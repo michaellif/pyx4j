@@ -37,45 +37,6 @@ import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
-    @Deprecated
-    public void updatePayments(ResidentTransactions rt) {
-        for (Property prop : rt.getProperty()) {
-            for (RTCustomer cust : prop.getRTCustomer()) {
-                // skip payment if lease expired
-                if (new YardiLeaseProcessor().isSkipped(cust)) {
-                    log.info("Transaction for: {} skipped, lease does not meet criteria.", cust.getCustomerID());
-                    continue;
-                }
-
-                log.info("Transaction for: " + cust.getCustomerID() + "/" + cust.getRTUnit().getUnitID());
-                // 1. get customer's YardiBillingAccount
-                YardiBillingAccount account = YardiARIntegrationAgent.getYardiBillingAccount(cust);
-                if (account == null) {
-                    try {
-                        Persistence.service().rollback();
-                    } catch (Throwable ignore) {
-                    }
-                    continue;
-                }
-                // 2. remove previously received yardi payments
-                EntityQueryCriteria<YardiPayment> oldPayments = EntityQueryCriteria.create(YardiPayment.class);
-                oldPayments.add(PropertyCriterion.eq(oldPayments.proto().billingAccount(), account));
-                oldPayments.add(PropertyCriterion.isNull(oldPayments.proto().paymentRecord()));
-                Persistence.service().delete(oldPayments);
-                for (Transactions tr : cust.getRTServiceTransactions().getTransactions()) {
-                    if (tr == null || tr.getPayment() == null) {
-                        continue;
-                    }
-                    Payment payment = tr.getPayment();
-                    // add new payment transaction
-                    Persistence.service().persist(YardiARIntegrationAgent.createPayment(account, payment));
-                }
-                Persistence.service().commit();
-            }
-        }
-
-    }
-
     void removeOldPayments(YardiBillingAccount account) {
         EntityQueryCriteria<YardiPayment> oldPayments = EntityQueryCriteria.create(YardiPayment.class);
         oldPayments.add(PropertyCriterion.eq(oldPayments.proto().billingAccount(), account));

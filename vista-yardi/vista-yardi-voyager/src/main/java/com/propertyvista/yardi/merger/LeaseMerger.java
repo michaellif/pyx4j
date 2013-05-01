@@ -16,6 +16,7 @@ package com.propertyvista.yardi.merger;
 import java.util.Date;
 
 import com.yardi.entity.mits.YardiLease;
+import com.yardi.entity.resident.RTCustomer;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,7 +28,19 @@ import com.propertyvista.yardi.services.YardiLeaseProcessor;
 
 public class LeaseMerger {
 
-    boolean isNew = false;
+    private boolean isNew = false;
+
+    public boolean isLeaseChanged(YardiLease imported, Lease existing) {
+        isNew = false;
+
+        compare(existing.actualMoveIn(), imported.getActualMoveIn());
+        compare(existing.actualMoveOut(), imported.getActualMoveOut());
+        compare(existing.expectedMoveIn(), imported.getExpectedMoveInDate());
+        // TODO expected move out is automatically calculated for our leases, what to do with one we get from yardi?
+        //        compare(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
+
+        return isNew;
+    }
 
     public Lease mergeLease(YardiLease imported, Lease existing) {
         existing.actualMoveIn().setValue(getImportedDate(imported.getActualMoveIn()));
@@ -38,51 +51,48 @@ public class LeaseMerger {
         return existing;
     }
 
-    public LeaseTerm updateTerm(YardiLease imported, LeaseTerm existing) {
+    public boolean isTermChanged(YardiLease imported, LeaseTerm existing) {
+        isNew = false;
+
+        compare(existing.termFrom(), YardiLeaseProcessor.guessFromDateNoThrow(imported));
+        compare(existing.termTo(), imported.getLeaseToDate());
+
+        return isNew;
+    }
+
+    public LeaseTerm mergeTerm(YardiLease imported, LeaseTerm existing) {
         existing.termFrom().setValue(YardiLeaseProcessor.guessFromDate(imported));
         existing.termTo().setValue(getImportedDate(imported.getLeaseToDate()));
         return existing;
     }
 
-    public boolean checkTermChanges(YardiLease imported, LeaseTerm existing) {
-        compare(existing.termFrom(), YardiLeaseProcessor.guessFromDateNoThrow(imported));
-        compare(existing.termTo(), imported.getLeaseToDate());
-        return isNew;
+    public boolean isPaymentTypeChanged(RTCustomer rtCustomer, Lease lease) {
+        if (!lease.billingAccount().paymentAccepted().getValue().equals(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()))) {
+            return true;
+        }
+        return false;
     }
 
-    public boolean checkLeaseChanges(YardiLease imported, Lease existing) {
-        compare(existing.actualMoveIn(), imported.getActualMoveIn());
-        compare(existing.actualMoveOut(), imported.getActualMoveOut());
-        compare(existing.expectedMoveIn(), imported.getExpectedMoveInDate());
-        // TODO expected move out is automatically calculated for our leases, what to do with one we get from yardi?
-//        compare(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
-        return isNew;
+    public void mergePaymentType(RTCustomer rtCustomer, Lease lease) {
+        lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
     }
+
+    // internals:
 
     private void compare(IPrimitive<LogicalDate> existing, Date imported) {
-        LogicalDate importedDate = getImportedDate(imported);
-        if ((existing.isNull() && importedDate != null) || (!existing.isNull() && importedDate == null)) {
-            isNew = true;
-            return;
-        } else if (!existing.isNull() && importedDate != null) {
-            if (!importedDate.equals(existing.getValue())) {
+        if (!isNew) {
+            LogicalDate importedDate = getImportedDate(imported);
+            if ((existing.isNull() && importedDate != null) || (!existing.isNull() && importedDate == null)) {
                 isNew = true;
+            } else if (!existing.isNull() && importedDate != null) {
+                if (!importedDate.equals(existing.getValue())) {
+                    isNew = true;
+                }
             }
         }
     }
 
     private LogicalDate getImportedDate(Date date) {
-        if (date != null) {
-            return new LogicalDate(date);
-        } else {
-            return null;
-        }
-    }
-
-    public boolean validatePaymentTypeChanger(String paymentAccepted, Lease lease) {
-        if (!lease.billingAccount().paymentAccepted().getValue().equals(BillingAccount.PaymentAccepted.getPaymentType(paymentAccepted))) {
-            return true;
-        }
-        return false;
+        return (date != null ? new LogicalDate(date) : null);
     }
 }

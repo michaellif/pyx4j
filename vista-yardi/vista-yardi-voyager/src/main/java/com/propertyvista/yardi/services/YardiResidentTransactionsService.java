@@ -132,7 +132,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         String propertyCode = lease.unit().building().propertyCode().getValue();
         ResidentTransactions transaction = getResidentTransaction(client, yc, propertyCode, lease.leaseId().getValue());
         if (transaction != null) {
-
             for (Property property : transaction.getProperty()) {
                 for (RTCustomer rtCustomer : property.getRTCustomer()) {
                     importLease(propertyCode, rtCustomer);
@@ -151,7 +150,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         importResidentTransactions(client, yc, reversalTransactions);
 
         if (reversal.applyNSF().isBooleanTrue()) {
-
             try {
                 String targetEmail = getEmailForNsfNotification(reversal);
                 ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmail, reversal);
@@ -223,7 +221,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
-        log.info("      Updating unit #" + rtCustomer.getRTUnit().getUnitID());
+        log.info("  Updating unit #" + rtCustomer.getRTUnit().getUnitID());
 
         AptUnit unit = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
 
@@ -239,8 +237,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private LeaseFinancialState importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
         final LeaseFinancialState state = new LeaseFinancialState();
-        log.info("      Updating lease");
-        if (new YardiLeaseProcessor().isSkipped(rtCustomer)) {
+        log.info("      Importing lease");
+        if (YardiLeaseProcessor.isSkipped(rtCustomer)) {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
             // TODO skipping monitor message
             return state;
@@ -251,21 +249,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             public Void execute() throws YardiServiceException {
                 // update lease
                 LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
-                Lease lease = new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
-
-                if (lease != null) {
-                    lease = leaseFacade.persist(lease);
-
-                    // activate:
-                    leaseFacade.approve(lease, null, null);
-                    leaseFacade.activate(lease);
-                } else {
-                    // TODO "lease information was unchanged" monitor message
-                    log.info("          Lease information unchanged");
-                }
+                new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
 
                 // update charges and payments
-
                 final YardiBillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
                 new YardiChargeProcessor().removeOldCharges(account);
                 new YardiPaymentProcessor().removeOldPayments(account);
