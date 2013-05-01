@@ -90,14 +90,14 @@ public class YardiAbstractService {
             c.transactionIdStart();
             c.setCurrentAction(Action.GetPropertyConfigurations);
 
-            GetPropertyConfigurations l = new GetPropertyConfigurations();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(l);
+            GetPropertyConfigurations request = new GetPropertyConfigurations();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(yc.credential().getValue());
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(request);
             if (response.getGetPropertyConfigurationsResult() == null) {
                 throw new Error("Received response is null");
             }
