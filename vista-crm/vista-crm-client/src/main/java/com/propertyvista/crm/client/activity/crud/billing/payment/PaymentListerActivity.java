@@ -40,7 +40,7 @@ public class PaymentListerActivity extends AbstractListerActivity<PaymentRecord>
 
         String val;
         if ((val = place.getFirstArg(CrmSiteMap.Finance.BillingCycle.ARG_BC_ID)) != null) {
-            filters.ge(filters.proto().padBillingCycle().id(), new Key(val));
+            filters.eq(filters.proto().padBillingCycle().id(), new Key(val));
         }
     }
 
