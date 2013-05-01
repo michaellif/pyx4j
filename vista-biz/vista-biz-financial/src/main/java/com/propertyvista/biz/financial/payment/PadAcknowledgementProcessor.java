@@ -32,17 +32,18 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadBatchProcessingStatus;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
@@ -61,13 +62,13 @@ class PadAcknowledgementProcessor {
 
     void processPmcAcknowledgement() {
 
-        final String namespace = NamespaceManager.getNamespace();
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         List<PadBatch> batchList = TaskRunner.runInOperationsNamespace(new Callable<List<PadBatch>>() {
             @Override
             public List<PadBatch> call() {
                 EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
-                criteria.eq(criteria.proto().pmcNamespace(), namespace);
+                criteria.eq(criteria.proto().pmc(), pmc);
                 criteria.eq(criteria.proto().processingStatus(), PadBatchProcessingStatus.AcknowledgedReceived);
                 List<PadBatch> batchList = Persistence.service().query(criteria);
                 for (PadBatch padBatch : batchList) {

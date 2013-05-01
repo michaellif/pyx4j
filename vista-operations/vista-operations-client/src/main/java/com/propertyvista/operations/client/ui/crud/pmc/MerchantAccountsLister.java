@@ -18,8 +18,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 
 public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAccountDTO> {
 
@@ -30,7 +30,10 @@ public class MerchantAccountsLister extends EntityDataTablePanel<PmcMerchantAcco
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().merchantTerminalId()).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().status()).searchable(false).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build()
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().paymentsStatus()).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().bankId()).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().branchTransitNumber()).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchable(false).sortable(false).build()
         );//@formatter:on
     }
 

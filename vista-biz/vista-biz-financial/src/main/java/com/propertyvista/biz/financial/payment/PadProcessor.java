@@ -26,13 +26,14 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
@@ -54,11 +55,11 @@ public class PadProcessor {
 
         Persistence.service().retrieve(paymentRecord.billingAccount());
 
-        final String namespace = NamespaceManager.getNamespace();
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                PadBatch padBatch = getPadBatch(padFile, namespace, paymentRecord.merchantAccount());
+                PadBatch padBatch = getPadBatch(padFile, pmc, paymentRecord.merchantAccount());
                 createPadDebitRecord(padBatch, paymentRecord);
                 return null;
             }
@@ -67,16 +68,16 @@ public class PadProcessor {
         return true;
     }
 
-    private PadBatch getPadBatch(PadFile padFile, String namespace, MerchantAccount merchantAccount) {
+    private PadBatch getPadBatch(PadFile padFile, Pmc pmc, MerchantAccount merchantAccount) {
         EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
-        criteria.add(PropertyCriterion.eq(criteria.proto().pmcNamespace(), namespace));
+        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
         criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), merchantAccount.id()));
         PadBatch padBatch = Persistence.service().retrieve(criteria);
         if (padBatch == null) {
             padBatch = EntityFactory.create(PadBatch.class);
             padBatch.padFile().set(padFile);
-            padBatch.pmcNamespace().setValue(namespace);
+            padBatch.pmc().set(pmc);
 
             padBatch.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
             padBatch.bankId().setValue(merchantAccount.bankId().getValue());

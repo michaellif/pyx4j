@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
@@ -36,6 +37,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -55,8 +57,11 @@ public interface PadBatch extends IEntity {
     @OrderBy(PrimaryKey.class)
     IList<PadDebitRecord> records();
 
+    @ReadOnly
+    @MemberColumn(notNull = true)
+    @Detached
     @Indexed(group = { "m,1" })
-    IPrimitive<String> pmcNamespace();
+    Pmc pmc();
 
     @Indexed(group = { "m,2" })
     IPrimitive<Key> merchantAccountKey();

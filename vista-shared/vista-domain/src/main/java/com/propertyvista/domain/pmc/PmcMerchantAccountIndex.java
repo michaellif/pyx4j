@@ -14,6 +14,7 @@
 package com.propertyvista.domain.pmc;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
@@ -35,6 +36,7 @@ public interface PmcMerchantAccountIndex extends IEntity {
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
+    @Detached
     Pmc pmc();
 
     @Length(8)
