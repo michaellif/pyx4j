@@ -97,6 +97,7 @@ public class YardiAbstractService {
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+
             GetPropertyConfigurationsResponse response = c.getResidentTransactionsService().getPropertyConfigurations(request);
             if (response.getGetPropertyConfigurationsResult() == null) {
                 throw new Error("Received response is null");
@@ -104,9 +105,7 @@ public class YardiAbstractService {
 
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
-            if (log.isDebugEnabled()) {
-                log.debug("GetPropertyConfigurations Result: {}", xml);
-            }
+            log.info("GetPropertyConfigurations Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);

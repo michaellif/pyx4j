@@ -13,8 +13,12 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
@@ -27,14 +31,52 @@ public class YardiExample {
     private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
 
     public static void main(String[] args) {
-        YardiClient c = ServerSideFactory.create(YardiClient.class);
-        c.setPmcYardiCredential(DevYardiCredentials.getTestPmcYardiCredential());
+        YardiClient client = ServerSideFactory.create(YardiClient.class);
+        client.setPmcYardiCredential(DevYardiCredentials.getTestPmcYardiCredential());
+        getPropertyConfigurations(client);
+        getPropertyCodes(client);
+        getResidentTransactions(client);
+        getUnitInformation(client);
+    }
+
+    private static void getPropertyConfigurations(YardiClient client) {
         try {
-            Properties properties = YardiResidentTransactionsService.getInstance()
-                    .getPropertyConfigurations(c, DevYardiCredentials.getTestPmcYardiCredential());
-            System.out.println("+++++++++++++" + properties);
+            Properties properties = YardiResidentTransactionsService.getInstance().getPropertyConfigurations(client,
+                    DevYardiCredentials.getTestPmcYardiCredential());
+            System.out.println(properties);
         } catch (Throwable e) {
             log.error("error", e);
         }
+    }
+
+    private static void getPropertyCodes(YardiClient client) {
+        try {
+            List<String> properties = YardiResidentTransactionsService.getInstance().getPropertyCodes(client, DevYardiCredentials.getTestPmcYardiCredential());
+            System.out.println(properties);
+        } catch (Throwable e) {
+            log.error("error", e);
+        }
+    }
+
+    private static void getResidentTransactions(YardiClient client) {
+        try {
+            ResidentTransactions residentTransactions = YardiResidentTransactionsService.getInstance().getResidentTransactions(client,
+                    DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
+            System.out.println(residentTransactions);
+        } catch (Throwable e) {
+            log.error("error", e);
+        }
+
+    }
+
+    private static void getUnitInformation(YardiClient client) {
+        try {
+            YardiResidentTransactionsService.getInstance().getUnitInformation(client, DevYardiCredentials.getTestPmcYardiCredential(),
+                    DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
+
+        } catch (Throwable e) {
+            log.error("error", e);
+        }
+
     }
 }
