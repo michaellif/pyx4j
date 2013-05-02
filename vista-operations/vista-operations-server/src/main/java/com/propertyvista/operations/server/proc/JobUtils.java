@@ -82,7 +82,7 @@ public class JobUtils {
             TriggerBuilder<Trigger> tb = TriggerBuilder.newTrigger().forJob(jobDetail).startNow();
             tb.usingJobData(JobData.manualExecution.name(), Boolean.TRUE);
             if (Context.isUserLoggedIn()) {
-                tb.usingJobData(JobData.startedBy.name(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey().asLong());
+                tb.usingJobData(JobData.startedBy.name(), new Long(Context.getVisit().getUserVisit().getPrincipalPrimaryKey().asLong()));
             }
             if (executionDate != null) {
                 tb.usingJobData(JobData.forDate.name(), executionDate.getTime());

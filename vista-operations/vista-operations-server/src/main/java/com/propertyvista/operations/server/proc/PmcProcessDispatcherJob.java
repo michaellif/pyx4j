@@ -96,7 +96,11 @@ public class PmcProcessDispatcherJob implements Job {
             }
 
             log.info("starting {}", process.getStringView());
-            startAndRun(process, scheduledFireTime, dataMap.getLong(JobData.startedBy.name()));
+            Long operationsUserKey = null;
+            if (dataMap.containsKey(JobData.startedBy.name())) {
+                operationsUserKey = dataMap.getLong(JobData.startedBy.name());
+            }
+            startAndRun(process, scheduledFireTime, operationsUserKey);
         } finally {
             Persistence.service().endTransaction();
             Lifecycle.endContext();
