@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.building;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -147,5 +149,12 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         ServerSideFactory.create(BuildingFacade.class).persist(dbo);
+    }
+
+    @Override
+    public void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub) {
+        MerchantAccount entity = Persistence.service().retrieve(MerchantAccount.class, merchantAccountStub.getPrimaryKey());
+        ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(entity);
+        callback.onSuccess(entity);
     }
 }

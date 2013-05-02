@@ -36,7 +36,7 @@ import com.propertyvista.dto.RoofDTO;
 
 public interface BuildingViewerView extends IViewer<BuildingDTO> {
 
-    interface Presenter extends IViewer.Presenter {
+    interface Presenter extends BuildingPresenterCommon, IViewer.Presenter {
 
         IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings);
     }

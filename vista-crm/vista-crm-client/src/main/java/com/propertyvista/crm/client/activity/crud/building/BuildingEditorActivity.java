@@ -24,6 +24,7 @@ import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.PublicVisibilityType;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.dto.BuildingDTO;
 
 public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> implements BuildingEditorView.Presenter {
@@ -39,5 +40,10 @@ public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> imple
         entity.marketing().visibility().setValue(PublicVisibilityType.global);
 
         callback.onSuccess(entity);
+    }
+
+    @Override
+    public void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub) {
+        ((BuildingCrudService) getService()).retrieveMerchantAccountStatus(callback, merchantAccountStub);
     }
 }

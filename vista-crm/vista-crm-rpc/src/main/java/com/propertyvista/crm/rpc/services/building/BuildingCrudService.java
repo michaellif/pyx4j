@@ -13,10 +13,14 @@
  */
 package com.propertyvista.crm.rpc.services.building;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.dto.BuildingDTO;
 
 public interface BuildingCrudService extends AbstractCrudService<BuildingDTO> {
 
+    void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub);
 }

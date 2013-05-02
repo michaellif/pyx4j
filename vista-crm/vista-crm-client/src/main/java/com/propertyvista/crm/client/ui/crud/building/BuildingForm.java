@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.commons.ValidationUtils;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
@@ -49,6 +50,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
@@ -156,6 +158,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     });
         }
 
+        fillMerchantAccountStatus(getValue().merchantAccount());
     }
 
     @Override
@@ -310,6 +313,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
+        // tweak:
+        get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<MerchantAccount> event) {
+                fillMerchantAccountStatus(event.getValue());
+            }
+        });
+
         return main;
     }
 
@@ -410,4 +421,14 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         }
     }
 
+    private void fillMerchantAccountStatus(MerchantAccount value) {
+        if (value != null && !value.isNull()) {
+            ((BuildingPresenterCommon) getParentView().getPresenter()).retrieveMerchantAccountStatus(new DefaultAsyncCallback<MerchantAccount>() {
+                @Override
+                public void onSuccess(MerchantAccount result) {
+                    get(proto().merchantAccount()).setNote(result.status().getStringView() + ", " + result.paymentsStatus().getStringView());
+                }
+            }, EntityFactory.createIdentityStub(MerchantAccount.class, value.getPrimaryKey()));
+        }
+    }
 }

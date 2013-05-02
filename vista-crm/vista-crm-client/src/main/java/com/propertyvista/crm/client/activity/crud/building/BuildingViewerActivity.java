@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.building;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -44,6 +45,7 @@ import com.propertyvista.crm.rpc.services.building.mech.ElevatorCrudService;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -170,5 +172,10 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     @Override
     public IDashboardVisorController getDashboardController(DashboardMetadata dashboardMetadata, List<Building> buildings) {
         return new DashboardVisorController(getView(), dashboardMetadata, buildings);
+    }
+
+    @Override
+    public void retrieveMerchantAccountStatus(AsyncCallback<MerchantAccount> callback, MerchantAccount merchantAccountStub) {
+        ((BuildingCrudService) getService()).retrieveMerchantAccountStatus(callback, merchantAccountStub);
     }
 }
