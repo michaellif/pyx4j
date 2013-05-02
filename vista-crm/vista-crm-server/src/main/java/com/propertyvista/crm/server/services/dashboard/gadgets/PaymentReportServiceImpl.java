@@ -61,16 +61,17 @@ public class PaymentReportServiceImpl implements PaymentReportService {
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper();
 
         Iterator<Building> buildingIterator = !buildingsFilter.isEmpty() ? buildingsFilter.iterator() : Persistence.service().query(null,
-                EntityQueryCriteria.create(Building.class), AttachLevel.Detached);
+                EntityQueryCriteria.create(Building.class), AttachLevel.IdOnly);
 
         if (PaymentsSummary.summaryByBuilding) {
             while (buildingIterator.hasNext()) {
-                Building building = buildingIterator.next();
+                Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers);
                 for (PaymentStatus paymentStatus : paymentStatusCriteria) {
                     PaymentsSummary summary = summaryHelper.calculateSummary(building, paymentStatus, targetDate);
                     if (summaryHelper.hasPayments(summary)) {
                         summariesVector.add(summary);
                     }
+                    summary.building().set(building);
                 }
             }
         } else {
