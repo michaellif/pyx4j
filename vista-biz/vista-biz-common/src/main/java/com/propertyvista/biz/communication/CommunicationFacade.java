@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.List;
+
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -66,7 +68,7 @@ public interface CommunicationFacade {
 
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
-    void sendPaymentReversalWithNsfNotification(String targetEmail, YardiReceiptReversal paymentReversal);
+    void sendPaymentReversalWithNsfNotification(List<String> targetEmail, YardiReceiptReversal paymentReversal);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

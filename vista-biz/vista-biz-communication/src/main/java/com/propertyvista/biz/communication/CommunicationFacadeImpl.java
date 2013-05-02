@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.communication;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
@@ -306,13 +307,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPaymentReversalWithNsfNotification(String targetEmail, YardiReceiptReversal paymentReversal) {
+    public void sendPaymentReversalWithNsfNotification(List<String> targetEmails, YardiReceiptReversal paymentReversal) {
         if (disabled) {
             return;
         }
         final MailMessage m = MessageTemplates.createNsfNotificationEmail(paymentReversal);
 
-        m.setTo(targetEmail);
+        m.setTo(targetEmails);
 
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));

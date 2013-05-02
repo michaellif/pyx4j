@@ -152,8 +152,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         if (reversal.applyNSF().isBooleanTrue()) {
             try {
-                String targetEmail = getEmailForNsfNotification(reversal);
-                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmail, reversal);
+                List<String> targetEmails = getEmailsForNsfNotification(reversal);
+                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmails, reversal);
             } catch (Throwable e) {
                 log.error("failed to send email", e);
             }
@@ -489,8 +489,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    private String getEmailForNsfNotification(YardiReceiptReversal receiptReversal) throws Exception {
-        String email = null;
+    private List<String> getEmailsForNsfNotification(YardiReceiptReversal receiptReversal) throws Exception {
+        List<String> emails = new ArrayList<String>();
 
         BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, receiptReversal.billingAccount().getPrimaryKey());
         Persistence.service().retrieve(billingAccount.lease());
@@ -499,20 +499,24 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         for (PropertyContact contact : billingAccount.lease().unit().building().contacts().propertyContacts()) {
             if ("NSF_NOTIFICATIONS".equals(contact.name().getValue())) {
-                email = contact.email().getValue();
-                break;
+                emails.add(contact.email().getValue());
             }
         }
 
-        if (email != null) {
+        if (!emails.isEmpty()) {
             SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
             if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-                email = mailConfig.getForwardAllTo();
+                String forwardToEmail = mailConfig.getForwardAllTo();
+                int s = emails.size();
+                emails.clear();
+                for (int i = 0; i < s; ++i) {
+                    emails.add(forwardToEmail);
+                }
             }
-            return email;
+            return emails;
         } else {
             throw new Exception(i18n.tr("Email address for NSF notification for payment record '" + receiptReversal.paymentRecord().getPrimaryKey()
-                    + "' was not defined (superintendant's email at building/marketing/propertyContacts)"));
+                    + "' was not defined (define a contact named 'NSF_NOTIFICATIONS' at building/marketing/property_contacts)"));
         }
     }
 }
