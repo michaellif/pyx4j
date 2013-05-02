@@ -325,7 +325,7 @@ public class MessageTemplates {
 
         Persistence.service().retrieve(billingAccount.lease());
         String leaseId = billingAccount.lease().leaseId().getValue();
-        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formPlace(billingAccount.lease().getPrimaryKey()));
+        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(billingAccount.lease().getPrimaryKey()));
 
         String tenantName = paymentReversal.paymentRecord().paymentMethod().customer().person().name().getStringView();
         String tenantId = "TENANT-ID-NOT-FOUND";

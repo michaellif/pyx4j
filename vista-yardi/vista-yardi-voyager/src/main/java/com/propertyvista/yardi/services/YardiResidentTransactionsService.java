@@ -66,7 +66,6 @@ import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -499,7 +498,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         Persistence.service().retrieve(billingAccount.lease().unit().building().contacts().propertyContacts());
 
         for (PropertyContact contact : billingAccount.lease().unit().building().contacts().propertyContacts()) {
-            if (contact.type().getValue() == PropertyContactType.superintendent) {
+            if ("NSF_NOTIFICATIONS".equals(contact.name().getValue())) {
                 email = contact.email().getValue();
                 break;
             }
