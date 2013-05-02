@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
@@ -350,8 +351,12 @@ public class MessageTemplates {
         String paymentId = paymentReversal.paymentRecord().getPrimaryKey().toString();
         String paymentAmount = i18n.tr("${0,number,#,##0.00}", paymentReversal.paymentRecord().amount().getValue());
 
-        email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId, tenantName));
+        String rejectionReason = i18n.tr("UNKNOWN");
+        if (CommonsStringUtils.isStringSet(paymentReversal.paymentRecord().transactionErrorMessage().getValue())) {
+            rejectionReason = paymentReversal.paymentRecord().transactionErrorMessage().getValue();
+        }
 
+        email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId, tenantName));
         String emailBody = "";
         try {
             emailBody = IOUtils.getTextResource("email/nsf-notification.html");
@@ -369,7 +374,8 @@ public class MessageTemplates {
                 .replace("${tenantUrl}", tenantUrl)
                 .replace("${paymentId}", paymentId)
                 .replace("${paymentAmount}", paymentAmount)
-                .replace("${paymentUrl}", paymentRecordUrl);
+                .replace("${paymentUrl}", paymentRecordUrl)
+                .replace("${rejectionReason}", rejectionReason);
         //@formatter:on
         email.setHtmlBody(wrapAdminHtml(emailBody));
 
