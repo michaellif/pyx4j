@@ -24,15 +24,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
-import com.yardi.ws.operations.AddReceiptsToBatch;
-import com.yardi.ws.operations.AddReceiptsToBatchResponse;
-import com.yardi.ws.operations.CancelReceiptBatch;
-import com.yardi.ws.operations.CancelReceiptBatchResponse;
-import com.yardi.ws.operations.OpenReceiptBatch;
-import com.yardi.ws.operations.OpenReceiptBatchResponse;
-import com.yardi.ws.operations.PostReceiptBatch;
-import com.yardi.ws.operations.PostReceiptBatchResponse;
-import com.yardi.ws.operations.TransactionXml_type1;
+import com.yardi.ws.operations.transactionsbatch.AddReceiptsToBatch;
+import com.yardi.ws.operations.transactionsbatch.AddReceiptsToBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.CancelReceiptBatch;
+import com.yardi.ws.operations.transactionsbatch.CancelReceiptBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.OpenReceiptBatch;
+import com.yardi.ws.operations.transactionsbatch.OpenReceiptBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
+import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
+import com.yardi.ws.operations.transactionsbatch.TransactionXml_type1;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;

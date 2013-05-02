@@ -24,10 +24,10 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.yardi.ws.operations.GetPropertyConfigurations;
-import com.yardi.ws.operations.GetPropertyConfigurationsResponse;
-import com.yardi.ws.operations.Ping;
-import com.yardi.ws.operations.PingResponse;
+import com.yardi.ws.operations.transactions.GetPropertyConfigurations;
+import com.yardi.ws.operations.transactions.GetPropertyConfigurationsResponse;
+import com.yardi.ws.operations.transactions.Ping;
+import com.yardi.ws.operations.transactions.PingResponse;
 
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 

@@ -23,7 +23,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.yardi.entity.maintenance.ServiceRequests;
-import com.yardi.ws.operations.GetServiceRequest_Search;
+import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;

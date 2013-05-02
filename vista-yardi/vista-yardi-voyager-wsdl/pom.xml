@@ -66,19 +66,19 @@
                     <namespaceURIs>
                         <namespaceURI>
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfResidentTransactions20</uri>
-                            <packageName>com.yardi.ws.operations</packageName>
+                            <packageName>com.yardi.ws.operations.transactions</packageName>
                         </namespaceURI>
                         <namespaceURI>
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ResidentTransactions20_SysBatch</uri>
-                            <packageName>com.yardi.ws.operations</packageName>
+                            <packageName>com.yardi.ws.operations.transactionsbatch</packageName>
                         </namespaceURI>
                         <namespaceURI>
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfApplicantScreening</uri>
-                            <packageName>com.yardi.ws.operations</packageName>
+                            <packageName>com.yardi.ws.operations.appscreening</packageName>
                         </namespaceURI>
 						<namespaceURI>
                             <uri>http://tempuri.org/YSI.Interfaces.WebServices/ItfServiceRequests</uri>
-                            <packageName>com.yardi.ws.operations</packageName>
+                            <packageName>com.yardi.ws.operations.requests</packageName>
                         </namespaceURI>
                     </namespaceURIs>
                 </configuration>

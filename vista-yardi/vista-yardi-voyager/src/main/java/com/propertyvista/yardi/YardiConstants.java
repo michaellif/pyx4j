@@ -16,7 +16,15 @@ package com.propertyvista.yardi;
 public class YardiConstants {
 
     public enum Action {
-        ping, ImportResidentTransactions, GetPropertyConfigurations, GetUnitInformation, GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate, GetResidentTransactions_ByApplicationDate, GetResidentLeaseCharges, GetResidentsLeaseCharges, ExportChartOfAccounts, GetVendors, GetVendor, OpenReceiptBatch, AddReceiptsToBatch, PostReceiptBatch, GetServiceRequests, CreateOrEditServiceRequests, GetCustomValues
+        ping, ImportResidentTransactions, GetPropertyConfigurations, GetUnitInformation,
+
+        GetResidentTransactions, GetResidentTransaction, GetResidentTransactions_ByChargeDate,
+
+        GetResidentTransactions_ByApplicationDate, GetResidentLeaseCharges, GetResidentsLeaseCharges,
+
+        ExportChartOfAccounts, GetVendors, GetVendor, OpenReceiptBatch, AddReceiptsToBatch, PostReceiptBatch,
+
+        GetServiceRequests, CreateOrEditServiceRequests, GetCustomValues
     }
 
     public static final long TIMEOUT = 180; // minutes

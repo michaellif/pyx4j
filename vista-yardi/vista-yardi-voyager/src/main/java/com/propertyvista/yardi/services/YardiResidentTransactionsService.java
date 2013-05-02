@@ -32,15 +32,15 @@ import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
-import com.yardi.ws.operations.GetResidentTransaction_Login;
-import com.yardi.ws.operations.GetResidentTransaction_LoginResponse;
-import com.yardi.ws.operations.GetResidentTransactions_Login;
-import com.yardi.ws.operations.GetResidentTransactions_LoginResponse;
-import com.yardi.ws.operations.GetUnitInformation_Login;
-import com.yardi.ws.operations.GetUnitInformation_LoginResponse;
-import com.yardi.ws.operations.ImportResidentTransactions_Login;
-import com.yardi.ws.operations.ImportResidentTransactions_LoginResponse;
-import com.yardi.ws.operations.TransactionXml_type1;
+import com.yardi.ws.operations.transactions.GetResidentTransaction_Login;
+import com.yardi.ws.operations.transactions.GetResidentTransaction_LoginResponse;
+import com.yardi.ws.operations.transactions.GetResidentTransactions_Login;
+import com.yardi.ws.operations.transactions.GetResidentTransactions_LoginResponse;
+import com.yardi.ws.operations.transactions.GetUnitInformation_Login;
+import com.yardi.ws.operations.transactions.GetUnitInformation_LoginResponse;
+import com.yardi.ws.operations.transactions.ImportResidentTransactions_Login;
+import com.yardi.ws.operations.transactions.ImportResidentTransactions_LoginResponse;
+import com.yardi.ws.operations.transactions.TransactionXml_type1;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -425,7 +425,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     void getUnitInformation(YardiClient c, PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         try {
             c.transactionIdStart();
-            c.setCurrentAction(Action.GetResidentTransaction);
+            c.setCurrentAction(Action.GetUnitInformation);
 
             GetUnitInformation_Login request = new GetUnitInformation_Login();
             request.setUserName(yc.username().getValue());
