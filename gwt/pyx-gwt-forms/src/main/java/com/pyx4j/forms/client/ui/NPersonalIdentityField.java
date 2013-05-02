@@ -4,6 +4,7 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
+import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.entity.shared.IPersonalIdentity;
 
@@ -11,6 +12,10 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBo
 
     public NPersonalIdentityField(CPersonalIdentityField<E> cComponent) {
         super(cComponent);
+    }
+
+    public NPersonalIdentityField(CPersonalIdentityField<E> cComponent, ImageResource triggerImage) {
+        super(cComponent, triggerImage);
     }
 
     @Override
