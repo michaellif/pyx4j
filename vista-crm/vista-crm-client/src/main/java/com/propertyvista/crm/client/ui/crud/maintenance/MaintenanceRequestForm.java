@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.util.List;
+
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -52,6 +56,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private FormFlexPanel surveyPanel;
 
+    private final BuildingSelector buildingSelector = new BuildingSelector();
+
+    private final TenantSelector tenantSelector = new TenantSelector();
+
     private final PrioritySelector priority = new PrioritySelector();
 
     private final StatusSelector status = new StatusSelector();
@@ -79,64 +87,43 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestId()), 20).build());
+
+        VerticalPanel left = new VerticalPanel();
+        left.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        panel.setWidget(++row, 0, left);
+
+        left.add(new DecoratorBuilder(inject(proto().requestId()), 20).build());
         get(proto().requestId()).inheritViewable(false);
         get(proto().requestId()).setViewable(true);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntitySelectorHyperlink<Building>() {
+        left.add(new DecoratorBuilder(inject(proto().building(), buildingSelector), 25).build());
+        left.add(new DecoratorBuilder(inject(proto().reporter(), tenantSelector), 25).build());
+        buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
             @Override
-            protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
+            public void onValueChange(ValueChangeEvent<Building> event) {
+                tenantSelector.setValue(null);
+                tenantSelector.setEnabled(!event.getValue().isNull());
             }
-
-            @Override
-            protected BuildingSelectorDialog getSelectorDialog() {
-                return new BuildingSelectorDialog(false) {
-
-                    @Override
-                    public boolean onClickOk() {
-                        if (getSelectedItems().isEmpty()) {
-                            return false;
-                        }
-                        setValue(getSelectedItems().get(0));
-                        return true;
-                    }
-                };
-            }
-        }), 25).build());
-
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reporter(), new CEntitySelectorHyperlink<Tenant>() {
-            @Override
-            protected AppPlace getTargetPlace() {
-                return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
-            }
-
-            @Override
-            protected TenantSelectorDialog getSelectorDialog() {
-                return new TenantSelectorDialog(false) {
-
-                    @Override
-                    public boolean onClickOk() {
-                        if (getSelectedItems().isEmpty()) {
-                            return false;
-                        }
-                        setValue(getSelectedItems().get(0));
-                        return true;
-                    }
-                };
-            }
-        }), 25).build());
-        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().priority(), priority), 10).build());
+        });
         // create category selection panel
         categoryPanel = new VerticalPanel();
-        panel.setWidget(row + 1, 0, categoryPanel);
-        panel.getCellFormatter().setVerticalAlignment(row + 1, 0, HasVerticalAlignment.ALIGN_TOP);
+        categoryPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        left.add(categoryPanel);
+
+        VerticalPanel right = new VerticalPanel();
+        right.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        panel.setWidget(row, 1, right);
+        panel.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+        panel.getCellFormatter().setVerticalAlignment(row, 1, HasVerticalAlignment.ALIGN_TOP);
+
+        right.add(new DecoratorBuilder(inject(proto().summary()), 20).build());
+        right.add(new DecoratorBuilder(inject(proto().description()), 20).build());
+        right.add(new DecoratorBuilder(inject(proto().priority(), priority), 10).build());
 
         VerticalPanel permPanel = new VerticalPanel();
         permPanel.add(new DecoratorBuilder(inject(proto().permissionToEnter()), 20).build());
         permPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 20).build());
-        panel.setWidget(++row, 1, permPanel);
+        right.add(permPanel);
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -229,11 +216,66 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
 
         if (isEditable()) {
-            get(proto().building()).setEditable(getValue().building().isNull());
-            get(proto().reporter()).setEditable(getValue().reporter().isNull());
+            buildingSelector.setEditable(getValue().building().isNull());
+            tenantSelector.setEditable(getValue().reporter().isNull());
+            tenantSelector.setEnabled(!getValue().building().isNull());
         }
 
         get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
+    }
+
+    class BuildingSelector extends CEntitySelectorHyperlink<Building> {
+        @Override
+        protected AppPlace getTargetPlace() {
+            return AppPlaceEntityMapper.resolvePlace(Building.class, getValue().getPrimaryKey());
+        }
+
+        @Override
+        protected BuildingSelectorDialog getSelectorDialog() {
+            return new BuildingSelectorDialog(false) {
+
+                @Override
+                public boolean onClickOk() {
+                    if (getSelectedItems().isEmpty()) {
+                        return false;
+                    }
+                    setValue(getSelectedItems().get(0));
+                    return true;
+                }
+            };
+        }
+    }
+
+    class TenantSelector extends CEntitySelectorHyperlink<Tenant> {
+        @Override
+        protected AppPlace getTargetPlace() {
+            return AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().getPrimaryKey());
+        }
+
+        @Override
+        protected TenantSelectorDialog getSelectorDialog() {
+            return new TenantSelectorDialog(false) {
+
+                @Override
+                public boolean onClickOk() {
+                    if (getSelectedItems().isEmpty()) {
+                        return false;
+                    }
+                    setValue(getSelectedItems().get(0));
+                    return true;
+                }
+
+                @Override
+                protected void setFilters(List<Criterion> filters) {
+                    super.setFilters(filters);
+                    // add building filter if value set
+                    Building building = MaintenanceRequestForm.this.getValue().building();
+                    if (!building.isNull()) {
+                        addFilter(PropertyCriterion.eq(proto().lease().unit().building(), building));
+                    }
+                }
+            };
+        }
     }
 
     class PrioritySelector extends CComboBox<MaintenanceRequestPriority> {
