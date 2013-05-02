@@ -292,7 +292,7 @@ public class SimpleMessageFormat {
     }
 
     private static boolean isNull(Object arg) {
-        return (arg == null) || (arg == "");
+        return (arg == null) || (arg.toString().length() == 0);
     }
 
     private static boolean isEnumEquals(Object arg, String value) {
