@@ -383,6 +383,9 @@ class PadReconciliationProcessor {
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Returned);
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+
+        paymentRecord.transactionErrorMessage().setValue(debitRecord.reasonCode().getValue() + " " + debitRecord.reasonText().getValue());
+
         Persistence.service().merge(paymentRecord);
 
         try {
