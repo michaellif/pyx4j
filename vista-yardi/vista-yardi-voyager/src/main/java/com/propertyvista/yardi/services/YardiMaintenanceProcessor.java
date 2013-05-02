@@ -74,7 +74,8 @@ public class YardiMaintenanceProcessor {
         if (!mr.reporter().isNull()) {
             req.setTenantCode(mr.reporter().participantId().getValue());
         }
-        req.setTenantCaused(!mr.reporter().isNull());
+// TODO - find out the use of TenantCaused
+//        req.setTenantCaused(!mr.reporter().isNull());
 
         req.setServiceRequestFullDescription(mr.description().getValue());
         req.setServiceRequestBriefDescription(mr.summary().getValue());
@@ -93,10 +94,10 @@ public class YardiMaintenanceProcessor {
 
         req.setRequestorName(mr.reporter().customer().person().name().firstName().getValue());
         req.setRequestorEmail(mr.reporter().customer().person().email().getValue());
-        // TODO - extract numbers, then convert to long
+
         String homePhone = mr.reporter().customer().person().homePhone().getValue();
-        if (StringUtils.isNotEmpty(homePhone) && StringUtils.isNumeric(homePhone)) {
-            req.setRequestorPhoneNumber(Long.valueOf(homePhone));
+        if (StringUtils.isNotEmpty(homePhone)) {
+            req.setRequestorPhoneNumber(Long.valueOf(homePhone.replaceAll("\\D", "")));
         }
 
         req.setServiceRequestDate(mr.submitted().getValue());
@@ -264,7 +265,6 @@ public class YardiMaintenanceProcessor {
     }
 
     private MaintenanceRequest createRequest(PmcYardiCredential yc, ServiceRequest request) {
-        // TODO
         MaintenanceRequest mr = EntityFactory.create(MaintenanceRequest.class);
         boolean metaReloaded = false;
         // find building - propertyCode field is mandatory
@@ -321,7 +321,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 subcat = findCategory(request.getSubCategory(), category);
                 if (subcat == null) {
-                    log.warn("SubCategory not found: {}", request.getSubCategory());
+                    log.debug("SubCategory not found: {}", request.getSubCategory());
                     return null;
                 }
             }
@@ -366,7 +366,10 @@ public class YardiMaintenanceProcessor {
     }
 
     private void updateRequest(MaintenanceRequest mr, MaintenanceRequest newData) {
-        // TODO
+        if (mr == null) {
+            log.warn("Request is null");
+            return;
+        }
         mr.requestId().set(newData.requestId());
         mr.updated().set(newData.updated());
         mr.scheduledDate().set(newData.scheduledDate());
