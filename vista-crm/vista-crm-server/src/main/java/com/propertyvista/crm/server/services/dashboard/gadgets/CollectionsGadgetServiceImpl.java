@@ -78,6 +78,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         }
         criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
         criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
+        criteria.add(PropertyCriterion.ne(criteria.proto().billingAccount().payments().$().paymentStatus(), PaymentRecord.PaymentStatus.Rejected));
         criteria.add(PropertyCriterion.ge(criteria.proto().billingAccount().payments().$().createdDate(), thisMonthStartDay));
         criteria.add(PropertyCriterion.le(criteria.proto().billingAccount().payments().$().createdDate(), today));
 
@@ -102,6 +103,7 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted));
         criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Canceled));
+        criteria.add(PropertyCriterion.ne(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Rejected));
         if (proto.fundsCollectedThisMonth() == fundsFilterProto | proto.fundsCollectedThisMonthLabel() == fundsFilterProto) {
 
         } else if (proto.fundsInProcessing() == fundsFilterProto | proto.fundsInProcessingLabel() == fundsFilterProto) {
