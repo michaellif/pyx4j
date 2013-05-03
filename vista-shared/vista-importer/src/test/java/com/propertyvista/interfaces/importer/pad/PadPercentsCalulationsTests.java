@@ -175,7 +175,7 @@ public class PadPercentsCalulationsTests {
     }
 
     @Test
-    public void testUninitializedChargeSplitCase3() {
+    public void testUninitializedChargeSplitCase3A() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
         leasePadEntities.add(createModelFull("1", "park", "100", 100));
         leasePadEntities.add(createModelFull("2", "park", null, 100));
@@ -193,6 +193,27 @@ public class PadPercentsCalulationsTests {
         Assert.assertNull("record accepted, but was " + leasePadEntities.get(3)._processorInformation().status().getValue(), leasePadEntities.get(3)
                 ._processorInformation().status().getValue());
         assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(3)._processorInformation().percent().getValue());
+
+    }
+
+    // Same as A only "park" for second account
+    @Test
+    public void testUninitializedChargeSplitCase3B() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "park", null, 100));
+        leasePadEntities.add(createModelFull("2", "park", "100", 100));
+        leasePadEntities.add(createModelFull("1", "rent", "50", 1000));
+        leasePadEntities.add(createModelFull("2", "rent", "50", 1000));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        //print(leasePadEntities);
+
+        Assert.assertEquals(PadProcessingStatus.ignoredUinitializedChargeSplit, leasePadEntities.get(0)._processorInformation().status().getValue());
+
+        assertEquals(new BigDecimal("0.5455"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(2)._processorInformation().percent().getValue());
+        Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(3)._processorInformation().status().getValue());
 
     }
 }

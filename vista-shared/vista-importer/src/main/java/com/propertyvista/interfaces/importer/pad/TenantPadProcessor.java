@@ -16,9 +16,11 @@ package com.propertyvista.interfaces.importer.pad;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -290,6 +292,8 @@ public class TenantPadProcessor {
         boolean allHaveEstimatedCharge = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).estimatedCharge());
 
         if (allHaveChargeCode && allHaveEstimatedCharge) {
+            // Yardi Migration Mode
+            eliminateUninitializedChargeSplitYardi(leasePadEntities);
             double estimatedChargeTotal = calulateEstimatedChargeTotal(leasePadEntities);
             // Merge PaymentMethods from the same account
             Map<String, List<PadFileModel>> mappedByAccount = mapByAccount(leasePadEntities);
@@ -309,17 +313,76 @@ public class TenantPadProcessor {
 
         double estimatedCharge;
 
-        PadFileModel firstRecord;
+        List<PadFileModel> entities = new ArrayList<PadFileModel>();
 
-        List<PadFileModel> uinitializedEntities = new ArrayList<PadFileModel>();
+        int uninitializedCount = 0;
 
     }
 
-    static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
+    static void eliminateUninitializedChargeSplitYardi(List<PadFileModel> leasePadEntities) {
         Map<String, ChargeCodeRecords> recordsByChargeCode = new HashMap<String, ChargeCodeRecords>();
+        for (PadFileModel padFileModel : leasePadEntities) {
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
+            if (padFileModel.charge().isNull()) {
+                double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
 
+                ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(padFileModel.chargeId().getValue());
+                if (chargeCodeRecords == null) {
+                    chargeCodeRecords = new ChargeCodeRecords();
+                    chargeCodeRecords.entities.add(padFileModel);
+                    chargeCodeRecords.estimatedCharge = estimatedCharge;
+                    recordsByChargeCode.put(padFileModel.chargeId().getValue(), chargeCodeRecords);
+                } else {
+                    if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
+                        padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge Id {0} are changing", padFileModel.chargeId()));
+                        padFileModel._import().invalid().setValue(Boolean.TRUE);
+                        padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
+                        continue;
+                    }
+                    chargeCodeRecords.entities.add(padFileModel);
+                }
+                if (padFileModel.percent().isNull()) {
+                    chargeCodeRecords.uninitializedCount++;
+                }
+            }
+        }
+
+        // This is done because of the complexity in creation of extract from yardi 
+        // Eliminate uninitialized charge split in Yardi
+        for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
+            // All uninitialized
+            if (chargeCodeRecords.entities.size() == chargeCodeRecords.uninitializedCount) {
+                // Fist is considered by Yardi as 100%
+                PadFileModel firstRecord = chargeCodeRecords.entities.get(0);
+                for (PadFileModel padFileModel : chargeCodeRecords.entities) {
+                    if (padFileModel != firstRecord) {
+                        padFileModel._import().message()
+                                .setValue(i18n.tr("Ignored as uninitialized ChargeSplit; used only record {0}", firstRecord._import().row()));
+                        padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredUinitializedChargeSplit);
+                    }
+                }
+            } else
+            // There are some Initialized records
+            if (chargeCodeRecords.uninitializedCount > 0) {
+                for (PadFileModel padFileModel : chargeCodeRecords.entities) {
+                    if (padFileModel.percent().isNull()) {
+                        padFileModel._import().message().setValue(i18n.tr("Ignored as uninitialized ChargeSplit"));
+                        padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredUinitializedChargeSplit);
+                    }
+                }
+            }
+        }
+    }
+
+    static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
+        Set<String> chargeCodes = new HashSet<String>();
         double estimatedChargeTotal = 0;
         for (PadFileModel padFileModel : leasePadEntities) {
+            if (!padFileModel._processorInformation().status().isNull()) {
+                continue;
+            }
             double estimatedChargeSplit = 0;
             if (padFileModel.charge().isNull()) {
                 double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
@@ -331,24 +394,10 @@ public class TenantPadProcessor {
                     // 100% assumed
                     estimatedChargeSplit = estimatedCharge;
                 }
-
-                ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(padFileModel.chargeId().getValue());
-                if (chargeCodeRecords == null) {
+                // Count each chargeCode once.
+                if (!chargeCodes.contains(padFileModel.chargeId().getValue())) {
                     estimatedChargeTotal += estimatedCharge;
-                    chargeCodeRecords = new ChargeCodeRecords();
-                    chargeCodeRecords.firstRecord = padFileModel;
-                    chargeCodeRecords.estimatedCharge = estimatedCharge;
-                    recordsByChargeCode.put(padFileModel.chargeId().getValue(), chargeCodeRecords);
-                } else {
-                    if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
-                        padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge Id {0} are changing", padFileModel.chargeId()));
-                        padFileModel._import().invalid().setValue(Boolean.TRUE);
-                        padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
-                        continue;
-                    }
-                    if (padFileModel.percent().isNull()) {
-                        chargeCodeRecords.uinitializedEntities.add(padFileModel);
-                    }
+                    chargeCodes.add(padFileModel.chargeId().getValue());
                 }
             } else {
                 estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
@@ -357,27 +406,27 @@ public class TenantPadProcessor {
 
             padFileModel._processorInformation().estimatedChargeSplit().setValue(estimatedChargeSplit);
         }
-
-        // This is done because of the complexity in creation opf extract from yardi 
-        // Eliminate uninitialized charge split in Yardi
-        for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
-            if (chargeCodeRecords.uinitializedEntities.size() > 0) {
-                for (PadFileModel padFileModel : chargeCodeRecords.uinitializedEntities) {
-                    padFileModel._import().message()
-                            .setValue(i18n.tr("Ignored as uninitialized ChargeSplit; used record {0}", chargeCodeRecords.firstRecord._import().row()));
-                    padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredUinitializedChargeSplit);
-                }
-            }
-        }
-
         return estimatedChargeTotal;
     }
 
     private static void mergeToFirstRow(double estimatedChargeTotal, List<PadFileModel> accountPadEntities) {
-        PadFileModel firstPadFileModel = accountPadEntities.get(0);
+        PadFileModel firstPadFileModel = null;
+        int idx = 0;
+        for (int i = 0; i < accountPadEntities.size(); i++) {
+            PadFileModel padFileModel = accountPadEntities.get(i);
+            if (padFileModel._processorInformation().status().isNull()) {
+                firstPadFileModel = padFileModel;
+                idx = i;
+                break;
+            }
+        }
+        if (firstPadFileModel == null) {
+            // Non of the records was initialized or valid
+            return;
+        }
         double accountChargeTotal = firstPadFileModel._processorInformation().estimatedChargeSplit().getValue();
 
-        for (int i = 1; i < accountPadEntities.size(); i++) {
+        for (int i = idx + 1; i < accountPadEntities.size(); i++) {
             PadFileModel padFileModel = accountPadEntities.get(i);
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
