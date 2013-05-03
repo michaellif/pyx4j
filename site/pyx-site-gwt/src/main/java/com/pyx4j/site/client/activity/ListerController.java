@@ -127,7 +127,7 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
 
     // TODO : check this optimization (in retrieveData):
 //    protected boolean isFilterCreateEmptyDataSet() {
-//        return (parentFiltering != null) && (parentID == null);
+//        return (parentFiltering != null) && (getParent() == null);
 //    }
 
     @Override
@@ -161,10 +161,10 @@ public class ListerController<E extends IEntity> implements ILister.Presenter<E>
     @Override
     public void editNew(Class<? extends CrudAppPlace> openPlaceClass) {
         if (canCreateNewItem()) {
-            if (parentClass != null) {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId, parentClass));
+            if (getParentClass() != null) {
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(getParent(), getParentClass()));
             } else {
-                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(parentId));
+                AppSite.getPlaceController().goTo(AppSite.getHistoryMapper().createPlace(openPlaceClass).formNewItemPlace(getParent()));
             }
         }
     }
