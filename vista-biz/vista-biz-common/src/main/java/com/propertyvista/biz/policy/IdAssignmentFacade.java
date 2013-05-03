@@ -14,6 +14,7 @@
 package com.propertyvista.biz.policy;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -33,10 +34,11 @@ public interface IdAssignmentFacade {
 
     void assignId(Lease lease);
 
-    <E extends LeaseParticipant> void assignId(E leaseCustomer);
+    <E extends LeaseParticipant<?>> void assignId(E leaseCustomer);
 
     void assignId(Employee employee);
 
-    String createAccountNumber();
+    void assignId(MaintenanceRequest maintenanceRequest);
 
+    String createAccountNumber();
 }

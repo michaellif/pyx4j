@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -59,6 +60,9 @@ public abstract class MaintenanceAbstractManager {
             request.buildingElement().set(request.reporter().lease().unit());
         }
         request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
+        if (request.id().isNull()) {
+            ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
+        }
         Persistence.secureSave(request);
     }
 

@@ -52,7 +52,9 @@ public interface IdAssignmentItem extends IEntity {
 
         employee,
 
-        accountNumber;
+        accountNumber,
+
+        maintenance;
 
         @Override
         public String toString() {
@@ -64,7 +66,7 @@ public interface IdAssignmentItem extends IEntity {
         }
 
         public static EnumSet<IdTarget> nonEditableWhenYardyIntergation() {
-            return EnumSet.of(propertyCode, lease, application, customer, tenant, guarantor, lead);
+            return EnumSet.of(propertyCode, lease, application, customer, tenant, guarantor, lead, maintenance);
         }
     }
 

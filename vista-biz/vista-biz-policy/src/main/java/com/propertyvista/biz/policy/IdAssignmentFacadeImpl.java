@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -31,9 +32,9 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
+import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
-import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
 import com.propertyvista.server.domain.IdAssignmentSequence;
@@ -80,7 +81,7 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
     }
 
     @Override
-    public <E extends LeaseParticipant> void assignId(E leaseCustomer) {
+    public <E extends LeaseParticipant<?>> void assignId(E leaseCustomer) {
         if (leaseCustomer instanceof Tenant) {
             if (needsGeneratedId(IdTarget.tenant)) {
                 leaseCustomer.participantId().setValue(getId(IdTarget.tenant));
@@ -98,6 +99,13 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
     public void assignId(Employee employee) {
         if (needsGeneratedId(IdTarget.employee)) {
             employee.employeeId().setValue(getId(IdTarget.employee));
+        }
+    }
+
+    @Override
+    public void assignId(MaintenanceRequest maintenanceRequest) {
+        if (needsGeneratedId(IdTarget.maintenance)) {
+            maintenanceRequest.requestId().setValue(getId(IdTarget.maintenance));
         }
     }
 
