@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.AccountNumberField;
@@ -59,7 +60,12 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo(), new AccountNumberField()), 20).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo(), new AccountNumberField() {
+            @Override
+            public void onRevealNumber() {
+                MessageDialog.info("Ok, display number here...");
+            }
+        }), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         if (isEditable()) {
