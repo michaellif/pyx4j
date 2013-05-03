@@ -32,7 +32,6 @@ import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.PublicPlace;
-import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 
 public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
@@ -97,7 +96,7 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
     @Override
     public final void forwardTo(AppPlace newPlace, final AsyncCallback<AppPlace> callback) {
-        if ((newPlace instanceof PublicPlace) || (newPlace instanceof SigningOutPlace)) {
+        if (newPlace instanceof PublicPlace) {
             callback.onSuccess(newPlace);
         } else if (isApplicationAuthenticated()) {
             final AppPlace targetPlace = selectTargetPlace(newPlace);
