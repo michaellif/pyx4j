@@ -106,6 +106,15 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         // set main form here:
         setForm(new BuildingForm(this));
 
+        addHeaderToolbarItem(new Button(i18n.tr("Maintenance Requests"), new Command() {
+            @Override
+            public void execute() {
+                if (!isVisorShown()) {
+                    ((BuildingViewerView.Presenter) getPresenter()).getMaintenanceRequestVisorController().show();
+                }
+            }
+        }));
+
         Button dashboardButton = new Button(i18n.tr("Dashboard"));
         dashboardsMenu = dashboardButton.createMenu();
         dashboardButton.setMenu(dashboardsMenu);

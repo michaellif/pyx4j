@@ -104,6 +104,5 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         if (VistaFeatures.instance().yardiIntegration()) {
             setActionVisible(maintenanceAction, !value.isPotentialTenant().isBooleanTrue());
         }
-
     }
 }

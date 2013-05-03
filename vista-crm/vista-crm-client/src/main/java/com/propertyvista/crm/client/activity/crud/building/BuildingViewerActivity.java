@@ -18,6 +18,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -31,6 +32,7 @@ import com.propertyvista.crm.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
+import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
@@ -84,6 +86,10 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
 
     private final Presenter<BillingCycleDTO> billingCycleLister;
 
+    private MaintenanceRequestVisorController maintenanceRequestVisorController;
+
+    private Key currentBuildingId;
+
     @SuppressWarnings("unchecked")
     public BuildingViewerActivity(CrudAppPlace place) {
         super(place, BuildingViewFactory.instance(BuildingViewerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class));
@@ -118,6 +124,14 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     }
 
     @Override
+    public MaintenanceRequestVisorController getMaintenanceRequestVisorController() {
+        if (maintenanceRequestVisorController == null) {
+            maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentBuildingId);
+        }
+        return maintenanceRequestVisorController;
+    }
+
+    @Override
     public boolean canEdit() {
         return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
     }
@@ -125,6 +139,8 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
     @Override
     public void onPopulateSuccess(BuildingDTO result) {
         super.onPopulateSuccess(result);
+
+        currentBuildingId = result.id().getValue();
 
         // -------------------------------------------------------
 
