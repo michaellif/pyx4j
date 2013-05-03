@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
@@ -24,6 +25,7 @@ import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditor
 import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
@@ -37,7 +39,11 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
 
     @Override
     protected void createNewEntity(final AsyncCallback<MaintenanceRequestDTO> callback) {
-        ((MaintenanceCrudService) getService()).createNewRequest(callback, getParentId());
+        if (getParentId() != null) {
+            ((MaintenanceCrudService) getService()).createNewRequest(callback, EntityFactory.createIdentityStub(Building.class, getParentId()));
+        } else {
+            super.createNewEntity(callback);
+        }
     }
 
     @Override

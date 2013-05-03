@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.visor.maintenance;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.activity.AbstractVisorController;
 import com.pyx4j.site.client.ui.IPane;
@@ -34,12 +36,17 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
 
     private final Presenter<MaintenanceRequestDTO> lister;
 
-    public MaintenanceRequestVisorController(IPane parentView, Key tenantId) {
+    public MaintenanceRequestVisorController(IPane parentView, Key buildingId) {
         super(parentView);
         visor = new MaintenanceRequestVisorView(this);
         lister = ListerControllerFactory.create(visor.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
                 MaintenanceRequestDTO.class, VistaCrmBehavior.Maintenance);
-        lister.setParent(tenantId);
+        lister.setParent(buildingId);
+    }
+
+    public MaintenanceRequestVisorController(IPane parentView, Key buildingId, Key tenantId) {
+        this(parentView, buildingId);
+        lister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).reporter().id(), tenantId));
     }
 
     @Override
@@ -48,5 +55,4 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
         visor.setCaption(i18n.tr("Maintenance Requests"));
         getParentView().showVisor(visor);
     }
-
 }

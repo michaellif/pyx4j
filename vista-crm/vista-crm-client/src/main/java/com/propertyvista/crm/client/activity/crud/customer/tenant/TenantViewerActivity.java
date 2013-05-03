@@ -43,6 +43,8 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     private Key currentTenantId;
 
+    private Key currentBuildingId;
+
     private Customer screeningCustomer;
 
     public TenantViewerActivity(CrudAppPlace place) {
@@ -52,7 +54,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     @Override
     public MaintenanceRequestVisorController getMaintenanceRequestVisorController() {
         if (maintenanceRequestVisorController == null) {
-            maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentTenantId);
+            maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentBuildingId, currentTenantId);
         }
         return maintenanceRequestVisorController;
     }
@@ -95,6 +97,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
         currentTenantId = result.getPrimaryKey();
         screeningCustomer = result.customer();
+        currentBuildingId = result.lease().unit().building().id().getValue();
     }
 
     @Override

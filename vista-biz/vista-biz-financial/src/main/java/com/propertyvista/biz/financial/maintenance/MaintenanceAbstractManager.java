@@ -40,7 +40,6 @@ public abstract class MaintenanceAbstractManager {
     public MaintenanceRequest createNewRequest(Building building) {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
         request.building().set(building);
-        request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         return request;
     }
 
@@ -52,7 +51,6 @@ public abstract class MaintenanceAbstractManager {
             request.buildingElement().set(tenant.lease().unit());
             request.reporter().set(tenant);
         }
-        request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         return request;
     }
 
@@ -61,6 +59,7 @@ public abstract class MaintenanceAbstractManager {
             Persistence.ensureRetrieve(request.reporter().lease(), AttachLevel.Attached);
             request.buildingElement().set(request.reporter().lease().unit());
         }
+        request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         Persistence.secureSave(request);
     }
 

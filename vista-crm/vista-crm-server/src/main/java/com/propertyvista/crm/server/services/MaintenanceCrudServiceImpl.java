@@ -33,6 +33,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -112,8 +113,15 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback, Key tenantId) {
-        Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId);
+    public void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback, Building buildingId) {
+        Building building = Persistence.service().retrieve(Building.class, buildingId.getPrimaryKey());
+        MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(building);
+        callback.onSuccess(createDTO(maintenanceRequest));
+    }
+
+    @Override
+    public void createNewRequestForTenant(AsyncCallback<MaintenanceRequestDTO> callback, Tenant buildingId) {
+        Tenant tenant = Persistence.service().retrieve(Tenant.class, buildingId.getPrimaryKey());
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequestForTenant(tenant);
         callback.onSuccess(createDTO(maintenanceRequest));
     }
