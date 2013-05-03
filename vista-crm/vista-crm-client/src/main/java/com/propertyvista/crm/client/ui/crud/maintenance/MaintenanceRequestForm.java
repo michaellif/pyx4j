@@ -58,7 +58,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
-    private final TenantSelector tenantSelector = new TenantSelector();
+    private final TenantSelector reporterSelector = new TenantSelector();
 
     private final PrioritySelector priority = new PrioritySelector();
 
@@ -76,9 +76,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
+
         // set value again in case meta comes after the form was populated
         if (getValue() != null) {
-            setComponentsValue(getValue(), true, true);
+            setComponentsValue(getValue(), false, true);
         }
     }
 
@@ -97,14 +98,14 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().requestId()).setViewable(true);
 
         left.add(new DecoratorBuilder(inject(proto().building(), buildingSelector), 25).build());
-        left.add(new DecoratorBuilder(inject(proto().reporter(), tenantSelector), 25).build());
+        left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
         buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
             @Override
             public void onValueChange(ValueChangeEvent<Building> event) {
-                tenantSelector.setValue(null);
-                tenantSelector.setEnabled(!event.getValue().isNull());
+                reporterSelector.setValue(null);
             }
         });
+
         // create category selection panel
         categoryPanel = new VerticalPanel();
         categoryPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
@@ -144,6 +145,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
             statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
             statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+
+            get(proto().status()).setViewable(true);
         }
 
         surveyPanel = new FormFlexPanel();
@@ -161,7 +164,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         return panel;
     }
 
-    public void initSelectors() {
+    private void initSelectors() {
         if (meta == null || choicesReady) {
             return;
         }
@@ -217,8 +220,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         if (isEditable()) {
             buildingSelector.setEditable(getValue().building().isNull());
-            tenantSelector.setEditable(getValue().reporter().isNull());
-            tenantSelector.setEnabled(!getValue().building().isNull());
+            reporterSelector.setEditable(getValue().reporter().isNull());
         }
 
         get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));

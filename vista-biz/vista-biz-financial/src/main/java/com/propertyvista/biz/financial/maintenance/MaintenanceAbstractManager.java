@@ -45,12 +45,11 @@ public abstract class MaintenanceAbstractManager {
 
     public MaintenanceRequest createNewRequest(Tenant tenant) {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
-        if (tenant != null) {
-            Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
-            request.building().set(tenant.lease().unit().building());
-            request.buildingElement().set(tenant.lease().unit());
-            request.reporter().set(tenant);
-        }
+        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);
+        request.building().set(tenant.lease().unit().building());
+        request.buildingElement().set(tenant.lease().unit());
+        request.reporter().set(tenant);
         return request;
     }
 

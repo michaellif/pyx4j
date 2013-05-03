@@ -19,6 +19,7 @@ import com.pyx4j.entity.shared.IList;
 
 @Transient
 public interface MaintenanceRequestMetadata extends IEntity {
+
     MaintenanceRequestCategory rootCategory();
 
     IList<MaintenanceRequestCategoryLevel> categoryLevels();
