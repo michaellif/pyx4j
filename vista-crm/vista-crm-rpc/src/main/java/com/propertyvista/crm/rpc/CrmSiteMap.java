@@ -25,6 +25,9 @@ import com.pyx4j.site.shared.meta.SiteMap;
 public class CrmSiteMap implements SiteMap {
 
     public static class Login extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     /**

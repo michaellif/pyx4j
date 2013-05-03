@@ -17,7 +17,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
-import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 import com.propertyvista.field.rpc.HeaderMode.NavigationToolbar;
@@ -30,9 +29,6 @@ import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
 public class FieldSiteMap implements SiteMap {
 
     public static class Login extends AppPlace implements PublicPlace, FullScreen {
-    }
-
-    public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
     /**

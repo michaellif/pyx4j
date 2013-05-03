@@ -16,7 +16,6 @@ package com.propertyvista.portal.rpc.ptapp;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
-import com.pyx4j.site.shared.meta.SigningOutPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
 public class PtSiteMap implements SiteMap {
@@ -36,9 +35,6 @@ public class PtSiteMap implements SiteMap {
     }
 
     public static class PasswordResetRequest extends AppPlace implements PublicPlace {
-    }
-
-    public static class SigningOut extends AppPlace implements SigningOutPlace {
     }
 
     public static class PasswordReset extends AppPlace {

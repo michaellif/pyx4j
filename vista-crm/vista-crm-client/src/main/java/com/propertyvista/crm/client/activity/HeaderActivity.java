@@ -31,6 +31,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
@@ -102,7 +103,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
                 ClientContext.logout((AuthenticationService) GWT.create(CrmAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
                     @Override
                     public void onSuccess(AuthenticationResponse result) {
-                        AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+                        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
                     }
                 });
             }
@@ -111,7 +112,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
 
     @Override
     public void login() {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Login());
+        AppSite.getPlaceController().goTo(AppPlace.NOWHERE);
     }
 
     private void obtainAvailableLocales() {
