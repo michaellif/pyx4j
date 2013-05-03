@@ -19,11 +19,11 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
-import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
+import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface DelinquentTenantCriteriaProvider {
+public interface DelinquentLeaseCriteriaProvider {
 
-    void makeTenantCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
+    void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
 
 }

@@ -20,16 +20,16 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
-import com.propertyvista.crm.rpc.dto.gadgets.DelinquentTenantDTO;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.DelinquentTenantCriteriaProvider;
+import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.filters.DelinquentLeaseCriteriaProvider;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface ArrearsGadgetService extends AbstractCounterGadgetBaseService<ArrearsGadgetDataDTO, Vector<Building>>, DelinquentTenantCriteriaProvider {
+public interface ArrearsGadgetService extends AbstractCounterGadgetBaseService<ArrearsGadgetDataDTO, Vector<Building>>, DelinquentLeaseCriteriaProvider {
 
     @Override
     public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, Vector<Building> queryParams);
 
     @Override
-    public void makeTenantCriteria(AsyncCallback<EntityListCriteria<DelinquentTenantDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
-
+    public void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, Vector<Building> buildingsFilter,
+            String criteriaPreset);
 }

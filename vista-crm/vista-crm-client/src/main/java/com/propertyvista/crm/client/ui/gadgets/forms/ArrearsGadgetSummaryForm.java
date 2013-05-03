@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.i18n.client.NumberFormat;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
@@ -40,22 +42,39 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        FlexTable content = new FlexTable();
         int row = -1;
-        content.setH2(++row, 0, 1, i18n.tr("Delinquent Tenants:"));
+//        content.setH2(++row, 0, 1, i18n.tr("Delinquent Tenants:"));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().delinquentTenants())).customLabel("").useLabelSemicolon(false).build());
+//        content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
+        content.setWidget(++row, 0, new Label(i18n.tr("This Month:")));
+        content.setWidget(row, 1, inject(proto().outstandingThisMonthCount()));
+        content.setWidget(row, 2, inject(proto().outstandingThisMonth()));
 
-        content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingThisMonth())).customLabel(i18n.tr("This Month")).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding1to30Days())).customLabel(i18n.tr("1 - 30")).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding31to60Days())).customLabel(i18n.tr("31 - 60")).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding61to90Days())).customLabel(i18n.tr("61 - 90")).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstanding91andMoreDays())).customLabel(i18n.tr("91+")).build());
+        content.setWidget(++row, 0, new Label(i18n.tr("1-30:")));
+        content.setWidget(row, 1, inject(proto().outstanding1to30DaysCount()));
+        content.setWidget(row, 2, inject(proto().outstanding1to30Days()));
 
-        content.setH3(++row, 0, 1, i18n.tr("Total:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingTotal())).customLabel("").useLabelSemicolon(false).build());
+        content.setWidget(++row, 0, new Label(i18n.tr("31-60:")));
+        content.setWidget(row, 1, inject(proto().outstanding31to60DaysCount()));
+        content.setWidget(row, 2, inject(proto().outstanding31to60Days()));
 
+        content.setWidget(++row, 0, new Label(i18n.tr("61-90:")));
+        content.setWidget(row, 1, inject(proto().outstanding61to90DaysCount()));
+        content.setWidget(row, 2, inject(proto().outstanding61to90Days()));
+
+        content.setWidget(++row, 0, new Label(i18n.tr("91+:")));
+        content.setWidget(row, 1, inject(proto().outstanding91andMoreDaysCount()));
+        content.setWidget(row, 2, inject(proto().outstanding91andMoreDays()));
+
+//        content.setH3(++row, 0, 1, i18n.tr("Total:"));
+        content.setWidget(++row, 0, new Label(i18n.tr("Total:")));
+        content.setWidget(row, 1, inject(proto().delinquentLeases()));
+        content.setWidget(row, 2, inject(proto().outstandingTotal()));
+
+        content.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
+        content.getColumnFormatter().setWidth(1, "100px");
+        content.getColumnFormatter().setWidth(2, "150px");
         return content;
     }
 
@@ -63,6 +82,7 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
+        // WE DO MUST DO THIS BECAUSE CHYPERLINKS sued in the form do not support formatting
         get(proto().outstandingThisMonth()).setValue(currencyFormat.format(getValue().buckets().bucketThisMonth().getValue()));
         get(proto().outstanding1to30Days()).setValue(currencyFormat.format(getValue().buckets().bucket30().getValue()));
         get(proto().outstanding31to60Days()).setValue(currencyFormat.format(getValue().buckets().bucket60().getValue()));

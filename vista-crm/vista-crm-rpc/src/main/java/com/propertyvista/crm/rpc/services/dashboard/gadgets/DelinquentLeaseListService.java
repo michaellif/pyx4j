@@ -11,18 +11,12 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.dto.gadgets;
+package com.propertyvista.crm.rpc.services.dashboard.gadgets;
 
-import com.pyx4j.entity.annotations.ExtendsDBO;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.domain.financial.billing.AgingBuckets;
-import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 
-@Transient
-@ExtendsDBO
-public interface DelinquentTenantDTO extends Tenant {
-
-    AgingBuckets arrears();
+public interface DelinquentLeaseListService extends AbstractListService<DelinquentLeaseDTO> {
 
 }

@@ -87,7 +87,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetSe
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentTenantListService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
@@ -261,7 +261,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitAvailabilitySummaryGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(UnitAvailabilityStatusListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CollectionsGadgetService.class));
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DelinquentTenantListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(DelinquentLeaseListService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeadsAndRentalsGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(LeaseExpirationGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(MaintenanceGadgetService.class));

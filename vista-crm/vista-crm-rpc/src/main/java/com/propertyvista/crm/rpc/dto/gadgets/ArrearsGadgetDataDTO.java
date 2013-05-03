@@ -23,31 +23,41 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 @Transient
 public interface ArrearsGadgetDataDTO extends IEntity {
 
-    IPrimitive<Integer> delinquentTenants();
-
     AgingBuckets buckets();
 
     /** used for presentation */
     @Caption(name = "Outstanding This Month")
     IPrimitive<String> outstandingThisMonth();
 
+    IPrimitive<Integer> outstandingThisMonthCount();
+
     /** used for presentation */
     @Caption(name = "Outstanding 1 to 30 Days")
     IPrimitive<String> outstanding1to30Days();
+
+    IPrimitive<Integer> outstanding1to30DaysCount();
 
     /** used for presentation */
     @Caption(name = "Outstanding 31 to 60 Days")
     IPrimitive<String> outstanding31to60Days();
 
+    IPrimitive<Integer> outstanding31to60DaysCount();
+
     /** used for presentation */
     @Caption(name = "Outstanding 61 to 90 Days")
     IPrimitive<String> outstanding61to90Days();
+
+    IPrimitive<Integer> outstanding61to90DaysCount();
 
     /** used for presentation */
     @Caption(name = "Outstanding 91+ Days")
     IPrimitive<String> outstanding91andMoreDays();
 
+    IPrimitive<Integer> outstanding91andMoreDaysCount();
+
     /** used for presentation */
     IPrimitive<String> outstandingTotal();
+
+    IPrimitive<Integer> delinquentLeases();
 
 }
