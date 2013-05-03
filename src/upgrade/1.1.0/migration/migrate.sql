@@ -25,7 +25,7 @@
 
 SET client_min_messages = 'error';
 
-/*
+
 BEGIN TRANSACTION;
         SELECT  namespace,_dba_.migrate_pmc_110(namespace)
         FROM    _admin_.admin_pmc a
@@ -261,7 +261,7 @@ BEGIN TRANSACTION;
         AND     namespace ~ '^z';
 COMMIT;
 
-*/
+
 
 SET client_min_messages = 'notice';
 

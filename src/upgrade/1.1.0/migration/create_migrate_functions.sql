@@ -21,6 +21,14 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- foreign keys
+        
+        ALTER TABLE maintenance_request DROP CONSTRAINT maintenance_request_lease_participant_fk;
+        
+        -- check constraints
+        
+        ALTER TABLE maintenance_request DROP CONSTRAINT maintenance_request_lease_participant_discriminator_d_ck;
+        
        
         /**
         ***     ======================================================================================================
@@ -40,7 +48,16 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- maintenance_request
         
+        ALTER TABLE maintenance_request ADD COLUMN building BIGINT,
+                                        ADD COLUMN building_element BIGINT,
+                                        ADD COLUMN building_element_discriminator VARCHAR(50),
+                                        ADD COLUMN originator BIGINT,
+                                        ADD COLUMN originator_discriminator VARCHAR(50);
+                                        
+        ALTER TABLE maintenance_request RENAME COLUMN lease_participant TO reporter;
+        ALTER TABLE maintenance_request RENAME COLUMN lease_participant_discriminator TO reporter_discriminator;
         
         /**
         ***     =====================================================================================================
@@ -49,6 +66,16 @@ BEGIN
         ***
         ***     =====================================================================================================
         **/
+        
+        -- maintenance_request
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                ||'SET  building = b.id '
+                ||'FROM lease_participant lp '
+                ||'JOIN lease l ON (lp.lease = l.id) '
+                ||'JOIN apt_unit a ON (l.unit = a.id) '
+                ||'JOIN building b ON (a.building = b.id) '
+                ||'WHERE m.reporter = lp.id ';
         
         
         
@@ -70,7 +97,25 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- foreign keys
         
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_fk FOREIGN KEY(reporter) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+
+        
+        -- check constraints
+        
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_element_discriminator_d_ck 
+                CHECK ((building_element_discriminator) IN ('LockerArea_BuildingElement', 'Parking_BuildingElement', 'Roof_BuildingElement', 'Unit_BuildingElement'));
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_originator_discriminator_d_ck CHECK ((originator_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_discriminator_d_ck CHECK (reporter_discriminator = 'Tenant');
+
+        
+        -- not null
+        
+        ALTER TABLE maintenance_request ALTER COLUMN reporter DROP NOT NULL;
+        ALTER TABLE maintenance_request ALTER COLUMN reporter_discriminator DROP NOT NULL;
+        ALTER TABLE maintenance_request ALTER COLUMN building SET NOT NULL;
         
         /**
         ***     ====================================================================================================

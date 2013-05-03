@@ -34,6 +34,15 @@ SET search_path = '_admin_';
         **/
         
         
+        /**
+        ***     ======================================================================================================
+        ***
+        ***             DROP INDEXES 
+        ***
+        ***     ======================================================================================================
+        **/
+        
+        DROP INDEX pad_batch_pmc_namespace_merchant_account_key_idx;
         
         
         /**
@@ -80,6 +89,21 @@ SET search_path = '_admin_';
         ***     ==========================================================================================================
         **/
         
+        -- pad_reconciliation_debit_record
+        
+        ALTER TABLE pad_reconciliation_debit_record DROP COLUMN odr;
+        
+        
+        -- pad_reconciliation_summary
+        
+        ALTER TABLE pad_reconciliation_summary DROP COLUMN odr;
+        
+        
+        -- pad_batch
+        
+        ALTER TABLE pad_batch DROP COLUMN pmc_namespace;
+        
+        
         
         /**
         ***     ========================================================================================================
@@ -102,12 +126,12 @@ SET search_path = '_admin_';
         /**
         ***     ============================================================================================================
         ***     
-        ***             INDEXES
+        ***             CREATE INDEXES
         ***
         ***     ============================================================================================================
         **/
         
-        
+        CREATE INDEX pad_batch_pmc_merchant_account_key_idx ON pad_batch USING btree (pmc, merchant_account_key); 
        
 
 
