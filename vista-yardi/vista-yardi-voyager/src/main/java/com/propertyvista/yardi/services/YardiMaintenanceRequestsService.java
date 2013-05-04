@@ -17,7 +17,9 @@ import java.rmi.RemoteException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -96,11 +98,28 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         return (Date) CacheService.get(lastTicketUpdateCacheKey);
     }
 
+    private Date setMetaTimestamp(Date ts) {
+        CacheService.put(lastMetaUpdateCacheKey, ts);
+        return ts;
+    }
+
+    private Date setTicketTimestamp(Date ts) {
+        // Yardi provides only date-portion of the ticket update date-time, so we should reset time-portion if set
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.setTime(ts);
+        cal.set(GregorianCalendar.HOUR_OF_DAY, 0);
+        cal.set(GregorianCalendar.MINUTE, 0);
+        cal.set(GregorianCalendar.SECOND, 0);
+        Date dateOnly = cal.getTime();
+        CacheService.put(lastTicketUpdateCacheKey, dateOnly);
+        return dateOnly;
+    }
+
     /*
      * We grab Metadata on first request and then every time a new category found in requested ticket.
      */
     public void loadMaintenanceRequestMeta(PmcYardiCredential yc) throws YardiServiceException {
-        assert VistaFeatures.instance().yardiIntegration();
+        assert VistaFeatures.instance().yardiIntegration() && VistaFeatures.instance().yardiMaintenance();
 
         if (getMetaTimestamp() == null) {
             loadMeta(yc);
@@ -112,15 +131,17 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
      * we get the latest update date from previously persisted tickets.
      */
     public void loadMaintenanceRequests(PmcYardiCredential yc) throws YardiServiceException {
-        assert VistaFeatures.instance().yardiIntegration();
+        assert VistaFeatures.instance().yardiIntegration() && VistaFeatures.instance().yardiMaintenance();
 
         // make sure meta was loaded
         loadMaintenanceRequestMeta(yc);
 
-        Date lastModified = getTicketTimestamp();
-        if (lastModified == null) {
-            lastModified = YardiMaintenanceIntegrationAgent.getLastModifiedDate();
+        Date ticketTS = getTicketTimestamp();
+        if (ticketTS == null) {
+            ticketTS = setTicketTimestamp(YardiMaintenanceIntegrationAgent.getLastModifiedDate());
         }
+        // add 1 ms time gap
+        ticketTS.setTime(ticketTS.getTime() - 1);
 
         List<String> propertyCodes = null;
         if (yc.propertyCode().isNull()) {
@@ -131,7 +152,11 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
 
         if (propertyCodes != null) {
             for (String propertyCode : propertyCodes) {
-                loadRequests(yc, lastModified, propertyCode);
+                Date lastModified = loadRequests(yc, ticketTS, propertyCode);
+                if (lastModified.after(getTicketTimestamp())) {
+                    log.info("setting new ticket time stamp {} -> {}", getTicketTimestamp(), lastModified.getTime());
+                    setTicketTimestamp(lastModified);
+                }
             }
         } else {
             log.trace("No PropertyCodes provided");
@@ -143,23 +168,26 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         ServiceRequests requests = new ServiceRequests();
         requests.getServiceRequest().add(serviceRequest);
 
-        requests = postMaintenanceRequests(yc, requests);
-        new YardiMaintenanceProcessor().updateRequest(yc, request, requests.getServiceRequest().get(0));
-
-        return request;
+        ServiceRequests result = postMaintenanceRequests(yc, requests);
+        MaintenanceRequest mr = new YardiMaintenanceProcessor().updateRequest(yc, request, result.getServiceRequest().get(0));
+        if (mr != null) {
+            Persistence.service().persist(mr);
+        }
+        return mr;
     }
 
-    protected void loadRequests(final PmcYardiCredential yc, Date fromDate, String propertyCode) throws YardiServiceException {
+    protected Date loadRequests(final PmcYardiCredential yc, Date fromDate, String propertyCode) throws YardiServiceException {
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         params.setYardiPropertyId(propertyCode);
-        final Date now = SystemDateManager.getDate();
         if (fromDate != null) {
             params.setFromDate(dateFormat.format(fromDate));
         }
+        log.info("Getting tickets for {} modified after {}", params.getYardiPropertyId(), params.getFromDate());
         final ServiceRequests newRequests = getRequestsByParameters(yc, params);
-        new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
+        return new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Date, YardiServiceException>() {
             @Override
-            public Void execute() throws YardiServiceException {
+            public Date execute() throws YardiServiceException {
+                Date lastUpdate = new Date(0);
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 for (ServiceRequest request : newRequests.getServiceRequest()) {
                     // When no records found Yardi returns empty request with undocumented Error element inside !?
@@ -174,11 +202,14 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
                     if (mr != null) {
                         Persistence.service().persist(mr);
                     }
+                    // get the newest update time
+                    if (lastUpdate.before(mr.updated().getValue())) {
+                        lastUpdate.setTime(mr.updated().getValue().getTime());
+                    }
                 }
 
-                CacheService.put(lastTicketUpdateCacheKey, now);
-                log.debug("loaded requests: {}", newRequests.getServiceRequest().size());
-                return null;
+                log.info("loaded requests: {}; last modified: {}", newRequests.getServiceRequest().size(), lastUpdate);
+                return lastUpdate;
             }
         });
     }
@@ -192,20 +223,20 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 // categories
                 processor.mergeCategories(meta.getCategories());
-                log.debug("loaded categories: {}", meta.getCategories().getCategory().size());
+                log.info("loaded categories: {}", meta.getCategories().getCategory().size());
                 // statuses
                 List<MaintenanceRequestStatus> statuses = processor.mergeStatuses(meta.getStatuses());
                 if (statuses != null) {
                     Persistence.service().persist(statuses);
                 }
-                log.debug("loaded statuses: {}", statuses.size());
+                log.info("loaded statuses: {}", statuses.size());
                 // priorities
                 List<MaintenanceRequestPriority> priorities = processor.mergePriorities(meta.getPriorities());
                 if (priorities != null) {
                     Persistence.service().persist(priorities);
                 }
-                log.debug("loaded priorities: {}", priorities.size());
-                CacheService.put(lastMetaUpdateCacheKey, now);
+                log.info("loaded priorities: {}", priorities.size());
+                setMetaTimestamp(now);
 
                 return null;
             }

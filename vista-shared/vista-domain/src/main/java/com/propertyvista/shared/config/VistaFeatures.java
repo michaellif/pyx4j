@@ -41,6 +41,8 @@ public class VistaFeatures {
         CountryOfOperation countryOfOperation();
 
         boolean yardiIntegration();
+
+        boolean yardiMaintenance();
     }
 
     private final static VistaFeaturesCustomization impl;

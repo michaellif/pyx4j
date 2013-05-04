@@ -15,12 +15,15 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -79,6 +82,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         }
 
         approvalLink.setVisible(true || !isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
+
+        get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().isBooleanTrue());
     }
 
     private FormFlexPanel createGeneralTab() {
@@ -149,11 +154,21 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().tenantSureIntegration()), 5).build());
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        final CComponent<Boolean, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
+        final CComponent<Boolean, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
+        yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                yardiMaintenanceSwitch.setEnabled(Boolean.TRUE.equals(event.getValue()));
+            }
+        });
         return content;
     }
 

@@ -14,6 +14,7 @@
 package com.propertyvista.domain.maintenance;
 
 import java.sql.Time;
+import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
@@ -71,11 +72,11 @@ public interface MaintenanceRequest extends IEntity {
     MaintenanceRequestStatus status();
 
     @Timestamp(Update.Created)
-    IPrimitive<LogicalDate> submitted();
+    IPrimitive<Date> submitted();
 
     @Caption(name = "Last Updated")
     @Timestamp(Update.Updated)
-    IPrimitive<LogicalDate> updated();
+    IPrimitive<Date> updated();
 
     IPrimitive<LogicalDate> scheduledDate();
 

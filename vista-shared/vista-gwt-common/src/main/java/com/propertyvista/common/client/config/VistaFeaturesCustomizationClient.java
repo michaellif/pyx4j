@@ -63,6 +63,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
+    public boolean yardiMaintenance() {
+        return features.yardiMaintenance().getValue(Boolean.FALSE);
+    }
+
+    @Override
     public CountryOfOperation countryOfOperation() {
         return features.countryOfOperation().getValue();
     }

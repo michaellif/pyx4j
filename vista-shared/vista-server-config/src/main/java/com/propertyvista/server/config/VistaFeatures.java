@@ -95,6 +95,11 @@ public class VistaFeatures {
         }
 
         @Override
+        public boolean yardiMaintenance() {
+            return threadLocale.get().yardiMaintenance().getValue(Boolean.FALSE);
+        }
+
+        @Override
         public CountryOfOperation countryOfOperation() {
             return threadLocale.get().countryOfOperation().getValue();
         }

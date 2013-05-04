@@ -15,14 +15,10 @@ package com.propertyvista.yardi.services;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -35,7 +31,6 @@ import com.yardi.entity.maintenance.meta.Priorities;
 import com.yardi.entity.maintenance.meta.Status;
 import com.yardi.entity.maintenance.meta.Statuses;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -77,7 +72,9 @@ public class YardiMaintenanceProcessor {
 // TODO - find out the use of TenantCaused
 //        req.setTenantCaused(!mr.reporter().isNull());
 
-        req.setServiceRequestFullDescription(mr.description().getValue());
+// TODO choose between FullDescription and DescriptionNotes
+//        req.setServiceRequestFullDescription(mr.description().getValue());
+        req.setProblemDescriptionNotes(mr.description().getValue());
         req.setServiceRequestBriefDescription(mr.summary().getValue());
 
         req.setHasPermissionToEnter(mr.permissionToEnter().getValue());
@@ -102,20 +99,7 @@ public class YardiMaintenanceProcessor {
 
         req.setServiceRequestDate(mr.submitted().getValue());
 
-        if (mr.updated().getValue() != null) {
-            try {
-                GregorianCalendar cal = new GregorianCalendar();
-                cal.setTime(mr.updated().getValue());
-                req.setUpdateDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(cal));
-            } catch (DatatypeConfigurationException ignore) {
-            }
-        }
-
         return req;
-    }
-
-    public void updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest sr) {
-        updateRequest(mr, createRequest(yc, sr));
     }
 
     // we will need to update and reload meta from here if request categories, status, or priority do not exist
@@ -124,10 +108,110 @@ public class YardiMaintenanceProcessor {
         crit.add(PropertyCriterion.eq(crit.proto().requestId(), request.getServiceRequestId().toString()));
         MaintenanceRequest mr = Persistence.service().retrieve(crit);
         if (mr == null) {
-            mr = createRequest(yc, request);
-        } else {
-            updateRequest(yc, mr, request);
+            mr = EntityFactory.create(MaintenanceRequest.class);
         }
+        return updateRequest(yc, mr, request);
+    }
+
+    public MaintenanceRequest updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest request) {
+        boolean metaReloaded = false;
+        // find building - propertyCode field is mandatory
+        {
+            EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
+            crit.add(PropertyCriterion.eq(crit.proto().propertyCode(), request.getPropertyCode()));
+            Building building = Persistence.service().retrieve(crit);
+            if (building == null) {
+                log.warn("Request dropped - Building not found: {}", request.getPropertyCode());
+                return null;
+            } else {
+                mr.building().set(building);
+            }
+        }
+        // unit
+        if (request.getUnitCode() != null) {
+            EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
+            crit.add(PropertyCriterion.eq(crit.proto().building(), mr.building()));
+            crit.add(PropertyCriterion.eq(crit.proto().info().number(), request.getUnitCode()));
+            AptUnit unit = Persistence.service().retrieve(crit);
+            if (unit == null) {
+                log.warn("Request dropped - Unit not found: {}", request.getUnitCode());
+                return null;
+            } else {
+                mr.buildingElement().set(unit);
+            }
+        }
+        // find tenant (if ticket is TenantCaused)
+        if (request.getTenantCode() != null) {
+            EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
+            crit.add(PropertyCriterion.eq(crit.proto().participantId(), request.getTenantCode()));
+            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
+            Tenant tenant = Persistence.service().retrieve(crit);
+            if (tenant == null) {
+                log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
+                return null;
+            } else {
+                mr.reporter().set(tenant);
+            }
+        }
+        // category
+        if (request.getCategory() != null) {
+            MaintenanceRequestCategory category = findCategory(request.getCategory(), null);
+            if (category == null) {
+                metaReloaded = reloadMeta(yc);
+                category = findCategory(request.getCategory(), null);
+                if (category == null) {
+                    log.warn("Request dropped - Category not found: {}", request.getCategory());
+                    return null;
+                }
+            }
+            MaintenanceRequestCategory subcat = findCategory(request.getSubCategory(), category);
+            if (subcat == null && !metaReloaded) {
+                metaReloaded = reloadMeta(yc);
+                subcat = findCategory(request.getSubCategory(), category);
+                if (subcat == null) {
+                    log.debug("SubCategory not found: {}", request.getSubCategory());
+                    return null;
+                }
+            }
+            mr.category().set(subcat);
+        }
+        // status
+        {
+            MaintenanceRequestStatus stat = findStatus(request.getCurrentStatus());
+            if (stat == null && !metaReloaded) {
+                metaReloaded = reloadMeta(yc);
+                stat = findStatus(request.getCurrentStatus());
+                if (stat == null) {
+                    log.warn("Request dropped - Status not found: {}", request.getCurrentStatus());
+                    return null;
+                }
+            }
+            mr.status().set(stat);
+        }
+        // priority
+        if (request.getPriority() != null) {
+            MaintenanceRequestPriority pr = findPriority(request.getPriority());
+            if (pr == null && !metaReloaded) {
+                metaReloaded = reloadMeta(yc);
+                pr = findPriority(request.getPriority());
+                if (pr == null) {
+                    log.warn("Request dropped - Priority not found: {}", request.getPriority());
+                    return null;
+                }
+            }
+            mr.priority().set(pr);
+        }
+        // other data
+        mr.requestId().setValue(request.getServiceRequestId().toString());
+        mr.summary().setValue(request.getServiceRequestBriefDescription());
+// TODO choose between FullDescription and DescriptionNotes
+//        mr.description().setValue(request.getServiceRequestFullDescription());
+        mr.description().setValue(request.getProblemDescriptionNotes());
+        mr.permissionToEnter().setValue(request.isHasPermissionToEnter());
+        mr.petInstructions().setValue(request.getAccessNotes());
+        mr.submitted().setValue(request.getServiceRequestDate());
+        mr.updated().setValue(request.getUpdateDate().toGregorianCalendar().getTime());
+
         return mr;
     }
 
@@ -262,122 +346,6 @@ public class YardiMaintenanceProcessor {
         MaintenanceRequestPriority priority = EntityFactory.create(MaintenanceRequestPriority.class);
         priority.name().setValue(name);
         return priority;
-    }
-
-    private MaintenanceRequest createRequest(PmcYardiCredential yc, ServiceRequest request) {
-        MaintenanceRequest mr = EntityFactory.create(MaintenanceRequest.class);
-        boolean metaReloaded = false;
-        // find building - propertyCode field is mandatory
-        {
-            EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
-            crit.add(PropertyCriterion.eq(crit.proto().propertyCode(), request.getPropertyCode()));
-            Building building = Persistence.service().retrieve(crit);
-            if (building == null) {
-                log.warn("Request dropped - Building not found: {}", request.getPropertyCode());
-                return null;
-            } else {
-                mr.building().set(building);
-            }
-        }
-        // unit
-        if (request.getUnitCode() != null) {
-            EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
-            crit.add(PropertyCriterion.eq(crit.proto().building(), mr.building()));
-            crit.add(PropertyCriterion.eq(crit.proto().info().number(), request.getUnitCode()));
-            AptUnit unit = Persistence.service().retrieve(crit);
-            if (unit == null) {
-                log.warn("Request dropped - Unit not found: {}", request.getUnitCode());
-                return null;
-            } else {
-                mr.buildingElement().set(unit);
-            }
-        }
-        // find tenant (if ticket is TenantCaused)
-        if (request.getTenantCode() != null) {
-            EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
-            crit.add(PropertyCriterion.eq(crit.proto().participantId(), request.getTenantCode()));
-            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
-            Tenant tenant = Persistence.service().retrieve(crit);
-            if (tenant == null) {
-                log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
-                return null;
-            } else {
-                mr.reporter().set(tenant);
-            }
-        }
-        // category
-        if (request.getCategory() != null) {
-            MaintenanceRequestCategory category = findCategory(request.getCategory(), null);
-            if (category == null) {
-                metaReloaded = reloadMeta(yc);
-                category = findCategory(request.getCategory(), null);
-                if (category == null) {
-                    log.warn("Request dropped - Category not found: {}", request.getCategory());
-                    return null;
-                }
-            }
-            MaintenanceRequestCategory subcat = findCategory(request.getSubCategory(), category);
-            if (subcat == null && !metaReloaded) {
-                metaReloaded = reloadMeta(yc);
-                subcat = findCategory(request.getSubCategory(), category);
-                if (subcat == null) {
-                    log.debug("SubCategory not found: {}", request.getSubCategory());
-                    return null;
-                }
-            }
-            mr.category().set(subcat);
-        }
-        // status
-        {
-            MaintenanceRequestStatus stat = findStatus(request.getCurrentStatus());
-            if (stat == null && !metaReloaded) {
-                metaReloaded = reloadMeta(yc);
-                stat = findStatus(request.getCurrentStatus());
-                if (stat == null) {
-                    log.warn("Request dropped - Status not found: {}", request.getCurrentStatus());
-                    return null;
-                }
-            }
-            mr.status().set(stat);
-        }
-        // priority
-        if (request.getPriority() != null) {
-            MaintenanceRequestPriority pr = findPriority(request.getPriority());
-            if (pr == null && !metaReloaded) {
-                metaReloaded = reloadMeta(yc);
-                pr = findPriority(request.getPriority());
-                if (pr == null) {
-                    log.warn("Request dropped - Priority not found: {}", request.getPriority());
-                    return null;
-                }
-            }
-            mr.priority().set(pr);
-        }
-        // other data
-        mr.requestId().setValue(request.getServiceRequestId().toString());
-        mr.summary().setValue(request.getServiceRequestBriefDescription());
-        mr.description().setValue(request.getServiceRequestFullDescription());
-        mr.permissionToEnter().setValue(request.isHasPermissionToEnter());
-        mr.petInstructions().setValue(request.getAccessNotes());
-        mr.submitted().setValue(new LogicalDate(request.getServiceRequestDate()));
-        mr.updated().setValue(new LogicalDate(request.getUpdateDate().toGregorianCalendar().getTimeInMillis()));
-
-        return mr;
-    }
-
-    private void updateRequest(MaintenanceRequest mr, MaintenanceRequest newData) {
-        if (mr == null) {
-            log.warn("Request is null");
-            return;
-        }
-        mr.requestId().set(newData.requestId());
-        mr.updated().set(newData.updated());
-        mr.scheduledDate().set(newData.scheduledDate());
-        mr.scheduledTime().set(newData.scheduledTime());
-        mr.description().set(newData.description());
-        mr.summary().set(newData.summary());
-        mr.permissionToEnter().set(newData.permissionToEnter());
-        mr.petInstructions().set(newData.petInstructions());
     }
 
     private List<String> getStatusesRecursive(Status status) {

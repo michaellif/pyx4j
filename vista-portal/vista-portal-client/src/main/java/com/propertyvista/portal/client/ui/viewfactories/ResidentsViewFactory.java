@@ -93,12 +93,6 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.Tenant
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantViewImpl;
 import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageView;
 import com.propertyvista.portal.client.ui.residents.usermessage.UserMessageViewImpl;
-import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMaintenanceRequestView;
-import com.propertyvista.portal.client.ui.residents.yardimaintenance.EditYardiMaintenanceRequestViewImpl;
-import com.propertyvista.portal.client.ui.residents.yardimaintenance.ViewYardiMaintenanceRequestView;
-import com.propertyvista.portal.client.ui.residents.yardimaintenance.ViewYardiMaintenanceRequestViewImpl;
-import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceView;
-import com.propertyvista.portal.client.ui.residents.yardimaintenance.YardiMaintenanceViewImpl;
 
 public class ResidentsViewFactory extends ViewFactoryBase {
 
@@ -151,13 +145,6 @@ public class ResidentsViewFactory extends ViewFactoryBase {
                 map.put(type, new ViewMaintenanceRequestViewImpl());
             } else if (EditMaintenanceRequestView.class.equals(type)) {
                 map.put(type, new EditMaintenanceRequestViewImpl());
-
-            } else if (YardiMaintenanceView.class.equals(type)) {
-                map.put(type, new YardiMaintenanceViewImpl());
-            } else if (ViewYardiMaintenanceRequestView.class.equals(type)) {
-                map.put(type, new ViewYardiMaintenanceRequestViewImpl());
-            } else if (EditYardiMaintenanceRequestView.class.equals(type)) {
-                map.put(type, new EditYardiMaintenanceRequestViewImpl());
 
             } else if (CommunicationCenterView.class.equals(type)) {
                 map.put(type, new CommunicationCenterViewImpl());

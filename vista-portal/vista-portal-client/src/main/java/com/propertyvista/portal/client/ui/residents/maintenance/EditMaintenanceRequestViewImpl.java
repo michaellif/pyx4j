@@ -47,13 +47,12 @@ public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestD
 
     @Override
     public void populate(MaintenanceRequestDTO value) {
-        boolean editable = (value.status().phase().getValue() == StatusPhase.Submitted);
+        boolean editable = (value.status().isNull() || value.status().phase().getValue() == StatusPhase.Submitted);
 
         getForm().setViewable(!editable);
 
         getSubmit().setVisible(editable);
         getCancel().setText(editable ? i18n.tr("Cancel") : i18n.tr("Back"));
-
         super.populate(value);
     }
 }

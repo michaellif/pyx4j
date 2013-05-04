@@ -14,7 +14,6 @@
 package com.propertyvista.biz.financial.maintenance.yardi;
 
 import java.sql.Time;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -34,8 +33,6 @@ import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.BuildingElement;
 
 public class MaintenanceYardiManager extends MaintenanceAbstractManager {
-
-    private Date ticketTS;
 
     private static class SingletonHolder {
         public static final MaintenanceYardiManager INSTANCE = new MaintenanceYardiManager();
@@ -57,7 +54,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     @Override
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
-        request.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
+        request.updated().setValue(SystemDateManager.getDate());
         postRequest(request);
     }
 
@@ -105,22 +102,17 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     private void postRequest(MaintenanceRequest request) {
         try {
-            MaintenanceRequest result = ServerSideFactory.create(YardiMaintenanceFacade.class).postMaintenanceRequest(request);
-            Persistence.secureSave(result);
+            ServerSideFactory.create(YardiMaintenanceFacade.class).postMaintenanceRequest(request);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     private void importModifiedRequests() {
-        Date lastMetaUpdate = ServerSideFactory.create(YardiMaintenanceFacade.class).getTicketTimestamp();
-        if (ticketTS == null || !ticketTS.equals(lastMetaUpdate)) {
-            try {
-                ServerSideFactory.create(YardiMaintenanceFacade.class).loadMaintenanceRequests();
-                ticketTS = lastMetaUpdate;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            ServerSideFactory.create(YardiMaintenanceFacade.class).loadMaintenanceRequests();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

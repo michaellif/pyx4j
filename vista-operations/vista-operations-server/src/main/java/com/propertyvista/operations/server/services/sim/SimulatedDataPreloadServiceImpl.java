@@ -147,7 +147,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
         }
     }
 
-    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, LogicalDate when) {
+    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, Date when) {
         Persistence.service().retrieveMember(lease.leaseParticipants());
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
         maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());

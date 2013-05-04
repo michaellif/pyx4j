@@ -252,8 +252,8 @@ public class LeaseLifecycleSimulator {
             MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
             maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
             maintenanceRequest.buildingElement().set(lease.unit());
-            maintenanceRequest.submitted().setValue(now());
-            maintenanceRequest.updated().setValue(now());
+            maintenanceRequest.submitted().setValue(SystemDateManager.getDate());
+            maintenanceRequest.updated().setValue(SystemDateManager.getDate());
             maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));
             maintenanceRequest.category().set(issueClassifications.get(RandomUtil.randomInt(issueClassifications.size())));
             Persistence.service().persist(maintenanceRequest);

@@ -59,6 +59,7 @@ public abstract class MaintenanceAbstractManager {
             Persistence.ensureRetrieve(request.reporter().lease(), AttachLevel.Attached);
             request.buildingElement().set(request.reporter().lease().unit());
         }
+        request.updated().setValue(SystemDateManager.getDate());
         request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         if (request.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
@@ -68,7 +69,7 @@ public abstract class MaintenanceAbstractManager {
 
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
-        request.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
+        request.updated().setValue(SystemDateManager.getDate());
         Persistence.secureSave(request);
     }
 

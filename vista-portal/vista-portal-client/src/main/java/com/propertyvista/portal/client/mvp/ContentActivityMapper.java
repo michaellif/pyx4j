@@ -45,10 +45,6 @@ import com.propertyvista.portal.client.activity.residents.paymentmethod.PaymentM
 import com.propertyvista.portal.client.activity.residents.paymentmethod.ViewPaymentMethodActivity;
 import com.propertyvista.portal.client.activity.residents.personalinfo.PersonalInfoEditActivity;
 import com.propertyvista.portal.client.activity.residents.personalinfo.PersonalInfoViewActivity;
-import com.propertyvista.portal.client.activity.residents.yardimaintenance.EditYardiMaintenanceRequestActivity;
-import com.propertyvista.portal.client.activity.residents.yardimaintenance.NewYardiMaintenanceRequestActivity;
-import com.propertyvista.portal.client.activity.residents.yardimaintenance.ViewYardiMaintenanceRequestActivity;
-import com.propertyvista.portal.client.activity.residents.yardimaintenance.YardiMaintenanceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.TenantInsuranceActivity;
 import com.propertyvista.portal.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
@@ -59,7 +55,6 @@ import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.Tenan
 import com.propertyvista.portal.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -118,16 +113,13 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new PreauthorizedPaymentSubmittedActivity(appPlace);
 
                     } else if (appPlace instanceof Residents.Maintenance) {
-                        activity = VistaFeatures.instance().yardiIntegration() ? new YardiMaintenanceActivity(appPlace) : new MaintenanceAcitvity(appPlace);
+                        activity = new MaintenanceAcitvity(appPlace);
                     } else if (appPlace instanceof Residents.Maintenance.NewMaintenanceRequest) {
-                        activity = VistaFeatures.instance().yardiIntegration() ? new NewYardiMaintenanceRequestActivity(appPlace)
-                                : new NewMaintenanceRequestActivity(appPlace);
+                        activity = new NewMaintenanceRequestActivity(appPlace);
                     } else if (appPlace instanceof Residents.Maintenance.ViewMaintenanceRequest) {
-                        activity = VistaFeatures.instance().yardiIntegration() ? new ViewYardiMaintenanceRequestActivity(appPlace)
-                                : new ViewMaintenanceRequestActivity(appPlace);
+                        activity = new ViewMaintenanceRequestActivity(appPlace);
                     } else if (appPlace instanceof Residents.Maintenance.EditMaintenanceRequest) {
-                        activity = VistaFeatures.instance().yardiIntegration() ? new EditYardiMaintenanceRequestActivity(appPlace)
-                                : new EditMaintenanceRequestActivity(appPlace);
+                        activity = new EditMaintenanceRequestActivity(appPlace);
 
                     } else if (appPlace instanceof Residents.TenantInsurance) {
                         activity = new TenantInsuranceActivity();

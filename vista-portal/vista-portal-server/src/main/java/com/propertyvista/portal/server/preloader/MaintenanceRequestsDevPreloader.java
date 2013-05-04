@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -49,14 +50,14 @@ public class MaintenanceRequestsDevPreloader extends BaseVistaDevDataPreloader {
             final long TODAY = new LogicalDate().getTime();
             GregorianCalendar cal = new GregorianCalendar();
             for (cal.add(GregorianCalendar.DAY_OF_YEAR, -NUM_OF_DAYS_AGO); cal.getTimeInMillis() < TODAY; cal.add(GregorianCalendar.DAY_OF_YEAR, 1)) {
-                makeMaintenanceRequest(issueClassifications, leases.get(RandomUtil.randomInt(leases.size())), new LogicalDate(cal.getTime()));
+                makeMaintenanceRequest(issueClassifications, leases.get(RandomUtil.randomInt(leases.size())), cal.getTime());
             }
         }
 
         return null;
     }
 
-    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, LogicalDate when) {
+    private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, Date when) {
         Persistence.service().retrieveMember(lease.leaseParticipants());
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
         maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
