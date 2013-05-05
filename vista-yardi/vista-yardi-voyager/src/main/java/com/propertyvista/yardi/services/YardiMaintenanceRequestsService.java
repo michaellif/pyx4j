@@ -211,10 +211,10 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
                     MaintenanceRequest mr = processor.mergeRequest(yc, request);
                     if (mr != null) {
                         Persistence.service().persist(mr);
-                    }
-                    // get the newest update time
-                    if (lastUpdate.before(mr.updated().getValue())) {
-                        lastUpdate.setTime(mr.updated().getValue().getTime());
+                        // get the newest update time
+                        if (lastUpdate.before(mr.updated().getValue())) {
+                            lastUpdate.setTime(mr.updated().getValue().getTime());
+                        }
                     }
                 }
 
