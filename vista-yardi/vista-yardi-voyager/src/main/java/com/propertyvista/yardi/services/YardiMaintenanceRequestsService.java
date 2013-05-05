@@ -81,6 +81,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     private static class SingletonHolder {
         public static final YardiMaintenanceRequestsService INSTANCE = new YardiMaintenanceRequestsService();
         static {
+            // reset cache on startup
             CacheService.remove(lastMetaUpdateCacheKey);
             CacheService.remove(lastTicketUpdateCacheKey);
         }
@@ -95,7 +96,12 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     }
 
     public Date getTicketTimestamp() {
-        return (Date) CacheService.get(lastTicketUpdateCacheKey);
+        Date ticketTS = (Date) CacheService.get(lastTicketUpdateCacheKey);
+        if (ticketTS == null) {
+            ticketTS = setTicketTimestamp(YardiMaintenanceIntegrationAgent.getLastModifiedDate());
+        }
+
+        return ticketTS;
     }
 
     private Date setMetaTimestamp(Date ts) {
@@ -104,13 +110,18 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     }
 
     private Date setTicketTimestamp(Date ts) {
-        // Yardi provides only date-portion of the ticket update date-time, so we should reset time-portion if set
-        Calendar cal = GregorianCalendar.getInstance();
-        cal.setTime(ts);
-        cal.set(GregorianCalendar.HOUR_OF_DAY, 0);
-        cal.set(GregorianCalendar.MINUTE, 0);
-        cal.set(GregorianCalendar.SECOND, 0);
-        Date dateOnly = cal.getTime();
+        Date dateOnly;
+        if (ts == null) {
+            return dateOnly = new Date(0);
+        } else {
+            // Yardi provides only date-portion of the ticket update date-time, so we should reset time-portion if set
+            Calendar cal = GregorianCalendar.getInstance();
+            cal.setTime(ts);
+            cal.set(GregorianCalendar.HOUR_OF_DAY, 0);
+            cal.set(GregorianCalendar.MINUTE, 0);
+            cal.set(GregorianCalendar.SECOND, 0);
+            dateOnly = cal.getTime();
+        }
         CacheService.put(lastTicketUpdateCacheKey, dateOnly);
         return dateOnly;
     }
@@ -137,11 +148,10 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         loadMaintenanceRequestMeta(yc);
 
         Date ticketTS = getTicketTimestamp();
-        if (ticketTS == null) {
-            ticketTS = setTicketTimestamp(YardiMaintenanceIntegrationAgent.getLastModifiedDate());
+        if (ticketTS != null) {
+            // add 1 ms time gap
+            ticketTS.setTime(ticketTS.getTime() - 1);
         }
-        // add 1 ms time gap
-        ticketTS.setTime(ticketTS.getTime() - 1);
 
         List<String> propertyCodes = null;
         if (yc.propertyCode().isNull()) {
@@ -153,7 +163,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         if (propertyCodes != null) {
             for (String propertyCode : propertyCodes) {
                 Date lastModified = loadRequests(yc, ticketTS, propertyCode);
-                if (lastModified.after(getTicketTimestamp())) {
+                if (getTicketTimestamp().before(lastModified)) {
                     log.info("setting new ticket time stamp {} -> {}", getTicketTimestamp(), lastModified.getTime());
                     setTicketTimestamp(lastModified);
                 }
