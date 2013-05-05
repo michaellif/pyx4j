@@ -49,18 +49,31 @@ public abstract class MaintenanceAbstractManager {
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease().unit().building(), AttachLevel.Attached);
         request.building().set(tenant.lease().unit().building());
-        request.buildingElement().set(tenant.lease().unit());
         request.reporter().set(tenant);
         return request;
     }
 
     public void postMaintenanceRequest(MaintenanceRequest request) {
-        if (!request.reporter().isNull() && request.buildingElement().isNull()) {
-            Persistence.ensureRetrieve(request.reporter().lease(), AttachLevel.Attached);
-            request.buildingElement().set(request.reporter().lease().unit());
-        }
         request.updated().setValue(SystemDateManager.getDate());
         request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
+        if (!request.reporter().isNull()) {
+            if (request.reporterName().isNull()) {
+                request.reporterName().setValue(request.reporter().customer().person().name().getStringView());
+            }
+            if (request.reporterEmail().isNull()) {
+                request.reporterEmail().setValue(request.reporter().customer().person().email().getStringView());
+            }
+            if (request.reporterPhone().isNull()) {
+                String phone = request.reporter().customer().person().mobilePhone().getStringView();
+                if (phone == null) {
+                    phone = request.reporter().customer().person().homePhone().getStringView();
+                }
+                if (phone == null) {
+                    phone = request.reporter().customer().person().workPhone().getStringView();
+                }
+                request.reporterPhone().setValue(phone);
+            }
+        }
         if (request.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
         }

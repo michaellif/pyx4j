@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +46,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);
@@ -66,9 +64,18 @@ public class YardiMaintenanceProcessor {
         if (mr.buildingElement().getInstanceValueClass().equals(AptUnit.class)) {
             req.setUnitCode(mr.buildingElement().<AptUnit> cast().info().number().getValue());
         }
-        if (!mr.reporter().isNull()) {
-            req.setTenantCode(mr.reporter().participantId().getValue());
+
+        req.setRequestorName(mr.reporterName().getValue());
+        req.setRequestorEmail(mr.reporterEmail().getValue());
+        Long requestorPhone = null;
+        try {
+            requestorPhone = Long.valueOf(mr.reporterPhone().getValue().replaceAll("\\D", ""));
+        } catch (Exception ignore) {
+
         }
+        req.setRequestorPhoneNumber(requestorPhone);
+// TODO - TenantCode sets BillTo property; enable when WorkOrder funtionality is implemented
+//        req.setTenantCode(mr.billTo().participantId().getValue());
 // TODO - find out the use of TenantCaused
 //        req.setTenantCaused(!mr.reporter().isNull());
 
@@ -88,14 +95,6 @@ public class YardiMaintenanceProcessor {
 
         req.setSubCategory(mr.category().name().getValue());
         req.setCategory(mr.category().parent().name().getValue());
-
-        req.setRequestorName(mr.reporter().customer().person().name().firstName().getValue());
-        req.setRequestorEmail(mr.reporter().customer().person().email().getValue());
-
-        String homePhone = mr.reporter().customer().person().homePhone().getValue();
-        if (StringUtils.isNotEmpty(homePhone)) {
-            req.setRequestorPhoneNumber(Long.valueOf(homePhone.replaceAll("\\D", "")));
-        }
 
         req.setServiceRequestDate(mr.submitted().getValue());
 
@@ -139,20 +138,23 @@ public class YardiMaintenanceProcessor {
             } else {
                 mr.buildingElement().set(unit);
             }
+        } else {
+            mr.buildingElement().setValue(null);
         }
-        // find tenant (if ticket is TenantCaused)
-        if (request.getTenantCode() != null) {
-            EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
-            crit.add(PropertyCriterion.eq(crit.proto().participantId(), request.getTenantCode()));
-            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
-            Tenant tenant = Persistence.service().retrieve(crit);
-            if (tenant == null) {
-                log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
-                return null;
-            } else {
-                mr.reporter().set(tenant);
-            }
-        }
+        // find tenant
+        // TODO TenantCode is set by Yardi BillTo field and should be matched to Vista tenant once WorkOrder is implemented
+//        if (request.getTenantCode() != null) {
+//            EntityQueryCriteria<Tenant> crit = EntityQueryCriteria.create(Tenant.class);
+//            crit.add(PropertyCriterion.eq(crit.proto().participantId(), request.getTenantCode()));
+//            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
+//            Tenant tenant = Persistence.service().retrieve(crit);
+//            if (tenant == null) {
+//                log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
+//                return null;
+//            } else {
+//                mr.reporter().set(tenant);
+//            }
+//        }
         // category
         if (request.getCategory() != null) {
             MaintenanceRequestCategory category = findCategory(request.getCategory(), null);
@@ -174,9 +176,11 @@ public class YardiMaintenanceProcessor {
                 }
             }
             mr.category().set(subcat);
+        } else {
+            mr.category().setValue(null);
         }
         // status
-        {
+        if (request.getCurrentStatus() != null) {
             MaintenanceRequestStatus stat = findStatus(request.getCurrentStatus());
             if (stat == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
@@ -187,6 +191,8 @@ public class YardiMaintenanceProcessor {
                 }
             }
             mr.status().set(stat);
+        } else {
+            mr.status().set(null);
         }
         // priority
         if (request.getPriority() != null) {
@@ -200,9 +206,16 @@ public class YardiMaintenanceProcessor {
                 }
             }
             mr.priority().set(pr);
+        } else {
+            mr.priority().set(null);
         }
         // other data
         mr.requestId().setValue(request.getServiceRequestId().toString());
+        if (mr.reporter().isNull()) {
+            mr.reporterName().setValue(request.getRequestorName());
+            mr.reporterPhone().setValue(request.getRequestorPhoneNumber() == null ? null : request.getRequestorPhoneNumber().toString());
+            mr.reporterEmail().setValue(request.getRequestorEmail());
+        }
         mr.summary().setValue(request.getServiceRequestBriefDescription());
 // TODO choose between FullDescription and DescriptionNotes
 //        mr.description().setValue(request.getServiceRequestFullDescription());

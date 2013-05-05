@@ -100,13 +100,19 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().requestId()).setViewable(true);
 
         left.add(new DecoratorBuilder(inject(proto().building(), buildingSelector), 25).build());
-        left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
-        buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Building> event) {
-                reporterSelector.setValue(null);
-            }
-        });
+        if (isEditable()) {
+            left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
+            buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<Building> event) {
+                    reporterSelector.setValue(null);
+                }
+            });
+        } else {
+            left.add(new DecoratorBuilder(inject(proto().reporterName()), 20).build());
+        }
+        left.add(new DecoratorBuilder(inject(proto().reporterPhone()), 20).build());
+        left.add(new DecoratorBuilder(inject(proto().reporterEmail()), 20).build());
 
         // create category selection panel
         categoryPanel = new VerticalPanel();

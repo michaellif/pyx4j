@@ -56,6 +56,14 @@ public interface MaintenanceRequest extends IEntity {
 
     Tenant reporter();
 
+    IPrimitive<String> reporterName();
+
+    @Editor(type = EditorType.phone)
+    IPrimitive<String> reporterPhone();
+
+    @Editor(type = EditorType.email)
+    IPrimitive<String> reporterEmail();
+
     @NotNull
     @Length(14)
     @Indexed(uniqueConstraint = true, ignoreCase = true)

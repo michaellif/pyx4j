@@ -60,9 +60,8 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
                 },// @formatter:off
                 new MemberColumnDescriptor.Builder(proto.priority()).build(),
                 new MemberColumnDescriptor.Builder(proto.summary()).build(),
-                new MemberColumnDescriptor.Builder(proto.reporter().customer().person().name()).searchable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.reporter().customer().person().name().firstName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto.reporter().customer().person().name().lastName(), false).build(),
+                new MemberColumnDescriptor.Builder(proto.reporterName()).searchable(false).build(),
+                new MemberColumnDescriptor.Builder(proto.reporterPhone(), false).build(),
                 new MemberColumnDescriptor.Builder(proto.permissionToEnter()).build(),
                 new MemberColumnDescriptor.Builder(proto.petInstructions()).build(),
                 new MemberColumnDescriptor.Builder(proto.submitted()).build(),

@@ -21,7 +21,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -44,9 +43,22 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void postMaintenanceRequest(MaintenanceRequest request) {
-        if (!request.reporter().isNull() && request.buildingElement().isNull()) {
-            Persistence.ensureRetrieve(request.reporter().lease(), AttachLevel.Attached);
-            request.buildingElement().set(request.reporter().lease().unit());
+        if (!request.reporter().isNull()) {
+            request.reporterName().setValue(request.reporter().customer().person().name().getStringView());
+            // email and phone can be different
+            if (request.reporterEmail().isNull()) {
+                request.reporterEmail().setValue(request.reporter().customer().person().email().getStringView());
+            }
+            if (request.reporterPhone().isNull()) {
+                String phone = request.reporter().customer().person().mobilePhone().getStringView();
+                if (phone == null) {
+                    phone = request.reporter().customer().person().homePhone().getStringView();
+                }
+                if (phone == null) {
+                    phone = request.reporter().customer().person().workPhone().getStringView();
+                }
+                request.reporterPhone().setValue(phone);
+            }
         }
         postRequest(request);
     }
