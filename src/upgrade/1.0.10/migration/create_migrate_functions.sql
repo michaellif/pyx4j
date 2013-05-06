@@ -3,12 +3,12 @@
 ***
 ***             @version $Revision$ ($Author$) $Date$
 ***
-***             VISTA-2778 (future version 1.1.0) PMC migration function
+***             VISTA-2778 (future version 1.0.10) PMC migration function
 ***
 ***     ======================================================================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_110(v_schema_name TEXT) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_1010(v_schema_name TEXT) RETURNS VOID AS
 $$
 BEGIN
         EXECUTE 'SET search_path = '||v_schema_name;
@@ -56,15 +56,20 @@ BEGIN
                                         ADD COLUMN building_element BIGINT,
                                         ADD COLUMN building_element_discriminator VARCHAR(50),
                                         ADD COLUMN originator BIGINT,
-                                        ADD COLUMN originator_discriminator VARCHAR(50);
+                                        ADD COLUMN originator_discriminator VARCHAR(50),
+                                        ADD COLUMN reporter_email VARCHAR(500),
+                                        ADD COLUMN reporter_name VARCHAR(500),
+                                        ADD COLUMN reporter_phone VARCHAR(500);
                                         
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant TO reporter;
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant_discriminator TO reporter_discriminator;
-        ALTER TABLE maintenance_request RENAME COLUMN submitted TO submitted_old;
-        ALTER TABLE maintenance_request RENAME COLUMN updated TO updated_old;
+       
         
-        ALTER TABLE maintenance_request ADD COLUMN submitted DATE,
-                                        ADD COLUMN updated DATE;                           
+        ALTER TABLE maintenance_request ALTER COLUMN submitted TYPE TIMESTAMP;
+        ALTER TABLE maintenance_request ALTER COLUMN updated TYPE TIMESTAMP;
+        
+       
+                               
         
         /**
         ***     =====================================================================================================
@@ -76,6 +81,15 @@ BEGIN
         
         -- maintenance_request
         
+        -- Kill all the maintenance requests for yardi-enabled pmcs
+        
+        IF EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
+                        ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
+        THEN
+                EXECUTE 'DELETE FROM '||v_schema_name||'.maintenance_request ';
+        END IF;
+        
+        
         EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
                 ||'SET  building = b.id '
                 ||'FROM lease_participant lp '
@@ -83,12 +97,7 @@ BEGIN
                 ||'JOIN apt_unit a ON (l.unit = a.id) '
                 ||'JOIN building b ON (a.building = b.id) '
                 ||'WHERE m.reporter = lp.id ';
-                
-        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request '
-                ||'SET  submitted = DATE_TRUNC(''day'',submitted_old),'
-                ||'     updated = DATE_TRUNC(''day'',updated_old)';
-        
-        
+               
         
         /**
         ***     ==========================================================================================================
@@ -100,13 +109,11 @@ BEGIN
         
         -- maintenance_request
         
-        SET CONSTRAINTS maintenance_request_category_fk IMMEDIATE;
-        SET CONSTRAINTS maintenance_request_priority_fk IMMEDIATE;
-        SET CONSTRAINTS maintenance_request_status_fk IMMEDIATE;
         
-        ALTER TABLE maintenance_request DROP COLUMN submitted_old,
-                                        DROP COLUMN updated_old;
-         
+        
+        
+        
+                 
         /**
         ***     ======================================================================================================
         ***
@@ -117,11 +124,13 @@ BEGIN
         
         -- foreign keys
         
+        SET CONSTRAINTS maintenance_request_category_fk IMMEDIATE;
+        SET CONSTRAINTS maintenance_request_priority_fk IMMEDIATE;
+        SET CONSTRAINTS maintenance_request_status_fk IMMEDIATE;
+        
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_fk FOREIGN KEY(reporter) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
 
-        -- SET CONSTRAINTS maintenance_request_building_fk IMMEDIATE;
-        -- SET CONSTRAINTS maintenance_request_reporter_fk IMMEDIATE;
         
         -- check constraints
         
@@ -156,7 +165,7 @@ BEGIN
         -- Finishing touch
         
         UPDATE  _admin_.admin_pmc
-        SET     schema_version = '1.1.0',
+        SET     schema_version = '1.0.10',
                 schema_data_upgrade_steps = NULL
         WHERE   namespace = v_schema_name;          
         
