@@ -19,11 +19,9 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -32,6 +30,7 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
@@ -54,20 +53,19 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
     @Override
     public IsWidget createContent() {
         FormFlexPanel container = new FormFlexPanel();
-        Widget widget = null;
         int row = -1;
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-        container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().name().firstName(), new CLabel<String>()), 12).build());
-        widget.getElement().getStyle().setMarginTop(20, Unit.PX);
+        container.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"))));
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().middleName(), new CLabel<String>()), 12).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name().lastName(), new CLabel<String>()), 20).build());
+        container.setBR(++row, 0, 1);
+
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
-        container.setWidget(++row, 0, widget = new DecoratorBuilder(inject(proto().email()), 20).build());
-        widget.getElement().getStyle().setMarginBottom(20, Unit.PX);
+        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
 
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false, true)));
