@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -253,8 +252,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
 
     }
 
-    @Ignore
-    public void TODO_StestScenario3() throws Exception {
+    public void testScenario3() throws Exception {
         setupScenario();
 
         setPreauthorizedPayment("376.16"); // 1139.90 * .33
@@ -296,7 +294,8 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         totalDueAmount("3133.74"); // 6217.48(previous) + 1139.90(monthly charges) + 50(late payment fees) - 4273.64(received amount)
         // @formatter:on
 
-        setPreauthorizedPayment("-3133.74"); // totaling 1139.90 now
+        // TODO add ability to cancel/edit PAP for tests, set monthly payment to 1139.90, add the commented-out test back
+//        setPreauthorizedPayment("-3133.74"); // totaling 1139.90 now
 
         advanceSysDate("1-Oct-2013");
 
@@ -311,10 +310,10 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         advanceSysDate("3-Dec-2013");
 
         // @formatter:off
-        new BillTester(getLatestBill()).
-        paymentReceivedAmount("-1139.90").
-        taxes("122.13").
-        totalDueAmount("0.00");
+//        new BillTester(getLatestBill()).
+//        paymentReceivedAmount("-1139.90").
+//        taxes("122.13").
+//        totalDueAmount("0.00");
         // @formatter:on
 
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
