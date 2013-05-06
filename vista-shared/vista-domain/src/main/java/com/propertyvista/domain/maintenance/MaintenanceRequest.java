@@ -92,7 +92,7 @@ public interface MaintenanceRequest extends IEntity {
     @Format("h:mm a")
     IPrimitive<Time> scheduledTime();
 
-    @Length(250)
+    @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
@@ -100,11 +100,11 @@ public interface MaintenanceRequest extends IEntity {
 
     IPrimitive<Boolean> permissionToEnter();
 
-    @Length(250)
+    @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> petInstructions();
 
-    @Length(250)
+    @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> resolution();
 
