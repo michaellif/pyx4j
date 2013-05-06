@@ -429,6 +429,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                     get(proto().merchantAccount()).setNote(result.status().getStringView() + ", " + result.paymentsStatus().getStringView());
                 }
             }, EntityFactory.createIdentityStub(MerchantAccount.class, value.getPrimaryKey()));
+        } else {
+            get(proto().merchantAccount()).setNote(null);
         }
     }
 }
