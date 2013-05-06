@@ -137,11 +137,11 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             criteria.add(PropertyCriterion.gt(criteria.proto().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucketThisMonth(), BigDecimal.ZERO));
         } else if (proto.outstanding1to30Days() == member | proto.outstanding1to30DaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket30(), BigDecimal.ZERO));
-        } else if (proto.outstanding31to60Days() == member | proto.outstanding1to30DaysCount() == member) {
+        } else if (proto.outstanding31to60Days() == member | proto.outstanding31to60DaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket60(), BigDecimal.ZERO));
-        } else if (proto.outstanding61to90Days() == member | proto.outstanding61to90Days() == member) {
+        } else if (proto.outstanding61to90Days() == member | proto.outstanding61to90DaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucket90(), BigDecimal.ZERO));
-        } else if (proto.outstanding91andMoreDays() == member | proto.outstanding61to90Days() == member) {
+        } else if (proto.outstanding91andMoreDays() == member | proto.outstanding91andMoreDaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().billingAccount().arrearsSnapshots().$().totalAgingBuckets().bucketOver90(), BigDecimal.ZERO));
         }
         return criteria;
