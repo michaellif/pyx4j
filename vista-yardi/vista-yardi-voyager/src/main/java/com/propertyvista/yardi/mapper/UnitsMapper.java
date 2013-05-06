@@ -72,13 +72,14 @@ public class UnitsMapper {
         }
 
         //floorplan
-        if (StringUtils.isEmpty(info.getFloorplanName())) {
-            throw new IllegalStateException(String.format("Illegal FloorplanName. FloorplanName for imported unit %s can not be empty or null",
-                    info.getUnitID()));
+        Floorplan floorplan = EntityFactory.create(Floorplan.class);
+        String floorplanName = info.getFloorplanName();
+        if (StringUtils.isEmpty(floorplanName)) {
+            StringBuilder builder = new StringBuilder();
+            floorplanName = builder.append(info.getUnitBedrooms()).append("bed").append(info.getUnitBathrooms()).append("bath").toString();
         }
 
-        Floorplan floorplan = EntityFactory.create(Floorplan.class);
-        floorplan.name().setValue(info.getFloorplanName());
+        floorplan.name().setValue(floorplanName);
         floorplan.bedrooms().setValue(info.getUnitBedrooms() != null ? info.getUnitBedrooms().intValue() : null);
         floorplan.bathrooms().setValue(info.getUnitBathrooms() != null ? info.getUnitBathrooms().intValue() : null);
 
