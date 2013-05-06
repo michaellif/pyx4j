@@ -45,15 +45,16 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
                     @Override
                     public String convert(IEntity entity) {
                         if (entity instanceof MaintenanceRequestDTO) {
-                            // return the first available value
-                            MaintenanceRequestCategory issue = ((MaintenanceRequestDTO)entity).category();
-                            while (!issue.isNull()) {
-                                if (!issue.name().isNull()) {
-                                    return issue.name().getValue();
+                            // return slash-separated name list
+                            StringBuilder result = new StringBuilder();
+                            MaintenanceRequestCategory category = ((MaintenanceRequestDTO)entity).category();
+                            while (!category.parent().isNull()) {
+                                if (!category.name().isNull()) {
+                                    result.insert(0, result.length() > 0 ? "/" : "").insert(0, category.name().getValue());
                                 }
-                                issue = issue.parent();
+                                category = category.parent();
                             }
-                            return "";
+                            return result.toString();
                         }
                         return super.convert(entity);
                     }
