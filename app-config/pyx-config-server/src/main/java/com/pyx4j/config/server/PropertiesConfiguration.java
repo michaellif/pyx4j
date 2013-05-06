@@ -23,6 +23,7 @@ package com.pyx4j.config.server;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -114,7 +115,45 @@ public class PropertiesConfiguration {
         if (value == null) {
             return defaultValue;
         } else {
-            return Enum.valueOf(enumClass, value);
+            for (T t : EnumSet.allOf(enumClass)) {
+                if (t.name().equalsIgnoreCase(value)) {
+                    return t;
+                }
+            }
+            StringBuilder valuesText = new StringBuilder();
+            for (T t : EnumSet.allOf(enumClass)) {
+                if (valuesText.length() > 0) {
+                    valuesText.append(", ");
+                }
+                valuesText.append(t.name());
+            }
+            throw new IllegalArgumentException("No enum constant '" + value + "' for key " + key + " of type " + enumClass.getSimpleName() + ", expected ["
+                    + valuesText.toString() + "]");
+        }
+    }
+
+    /**
+     * First value is default
+     */
+    public <T extends Enum<T>> T getEnumValue(String key, T... values) {
+        String value = getValue(key);
+        if (value == null) {
+            return values[0];
+        } else {
+            for (T t : values) {
+                if (t.name().equalsIgnoreCase(value)) {
+                    return t;
+                }
+            }
+            StringBuilder valuesText = new StringBuilder();
+            for (T t : values) {
+                if (valuesText.length() > 0) {
+                    valuesText.append(", ");
+                }
+                valuesText.append(t.name());
+            }
+            throw new IllegalArgumentException("No enum constant '" + value + "' for key " + key + " of type " + values[0].getClass().getSimpleName()
+                    + ", expected [" + valuesText.toString() + "]");
         }
     }
 
