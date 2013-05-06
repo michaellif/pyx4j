@@ -105,7 +105,6 @@ public class SiteViewTheme extends Theme {
         style.addProperty("color", ThemeColor.object1, 0.1);
         style.addProperty("font-size", "1em");
         style.addProperty("margin", "10px");
-        style.addProperty("float", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.SiteViewAction.name(), " td");

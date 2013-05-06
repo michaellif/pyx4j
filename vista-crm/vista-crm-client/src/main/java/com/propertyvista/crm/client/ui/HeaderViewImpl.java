@@ -12,8 +12,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -29,7 +30,7 @@ import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class HeaderViewImpl extends FlowPanel implements HeaderView {
+public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     public enum Theme {
         Gainsboro, VillageGreen, BlueCold, BrownWarm
@@ -73,36 +74,40 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     }
 
     public HeaderViewImpl() {
-
         setStyleName(SiteViewTheme.StyleName.SiteViewHeader.name());
 
-        add(createLogoContainer());
+        Widget w;
 
-        add(createActionsContainer());
+        add(w = createLogoContainer());
+        setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_LEFT);
+
+        add(w = createActionsContainer());
+        setCellHorizontalAlignment(w, HasHorizontalAlignment.ALIGN_RIGHT);
     }
 
     private Widget createLogoContainer() {
         SimplePanel logoContainer = new SimplePanel();
-        logoContainer.getElement().getStyle().setFloat(Style.Float.LEFT);
-
         HasClickHandlers logoElement;
+
         if (useLogoImage) {
             Image logoImage = new Image(MediaUtils.createCrmLogoUrl());
             logoImage.getElement().getStyle().setProperty("maxHeight", "50px");
             logoImage.getElement().getStyle().setMarginLeft(20, Unit.PX);
             logoImage.getElement().getStyle().setFloat(Style.Float.LEFT);
             logoImage.getElement().getStyle().setCursor(Cursor.POINTER);
-            logoElement = logoImage;
-            logoContainer.setWidget(logoImage);
             logoImage.setTitle(i18n.tr("Home"));
-        } else {
-            HTML logo = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "") + "</h1>");
-            logo.getElement().getStyle().setCursor(Cursor.POINTER);
-            logoElement = logo;
-            logoContainer.setWidget(logo);
-        }
-        logoElement.addClickHandler(new ClickHandler() {
 
+            logoContainer.setWidget(logoImage);
+            logoElement = logoImage;
+        } else {
+            HTML logoHtml = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "") + "</h1>");
+            logoHtml.getElement().getStyle().setCursor(Cursor.POINTER);
+
+            logoContainer.setWidget(logoHtml);
+            logoElement = logoHtml;
+        }
+
+        logoElement.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 presenter.navigToLanding();
@@ -113,7 +118,6 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
     }
 
     private Widget createActionsContainer() {
-
         Toolbar toolbar = new Toolbar();
         toolbar.addStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
 
@@ -235,6 +239,7 @@ public class HeaderViewImpl extends FlowPanel implements HeaderView {
         getSatisfaction.setVisible(false);
         greetings.setVisible(false);
         greetings.setHTML("");
+
         thisIsDemo.getElement().getStyle().setPosition(Position.ABSOLUTE);
         thisIsDemo.getElement().getStyle().setProperty("marginLeft", "auto");
         thisIsDemo.getElement().getStyle().setProperty("marginRight", "auto");
