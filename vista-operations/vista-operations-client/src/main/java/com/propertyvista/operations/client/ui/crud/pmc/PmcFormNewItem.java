@@ -13,9 +13,13 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
+
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -51,9 +55,18 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
+
+        final CComponent<Boolean, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
+        final CComponent<Boolean, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
+        yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                yardiMaintenanceSwitch.setEnabled(Boolean.TRUE.equals(event.getValue()));
+            }
+        });
 
         selectTab(addTab(content));
-
     }
 
     @Override
@@ -64,6 +77,8 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         get(proto().person().name().lastName()).setViewable(existingOnboardingUser);
         get(proto().email()).setViewable(existingOnboardingUser);
         get(proto().password()).setVisible(!existingOnboardingUser);
+
+        get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().isBooleanTrue());
     }
 
     @Override
