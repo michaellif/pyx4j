@@ -27,6 +27,8 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE id_assignment_item DROP CONSTRAINT id_assignment_item_target_e_ck;
+        ALTER TABLE id_assignment_sequence DROP CONSTRAINT id_assignment_sequence_target_e_ck;
         ALTER TABLE maintenance_request DROP CONSTRAINT maintenance_request_lease_participant_discriminator_d_ck;
         
        
@@ -58,6 +60,11 @@ BEGIN
                                         
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant TO reporter;
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant_discriminator TO reporter_discriminator;
+        ALTER TABLE maintenance_request RENAME COLUMN submitted TO submitted_old;
+        ALTER TABLE maintenance_request RENAME COLUMN updated TO updated_old;
+        
+        ALTER TABLE maintenance_request ADD COLUMN submitted DATE,
+                                        ADD COLUMN updated DATE;                           
         
         /**
         ***     =====================================================================================================
@@ -76,6 +83,10 @@ BEGIN
                 ||'JOIN apt_unit a ON (l.unit = a.id) '
                 ||'JOIN building b ON (a.building = b.id) '
                 ||'WHERE m.reporter = lp.id ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request '
+                ||'SET  submitted = DATE_TRUNC(''day'',submitted_old),'
+                ||'     updated = DATE_TRUNC(''day'',updated_old)';
         
         
         
@@ -87,7 +98,14 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
-       
+        -- maintenance_request
+        
+        SET CONSTRAINTS maintenance_request_category_fk IMMEDIATE;
+        SET CONSTRAINTS maintenance_request_priority_fk IMMEDIATE;
+        SET CONSTRAINTS maintenance_request_status_fk IMMEDIATE;
+        
+        ALTER TABLE maintenance_request DROP COLUMN submitted_old,
+                                        DROP COLUMN updated_old;
          
         /**
         ***     ======================================================================================================
@@ -102,9 +120,17 @@ BEGIN
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_fk FOREIGN KEY(reporter) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
 
+        -- SET CONSTRAINTS maintenance_request_building_fk IMMEDIATE;
+        -- SET CONSTRAINTS maintenance_request_reporter_fk IMMEDIATE;
         
         -- check constraints
         
+        ALTER TABLE id_assignment_item ADD CONSTRAINT id_assignment_item_target_e_ck 
+                CHECK ((target) IN ('accountNumber', 'application', 'customer', 'employee', 'guarantor', 'lead', 'lease', 'maintenance', 
+                'propertyCode', 'tenant'));
+        ALTER TABLE id_assignment_sequence ADD CONSTRAINT id_assignment_sequence_target_e_ck 
+                CHECK ((target) IN ('accountNumber', 'application', 'customer', 'employee', 'guarantor', 'lead', 'lease', 'maintenance', 
+                'propertyCode', 'tenant'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_element_discriminator_d_ck 
                 CHECK ((building_element_discriminator) IN ('LockerArea_BuildingElement', 'Parking_BuildingElement', 'Roof_BuildingElement', 'Unit_BuildingElement'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_originator_discriminator_d_ck CHECK ((originator_discriminator) IN ('CrmUser', 'CustomerUser'));

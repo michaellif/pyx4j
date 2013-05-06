@@ -39,7 +39,7 @@ SET search_path = '_admin_';
         ***
         ***             DROP INDEXES 
         ***
-        ***     ======================================================================================================
+        ***     ==============================================================admin_pmc_vista_features========================================
         **/
         
         DROP INDEX pad_batch_pmc_namespace_merchant_account_key_idx;
@@ -53,6 +53,9 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
+        -- admin_pmc_vista_features
+        
+        ALTER TABLE admin_pmc_vista_features ADD COLUMN yardi_maintenance BOOLEAN;
         
         -- pad_batch
         
