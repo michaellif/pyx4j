@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -43,10 +42,6 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
     public EcheckInfoEditor() {
         super(EcheckInfo.class);
-    }
-
-    public EcheckInfoEditor(IEditableComponentFactory factory) {
-        super(EcheckInfo.class, factory);
     }
 
     @Override

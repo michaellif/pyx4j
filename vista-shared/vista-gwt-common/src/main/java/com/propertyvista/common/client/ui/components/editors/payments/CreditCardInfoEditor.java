@@ -34,7 +34,6 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -56,10 +55,6 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);
-    }
-
-    public CreditCardInfoEditor(IEditableComponentFactory factory) {
-        super(CreditCardInfo.class, factory);
     }
 
     @Override

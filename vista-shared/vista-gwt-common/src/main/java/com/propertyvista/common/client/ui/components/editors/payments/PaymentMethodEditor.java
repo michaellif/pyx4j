@@ -171,34 +171,34 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
             switch (type) {
             case Cash:
                 // Disable cash editor:            
-//                editor = new CashInfoEditor();
+//                editor = createCashInfoEditor();
                 if (details.getInstanceValueClass() != CashInfo.class) {
                     details.set(EntityFactory.create(CashInfo.class));
                 }
                 break;
             case Check:
-                editor = new CheckInfoEditor();
+                editor = createCheckInfoEditor();
                 if (details.getInstanceValueClass() != CheckInfo.class) {
                     details.set(EntityFactory.create(CheckInfo.class));
                 }
                 setBillingAddressVisible(true);
                 break;
             case Echeck:
-                editor = new EcheckInfoEditor();
+                editor = createEcheckInfoEditor();
                 if (details.getInstanceValueClass() != EcheckInfo.class) {
                     details.set(EntityFactory.create(EcheckInfo.class));
                 }
                 setBillingAddressVisible(true);
                 break;
             case CreditCard:
-                editor = new CreditCardInfoEditor();
+                editor = createCreditCardInfoEditor();
                 if (details.getInstanceValueClass() != CreditCardInfo.class) {
                     details.set(EntityFactory.create(CreditCardInfo.class));
                 }
                 setBillingAddressVisible(true);
                 break;
             case Interac:
-                editor = new InteracInfoEditor();
+                editor = createInteracInfoEditor();
                 if (details.getInstanceValueClass() != InteracInfo.class) {
                     details.set(EntityFactory.create(InteracInfo.class));
                 }
@@ -215,6 +215,28 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 setPaymentDetailsWidget(editor.asWidget());
             }
         }
+    }
+
+    // Override these methods for method editors customization:
+
+    protected CEntityForm<?> createCashInfoEditor() {
+        return new CashInfoEditor();
+    }
+
+    protected CEntityForm<?> createCheckInfoEditor() {
+        return new CheckInfoEditor();
+    }
+
+    protected CEntityForm<?> createEcheckInfoEditor() {
+        return new EcheckInfoEditor();
+    }
+
+    protected CEntityForm<?> createCreditCardInfoEditor() {
+        return new CreditCardInfoEditor();
+    }
+
+    protected CEntityForm<?> createInteracInfoEditor() {
+        return new InteracInfoEditor();
     }
 
     private void setPaymentDetailsWidget(Widget w) {

@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -37,10 +36,6 @@ public class InteracInfoEditor extends CEntityDecoratableForm<InteracInfo> {
 
     public InteracInfoEditor() {
         super(InteracInfo.class);
-    }
-
-    public InteracInfoEditor(IEditableComponentFactory factory) {
-        super(InteracInfo.class, factory);
     }
 
     @Override
