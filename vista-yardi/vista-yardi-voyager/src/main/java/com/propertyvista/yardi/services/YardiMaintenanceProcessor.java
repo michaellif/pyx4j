@@ -50,6 +50,17 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 public class YardiMaintenanceProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiMaintenanceProcessor.class);
 
+    // Mapping for statuses from Yardi "Standard" set 
+    private final static Map<String, MaintenanceRequestStatus.StatusPhase> yardiStatusMap;
+    static {
+        yardiStatusMap = new HashMap<String, MaintenanceRequestStatus.StatusPhase>();
+        yardiStatusMap.put("Call", MaintenanceRequestStatus.StatusPhase.Submitted);
+        yardiStatusMap.put("In Progress", MaintenanceRequestStatus.StatusPhase.Submitted);
+        yardiStatusMap.put("Scheduled", MaintenanceRequestStatus.StatusPhase.Scheduled);
+        yardiStatusMap.put("Work Completed", MaintenanceRequestStatus.StatusPhase.Resolved);
+        yardiStatusMap.put("Canceled", MaintenanceRequestStatus.StatusPhase.Cancelled);
+    }
+
     public ServiceRequest convertRequest(MaintenanceRequest mr) {
         ServiceRequest req = new ServiceRequest();
 
@@ -352,6 +363,7 @@ public class YardiMaintenanceProcessor {
     private MaintenanceRequestStatus createStatus(String name) {
         MaintenanceRequestStatus status = EntityFactory.create(MaintenanceRequestStatus.class);
         status.name().setValue(name);
+        status.phase().setValue(yardiStatusMap.get(name));
         return status;
     }
 

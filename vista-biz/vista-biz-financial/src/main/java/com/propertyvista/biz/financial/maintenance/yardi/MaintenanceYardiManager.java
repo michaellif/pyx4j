@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
 import com.propertyvista.biz.system.YardiMaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.BuildingElement;
@@ -65,9 +66,11 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
-        request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
-        request.updated().setValue(SystemDateManager.getDate());
-        postRequest(request);
+        MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Cancelled);
+        if (status != null) {
+            request.status().set(status);
+            postRequest(request);
+        }
     }
 
     @Override
@@ -86,8 +89,11 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
-        request.status().set(getMaintenanceStatus(StatusPhase.Resolved));
-        postRequest(request);
+        MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Resolved);
+        if (status != null) {
+            request.status().set(status);
+            postRequest(request);
+        }
     }
 
     @Override
@@ -114,6 +120,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     private void postRequest(MaintenanceRequest request) {
         try {
+            request.updated().setValue(SystemDateManager.getDate());
             ServerSideFactory.create(YardiMaintenanceFacade.class).postMaintenanceRequest(request);
         } catch (Exception e) {
             throw new RuntimeException(e);

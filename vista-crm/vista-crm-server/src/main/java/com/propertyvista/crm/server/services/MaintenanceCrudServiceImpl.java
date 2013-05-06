@@ -59,9 +59,13 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.building());
-        Persistence.service().retrieve(dto.category());
-        MaintenanceRequestCategory parent = dto.category().parent();
+        enhanceDbo(dto);
+    }
+
+    protected void enhanceDbo(MaintenanceRequest dbo) {
+        Persistence.service().retrieve(dbo.building());
+        Persistence.service().retrieve(dbo.category());
+        MaintenanceRequestCategory parent = dbo.category().parent();
         while (!parent.isNull()) {
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
@@ -83,6 +87,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time time, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, date, time);
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -91,6 +96,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).resolveMaintenanceRequest(request);
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -99,6 +105,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(request, rate);
         Persistence.service().commit();
         callback.onSuccess(null);
@@ -107,6 +114,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     @Override
     public void cancelAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        enhanceDbo(request);
         ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request);
         Persistence.service().commit();
         callback.onSuccess(null);
