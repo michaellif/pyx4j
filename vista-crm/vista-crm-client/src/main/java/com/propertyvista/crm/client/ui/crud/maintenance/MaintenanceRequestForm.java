@@ -227,7 +227,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         get(proto().updated()).setVisible(!mr.updated().isNull());
         get(proto().status()).setVisible(!mr.submitted().isNull());
 
-        statusPanel.setVisible(!mr.category().isNull());
+        statusPanel.setVisible(!mr.id().isNull());
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
 
         if (isEditable()) {
