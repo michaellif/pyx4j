@@ -62,6 +62,9 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
     public void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, Vector<Building> buildingsFilter,
             String criteriaPreset) {
         EntityListCriteria<DelinquentLeaseDTO> criteria = EntityListCriteria.create(DelinquentLeaseDTO.class);
+        if (!buildingsFilter.isEmpty()) {
+            criteria.in(criteria.proto().building(), buildingsFilter);
+        }
 
         criteria.add(PropertyCriterion.eq(criteria.proto().asOf(), OccupancyFacade.MAX_DATE));
 
@@ -126,6 +129,9 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     private EntityQueryCriteria<Lease> delinquentLeasesCriteria(Vector<Building> buildingsFilter, String criteriaPreset) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        if (!buildingsFilter.isEmpty()) {
+            criteria.in(criteria.proto().unit().building(), buildingsFilter);
+        }
         criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().arrearsSnapshots().$().toDate(), OccupancyFacade.MAX_DATE));
 
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);

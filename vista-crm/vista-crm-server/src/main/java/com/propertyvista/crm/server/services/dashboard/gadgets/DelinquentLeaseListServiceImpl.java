@@ -43,6 +43,10 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
         bind(dtoProto.participantId(), dboProto.currentTerm().version().tenants().$().leaseParticipant().participantId());
         bind(dtoProto.primaryApplicantsFirstName(), dboProto.currentTerm().version().tenants().$().leaseParticipant().customer().person().name().firstName());
         bind(dtoProto.primaryApplicantsLastName(), dboProto.currentTerm().version().tenants().$().leaseParticipant().customer().person().name().lastName());
+        bind(dtoProto.email(), dboProto.currentTerm().version().tenants().$().leaseParticipant().customer().person().email());
+        bind(dtoProto.mobilePhone(), dboProto.currentTerm().version().tenants().$().leaseParticipant().customer().person().mobilePhone());
+        bind(dtoProto.homePhone(), dboProto.currentTerm().version().tenants().$().leaseParticipant().customer().person().homePhone());
+        bind(dtoProto.workPhone(), dboProto.currentTerm().version().tenants().$().leaseParticipant().customer().person().workPhone());
         bind(dtoProto.arrears(), dboProto.billingAccount().arrearsSnapshots().$().totalAgingBuckets());
     }
 
@@ -51,27 +55,22 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
         dbCriteria.ne(dbCriteria.proto().status(), Lease.Status.Application);
         dbCriteria.ne(dbCriteria.proto().status(), Lease.Status.Closed);
 
-        if (dtoCriteria.getFilters() != null) {
+        dbCriteria.eq(dbCriteria.proto().currentTerm().version().tenants().$().role(), Role.Applicant);
 
+        if (dtoCriteria.getFilters() != null) {
             java.util.Iterator<Criterion> i = dtoCriteria.getFilters().iterator();
 
             while (i.hasNext()) {
-                Criterion cr = i.next();
-                if (cr instanceof PropertyCriterion) {
-                    PropertyCriterion pcr = (PropertyCriterion) cr;
+                Criterion criterion = i.next();
+                if (criterion instanceof PropertyCriterion) {
+                    PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
-                    if (pcr.getPropertyPath().equals(dtoProto.participantId().getPath().toString())) {//@formatter:off
-                    }                    
-//                        dbCriteria.add(new PropertyCriterion(
-//                                dbCriteria.proto().currentTerm().version().tenants().$().leaseParticipant().participantId(),
-//                                pcr.getRestriction(),
-//                                pcr.getValue()
-//                        ));                        
-//                        i.remove();
-//                    }//@formatter:on
-                    if (pcr.getPropertyPath().equals(dtoProto.asOf().getPath().toString())) {
-                        dbCriteria.le(dbCriteria.proto().billingAccount().arrearsSnapshots().$().fromDate(), pcr.getValue());
-                        dbCriteria.ge(dbCriteria.proto().billingAccount().arrearsSnapshots().$().toDate(), pcr.getValue());
+                    if (propertyCriterion.getPropertyPath().equals(dtoProto.asOf().getPath().toString())) {
+                        dbCriteria.le(dbCriteria.proto().billingAccount().arrearsSnapshots().$().fromDate(), propertyCriterion.getValue());
+                        dbCriteria.ge(dbCriteria.proto().billingAccount().arrearsSnapshots().$().toDate(), propertyCriterion.getValue());
+                        i.remove();
+                    } else if (propertyCriterion.getPropertyPath().equals(dtoProto.building().getPath().toString())) {
+                        dbCriteria.in(dbCriteria.proto().unit().building(), propertyCriterion.getValue());
                         i.remove();
                     }
                 }

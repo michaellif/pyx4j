@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
@@ -44,9 +45,6 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
     public IsWidget createContent() {
         FlexTable content = new FlexTable();
         int row = -1;
-//        content.setH2(++row, 0, 1, i18n.tr("Delinquent Tenants:"));
-
-//        content.setH2(++row, 0, 1, i18n.tr("Outstanding:"));
         content.setWidget(++row, 0, new Label(i18n.tr("This Month:")));
         content.setWidget(row, 1, inject(proto().outstandingThisMonthCount()));
         content.setWidget(row, 2, inject(proto().outstandingThisMonth()));
@@ -67,10 +65,11 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
         content.setWidget(row, 1, inject(proto().outstanding91andMoreDaysCount()));
         content.setWidget(row, 2, inject(proto().outstanding91andMoreDays()));
 
-//        content.setH3(++row, 0, 1, i18n.tr("Total:"));
         content.setWidget(++row, 0, new Label(i18n.tr("Total:")));
         content.setWidget(row, 1, inject(proto().delinquentLeases()));
         content.setWidget(row, 2, inject(proto().outstandingTotal()));
+        content.getFlexCellFormatter().getElement(row, 1).getStyle().setFontWeight(FontWeight.BOLD);
+        content.getFlexCellFormatter().getElement(row, 2).getStyle().setFontWeight(FontWeight.BOLD);
 
         content.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
         content.getColumnFormatter().setWidth(1, "100px");

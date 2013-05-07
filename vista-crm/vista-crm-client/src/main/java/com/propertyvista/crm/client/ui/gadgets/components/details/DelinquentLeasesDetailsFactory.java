@@ -46,7 +46,6 @@ public class DelinquentLeasesDetailsFactory extends AbstractListerDetailsFactory
                     new Builder(proto().workPhone()).visible(false).build(),
                     new Builder(proto().email()).build(),
                                                                                 
-                    new Builder(proto().arrears().bucketCurrent()).searchable(true).sortable(true).build(),
                     new Builder(proto().arrears().bucketThisMonth()).searchable(true).sortable(true).build(),
                     new Builder(proto().arrears().bucket30()).searchable(true).sortable(true).build(),
                     new Builder(proto().arrears().bucket60()).searchable(true).sortable(true).build(),
