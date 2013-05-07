@@ -33,13 +33,16 @@ SET search_path = '_admin_';
         ***     ======================================================================================================
         **/
         
+        -- check constraints
+        
+        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
         
         /**
         ***     ======================================================================================================
         ***
         ***             DROP INDEXES 
         ***
-        ***     ==============================================================admin_pmc_vista_features========================================
+        ***     ======================================================================================================
         **/
         
         DROP INDEX pad_batch_pmc_namespace_merchant_account_key_idx;
@@ -120,6 +123,16 @@ SET search_path = '_admin_';
         
         ALTER TABLE pad_batch ADD CONSTRAINT pad_batch_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE scheduler_run ADD CONSTRAINT scheduler_run_started_by_fk FOREIGN KEY(started_by) REFERENCES operations_user(id)  DEFERRABLE INITIALLY DEFERRED;
+        
+        -- check constraints
+        
+        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+                CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'initializeFutureBillingCycles', 
+                'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsIssue', 'paymentsPadProcesAcknowledgment', 'paymentsPadProcesReconciliation',
+                'paymentsPadReceiveAcknowledgment', 'paymentsPadReceiveReconciliation', 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 
+                'paymentsTenantSure', 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 'test', 
+                'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 'yardiImportProcess'));
+
         
 
         -- not null

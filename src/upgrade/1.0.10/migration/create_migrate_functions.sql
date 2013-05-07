@@ -65,8 +65,11 @@ BEGIN
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant_discriminator TO reporter_discriminator;
        
         
-        ALTER TABLE maintenance_request ALTER COLUMN submitted TYPE TIMESTAMP;
-        ALTER TABLE maintenance_request ALTER COLUMN updated TYPE TIMESTAMP;
+        ALTER TABLE maintenance_request ALTER COLUMN submitted TYPE TIMESTAMP,
+                                        ALTER COLUMN updated TYPE TIMESTAMP,
+                                        ALTER COLUMN description TYPE VARCHAR(2048),
+                                        ALTER COLUMN pet_instructions TYPE VARCHAR(2048),
+                                        ALTER COLUMN resolution TYPE VARCHAR(2048);
         
        
                                
@@ -97,6 +100,16 @@ BEGIN
                 ||'JOIN apt_unit a ON (l.unit = a.id) '
                 ||'JOIN building b ON (a.building = b.id) '
                 ||'WHERE m.reporter = lp.id ';
+                
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                ||'SET  originator_discriminator = ''CrmUser'', '
+                ||'     originator = u.id '
+                ||'FROM '||v_schema_name||'.crm_user u '
+                ||'JOIN '||v_schema_name||'.crm_user_credential uc ON (u.id = uc.usr) '
+                ||'JOIN '||v_schema_name||'.crm_user_credential$rls ur ON (uc.id = ur.owner) '
+                ||'JOIN '||v_schema_name||'.crm_role r ON (ur.value = r.id) '
+                ||'WHERE r.name = ''PropertyVistaAccountOwner'' ';
                
         
         /**
