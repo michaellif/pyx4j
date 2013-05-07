@@ -26,7 +26,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -53,7 +52,7 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
 
     public BaseFolderDecorator(EntityFolderImages images, String title, boolean addable) {
         this.addable = addable;
-        addButton = new Button(new Image(images.addButton().regular()), title);
+        addButton = new Button(images.addButton().regular(), title);
         addButton.setStyleName(EntityFolderAddButton.name());
 
         validationMessageHolder = new HTML();

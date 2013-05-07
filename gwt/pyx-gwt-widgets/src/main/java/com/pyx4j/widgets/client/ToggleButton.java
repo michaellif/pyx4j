@@ -26,22 +26,22 @@ import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseUpEvent;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.resources.client.ImageResource;
 
 public class ToggleButton extends Button {
 
     private boolean checked = false;
 
-    public ToggleButton(Image image) {
-        this(image, null);
+    public ToggleButton(ImageResource imageResource) {
+        this(imageResource, null);
     }
 
     public ToggleButton(String text) {
         this(null, text);
     }
 
-    public ToggleButton(Image image, final String text) {
-        super(new ToggleButtonFacesHandler(), image, text);
+    public ToggleButton(ImageResource imageResource, final String text) {
+        super(new ToggleButtonFacesHandler(), imageResource, text);
     }
 
     public boolean isChecked() {

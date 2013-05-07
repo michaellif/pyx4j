@@ -26,7 +26,6 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -123,13 +122,13 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setAddActionCommand(Command addActionCommand) {
         topActionsBar.getToolbar().insert(
-                addButton = new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New {0}", entityPrototype.getEntityMeta()
-                        .getCaption()), addActionCommand), 0);
+                addButton = new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("New {0}", entityPrototype.getEntityMeta().getCaption()),
+                        addActionCommand), 0);
     }
 
     public void setDelActionCommand(Command delActionCommand) {
-        topActionsBar.getToolbar().insert(
-                delButton = new Button(new Image(EntityFolderImages.INSTANCE.delButton().hover()), i18n.tr("Delete Checked"), delActionCommand), 1);
+        topActionsBar.getToolbar().insert(delButton = new Button(EntityFolderImages.INSTANCE.delButton().hover(), i18n.tr("Delete Checked"), delActionCommand),
+                1);
 
         delButton.setEnabled(getDataTableModel().isAnyChecked());
         getDataTable().setHasCheckboxColumn(true);

@@ -35,6 +35,7 @@ import com.google.gwt.event.dom.client.MouseOverHandler;
 import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.event.dom.client.MouseUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FocusPanel;
@@ -50,7 +51,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private final SimplePanel imageHolder;
 
-    private final Image image;
+    private final ImageResource imageResource;
 
     private final ButtonFacesHandler buttonFacesHandler;
 
@@ -58,36 +59,36 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private Command command;
 
-    public Button(Image image) {
-        this(image, (String) null);
+    public Button(ImageResource imageResource) {
+        this(imageResource, (String) null);
     }
 
     public Button(String text) {
-        this((Image) null, text);
+        this((ImageResource) null, text);
     }
 
-    public Button(Image image, Command command) {
-        this(image);
+    public Button(ImageResource imageResource, Command command) {
+        this(imageResource);
         this.command = command;
     }
 
     public Button(String text, Command command) {
-        this((Image) null, text);
+        this((ImageResource) null, text);
         this.command = command;
     }
 
-    public Button(Image image, String text, Command command) {
-        this(image, text);
+    public Button(ImageResource imageResource, String text, Command command) {
+        this(imageResource, text);
         this.command = command;
     }
 
-    public Button(Image image, final String text) {
-        this(new ButtonFacesHandler(), image, text);
+    public Button(ImageResource imageResource, final String text) {
+        this(new ButtonFacesHandler(), imageResource, text);
     }
 
-    protected Button(ButtonFacesHandler facesHandler, Image image, String text) {
+    protected Button(ButtonFacesHandler facesHandler, ImageResource imageResource, String text) {
 
-        this.image = image;
+        this.imageResource = imageResource;
 
         setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Button.name());
 
@@ -106,7 +107,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         setWidget(imageHolder);
 
-        if (image != null) {
+        if (imageResource != null) {
             setImageVisible(true);
         }
 
@@ -188,11 +189,12 @@ public class Button extends FocusPanel implements IFocusWidget {
     }
 
     public void setImageVisible(boolean visible) {
-        if (image != null) {
+        if (imageResource != null) {
             if (visible) {
-                imageHolder.getElement().getStyle().setProperty("paddingLeft", image.getWidth() + "px");
+                imageHolder.getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
                 imageHolder.getElement().getStyle().setProperty("height", "100%");
-                imageHolder.getElement().getStyle().setProperty("background", "url('" + image.getUrl() + "') no-repeat scroll left center");
+                imageHolder.getElement().getStyle()
+                        .setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
             } else {
                 imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
                 imageHolder.getElement().getStyle().setProperty("background", "none");
@@ -220,13 +222,6 @@ public class Button extends FocusPanel implements IFocusWidget {
     protected void onEnsureDebugId(String baseID) {
         if (textLabel != null) {
             textLabel.ensureDebugId(baseID);
-        }
-        if (this.image != null) {
-            if (textLabel != null) {
-                image.ensureDebugId(baseID);
-            } else {
-                image.ensureDebugId(baseID + "-image");
-            }
         }
     }
 

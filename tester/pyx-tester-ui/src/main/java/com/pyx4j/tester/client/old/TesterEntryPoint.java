@@ -32,10 +32,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RichTextArea;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -51,6 +49,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.tester.client.images.Images;
 import com.pyx4j.tester.client.theme.TesterPalette;
 import com.pyx4j.tester.client.theme.TesterTheme;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CheckBox;
 import com.pyx4j.widgets.client.GlassPanel;
 import com.pyx4j.widgets.client.GlassPanel.GlassStyle;
@@ -153,7 +152,7 @@ public class TesterEntryPoint implements EntryPoint {
 
         {
 
-            com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(Images.INSTANCE.collapse()), "Test");
+            com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(Images.INSTANCE.collapse(), "Test");
             contentPanel.add(buttonTest2);
         }
 
@@ -248,7 +247,7 @@ public class TesterEntryPoint implements EntryPoint {
             com.pyx4j.widgets.client.Button buttonTest1 = new com.pyx4j.widgets.client.Button("Test");
             contentPanel.add(buttonTest1);
 
-            com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(new Image(Images.INSTANCE.collapse()), "Test");
+            com.pyx4j.widgets.client.Button buttonTest2 = new com.pyx4j.widgets.client.Button(Images.INSTANCE.collapse(), "Test");
             contentPanel.add(buttonTest2);
         }
 

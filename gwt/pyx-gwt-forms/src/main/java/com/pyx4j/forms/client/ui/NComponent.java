@@ -32,7 +32,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -139,6 +138,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     }
 
     public void onToggle() {
+    }
+
+    public void onNavigate() {
     }
 
     protected void setToggleOn(boolean flag) {
@@ -253,7 +255,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addBlurHandler(focusHandlerManager);
             }
 
-            triggerButton = new Button(new Image(triggerImage));
+            triggerButton = new Button(triggerImage);
             triggerButton.addFocusHandler(focusHandlerManager);
             triggerButton.addBlurHandler(focusHandlerManager);
 
@@ -340,16 +342,51 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             return addDomHandler(handler, DoubleClickEvent.getType());
         }
 
-        @Override
-        protected void onLoad() {
-            super.onLoad();
-            DomDebug.attachedWidget();
+    }
+
+    class NavigPanel extends HorizontalPanel {
+
+        private final Button navigButton;
+
+        public NavigPanel(ImageResource navigImage) {
+            super();
+
+            setStyleName(DefaultCComponentsTheme.StyleName.TriggerPannel.name());
+
+            NComponent.this.getViewer().asWidget().setWidth("100%");
+            add(NComponent.this.getViewer());
+            setCellWidth(NComponent.this.getViewer(), "100%");
+
+            navigButton = new Button(navigImage);
+
+            add(navigButton);
+            setCellVerticalAlignment(navigButton, ALIGN_TOP);
+
+            String marginTop;
+            if (BrowserType.isFirefox()) {
+                marginTop = "0";
+            } else if (BrowserType.isIE()) {
+                marginTop = "1";
+            } else {
+                //Chrome and Safari
+                marginTop = "2";
+            }
+            DOM.setStyleAttribute(navigButton.getElement(), "marginTop", marginTop);
+            DOM.setStyleAttribute(navigButton.getElement(), "marginLeft", "4px");
+
+            navigButton.setCommand(new Command() {
+
+                @Override
+                public void execute() {
+                    NComponent.this.onNavigate();
+                }
+            });
+
         }
 
-        @Override
-        protected void onUnload() {
-            super.onUnload();
-            DomDebug.detachWidget();
+        public Button getNavigButton() {
+            return navigButton;
         }
+
     }
 }

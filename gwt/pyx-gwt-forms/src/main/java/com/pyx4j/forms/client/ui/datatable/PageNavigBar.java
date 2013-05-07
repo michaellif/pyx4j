@@ -31,7 +31,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -79,12 +78,12 @@ public class PageNavigBar extends Toolbar {
 
         getElement().getStyle().setProperty("textAlign", "right");
 
-        firstButton = new Button(new Image(DataTableImages.INSTANCE.first()));
+        firstButton = new Button(DataTableImages.INSTANCE.first());
         firstButton.setVisible(false);
         firstButton.getElement().getStyle().setMarginRight(3, Unit.PX);
         add(firstButton);
 
-        prevButton = new Button(new Image(DataTableImages.INSTANCE.prev()));
+        prevButton = new Button(DataTableImages.INSTANCE.prev());
         prevButton.setVisible(false);
         prevButton.getElement().getStyle().setMarginRight(5, Unit.PX);
         add(prevButton);
@@ -94,12 +93,12 @@ public class PageNavigBar extends Toolbar {
         countLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         add(countLabel);
 
-        nextButton = new Button(new Image(DataTableImages.INSTANCE.next()));
+        nextButton = new Button(DataTableImages.INSTANCE.next());
         nextButton.setVisible(false);
         nextButton.getElement().getStyle().setMarginRight(3, Unit.PX);
         add(nextButton);
 
-        lastButton = new Button(new Image(DataTableImages.INSTANCE.last()));
+        lastButton = new Button(DataTableImages.INSTANCE.last());
         lastButton.setVisible(false);
         add(lastButton);
 
