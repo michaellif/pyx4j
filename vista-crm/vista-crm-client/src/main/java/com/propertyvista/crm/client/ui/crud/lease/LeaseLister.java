@@ -19,7 +19,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -93,7 +92,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
 //        }));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("New Lease"), new Command() {
+            addActionItem(new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("New Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.New).show();
@@ -102,7 +101,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
         }
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            addActionItem(new Button(new Image(EntityFolderImages.INSTANCE.addButton().hover()), i18n.tr("Current Lease"), new Command() {
+            addActionItem(new Button(EntityFolderImages.INSTANCE.addButton().hover(), i18n.tr("Current Lease"), new Command() {
                 @Override
                 public void execute() {
                     new LeaseDataDialog(LeaseDataDialog.Type.Current).show();
