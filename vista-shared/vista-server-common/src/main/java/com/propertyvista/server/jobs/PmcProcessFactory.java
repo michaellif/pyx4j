@@ -32,6 +32,12 @@ public class PmcProcessFactory {
             return new BillingProcess();
         case initializeFutureBillingCycles:
             return new FutureBillingCycleInitializationProcess();
+
+        case depositRefund:
+            return new DepositRefundProcess();
+        case depositInterestAdjustment:
+            return new DepositInterestAdjustmentProcess();
+
         case paymentsIssue:
             return new PaymentsIssueProcess();
         case paymentsUpdate:

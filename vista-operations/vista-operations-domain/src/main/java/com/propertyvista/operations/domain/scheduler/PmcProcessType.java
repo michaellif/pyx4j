@@ -26,6 +26,10 @@ public enum PmcProcessType implements Serializable {
 
     billing(true),
 
+    depositRefund,
+
+    depositInterestAdjustment,
+
     @Translate("PAD 1 - Issue PreAuthorized Payments")
     paymentsIssue(true),
 

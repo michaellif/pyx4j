@@ -88,18 +88,10 @@ import com.propertyvista.domain.tenant.lease.LeaseAdjustment.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.server.jobs.BillingProcess;
-import com.propertyvista.server.jobs.DepositInterestAdjustmentProcess;
-import com.propertyvista.server.jobs.DepositRefundProcess;
-import com.propertyvista.server.jobs.FutureBillingCycleInitializationProcess;
-import com.propertyvista.server.jobs.LeaseActivationProcess;
-import com.propertyvista.server.jobs.LeaseCompletionProcess;
-import com.propertyvista.server.jobs.LeaseRenewalProcess;
-import com.propertyvista.server.jobs.PaymentsIssueProcess;
-import com.propertyvista.server.jobs.PaymentsScheduledProcess;
-import com.propertyvista.server.jobs.PaymentsUpdateProcess;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
+import com.propertyvista.server.jobs.PmcProcessFactory;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
@@ -773,29 +765,35 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected void setBillingBatchProcess() {
-        scheduler.schedulePmcProcess(new BillingProcess(), new Schedule());
-        scheduler.schedulePmcProcess(new FutureBillingCycleInitializationProcess(), new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.billing, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.initializeFutureBillingCycles, new Schedule());
     }
 
     protected void setDepositBatchProcess() {
         // schedule deposit interest adjustment batch process to run on 1st of each month
-        scheduler.schedulePmcProcess(new DepositInterestAdjustmentProcess(), new Schedule().set(Calendar.DAY_OF_MONTH, 1));
+        scheduler.schedulePmcProcess(PmcProcessType.depositInterestAdjustment, new Schedule().set(Calendar.DAY_OF_MONTH, 1));
         // schedule deposit refund batch process to run every day
-        scheduler.schedulePmcProcess(new DepositRefundProcess(), new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.depositRefund, new Schedule());
     }
 
     protected void setLeaseBatchProcess() {
         // schedule lease activation and completion process to run daily
-        scheduler.schedulePmcProcess(new LeaseActivationProcess(), new Schedule());
-        scheduler.schedulePmcProcess(new LeaseCompletionProcess(), new Schedule());
-        scheduler.schedulePmcProcess(new LeaseRenewalProcess(), new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.leaseActivation, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.leaseCompletion, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.leaseRenewal, new Schedule());
     }
 
     protected void setPaymentBatchProcess() {
         // schedule payment process to run daily
-        scheduler.schedulePmcProcess(new PaymentsIssueProcess(), new Schedule());
-        scheduler.schedulePmcProcess(new PaymentsUpdateProcess(), new Schedule());
-        scheduler.schedulePmcProcess(new PaymentsScheduledProcess(PaymentType.Echeck), new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsIssue, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsUpdate, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsScheduledEcheck, new Schedule());
+    }
+
+    protected void setCaledonPAdPaymentBatchProcess() {
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsPadSend, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsPadReceiveAcknowledgment, new Schedule());
+        scheduler.schedulePmcProcess(PmcProcessType.paymentsPadReceiveReconciliation, new Schedule());
     }
 
     public static class TaskScheduler {
@@ -848,7 +846,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             taskSchedule.put(entry, task);
         }
 
-        protected void schedulePmcProcess(final PmcProcess pmcProcess, Schedule entry) {
+        protected void schedulePmcProcess(final PmcProcessType triggerType, Schedule entry) {
             taskSchedule.put(entry, new Task() {
                 @Override
                 public void execute() throws Exception {
@@ -857,6 +855,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                         Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
                         Date runDate = getSysDate();
                         PmcProcessContext sharedContext = new PmcProcessContext(runDate);
+                        PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(triggerType);
                         if (pmcProcess.start(sharedContext)) {
                             PmcProcessContext pmcContext = new PmcProcessContext(runDate);
                             pmcProcess.executePmcJob(pmcContext);
