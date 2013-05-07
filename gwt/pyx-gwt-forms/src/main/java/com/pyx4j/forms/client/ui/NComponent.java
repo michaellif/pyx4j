@@ -20,11 +20,25 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
+import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
@@ -107,7 +121,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 editor = createEditor();
                 onEditorCreate();
                 if (triggerImageResource != null) {
-                    triggerPanel = new TriggerPanel(this, triggerImageResource);
+                    triggerPanel = new TriggerPanel(triggerImageResource);
                 }
             }
             onEditorInit();
@@ -215,4 +229,127 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
+    class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
+
+        private final Button triggerButton;
+
+        private final GroupFocusHandler focusHandlerManager;
+
+        private boolean toggledOn = false;
+
+        public TriggerPanel(ImageResource triggerImage) {
+            super();
+
+            setStyleName(DefaultCComponentsTheme.StyleName.TriggerPannel.name());
+
+            NComponent.this.getEditor().asWidget().setWidth("100%");
+            add(NComponent.this.getEditor());
+            setCellWidth(NComponent.this.getEditor(), "100%");
+
+            focusHandlerManager = new GroupFocusHandler(this);
+
+            if (NComponent.this.getEditor() instanceof NFocusComponent) {
+                ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addFocusHandler(focusHandlerManager);
+                ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addBlurHandler(focusHandlerManager);
+            }
+
+            triggerButton = new Button(new Image(triggerImage));
+            triggerButton.addFocusHandler(focusHandlerManager);
+            triggerButton.addBlurHandler(focusHandlerManager);
+
+            add(triggerButton);
+            setCellVerticalAlignment(triggerButton, ALIGN_TOP);
+
+            String marginTop;
+            if (BrowserType.isFirefox()) {
+                marginTop = "0";
+            } else if (BrowserType.isIE()) {
+                marginTop = "1";
+            } else {
+                //Chrome and Safari
+                marginTop = "2";
+            }
+            DOM.setStyleAttribute(triggerButton.getElement(), "marginTop", marginTop);
+            DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "4px");
+
+            triggerButton.setCommand(new Command() {
+
+                @Override
+                public void execute() {
+                    toggleOn(!toggledOn);
+                }
+            });
+
+            triggerButton.addKeyDownHandler(new KeyDownHandler() {
+
+                @Override
+                public void onKeyDown(KeyDownEvent event) {
+                    switch (event.getNativeKeyCode()) {
+                    case KeyCodes.KEY_TAB:
+                    case KeyCodes.KEY_ESCAPE:
+                    case KeyCodes.KEY_UP:
+                        toggleOn(false);
+                        break;
+                    case KeyCodes.KEY_DOWN:
+                        toggleOn(true);
+                        break;
+                    }
+
+                }
+            });
+
+            triggerButton.sinkEvents(Event.ONDBLCLICK);
+
+            this.addDoubleClickHandler(new DoubleClickHandler() {
+                @Override
+                public void onDoubleClick(DoubleClickEvent event) {
+                    if (NComponent.this.isEditable() && NComponent.this.isEnabled()) {
+                        toggleOn(true);
+                    }
+                }
+            });
+        }
+
+        protected void toggleOn(boolean flag) {
+            toggledOn = flag;
+            NComponent.this.onToggle();
+        }
+
+        protected boolean isToggledOn() {
+            return toggledOn;
+        }
+
+        @Override
+        protected void onEnsureDebugId(String baseID) {
+            //super.onEnsureDebugId(baseID);
+            ((Widget) NComponent.this.getEditor()).ensureDebugId(baseID);
+            // Special name for selenium to fire events instead of click
+            triggerButton.ensureDebugId(CompositeDebugId.debugId(baseID, CCompDebugId.trigger));
+        }
+
+        public Button getTriggerButton() {
+            return triggerButton;
+        }
+
+        protected GroupFocusHandler getGroupFocusHandler() {
+            return focusHandlerManager;
+        }
+
+        @Override
+        public HandlerRegistration addDoubleClickHandler(DoubleClickHandler handler) {
+            return addDomHandler(handler, DoubleClickEvent.getType());
+        }
+
+        @Override
+        protected void onLoad() {
+            super.onLoad();
+            DomDebug.attachedWidget();
+        }
+
+        @Override
+        protected void onUnload() {
+            super.onUnload();
+            DomDebug.detachWidget();
+        }
+    }
 }
