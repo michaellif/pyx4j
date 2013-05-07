@@ -399,8 +399,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             entList.add(Concrete3AssignedPKEntity.class);
 
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.in(criteria.proto().reference(), entList));
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().reference(), entList);
 
             List<Concrete2Entity> found = srv.query(criteria);
             Assert.assertTrue(found.contains(ent1));
@@ -413,8 +413,8 @@ public abstract class PolymorphicTestCase extends DatastoreTestBase {
             List<Concrete1Entity> entList = new ArrayList<Concrete1Entity>();
             entList.add(ent11);
             EntityQueryCriteria<Concrete2Entity> criteria = EntityQueryCriteria.create(Concrete2Entity.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().testId(), testId));
-            criteria.add(PropertyCriterion.in(criteria.proto().reference(), entList));
+            criteria.eq(criteria.proto().testId(), testId);
+            criteria.in(criteria.proto().reference(), entList);
 
             Concrete2Entity found = srv.retrieve(criteria);
             Assert.assertEquals(ent1, found);

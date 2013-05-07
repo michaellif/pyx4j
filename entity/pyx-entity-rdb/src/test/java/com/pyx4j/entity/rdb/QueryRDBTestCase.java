@@ -34,6 +34,7 @@ import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
 import com.pyx4j.entity.test.shared.domain.Employee;
+import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.sort.SortBy;
 import com.pyx4j.entity.test.shared.domain.sort.SortSortable;
 import com.pyx4j.geo.GeoBox;
@@ -91,7 +92,35 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
         {
             EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().id(), emps));
+            criteria.in(criteria.proto().id(), emps);
+
+            List<Employee> empsRetrived = srv.query(criteria);
+            Assert.assertEquals("result set size", dataSize, empsRetrived.size());
+        }
+    }
+
+    public void testCriterionINJoin() {
+        String setId = uniqueString();
+        Vector<Employee> emps = new Vector<Employee>();
+        Vector<Task> tasks = new Vector<Task>();
+        final int dataSize = 3;
+        for (int i = 0; i < dataSize; i++) {
+            Employee emp = EntityFactory.create(Employee.class);
+            emp.firstName().setValue(uniqueString());
+            emp.workAddress().streetName().setValue(setId);
+
+            Task task = EntityFactory.create(Task.class);
+            task.description().setValue(setId);
+            emp.tasks().add(task);
+
+            srv.persist(emp);
+            emps.add(emp);
+            tasks.add(task);
+        }
+
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.in(criteria.proto().tasks(), tasks);
 
             List<Employee> empsRetrived = srv.query(criteria);
             Assert.assertEquals("result set size", dataSize, empsRetrived.size());
