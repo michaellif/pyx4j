@@ -52,7 +52,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         formatter.header("City Zip");
         formatter.header("Unit");
         formatter.header("First");
-        formatter.header("Last/Middle");
+        formatter.header("Middle");
         formatter.header("Last");
         formatter.header("Portal Registration Token");
         formatter.newRow();
@@ -95,13 +95,12 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         formatter.cell(getCityZip(tenant.lease().unit().building()));
         formatter.cell(tenant.lease().unit().info().number().getValue());
         formatter.cell(tenant.customer().person().name().firstName().getStringView());
-        if (tenant.customer().person().name().middleName() != null && !tenant.customer().person().name().middleName().isNull()) {
+        if (!tenant.customer().person().name().middleName().isNull()) {
             formatter.cell(tenant.customer().person().name().middleName().getStringView());
-            formatter.cell(tenant.customer().person().name().lastName().getStringView());
         } else {
-            formatter.cell(tenant.customer().person().name().lastName().getStringView());
             formatter.cell("");
         }
+        formatter.cell(tenant.customer().person().name().lastName().getStringView());
         formatter.cell(tenant.customer().portalRegistrationToken().getValue());
         formatter.newRow();
     }
