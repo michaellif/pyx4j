@@ -21,15 +21,15 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.operations.domain.payment.pad.PadTestTransactionOffset;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.operations.domain.payment.pad.PadTestTransactionOffset;
 import com.propertyvista.server.jobs.TaskRunner;
 
 /**
  * Used to enforce unique transaction number in development.
  * In production the values are mapped one to one.
  */
-public class PadTransactionUtils {
+class PadTransactionUtils {
 
     private static final char transactionSeparator = '-';
 
@@ -62,7 +62,7 @@ public class PadTransactionUtils {
         }
     }
 
-    private static String testDBversionId() {
+    static String testDBversionId() {
         return TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
