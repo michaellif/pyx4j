@@ -58,7 +58,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         return editor;
     }
 
-    public Button getTriggerButton() {
+    Button getTriggerButton() {
         return triggerPanel == null ? null : triggerPanel.getTriggerButton();
     }
 
