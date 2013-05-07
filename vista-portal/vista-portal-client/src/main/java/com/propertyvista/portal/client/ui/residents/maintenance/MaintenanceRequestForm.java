@@ -48,9 +48,10 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
+
         // set value again in case meta comes after the form was populated
         if (getValue() != null) {
-            setComponentsValue(getValue(), true, true);
+            setComponentsValue(getValue(), false, true);
         }
     }
 

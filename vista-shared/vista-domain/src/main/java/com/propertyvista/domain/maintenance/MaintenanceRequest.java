@@ -34,6 +34,9 @@ import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
+import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -54,6 +57,8 @@ public interface MaintenanceRequest extends IEntity {
 
     AbstractPmcUser originator();
 
+    // --------------------------------------
+
     Tenant reporter();
 
     IPrimitive<String> reporterName();
@@ -63,6 +68,8 @@ public interface MaintenanceRequest extends IEntity {
 
     @Editor(type = EditorType.email)
     IPrimitive<String> reporterEmail();
+
+    // --------------------------------------
 
     @NotNull
     @Length(14)
@@ -86,18 +93,15 @@ public interface MaintenanceRequest extends IEntity {
     @Timestamp(Update.Updated)
     IPrimitive<Date> updated();
 
-    IPrimitive<LogicalDate> scheduledDate();
-
-    @Editor(type = EditorType.timepicker)
-    @Format("h:mm a")
-    IPrimitive<Time> scheduledTime();
+    // --------------------------------------
 
     @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
-    @NotNull
     IPrimitive<String> summary();
+
+    // --------------------------------------
 
     IPrimitive<Boolean> permissionToEnter();
 
@@ -105,11 +109,52 @@ public interface MaintenanceRequest extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> petInstructions();
 
+    // --------------------------------------
+
+    @I18n
+    public enum DayTime {
+
+        @Translate("9am-12am")
+        Morning,
+
+        @Translate("12am-3pm")
+        Afternoon,
+
+        @Translate("3pm-6pm")
+        Evening;
+
+        @Override
+        public String toString() {
+            return I18nEnum.toString(this);
+        }
+    }
+
+    IPrimitive<LogicalDate> preferredDate1();
+
+    @Format("h:mm a")
+    IPrimitive<DayTime> preferredTime1();
+
+    IPrimitive<LogicalDate> preferredDate2();
+
+    @Format("h:mm a")
+    IPrimitive<DayTime> preferredTime2();
+
+    // --------------------------------------
+
+    IPrimitive<LogicalDate> scheduledDate();
+
+    @Editor(type = EditorType.timepicker)
+    @Format("h:mm a")
+    IPrimitive<Time> scheduledTime();
+
+    // --------------------------------------
+
     @Length(2048)
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> resolution();
 
+    // --------------------------------------
+
     @EmbeddedEntity
     SurveyResponse surveyResponse();
-
 }

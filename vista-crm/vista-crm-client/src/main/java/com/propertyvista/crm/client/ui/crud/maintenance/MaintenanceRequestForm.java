@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -56,6 +57,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private VerticalPanel categoryPanel;
 
+    private FormFlexPanel accessPanel;
+
     private FormFlexPanel statusPanel;
 
     private FormFlexPanel surveyPanel;
@@ -93,84 +96,110 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
-        panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
-
         VerticalPanel left = new VerticalPanel();
-        left.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-        panel.setWidget(++row, 0, left);
-
-        left.add(new DecoratorBuilder(inject(proto().requestId()), 20).build());
-        get(proto().requestId()).inheritViewable(false);
-        get(proto().requestId()).setViewable(true);
-
+        left.add(new DecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());
+        left.add(new HTML("&nbsp"));
         left.add(new DecoratorBuilder(inject(proto().building(), buildingSelector), 25).build());
-        if (isEditable()) {
-            left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
-            buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<Building> event) {
-                    reporterSelector.setValue(null);
-                }
-            });
-        } else {
-            left.add(new DecoratorBuilder(inject(proto().reporterName()), 20).build());
-        }
-        left.add(new DecoratorBuilder(inject(proto().reporterPhone()), 20).build());
-        left.add(new DecoratorBuilder(inject(proto().reporterEmail()), 20).build());
+        buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Building> event) {
+                unitSelector.setValue(null);
+                reporterSelector.setValue(null);
+            }
+        });
         left.add(new DecoratorBuilder(inject(proto().buildingElement(), unitSelector), 25).build());
+        left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
 
-        // create category selection panel
-        categoryPanel = new VerticalPanel();
-        categoryPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
-        left.add(categoryPanel);
-
+        left.add(new DecoratorBuilder(inject(proto().reporterPhone()), 25).build());
+        left.add(new DecoratorBuilder(inject(proto().reporterEmail()), 25).build());
+        // --------------------------------------------------------------------------------------------------------------------
         VerticalPanel right = new VerticalPanel();
-        right.setVerticalAlignment(HasVerticalAlignment.ALIGN_TOP);
+        categoryPanel = new VerticalPanel();
+        right.add(categoryPanel);
+        right.add(new HTML("&nbsp"));
+        right.add(new DecoratorBuilder(inject(proto().summary()), 25).build());
+        right.add(new DecoratorBuilder(inject(proto().description()), 25).build());
+        right.add(new DecoratorBuilder(inject(proto().priority(), priority), 25).build());
+
+        // --------------------------------------------------------------------------------------------------------------------
+
+        panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
+        panel.setWidget(++row, 0, left);
         panel.setWidget(row, 1, right);
         panel.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
-        panel.getCellFormatter().setVerticalAlignment(row, 1, HasVerticalAlignment.ALIGN_TOP);
+//        panel.getCellFormatter().setVerticalAlignment(row, 1, HasVerticalAlignment.ALIGN_TOP);
 
-        right.add(new DecoratorBuilder(inject(proto().summary()), 20).build());
-        right.add(new DecoratorBuilder(inject(proto().description()), 20).build());
-        right.add(new DecoratorBuilder(inject(proto().priority(), priority), 10).build());
+        // --------------------------------------------------------------------------------------------------------------------
 
-        VerticalPanel permPanel = new VerticalPanel();
-        permPanel.add(new DecoratorBuilder(inject(proto().permissionToEnter()), 20).build());
-        permPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 20).build());
-        right.add(permPanel);
+        panel.setH1(++row, 0, 2, i18n.tr("Unit Access"));
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
+        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
+                accessPanel.setVisible(event.getValue());
             }
         });
-        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
+
+        // --------------------------------------------------------------------------------------------------------------------
+
+        VerticalPanel permissionPanel = new VerticalPanel();
+
+        permissionPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 25).build());
         get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
+        // --------------------------------------------------------------------------------------------------------------------
+        VerticalPanel schedulePanel = new VerticalPanel();
+
+        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate1()), 10).build());
+        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredTime1()), 10).build());
+        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate2()), 10).build());
+        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredTime2()), 10).build());
+        // --------------------------------------------------------------------------------------------------------------------
+        accessPanel = new FormFlexPanel();
+
+        accessPanel.setWidget(1, 0, permissionPanel);
+        accessPanel.setWidget(1, 1, schedulePanel);
+
+        accessPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+
+        panel.setWidget(++row, 0, accessPanel);
+        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        // --------------------------------------------------------------------------------------------------------------------
 
         statusPanel = new FormFlexPanel();
-        panel.getFlexCellFormatter().setColSpan(++row, 0, 2);
-        panel.setWidget(row, 0, statusPanel);
-        {
-            int innerRow = -1;
-            statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), status), 10).build());
-            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
-            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-            statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        int innerRow = -1;
 
-            get(proto().status()).setViewable(true);
-        }
+        statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
+        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), status), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+
+        innerRow = 0;
+        statusPanel.setWidget(++innerRow, 1, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 1, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
+
+        statusPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+
+        panel.setWidget(++row, 0, statusPanel);
+        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        get(proto().status()).setViewable(true);
+
+        // --------------------------------------------------------------------------------------------------------------------
 
         surveyPanel = new FormFlexPanel();
-        panel.getFlexCellFormatter().setColSpan(++row, 0, 2);
-        panel.setWidget(row, 0, surveyPanel);
-        {
-            int innerRow = -1;
-            surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
-            surveyPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
-            surveyPanel.setWidget(innerRow, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
-        }
+
+        surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
+        surveyPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
+        surveyPanel.setWidget(innerRow, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
+
+        surveyPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+
+        panel.setWidget(++row, 0, surveyPanel);
+        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        // --------------------------------------------------------------------------------------------------------------------
 
         panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
@@ -191,10 +220,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
             String choiceLabel = meta.categoryLevels().get(levels - 1 - i).name().getValue();
             if (i == 0) {
-                categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
+                categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 25).customLabel(choiceLabel).build(), 0);
                 mrCategory = choice;
             } else {
-                categoryPanel.insert(new DecoratorBuilder(choice, 20).customLabel(choiceLabel).build(), 0);
+                categoryPanel.insert(new DecoratorBuilder(choice, 25).customLabel(choiceLabel).build(), 0);
             }
             if (child != null) {
                 child.assignParent(choice);
@@ -224,6 +253,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
+        if (isEditable()) {
+//            buildingSelector.setEditable(getValue().building().isNull());
+//            reporterSelector.setEditable(getValue().reporter().isNull());
+        }
+
         StatusPhase phase = mr.status().phase().getValue();
         get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
         get(proto().scheduledTime()).setVisible(phase == StatusPhase.Scheduled);
@@ -234,13 +268,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         statusPanel.setVisible(!mr.id().isNull());
         surveyPanel.setVisible(phase == StatusPhase.Resolved);
-
-        if (isEditable()) {
-            buildingSelector.setEditable(getValue().building().isNull());
-            reporterSelector.setEditable(getValue().reporter().isNull());
-        }
-
-        get(proto().petInstructions()).setEnabled((getValue().permissionToEnter().isBooleanTrue()));
+        accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue());
     }
 
     class BuildingSelector extends CEntitySelectorHyperlink<Building> {

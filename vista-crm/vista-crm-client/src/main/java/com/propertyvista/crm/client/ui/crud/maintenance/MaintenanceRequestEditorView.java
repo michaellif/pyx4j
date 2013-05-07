@@ -23,6 +23,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 public interface MaintenanceRequestEditorView extends IEditor<MaintenanceRequestDTO> {
 
     interface Presenter extends IEditor.Presenter {
+
         void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback);
     }
 }
