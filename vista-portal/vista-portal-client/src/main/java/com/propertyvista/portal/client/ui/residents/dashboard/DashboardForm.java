@@ -326,7 +326,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
         private String issueDetail(MaintenanceRequestDTO request) {
             try {
-                return request.category().getStringView();
+                return request.summary().getStringView();
             } catch (Exception ignore) {
                 return "Invalid Entry";
             }

@@ -38,6 +38,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
+import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
@@ -45,6 +46,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
@@ -61,6 +63,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
     private final TenantSelector reporterSelector = new TenantSelector();
+
+    private final UnitSelector unitSelector = new UnitSelector();
 
     private final PrioritySelector priority = new PrioritySelector();
 
@@ -113,6 +117,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
         left.add(new DecoratorBuilder(inject(proto().reporterPhone()), 20).build());
         left.add(new DecoratorBuilder(inject(proto().reporterEmail()), 20).build());
+        left.add(new DecoratorBuilder(inject(proto().buildingElement(), unitSelector), 25).build());
 
         // create category selection panel
         categoryPanel = new VerticalPanel();
@@ -287,6 +292,28 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     if (!building.isNull()) {
                         addFilter(PropertyCriterion.eq(proto().lease().unit().building(), building));
                     }
+                }
+            };
+        }
+    }
+
+    class UnitSelector extends CEntitySelectorHyperlink<AptUnit> {
+        @Override
+        protected AppPlace getTargetPlace() {
+            return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
+        }
+
+        @Override
+        protected UnitSelectorDialog getSelectorDialog() {
+            return new UnitSelectorDialog(false) {
+
+                @Override
+                public boolean onClickOk() {
+                    if (getSelectedItems().isEmpty()) {
+                        return false;
+                    }
+                    setValue(getSelectedItems().get(0));
+                    return true;
                 }
             };
         }

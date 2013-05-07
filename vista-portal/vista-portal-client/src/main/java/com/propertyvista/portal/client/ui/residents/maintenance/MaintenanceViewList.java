@@ -92,7 +92,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             openRequestsPanel.setHTML(++row, ++col, i18n.tr("Ticket"));
             openRequestsPanel.getCellFormatter().getElement(row, col).getStyle().setPaddingLeft(4, Unit.PX);
             openRequestsPanel.setHTML(row, ++col, i18n.tr("Status"));
-            openRequestsPanel.setHTML(row, ++col, i18n.tr("Description"));
+            openRequestsPanel.setHTML(row, ++col, i18n.tr("Summary"));
             openRequestsPanel.setHTML(row, ++col, i18n.tr("Entry Allowed"));
             openRequestsPanel.setHTML(row, ++col, "");
             openRequestsPanel.setHTML(row, ++col, "");
@@ -115,7 +115,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                     break;
                 }
 
-                openRequestsPanel.setHTML(row, ++col, request.description().getStringView());
+                openRequestsPanel.setHTML(row, ++col, request.summary().getStringView());
                 openRequestsPanel.setHTML(row, ++col, request.permissionToEnter().isBooleanTrue() ? i18n.tr("Yes") : i18n.tr("No"));
 
                 Anchor cancelTicket = new Anchor(i18n.tr("Cancel"));
@@ -168,7 +168,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             historyRequestsPanel.setHTML(++row, 0, i18n.tr("Ticket"));
             historyRequestsPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(4, Unit.PX);
             historyRequestsPanel.setHTML(row, 1, i18n.tr("Status"));
-            historyRequestsPanel.setHTML(row, 2, i18n.tr("Description"));
+            historyRequestsPanel.setHTML(row, 2, i18n.tr("Summary"));
             historyRequestsPanel.setHTML(row, 3, i18n.tr("Rate Service"));
             historyRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
 
@@ -178,7 +178,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
 
                 historyRequestsPanel.setHTML(row, 1, request.status().getStringView() + "<p><i style='font-size:0.8em'>" + request.submitted().getStringView()
                         + "</i>");
-                historyRequestsPanel.setHTML(row, 2, request.description().getStringView());
+                historyRequestsPanel.setHTML(row, 2, request.summary().getStringView());
 
                 RateIt rateIt = new RateIt(5);
                 Integer rate = request.surveyResponse().rating().getValue();

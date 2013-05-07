@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.client.ui.residents.maintenance;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -33,6 +36,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     private MaintenanceRequestMetadata meta;
 
     private VerticalPanel categoryPanel;
+
+    private VerticalPanel permissionPanel;
 
     private boolean choicesReady = false;
 
@@ -57,19 +62,41 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         content.setBR(++row, 0, 1);
 
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportedForOwnUnit()), 25).build());
+
         categoryPanel = new VerticalPanel();
         content.setWidget(++row, 0, categoryPanel);
         content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         // Description
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().summary()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().petInstructions()), 25).build());
 
-        get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
-        get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
+        permissionPanel = new VerticalPanel();
+        content.setWidget(++row, 0, permissionPanel);
+        permissionPanel.add(new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
+        permissionPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 25).build());
+
+        final CComponent<?, ?> permToEnter = get(proto().permissionToEnter());
+        final CComponent<?, ?> petInstr = get(proto().petInstructions());
+
+        permToEnter.setNote(i18n.tr("To allow our service personnel to enter your apartment"));
+        petInstr.setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
+        get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                permissionPanel.setVisible(Boolean.TRUE.equals(event.getValue()));
+            }
+        });
 
         return content;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        permissionPanel.setVisible(getValue() != null && getValue().reportedForOwnUnit().isBooleanTrue());
     }
 
     public void initSelectors() {

@@ -179,11 +179,20 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         requests.getServiceRequest().add(serviceRequest);
 
         ServiceRequests result = postMaintenanceRequests(yc, requests);
-        MaintenanceRequest mr = new YardiMaintenanceProcessor().updateRequest(yc, request, result.getServiceRequest().get(0));
-        if (mr != null) {
+        try {
+            ServiceRequest sr = result.getServiceRequest().get(0);
+            // In case of error Yardi may return request xml with invalid scheme...
+            if (!isResponseValid(sr)) {
+                throw new YardiServiceException("Posting request failed");
+            }
+            MaintenanceRequest mr = new YardiMaintenanceProcessor().updateRequest(yc, request, sr);
             Persistence.service().persist(mr);
+            return mr;
+        } catch (YardiServiceException rethrow) {
+            throw rethrow;
+        } catch (Exception e) {
+            throw new YardiServiceException(e);
         }
-        return mr;
     }
 
     protected Date loadRequests(final PmcYardiCredential yc, Date fromDate, String propertyCode) throws YardiServiceException {
@@ -200,21 +209,21 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
                 Date lastUpdate = new Date(0);
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 for (ServiceRequest request : newRequests.getServiceRequest()) {
-                    // When no records found Yardi returns empty request with undocumented Error element inside !?
-                    //   <ServiceRequests><ServiceRequest><ErrorMessages>
-                    //     <Error>There are no work orders found for these input values. </Error>
-                    //   </ErrorMessages></ServiceRequest></ServiceRequests>
-                    if (request.getServiceRequestId() == null) {
-                        log.debug("Empty request skipped");
+                    // When no records found Yardi returns request xml with invalid scheme...
+                    if (!isResponseValid(request)) {
+                        log.debug("Invalid request skipped");
                         continue;
                     }
-                    MaintenanceRequest mr = processor.mergeRequest(yc, request);
-                    if (mr != null) {
+                    try {
+                        MaintenanceRequest mr = processor.mergeRequest(yc, request);
                         Persistence.service().persist(mr);
                         // get the newest update time
                         if (lastUpdate.before(mr.updated().getValue())) {
                             lastUpdate.setTime(mr.updated().getValue().getTime());
                         }
+                    } catch (YardiServiceException e) {
+                        // just a warning, don't break the loop
+                        log.warn(e.getMessage());
                     }
                 }
 
@@ -375,5 +384,24 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         } catch (XMLStreamException e) {
             throw new Error(e);
         }
+    }
+
+    private boolean isResponseValid(ServiceRequest request) {
+        // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+        //   <ServiceRequests><ServiceRequest>
+        //     <ErrorMessages><Error>There are no work orders found for these input values.</Error></ErrorMessages>
+        //   </ServiceRequest></ServiceRequests>
+        // or
+        //   <ServiceRequests><ServiceRequest>
+        //     <ServiceRequestId>0</ServiceRequestId>
+        //     <PropertyCode>B1</PropertyCode>
+        //     <UnitCode>#100</UnitCode>
+        //     <ErrorMessages><Error>Could not find Property:B1.</Error></ErrorMessages>
+        //  </ServiceRequest>
+        if (request.getServiceRequestId() == null || request.getServiceRequestId() == 0) {
+            return false;
+        }
+
+        return true;
     }
 }

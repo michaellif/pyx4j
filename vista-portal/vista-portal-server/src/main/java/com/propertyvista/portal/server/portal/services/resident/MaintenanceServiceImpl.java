@@ -37,7 +37,6 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
-import com.propertyvista.portal.server.ptapp.util.Converter;
 
 public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceService {
 
@@ -60,13 +59,14 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
         callback.onSuccess(listIssues(MaintenanceRequestStatus.StatusPhase.closed()));
     }
 
-    static Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
+    private Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(statuses,
                 TenantAppContext.getCurrentCustomerUnit());
         for (MaintenanceRequest mr : requests) {
-            Persistence.service().retrieve(mr.category());
-            dto.add(Converter.convert(mr));
+            MaintenanceRequestDTO mrDto = createDTO(mr);
+            enhanceAll(mrDto);
+            dto.add(mrDto);
         }
         return dto;
     }
@@ -89,15 +89,21 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
         }
+        dto.reportedForOwnUnit().setValue(TenantAppContext.getCurrentCustomerUnit().id().equals(dto.buildingElement().id()));
     }
 
     @Override
     protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
+        if (dto.reportedForOwnUnit().isBooleanTrue() && !dto.reporter().isNull()) {
+            Persistence.ensureRetrieve(dto.reporter().lease(), AttachLevel.Attached);
+            entity.buildingElement().set(dto.reporter().lease().unit());
+        }
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
     }
 
     @Override
     public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
+        enhanceAll(dto);
         ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(dto);
         Persistence.service().commit();
         callback.onSuccess(null);

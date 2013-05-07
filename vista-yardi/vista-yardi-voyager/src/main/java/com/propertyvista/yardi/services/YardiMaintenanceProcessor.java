@@ -112,8 +112,8 @@ public class YardiMaintenanceProcessor {
         return req;
     }
 
-    // we will need to update and reload meta from here if request categories, status, or priority do not exist
-    public MaintenanceRequest mergeRequest(PmcYardiCredential yc, ServiceRequest request) {
+    // we will update and reload meta from here if request categories, status, or priority do not exist
+    public MaintenanceRequest mergeRequest(PmcYardiCredential yc, ServiceRequest request) throws YardiServiceException {
         EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
         crit.add(PropertyCriterion.eq(crit.proto().requestId(), request.getServiceRequestId().toString()));
         MaintenanceRequest mr = Persistence.service().retrieve(crit);
@@ -123,7 +123,7 @@ public class YardiMaintenanceProcessor {
         return updateRequest(yc, mr, request);
     }
 
-    public MaintenanceRequest updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest request) {
+    public MaintenanceRequest updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest request) throws YardiServiceException {
         boolean metaReloaded = false;
         // find building - propertyCode field is mandatory
         {
@@ -131,8 +131,7 @@ public class YardiMaintenanceProcessor {
             crit.add(PropertyCriterion.eq(crit.proto().propertyCode(), request.getPropertyCode()));
             Building building = Persistence.service().retrieve(crit);
             if (building == null) {
-                log.warn("Request dropped - Building not found: {}", request.getPropertyCode());
-                return null;
+                throw new YardiServiceException("Request dropped - Building not found: " + request.getPropertyCode());
             } else {
                 mr.building().set(building);
             }
@@ -144,8 +143,7 @@ public class YardiMaintenanceProcessor {
             crit.add(PropertyCriterion.eq(crit.proto().info().number(), request.getUnitCode()));
             AptUnit unit = Persistence.service().retrieve(crit);
             if (unit == null) {
-                log.warn("Request dropped - Unit not found: {}", request.getUnitCode());
-                return null;
+                throw new YardiServiceException("Request dropped - Unit not found: " + request.getUnitCode());
             } else {
                 mr.buildingElement().set(unit);
             }
@@ -160,7 +158,7 @@ public class YardiMaintenanceProcessor {
 //            crit.add(PropertyCriterion.eq(crit.proto().lease().unit().building().propertyCode(), request.getPropertyCode()));
 //            Tenant tenant = Persistence.service().retrieve(crit);
 //            if (tenant == null) {
-//                log.warn("Request dropped - Tenant not found: {}", request.getTenantCode());
+//                throw new YardiServiceException("Request dropped - Tenant not found: " + request.getTenantCode());
 //                return null;
 //            } else {
 //                mr.reporter().set(tenant);
@@ -173,8 +171,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 category = findCategory(request.getCategory(), null);
                 if (category == null) {
-                    log.warn("Request dropped - Category not found: {}", request.getCategory());
-                    return null;
+                    throw new YardiServiceException("Request dropped - Category not found: " + request.getCategory());
                 }
             }
             MaintenanceRequestCategory subcat = findCategory(request.getSubCategory(), category);
@@ -182,8 +179,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 subcat = findCategory(request.getSubCategory(), category);
                 if (subcat == null) {
-                    log.debug("SubCategory not found: {}", request.getSubCategory());
-                    return null;
+                    throw new YardiServiceException("SubCategory not found: " + request.getSubCategory());
                 }
             }
             mr.category().set(subcat);
@@ -197,8 +193,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 stat = findStatus(request.getCurrentStatus());
                 if (stat == null) {
-                    log.warn("Request dropped - Status not found: {}", request.getCurrentStatus());
-                    return null;
+                    throw new YardiServiceException("Request dropped - Status not found: " + request.getCurrentStatus());
                 }
             }
             mr.status().set(stat);
@@ -212,8 +207,7 @@ public class YardiMaintenanceProcessor {
                 metaReloaded = reloadMeta(yc);
                 pr = findPriority(request.getPriority());
                 if (pr == null) {
-                    log.warn("Request dropped - Priority not found: {}", request.getPriority());
-                    return null;
+                    throw new YardiServiceException("Request dropped - Priority not found: " + request.getPriority());
                 }
             }
             mr.priority().set(pr);

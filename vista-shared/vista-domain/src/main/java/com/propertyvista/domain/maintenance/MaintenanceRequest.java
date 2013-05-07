@@ -96,6 +96,7 @@ public interface MaintenanceRequest extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> description();
 
+    @NotNull
     IPrimitive<String> summary();
 
     IPrimitive<Boolean> permissionToEnter();

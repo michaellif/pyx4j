@@ -13,12 +13,16 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 
 @Transient
 @ExtendsDBO
 public interface MaintenanceRequestDTO extends MaintenanceRequest {
+    @Caption(name = "Problem in my Apartment")
+    IPrimitive<Boolean> reportedForOwnUnit();
 }
