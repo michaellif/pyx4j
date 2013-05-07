@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.util.Vector;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -70,7 +73,7 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
                         dbCriteria.ge(dbCriteria.proto().billingAccount().arrearsSnapshots().$().toDate(), propertyCriterion.getValue());
                         i.remove();
                     } else if (propertyCriterion.getPropertyPath().equals(dtoProto.building().getPath().toString())) {
-                        dbCriteria.in(dbCriteria.proto().unit().building(), propertyCriterion.getValue());
+                        dbCriteria.in(dbCriteria.proto().unit().building(), (Vector<Building>) propertyCriterion.getValue());
                         i.remove();
                     }
                 }
