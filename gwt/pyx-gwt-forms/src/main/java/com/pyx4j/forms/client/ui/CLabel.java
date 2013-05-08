@@ -20,7 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
-public class CLabel<E> extends CTextFieldBase<E, NTextBox<E>> {
+public class CLabel<E> extends CComponent<E, NLabel<E>> {
+
+    private IFormat<E> format;
 
     public CLabel() {
         this(null);
@@ -32,14 +34,35 @@ public class CLabel<E> extends CTextFieldBase<E, NTextBox<E>> {
         setViewable(true);
     }
 
+    public void setFormat(IFormat<E> format) {
+        this.format = format;
+    }
+
+    public IFormat<E> getFormat() {
+        return format;
+    }
+
+    public String format(E value) {
+        String text = null;
+        try {
+            text = getFormat().format(value);
+        } catch (Exception ignore) {
+        }
+        return text == null ? "" : text;
+    }
+
+    public String getFormattedValue() {
+        return format(getValue());
+    }
+
     public CLabel(String title, boolean mandatory) {
         this(title);
         this.setMandatory(mandatory);
     }
 
     @Override
-    protected NTextBox<E> createWidget() {
-        return new NTextBox<E>(this);
+    protected NLabel<E> createWidget() {
+        return new NLabel<E>(this);
     }
 
     class LabelFormat implements IFormat<E> {

@@ -27,9 +27,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.events.NValueChangeEvent;
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ITextWidget;
-import com.pyx4j.widgets.client.ToggleButton;
 
 public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
         implements INativeTextComponent<DATA> {

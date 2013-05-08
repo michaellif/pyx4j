@@ -88,6 +88,7 @@ public class DefaultDataTableTheme extends Theme {
 
         style = new Style(".", StyleName.DataTableRow);
         style.addProperty("cursor", "pointer");
+        style.addProperty("line-height", "1.5em");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableRow, "-", StyleDependent.even);
