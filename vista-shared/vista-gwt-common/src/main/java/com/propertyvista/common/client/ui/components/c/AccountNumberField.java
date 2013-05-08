@@ -13,8 +13,11 @@
  */
 package com.propertyvista.common.client.ui.components.c;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.NPersonalIdentityField;
+import com.pyx4j.widgets.client.ToggleButton;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.AccountNumberIdentity;
@@ -27,13 +30,17 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
 
     @Override
     protected NPersonalIdentityField<AccountNumberIdentity> createWidget() {
-        return new NPersonalIdentityField<AccountNumberIdentity>(this, VistaImages.INSTANCE.triggerDown()) {
+
+        final ToggleButton triggerButton = new ToggleButton(VistaImages.INSTANCE.triggerDown());
+        triggerButton.setCommand(new Command() {
+
             @Override
-            public void onToggle() {
+            public void execute() {
                 onRevealNumber();
-                super.onToggle();
             }
-        };
+        });
+
+        return new NPersonalIdentityField<AccountNumberIdentity>(this, triggerButton);
     }
 
     public abstract void onRevealNumber();
