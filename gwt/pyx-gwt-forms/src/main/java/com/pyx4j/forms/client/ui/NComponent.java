@@ -252,6 +252,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             editorHolder.addStyleName(DefaultCComponentsTheme.StyleName.Editor.name());
             editorHolder.setWidget(NComponent.this.getEditor());
             add(editorHolder, DockPanel.CENTER);
+            setCellVerticalAlignment(editorHolder, DockPanel.ALIGN_MIDDLE);
 
             focusHandlerManager = new GroupFocusHandler(this);
 
@@ -360,6 +361,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             viewerHolder.setWidget(NComponent.this.getViewer());
 
             add(viewerHolder, DockPanel.CENTER);
+            setCellVerticalAlignment(viewerHolder, DockPanel.ALIGN_MIDDLE);
 
             setActionButton(actionButton);
 
