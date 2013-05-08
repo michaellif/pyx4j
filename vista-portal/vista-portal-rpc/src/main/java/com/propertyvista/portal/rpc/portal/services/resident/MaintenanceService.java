@@ -17,6 +17,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -30,9 +31,9 @@ public interface MaintenanceService extends AbstractCrudService<MaintenanceReque
 
     void listClosedIssues(AsyncCallback<Vector<MaintenanceRequestDTO>> callback);
 
-    void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request);
+    void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId);
 
-    void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO request, Integer rate);
+    void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId, Integer rate);
 
     void createNewRequest(AsyncCallback<MaintenanceRequestDTO> callback);
 

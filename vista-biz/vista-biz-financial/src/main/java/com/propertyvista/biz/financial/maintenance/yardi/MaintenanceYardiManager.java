@@ -30,7 +30,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.property.asset.BuildingElement;
+import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
@@ -112,9 +112,9 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
+    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
         importModifiedRequests();
-        return super.getMaintenanceRequests(statuses, buildingElement);
+        return super.getMaintenanceRequests(statuses, reporter);
     }
 
     @Override

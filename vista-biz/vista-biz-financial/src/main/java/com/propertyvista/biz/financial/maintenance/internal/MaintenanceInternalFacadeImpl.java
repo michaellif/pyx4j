@@ -24,7 +24,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -36,8 +35,8 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
-        return MaintenanceInternalManager.instance().getMaintenanceRequests(statuses, buildingElement);
+    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
+        return MaintenanceInternalManager.instance().getMaintenanceRequests(statuses, reporter);
     }
 
     @Override

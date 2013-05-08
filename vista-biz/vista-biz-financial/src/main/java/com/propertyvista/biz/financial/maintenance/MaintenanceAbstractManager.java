@@ -38,7 +38,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
-import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -97,36 +96,38 @@ public abstract class MaintenanceAbstractManager {
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
         request.updated().setValue(SystemDateManager.getDate());
-        Persistence.secureSave(request);
+        Persistence.service().persist(request);
 
         sendReporterNote(request, false);
     }
 
     public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
         request.surveyResponse().set(rate);
-        Persistence.secureSave(request);
+        Persistence.service().persist(request);
     }
 
     public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
         request.scheduledDate().setValue(date);
         request.scheduledTime().setValue(time);
         request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
-        Persistence.secureSave(request);
+        Persistence.service().persist(request);
 
         sendReporterNote(request, false);
     }
 
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Resolved));
-        Persistence.secureSave(request);
+        Persistence.service().persist(request);
 
         sendReporterNote(request, false);
     }
 
-    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
+    public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), statuses));
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), buildingElement));
+        if (reporter != null) {
+            criteria.add(PropertyCriterion.eq(criteria.proto().reporter(), reporter));
+        }
         return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 
@@ -149,7 +150,6 @@ public abstract class MaintenanceAbstractManager {
     }
 
     protected void sendAdminNote(MaintenanceRequest request, boolean isNewRequest) {
-        Persistence.ensureRetrieve(request.building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(request.building().contacts().propertyContacts(), AttachLevel.Attached);
         for (PropertyContact cont : request.building().contacts().propertyContacts()) {
             if (PropertyContactType.superintendent.equals(cont.type().getValue())) {

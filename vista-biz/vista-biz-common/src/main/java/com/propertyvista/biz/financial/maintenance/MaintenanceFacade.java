@@ -23,7 +23,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -35,7 +34,7 @@ public interface MaintenanceFacade {
 
     MaintenanceRequestMetadata getMaintenanceMetadata(boolean labelsOnly);
 
-    List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement);
+    List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter);
 
     MaintenanceRequest createNewRequest(Building building);
 

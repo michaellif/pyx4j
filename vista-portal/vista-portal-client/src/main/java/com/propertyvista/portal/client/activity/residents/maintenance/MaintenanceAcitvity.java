@@ -20,6 +20,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
@@ -75,7 +76,7 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
     }
 
     @Override
-    public void cancelRequest(MaintenanceRequestDTO request) {
+    public void cancelRequest(Key requestId) {
         srv.cancelMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
@@ -92,15 +93,15 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
                     }
                 });
             }
-        }, request);
+        }, requestId);
     }
 
     @Override
-    public void rateRequest(MaintenanceRequestDTO request, Integer rate) {
+    public void rateRequest(Key requestId, Integer rate) {
         srv.rateMaintenanceRequest(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
             }
-        }, request, rate);
+        }, requestId, rate);
     }
 }

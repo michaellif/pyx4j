@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
@@ -62,7 +63,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     private Vector<MaintenanceRequestDTO> listIssues(Set<StatusPhase> statuses) {
         Vector<MaintenanceRequestDTO> dto = new Vector<MaintenanceRequestDTO>();
         List<MaintenanceRequest> requests = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceRequests(statuses,
-                TenantAppContext.getCurrentCustomerUnit());
+                TenantAppContext.getCurrentUserTenant());
         for (MaintenanceRequest mr : requests) {
             MaintenanceRequestDTO mrDto = createDTO(mr);
             enhanceAll(mrDto);
@@ -82,39 +83,45 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
-        Persistence.service().retrieve(dto.reporter());
-        Persistence.service().retrieve(dto.category());
-        MaintenanceRequestCategory parent = dto.category().parent();
+        enhanceDbo(dto);
+        dto.reportedForOwnUnit().setValue(TenantAppContext.getCurrentCustomerUnit().id().equals(dto.unit().id()));
+    }
+
+    protected void enhanceDbo(MaintenanceRequest dbo) {
+        Persistence.ensureRetrieve(dbo.building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dbo.reporter(), AttachLevel.Attached);
+        MaintenanceRequestCategory parent = dbo.category().parent();
         while (!parent.isNull()) {
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
         }
-        dto.reportedForOwnUnit().setValue(TenantAppContext.getCurrentCustomerUnit().id().equals(dto.unit().id()));
     }
 
     @Override
     protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        if (dto.reportedForOwnUnit().isBooleanTrue()) {
-            entity.reporter().set(TenantAppContext.getCurrentUserTenant());
-            entity.unit().set(TenantAppContext.getCurrentCustomerUnit());
-            entity.building().setPrimaryKey(entity.unit().building().getPrimaryKey());
+        if (dto.reportedForOwnUnit().isBooleanTrue() && !dto.reporter().isNull()) {
+            Persistence.ensureRetrieve(dto.reporter().lease(), AttachLevel.Attached);
+            entity.unit().set(dto.reporter().lease().unit());
         }
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
     }
 
     @Override
-    public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto) {
-        enhanceAll(dto);
-        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(dto);
+    public void cancelMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId) {
+        MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, requestId);
+        enhanceDbo(request);
+        ServerSideFactory.create(MaintenanceFacade.class).cancelMaintenanceRequest(request);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
 
     @Override
-    public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, MaintenanceRequestDTO dto, Integer rate) {
+    public void rateMaintenanceRequest(AsyncCallback<VoidSerializable> callback, Key requestId, Integer rate) {
+        MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, requestId);
+        enhanceDbo(request);
         SurveyResponse response = EntityFactory.create(SurveyResponse.class);
         response.rating().setValue(rate);
-        ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(dto, response);
+        ServerSideFactory.create(MaintenanceFacade.class).rateMaintenanceRequest(request, response);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

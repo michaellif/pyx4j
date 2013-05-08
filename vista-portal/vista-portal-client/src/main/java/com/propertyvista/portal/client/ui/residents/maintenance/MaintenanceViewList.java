@@ -123,7 +123,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                     @Override
                     public void onClick(ClickEvent event) {
                         if (Window.confirm("You are about to cancel ticket '" + issueDetails(request) + "'")) {
-                            presenter.cancelRequest(request);
+                            presenter.cancelRequest(request.getPrimaryKey());
                         }
                     }
                 });
@@ -188,7 +188,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                 rateIt.addValueChangeHandler(new ValueChangeHandler<Integer>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Integer> event) {
-                        presenter.rateRequest(request, event.getValue());
+                        presenter.rateRequest(request.getPrimaryKey(), event.getValue());
                     }
 
                 });

@@ -17,6 +17,8 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.Key;
+
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceView extends IsWidget {
@@ -27,9 +29,9 @@ public interface MaintenanceView extends IsWidget {
 
         void viewRequest(MaintenanceRequestDTO requests);
 
-        void cancelRequest(MaintenanceRequestDTO request);
+        void cancelRequest(Key requestId);
 
-        void rateRequest(MaintenanceRequestDTO request, Integer rate);
+        void rateRequest(Key requestId, Integer rate);
     }
 
     void setPresenter(Presenter presenter);
