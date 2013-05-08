@@ -119,7 +119,7 @@ public class DashboardGenerator {
         );//@formatter:on
         } else {
             return makeSystemDashboard(//@formatter:off
-                    i18n.tr("System"),
+                    i18n.tr("System Dashboard"),
                     i18n.tr("Displays default system data"),
                     BuildingListerGadgetMetadata.class                
             );//@formatter:on            
