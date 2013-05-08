@@ -129,6 +129,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
 
     @Override
     public void setOptions(Collection<E> opt) {
+        optionsLoaded = true;
         if (((optionsFilter == null) && (comparator == null)) || (opt == null) || (opt.size() == 0)) {
             super.setOptions(opt);
         } else {
