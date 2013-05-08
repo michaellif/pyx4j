@@ -32,6 +32,8 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
     @Override
     protected NPersonalIdentityField<AccountNumberIdentity> createWidget() {
 
+        NPersonalIdentityField<AccountNumberIdentity> field = new NPersonalIdentityField<AccountNumberIdentity>(this);
+
         final Button actionButton = new ToggleButton(VistaImages.INSTANCE.triggerDown());
         actionButton.setCommand(new Command() {
 
@@ -41,7 +43,9 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
             }
         });
 
-        return new NPersonalIdentityField<AccountNumberIdentity>(this, null, actionButton);
+        field.setActionButton(actionButton);
+
+        return field;
     }
 
     public abstract void onRevealNumber();
