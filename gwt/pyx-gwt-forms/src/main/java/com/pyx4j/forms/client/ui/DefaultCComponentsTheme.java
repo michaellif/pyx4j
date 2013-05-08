@@ -32,11 +32,11 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        EditorHolder, ValidationLabel, NoteLabel
+        Editor, EditorPanel, Viewer, ViewerPanel, ValidationLabel, NoteLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, readonly, info, warning
+        disabled, readonly, info, anchor, warning
     }
 
     public DefaultCComponentsTheme() {
@@ -54,6 +54,15 @@ public class DefaultCComponentsTheme extends Theme {
         initTriggerButtonStyle();
         initValidationLabelStyle();
         initNoteStyle();
+        initViewerHyperlinkStyle();
+    }
+
+    private void initViewerHyperlinkStyle() {
+        Style style = new Style(".", StyleName.Viewer, "-", StyleDependent.anchor);
+        style.addProperty("border-bottom", "1px solid");
+        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.6);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
     }
 
     protected void initTextBoxStyle() {
@@ -89,7 +98,14 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initTriggerButtonStyle() {
 
-        Style style = new Style(".", StyleName.EditorHolder, " .", DefaultWidgetsTheme.StyleName.Button);
+        Style style = new Style(".", StyleName.EditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("background", "transparent");
+        style.addProperty("border", "none");
+        style.addProperty("padding", "0");
+        style.addProperty("height", "19px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ViewerPanel, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");

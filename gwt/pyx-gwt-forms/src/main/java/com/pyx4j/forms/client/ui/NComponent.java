@@ -23,6 +23,8 @@ package com.pyx4j.forms.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
@@ -31,15 +33,13 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
@@ -56,11 +56,11 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private boolean viewable;
 
-    private EditorHolder editorHolder;
+    private EditorPanel editorPanel;
 
     private ToggleButton triggerButton;
 
-    private ViewerHolder viewerHolder;
+    private ViewerPanel viewerPanel;
 
     private Button actionButton;
 
@@ -69,6 +69,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public NComponent(CCOMP cComponent) {
         super();
         this.cComponent = cComponent;
+
     }
 
     public WIDGET getEditor() {
@@ -77,15 +78,22 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     public void setTriggerButton(ToggleButton triggerButton) {
         this.triggerButton = triggerButton;
-        if (editorHolder != null) {
-            editorHolder.setTriggerButton(triggerButton);
+        if (editorPanel != null) {
+            editorPanel.setTriggerButton(triggerButton);
         }
     }
 
     public void setActionButton(Button actionButton) {
         this.actionButton = actionButton;
-        if (viewerHolder != null) {
-            viewerHolder.setActionButton(actionButton);
+        if (viewerPanel != null) {
+            viewerPanel.setActionButton(actionButton);
+        }
+    }
+
+    public void setNavigationCommand(Command navigationCommand) {
+        this.navigationCommand = navigationCommand;
+        if (viewerPanel != null) {
+            viewerPanel.setNavigationCommand(navigationCommand);
         }
     }
 
@@ -126,18 +134,18 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (viewer == null) {
                 viewer = createViewer();
                 onViewerCreate();
-                viewerHolder = new ViewerHolder(actionButton);
+                viewerPanel = new ViewerPanel(actionButton, navigationCommand);
             }
             onViewerInit();
-            setWidget(viewerHolder);
+            setWidget(viewerPanel);
         } else {
             if (editor == null) {
                 editor = createEditor();
                 onEditorCreate();
-                editorHolder = new EditorHolder(triggerButton);
+                editorPanel = new EditorPanel(triggerButton);
             }
             onEditorInit();
-            setWidget(editorHolder);
+            setWidget(editorPanel);
         }
     }
 
@@ -147,8 +155,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     }
 
     protected GroupFocusHandler getGroupFocusHandler() {
-        if (editorHolder != null) {
-            return editorHolder.getGroupFocusHandler();
+        if (editorPanel != null) {
+            return editorPanel.getGroupFocusHandler();
         } else {
             return null;
         }
@@ -215,8 +223,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         if (getEditor() != null) {
             getEditor().ensureDebugId(debugId.debugId());
 
-            if (editorHolder != null)
-                editorHolder.ensureDebugId(debugId.debugId() + "-triggerPanel");
+            if (editorPanel != null)
+                editorPanel.ensureDebugId(debugId.debugId() + "-triggerPanel");
 
         }
         if (getViewer() != null) {
@@ -224,7 +232,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
-    class EditorHolder extends HorizontalPanel implements HasDoubleClickHandlers {
+    class EditorPanel extends DockPanel implements HasDoubleClickHandlers {
 
         private ToggleButton triggerButton;
 
@@ -234,14 +242,16 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         private String baseDebugID;
 
-        public EditorHolder(final ToggleButton triggerButton) {
+        public EditorPanel(final ToggleButton triggerButton) {
             super();
-            setStyleName(DefaultCComponentsTheme.StyleName.EditorHolder.name());
+            setStyleName(DefaultCComponentsTheme.StyleName.EditorPanel.name());
+            setWidth("100%");
 
-            NComponent.this.getEditor().asWidget().setWidth("100%");
-            add(NComponent.this.getEditor());
-            setCellWidth(NComponent.this.getEditor(), "100%");
-            setCellVerticalAlignment(NComponent.this.getEditor(), ALIGN_MIDDLE);
+            SimplePanel editorHolder = new SimplePanel();
+            editorHolder.setWidth("100%");
+            editorHolder.addStyleName(DefaultCComponentsTheme.StyleName.Editor.name());
+            editorHolder.setWidget(NComponent.this.getEditor());
+            add(editorHolder, DockPanel.CENTER);
 
             focusHandlerManager = new GroupFocusHandler(this);
 
@@ -268,21 +278,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
                 triggerButtonHandlerRegistrations.add(triggerButton.addFocusHandler(focusHandlerManager));
                 triggerButtonHandlerRegistrations.add(triggerButton.addBlurHandler(focusHandlerManager));
-
-                add(triggerButton);
-                setCellVerticalAlignment(triggerButton, ALIGN_MIDDLE);
-
-                String marginTop;
-                if (BrowserType.isFirefox()) {
-                    marginTop = "0";
-                } else if (BrowserType.isIE()) {
-                    marginTop = "1";
-                } else {
-                    //Chrome and Safari
-                    marginTop = "2";
-                }
-                DOM.setStyleAttribute(triggerButton.getElement(), "marginTop", marginTop);
-                DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "4px");
 
                 triggerButton.sinkEvents(Event.ONDBLCLICK);
 
@@ -320,7 +315,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 }));
 
                 triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
-
+                add(triggerButton, DockPanel.EAST);
             }
         }
 
@@ -345,22 +340,53 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
-    class ViewerHolder extends HorizontalPanel {
+    class ViewerPanel extends DockPanel {
 
         private Button actionButton;
 
-        public ViewerHolder(Button actionButton) {
+        private HandlerRegistration navigationCommandHandlerRegistration;
+
+        private final SimplePanel viewerHolder;
+
+        public ViewerPanel(Button actionButton, Command navigationCommand) {
             super();
 
-            setStyleName(DefaultCComponentsTheme.StyleName.EditorHolder.name());
+            setStyleName(DefaultCComponentsTheme.StyleName.ViewerPanel.name());
 
             NComponent.this.getViewer().asWidget().setWidth("100%");
-            add(NComponent.this.getViewer());
-            setCellWidth(NComponent.this.getViewer(), "100%");
-            setCellVerticalAlignment(NComponent.this.getViewer(), ALIGN_MIDDLE);
+
+            viewerHolder = new SimplePanel();
+            viewerHolder.addStyleName(DefaultCComponentsTheme.StyleName.Viewer.name());
+            viewerHolder.setWidget(NComponent.this.getViewer());
+
+            add(viewerHolder, DockPanel.CENTER);
 
             setActionButton(actionButton);
 
+            setNavigationCommand(navigationCommand);
+
+        }
+
+        public void setNavigationCommand(final Command navigationCommand) {
+            if (navigationCommandHandlerRegistration != null) {
+                navigationCommandHandlerRegistration.removeHandler();
+            }
+            NComponent.this.getViewer().sinkEvents(Event.ONCLICK);
+
+            if (navigationCommand != null) {
+                navigationCommandHandlerRegistration = addDomHandler(new ClickHandler() {
+
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        navigationCommand.execute();
+
+                    }
+                }, ClickEvent.getType());
+
+                viewerHolder.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.anchor.name());
+            } else {
+                viewerHolder.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.anchor.name());
+            }
         }
 
         public void setActionButton(final Button actionButton) {
@@ -371,21 +397,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             this.actionButton = actionButton;
 
             if (actionButton != null) {
-                add(actionButton);
-                setCellVerticalAlignment(actionButton, ALIGN_MIDDLE);
-
-                String marginTop;
-                if (BrowserType.isFirefox()) {
-                    marginTop = "0";
-                } else if (BrowserType.isIE()) {
-                    marginTop = "1";
-                } else {
-                    //Chrome and Safari
-                    marginTop = "2";
-                }
-                DOM.setStyleAttribute(actionButton.getElement(), "marginTop", marginTop);
-                DOM.setStyleAttribute(actionButton.getElement(), "marginLeft", "4px");
-
+                add(actionButton, DockPanel.EAST);
             }
 
         }
