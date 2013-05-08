@@ -89,14 +89,15 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
         }
-        dto.reportedForOwnUnit().setValue(TenantAppContext.getCurrentCustomerUnit().id().equals(dto.buildingElement().id()));
+        dto.reportedForOwnUnit().setValue(TenantAppContext.getCurrentCustomerUnit().id().equals(dto.unit().id()));
     }
 
     @Override
     protected void persist(MaintenanceRequest entity, MaintenanceRequestDTO dto) {
-        if (dto.reportedForOwnUnit().isBooleanTrue() && !dto.reporter().isNull()) {
-            Persistence.ensureRetrieve(dto.reporter().lease(), AttachLevel.Attached);
-            entity.buildingElement().set(dto.reporter().lease().unit());
+        if (dto.reportedForOwnUnit().isBooleanTrue()) {
+            entity.reporter().set(TenantAppContext.getCurrentUserTenant());
+            entity.unit().set(TenantAppContext.getCurrentCustomerUnit());
+            entity.building().setPrimaryKey(entity.unit().building().getPrimaryKey());
         }
         ServerSideFactory.create(MaintenanceFacade.class).postMaintenanceRequest(entity);
     }

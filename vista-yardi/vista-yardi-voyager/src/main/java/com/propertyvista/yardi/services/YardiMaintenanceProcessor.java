@@ -72,8 +72,8 @@ public class YardiMaintenanceProcessor {
         }
 
         req.setPropertyCode(mr.building().propertyCode().getValue());
-        if (mr.buildingElement().getInstanceValueClass().equals(AptUnit.class)) {
-            req.setUnitCode(mr.buildingElement().<AptUnit> cast().info().number().getValue());
+        if (mr.unit().getInstanceValueClass().equals(AptUnit.class)) {
+            req.setUnitCode(mr.unit().<AptUnit> cast().info().number().getValue());
         }
 
         req.setRequestorName(mr.reporterName().getValue());
@@ -145,10 +145,10 @@ public class YardiMaintenanceProcessor {
             if (unit == null) {
                 throw new YardiServiceException("Request dropped - Unit not found: " + request.getUnitCode());
             } else {
-                mr.buildingElement().set(unit);
+                mr.unit().set(unit);
             }
         } else {
-            mr.buildingElement().setValue(null);
+            mr.unit().setValue(null);
         }
         // find tenant
         // TODO TenantCode is set by Yardi BillTo field and should be matched to Vista tenant once WorkOrder is implemented

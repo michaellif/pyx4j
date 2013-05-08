@@ -126,7 +126,7 @@ public abstract class MaintenanceAbstractManager {
     public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
         EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
         criteria.add(PropertyCriterion.in(criteria.proto().status().phase(), statuses));
-        criteria.add(PropertyCriterion.eq(criteria.proto().buildingElement(), buildingElement));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), buildingElement));
         return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 
@@ -149,6 +149,8 @@ public abstract class MaintenanceAbstractManager {
     }
 
     protected void sendAdminNote(MaintenanceRequest request, boolean isNewRequest) {
+        Persistence.ensureRetrieve(request.building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(request.building().contacts().propertyContacts(), AttachLevel.Attached);
         for (PropertyContact cont : request.building().contacts().propertyContacts()) {
             if (PropertyContactType.superintendent.equals(cont.type().getValue())) {
                 String sendTo = cont.email().getValue();

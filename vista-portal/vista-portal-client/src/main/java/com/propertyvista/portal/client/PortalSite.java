@@ -36,6 +36,7 @@ import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
@@ -44,8 +45,10 @@ import com.propertyvista.portal.client.ui.PortalRootPane;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
+import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
+import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
 
 public class PortalSite extends VistaSite {
 
@@ -94,6 +97,7 @@ public class PortalSite extends VistaSite {
 
     private void initialize() {
         initSiteTheme();
+        ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PortalPolicyRetrieveService.class));
     }
 
     private void initSiteTheme() {

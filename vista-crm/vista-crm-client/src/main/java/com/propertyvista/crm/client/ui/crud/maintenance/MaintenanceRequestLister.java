@@ -40,7 +40,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
         return new ColumnDescriptor[] {
                 new MemberColumnDescriptor.Builder(proto.requestId()).build(),
                 new MemberColumnDescriptor.Builder(proto.building().propertyCode()).build(),
-                new MemberColumnDescriptor.Builder(proto.buildingElement()).build(),
+                new MemberColumnDescriptor.Builder(proto.unit()).build(),
                 new ColumnDescriptor(proto.category().getPath().toString(), proto.category().getMeta().getCaption()) {
                     @Override
                     public String convert(IEntity entity) {

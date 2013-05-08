@@ -69,9 +69,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private final UnitSelector unitSelector = new UnitSelector();
 
-    private final PrioritySelector priority = new PrioritySelector();
+    private final PrioritySelector prioritySelector = new PrioritySelector();
 
-    private final StatusSelector status = new StatusSelector();
+    private final StatusSelector statusSelector = new StatusSelector();
 
     private MaintenanceRequestMetadata meta;
 
@@ -107,7 +107,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 reporterSelector.setValue(null);
             }
         });
-        left.add(new DecoratorBuilder(inject(proto().buildingElement(), unitSelector), 25).build());
+        left.add(new DecoratorBuilder(inject(proto().unit(), unitSelector), 25).build());
         left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
 
         // --------------------------------------------------------------------------------------------------------------------
@@ -117,7 +117,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         right.add(new HTML("&nbsp"));
         right.add(new DecoratorBuilder(inject(proto().summary()), 25).build());
         right.add(new DecoratorBuilder(inject(proto().description()), 25).build());
-        right.add(new DecoratorBuilder(inject(proto().priority(), priority), 25).build());
+        right.add(new DecoratorBuilder(inject(proto().priority(), prioritySelector), 25).build());
 
         // --------------------------------------------------------------------------------------------------------------------
 
@@ -169,7 +169,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int innerRow = -1;
 
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), status), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), statusSelector), 10).build());
         statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
         statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
@@ -208,8 +208,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         if (meta == null || choicesReady) {
             return;
         }
-        priority.setOptions(meta.priorities());
-        status.setOptions(meta.statuses());
+        prioritySelector.setOptions(meta.priorities());
+        statusSelector.setOptions(meta.statuses());
         // create selectors
         int levels = meta.categoryLevels().size();
         MaintenanceRequestCategoryChoice child = null;

@@ -151,7 +151,7 @@ public class SimulatedDataPreloadServiceImpl implements SimulatedDataPreloadServ
         Persistence.service().retrieveMember(lease.leaseParticipants());
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
         maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
-        maintenanceRequest.buildingElement().set(lease.unit());
+        maintenanceRequest.unit().set(lease.unit());
         maintenanceRequest.submitted().setValue(when);
         maintenanceRequest.updated().setValue(when);
         maintenanceRequest.description().setValue(RandomUtil.randomLetters(50));

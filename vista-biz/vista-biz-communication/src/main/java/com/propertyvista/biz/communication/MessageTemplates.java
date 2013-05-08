@@ -590,7 +590,7 @@ public class MessageTemplates {
                     .replace("${propertyCode}", request.building().propertyCode().getValue())
                     .replace("${summary}", request.summary().getStringView())
                     .replace("${description}", request.description().getStringView())
-                    .replace("${unit}", request.buildingElement().getStringView())
+                    .replace("${unit}", request.unit().getStringView())
                     .replace("${priority}", request.priority().getStringView())
             ;// @formatter:on
             if (!toAdmin) {

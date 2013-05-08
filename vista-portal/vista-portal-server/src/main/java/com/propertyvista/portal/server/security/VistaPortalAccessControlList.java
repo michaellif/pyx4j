@@ -49,6 +49,7 @@ import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
+import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
@@ -125,6 +126,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(new IServiceExecutePermission(PortalSiteServices.class));
 
         grant(new IServiceExecutePermission(SiteThemeServices.class));
+
+        grant(new IServiceExecutePermission(PortalPolicyRetrieveService.class));
 
         grant(VistaBasicBehavior.ProspectiveAppPasswordChangeRequired, new IServiceExecutePermission(PtPasswordResetService.class));
         grant(VistaBasicBehavior.TenantPortalPasswordChangeRequired, new IServiceExecutePermission(PortalPasswordResetService.class));

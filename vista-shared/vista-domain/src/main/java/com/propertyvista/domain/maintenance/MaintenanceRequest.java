@@ -38,8 +38,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -52,8 +52,7 @@ public interface MaintenanceRequest extends IEntity {
     @JoinColumn
     Building building();
 
-    @Caption(name = "Element")
-    BuildingElement buildingElement();
+    AptUnit unit();
 
     AbstractPmcUser originator();
 
