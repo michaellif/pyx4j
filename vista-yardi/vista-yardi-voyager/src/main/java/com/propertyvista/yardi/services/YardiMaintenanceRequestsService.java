@@ -223,7 +223,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
                         }
                     } catch (YardiServiceException e) {
                         // just a warning, don't break the loop
-                        log.warn(e.getMessage());
+                        log.warn("Request processing failed: {}", e);
                     }
                 }
 

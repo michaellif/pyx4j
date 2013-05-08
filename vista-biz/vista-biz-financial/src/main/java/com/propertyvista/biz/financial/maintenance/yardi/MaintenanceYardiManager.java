@@ -61,7 +61,13 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
                 request.reporterPhone().setValue(phone);
             }
         }
+        boolean isNewRequest = request.id().isNull();
         postRequest(request);
+
+        if (isNewRequest) {
+            sendAdminNote(request, true);
+            sendReporterNote(request, true);
+        }
     }
 
     @Override
@@ -70,6 +76,8 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         if (status != null) {
             request.status().set(status);
             postRequest(request);
+
+            sendReporterNote(request, false);
         }
     }
 
@@ -81,10 +89,15 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
-        request.scheduledDate().setValue(date);
-        request.scheduledTime().setValue(time);
-        request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
-        postRequest(request);
+        MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Scheduled);
+        if (status != null) {
+            request.status().set(status);
+            request.scheduledDate().setValue(date);
+            request.scheduledTime().setValue(time);
+            postRequest(request);
+
+            sendReporterNote(request, false);
+        }
     }
 
     @Override
@@ -93,6 +106,8 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         if (status != null) {
             request.status().set(status);
             postRequest(request);
+
+            sendReporterNote(request, false);
         }
     }
 

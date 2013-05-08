@@ -52,6 +52,8 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -382,6 +384,15 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createMaintenanceRequestEmail(String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
+        EmailTemplate emailTemplate = emailMaintenanceRequestNote(userName, request, isNewRequest, toAdmin);
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+        buildSimpleEmail(email, emailTemplate);
+
+        return email;
+    }
+
     private static String bodyRaw;
 
     public static String getEmailHTMLBody() {
@@ -558,6 +569,39 @@ public class MessageTemplates {
 
         } catch (IOException e) {
             throw new UserRuntimeException("Unable to send TenantSure email");
+        }
+    }
+
+    private static EmailTemplate emailMaintenanceRequestNote(String userName, MaintenanceRequest request, boolean isNewTicket, boolean toAdmin) {
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.subject().setValue(i18n.tr("Maintenance Request " + (isNewTicket ? "Created" : "Updated") + ": {0}", request.requestId().getValue()));
+        String templateRC = "maintenance-request-" + (isNewTicket ? "created" : "updated") + "-" + (toAdmin ? "superintendent" : "reporter");
+        try {
+            // TODO add email html
+            String body = IOUtils.getTextResource("email/" + templateRC + ".html");
+            String status = request.status().getStringView();
+            if (StatusPhase.Scheduled.equals(request.status().phase().getValue())) {
+                status += ": " + request.scheduledDate().getStringView() + " " + request.scheduledTime().getStringView();
+            }
+            body = body //@formatter:off
+                    .replace("${name}", userName)
+                    .replace("${status}", status)
+                    .replace("${requestId}", request.requestId().getValue())
+                    .replace("${propertyCode}", request.building().propertyCode().getValue())
+                    .replace("${summary}", request.summary().getStringView())
+                    .replace("${description}", request.description().getStringView())
+                    .replace("${unit}", request.buildingElement().getStringView())
+                    .replace("${priority}", request.priority().getStringView())
+            ;// @formatter:on
+            if (!toAdmin) {
+                String url = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH;
+                body = body.replace("${residentsUrl}", url);
+            }
+            // TODO i18n body
+            template.content().setValue(body);
+            return template;
+        } catch (IOException e) {
+            throw new UserRuntimeException("Could not generate email template");
         }
     }
 

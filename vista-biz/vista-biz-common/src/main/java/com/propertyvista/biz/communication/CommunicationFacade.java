@@ -18,6 +18,7 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -73,5 +74,7 @@ public interface CommunicationFacade {
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
+
+    void sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin);
 
 }

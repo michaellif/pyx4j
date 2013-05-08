@@ -17,6 +17,9 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -26,17 +29,21 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.property.PropertyContact;
+import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.BuildingElement;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public abstract class MaintenanceAbstractManager {
+    private final static Logger log = LoggerFactory.getLogger(MaintenanceAbstractManager.class);
 
     public MaintenanceRequest createNewRequest(Building building) {
         MaintenanceRequest request = EntityFactory.create(MaintenanceRequest.class);
@@ -54,6 +61,7 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public void postMaintenanceRequest(MaintenanceRequest request) {
+        request.updated().setValue(SystemDateManager.getDate());
         if (!request.reporter().isNull()) {
             if (request.reporterName().isNull()) {
                 request.reporterName().setValue(request.reporter().customer().person().name().getStringView());
@@ -72,18 +80,26 @@ public abstract class MaintenanceAbstractManager {
                 request.reporterPhone().setValue(phone);
             }
         }
+        boolean isNewRequest = false;
         if (request.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
             request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
+            isNewRequest = true;
         }
-        request.updated().setValue(SystemDateManager.getDate());
         Persistence.secureSave(request);
+
+        if (isNewRequest) {
+            sendAdminNote(request, true);
+            sendReporterNote(request, true);
+        }
     }
 
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
         request.updated().setValue(SystemDateManager.getDate());
         Persistence.secureSave(request);
+
+        sendReporterNote(request, false);
     }
 
     public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
@@ -96,11 +112,15 @@ public abstract class MaintenanceAbstractManager {
         request.scheduledTime().setValue(time);
         request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
         Persistence.secureSave(request);
+
+        sendReporterNote(request, false);
     }
 
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Resolved));
         Persistence.secureSave(request);
+
+        sendReporterNote(request, false);
     }
 
     public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, BuildingElement buildingElement) {
@@ -126,5 +146,37 @@ public abstract class MaintenanceAbstractManager {
             }
         }
         return null;
+    }
+
+    protected void sendAdminNote(MaintenanceRequest request, boolean isNewRequest) {
+        for (PropertyContact cont : request.building().contacts().propertyContacts()) {
+            if (PropertyContactType.superintendent.equals(cont.type().getValue())) {
+                String sendTo = cont.email().getValue();
+                String userName = cont.name().getValue();
+                try {
+                    ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(sendTo, userName, request, isNewRequest, true);
+                } catch (Exception e) {
+                    log.warn("Email communication failed: {}", e);
+                }
+                return;
+            }
+        }
+    }
+
+    protected void sendReporterNote(MaintenanceRequest request, boolean isNewRequest) {
+        if (request.reporter().isNull() || request.reporter().customer().person().email().isNull()) {
+            return;
+        }
+
+        String sendTo = request.reporter().customer().person().email().getValue();
+        String userName = "Tenant";
+        if (!request.reporter().isNull() && !request.reporter().customer().person().email().isNull()) {
+            userName = request.reporter().customer().person().name().getStringView();
+        }
+        try {
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(sendTo, userName, request, isNewRequest, false);
+        } catch (Exception e) {
+            log.warn("Email communication failed: {}", e);
+        }
     }
 }
