@@ -23,6 +23,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 @Transient
 @ExtendsDBO
 public interface MaintenanceRequestDTO extends MaintenanceRequest {
+
     @Caption(name = "Problem in my Apartment")
     IPrimitive<Boolean> reportedForOwnUnit();
 }

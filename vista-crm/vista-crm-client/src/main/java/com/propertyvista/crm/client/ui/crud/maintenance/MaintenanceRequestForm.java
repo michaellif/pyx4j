@@ -110,8 +110,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         left.add(new DecoratorBuilder(inject(proto().buildingElement(), unitSelector), 25).build());
         left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
 
-        left.add(new DecoratorBuilder(inject(proto().reporterPhone()), 25).build());
-        left.add(new DecoratorBuilder(inject(proto().reporterEmail()), 25).build());
         // --------------------------------------------------------------------------------------------------------------------
         VerticalPanel right = new VerticalPanel();
         categoryPanel = new VerticalPanel();
@@ -342,6 +340,16 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                     }
                     setValue(getSelectedItems().get(0));
                     return true;
+                }
+
+                @Override
+                protected void setFilters(List<Criterion> filters) {
+                    super.setFilters(filters);
+                    // add building filter if value set
+                    Building building = MaintenanceRequestForm.this.getValue().building();
+                    if (!building.isNull()) {
+                        addFilter(PropertyCriterion.eq(proto().building(), building));
+                    }
                 }
             };
         }

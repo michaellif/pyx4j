@@ -64,7 +64,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
         Persistence.service().retrieve(dbo.building());
-        Persistence.service().retrieve(dbo.category());
+//        Persistence.service().retrieve(dbo.category());
         MaintenanceRequestCategory parent = dbo.category().parent();
         while (!parent.isNull()) {
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);

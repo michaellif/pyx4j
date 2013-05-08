@@ -54,8 +54,6 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public void postMaintenanceRequest(MaintenanceRequest request) {
-        request.updated().setValue(SystemDateManager.getDate());
-        request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         if (!request.reporter().isNull()) {
             if (request.reporterName().isNull()) {
                 request.reporterName().setValue(request.reporter().customer().person().name().getStringView());
@@ -76,7 +74,9 @@ public abstract class MaintenanceAbstractManager {
         }
         if (request.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
+            request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
         }
+        request.updated().setValue(SystemDateManager.getDate());
         Persistence.secureSave(request);
     }
 
