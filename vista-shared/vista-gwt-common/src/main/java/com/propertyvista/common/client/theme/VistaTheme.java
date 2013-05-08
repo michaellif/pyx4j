@@ -110,7 +110,7 @@ public class VistaTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
-        style.addProperty("font", "12px/1.5em Arial, Helvetica, sans-serif");
+        style.addProperty("font", "12px/14px Arial, Helvetica, sans-serif");
         addStyle(style);
 
     }
