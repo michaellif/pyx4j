@@ -74,7 +74,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     @Override
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
-
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());
@@ -89,6 +88,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().summary()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().priority(), prioritySelector), 25).build());
+        content.setBR(++row, 0, 1);
 
         VerticalPanel schedulePanel = new VerticalPanel();
         schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate1()), 10).build());
@@ -102,9 +102,9 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         permissionPanel.add(new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
         permissionPanel.add(accessPanel);
         content.setWidget(++row, 0, permissionPanel);
+        content.setBR(++row, 0, 1);
 
         int innerRow = -1;
-
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
         statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), statusSelector), 10).build());
         statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
@@ -158,7 +158,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         permissionPanel.setVisible(getValue().reportedForOwnUnit().isBooleanTrue());
         accessPanel.setVisible(getValue().permissionToEnter().isBooleanTrue());
-        statusPanel.setVisible(getValue().id().isNull());
+        statusPanel.setVisible(!getValue().id().isNull());
     }
 
     public void initSelectors() {
