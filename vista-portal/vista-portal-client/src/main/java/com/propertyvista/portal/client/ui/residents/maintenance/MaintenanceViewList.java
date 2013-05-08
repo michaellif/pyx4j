@@ -207,7 +207,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
 
     private String issueDetails(MaintenanceRequestDTO request) {
         try {
-            return request.category().getStringView();
+            return request.requestId().getValue();
         } catch (Exception ignore) {
             return "Invalid Entry";
         }
