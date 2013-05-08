@@ -19,14 +19,14 @@
 ***     ===================================================================================================================
 **/
                 
-CREATE OR REPLACE FUNCTION array_sort(ANYARRAY) RETURNS ANYARRAY
+CREATE OR REPLACE FUNCTION _dba_.array_sort(ANYARRAY) RETURNS ANYARRAY
 AS
 $$
         SELECT array(SELECT * FROM unnest($1) ORDER BY 1);
 $$
 LANGUAGE SQL IMMUTABLE STRICT;
 
-CREATE OR REPLACE FUNCTION array_rsort(ANYARRAY) RETURNS ANYARRAY
+CREATE OR REPLACE FUNCTION _dba_.array_rsort(ANYARRAY) RETURNS ANYARRAY
 AS
 $$
         SELECT array(SELECT * FROM unnest($1) ORDER BY 1 DESC);
@@ -711,11 +711,11 @@ $$
 	                FROM            pg_constraint a
                         JOIN 	        pg_class b ON (a.conrelid = b.oid)
                         LEFT JOIN 	pg_class c ON (a.confrelid = c.oid)
-                        JOIN 	        (SELECT a.oid,array_to_string(array_sort(array_agg(b.attname)),',') AS colname
+                        JOIN 	        (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
                                         FROM    (SELECT oid,conrelid,unnest(conkey) AS conkey FROM pg_constraint) AS a
                                         JOIN    pg_attribute b ON (a.conrelid = b.attrelid AND a.conkey = b.attnum) 
                                         GROUP BY a.oid) AS d ON (a.oid = d.oid)
-                        LEFT JOIN       (SELECT a.oid,array_to_string(array_sort(array_agg(b.attname)),',') AS ref_colname
+                        LEFT JOIN       (SELECT a.oid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS ref_colname
                                         FROM    (SELECT oid,confrelid,unnest(confkey) AS confkey FROM pg_constraint) AS a
                                         LEFT JOIN    pg_attribute b ON (a.confrelid = b.attrelid AND a.confkey = b.attnum) 
                                         GROUP BY a.oid) AS e ON (a.oid = e.oid)
@@ -797,7 +797,7 @@ $$
                         FROM    pg_index a
                         JOIN    pg_class b ON (a.indexrelid = b.oid)
                         JOIN    pg_class c ON (a.indrelid = c.oid)
-                        LEFT JOIN    (SELECT a.indexrelid,array_to_string(array_sort(array_agg(b.attname)),',') AS colname
+                        LEFT JOIN    (SELECT a.indexrelid,array_to_string(_dba_.array_sort(array_agg(b.attname)),',') AS colname
                                         FROM    (SELECT indexrelid,indrelid,unnest(indkey) AS indkey FROM pg_index) AS a
                                         JOIN    pg_attribute b ON (a.indrelid = b.attrelid AND a.indkey = b.attnum) 
                                         GROUP BY a.indexrelid) AS d 

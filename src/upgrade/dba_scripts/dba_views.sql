@@ -13,7 +13,7 @@ CREATE OR REPLACE VIEW _dba_.dba_proc AS
 	FROM 	pg_proc a 
 	JOIN	pg_type b ON (a.prorettype = b.oid)
 	JOIN	pg_language c ON (a.prolang = c.oid)
-	JOIN	pg_shadow d ON (a.proowner = d.usesysid)
+	JOIN	pg_user d ON (a.proowner = d.usesysid)
 	JOIN	pg_namespace e ON (a.pronamespace = e.oid)
 	WHERE 	e.nspname = '_dba_'
 	ORDER BY 1
