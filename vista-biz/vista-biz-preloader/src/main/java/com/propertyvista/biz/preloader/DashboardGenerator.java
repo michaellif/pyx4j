@@ -111,7 +111,7 @@ public class DashboardGenerator {
     private DashboardMetadata makeDefaultSystemDashboard() {
         if (VistaDemo.isDemo()) {
             return makeSystemDashboard(//@formatter:off
-                i18n.tr("System"),
+                i18n.tr("System Dashboard"),
                 i18n.tr("Displays default system data"),
                 BuildingListerGadgetMetadata.class, 
                 OutstandingMaintenanceChartGadgetMetadata.class ,               
