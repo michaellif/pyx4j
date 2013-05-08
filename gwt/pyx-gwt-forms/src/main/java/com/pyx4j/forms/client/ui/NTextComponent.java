@@ -23,10 +23,10 @@ package com.pyx4j.forms.client.ui;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.ToggleButton;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends
@@ -36,8 +36,8 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
         this(cComponent, null);
     }
 
-    public NTextComponent(CCOMP cComponent, ImageResource triggerImage) {
-        super(cComponent, triggerImage);
+    public NTextComponent(CCOMP cComponent, ToggleButton triggerButton) {
+        super(cComponent, triggerButton);
 
     }
 

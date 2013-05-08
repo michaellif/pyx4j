@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui.prime.misc;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ImageFactory;
@@ -31,11 +32,21 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.ToggleButton;
 
 class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> implements INativeTextComponent<E> {
 
     public NEntitySelectorHyperlink(CEntitySelectorHyperlink<E> cComponent) {
-        super(cComponent, ImageFactory.getImages().triggerDown());
+        super(cComponent, new ToggleButton(ImageFactory.getImages().triggerDown()));
+        ToggleButton triggerButton = getTriggerButton();
+        triggerButton.setCommand(new Command() {
+
+            @Override
+            public void execute() {
+                getCComponent().getSelectorDialog().show();
+
+            }
+        });
     }
 
     @Override
@@ -97,8 +108,4 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, Tex
         return (value == null ? "" : value.getStringView());
     }
 
-    @Override
-    public void onToggle() {
-        getCComponent().getSelectorDialog().show();
-    }
 }

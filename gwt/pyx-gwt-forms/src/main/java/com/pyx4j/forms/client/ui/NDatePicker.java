@@ -24,15 +24,65 @@ import java.util.Date;
 
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.forms.client.ImageFactory;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<Date> {
 
     private DatePickerDropDownPanel datePickerDropDown;
 
     public NDatePicker(CDatePicker cComponent) {
-        super(cComponent, ImageFactory.getImages().datePicker());
+        super(cComponent, new ToggleButton(ImageFactory.getImages().datePicker()));
+        final ToggleButton triggerButton = getTriggerButton();
+        triggerButton.setCommand(new Command() {
+
+            @Override
+            public void execute() {
+                if (datePickerDropDown == null) {
+                    datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this) {
+                        @Override
+                        public void hideDatePicker() {
+                            super.hideDatePicker();
+                            if (triggerButton.isChecked()) {
+                                triggerButton.toggleChecked();
+                            }
+                        };
+
+                        @Override
+                        public void showDatePicker() {
+                            super.showDatePicker();
+                            if (!triggerButton.isChecked()) {
+                                triggerButton.toggleChecked();
+                            }
+                        };
+                    };
+                    datePickerDropDown.addFocusHandler(getGroupFocusHandler());
+                    datePickerDropDown.addBlurHandler(getGroupFocusHandler());
+
+                    datePickerDropDown.addCloseHandler(new CloseHandler<PopupPanel>() {
+
+                        @Override
+                        public void onClose(CloseEvent<PopupPanel> event) {
+                            if (triggerButton.isChecked()) {
+                                triggerButton.toggleChecked();
+                            }
+                        }
+                    });
+                }
+
+                if (triggerButton.isChecked()) {
+                    datePickerDropDown.showDatePicker();
+                } else {
+                    datePickerDropDown.hideDatePicker();
+                }
+
+            }
+        });
     }
 
     @Override
@@ -46,22 +96,6 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
                 }
             }
         });
-    }
-
-    @Override
-    public void onToggle() {
-        if (datePickerDropDown == null) {
-            if (isToggledOn()) {
-                datePickerDropDown = new DatePickerDropDownPanel(NDatePicker.this);
-                datePickerDropDown.addFocusHandler(getGroupFocusHandler());
-                datePickerDropDown.addBlurHandler(getGroupFocusHandler());
-                datePickerDropDown.showDatePicker();
-            }
-        } else if (datePickerDropDown.isShowing()) {
-            datePickerDropDown.hideDatePicker();
-        } else {
-            datePickerDropDown.showDatePicker();
-        }
     }
 
 }

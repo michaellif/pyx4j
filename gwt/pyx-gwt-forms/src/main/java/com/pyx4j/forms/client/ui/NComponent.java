@@ -28,7 +28,6 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -41,6 +40,7 @@ import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CComponent<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
         INativeComponent<DATA> {
@@ -55,24 +55,24 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private TriggerPanel triggerPanel;
 
-    private ImageResource triggerImageResource;
+    private ToggleButton triggerButton;
 
     public NComponent(CCOMP cComponent) {
         this(cComponent, null);
     }
 
-    public NComponent(CCOMP cComponent, ImageResource triggerImageResource) {
+    public NComponent(CCOMP cComponent, ToggleButton triggerButton) {
         super();
         this.cComponent = cComponent;
-        this.triggerImageResource = triggerImageResource;
+        this.triggerButton = triggerButton;
     }
 
     public WIDGET getEditor() {
         return editor;
     }
 
-    Button getTriggerButton() {
-        return triggerPanel == null ? null : triggerPanel.getTriggerButton();
+    protected ToggleButton getTriggerButton() {
+        return triggerButton;
     }
 
     public VIEWER getViewer() {
@@ -119,12 +119,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (editor == null) {
                 editor = createEditor();
                 onEditorCreate();
-                if (triggerImageResource != null) {
-                    triggerPanel = new TriggerPanel(triggerImageResource);
+                if (triggerButton != null) {
+                    triggerPanel = new TriggerPanel(triggerButton);
                 }
             }
             onEditorInit();
-            if (triggerImageResource == null) {
+            if (triggerButton == null) {
                 setWidget(editor);
             } else {
                 setWidget(triggerPanel);
@@ -135,20 +135,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     @Override
     public boolean isViewable() {
         return viewable;
-    }
-
-    public void onToggle() {
-    }
-
-    public void onNavigate() {
-    }
-
-    protected void setToggleOn(boolean flag) {
-        triggerPanel.toggleOn(flag);
-    }
-
-    protected boolean isToggledOn() {
-        return triggerPanel.isToggledOn();
     }
 
     protected GroupFocusHandler getGroupFocusHandler() {
@@ -233,15 +219,13 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
 
-        private final Button triggerButton;
+        private final ToggleButton triggerButton;
 
         private final GroupFocusHandler focusHandlerManager;
 
-        private boolean toggledOn = false;
-
-        public TriggerPanel(ImageResource triggerImage) {
+        public TriggerPanel(final ToggleButton triggerButton) {
             super();
-
+            this.triggerButton = triggerButton;
             setStyleName(DefaultCComponentsTheme.StyleName.TriggerPannel.name());
 
             NComponent.this.getEditor().asWidget().setWidth("100%");
@@ -255,7 +239,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addBlurHandler(focusHandlerManager);
             }
 
-            triggerButton = new Button(triggerImage);
             triggerButton.addFocusHandler(focusHandlerManager);
             triggerButton.addBlurHandler(focusHandlerManager);
 
@@ -274,14 +257,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             DOM.setStyleAttribute(triggerButton.getElement(), "marginTop", marginTop);
             DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "4px");
 
-            triggerButton.setCommand(new Command() {
-
-                @Override
-                public void execute() {
-                    toggleOn(!toggledOn);
-                }
-            });
-
             triggerButton.addKeyDownHandler(new KeyDownHandler() {
 
                 @Override
@@ -290,10 +265,14 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                     case KeyCodes.KEY_TAB:
                     case KeyCodes.KEY_ESCAPE:
                     case KeyCodes.KEY_UP:
-                        toggleOn(false);
+                        if (triggerButton.isChecked()) {
+                            triggerButton.toggleChecked();
+                        }
                         break;
                     case KeyCodes.KEY_DOWN:
-                        toggleOn(true);
+                        if (!triggerButton.isChecked()) {
+                            triggerButton.toggleChecked();
+                        }
                         break;
                     }
 
@@ -306,19 +285,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 @Override
                 public void onDoubleClick(DoubleClickEvent event) {
                     if (NComponent.this.isEditable() && NComponent.this.isEnabled()) {
-                        toggleOn(true);
+                        if (!triggerButton.isChecked()) {
+                            triggerButton.toggleChecked();
+                        }
                     }
                 }
             });
-        }
-
-        protected void toggleOn(boolean flag) {
-            toggledOn = flag;
-            NComponent.this.onToggle();
-        }
-
-        protected boolean isToggledOn() {
-            return toggledOn;
         }
 
         @Override
@@ -373,14 +345,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             }
             DOM.setStyleAttribute(navigButton.getElement(), "marginTop", marginTop);
             DOM.setStyleAttribute(navigButton.getElement(), "marginLeft", "4px");
-
-            navigButton.setCommand(new Command() {
-
-                @Override
-                public void execute() {
-                    NComponent.this.onNavigate();
-                }
-            });
 
         }
 

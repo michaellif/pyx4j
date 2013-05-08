@@ -20,9 +20,8 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import com.google.gwt.resources.client.ImageResource;
-
 import com.pyx4j.widgets.client.TextBox;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox, CTextFieldBase<DATA, ?>> implements INativeTextComponent<DATA> {
 
@@ -30,8 +29,8 @@ public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox, CTextFieldBase
         this(cComponent, null);
     }
 
-    public NTextBox(CTextFieldBase<DATA, ?> cComponent, ImageResource triggerImage) {
-        super(cComponent, triggerImage);
+    public NTextBox(CTextFieldBase<DATA, ?> cComponent, ToggleButton triggerButton) {
+        super(cComponent, triggerButton);
 
     }
 

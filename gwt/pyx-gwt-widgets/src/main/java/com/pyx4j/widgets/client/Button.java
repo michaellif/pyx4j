@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client;
 
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -147,7 +148,7 @@ public class Button extends FocusPanel implements IFocusWidget {
                 }
             }
         };
-        return addDomHandler(wrapper, ClickEvent.getType());
+        return super.addClickHandler(wrapper);
     }
 
     public ButtonMenuBar createMenu() {
@@ -248,11 +249,15 @@ public class Button extends FocusPanel implements IFocusWidget {
             button.addMouseDownHandler(this);
             button.addMouseUpHandler(this);
             button.addClickHandler(this);
+
         }
 
-        public void enable(boolean flag) {
-            enabled = flag;
-            if (flag) {
+        public void enable(boolean enabled) {
+            if (button == null) {
+                return;
+            }
+            this.enabled = enabled;
+            if (enabled) {
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
                 if (mouseOver) {
                     onMouseOver(null);
@@ -341,9 +346,9 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         @Override
         public MenuItem insertItem(MenuItem item, int beforeIndex) {
-            if (item.getCommand() != null) {
-                final Command origCommand = item.getCommand();
-                item.setCommand(new Command() {
+            if (item.getScheduledCommand() != null) {
+                final ScheduledCommand origCommand = item.getScheduledCommand();
+                item.setScheduledCommand(new Command() {
 
                     @Override
                     public void execute() {

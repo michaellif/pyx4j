@@ -27,10 +27,10 @@ import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.IFocusWidget;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP extends CFocusComponent<DATA, ?>, VIEWER extends Widget> extends
         NComponent<DATA, WIDGET, CCOMP, VIEWER> implements INativeFocusComponent<DATA> {
@@ -39,8 +39,8 @@ public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP e
         this(cComponent, null);
     }
 
-    public NFocusComponent(CCOMP cComponent, ImageResource triggerImage) {
-        super(cComponent, triggerImage);
+    public NFocusComponent(CCOMP cComponent, ToggleButton triggerButton) {
+        super(cComponent, triggerButton);
 
     }
 

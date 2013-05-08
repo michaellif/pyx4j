@@ -24,11 +24,11 @@ import java.text.ParseException;
 
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.widgets.client.ITextWidget;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP extends CTextFieldBase<DATA, ?>> extends NTextComponent<DATA, WIDGET, CCOMP>
         implements INativeTextComponent<DATA> {
@@ -37,8 +37,8 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
         this(cComponent, null);
     }
 
-    public NTextFieldBase(CCOMP cComponent, ImageResource triggerImage) {
-        super(cComponent, triggerImage);
+    public NTextFieldBase(CCOMP cComponent, ToggleButton triggerButton) {
+        super(cComponent, triggerButton);
 
     }
 

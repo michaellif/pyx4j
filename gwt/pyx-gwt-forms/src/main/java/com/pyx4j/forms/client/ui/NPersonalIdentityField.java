@@ -4,9 +4,9 @@ import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
-import com.google.gwt.resources.client.ImageResource;
 
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBox<E> {
 
@@ -14,8 +14,8 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBo
         super(cComponent);
     }
 
-    public NPersonalIdentityField(CPersonalIdentityField<E> cComponent, ImageResource triggerImage) {
-        super(cComponent, triggerImage);
+    public NPersonalIdentityField(CPersonalIdentityField<E> cComponent, ToggleButton triggerButton) {
+        super(cComponent, triggerButton);
     }
 
     @Override

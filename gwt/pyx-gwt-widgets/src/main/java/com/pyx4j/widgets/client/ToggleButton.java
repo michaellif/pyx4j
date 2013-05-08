@@ -22,10 +22,8 @@ package com.pyx4j.widgets.client;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOverEvent;
-import com.google.gwt.event.dom.client.MouseUpEvent;
 import com.google.gwt.resources.client.ImageResource;
 
 public class ToggleButton extends Button {
@@ -55,66 +53,38 @@ public class ToggleButton extends Button {
 
     static class ToggleButtonFacesHandler extends ButtonFacesHandler implements ClickHandler {
 
-        private ToggleButton button;
-
         public ToggleButtonFacesHandler() {
         }
 
         @Override
-        public void init(Button button) {
-            this.button = (ToggleButton) button;
-            button.addMouseOverHandler(this);
-            button.addMouseOutHandler(this);
-            button.addMouseDownHandler(this);
-            button.addMouseUpHandler(this);
-            button.addClickHandler(this);
-        }
-
-        @Override
         public void onMouseOver(MouseOverEvent event) {
-            if (button.checked) {
-                button.removeStyleDependentName("hover");
-                button.removeStyleDependentName("checked");
-                button.addStyleDependentName("pushed");
-            } else {
-                button.removeStyleDependentName("pushed");
-                button.addStyleDependentName("hover");
+            super.onMouseOver(event);
+            ToggleButton button = (ToggleButton) getButton();
+            if (isEnabled() && button.checked) {
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
-
         }
 
         @Override
         public void onMouseOut(MouseOutEvent event) {
-            if (button.checked) {
-                button.removeStyleDependentName("pushed");
-                button.removeStyleDependentName("hover");
-                button.addStyleDependentName("checked");
-            } else {
-                button.removeStyleDependentName("hover");
-                button.removeStyleDependentName("pushed");
+            super.onMouseOut(event);
+            ToggleButton button = (ToggleButton) getButton();
+            if (isEnabled() && button.checked) {
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
 
         }
 
         @Override
-        public void onMouseDown(MouseDownEvent event) {
-            button.removeStyleDependentName("hover");
-            button.addStyleDependentName("pushed");
-        }
-
-        @Override
-        public void onMouseUp(MouseUpEvent event) {
-            button.removeStyleDependentName("pushed");
-            button.addStyleDependentName("hover");
-        }
-
-        @Override
         public void onClick(ClickEvent event) {
+            ToggleButton button = (ToggleButton) getButton();
             button.checked = !button.checked;
             if (button.checked) {
-                button.addStyleDependentName("checked");
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             } else {
-                button.removeStyleDependentName("checked");
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
         }
     }

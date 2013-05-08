@@ -24,15 +24,25 @@ import java.text.ParseException;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.ToggleButton;
 
 public class NFile<E extends IFile> extends NComponent<E, Anchor, CFile<E>, Anchor> implements INativeHyperlink<E> {
 
     public NFile(final CFile<E> file) {
-        super(file, ImageFactory.getImages().triggerDown());
+        super(file, new ToggleButton(ImageFactory.getImages().triggerDown()));
+        final ToggleButton triggerButton = getTriggerButton();
+        triggerButton.setCommand(new Command() {
+
+            @Override
+            public void execute() {
+                getCComponent().showFileSelectionDialog();
+            }
+        });
     }
 
     @Override
@@ -81,8 +91,4 @@ public class NFile<E extends IFile> extends NComponent<E, Anchor, CFile<E>, Anch
         return createEditor();
     }
 
-    @Override
-    public void onToggle() {
-        getCComponent().showFileSelectionDialog();
-    }
 }
