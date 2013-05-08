@@ -25,6 +25,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.ToggleButton;
 import com.pyx4j.widgets.client.WatermarkComponent;
@@ -33,11 +34,11 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
         NFocusComponent<DATA, WIDGET, CCOMP, HTML> implements INativeTextComponent<DATA>, WatermarkComponent {
 
     public NTextComponent(CCOMP cComponent) {
-        this(cComponent, null);
+        this(cComponent, null, null);
     }
 
-    public NTextComponent(CCOMP cComponent, ToggleButton triggerButton) {
-        super(cComponent, triggerButton);
+    public NTextComponent(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
+        super(cComponent, triggerButton, actionButton);
 
     }
 

@@ -57,14 +57,19 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private ToggleButton triggerButton;
 
+    private ActionPanel actionPanel;
+
+    private Button actionButton;
+
     public NComponent(CCOMP cComponent) {
-        this(cComponent, null);
+        this(cComponent, null, null);
     }
 
-    public NComponent(CCOMP cComponent, ToggleButton triggerButton) {
+    public NComponent(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
         super();
         this.cComponent = cComponent;
         this.triggerButton = triggerButton;
+        this.actionButton = actionButton;
     }
 
     public WIDGET getEditor() {
@@ -112,9 +117,16 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (viewer == null) {
                 viewer = createViewer();
                 onViewerCreate();
+                if (actionButton != null) {
+                    actionPanel = new ActionPanel(actionButton);
+                }
             }
             onViewerInit();
-            setWidget(viewer);
+            if (actionButton == null) {
+                setWidget(viewer);
+            } else {
+                setWidget(actionPanel);
+            }
         } else {
             if (editor == null) {
                 editor = createEditor();
@@ -316,11 +328,11 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     }
 
-    class NavigPanel extends HorizontalPanel {
+    class ActionPanel extends HorizontalPanel {
 
-        private final Button navigButton;
+        private final Button actionButton;
 
-        public NavigPanel(ImageResource navigImage) {
+        public ActionPanel(Button actionButton) {
             super();
 
             setStyleName(DefaultCComponentsTheme.StyleName.TriggerPannel.name());
@@ -329,10 +341,10 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             add(NComponent.this.getViewer());
             setCellWidth(NComponent.this.getViewer(), "100%");
 
-            navigButton = new Button(navigImage);
+            this.actionButton = actionButton;
 
-            add(navigButton);
-            setCellVerticalAlignment(navigButton, ALIGN_TOP);
+            add(actionButton);
+            setCellVerticalAlignment(actionButton, ALIGN_TOP);
 
             String marginTop;
             if (BrowserType.isFirefox()) {
@@ -343,13 +355,13 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 //Chrome and Safari
                 marginTop = "2";
             }
-            DOM.setStyleAttribute(navigButton.getElement(), "marginTop", marginTop);
-            DOM.setStyleAttribute(navigButton.getElement(), "marginLeft", "4px");
+            DOM.setStyleAttribute(actionButton.getElement(), "marginTop", marginTop);
+            DOM.setStyleAttribute(actionButton.getElement(), "marginLeft", "4px");
 
         }
 
-        public Button getNavigButton() {
-            return navigButton;
+        public Button getActionButton() {
+            return actionButton;
         }
 
     }

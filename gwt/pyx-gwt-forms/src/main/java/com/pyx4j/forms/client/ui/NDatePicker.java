@@ -37,7 +37,7 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
     private DatePickerDropDownPanel datePickerDropDown;
 
     public NDatePicker(CDatePicker cComponent) {
-        super(cComponent, new ToggleButton(ImageFactory.getImages().datePicker()));
+        super(cComponent, new ToggleButton(ImageFactory.getImages().datePicker()), null);
         final ToggleButton triggerButton = getTriggerButton();
         triggerButton.setCommand(new Command() {
 

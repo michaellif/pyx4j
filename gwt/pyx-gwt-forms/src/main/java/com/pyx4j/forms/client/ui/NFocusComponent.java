@@ -29,6 +29,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.ToggleButton;
 
@@ -36,11 +37,11 @@ public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP e
         NComponent<DATA, WIDGET, CCOMP, VIEWER> implements INativeFocusComponent<DATA> {
 
     public NFocusComponent(CCOMP cComponent) {
-        this(cComponent, null);
+        this(cComponent, null, null);
     }
 
-    public NFocusComponent(CCOMP cComponent, ToggleButton triggerButton) {
-        super(cComponent, triggerButton);
+    public NFocusComponent(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
+        super(cComponent, triggerButton, actionButton);
 
     }
 

@@ -20,17 +20,18 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.ToggleButton;
 
 public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox, CTextFieldBase<DATA, ?>> implements INativeTextComponent<DATA> {
 
     public NTextBox(CTextFieldBase<DATA, ?> cComponent) {
-        this(cComponent, null);
+        this(cComponent, null, null);
     }
 
-    public NTextBox(CTextFieldBase<DATA, ?> cComponent, ToggleButton triggerButton) {
-        super(cComponent, triggerButton);
+    public NTextBox(CTextFieldBase<DATA, ?> cComponent, ToggleButton triggerButton, Button actionButton) {
+        super(cComponent, triggerButton, actionButton);
 
     }
 

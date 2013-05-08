@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 
 import com.pyx4j.entity.shared.IPersonalIdentity;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ToggleButton;
 
 public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBox<E> {
@@ -14,8 +15,8 @@ public class NPersonalIdentityField<E extends IPersonalIdentity> extends NTextBo
         super(cComponent);
     }
 
-    public NPersonalIdentityField(CPersonalIdentityField<E> cComponent, ToggleButton triggerButton) {
-        super(cComponent, triggerButton);
+    public NPersonalIdentityField(CPersonalIdentityField<E> cComponent, ToggleButton triggerButton, Button actionButton) {
+        super(cComponent, triggerButton, actionButton);
     }
 
     @Override

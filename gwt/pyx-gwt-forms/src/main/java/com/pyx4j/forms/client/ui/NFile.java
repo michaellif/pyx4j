@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.ToggleButton;
 public class NFile<E extends IFile> extends NComponent<E, Anchor, CFile<E>, Anchor> implements INativeHyperlink<E> {
 
     public NFile(final CFile<E> file) {
-        super(file, new ToggleButton(ImageFactory.getImages().triggerDown()));
+        super(file, new ToggleButton(ImageFactory.getImages().triggerDown()), null);
         final ToggleButton triggerButton = getTriggerButton();
         triggerButton.setCommand(new Command() {
 
