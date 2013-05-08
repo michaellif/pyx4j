@@ -20,6 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.google.gwt.event.dom.client.DoubleClickEvent;
 import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
@@ -27,7 +30,7 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -53,31 +56,37 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private boolean viewable;
 
-    private TriggerPanel triggerPanel;
+    private EditorHolder editorHolder;
 
     private ToggleButton triggerButton;
 
-    private ActionPanel actionPanel;
+    private ViewerHolder viewerHolder;
 
     private Button actionButton;
 
-    public NComponent(CCOMP cComponent) {
-        this(cComponent, null, null);
-    }
+    private Command navigationCommand;
 
-    public NComponent(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
+    public NComponent(CCOMP cComponent) {
         super();
         this.cComponent = cComponent;
-        this.triggerButton = triggerButton;
-        this.actionButton = actionButton;
     }
 
     public WIDGET getEditor() {
         return editor;
     }
 
-    protected ToggleButton getTriggerButton() {
-        return triggerButton;
+    public void setTriggerButton(ToggleButton triggerButton) {
+        this.triggerButton = triggerButton;
+        if (editorHolder != null) {
+            editorHolder.setTriggerButton(triggerButton);
+        }
+    }
+
+    public void setActionButton(Button actionButton) {
+        this.actionButton = actionButton;
+        if (viewerHolder != null) {
+            viewerHolder.setActionButton(actionButton);
+        }
     }
 
     public VIEWER getViewer() {
@@ -117,30 +126,18 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (viewer == null) {
                 viewer = createViewer();
                 onViewerCreate();
-                if (actionButton != null) {
-                    actionPanel = new ActionPanel(actionButton);
-                }
+                viewerHolder = new ViewerHolder(actionButton);
             }
             onViewerInit();
-            if (actionButton == null) {
-                setWidget(viewer);
-            } else {
-                setWidget(actionPanel);
-            }
+            setWidget(viewerHolder);
         } else {
             if (editor == null) {
                 editor = createEditor();
                 onEditorCreate();
-                if (triggerButton != null) {
-                    triggerPanel = new TriggerPanel(triggerButton);
-                }
+                editorHolder = new EditorHolder(triggerButton);
             }
             onEditorInit();
-            if (triggerButton == null) {
-                setWidget(editor);
-            } else {
-                setWidget(triggerPanel);
-            }
+            setWidget(editorHolder);
         }
     }
 
@@ -150,8 +147,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     }
 
     protected GroupFocusHandler getGroupFocusHandler() {
-        if (triggerPanel != null) {
-            return triggerPanel.getGroupFocusHandler();
+        if (editorHolder != null) {
+            return editorHolder.getGroupFocusHandler();
         } else {
             return null;
         }
@@ -159,7 +156,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     @Override
     public void setEnabled(boolean enabled) {
-        Button triggerButton = getTriggerButton();
         if (triggerButton != null) {
             triggerButton.setEnabled(isEditable() && enabled);
         }
@@ -185,7 +181,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     @Override
     public void setEditable(boolean editable) {
-        Button triggerButton = getTriggerButton();
         if (triggerButton != null) {
             triggerButton.setEnabled(isEnabled() && editable);
         }
@@ -220,8 +215,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         if (getEditor() != null) {
             getEditor().ensureDebugId(debugId.debugId());
 
-            if (triggerPanel != null)
-                triggerPanel.ensureDebugId(debugId.debugId() + "-triggerPanel");
+            if (editorHolder != null)
+                editorHolder.ensureDebugId(debugId.debugId() + "-triggerPanel");
 
         }
         if (getViewer() != null) {
@@ -229,20 +224,24 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
-    class TriggerPanel extends HorizontalPanel implements HasDoubleClickHandlers {
+    class EditorHolder extends HorizontalPanel implements HasDoubleClickHandlers {
 
-        private final ToggleButton triggerButton;
+        private ToggleButton triggerButton;
 
         private final GroupFocusHandler focusHandlerManager;
 
-        public TriggerPanel(final ToggleButton triggerButton) {
+        private final Set<HandlerRegistration> triggerButtonHandlerRegistrations = new HashSet<HandlerRegistration>();
+
+        private String baseDebugID;
+
+        public EditorHolder(final ToggleButton triggerButton) {
             super();
-            this.triggerButton = triggerButton;
-            setStyleName(DefaultCComponentsTheme.StyleName.TriggerPannel.name());
+            setStyleName(DefaultCComponentsTheme.StyleName.EditorHolder.name());
 
             NComponent.this.getEditor().asWidget().setWidth("100%");
             add(NComponent.this.getEditor());
             setCellWidth(NComponent.this.getEditor(), "100%");
+            setCellVerticalAlignment(NComponent.this.getEditor(), ALIGN_MIDDLE);
 
             focusHandlerManager = new GroupFocusHandler(this);
 
@@ -251,69 +250,81 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addBlurHandler(focusHandlerManager);
             }
 
-            triggerButton.addFocusHandler(focusHandlerManager);
-            triggerButton.addBlurHandler(focusHandlerManager);
+            setTriggerButton(triggerButton);
+        }
 
-            add(triggerButton);
-            setCellVerticalAlignment(triggerButton, ALIGN_TOP);
-
-            String marginTop;
-            if (BrowserType.isFirefox()) {
-                marginTop = "0";
-            } else if (BrowserType.isIE()) {
-                marginTop = "1";
-            } else {
-                //Chrome and Safari
-                marginTop = "2";
+        public void setTriggerButton(final ToggleButton triggerButton) {
+            if (this.triggerButton != null) {
+                remove(this.triggerButton);
+                for (HandlerRegistration handlerRegistration : triggerButtonHandlerRegistrations) {
+                    handlerRegistration.removeHandler();
+                }
+                triggerButtonHandlerRegistrations.clear();
             }
-            DOM.setStyleAttribute(triggerButton.getElement(), "marginTop", marginTop);
-            DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "4px");
 
-            triggerButton.addKeyDownHandler(new KeyDownHandler() {
+            this.triggerButton = triggerButton;
 
-                @Override
-                public void onKeyDown(KeyDownEvent event) {
-                    switch (event.getNativeKeyCode()) {
-                    case KeyCodes.KEY_TAB:
-                    case KeyCodes.KEY_ESCAPE:
-                    case KeyCodes.KEY_UP:
-                        if (triggerButton.isChecked()) {
-                            triggerButton.toggleChecked();
-                        }
-                        break;
-                    case KeyCodes.KEY_DOWN:
-                        if (!triggerButton.isChecked()) {
-                            triggerButton.toggleChecked();
-                        }
-                        break;
-                    }
+            if (triggerButton != null) {
 
+                triggerButtonHandlerRegistrations.add(triggerButton.addFocusHandler(focusHandlerManager));
+                triggerButtonHandlerRegistrations.add(triggerButton.addBlurHandler(focusHandlerManager));
+
+                add(triggerButton);
+                setCellVerticalAlignment(triggerButton, ALIGN_MIDDLE);
+
+                String marginTop;
+                if (BrowserType.isFirefox()) {
+                    marginTop = "0";
+                } else if (BrowserType.isIE()) {
+                    marginTop = "1";
+                } else {
+                    //Chrome and Safari
+                    marginTop = "2";
                 }
-            });
+                DOM.setStyleAttribute(triggerButton.getElement(), "marginTop", marginTop);
+                DOM.setStyleAttribute(triggerButton.getElement(), "marginLeft", "4px");
 
-            triggerButton.sinkEvents(Event.ONDBLCLICK);
+                triggerButton.sinkEvents(Event.ONDBLCLICK);
 
-            this.addDoubleClickHandler(new DoubleClickHandler() {
-                @Override
-                public void onDoubleClick(DoubleClickEvent event) {
-                    if (NComponent.this.isEditable() && NComponent.this.isEnabled()) {
-                        if (!triggerButton.isChecked()) {
-                            triggerButton.toggleChecked();
+                triggerButtonHandlerRegistrations.add(triggerButton.addKeyDownHandler(new KeyDownHandler() {
+
+                    @Override
+                    public void onKeyDown(KeyDownEvent event) {
+                        switch (event.getNativeKeyCode()) {
+                        case KeyCodes.KEY_TAB:
+                        case KeyCodes.KEY_ESCAPE:
+                        case KeyCodes.KEY_UP:
+                            if (triggerButton.isChecked()) {
+                                triggerButton.toggleChecked();
+                            }
+                            break;
+                        case KeyCodes.KEY_DOWN:
+                            if (!triggerButton.isChecked()) {
+                                triggerButton.toggleChecked();
+                            }
+                            break;
+                        }
+
+                    }
+                }));
+
+                triggerButtonHandlerRegistrations.add(this.addDoubleClickHandler(new DoubleClickHandler() {
+                    @Override
+                    public void onDoubleClick(DoubleClickEvent event) {
+                        if (NComponent.this.isEditable() && NComponent.this.isEnabled()) {
+                            if (!triggerButton.isChecked()) {
+                                triggerButton.toggleChecked();
+                            }
                         }
                     }
-                }
-            });
+                }));
+
+                triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
+
+            }
         }
 
-        @Override
-        protected void onEnsureDebugId(String baseID) {
-            //super.onEnsureDebugId(baseID);
-            ((Widget) NComponent.this.getEditor()).ensureDebugId(baseID);
-            // Special name for selenium to fire events instead of click
-            triggerButton.ensureDebugId(CompositeDebugId.debugId(baseID, CCompDebugId.trigger));
-        }
-
-        public Button getTriggerButton() {
+        public ToggleButton getTriggerButton() {
             return triggerButton;
         }
 
@@ -326,37 +337,56 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             return addDomHandler(handler, DoubleClickEvent.getType());
         }
 
+        @Override
+        protected void onEnsureDebugId(String baseID) {
+            baseDebugID = baseID;
+            //super.onEnsureDebugId(baseID);
+            ((Widget) NComponent.this.getEditor()).ensureDebugId(baseID);
+        }
     }
 
-    class ActionPanel extends HorizontalPanel {
+    class ViewerHolder extends HorizontalPanel {
 
-        private final Button actionButton;
+        private Button actionButton;
 
-        public ActionPanel(Button actionButton) {
+        public ViewerHolder(Button actionButton) {
             super();
 
-            setStyleName(DefaultCComponentsTheme.StyleName.TriggerPannel.name());
+            setStyleName(DefaultCComponentsTheme.StyleName.EditorHolder.name());
 
             NComponent.this.getViewer().asWidget().setWidth("100%");
             add(NComponent.this.getViewer());
             setCellWidth(NComponent.this.getViewer(), "100%");
+            setCellVerticalAlignment(NComponent.this.getViewer(), ALIGN_MIDDLE);
+
+            setActionButton(actionButton);
+
+        }
+
+        public void setActionButton(final Button actionButton) {
+            if (this.actionButton != null) {
+                remove(this.actionButton);
+            }
 
             this.actionButton = actionButton;
 
-            add(actionButton);
-            setCellVerticalAlignment(actionButton, ALIGN_TOP);
+            if (actionButton != null) {
+                add(actionButton);
+                setCellVerticalAlignment(actionButton, ALIGN_MIDDLE);
 
-            String marginTop;
-            if (BrowserType.isFirefox()) {
-                marginTop = "0";
-            } else if (BrowserType.isIE()) {
-                marginTop = "1";
-            } else {
-                //Chrome and Safari
-                marginTop = "2";
+                String marginTop;
+                if (BrowserType.isFirefox()) {
+                    marginTop = "0";
+                } else if (BrowserType.isIE()) {
+                    marginTop = "1";
+                } else {
+                    //Chrome and Safari
+                    marginTop = "2";
+                }
+                DOM.setStyleAttribute(actionButton.getElement(), "marginTop", marginTop);
+                DOM.setStyleAttribute(actionButton.getElement(), "marginLeft", "4px");
+
             }
-            DOM.setStyleAttribute(actionButton.getElement(), "marginTop", marginTop);
-            DOM.setStyleAttribute(actionButton.getElement(), "marginLeft", "4px");
 
         }
 

@@ -35,11 +35,7 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
         implements INativeTextComponent<DATA> {
 
     public NTextFieldBase(CCOMP cComponent) {
-        this(cComponent, null, null);
-    }
-
-    public NTextFieldBase(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
-        super(cComponent, triggerButton, actionButton);
+        super(cComponent);
 
     }
 

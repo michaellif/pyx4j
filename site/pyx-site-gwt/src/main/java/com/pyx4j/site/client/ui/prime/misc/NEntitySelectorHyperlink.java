@@ -37,8 +37,9 @@ import com.pyx4j.widgets.client.ToggleButton;
 class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> implements INativeTextComponent<E> {
 
     public NEntitySelectorHyperlink(CEntitySelectorHyperlink<E> cComponent) {
-        super(cComponent, new ToggleButton(ImageFactory.getImages().triggerDown()), null);
-        ToggleButton triggerButton = getTriggerButton();
+        super(cComponent);
+
+        ToggleButton triggerButton = new ToggleButton(ImageFactory.getImages().triggerDown());
         triggerButton.setCommand(new Command() {
 
             @Override
@@ -47,6 +48,8 @@ class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, Tex
 
             }
         });
+
+        setTriggerButton(triggerButton);
     }
 
     @Override

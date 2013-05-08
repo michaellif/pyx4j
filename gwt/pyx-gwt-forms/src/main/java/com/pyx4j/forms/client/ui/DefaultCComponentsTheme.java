@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        TriggerPannel, ValidationLabel, NoteLabel
+        EditorHolder, ValidationLabel, NoteLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -89,7 +89,7 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initTriggerButtonStyle() {
 
-        Style style = new Style(".", StyleName.TriggerPannel, " .", DefaultWidgetsTheme.StyleName.Button);
+        Style style = new Style(".", StyleName.EditorHolder, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");

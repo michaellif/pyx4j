@@ -37,11 +37,7 @@ public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP e
         NComponent<DATA, WIDGET, CCOMP, VIEWER> implements INativeFocusComponent<DATA> {
 
     public NFocusComponent(CCOMP cComponent) {
-        this(cComponent, null, null);
-    }
-
-    public NFocusComponent(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
-        super(cComponent, triggerButton, actionButton);
+        super(cComponent);
 
     }
 

@@ -34,11 +34,7 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
         NFocusComponent<DATA, WIDGET, CCOMP, HTML> implements INativeTextComponent<DATA>, WatermarkComponent {
 
     public NTextComponent(CCOMP cComponent) {
-        this(cComponent, null, null);
-    }
-
-    public NTextComponent(CCOMP cComponent, ToggleButton triggerButton, Button actionButton) {
-        super(cComponent, triggerButton, actionButton);
+        super(cComponent);
 
     }
 
