@@ -63,6 +63,7 @@ public class SiteViewTheme extends Theme {
         style = new Style(".", StyleName.SiteViewNavigContainer.name());
         style.addProperty("border-right", "4px solid");
         style.addProperty("border-right-color", ThemeColor.object1);
+        style.addProperty("line-height", "1.5em");
         addStyle(style);
 
         /*
