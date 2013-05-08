@@ -28,7 +28,6 @@ public class NLabel<DATA> extends NComponent<DATA, Label, CLabel<DATA>, Label> i
 
     public NLabel(CLabel<DATA> cComponent) {
         super(cComponent);
-        // TODO Auto-generated constructor stub
     }
 
     @Override
