@@ -59,7 +59,11 @@ BEGIN
                                         ADD COLUMN originator_discriminator VARCHAR(50),
                                         ADD COLUMN reporter_email VARCHAR(500),
                                         ADD COLUMN reporter_name VARCHAR(500),
-                                        ADD COLUMN reporter_phone VARCHAR(500);
+                                        ADD COLUMN reporter_phone VARCHAR(500),
+                                        ADD COLUMN preferred_date1 DATE,
+                                        ADD COLUMN preferred_date2 DATE,
+                                        ADD COLUMN preferred_time1 VARCHAR(50),
+                                        ADD COLUMN preferred_time2 VARCHAR(50);
                                         
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant TO reporter;
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant_discriminator TO reporter_discriminator;
@@ -157,6 +161,9 @@ BEGIN
                 CHECK ((building_element_discriminator) IN ('LockerArea_BuildingElement', 'Parking_BuildingElement', 'Roof_BuildingElement', 'Unit_BuildingElement'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_originator_discriminator_d_ck CHECK ((originator_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_discriminator_d_ck CHECK (reporter_discriminator = 'Tenant');
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_preferred_time1_e_ck CHECK ((preferred_time1) IN ('Afternoon', 'Evening', 'Morning'));
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_preferred_time2_e_ck CHECK ((preferred_time2) IN ('Afternoon', 'Evening', 'Morning'));
+
 
         
         -- not null
