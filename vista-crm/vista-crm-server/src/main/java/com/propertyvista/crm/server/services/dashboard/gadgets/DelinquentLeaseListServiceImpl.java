@@ -35,6 +35,13 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
         super(LeaseArrearsSnapshot.class, DelinquentLeaseDTO.class);
     }
 
+    public EntityListCriteria<LeaseArrearsSnapshot> convertCriteria(EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
+        EntityListCriteria<LeaseArrearsSnapshot> dboCriteria = EntityListCriteria.create(LeaseArrearsSnapshot.class);
+        enhanceListCriteria(dboCriteria, dtoCriteria);
+
+        return dboCriteria;
+    }
+
     @Override
     protected void bind() {
         bind(dtoProto.leasePrimaryKey(), dboProto.billingAccount().lease().id());
