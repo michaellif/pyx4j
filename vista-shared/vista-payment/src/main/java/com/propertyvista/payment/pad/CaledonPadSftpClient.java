@@ -36,7 +36,7 @@ import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckFile;
 
 public class CaledonPadSftpClient {
 
@@ -186,7 +186,7 @@ public class CaledonPadSftpClient {
                         fileMatch = rFile.getFilename().endsWith("." + companyId);
                         break;
                     case Acknowledgement:
-                        fileMatch = rFile.getFilename().endsWith("." + companyId + PadAkFile.FileNameSufix);
+                        fileMatch = rFile.getFilename().endsWith("." + companyId + PadAckFile.FileNameSufix);
                         break;
                     case Reconciliation:
                         fileMatch = rFile.getFilename().endsWith(PadReconciliationFile.FileNameSufix + companyId);

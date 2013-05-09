@@ -15,13 +15,13 @@ package com.propertyvista.payment.pad;
 
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckFile;
 
 public interface EFTTransportFacade {
 
     public void sendPadFile(PadFile padFile);
 
-    public PadAkFile receivePadAcknowledgementFile(String companyId);
+    public PadAckFile receivePadAcknowledgementFile(String companyId);
 
     public PadReconciliationFile receivePadReconciliation(String companyId);
 

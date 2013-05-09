@@ -64,9 +64,10 @@ public interface PadDebitRecord extends IEntity {
 
     IPrimitive<String> acknowledgmentStatusCode();
 
-    // Record processing status
+    // Not coming from Caledon, Record processing status
     IPrimitive<Boolean> processed();
 
+    // Not coming from Caledon, this is our processing flag
     IPrimitive<PadDebitRecordProcessingStatus> processingStatus();
 
 }

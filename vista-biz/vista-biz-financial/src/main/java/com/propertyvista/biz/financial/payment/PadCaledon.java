@@ -42,7 +42,7 @@ import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class PadCaledon {
@@ -216,7 +216,7 @@ public class PadCaledon {
     }
 
     public boolean receivePadAcknowledgementFile(final ExecutionMonitor executionMonitor) {
-        final PadAkFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
+        final PadAckFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
         if (padAkFile == null) {
             executionMonitor.addInfoEvent("Pooled, No file found on server", null);
             return false;

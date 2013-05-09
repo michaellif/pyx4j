@@ -24,14 +24,14 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
-import com.propertyvista.payment.pad.data.PadAkBatch;
-import com.propertyvista.payment.pad.data.PadAkDebitRecord;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckBatch;
+import com.propertyvista.payment.pad.data.PadAckDebitRecord;
+import com.propertyvista.payment.pad.data.PadAckFile;
 
 class CaledonPadAcknowledgmentParser {
 
-    PadAkFile parsReport(File file) {
-        final PadAkFile akFile = EntityFactory.create(PadAkFile.class);
+    PadAckFile parsReport(File file) {
+        final PadAckFile akFile = EntityFactory.create(PadAckFile.class);
 
         InputStream is;
         try {
@@ -69,7 +69,7 @@ class CaledonPadAcknowledgmentParser {
             @Override
             public void onRow(String[] values) {
                 if (values[0].equals("BRJ")) {
-                    PadAkBatch batch = EntityFactory.create(PadAkBatch.class);
+                    PadAckBatch batch = EntityFactory.create(PadAckBatch.class);
                     int v = 1;
                     batch.batchId().setValue(values[v++]);
                     batch.terminalId().setValue(values[v++]);
@@ -78,7 +78,7 @@ class CaledonPadAcknowledgmentParser {
                     EntityValidator.validate(batch);
                     akFile.batches().add(batch);
                 } else if (values[0].equals("TRJ")) {
-                    PadAkDebitRecord record = EntityFactory.create(PadAkDebitRecord.class);
+                    PadAckDebitRecord record = EntityFactory.create(PadAckDebitRecord.class);
                     int v = 1;
                     record.terminalId().setValue(values[v++]);
                     record.clientId().setValue(values[v++]);

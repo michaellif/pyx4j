@@ -29,7 +29,7 @@ import com.pyx4j.i18n.annotations.I18n;
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface PadAkFile extends IEntity {
+public interface PadAckFile extends IEntity {
 
     public static String FileNameSufix = "_acknowledgement.csv";
 
@@ -67,7 +67,7 @@ public interface PadAkFile extends IEntity {
 
     IPrimitive<String> acknowledgmentRejectReasonMessage();
 
-    IList<PadAkBatch> batches();
+    IList<PadAckBatch> batches();
 
-    IList<PadAkDebitRecord> records();
+    IList<PadAckDebitRecord> records();
 }

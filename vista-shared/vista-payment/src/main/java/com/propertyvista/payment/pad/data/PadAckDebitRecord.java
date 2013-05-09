@@ -22,22 +22,25 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Transient
-public interface PadAkBatch extends IEntity {
-
-    @Length(6)
-    @NotNull
-    IPrimitive<String> batchId();
+public interface PadAckDebitRecord extends IEntity {
 
     @Length(8)
     @NotNull
     IPrimitive<String> terminalId();
 
+    @Length(29)
+    @NotNull
+    IPrimitive<String> clientId();
+
+    @Length(15)
+    IPrimitive<String> transactionId();
+
+    @Length(10)
+    @NotNull
+    IPrimitive<String> amount();
+
     @Length(4)
     @NotNull
     IPrimitive<String> acknowledgmentStatusCode();
-
-    @Length(14)
-    @NotNull
-    IPrimitive<String> batchAmount();
 
 }

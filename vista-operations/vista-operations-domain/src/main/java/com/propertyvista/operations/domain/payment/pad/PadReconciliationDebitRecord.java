@@ -66,6 +66,7 @@ public interface PadReconciliationDebitRecord extends IEntity {
     @Format("#0.00")
     IPrimitive<BigDecimal> fee();
 
+    // Not coming from Caledon, this is our processing flag
     @NotNull
     IPrimitive<Boolean> processingStatus();
 

@@ -27,6 +27,9 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.payment.pad.EFTTransportFacade;
+import com.propertyvista.payment.pad.mock.EFTMockFacade;
+import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
@@ -38,6 +41,7 @@ public class PadProcessingTest extends FinancialTestBase {
     protected void setUp() throws Exception {
         super.setUp();
         preloadData();
+        ServerSideFactory.register(EFTTransportFacade.class, EFTTransportFacadeMock.class);
     }
 
     @Override
@@ -62,5 +66,9 @@ public class PadProcessingTest extends FinancialTestBase {
         PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(paymentMethod, "100");
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+
+        if (false) {
+            ServerSideFactory.create(EFTMockFacade.class).scheduleTransactionAcknowledgmentResponse("", "");
+        }
     }
 }

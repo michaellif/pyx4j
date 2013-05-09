@@ -28,7 +28,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckFile;
 
 /**
  * Caledon SFTP interface implementation
@@ -78,7 +78,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public PadAkFile receivePadAcknowledgementFile(String companyId) {
+    public PadAckFile receivePadAcknowledgementFile(String companyId) {
         File padWorkdir = getPadBaseDir();
         List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Acknowledgement, padWorkdir);
         if (files.size() == 0) {
@@ -87,10 +87,10 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
         final File file = files.get(0);
         boolean parsOk = false;
         try {
-            if (!file.getName().endsWith(PadAkFile.FileNameSufix)) {
+            if (!file.getName().endsWith(PadAckFile.FileNameSufix)) {
                 throw new Error("Invalid acknowledgment file name" + file.getName());
             }
-            PadAkFile padAkFile = new CaledonPadAcknowledgmentParser().parsReport(file);
+            PadAckFile padAkFile = new CaledonPadAcknowledgmentParser().parsReport(file);
             parsOk = true;
             return padAkFile;
         } finally {

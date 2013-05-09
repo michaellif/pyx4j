@@ -27,9 +27,9 @@ import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingS
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
 import com.propertyvista.payment.pad.CaledonPadUtils;
-import com.propertyvista.payment.pad.data.PadAkBatch;
-import com.propertyvista.payment.pad.data.PadAkDebitRecord;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckBatch;
+import com.propertyvista.payment.pad.data.PadAckDebitRecord;
+import com.propertyvista.payment.pad.data.PadAckFile;
 
 class PadCaledonAcknowledgement {
 
@@ -39,44 +39,44 @@ class PadCaledonAcknowledgement {
         this.executionMonitor = executionMonitor;
     }
 
-    void validateAndPersistFile(PadAkFile akFile) {
+    void validateAndPersistFile(PadAckFile ackFile) {
         PadFile padFile;
         {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-            criteria.eq(criteria.proto().fileCreationNumber(), akFile.fileCreationNumber().getValue());
+            criteria.eq(criteria.proto().fileCreationNumber(), ackFile.fileCreationNumber().getValue());
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
-                throw new Error("Unexpected fileCreationNumber '" + akFile.fileCreationNumber().getValue() + "' in file " + akFile.fileName().getValue());
+                throw new Error("Unexpected fileCreationNumber '" + ackFile.fileCreationNumber().getValue() + "' in file " + ackFile.fileName().getValue());
             }
             if (padFile.status().getValue() != PadFile.PadFileStatus.Sent) {
-                throw new Error("Unexpected file status '" + padFile.status().getValue() + "' for file " + akFile.fileName().getValue());
+                throw new Error("Unexpected file status '" + padFile.status().getValue() + "' for file " + ackFile.fileName().getValue());
             }
         }
 
         for (FileAcknowledgmentStatus acknowledgmentStatus : EnumSet.allOf(FileAcknowledgmentStatus.class)) {
-            if (acknowledgmentStatus.getStatusCode().equals(akFile.acknowledgmentStatusCode().getValue())) {
+            if (acknowledgmentStatus.getStatusCode().equals(ackFile.acknowledgmentStatusCode().getValue())) {
                 padFile.acknowledgmentStatus().setValue(acknowledgmentStatus);
-                padFile.acknowledgmentStatusCode().setValue(akFile.acknowledgmentStatusCode().getValue());
+                padFile.acknowledgmentStatusCode().setValue(ackFile.acknowledgmentStatusCode().getValue());
                 break;
             }
         }
         if (padFile.acknowledgmentStatus().isNull()) {
-            throw new Error("Unexpected acknowledgmentStatusCode '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
-                    + akFile.fileName().getValue());
+            throw new Error("Unexpected acknowledgmentStatusCode '" + ackFile.acknowledgmentStatusCode().getValue() + "' in file "
+                    + ackFile.fileName().getValue());
         }
 
         padFile.acknowledged().setValue(SystemDateManager.getDate());
-        padFile.acknowledgmentRejectReasonMessage().setValue(akFile.acknowledgmentRejectReasonMessage().getValue());
+        padFile.acknowledgmentRejectReasonMessage().setValue(ackFile.acknowledgmentRejectReasonMessage().getValue());
 
         if (padFile.acknowledgmentStatus().getValue() == FileAcknowledgmentStatus.Accepted) {
-            assertAcknowledgedValues(padFile, akFile);
-            if (akFile.batches().size() > 0) {
-                throw new Error("Unexpected batches rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
-                        + akFile.fileName().getValue());
+            assertAcknowledgedValues(padFile, ackFile);
+            if (ackFile.batches().size() > 0) {
+                throw new Error("Unexpected batches rejects for acknowledgmentStatus '" + ackFile.acknowledgmentStatusCode().getValue() + "' in file "
+                        + ackFile.fileName().getValue());
             }
-            if (akFile.records().size() > 0) {
-                throw new Error("Unexpected record level rejects for acknowledgmentStatus '" + akFile.acknowledgmentStatusCode().getValue() + "' in file "
-                        + akFile.fileName().getValue());
+            if (ackFile.records().size() > 0) {
+                throw new Error("Unexpected record level rejects for acknowledgmentStatus '" + ackFile.acknowledgmentStatusCode().getValue() + "' in file "
+                        + ackFile.fileName().getValue());
             }
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
@@ -87,9 +87,9 @@ class PadCaledonAcknowledgement {
             executionMonitor.addProcessedEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
         } else if (EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
                 FileAcknowledgmentStatus.BatchLevelReject).contains(padFile.acknowledgmentStatus().getValue())) {
-            assertAcknowledgedValues(padFile, akFile);
-            updateBatches(padFile, akFile);
-            updateRecords(padFile, akFile);
+            assertAcknowledgedValues(padFile, ackFile);
+            updateBatches(padFile, ackFile);
+            updateRecords(padFile, ackFile);
             padFile.status().setValue(PadFile.PadFileStatus.Acknowledged);
             Persistence.service().merge(padFile);
 
@@ -105,39 +105,39 @@ class PadCaledonAcknowledgement {
         }
     }
 
-    private void assertAcknowledgedValues(PadFile padFile, PadAkFile akFile) {
-        if (!padFile.recordsCount().getValue().equals(Integer.valueOf(akFile.recordsCount().getValue()))) {
-            throw new Error("Unexpected recordsCount '" + akFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "'; in akFile "
-                    + akFile.fileCreationNumber().getValue());
+    private void assertAcknowledgedValues(PadFile padFile, PadAckFile ackFile) {
+        if (!padFile.recordsCount().getValue().equals(Integer.valueOf(ackFile.recordsCount().getValue()))) {
+            throw new Error("Unexpected recordsCount '" + ackFile.recordsCount().getValue() + "' != '" + padFile.recordsCount().getValue() + "'; in akFile "
+                    + ackFile.fileCreationNumber().getValue());
         }
-        if (!CaledonPadUtils.formatAmount(padFile.fileAmount().getValue()).equals(akFile.fileAmount().getValue())) {
-            throw new Error("Unexpected fileAmount '" + akFile.fileAmount().getValue() + "', expected'" + padFile.fileAmount().getValue() + "'; in akFile "
-                    + akFile.fileCreationNumber().getValue());
+        if (!CaledonPadUtils.formatAmount(padFile.fileAmount().getValue()).equals(ackFile.fileAmount().getValue())) {
+            throw new Error("Unexpected fileAmount '" + ackFile.fileAmount().getValue() + "', expected'" + padFile.fileAmount().getValue() + "'; in akFile "
+                    + ackFile.fileCreationNumber().getValue());
         }
     }
 
-    private void updateBatches(PadFile padFile, PadAkFile akFile) {
-        for (PadAkBatch akBatch : akFile.batches()) {
+    private void updateBatches(PadFile padFile, PadAckFile ackFile) {
+        for (PadAckBatch akBatch : ackFile.batches()) {
             EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
             criteria.eq(criteria.proto().padFile(), padFile);
             criteria.eq(criteria.proto().batchNumber(), Integer.valueOf(akBatch.batchId().getValue()));
             PadBatch padBatch = Persistence.service().retrieve(criteria);
             if (padBatch == null) {
                 throw new Error("Unexpected batchId '" + akBatch.batchId().getValue() + "', terminalId '" + akBatch.terminalId().getValue() + "' in akFile "
-                        + akFile.fileCreationNumber().getValue());
+                        + ackFile.fileCreationNumber().getValue());
             }
 
             // assert Acknowledged Values
             if (!padBatch.merchantTerminalId().getValue().equals(akBatch.terminalId().getValue())) {
-                throw new Error("Unexpected terminalId '" + akBatch.terminalId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
+                throw new Error("Unexpected terminalId '" + akBatch.terminalId().getValue() + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
             if (!CaledonPadUtils.formatAmount(padBatch.batchAmount().getValue()).equals(akBatch.batchAmount().getValue())) {
                 throw new Error("Unexpected batchAmount '" + akBatch.batchAmount().getValue() + "', terminalId '" + akBatch.terminalId().getValue()
-                        + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
             if (!padBatch.acknowledgmentStatusCode().isNull()) {
                 throw new Error("Already acknowledged batchId '" + akBatch.batchId().getValue() + "', terminalId '" + akBatch.terminalId().getValue()
-                        + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
 
             padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgedReceived);
@@ -148,33 +148,33 @@ class PadCaledonAcknowledgement {
         }
     }
 
-    private void updateRecords(PadFile padFile, PadAkFile akFile) {
-        for (PadAkDebitRecord akDebitRecord : akFile.records()) {
+    private void updateRecords(PadFile padFile, PadAckFile ackFile) {
+        for (PadAckDebitRecord akDebitRecord : ackFile.records()) {
             EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
             criteria.eq(criteria.proto().padBatch().padFile(), padFile);
             criteria.eq(criteria.proto().transactionId(), akDebitRecord.transactionId());
             PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
             if (padDebitRecord == null) {
                 throw new Error("Unexpected transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '" + akDebitRecord.clientId().getValue()
-                        + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
             // assert Acknowledged Values
             if (!CaledonPadUtils.formatAmount(padDebitRecord.amount().getValue()).equals(akDebitRecord.amount().getValue())) {
                 throw new Error("Unexpected recordAmount '" + padDebitRecord.amount().getValue() + "', terminalId '" + akDebitRecord.terminalId().getValue()
-                        + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
             if (!padDebitRecord.clientId().getValue().equals(akDebitRecord.clientId().getValue())) {
                 throw new Error("Unexpected clientId '" + padDebitRecord.clientId().getValue() + "', terminalId '" + akDebitRecord.terminalId().getValue()
-                        + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
             if (!padDebitRecord.acknowledgmentStatusCode().isNull()) {
                 throw new Error("Already acknowledged transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '"
-                        + akDebitRecord.clientId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + akDebitRecord.clientId().getValue() + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
 
             if (padDebitRecord.processed().isBooleanTrue()) {
                 throw new Error("Already processed transactionId '" + akDebitRecord.transactionId().getValue() + "', clientId '"
-                        + akDebitRecord.clientId().getValue() + "' in akFile " + akFile.fileCreationNumber().getValue());
+                        + akDebitRecord.clientId().getValue() + "' in akFile " + ackFile.fileCreationNumber().getValue());
             }
 
             padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgedReceived);

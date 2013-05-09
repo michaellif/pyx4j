@@ -39,7 +39,7 @@ import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadUtils;
-import com.propertyvista.payment.pad.data.PadAkFile;
+import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
 import com.propertyvista.payment.pad.simulator.PadSimFileParser;
 import com.propertyvista.payment.pad.simulator.PadSimReconciliationFileWriter;
@@ -124,7 +124,7 @@ public class PadSim {
         Persistence.service().retrieveMember(padFile.batches());
         updateAcknowledgments(padFile);
 
-        File file = new File(getPadBaseDir(), padFile.fileName().getValue() + PadAkFile.FileNameSufix);
+        File file = new File(getPadBaseDir(), padFile.fileName().getValue() + PadAckFile.FileNameSufix);
         try {
             PadSimAcknowledgementFileWriter writer = new PadSimAcknowledgementFileWriter(padFile, file);
             try {
