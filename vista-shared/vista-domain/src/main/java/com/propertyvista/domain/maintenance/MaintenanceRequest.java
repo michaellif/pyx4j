@@ -112,10 +112,10 @@ public interface MaintenanceRequest extends IEntity {
     @I18n
     public enum DayTime {
 
-        @Translate("9am-12am")
+        @Translate("9am-12pm")
         Morning,
 
-        @Translate("12am-3pm")
+        @Translate("12pm-3pm")
         Afternoon,
 
         @Translate("3pm-6pm")
