@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -27,6 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
@@ -35,6 +38,7 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -47,9 +51,12 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
+import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -87,6 +94,29 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
         }
+
+        @Override
+        protected CEntityForm<?> createEcheckInfoEditor() {
+            @SuppressWarnings("unchecked")
+            final CEntityForm<EcheckInfo> form = (CEntityForm<EcheckInfo>) super.createEcheckInfoEditor();
+            if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+                form.get(form.proto().accountNo()).setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
+                                new DefaultAsyncCallback<EcheckInfo>() {
+                                    @Override
+                                    public void onSuccess(EcheckInfo result) {
+                                        MessageDialog.info(result.accountNo().getStringView());
+                                    }
+                                }, EntityFactory.createIdentityStub(EcheckInfo.class, form.getValue().getPrimaryKey()));
+                    }
+                });
+            }
+
+            return form;
+        };
+
     };
 
     public PaymentForm(IForm<PaymentRecordDTO> view) {

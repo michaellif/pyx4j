@@ -244,6 +244,7 @@ public interface Lease extends IEntity {
     @Detached(level = AttachLevel.Detached)
     ISet<LeaseParticipant<?>> leaseParticipants();
 
+    // Denormalized filed to be able to build query
     @Detached(level = AttachLevel.Detached)
     Tenant _applicant();
 }
