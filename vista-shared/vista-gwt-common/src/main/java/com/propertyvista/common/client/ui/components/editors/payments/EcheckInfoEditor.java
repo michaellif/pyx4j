@@ -22,17 +22,17 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.AccountNumberField;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
+import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.util.ValidationUtils;
 
@@ -50,27 +50,23 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
         int row = -1;
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+        panel.getFlexCellFormatter().setColSpan(row, 0, 1);
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNo(), new AccountNumberField() {
-            @Override
-            public void onRevealNumber() {
-                MessageDialog.info("Ok, display number here...");
-            }
-        }), 20).build());
+        panel.setWidget(
+                ++row,
+                0,
+                new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
+                        "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         if (isEditable()) {
             panel.setWidget(++row, 0, new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri()));
             panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-            panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+            panel.getFlexCellFormatter().setColSpan(row, 0, 1);
         }
-
-        panel.getColumnFormatter().setWidth(0, "70%");
-        panel.getColumnFormatter().setWidth(1, "30%");
 
         panel.setWidth("36em");
         return panel;
