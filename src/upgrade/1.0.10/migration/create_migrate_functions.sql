@@ -25,6 +25,7 @@ BEGIN
         
         ALTER TABLE maintenance_request DROP CONSTRAINT maintenance_request_lease_participant_fk;
         
+        
         -- check constraints
         
         ALTER TABLE id_assignment_item DROP CONSTRAINT id_assignment_item_target_e_ck;
@@ -50,11 +51,20 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        
+        -- lease
+        
+        ALTER TABLE lease       ADD COLUMN _applicant BIGINT,
+                                ADD COLUMN _applicant_discriminator VARCHAR(50);
+        
+        
+        
+        
         -- maintenance_request
         
         ALTER TABLE maintenance_request ADD COLUMN building BIGINT,
-                                        ADD COLUMN building_element BIGINT,
-                                        ADD COLUMN building_element_discriminator VARCHAR(50),
+                                        -- ADD COLUMN building_element BIGINT,
+                                        -- ADD COLUMN building_element_discriminator VARCHAR(50),
                                         ADD COLUMN originator BIGINT,
                                         ADD COLUMN originator_discriminator VARCHAR(50),
                                         ADD COLUMN reporter_email VARCHAR(500),
@@ -63,7 +73,9 @@ BEGIN
                                         ADD COLUMN preferred_date1 DATE,
                                         ADD COLUMN preferred_date2 DATE,
                                         ADD COLUMN preferred_time1 VARCHAR(50),
-                                        ADD COLUMN preferred_time2 VARCHAR(50);
+                                        ADD COLUMN preferred_time2 VARCHAR(50),
+                                        ADD COLUMN unit BIGINT;
+                                        
                                         
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant TO reporter;
         ALTER TABLE maintenance_request RENAME COLUMN lease_participant_discriminator TO reporter_discriminator;
@@ -85,6 +97,17 @@ BEGIN
         ***
         ***     =====================================================================================================
         **/
+        
+        
+        -- lease
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease AS l '
+                ||'SET  _applicant_discriminator = ''Tenant'', '
+                ||'     _applicant = lp.id '
+                ||'FROM '||v_schema_name||'.lease_participant lp '
+                ||'WHERE l.id = lp.lease '
+                ||'AND lp.id_discriminator = ''Tenant'' '; 
+        
         
         -- maintenance_request
         
@@ -114,6 +137,12 @@ BEGIN
                 ||'JOIN '||v_schema_name||'.crm_user_credential$rls ur ON (uc.id = ur.owner) '
                 ||'JOIN '||v_schema_name||'.crm_role r ON (ur.value = r.id) '
                 ||'WHERE r.name = ''PropertyVistaAccountOwner'' ';
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request AS m '
+                ||'SET  unit = l.unit '
+                ||'FROM lease_participant lp '
+                ||'JOIN lease l ON (lp.lease = l.id) '
+                ||'WHERE m.reporter = lp.id ';
                
         
         /**
@@ -126,9 +155,7 @@ BEGIN
         
         -- maintenance_request
         
-        
-        
-        
+             
         
                  
         /**
@@ -141,12 +168,21 @@ BEGIN
         
         -- foreign keys
         
+        SET CONSTRAINTS lease_billing_account_fk IMMEDIATE;
+        SET CONSTRAINTS lease_current_term_fk IMMEDIATE;
+        SET CONSTRAINTS lease_next_term_fk IMMEDIATE;
+        SET CONSTRAINTS lease_previous_term_fk IMMEDIATE;
+        SET CONSTRAINTS lease_unit_fk IMMEDIATE;
+        
+        ALTER TABLE lease ADD CONSTRAINT lease__applicant_fk FOREIGN KEY(_applicant) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+                
         SET CONSTRAINTS maintenance_request_category_fk IMMEDIATE;
         SET CONSTRAINTS maintenance_request_priority_fk IMMEDIATE;
         SET CONSTRAINTS maintenance_request_status_fk IMMEDIATE;
         
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_fk FOREIGN KEY(reporter) REFERENCES lease_participant(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_unit_fk FOREIGN KEY(unit) REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
 
         
         -- check constraints
@@ -157,12 +193,14 @@ BEGIN
         ALTER TABLE id_assignment_sequence ADD CONSTRAINT id_assignment_sequence_target_e_ck 
                 CHECK ((target) IN ('accountNumber', 'application', 'customer', 'employee', 'guarantor', 'lead', 'lease', 'maintenance', 
                 'propertyCode', 'tenant'));
-        ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_building_element_discriminator_d_ck 
-                CHECK ((building_element_discriminator) IN ('LockerArea_BuildingElement', 'Parking_BuildingElement', 'Roof_BuildingElement', 'Unit_BuildingElement'));
+       
+                
+        ALTER TABLE lease ADD CONSTRAINT lease__applicant_discriminator_d_ck CHECK (_applicant_discriminator = 'Tenant');
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_originator_discriminator_d_ck CHECK ((originator_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_reporter_discriminator_d_ck CHECK (reporter_discriminator = 'Tenant');
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_preferred_time1_e_ck CHECK ((preferred_time1) IN ('Afternoon', 'Evening', 'Morning'));
         ALTER TABLE maintenance_request ADD CONSTRAINT maintenance_request_preferred_time2_e_ck CHECK ((preferred_time2) IN ('Afternoon', 'Evening', 'Morning'));
+        
 
 
         
