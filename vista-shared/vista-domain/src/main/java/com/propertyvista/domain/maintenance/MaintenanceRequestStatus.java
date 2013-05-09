@@ -23,6 +23,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 public interface MaintenanceRequestStatus extends IEntity {
+
     @I18n(context = "Maintenance Request")
     public enum StatusPhase {
 
