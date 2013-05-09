@@ -33,7 +33,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -96,23 +95,20 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             int row = -1;
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15, 10).build());
 
-            if (CrmMediaFolder.this.isEditable()) {
-                CTextField utubeEditor = null;
-                main.setWidget(++row, 0, new DecoratorBuilder(utubeEditor = (CTextField) inject(proto().youTubeVideoID()), 25, 10).build());
-                utubeEditor.addValueValidator(new YouTubeVideoIdValidator());
-                utubeEditor.setFormat(new YouTubeVideoIdFormat());
+            CTextField utubeEditor = null;
+            main.setWidget(++row, 0, new DecoratorBuilder(utubeEditor = (CTextField) inject(proto().youTubeVideoID()), 25, 10).build());
+            utubeEditor.addValueValidator(new YouTubeVideoIdValidator());
+            utubeEditor.setFormat(new YouTubeVideoIdFormat());
 
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url()), 25, 10).build());
-            } else {
-                Command showMediaCommand = new Command() {
-                    @Override
-                    public void execute() {
-                        showMedia();
-                    }
-                };
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().youTubeVideoID(), new CHyperlink(showMediaCommand)), 25, 10).build());
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url(), new CHyperlink(showMediaCommand)), 25, 10).build());
-            }
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url()), 25, 10).build());
+            Command showMediaCommand = new Command() {
+                @Override
+                public void execute() {
+                    showMedia();
+                }
+            };
+            get(proto().youTubeVideoID()).setNavigationCommand(showMediaCommand);
+            get(proto().url()).setNavigationCommand(showMediaCommand);
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(imageTarget, new Command() {
                 @Override

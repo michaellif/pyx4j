@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -50,36 +49,6 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         COLUMNS = Arrays.asList((new EntityFolderColumnDescriptor(proto.fileName(), "30em")));
     }
 
-    private static class CDownloadPmcDocumentHyperlink extends CHyperlink<String> {
-
-        public CDownloadPmcDocumentHyperlink() {
-            super("");
-            setCommand(new Command() {
-                @Override
-                public void execute() {
-                    // TODO fix this
-                    Window.open(MediaUtils.createPmcDocumentUrl(((PmcDocumentFileForm) getParent()).getValue()), "_blank", null);
-                }
-            });
-
-            setFormat(new IFormat<String>() {
-                @Override
-                public String format(String value) {
-                    if (value == null || value.equals("")) {
-                        return i18n.tr("No File");
-                    } else {
-                        return value;
-                    }
-                }
-
-                @Override
-                public String parse(String string) throws ParseException {
-                    return string;
-                }
-            });
-        }
-    }
-
     private static class PmcDocumentFileForm extends CEntityFolderRowEditor<PmcDocumentFile> {
 
         public PmcDocumentFileForm() {
@@ -90,7 +59,29 @@ public class PmcDocumentFileFolder extends VistaTableFolder<PmcDocumentFile> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().fileName()) {
-                CComponent<?, ?> cmp = isEditable() ? new CTextField() : new CDownloadPmcDocumentHyperlink();
+                CTextField cmp = new CTextField();
+                cmp.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        // TODO fix this
+                        Window.open(MediaUtils.createPmcDocumentUrl(((PmcDocumentFileForm) getParent()).getValue()), "_blank", null);
+                    }
+                });
+                cmp.setFormat(new IFormat<String>() {
+                    @Override
+                    public String format(String value) {
+                        if (value == null || value.equals("")) {
+                            return i18n.tr("No File");
+                        } else {
+                            return value;
+                        }
+                    }
+
+                    @Override
+                    public String parse(String string) throws ParseException {
+                        return string;
+                    }
+                });
                 inject(column.getObject(), cmp);
                 return cmp;
             }

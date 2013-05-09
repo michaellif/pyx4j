@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
@@ -87,13 +87,15 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> {
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
                 if (member.equals(proto().amount())) {
-                    comp = new CHyperlink<BigDecimal>(new Command() {
+                    comp = new CLabel<BigDecimal>();
+                    comp.setViewable(true);
+                    comp.setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             presenter.view(getValue());
                         }
                     });
-                    comp.setViewable(true);
+
                 } else {
                     comp = super.create(member);
                 }

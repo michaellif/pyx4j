@@ -23,7 +23,6 @@ import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -51,8 +50,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return java.util.Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "15em"),
-
-        new EntityFolderColumnDescriptor(proto().description(), "20em"));
+                new EntityFolderColumnDescriptor(proto().description(), "20em"));
     }
 
     @Override
@@ -63,17 +61,13 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     CComponent<?, ?> comp = null;
                     if (proto().name() == column.getObject()) {
-                        if (isEditable()) {
-                            comp = inject(column.getObject(), new CLabel<String>());
-                        } else {
-                            comp = new CHyperlink(new Command() {
-                                @Override
-                                public void execute() {
-                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Portfolio().formViewerPlace(getValue().id().getValue()));
-                                }
-                            });
-                            comp = inject(column.getObject(), comp);
-                        }
+                        comp = inject(column.getObject(), new CLabel<String>());
+                        comp.setNavigationCommand(new Command() {
+                            @Override
+                            public void execute() {
+                                AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Portfolio().formViewerPlace(getValue().id().getValue()));
+                            }
+                        });
                     } else if (proto().description() == column.getObject()) {
                         comp = inject(column.getObject(), new CLabel<String>());
                     } else {

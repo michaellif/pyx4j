@@ -21,7 +21,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -79,15 +78,17 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp = null;
-            if (!isEditable() && column.getObject().equals(proto().name())) {
-                comp = inject(column.getObject(), new CHyperlink(new Command() {
+            if (column.getObject().equals(proto().name())) {
+                comp = new CLabel<String>();
+                comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class, getValue().getPrimaryKey()));
                     }
-                }));
+                });
+                inject(column.getObject(), comp);
             } else {
-                comp = inject(column.getObject(), new CLabel());
+                comp = super.createCell(column);
             }
             return comp;
         }

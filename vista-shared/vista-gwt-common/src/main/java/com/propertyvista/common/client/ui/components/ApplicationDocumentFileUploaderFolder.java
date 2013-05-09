@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -88,57 +88,36 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().fileName()) {
-                if (isEditable()) {
-                    CComponent<?, ?> comp = inject(column.getObject());
-                    comp.setViewable(true);
-                    return comp;
-                } else {
-                    CHyperlink link = new DownloadDocumentHyperlink() {
-                        @Override
-                        protected ApplicationDocumentFile getApplicationDocument() {
-                            return ApplicationDocumentEditor.this.getValue();
+                CTextField comp = (CTextField) inject(column.getObject(), new CTextField());
+                comp.setViewable(true);
+                comp.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        Window.open(MediaUtils.createApplicationDocumentUrl(ApplicationDocumentEditor.this.getValue()), "_blank", null);
+                    }
+                });
+                comp.setFormat(new IFormat<String>() {
+                    @Override
+                    public String format(String value) {
+                        if (value == null || value.equals("")) {
+                            return i18n.tr("No File");
+                        } else {
+                            return value;
                         }
-                    };
-                    return inject(column.getObject(), link);
-                }
+                    }
+
+                    @Override
+                    public String parse(String string) throws ParseException {
+                        return string;
+                    }
+                });
+                return comp;
+
             } else {
                 CComponent<?, ?> comp = inject(column.getObject());
                 comp.setViewable(true);
                 return comp;
             }
         }
-    }
-
-    private abstract class DownloadDocumentHyperlink extends CHyperlink {
-
-        public DownloadDocumentHyperlink() {
-            super("");
-            setCommand(new Command() {
-                @Override
-                public void execute() {
-                    Window.open(MediaUtils.createApplicationDocumentUrl(getApplicationDocument()), "_blank", null);
-                }
-            });
-
-            setFormat(new IFormat<String>() {
-
-                @Override
-                public String format(String value) {
-                    if (value == null || value.equals("")) {
-                        return i18n.tr("No File");
-                    } else {
-                        return value;
-                    }
-                }
-
-                @Override
-                public String parse(String string) throws ParseException {
-                    return string;
-                }
-            });
-        }
-
-        protected abstract ApplicationDocumentFile getApplicationDocument();
-
     }
 }

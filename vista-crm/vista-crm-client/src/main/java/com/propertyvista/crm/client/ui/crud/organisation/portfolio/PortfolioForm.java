@@ -20,7 +20,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -84,13 +83,15 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
                     @Override
                     protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                         if (proto().propertyCode() == column.getObject()) {
-                            return inject(proto().propertyCode(), new CHyperlink<String>(null, new Command() {
+                            CComponent<?, ?> cmp = inject(proto().propertyCode());
+                            cmp.setNavigationCommand(new Command() {
                                 @Override
                                 public void execute() {
                                     AppSite.getPlaceController().goTo(
                                             AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
                                 }
-                            }));
+                            });
+                            return cmp;
                         }
                         return super.createCell(column);
                     }

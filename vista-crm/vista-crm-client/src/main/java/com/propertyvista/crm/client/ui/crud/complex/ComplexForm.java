@@ -18,7 +18,6 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -48,38 +47,35 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         int row = 0;
 
         panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().name()))).build());
-        if (isEditable()) {
-            panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
-            get(proto().website()).addValueValidator(new EditableValueValidator<String>() {
+        panel.setWidget(row++, 0, (new DecoratorBuilder(inject(proto().website()))).build());
+        get(proto().website()).addValueValidator(new EditableValueValidator<String>() {
 
-                @Override
-                public ValidationError isValid(CComponent<String, ?> component, String url) {
-                    if (url != null) {
-                        if (ValidationUtils.isSimpleUrl(url)) {
-                            return null;
-                        } else {
-                            return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
-                        }
+            @Override
+            public ValidationError isValid(CComponent<String, ?> component, String url) {
+                if (url != null) {
+                    if (ValidationUtils.isSimpleUrl(url)) {
+                        return null;
+                    } else {
+                        return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
-                    return null;
                 }
-            });
-        } else {
-            panel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().website(), new CHyperlink(new Command() {
-                @Override
-                public void execute() {
-                    String url = getValue().website().getValue();
-                    if (!ValidationUtils.urlHasProtocol(url)) {
-                        url = "http://" + url;
-                    }
-                    if (!ValidationUtils.isCorrectUrl(url)) {
-                        throw new Error(i18n.tr("The URL is not in proper format"));
-                    }
+                return null;
+            }
+        });
+        get(proto().website()).setNavigationCommand(new Command() {
+            @Override
+            public void execute() {
+                String url = getValue().website().getValue();
+                if (!ValidationUtils.urlHasProtocol(url)) {
+                    url = "http://" + url;
+                }
+                if (!ValidationUtils.isCorrectUrl(url)) {
+                    throw new Error(i18n.tr("The URL is not in proper format"));
+                }
 
-                    Window.open(url, proto().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
-                }
-            })), 50).build());
-        }
+                Window.open(url, proto().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+            }
+        });
 
         return panel;
     }

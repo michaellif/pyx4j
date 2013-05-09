@@ -21,7 +21,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
@@ -75,18 +74,16 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp;
             if (column.getObject() == proto().type()) {
-                if (isEditable()) {
-                    comp = inject(proto().type(), new CEnumLabel());
-                } else {
-                    comp = inject(proto().type(), new CHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            CrudAppPlace place = new CrmSiteMap.Properties.Service();
-                            place.formViewerPlace(getValue().getPrimaryKey());
-                            AppSite.getPlaceController().goTo(place);
-                        }
-                    }));
-                }
+                comp = new CEnumLabel();
+                comp.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        CrudAppPlace place = new CrmSiteMap.Properties.Service();
+                        place.formViewerPlace(getValue().getPrimaryKey());
+                        AppSite.getPlaceController().goTo(place);
+                    }
+                });
+                inject(proto().type(), comp);
             } else {
                 comp = super.createCell(column);
             }

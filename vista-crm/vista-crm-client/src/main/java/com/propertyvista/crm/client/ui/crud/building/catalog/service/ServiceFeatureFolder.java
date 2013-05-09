@@ -25,7 +25,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -81,16 +80,14 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
         public CComponent<?, ?> create(IObject<?> member) {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().type())) {
-                if (ServiceFeatureFolder.this.isEditable()) {
-                    comp = new CEnumLabel();
-                } else {
-                    comp = new CHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Feature.class).formViewerPlace(getValue().getPrimaryKey()));
-                        }
-                    });
-                }
+                comp = new CEnumLabel();
+                comp.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Feature.class).formViewerPlace(getValue().getPrimaryKey()));
+                    }
+                });
+
             } else {
                 comp = super.create(member);
             }

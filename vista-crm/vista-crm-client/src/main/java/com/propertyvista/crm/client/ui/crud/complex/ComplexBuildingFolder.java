@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -100,12 +99,14 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().propertyCode() == column.getObject()) {
-                return inject(proto().propertyCode(), new CHyperlink<String>(null, new Command() {
+                CComponent<?, ?> comp = inject(proto().propertyCode());
+                comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
                     }
-                }));
+                });
+                return comp;
             } else if (proto().info() == column.getObject()) {
                 return inject(proto().info(), new CEntityLabel<BuildingInfo>());
             } else if (column.getObject() == proto().complexPrimary() && isEditable()) {

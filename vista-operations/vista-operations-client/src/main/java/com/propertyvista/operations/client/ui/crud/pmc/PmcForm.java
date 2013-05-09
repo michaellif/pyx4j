@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -97,7 +97,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CHyperlink(new Command() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CLabel<String>()), 50).build());
+        get(proto().vistaCrmUrl()).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().vistaCrmUrl().getValue();
@@ -111,9 +112,10 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 Window.open(url, getValue().dnsName().getStringView() + "_Crm", null);
             }
 
-        })), 50).build());
+        });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CHyperlink(new Command() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CLabel<String>()), 50).build());
+        get(proto().residentPortalUrl()).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().residentPortalUrl().getValue();
@@ -127,9 +129,10 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 Window.open(url, getValue().dnsName().getStringView() + "_Portal", null);
             }
 
-        })), 50).build());
+        });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CHyperlink(new Command() {
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CLabel<String>()), 50).build());
+        get(proto().prospectPortalUrl()).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().prospectPortalUrl().getValue();
@@ -143,7 +146,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
                 Window.open(url, getValue().dnsName().getStringView() + "_Ptapp", null);
             }
 
-        })), 50).build());
+        });
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());

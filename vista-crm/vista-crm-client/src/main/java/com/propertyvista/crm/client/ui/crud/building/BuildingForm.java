@@ -27,7 +27,6 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -247,40 +246,36 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
         main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
 
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
-            get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
-
-                @Override
-                public ValidationError isValid(CComponent<String, ?> component, String url) {
-                    if (url != null) {
-                        if (ValidationUtils.isSimpleUrl(url)) {
-                            return null;
-                        } else {
-                            return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
-                        }
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
+        get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
+            @Override
+            public ValidationError isValid(CComponent<String, ?> component, String url) {
+                if (url != null) {
+                    if (ValidationUtils.isSimpleUrl(url)) {
+                        return null;
+                    } else {
+                        return new ValidationError(component, i18n.tr("Please use proper URL format, e.g. www.propertyvista.com"));
                     }
-                    return null;
                 }
-            });
-        } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website(), new CHyperlink(new Command() {
-                @Override
-                public void execute() {
-                    String url = getValue().contacts().website().getValue();
-                    if (!ValidationUtils.urlHasProtocol(url)) {
-                        url = "http://" + url;
-                    }
-                    if (!ValidationUtils.isCorrectUrl(url)) {
-                        throw new Error(i18n.tr("The URL is not in proper format"));
-                    }
-
-                    Window.open(url, proto().contacts().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+                return null;
+            }
+        });
+        get(proto().contacts().website()).setNavigationCommand(new Command() {
+            @Override
+            public void execute() {
+                String url = getValue().contacts().website().getValue();
+                if (!ValidationUtils.urlHasProtocol(url)) {
+                    url = "http://" + url;
+                }
+                if (!ValidationUtils.isCorrectUrl(url)) {
+                    throw new Error(i18n.tr("The URL is not in proper format"));
                 }
 
-            })), 50).build());
-        }
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+                Window.open(url, proto().contacts().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
+            }
+
+        });
+        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
         main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));

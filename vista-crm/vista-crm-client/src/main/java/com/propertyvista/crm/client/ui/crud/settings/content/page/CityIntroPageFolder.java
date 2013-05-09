@@ -20,7 +20,6 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -81,16 +80,13 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().cityName())) {
                 CComponent<?, ?> comp = null;
-                if (parent.isEditable()) {
-                    comp = inject(column.getObject(), new CLabel<String>());
-                } else {
-                    comp = inject(column.getObject(), new CHyperlink(new Command() {
-                        @Override
-                        public void execute() {
-                            viewer.viewChild(getValue().getPrimaryKey(), Content.CityIntroPage.class);
-                        }
-                    }));
-                }
+                comp = inject(column.getObject(), new CLabel<String>());
+                comp.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        viewer.viewChild(getValue().getPrimaryKey(), Content.CityIntroPage.class);
+                    }
+                });
                 return comp;
             }
             return super.createCell(column);
