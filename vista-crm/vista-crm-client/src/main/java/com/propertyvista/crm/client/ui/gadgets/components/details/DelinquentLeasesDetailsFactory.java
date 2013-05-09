@@ -36,15 +36,15 @@ public class DelinquentLeasesDetailsFactory extends AbstractListerDetailsFactory
                     new Builder(proto().unitNumber()).build(),
                   
                     new Builder(proto().leaseId()).build(),
-                    
-                    new Builder(proto().participantId()).build(),                    
-                    
-                    new Builder(proto().primaryApplicantsFirstName()).build(),
-                    new Builder(proto().primaryApplicantsLastName()).build(),
-                    new Builder(proto().mobilePhone()).build(),
-                    new Builder(proto().homePhone()).visible(false).build(),
-                    new Builder(proto().workPhone()).visible(false).build(),
-                    new Builder(proto().email()).build(),
+
+                    // TODO fix sortable when primary tenant is a normalized field in the lease (and not in current term)
+                    new Builder(proto().participantId()).searchable(true).sortable(false).build(),                                        
+                    new Builder(proto().primaryApplicantsFirstName()).searchable(true).sortable(false).build(),
+                    new Builder(proto().primaryApplicantsLastName()).searchable(true).sortable(false).build(),
+                    new Builder(proto().mobilePhone()).searchable(true).sortable(false).build(),
+                    new Builder(proto().homePhone()).searchable(true).sortable(false).visible(false).build(),
+                    new Builder(proto().workPhone()).searchable(true).sortable(false).visible(false).build(),
+                    new Builder(proto().email()).searchable(true).sortable(false).build(),
                                                                                 
                     new Builder(proto().arrears().bucketThisMonth()).searchable(true).sortable(true).build(),
                     new Builder(proto().arrears().bucket30()).searchable(true).sortable(true).build(),
