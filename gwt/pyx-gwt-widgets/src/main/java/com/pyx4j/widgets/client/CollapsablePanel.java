@@ -66,6 +66,7 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
         mainPanel.setCellWidth(collapseImage, collapseImage.getWidth() + "px");
         contentHolder = new SimplePanel();
         mainPanel.add(contentHolder);
+        mainPanel.setCellVerticalAlignment(contentHolder, HorizontalPanel.ALIGN_MIDDLE);
 
         super.setWidget(mainPanel);
     }
