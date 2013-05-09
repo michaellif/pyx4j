@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.OptionsFilter;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -32,26 +33,22 @@ import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class AvailableLocaleSelectorDialog extends Dialog implements CancelOption {
+    private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
+
+    private final static String title = "Select Locale";
+
+    private final Set<AvailableLocale> usedLocales;
+
     private final VerticalPanel panel = new VerticalPanel();
 
     public AvailableLocaleSelectorDialog(final Set<AvailableLocale> usedLocales, final ValueChangeHandler<AvailableLocale> selectHandler) {
-        super("Select Locale");
+        super(i18n.tr(title));
         setDialogOptions(this);
 
+        this.usedLocales = usedLocales;
+
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-        localeSelector.setNoSelectionText("Select Locale");
-        if (usedLocales != null) {
-            final Set<CompiledLocale> clSet = new HashSet<CompiledLocale>();
-            for (AvailableLocale al : usedLocales) {
-                clSet.add(al.lang().getValue());
-            }
-            localeSelector.setOptionsFilter(new OptionsFilter<AvailableLocale>() {
-                @Override
-                public boolean acceptOption(AvailableLocale al) {
-                    return !clSet.contains(al.lang().getValue());
-                }
-            });
-        }
+        localeSelector.setNoSelectionText(i18n.tr(title));
         // this triggers option load
         localeSelector.setValueByString("");
         if (localeSelector.isOptionsLoaded()) {
@@ -78,6 +75,19 @@ public class AvailableLocaleSelectorDialog extends Dialog implements CancelOptio
     }
 
     private void setContentPanel(CEntityComboBox<AvailableLocale> localeSelector) {
+        if (usedLocales != null) {
+            final Set<CompiledLocale> clSet = new HashSet<CompiledLocale>();
+            for (AvailableLocale al : usedLocales) {
+                clSet.add(al.lang().getValue());
+            }
+            localeSelector.setOptionsFilter(new OptionsFilter<AvailableLocale>() {
+                @Override
+                public boolean acceptOption(AvailableLocale al) {
+                    return !clSet.contains(al.lang().getValue());
+                }
+            });
+        }
+
         int optSize = localeSelector.getOptions().size();
         if (optSize == 0) {
             panel.add(new Label("Sorry, no more items to choose from."));
