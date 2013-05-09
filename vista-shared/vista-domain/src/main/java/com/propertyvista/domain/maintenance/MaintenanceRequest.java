@@ -89,7 +89,6 @@ public interface MaintenanceRequest extends IEntity {
     IPrimitive<Date> submitted();
 
     @Caption(name = "Last Updated")
-    @Timestamp(Update.Updated)
     IPrimitive<Date> updated();
 
     // --------------------------------------

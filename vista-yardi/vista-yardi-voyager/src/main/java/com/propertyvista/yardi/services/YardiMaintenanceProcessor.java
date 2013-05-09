@@ -227,7 +227,9 @@ public class YardiMaintenanceProcessor {
         mr.description().setValue(request.getProblemDescriptionNotes());
         mr.permissionToEnter().setValue(request.isHasPermissionToEnter());
         mr.petInstructions().setValue(request.getAccessNotes());
-        mr.submitted().setValue(request.getServiceRequestDate());
+        if (mr.submitted().isNull()) {
+            mr.submitted().setValue(request.getServiceRequestDate());
+        }
         mr.updated().setValue(request.getUpdateDate().toGregorianCalendar().getTime());
 
         return mr;

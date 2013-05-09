@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -52,8 +53,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     private final FormFlexPanel statusPanel = new FormFlexPanel();
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
-
-    private final StatusSelector statusSelector = new StatusSelector();
 
     private boolean choicesReady = false;
 
@@ -106,7 +105,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         int innerRow = -1;
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), statusSelector), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10).build());
         statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
         statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         statusPanel.setBR(++innerRow, 0, 1);
@@ -115,6 +114,12 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         content.setWidget(++row, 0, statusPanel);
 
         // tweaks:
+        get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                permissionPanel.setVisible(event.getValue());
+            }
+        });
 
         get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -125,13 +130,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         });
 
         get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
-
-        get(proto().reportedForOwnUnit()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                permissionPanel.setVisible(Boolean.TRUE.equals(event.getValue()));
-            }
-        });
 
         return content;
     }
@@ -201,22 +199,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         @Override
         public boolean isValuesEquals(MaintenanceRequestPriority value1, MaintenanceRequestPriority value2) {
-            return value1 != null && value2 != null && value1.name().equals(value2.name());
-        }
-    }
-
-    class StatusSelector extends CComboBox<MaintenanceRequestStatus> {
-        @Override
-        public String getItemName(MaintenanceRequestStatus o) {
-            if (o == null) {
-                return super.getItemName(o);
-            } else {
-                return o.getStringView();
-            }
-        }
-
-        @Override
-        public boolean isValuesEquals(MaintenanceRequestStatus value1, MaintenanceRequestStatus value2) {
             return value1 != null && value2 != null && value1.name().equals(value2.name());
         }
     }
