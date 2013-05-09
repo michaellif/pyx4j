@@ -86,7 +86,7 @@ public abstract class MaintenanceAbstractManager {
             request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
             isNewRequest = true;
         }
-        Persistence.secureSave(request);
+        Persistence.service().merge(request);
 
         if (isNewRequest) {
             sendAdminNote(request, true);
@@ -97,28 +97,28 @@ public abstract class MaintenanceAbstractManager {
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
         request.updated().setValue(SystemDateManager.getDate());
-        Persistence.service().persist(request);
+        Persistence.service().merge(request);
 
         sendReporterNote(request, false);
     }
 
     public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
         request.surveyResponse().set(rate);
-        Persistence.service().persist(request);
+        Persistence.service().merge(request);
     }
 
     public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
         request.scheduledDate().setValue(date);
         request.scheduledTime().setValue(time);
         request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
-        Persistence.service().persist(request);
+        Persistence.service().merge(request);
 
         sendReporterNote(request, false);
     }
 
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
         request.status().set(getMaintenanceStatus(StatusPhase.Resolved));
-        Persistence.service().persist(request);
+        Persistence.service().merge(request);
 
         sendReporterNote(request, false);
     }
