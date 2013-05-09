@@ -153,7 +153,8 @@ public abstract class ARAbstractTransactionManager {
                 balance = balance.add(credit.outstandingCredit().getValue());
             }
         }
-        return balance;
+        // no charge for negative balance
+        return balance.compareTo(BigDecimal.ZERO) > 0 ? balance : BigDecimal.ZERO;
     }
 
     public LogicalDate getTransactionDueDate(BillingAccount billingAccount, LogicalDate postDate) {

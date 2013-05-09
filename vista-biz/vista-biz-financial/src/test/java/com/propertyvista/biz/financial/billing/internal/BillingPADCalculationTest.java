@@ -100,6 +100,32 @@ public class BillingPADCalculationTest extends FinancialTestBase {
 
         assertEquals("PAD Balance", new BigDecimal("1244.27"), getPADBalance(bill.billingCycle()));
 
+        //==================== RUN 2 ======================//
+        // Negative balance case: PAD amount should be 0.00
+
+        advanceSysDate("18-Apr-2011");
+
+        addGoodWillCredit("5000");
+
+        bill = runBilling(true);
+
+        // @formatter:off
+        new BillTester(bill).
+        billSequenceNumber(3).
+        billType(Bill.BillType.Regular).
+        billingPeriodStartDate("01-May-2011").
+        billingPeriodEndDate("31-May-2011").
+        numOfProductCharges(4).
+        paymentReceivedAmount("0.00").
+        serviceCharge("930.30").
+        recurringFeatureCharges("160.00").
+        oneTimeFeatureCharges("0.00").
+        taxes("130.84").
+        totalDueAmount("-832.88"); // no payment required
+        // @formatter:on
+
+        assertTrue("PAD Balance", new BigDecimal("0.00").compareTo(getPADBalance(bill.billingCycle())) == 0);
+
         printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
