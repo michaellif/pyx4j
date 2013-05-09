@@ -49,7 +49,8 @@ public class CustomizablePage extends BasePage implements IMarkupResourceStreamP
     public String getVariation() {
         PMSiteContentManager cm = getCM();
         if (cm != null && cm.isCustomResidentsContentEnabled()) {
-            return NamespaceManager.getNamespace();
+            // cache markup per PMC + locale
+            return NamespaceManager.getNamespace() + ((PMSiteWebRequest) getRequest()).getSiteLocale().getStringView();
         } else {
             return super.getVariation();
         }
