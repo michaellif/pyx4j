@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NativeEntityPanel<E>> implements IEditableComponentFactory {
+public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NEntityContainer<E>> implements IEditableComponentFactory {
 
     private ImageResource icon;
 
@@ -56,8 +56,8 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     @Override
-    protected NativeEntityPanel<E> createWidget() {
-        return new NativeEntityPanel<E>(this);
+    protected NEntityContainer<E> createWidget() {
+        return new NEntityContainer<E>(this);
     }
 
     public final void initContent() {

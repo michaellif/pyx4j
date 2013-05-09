@@ -27,6 +27,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.FocusHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.ListBox;
 
 import com.pyx4j.commons.IDebugId;
@@ -185,4 +186,9 @@ public class NativeListBox<E> extends TriggerComponent<List<E>> implements INati
 
     }
 
+    @Override
+    public void setNavigationCommand(Command navigationCommand) {
+        // TODO Auto-generated method stub
+
+    }
 }

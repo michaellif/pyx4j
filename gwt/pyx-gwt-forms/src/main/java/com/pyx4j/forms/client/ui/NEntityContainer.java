@@ -35,17 +35,17 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.widgets.client.Button;
 
-public class NativeEntityPanel<E extends IObject<?>> extends FlowPanel implements INativeComponent<E>, RequiresResize, ProvidesResize {
+public class NEntityContainer<E extends IObject<?>> extends FlowPanel implements INativeComponent<E>, RequiresResize, ProvidesResize {
 
-    private static final Logger log = LoggerFactory.getLogger(NativeEntityPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(NEntityContainer.class);
 
-    private final CEntityContainer<?> container;
+    private final CEntityContainer<E> container;
 
     private final SimplePanel contentHolder;
 
     private boolean viewable;
 
-    public NativeEntityPanel(final CEntityContainer<E> container) {
+    public NEntityContainer(final CEntityContainer<E> container) {
         this.container = container;
 
         if (false) {
@@ -135,6 +135,12 @@ public class NativeEntityPanel<E extends IObject<?>> extends FlowPanel implement
 
     @Override
     public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setNavigationCommand(Command navigationCommand) {
         // TODO Auto-generated method stub
 
     }

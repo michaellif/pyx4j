@@ -38,6 +38,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -117,6 +118,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private boolean unconditionalValidationErrorRendering;
 
+    private Command navigationCommand;
+
     public CComponent() {
         this(null);
     }
@@ -176,6 +179,13 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         this.height = height;
         if (isWidgetCreated()) {
             asWidget().setHeight(height);
+        }
+    }
+
+    public void setNavigationCommand(Command navigationCommand) {
+        this.navigationCommand = navigationCommand;
+        if (isWidgetCreated()) {
+            widget.setNavigationCommand(navigationCommand);
         }
     }
 
@@ -411,6 +421,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         applyAccessibilityRules();
         widget.setWidth(getWidth());
         widget.setHeight(getHeight());
+        widget.setNavigationCommand(navigationCommand);
 
         setNativeValue(getValue());
 

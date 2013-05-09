@@ -39,6 +39,7 @@ import com.google.gwt.event.dom.client.HasDoubleClickHandlers;
 import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -491,6 +492,12 @@ public abstract class NativeListSelectionComposite<E> extends FlexTable implemen
 
     @Override
     public void setDebugId(IDebugId debugId) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setNavigationCommand(Command navigationCommand) {
         // TODO Auto-generated method stub
 
     }

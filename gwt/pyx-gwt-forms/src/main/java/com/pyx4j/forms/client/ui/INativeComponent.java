@@ -22,6 +22,8 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
+import com.google.gwt.user.client.Command;
+
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.IWidget;
 
@@ -36,6 +38,8 @@ public interface INativeComponent<E> extends IWidget {
     void setNativeValue(E value);
 
     E getNativeValue() throws ParseException;
+
+    void setNavigationCommand(Command navigationCommand);
 
     void setDebugId(IDebugId debugId);
 
