@@ -31,7 +31,6 @@ public class CLabel<E> extends CComponent<E, NLabel<E>> {
     public CLabel(String title) {
         super(title);
         setFormat(new LabelFormat());
-        setViewable(true);
     }
 
     public void setFormat(IFormat<E> format) {
