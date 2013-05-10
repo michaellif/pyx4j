@@ -28,7 +28,6 @@ public class LeadValidator extends CompositeEntityValidator<Lead> {
         bind(proto().leaseType(), new NotNullValidator());
         bind(proto().leaseTerm(), new NotNullValidator());
         bind(proto().moveInDate(), new NotNullValidator());
-        bind(proto().floorplan(), new NotNullValidator());
         bind(proto().agent(), new NotNullValidator());
     }
 }
