@@ -25,7 +25,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -146,7 +146,39 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             left.setHR(++row, 0, 1);
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), new CCreditCheckReportHyperlink()), 10).build());
+
+            CLabel<Key> creditCheckReport = new CLabel<Key>(i18n.tr("View Full Report"));
+            creditCheckReport.setFormat(new IFormat<Key>() {
+                @Override
+                public String format(Key value) {
+                    if (value != null) {
+                        return i18n.tr("View");
+                    } else {
+                        return null;
+                    }
+                }
+
+                @Override
+                public Key parse(String string) {
+                    return null;
+                }
+            });
+            creditCheckReport.setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    ((LeaseApplicationViewerView.Presenter) ((IViewer<?>) view).getPresenter())
+                            .isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
+
+                                @Override
+                                public void onSuccess(VoidSerializable result) {
+                                    AppSite.getPlaceController().goTo(
+                                            new CrmSiteMap.Tenants.CustomerCreditCheckLongReport().formViewerPlace(LeaseParticipanApprovalViewer.this
+                                                    .getValue().leaseParticipant().leaseParticipant().customer().getPrimaryKey()));
+                                }
+                            });
+                }
+            });
+            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), creditCheckReport), 10).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -186,45 +218,6 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             get(proto().creditCheck().reason()).setVisible(creditCheckResult != CreditCheckResult.Accept);
 
             get(proto().creditCheck().creditCheckReport()).setVisible(!getValue().creditCheck().creditCheckReport().isNull());
-        }
-
-        private class CCreditCheckReportHyperlink extends CHyperlink<Key> {
-
-            public CCreditCheckReportHyperlink() {
-                super(i18n.tr("View Full Report"));
-
-                setCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        ((LeaseApplicationViewerView.Presenter) ((IViewer<?>) view).getPresenter())
-                                .isCreditCheckViewAllowed(new DefaultAsyncCallback<VoidSerializable>() {
-
-                                    @Override
-                                    public void onSuccess(VoidSerializable result) {
-                                        AppSite.getPlaceController().goTo(
-                                                new CrmSiteMap.Tenants.CustomerCreditCheckLongReport().formViewerPlace(LeaseParticipanApprovalViewer.this
-                                                        .getValue().leaseParticipant().leaseParticipant().customer().getPrimaryKey()));
-                                    }
-                                });
-                    }
-                });
-
-                setFormat(new IFormat<Key>() {
-                    @Override
-                    public String format(Key value) {
-                        if (value != null) {
-                            return i18n.tr("View");
-                        } else {
-                            return null;
-                        }
-                    }
-
-                    @Override
-                    public Key parse(String string) {
-                        return null;
-                    }
-                });
-            }
         }
     }
 }
