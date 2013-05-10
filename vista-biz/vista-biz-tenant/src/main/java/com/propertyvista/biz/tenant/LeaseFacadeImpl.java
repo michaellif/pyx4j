@@ -89,7 +89,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.shared.NotesParentId;
@@ -1118,14 +1117,9 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
     private void updateLeaseApplicantReference(Lease lease) {
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
-            if (tenant.role().getValue() == Role.Applicant) {
-                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-                criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant.leaseParticipant().customer()));
-                lease._applicant().set(Persistence.service().retrieve(criteria));
-                break;
-            }
+        for (LeaseTermTenant leaseTermTenant : lease.currentTerm().version().tenants()) {
+            lease._applicant().set(leaseTermTenant.leaseParticipant());
+            break;
         }
     }
 
