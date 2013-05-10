@@ -97,7 +97,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
         panel.setWidget(++row, 0, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
+        if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().prorationMethod()).setVisible(false);
             get(proto().confirmationMethod()).setVisible(false);
         }
