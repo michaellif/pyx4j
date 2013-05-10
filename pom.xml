@@ -189,6 +189,7 @@
         <module>vista-shared</module>
         <module>vista-yardi</module>
         <module>vista-ils</module>
+        <module>vista-oapi</module>
         <module>vista-operations</module>
         <module>vista-onboarding</module>
         <module>vista-field</module>

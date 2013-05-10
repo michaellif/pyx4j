@@ -13,13 +13,12 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-yardi</artifactId>
-    <name>vista-yardi</name>
+    <artifactId>vista-oapi</artifactId>
+    <name>vista-oapi</name>
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-yardi-voyager-wsdl</module>
-        <module>vista-yardi-voyager</module>
+        <module>vista-oapi-interface</module>
     </modules>
 
 </project>
