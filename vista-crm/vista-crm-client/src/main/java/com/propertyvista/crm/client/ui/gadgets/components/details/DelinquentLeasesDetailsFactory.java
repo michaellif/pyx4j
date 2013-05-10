@@ -37,14 +37,13 @@ public class DelinquentLeasesDetailsFactory extends AbstractListerDetailsFactory
                   
                     new Builder(proto().leaseId()).build(),
 
-                    // TODO fix sortable when primary tenant is a normalized field in the lease (and not in current term)
-                    new Builder(proto().participantId()).searchable(true).sortable(false).build(),                                        
-                    new Builder(proto().primaryApplicantsFirstName()).searchable(true).sortable(false).build(),
-                    new Builder(proto().primaryApplicantsLastName()).searchable(true).sortable(false).build(),
-                    new Builder(proto().mobilePhone()).searchable(true).sortable(false).build(),
-                    new Builder(proto().homePhone()).searchable(true).sortable(false).visible(false).build(),
-                    new Builder(proto().workPhone()).searchable(true).sortable(false).visible(false).build(),
-                    new Builder(proto().email()).searchable(true).sortable(false).build(),
+                    new Builder(proto().participantId()).searchable(true).sortable(true).build(),                                        
+                    new Builder(proto().primaryApplicantsFirstName()).searchable(true).sortable(true).build(),
+                    new Builder(proto().primaryApplicantsLastName()).searchable(true).sortable(true).build(),                    
+                    new Builder(proto().mobilePhone()).searchable(true).sortable(true).build(),
+                    new Builder(proto().homePhone()).searchable(true).sortable(true).visible(false).build(),
+                    new Builder(proto().workPhone()).searchable(true).sortable(true).visible(false).build(),
+                    new Builder(proto().email()).searchable(true).sortable(true).build(),
                                                                                 
                     new Builder(proto().arrears().bucketThisMonth()).searchable(true).sortable(true).build(),
                     new Builder(proto().arrears().bucket30()).searchable(true).sortable(true).build(),
