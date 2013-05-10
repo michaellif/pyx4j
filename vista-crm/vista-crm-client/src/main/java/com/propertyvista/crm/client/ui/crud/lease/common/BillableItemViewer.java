@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +26,9 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -45,6 +49,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
@@ -232,12 +237,35 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
             }
 
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                if (column.getObject() == proto().value()) {
-                    // TODO : inject value place holder here:
-                    return super.createCell(column);
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                bindValueEditor(getValue().type().getValue(), populate);
+            }
+
+            private void bindValueEditor(Type valueType, boolean populate) {
+                CComponent<?, ?> comp = null;
+                if (valueType != null) {
+                    switch (valueType) {
+                    case monetary:
+                        comp = new CMoneyField();
+                        break;
+                    case percentage:
+                        comp = new CPercentageField();
+                        break;
+                    }
                 }
-                return super.createCell(column);
+
+                if (comp != null) {
+                    @SuppressWarnings("unchecked")
+                    IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().value())).getDecorator();
+                    unbind(proto().value());
+                    inject(proto().value(), comp);
+                    comp.setDecorator(decor);
+
+                    if (populate) {
+                        get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
+                    }
+                }
             }
         }
     }

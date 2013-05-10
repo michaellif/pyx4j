@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -26,7 +28,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CMoneyField;
+import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -53,6 +58,7 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -308,13 +314,53 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 super(BillableItemAdjustment.class, columns());
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                if (column.getObject() == proto().value()) {
-                    // TODO : inject value place holder here:
-                    return super.createCell(column);
+                CComponent<?, ?> comp = super.createCell(column);
+
+                if (column.getObject() == proto().type()) {
+                    ((CComponent<Type, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Type>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<Type> event) {
+                            bindValueEditor(event.getValue(), false);
+                        }
+                    });
                 }
-                return super.createCell(column);
+
+                return comp;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                bindValueEditor(getValue().type().getValue(), populate);
+            }
+
+            private void bindValueEditor(Type valueType, boolean populate) {
+                CComponent<?, ?> comp = null;
+                if (valueType != null) {
+                    switch (valueType) {
+                    case monetary:
+                        comp = new CMoneyField();
+                        break;
+                    case percentage:
+                        comp = new CPercentageField();
+                        break;
+                    }
+                }
+
+                if (comp != null) {
+                    @SuppressWarnings("unchecked")
+                    IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().value())).getDecorator();
+                    unbind(proto().value());
+                    inject(proto().value(), comp);
+                    comp.setDecorator(decor);
+
+                    if (populate) {
+                        get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));
+                    }
+                }
             }
 
             @Override
