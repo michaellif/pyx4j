@@ -88,7 +88,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-yardi-voyager</artifactId>
+            <artifactId>vista-yardi-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -247,7 +247,7 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>com.propertyvista</groupId>
-                                    <artifactId>vista-yardi-voyager-wsdl</artifactId>
+                                    <artifactId>vista-yardi-interface-wsdl</artifactId>
                                     <version>${project.version}</version>
                                     <type>jar</type>
                                     <overWrite>true</overWrite>

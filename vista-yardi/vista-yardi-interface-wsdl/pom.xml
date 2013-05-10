@@ -11,8 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-yardi-voyager-wsdl</artifactId>
-    <name>vista-yardi-voyager-wsdl</name>
+    <artifactId>vista-yardi-interface-wsdl</artifactId>
+    <name>vista-yardi-interface-wsdl</name>
 
     <dependencies>
 
@@ -20,7 +20,6 @@
             <groupId>org.apache.axis2</groupId>
             <artifactId>axis2-adb</artifactId>
         </dependency>
-
 
         <dependency>
             <groupId>com.pyx4j</groupId>
@@ -186,7 +185,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
@@ -207,7 +206,7 @@
                     <packageName>com.yardi.ws</packageName>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

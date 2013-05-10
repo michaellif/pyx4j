@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-yardi-voyager</artifactId>
-    <name>vista-yardi-voyager</name>
+    <artifactId>vista-yardi-interface</artifactId>
+    <name>vista-yardi-interface</name>
 
     <dependencies>
 

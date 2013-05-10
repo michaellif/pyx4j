@@ -18,8 +18,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>vista-yardi-voyager-wsdl</module>
-        <module>vista-yardi-voyager</module>
+        <module>vista-yardi-interface-wsdl</module>
+        <module>vista-yardi-interface</module>
     </modules>
 
 </project>

@@ -29,7 +29,7 @@
             <artifactId>vista-operations-rpc</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-biz-system</artifactId>
@@ -50,7 +50,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-yardi-interface</artifactId>
+            <artifactId>vista-oapi-interface</artifactId>
             <version>${project.version}</version>
         </dependency>
 

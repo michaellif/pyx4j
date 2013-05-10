@@ -11,8 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-yardi-interface</artifactId>
-    <name>vista-yardi-interface</name>
+    <artifactId>vista-oapi-interface</artifactId>
+    <name>vista-oapi-interface</name>
 
     <dependencies>
 
