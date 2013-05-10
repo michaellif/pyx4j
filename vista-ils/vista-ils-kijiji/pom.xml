@@ -20,6 +20,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-ils-kijiji-gen</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-server-config</artifactId>
             <version>${project.version}</version>
         </dependency>

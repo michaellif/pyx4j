@@ -19,6 +19,7 @@
 
     <modules>
         <module>vista-ils-kijiji</module>
+        <module>vista-ils-kijiji-gen</module>
     </modules>
 
 </project>
