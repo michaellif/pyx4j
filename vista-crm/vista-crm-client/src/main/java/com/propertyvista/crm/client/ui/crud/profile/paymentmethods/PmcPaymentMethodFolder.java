@@ -16,20 +16,34 @@ package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
 import java.util.Collection;
 import java.util.EnumSet;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.shared.SecurityController;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
+
+    private static final I18n i18n = I18n.get(PmcPaymentMethodFolder.class);
 
     public class PmcPaymentMethodEditor extends PaymentMethodEditor<PmcPaymentMethod> {
 
@@ -70,6 +84,33 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
             });
         }
 
+        @Override
+        protected CEntityForm<?> createEcheckInfoEditor() {
+            return new EcheckInfoEditor() {
+                @Override
+                public IsWidget createContent() {
+                    IsWidget content = super.createContent();
+
+                    if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+                        get(proto().accountNo()).setNavigationCommand(new Command() {
+                            @Override
+                            public void execute() {
+                                GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
+                                        new DefaultAsyncCallback<EcheckInfo>() {
+                                            @Override
+                                            public void onSuccess(EcheckInfo result) {
+                                                MessageDialog.info(i18n.tr("Account Number") + ": <b>" + result.accountNo().newNumber().getStringView()
+                                                        + "</b>");
+                                            }
+                                        }, EntityFactory.createIdentityStub(EcheckInfo.class, getValue().getPrimaryKey()));
+                            }
+                        });
+                    }
+
+                    return content;
+                };
+            };
+        }
     }
 
     public PmcPaymentMethodFolder() {

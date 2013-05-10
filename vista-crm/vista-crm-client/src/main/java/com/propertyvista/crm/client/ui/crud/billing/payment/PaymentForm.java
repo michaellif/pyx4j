@@ -49,6 +49,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
@@ -97,26 +98,31 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         @Override
         protected CEntityForm<?> createEcheckInfoEditor() {
-            @SuppressWarnings("unchecked")
-            final CEntityForm<EcheckInfo> form = (CEntityForm<EcheckInfo>) super.createEcheckInfoEditor();
-            if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-                form.get(form.proto().accountNo()).setNavigationCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
-                                new DefaultAsyncCallback<EcheckInfo>() {
-                                    @Override
-                                    public void onSuccess(EcheckInfo result) {
-                                        MessageDialog.info(result.accountNo().getStringView());
-                                    }
-                                }, EntityFactory.createIdentityStub(EcheckInfo.class, form.getValue().getPrimaryKey()));
+            return new EcheckInfoEditor() {
+                @Override
+                public IsWidget createContent() {
+                    IsWidget content = super.createContent();
+
+                    if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+                        get(proto().accountNo()).setNavigationCommand(new Command() {
+                            @Override
+                            public void execute() {
+                                GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
+                                        new DefaultAsyncCallback<EcheckInfo>() {
+                                            @Override
+                                            public void onSuccess(EcheckInfo result) {
+                                                MessageDialog.info(i18n.tr("Account Number") + ": <b>" + result.accountNo().newNumber().getStringView()
+                                                        + "</b>");
+                                            }
+                                        }, EntityFactory.createIdentityStub(EcheckInfo.class, getValue().getPrimaryKey()));
+                            }
+                        });
                     }
-                });
-            }
 
-            return form;
-        };
-
+                    return content;
+                };
+            };
+        }
     };
 
     public PaymentForm(IForm<PaymentRecordDTO> view) {
