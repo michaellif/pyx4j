@@ -89,6 +89,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.shared.NotesParentId;
@@ -188,7 +189,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         // load current Term
         assert !lease.currentTerm().isNull();
-        Persistence.service().retrieve(lease.currentTerm());
         if (editingTerm || lease.currentTerm().version().isNull()) {
             lease.currentTerm().set(Persistence.retrieveDraftForEdit(LeaseTerm.class, lease.currentTerm().getPrimaryKey()));
         }
@@ -340,6 +340,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
         if (!lease.leaseApplication().onlineApplication().isNull()) {
+            Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
             for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                 if (!tenant.application().isNull()) { // co-applicants have no dedicated application
                     ServerSideFactory.create(CommunicationFacade.class).sendApplicationStatus(tenant);
@@ -415,7 +416,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         switch (leaseStatus) {
         case Application:
             if (!lease.leaseApplication().onlineApplication().isNull()) {
-                Persistence.service().retrieve(lease.currentTerm().version().tenants());
+                Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
                 for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                     if (!tenant.application().isNull()) { // co-applicants have no
                                                           // dedicated application
@@ -559,11 +560,11 @@ public class LeaseFacadeImpl implements LeaseFacade {
         updateTermUnitRelatedData(term, lease.unit(), lease.type().getValue());
 
         // migrate participants:
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
             term.version().tenants().add(businessDuplicate(tenant));
         }
-        Persistence.service().retrieve(lease.currentTerm().version().guarantors());
+        Persistence.ensureRetrieve(lease.currentTerm().version().guarantors(), AttachLevel.Attached);
         for (LeaseTermGuarantor guarantor : lease.currentTerm().version().guarantors()) {
             term.version().guarantors().add(businessDuplicate(guarantor));
         }
@@ -748,69 +749,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
     }
 
     @Override
-    public void updateLeaseDates(Lease lease) {
-        if (lease.status().getValue().isDraft()) {
-            assert (!lease.currentTerm().isEmpty());
-
-            lease.leaseFrom().set(lease.currentTerm().termFrom());
-            lease.leaseTo().set(lease.currentTerm().termTo());
-        } else {
-            EntityQueryCriteria<LeaseTerm> criteria = new EntityQueryCriteria<LeaseTerm>(LeaseTerm.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
-            criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
-            // set sorting by 'from date':
-            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), false))));
-
-            List<LeaseTerm> terms = Persistence.service().query(criteria);
-            assert (!terms.isEmpty());
-
-            lease.leaseFrom().set(terms.get(0).termFrom());
-            lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
-        }
-
-        // some common checks/corrections:
-        if (lease.expectedMoveIn().isNull()) {
-            lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
-        }
-        if (lease.completion().isNull()) {
-            lease.expectedMoveOut().setValue(null);
-        }
-
-        // current term type-related corrections:
-        switch (lease.currentTerm().type().getValue()) {
-        case Fixed:
-        case FixedEx:
-            if (lease.completion().isNull()) {
-                lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
-            }
-            break;
-        case Periodic:
-            break;
-        default:
-            break;
-        }
-
-        // next term type-related corrections:
-        if (lease.completion().isNull() && !lease.nextTerm().isNull()) {
-            switch (lease.nextTerm().type().getValue()) {
-            case Fixed:
-            case FixedEx:
-                lease.expectedMoveOut().setValue(lease.nextTerm().termTo().getValue());
-                break;
-            case Periodic:
-                break;
-            default:
-                break;
-            }
-        }
-
-        // if lease to be terminated:
-        if (!lease.terminationLeaseTo().isNull()) {
-            lease.leaseTo().setValue(lease.terminationLeaseTo().getValue());
-        }
-    }
-
-    @Override
     public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
@@ -939,6 +877,13 @@ public class LeaseFacadeImpl implements LeaseFacade {
         return leaseTerm;
     }
 
+    private void finalizeBillableItems(LeaseTerm leaseTerm) {
+        leaseTerm.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
+        for (BillableItem item : leaseTerm.version().leaseProducts().featureItems()) {
+            item.finalized().setValue(Boolean.TRUE);
+        }
+    }
+
     private Lease persist(Lease lease, boolean finalize) {
         boolean doReserve = false;
         boolean doUnreserve = false;
@@ -973,6 +918,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
             persist(lease.currentTerm());
         }
 
+        updateLeaseApplicantReference(lease);
         updateLeaseDates(lease);
         updateBillingType(lease);
 
@@ -1014,6 +960,8 @@ public class LeaseFacadeImpl implements LeaseFacade {
 
         return lease;
     }
+
+    // Internals: -----------------------------------------------------------------------------------------------------
 
     private void persistCustomers(LeaseTerm leaseTerm) {
         for (LeaseTermTenant tenant : leaseTerm.version().tenants()) {
@@ -1068,16 +1016,120 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private void finalizeBillableItems(LeaseTerm leaseTerm) {
-        leaseTerm.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
-        for (BillableItem item : leaseTerm.version().leaseProducts().featureItems()) {
-            item.finalized().setValue(Boolean.TRUE);
+    /**
+     * Terminate-complete all other active, but completion marked (Evicted/Skipped/etc.) leases on the unit.
+     * 
+     * @param lease
+     *            - primary lease.
+     */
+    private void ensureLeaseUniqness(Lease lease) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), lease.unit()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
+        criteria.add(PropertyCriterion.ne(criteria.proto().id(), lease.getPrimaryKey()));
+
+        for (Lease concurrent : Persistence.service().query(criteria)) {
+            if (concurrent.completion().isNull()) {
+                throw new IllegalStateException("Lease has no completion mark");
+            }
+            // set termination date to day before current(new) lease:
+            concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), -1));
+            updateLeaseDates(concurrent);
+            Persistence.secureSave(concurrent);
+            complete(concurrent);
+        }
+    }
+
+    private NotesAndAttachments creteLeaseNote(Lease leaseId, String subject, String note, CrmUser user) {
+        NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
+
+        new NotesParentId(leaseId).setOwner(naa);
+
+        naa.subject().setValue(subject);
+        naa.note().setValue(note);
+
+        naa.user().set(user);
+
+        return naa;
+    }
+
+    @Override
+    public void updateLeaseDates(Lease lease) {
+        if (lease.status().getValue().isDraft()) {
+            assert (!lease.currentTerm().isEmpty());
+
+            lease.leaseFrom().set(lease.currentTerm().termFrom());
+            lease.leaseTo().set(lease.currentTerm().termTo());
+        } else {
+            EntityQueryCriteria<LeaseTerm> criteria = new EntityQueryCriteria<LeaseTerm>(LeaseTerm.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+            criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
+            // set sorting by 'from date':
+            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), false))));
+
+            List<LeaseTerm> terms = Persistence.service().query(criteria);
+            assert (!terms.isEmpty());
+
+            lease.leaseFrom().set(terms.get(0).termFrom());
+            lease.leaseTo().set(terms.get(terms.size() - 1).termTo());
+        }
+
+        // some common checks/corrections:
+        if (lease.expectedMoveIn().isNull()) {
+            lease.expectedMoveIn().setValue(lease.leaseFrom().getValue());
+        }
+        if (lease.completion().isNull()) {
+            lease.expectedMoveOut().setValue(null);
+        }
+
+        // current term type-related corrections:
+        switch (lease.currentTerm().type().getValue()) {
+        case Fixed:
+        case FixedEx:
+            if (lease.completion().isNull()) {
+                lease.expectedMoveOut().setValue(lease.currentTerm().termTo().getValue());
+            }
+            break;
+        case Periodic:
+            break;
+        default:
+            break;
+        }
+
+        // next term type-related corrections:
+        if (lease.completion().isNull() && !lease.nextTerm().isNull()) {
+            switch (lease.nextTerm().type().getValue()) {
+            case Fixed:
+            case FixedEx:
+                lease.expectedMoveOut().setValue(lease.nextTerm().termTo().getValue());
+                break;
+            case Periodic:
+                break;
+            default:
+                break;
+            }
+        }
+
+        // if lease to be terminated:
+        if (!lease.terminationLeaseTo().isNull()) {
+            lease.leaseTo().setValue(lease.terminationLeaseTo().getValue());
+        }
+    }
+
+    private void updateLeaseApplicantReference(Lease lease) {
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+            if (tenant.role().getValue() == Role.Applicant) {
+                EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
+                criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
+                criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant.leaseParticipant().customer()));
+                lease._applicant().set(Persistence.service().retrieve(criteria));
+                break;
+            }
         }
     }
 
     private void updateLeaseDeposits(Lease lease) {
-        Persistence.ensureRetrieve(lease.currentTerm(), AttachLevel.Attached);
-
         if (lease.billingAccount().isAssignableFrom(InternalBillingAccount.class)) {
 
             List<Deposit> currentDeposits = new ArrayList<Deposit>();
@@ -1150,17 +1202,12 @@ public class LeaseFacadeImpl implements LeaseFacade {
         }
     }
 
-    private NotesAndAttachments creteLeaseNote(Lease leaseId, String subject, String note, CrmUser user) {
-        NotesAndAttachments naa = EntityFactory.create(NotesAndAttachments.class);
-
-        new NotesParentId(leaseId).setOwner(naa);
-
-        naa.subject().setValue(subject);
-        naa.note().setValue(note);
-
-        naa.user().set(user);
-
-        return naa;
+    private void updateBillingType(Lease lease) {
+        if (!lease.leaseFrom().isNull() && !lease.unit().isNull()) {
+            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
+        } else {
+            log.debug("Can't retrieve Billing Type!..");
+        }
     }
 
     private <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
@@ -1169,37 +1216,5 @@ public class LeaseFacadeImpl implements LeaseFacade {
         P copy = EntityGraph.businessDuplicate(leaseParticipant);
         copy.screening().set(null);
         return copy;
-    }
-
-    /**
-     * Terminate-complete all other active, but completion marked (Evicted/Skipped/etc.) leases on the unit.
-     * 
-     * @param lease
-     *            - primary lease.
-     */
-    private void ensureLeaseUniqness(Lease lease) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), lease.unit()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
-        criteria.add(PropertyCriterion.ne(criteria.proto().id(), lease.getPrimaryKey()));
-
-        for (Lease concurrent : Persistence.service().query(criteria)) {
-            if (concurrent.completion().isNull()) {
-                throw new IllegalStateException("Lease has no completion mark");
-            }
-            // set termination date to day before current(new) lease:
-            concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), -1));
-            updateLeaseDates(concurrent);
-            Persistence.secureSave(concurrent);
-            complete(concurrent);
-        }
-    }
-
-    private void updateBillingType(Lease lease) {
-        if (!lease.leaseFrom().isNull() && !lease.unit().isNull()) {
-            lease.billingAccount().billingType().set(ServerSideFactory.create(BillingCycleFacade.class).getBillingType(lease));
-        } else {
-            log.debug("Can't retrieve Billing Type!..");
-        }
     }
 }
