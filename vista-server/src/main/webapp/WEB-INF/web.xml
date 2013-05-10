@@ -46,7 +46,7 @@
         <filter-name>RobotsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
+
     <filter>
         <filter-name>LifecycleFilter</filter-name>
         <filter-class>com.pyx4j.server.contexts.LifecycleFilter</filter-class>
@@ -569,6 +569,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
     </welcome-file-list>
 
     <session-config>
+        <!-- set 20 for production -->
         <session-timeout>240</session-timeout>
     </session-config>
 
