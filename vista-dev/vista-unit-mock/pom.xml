@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-unit-preloader</artifactId>
-    <name>vista-unit-preloader</name>
+    <artifactId>vista-unit-mock</artifactId>
+    <name>vista-unit-mock</name>
 
     <dependencies>
 
