@@ -20,7 +20,7 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
-            <artifactId>vista-yardi-voyager-wsdl</artifactId>
+            <artifactId>vista-yardi-interface-wsdl</artifactId>
             <version>${project.version}</version>
         </dependency>
 
