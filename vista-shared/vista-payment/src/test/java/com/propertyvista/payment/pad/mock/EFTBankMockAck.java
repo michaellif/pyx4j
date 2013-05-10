@@ -13,32 +13,94 @@
  */
 package com.propertyvista.payment.pad.mock;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.validator.EntityValidator;
+
+import com.propertyvista.operations.domain.payment.pad.PadBatch;
+import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.payment.pad.CaledonPadUtils;
+import com.propertyvista.payment.pad.data.PadAckBatch;
+import com.propertyvista.payment.pad.data.PadAckDebitRecord;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.test.mock.MockEventBus;
 
 class EFTBankMockAck implements ScheduledResponseAcknowledgment.Handler {
 
-    private final List<ScheduledResponseAcknowledgment> scheduled = new ArrayList<ScheduledResponseAcknowledgment>();
+    private final Map<String, ScheduledResponseAcknowledgment> scheduled = new HashMap<String, ScheduledResponseAcknowledgment>();
 
     EFTBankMockAck() {
-        MockEventBus.addHandler(ScheduledResponseAcknowledgment.TYPE, this);
+        MockEventBus.addHandler(ScheduledResponseAcknowledgment.class, this);
+        // TODO add Bach reject request
     }
 
     @Override
     public void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAcknowledgment event) {
-        // TODO Auto-generated method stub
-    }
-
-    void scheduleTransactionAcknowledgmentResponse(String transactionId, String acknowledgmentStatusCode) {
-        // TODO Auto-generated method stub
+        scheduled.put(event.transactionId, event);
     }
 
     PadAckFile createAcknowledgementFile(PadFile unacknowledgedFile) {
-        return null;
-    }
+        PadAckFile ackFile = EntityFactory.create(PadAckFile.class);
 
+        boolean batchLevelReject = false;
+        boolean transactionReject = false;
+        for (PadBatch padBatch : unacknowledgedFile.batches()) {
+            // TODO Has Bach reject request
+            if (false) {
+                PadAckBatch batch = EntityFactory.create(PadAckBatch.class);
+                batch.batchId().setValue(String.valueOf(padBatch.batchNumber().getValue()));
+                batch.terminalId().setValue(padBatch.merchantTerminalId().getValue());
+                batch.acknowledgmentStatusCode().setValue("");
+                batch.batchAmount().setValue(padBatch.accountNumber().getValue());
+                ackFile.batches().add(batch);
+                batchLevelReject = true;
+            } else {
+                // Find TRANSACTION  REJECT RECORD
+                for (PadDebitRecord padDebitRecord : padBatch.records()) {
+                    ScheduledResponseAcknowledgment askReject = scheduled.get(padDebitRecord.transactionId().getValue());
+                    if (askReject == null) {
+                        EFTBankMock.instance().addAcknowledgedRecord(padDebitRecord);
+                    } else {
+                        scheduled.remove(padDebitRecord.transactionId().getValue());
+
+                        PadAckDebitRecord record = EntityFactory.create(PadAckDebitRecord.class);
+                        record.terminalId().setValue(padBatch.merchantTerminalId().getValue());
+                        record.clientId().setValue(padDebitRecord.clientId().getValue());
+                        record.transactionId().setValue(padDebitRecord.transactionId().getValue());
+                        record.amount().setValue(CaledonPadUtils.formatAmount(padDebitRecord.amount().getValue()));
+                        record.acknowledgmentStatusCode().setValue(askReject.acknowledgmentStatusCode);
+                        EntityValidator.validate(record);
+                        ackFile.records().add(record);
+                        transactionReject = true;
+                    }
+                }
+            }
+        }
+
+        ackFile.companyId().setValue(unacknowledgedFile.companyId().getValue());
+        ackFile.fileCreationNumber().setValue(unacknowledgedFile.fileCreationNumber().getValue());
+        String fileCreationDate = new SimpleDateFormat("yyyyMMdd").format(unacknowledgedFile.created().getValue());
+        ackFile.fileCreationDate().setValue(fileCreationDate);
+
+        ackFile.batcheCount().setValue(String.valueOf(unacknowledgedFile.batches().size()));
+        ackFile.recordsCount().setValue(String.valueOf(unacknowledgedFile.recordsCount().getValue()));
+
+        ackFile.fileAmount().setValue(CaledonPadUtils.formatAmount(unacknowledgedFile.fileAmount().getValue()));
+
+        if (batchLevelReject && transactionReject) {
+            ackFile.acknowledgmentStatusCode().setValue("0004");
+        } else if (batchLevelReject) {
+            ackFile.acknowledgmentStatusCode().setValue("0002");
+        } else if (transactionReject) {
+            ackFile.acknowledgmentStatusCode().setValue("0003");
+        } else {
+            // Accepted
+            ackFile.acknowledgmentStatusCode().setValue("0000");
+        }
+        return ackFile;
+    }
 }

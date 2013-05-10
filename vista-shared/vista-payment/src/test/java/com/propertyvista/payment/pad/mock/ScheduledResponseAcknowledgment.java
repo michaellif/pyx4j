@@ -13,13 +13,13 @@
  */
 package com.propertyvista.payment.pad.mock;
 
-import com.google.web.bindery.event.shared.Event;
+import com.propertyvista.test.mock.MockEvent;
 
-class ScheduledResponseAcknowledgment extends Event<ScheduledResponseAcknowledgment.Handler> {
+public class ScheduledResponseAcknowledgment extends MockEvent<ScheduledResponseAcknowledgment.Handler> {
 
-    String transactionId;
+    public String transactionId;
 
-    String acknowledgmentStatusCode;
+    public String acknowledgmentStatusCode;
 
     public interface Handler {
 
@@ -27,15 +27,14 @@ class ScheduledResponseAcknowledgment extends Event<ScheduledResponseAcknowledgm
 
     }
 
-    public static final Type<ScheduledResponseAcknowledgment.Handler> TYPE = new Type<ScheduledResponseAcknowledgment.Handler>();
-
-    @Override
-    public com.google.web.bindery.event.shared.Event.Type<Handler> getAssociatedType() {
-        return TYPE;
+    public ScheduledResponseAcknowledgment(String transactionId, String acknowledgmentStatusCode) {
+        super();
+        this.transactionId = transactionId;
+        this.acknowledgmentStatusCode = acknowledgmentStatusCode;
     }
 
     @Override
-    protected void dispatch(Handler handler) {
+    protected final void dispatch(Handler handler) {
         handler.scheduleTransactionAcknowledgmentResponse(this);
     }
 }

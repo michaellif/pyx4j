@@ -16,8 +16,6 @@ package com.propertyvista.test.mock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.web.bindery.event.shared.Event;
-import com.google.web.bindery.event.shared.Event.Type;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.event.shared.SimpleEventBus;
@@ -28,11 +26,11 @@ public class MockEventBus {
 
     public static EventBus instance = new SimpleEventBus();
 
-    public static <H> HandlerRegistration addHandler(Type<H> type, H handler) {
-        return instance.addHandler(type, handler);
+    public static <H> HandlerRegistration addHandler(Class<? extends MockEvent<H>> eventClass, H handler) {
+        return instance.addHandler(MockEvent.getTypeByClass(eventClass), handler);
     }
 
-    public static void fireEvent(Event<?> event) {
+    public static void fireEvent(MockEvent<?> event) {
         log.trace("fireEvent {}", event.getClass().getSimpleName());
         instance.fireEvent(event);
     }

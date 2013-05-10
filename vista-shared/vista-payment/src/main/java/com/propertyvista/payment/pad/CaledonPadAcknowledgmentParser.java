@@ -31,7 +31,7 @@ import com.propertyvista.payment.pad.data.PadAckFile;
 class CaledonPadAcknowledgmentParser {
 
     PadAckFile parsReport(File file) {
-        final PadAckFile akFile = EntityFactory.create(PadAckFile.class);
+        final PadAckFile ackFile = EntityFactory.create(PadAckFile.class);
 
         InputStream is;
         try {
@@ -41,8 +41,8 @@ class CaledonPadAcknowledgmentParser {
         }
         CSVParser parser = new CSVParser();
 
-        akFile.version().setValue(1);
-        akFile.fileName().setValue(file.getName());
+        ackFile.version().setValue(1);
+        ackFile.fileName().setValue(file.getName());
 
         CSVLoad.loadFile(is, parser, new CSVReciver() {
 
@@ -52,17 +52,17 @@ class CaledonPadAcknowledgmentParser {
                     throw new Error("Wrong file header  '" + headers[0] + "' format");
                 }
                 int v = 1;
-                akFile.companyId().setValue(headers[v++]);
-                akFile.fileCreationNumber().setValue(headers[v++]);
-                akFile.fileCreationDate().setValue(headers[v++]);
-                akFile.batcheCount().setValue(headers[v++]);
-                akFile.recordsCount().setValue(headers[v++]);
-                akFile.fileAmount().setValue(headers[v++]);
-                akFile.acknowledgmentStatusCode().setValue(headers[v++]);
+                ackFile.companyId().setValue(headers[v++]);
+                ackFile.fileCreationNumber().setValue(headers[v++]);
+                ackFile.fileCreationDate().setValue(headers[v++]);
+                ackFile.batcheCount().setValue(headers[v++]);
+                ackFile.recordsCount().setValue(headers[v++]);
+                ackFile.fileAmount().setValue(headers[v++]);
+                ackFile.acknowledgmentStatusCode().setValue(headers[v++]);
                 if (headers.length > v) {
-                    akFile.acknowledgmentRejectReasonMessage().setValue(headers[v++]);
+                    ackFile.acknowledgmentRejectReasonMessage().setValue(headers[v++]);
                 }
-                EntityValidator.validate(akFile);
+                EntityValidator.validate(ackFile);
                 return true;
             }
 
@@ -76,7 +76,7 @@ class CaledonPadAcknowledgmentParser {
                     batch.acknowledgmentStatusCode().setValue(values[v++]);
                     batch.batchAmount().setValue(values[v++]);
                     EntityValidator.validate(batch);
-                    akFile.batches().add(batch);
+                    ackFile.batches().add(batch);
                 } else if (values[0].equals("TRJ")) {
                     PadAckDebitRecord record = EntityFactory.create(PadAckDebitRecord.class);
                     int v = 1;
@@ -86,7 +86,7 @@ class CaledonPadAcknowledgmentParser {
                     record.amount().setValue(values[v++]);
                     record.acknowledgmentStatusCode().setValue(values[v++]);
                     EntityValidator.validate(record);
-                    akFile.records().add(record);
+                    ackFile.records().add(record);
                 } else {
                     throw new Error("Wrong file record type  '" + values[0] + "'");
                 }
@@ -99,6 +99,6 @@ class CaledonPadAcknowledgmentParser {
 
         });
 
-        return akFile;
+        return ackFile;
     }
 }

@@ -22,15 +22,17 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.payment.pad.EFTTransportFacade;
-import com.propertyvista.payment.pad.mock.EFTMockFacade;
 import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
+import com.propertyvista.payment.pad.mock.ScheduledResponseAcknowledgment;
 import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 
@@ -53,6 +55,7 @@ public class PadProcessingTest extends FinancialTestBase {
 
     public void testSuccessfulPad() throws Exception {
         setSysDate("2011-04-01");
+        setCaledonPAdPaymentBatchProcess();
 
         Customer customer = getDataModel(CustomerDataModel.class).addCustomer();
         getDataModel(CustomerDataModel.class).setCurrentItem(customer);
@@ -67,8 +70,16 @@ public class PadProcessingTest extends FinancialTestBase {
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
 
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        setSysDate("2011-04-01");
+
         if (false) {
-            ServerSideFactory.create(EFTMockFacade.class).scheduleTransactionAcknowledgmentResponse("", "");
+            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        }
+
+        if (false) {
+            MockEventBus.fireEvent(new ScheduledResponseAcknowledgment(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()), "Bad Account#"));
         }
     }
 }

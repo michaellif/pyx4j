@@ -13,11 +13,32 @@
  */
 package com.propertyvista.payment.pad.mock;
 
-class ScheduledResponseReconciliation {
+import com.propertyvista.test.mock.MockEvent;
 
-    String transactionId;
+public class ScheduledResponseReconciliation extends MockEvent<ScheduledResponseReconciliation.Handler> {
 
-    String reasonCode;
+    public String transactionId;
 
-    String reasonText;
+    public String reasonCode;
+
+    public String reasonText;
+
+    public interface Handler {
+
+        void scheduleTransactionReconciliationResponse(ScheduledResponseReconciliation event);
+
+    }
+
+    public ScheduledResponseReconciliation(String transactionId, String reasonCode, String reasonText) {
+        super();
+        this.transactionId = transactionId;
+        this.reasonCode = reasonCode;
+        this.reasonText = reasonText;
+    }
+
+    @Override
+    protected final void dispatch(Handler handler) {
+        handler.scheduleTransactionReconciliationResponse(this);
+    }
+
 }

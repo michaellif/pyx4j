@@ -43,10 +43,6 @@ class EFTBankMock {
         receivedPadFile.add(padFile.<PadFile> duplicate());
     }
 
-    void scheduleTransactionAcknowledgmentResponse(String transactionId, String acknowledgmentStatusCode) {
-        acknowledgment.scheduleTransactionAcknowledgmentResponse(transactionId, acknowledgmentStatusCode);
-    }
-
     PadAckFile acknowledgeFile(String companyId) {
         // Find unacknowledged file
         PadFile unacknowledgedFile = null;
@@ -63,5 +59,9 @@ class EFTBankMock {
             receivedPadFile.remove(unacknowledgedFile);
             return acknowledgment.createAcknowledgementFile(unacknowledgedFile);
         }
+    }
+
+    void addAcknowledgedRecord(PadDebitRecord padDebitRecord) {
+        uprocessedRecords.add(padDebitRecord);
     }
 }
