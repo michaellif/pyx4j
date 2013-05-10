@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
@@ -104,7 +105,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         super(PreauthorizedPaymentDTO.class, view);
 
         amountPlaceholder.setWidth("15em");
-        percent = new DecoratorBuilder(inject(proto().percent()), 10).customLabel(i18n.tr("Percent of Lease Charges")).build();
+        percent = new DecoratorBuilder(inject(proto().percent()), 10).customLabel(i18n.tr("Percent of Lease Balance")).build();
         value = new DecoratorBuilder(inject(proto().value()), 10).build();
 
         addStep(createDetailsStep());
@@ -221,6 +222,11 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
+
+        panel.setBR(++row, 0, 1);
+
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7).labelWidth(25).build());
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
 

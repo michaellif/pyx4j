@@ -13,18 +13,16 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import java.util.List;
-
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -42,7 +40,7 @@ import com.propertyvista.portal.client.ui.residents.payment.autopay.Preauthorize
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
-public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentListDTO> {
+public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentListDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
 
@@ -58,15 +56,13 @@ public class PreauthorizedPaymentsForm extends CEntityForm<PreauthorizedPaymentL
 
     @Override
     public IsWidget createContent() {
-        FlowPanel container = new FlowPanel();
-        container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
-        return container;
-    }
+        VerticalPanel container = new VerticalPanel();
 
-    public void populate(List<PreauthorizedPaymentItemDTO> preauthorizedPayment) {
-        PreauthorizedPaymentListDTO dto = EntityFactory.create(PreauthorizedPaymentListDTO.class);
-        dto.preauthorizedPayments().addAll(preauthorizedPayment);
-        super.populate(dto);
+        container.add(new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelWidth(25).build());
+        container.add(new HTML("&nbsp"));
+        container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+
+        return container;
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentItemDTO> {

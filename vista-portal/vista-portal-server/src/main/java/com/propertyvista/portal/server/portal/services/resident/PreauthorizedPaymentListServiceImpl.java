@@ -17,16 +17,20 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -68,5 +72,27 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
         Persistence.service().commit();
 
         callback.onSuccess(Boolean.TRUE);
+    }
+
+    @Override
+    public void getData(final AsyncCallback<PreauthorizedPaymentListDTO> callback) {
+        list(new AsyncCallback<EntitySearchResult<PreauthorizedPaymentItemDTO>>() {
+            @Override
+            public void onSuccess(EntitySearchResult<PreauthorizedPaymentItemDTO> result) {
+                PreauthorizedPaymentListDTO dto = EntityFactory.create(PreauthorizedPaymentListDTO.class);
+
+                dto.preauthorizedPayments().addAll(result.getData());
+                dto.nextScheduledPaymentDate().setValue(
+                        ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(TenantAppContext.getCurrentUserLease()).padExecutionDate()
+                                .getValue());
+
+                callback.onSuccess(dto);
+            }
+
+            @Override
+            public void onFailure(Throwable arg0) {
+                callback.onFailure(arg0);
+            }
+        }, new EntityListCriteria<PreauthorizedPaymentItemDTO>(PreauthorizedPaymentItemDTO.class));
     }
 }

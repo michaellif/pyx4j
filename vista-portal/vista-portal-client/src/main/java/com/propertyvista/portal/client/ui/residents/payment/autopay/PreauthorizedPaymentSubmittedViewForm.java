@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -67,6 +68,9 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
         content.setWidget(++row, 0, amountPlaceholder);
 
         content.setHR(++row, 0, 1);
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelAlignment(Alignment.left)
+                .labelWidth(25).build());
 
         return content;
     }

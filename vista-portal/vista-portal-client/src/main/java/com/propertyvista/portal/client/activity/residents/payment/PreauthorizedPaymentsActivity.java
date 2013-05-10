@@ -18,8 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
@@ -29,6 +27,7 @@ import com.propertyvista.portal.client.ui.residents.payment.autopay.Preauthorize
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 
 public class PreauthorizedPaymentsActivity extends SecurityAwareActivity implements PreauthorizedPaymentsView.Presenter {
@@ -48,12 +47,12 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.list(new DefaultAsyncCallback<EntitySearchResult<PreauthorizedPaymentItemDTO>>() {
+        srv.getData(new DefaultAsyncCallback<PreauthorizedPaymentListDTO>() {
             @Override
-            public void onSuccess(EntitySearchResult<PreauthorizedPaymentItemDTO> result) {
-                view.populate(result.getData());
+            public void onSuccess(PreauthorizedPaymentListDTO result) {
+                view.populate(result);
             }
-        }, new EntityListCriteria<PreauthorizedPaymentItemDTO>(PreauthorizedPaymentItemDTO.class));
+        });
     }
 
     @Override

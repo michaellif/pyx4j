@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -60,7 +61,6 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     @Override
     public void create(AsyncCallback<PreauthorizedPaymentDTO> callback) {
         Lease lease = TenantAppContext.getCurrentUserLease();
-        Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
         PreauthorizedPaymentDTO dto = EntityFactory.create(PreauthorizedPaymentDTO.class);
@@ -78,6 +78,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         dto.leaseStatus().set(lease.status());
 
         dto.tenant().set(TenantAppContext.getCurrentUserTenant());
+
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).padExecutionDate().getValue());
 
 //        ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), )
 //        dto.allowedAmountTypes().

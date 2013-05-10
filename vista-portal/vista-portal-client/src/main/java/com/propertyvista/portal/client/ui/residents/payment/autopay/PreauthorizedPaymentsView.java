@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
 public interface PreauthorizedPaymentsView extends IsWidget {
 
@@ -30,7 +29,7 @@ public interface PreauthorizedPaymentsView extends IsWidget {
         void deletePreauthorizedPayment(PreauthorizedPaymentItemDTO preauthorizedPayment);
     }
 
-    void populate(List<PreauthorizedPaymentItemDTO> preauthorizedPayments);
+    void populate(PreauthorizedPaymentListDTO preauthorizedPayments);
 
     void setPresenter(Presenter presenter);
 }
