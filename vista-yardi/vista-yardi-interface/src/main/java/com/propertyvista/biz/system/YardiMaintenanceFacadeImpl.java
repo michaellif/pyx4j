@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
+import java.rmi.RemoteException;
 import java.util.Date;
 
 import com.propertyvista.config.VistaDeployment;
@@ -32,12 +33,12 @@ public class YardiMaintenanceFacadeImpl implements YardiMaintenanceFacade {
     }
 
     @Override
-    public MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException {
+    public MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException, RemoteException {
         return YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(VistaDeployment.getPmcYardiCredential(), request);
     }
 
     @Override
-    public void loadMaintenanceRequests() throws YardiServiceException {
+    public void loadMaintenanceRequests() throws YardiServiceException, RemoteException {
         YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(VistaDeployment.getPmcYardiCredential());
     }
 }

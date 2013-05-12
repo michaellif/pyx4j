@@ -47,6 +47,8 @@ import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
+import com.propertyvista.yardi.stub.YardiMockResidentTransactionsStubImpl;
+import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 public class YardiTestBase {
 
@@ -54,7 +56,7 @@ public class YardiTestBase {
     public void init() throws Exception {
         VistaTestDBSetup.init();
 
-        ServerSideFactory.register(YardiClient.class, YardiTestClientImpl.class);
+        ServerSideFactory.register(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
 
         Persistence.service().startBackgroundProcessTransaction();
 

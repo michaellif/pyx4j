@@ -19,12 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.util.AXIOMUtil;
 import org.apache.axis2.AxisFault;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,15 +28,6 @@ import com.yardi.entity.resident.Property;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
-import com.yardi.ws.operations.transactions.GetResidentTransaction_Login;
-import com.yardi.ws.operations.transactions.GetResidentTransaction_LoginResponse;
-import com.yardi.ws.operations.transactions.GetResidentTransactions_Login;
-import com.yardi.ws.operations.transactions.GetResidentTransactions_LoginResponse;
-import com.yardi.ws.operations.transactions.GetUnitInformation_Login;
-import com.yardi.ws.operations.transactions.GetUnitInformation_LoginResponse;
-import com.yardi.ws.operations.transactions.ImportResidentTransactions_Login;
-import com.yardi.ws.operations.transactions.ImportResidentTransactions_LoginResponse;
-import com.yardi.ws.operations.transactions.TransactionXml_type1;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -50,7 +37,6 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
@@ -59,7 +45,6 @@ import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
@@ -70,10 +55,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.yardi.YardiClient;
-import com.propertyvista.yardi.YardiConstants;
-import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.bean.Messages;
+import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 /**
  * Implementation functionality for updating properties/units/leases/tenants basing on getResidentTransactions from YARDI api
@@ -99,6 +82,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     /**
+     * The Ping function accepts no parameters, but will return the
+     * assembly name of the function being called. Use it to test
+     * connectivity.
+     * 
+     * @throws RemoteException
+     * @throws AxisFault
+     */
+    public static void ping(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws AxisFault, RemoteException {
+        String result = stub.ping(yc);
+        log.info("Connection to Yardi works: {}", result);
+    }
+
+    /**
      * Updates/creates entities basing on data from YARDI System.
      * 
      * @param yp
@@ -106,17 +102,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      * @throws YardiServiceException
      *             if operation fails
      */
-    public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException {
-        YardiClient client = ServerSideFactory.create(YardiClient.class);
-        client.setPmcYardiCredential(yc);
+    public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
         List<ResidentTransactions> allTransactions;
         if (yc.propertyCode().isNull()) {
-            List<String> propertyCodes = getPropertyCodes(client, yc);
-            allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
+            List<String> propertyCodes = getPropertyCodes(stub, yc);
+            allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
         } else {
             List<String> propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s*,\\s*"));
-            allTransactions = getAllResidentTransactions(client, yc, propertyCodes);
+            allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
         }
 
         for (ResidentTransactions transaction : allTransactions) {
@@ -126,12 +121,12 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("Update completed.");
     }
 
-    public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException {
+    public void updateLease(PmcYardiCredential yc, Lease lease) throws YardiServiceException, RemoteException {
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+
         Persistence.service().retrieve(lease.unit().building());
-        YardiClient client = ServerSideFactory.create(YardiClient.class);
-        client.setPmcYardiCredential(yc);
         String propertyCode = lease.unit().building().propertyCode().getValue();
-        ResidentTransactions transaction = getResidentTransaction(client, yc, propertyCode, lease.leaseId().getValue());
+        ResidentTransactions transaction = stub.getResidentTransaction(yc, propertyCode, lease.leaseId().getValue());
         if (transaction != null) {
             for (Property property : transaction.getProperty()) {
                 for (RTCustomer rtCustomer : property.getRTCustomer()) {
@@ -141,14 +136,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException {
-        YardiClient client = ServerSideFactory.create(YardiClient.class);
-        client.setPmcYardiCredential(yc);
+    public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
 
-        importResidentTransactions(client, yc, reversalTransactions);
+        stub.importResidentTransactions(yc, reversalTransactions);
 
         if (reversal.applyNSF().isBooleanTrue()) {
             try {
@@ -158,6 +152,17 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 log.error("failed to send email", e);
             }
         }
+    }
+
+    public List<String> getPropertyCodes(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        List<String> propertyCodes = new ArrayList<String>();
+        Properties properties = stub.getPropertyConfigurations(yc);
+        for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
+            if (StringUtils.isNotEmpty(property.getCode())) {
+                propertyCodes.add(property.getCode());
+            }
+        }
+        return propertyCodes;
     }
 
     private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
@@ -249,7 +254,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Void execute() throws YardiServiceException {
                 // update lease
-                LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
                 new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
 
                 // update charges and payments
@@ -280,182 +284,17 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return state;
     }
 
-    private List<ResidentTransactions> getAllResidentTransactions(YardiClient client, PmcYardiCredential yc, List<String> propertyCodes)
-            throws YardiServiceException {
+    List<ResidentTransactions> getAllResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
+            throws YardiServiceException, RemoteException {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
-            ResidentTransactions residentTransactions = getResidentTransactions(client, yc, propertyCode);
+            ResidentTransactions residentTransactions = stub.getResidentTransactions(yc, propertyCode);
             if (residentTransactions != null) {
                 transactions.add(residentTransactions);
             }
         }
 
         return transactions;
-    }
-
-    /**
-     * Allows export of resident/transactional data for a given property/property list.
-     * 
-     * @throws RemoteException
-     * @throws AxisFault
-     * 
-     * @throws JAXBException
-     */
-    ResidentTransactions getResidentTransactions(YardiClient c, PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        try {
-
-            c.transactionIdStart();
-            c.setCurrentAction(Action.GetResidentTransactions);
-
-            GetResidentTransactions_Login request = new GetResidentTransactions_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.credential().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setYardiPropertyId(propertyId);
-
-            GetResidentTransactions_LoginResponse response = c.getResidentTransactionsService().getResidentTransactions_Login(request);
-            if ((response == null) || (response.getGetResidentTransactions_LoginResult() == null)) {
-                throw new YardiServiceException(SimpleMessageFormat.format(
-                        "Yardi connection configuration error, Login error or database ''{0}'' or Property Id ''{1}'' do not exists on Yardi server",
-                        yc.database(), propertyId));
-            }
-            String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
-
-            log.info("GetResidentTransactions: {}", xml);
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-
-            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-            return transactions;
-
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } catch (RemoteException e) {
-            throw new Error(e);
-        }
-
-    }
-
-    ResidentTransactions getResidentTransaction(YardiClient c, PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
-        try {
-            c.transactionIdStart();
-            c.setCurrentAction(Action.GetResidentTransaction);
-
-            GetResidentTransaction_Login request = new GetResidentTransaction_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.credential().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setYardiPropertyId(propertyId);
-            request.setTenantId(tenantId);
-
-            GetResidentTransaction_LoginResponse response = c.getResidentTransactionsService().getResidentTransaction_Login(request);
-            String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
-
-            log.info("GetResidentTransaction: {}", xml);
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-            return transactions;
-
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } catch (RemoteException e) {
-            throw new Error(e);
-        }
-    }
-
-    void importResidentTransactions(YardiClient c, PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException {
-        try {
-            c.transactionIdStart();
-            c.setCurrentAction(Action.ImportResidentTransactions);
-
-            ImportResidentTransactions_Login request = new ImportResidentTransactions_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.credential().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-
-            String trXml = MarshallUtil.marshall(reversalTransactions);
-            log.info(trXml);
-            TransactionXml_type1 transactionXml = new TransactionXml_type1();
-            OMElement element = AXIOMUtil.stringToOM(trXml);
-            transactionXml.setExtraElement(element);
-            request.setTransactionXml(transactionXml);
-
-            ImportResidentTransactions_LoginResponse response = c.getResidentTransactionsService().importResidentTransactions_Login(request);
-            String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
-
-            log.info("ImportResidentTransactions: {}", xml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } catch (RemoteException e) {
-            throw new Error(e);
-        } catch (XMLStreamException e) {
-            throw new Error(e);
-        }
-    }
-
-    void getUnitInformation(YardiClient c, PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        try {
-            c.transactionIdStart();
-            c.setCurrentAction(Action.GetUnitInformation);
-
-            GetUnitInformation_Login request = new GetUnitInformation_Login();
-            request.setUserName(yc.username().getValue());
-            request.setPassword(yc.credential().getValue());
-            request.setServerName(yc.serverName().getValue());
-            request.setDatabase(yc.database().getValue());
-            request.setPlatform(yc.platform().getValue().name());
-            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            request.setYardiPropertyId(propertyId);
-
-            GetUnitInformation_LoginResponse response = c.getResidentTransactionsService().getUnitInformation_Login(request);
-            String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
-
-            log.info("GetUnitInformation: {}", xml);
-            if (Messages.isMessageResponse(xml)) {
-                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-                if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
-                } else {
-                    log.info(messages.toString());
-                }
-            }
-//            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-//            return transactions;
-
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } catch (RemoteException e) {
-            throw new Error(e);
-        }
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {

@@ -25,6 +25,7 @@ import org.junit.Test;
 import com.yardi.entity.maintenance.ServiceRequests;
 import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
@@ -39,6 +40,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
+import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 
 @Ignore
 public class YardiMaintenanceRequestsServiceTest {
@@ -78,10 +80,12 @@ public class YardiMaintenanceRequestsServiceTest {
     @Test
     public void testGetRequestsByPropertyId() throws YardiServiceException, IOException, JAXBException {
 
+        YardiMaintenanceRequestsStub stub = ServerSideFactory.create(YardiMaintenanceRequestsStub.class);
+
         YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         params.setYardiPropertyId("prvista1");
-        YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+        stub.getRequestsByParameters(yc, params);
 
         //Mandatory predefined info which should exist in Yardi:
         //1. Property should exist
@@ -95,24 +99,26 @@ public class YardiMaintenanceRequestsServiceTest {
     @Ignore
     @Test
     public void testGetLeaseOpenMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
+        YardiMaintenanceRequestsStub stub = ServerSideFactory.create(YardiMaintenanceRequestsStub.class);
         YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         params.setYardiPropertyId("prvista1");
         params.setResidentCode("t0005339");
         params.setOpenOrClosed("Open");
-        YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+        stub.getRequestsByParameters(yc, params);
 
     }
 
     @Ignore
     @Test
     public void testGetLeaseClosedMaintenanceRequests() throws YardiServiceException, IOException, JAXBException {
+        YardiMaintenanceRequestsStub stub = ServerSideFactory.create(YardiMaintenanceRequestsStub.class);
         YardiMaintenanceRequestsService.getInstance().loadMeta(yc);
         GetServiceRequest_Search params = new GetServiceRequest_Search();
         params.setYardiPropertyId("prvista1");
         params.setResidentCode("t0005339");
         params.setOpenOrClosed("Closed");
-        YardiMaintenanceRequestsService.getInstance().getRequestsByParameters(yc, params);
+        stub.getRequestsByParameters(yc, params);
 
     }
 

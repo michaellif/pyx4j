@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.system;
 
+import java.rmi.RemoteException;
 import java.util.Date;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -23,7 +24,7 @@ public interface YardiMaintenanceFacade {
 
     Date getTicketTimestamp();
 
-    MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException;
+    MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException, RemoteException;
 
-    void loadMaintenanceRequests() throws YardiServiceException;
+    void loadMaintenanceRequests() throws YardiServiceException, RemoteException;
 }

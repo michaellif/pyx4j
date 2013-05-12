@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.maintenance.yardi;
 
+import java.rmi.RemoteException;
+
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.system.YardiServiceException;
@@ -26,7 +28,8 @@ public class YardiIntegrationMaintenanceCategoryAgentTest {
      * @param args
      * @throws YardiServiceException
      */
-    public static void main(String[] args) throws YardiServiceException {
+    public static void main(String[] args) throws YardiServiceException, RemoteException {
+
         PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
         yc.username().setValue("propertyvista-srws");
         yc.credential().setValue("55548");

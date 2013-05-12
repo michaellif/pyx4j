@@ -23,45 +23,45 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.yardi.YardiClient;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 public class YardiExample {
 
     private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
 
     public static void main(String[] args) {
-        YardiClient client = ServerSideFactory.create(YardiClient.class);
-        client.setPmcYardiCredential(DevYardiCredentials.getTestPmcYardiCredential());
-        getPropertyConfigurations(client);
-        getPropertyCodes(client);
-        getResidentTransactions(client);
-        getUnitInformation(client);
+        getPropertyConfigurations();
+        getPropertyCodes();
+        getResidentTransactions();
+        getUnitInformation();
     }
 
-    private static void getPropertyConfigurations(YardiClient client) {
+    private static void getPropertyConfigurations() {
         try {
-            Properties properties = YardiResidentTransactionsService.getInstance().getPropertyConfigurations(client,
-                    DevYardiCredentials.getTestPmcYardiCredential());
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            Properties properties = stub.getPropertyConfigurations(DevYardiCredentials.getTestPmcYardiCredential());
             System.out.println(properties);
         } catch (Throwable e) {
             log.error("error", e);
         }
     }
 
-    private static void getPropertyCodes(YardiClient client) {
+    private static void getPropertyCodes() {
         try {
-            List<String> properties = YardiResidentTransactionsService.getInstance().getPropertyCodes(client, DevYardiCredentials.getTestPmcYardiCredential());
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            List<String> properties = YardiResidentTransactionsService.getInstance().getPropertyCodes(stub, DevYardiCredentials.getTestPmcYardiCredential());
             System.out.println(properties);
         } catch (Throwable e) {
             log.error("error", e);
         }
     }
 
-    private static void getResidentTransactions(YardiClient client) {
+    private static void getResidentTransactions() {
         try {
-            ResidentTransactions residentTransactions = YardiResidentTransactionsService.getInstance().getResidentTransactions(client,
-                    DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            ResidentTransactions residentTransactions = stub.getResidentTransactions(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials
+                    .getTestPmcYardiCredential().propertyCode().getValue());
             System.out.println(residentTransactions);
         } catch (Throwable e) {
             log.error("error", e);
@@ -69,10 +69,10 @@ public class YardiExample {
 
     }
 
-    private static void getUnitInformation(YardiClient client) {
+    private static void getUnitInformation() {
         try {
-            YardiResidentTransactionsService.getInstance().getUnitInformation(client, DevYardiCredentials.getTestPmcYardiCredential(),
-                    DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            stub.getUnitInformation(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
 
         } catch (Throwable e) {
             log.error("error", e);

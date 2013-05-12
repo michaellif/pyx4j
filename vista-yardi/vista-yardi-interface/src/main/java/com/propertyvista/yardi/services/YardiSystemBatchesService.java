@@ -15,36 +15,18 @@ package com.propertyvista.yardi.services;
 
 import java.rmi.RemoteException;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.stream.XMLStreamException;
-
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.util.AXIOMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
-import com.yardi.ws.operations.transactionsbatch.AddReceiptsToBatch;
-import com.yardi.ws.operations.transactionsbatch.AddReceiptsToBatchResponse;
-import com.yardi.ws.operations.transactionsbatch.CancelReceiptBatch;
-import com.yardi.ws.operations.transactionsbatch.CancelReceiptBatchResponse;
-import com.yardi.ws.operations.transactionsbatch.OpenReceiptBatch;
-import com.yardi.ws.operations.transactionsbatch.OpenReceiptBatchResponse;
-import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
-import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
-import com.yardi.ws.operations.transactionsbatch.TransactionXml_type1;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
-import com.propertyvista.yardi.YardiClient;
-import com.propertyvista.yardi.YardiConstants;
-import com.propertyvista.yardi.YardiConstants.Action;
-import com.propertyvista.yardi.bean.Messages;
+import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
 
 public class YardiSystemBatchesService extends YardiAbstractService {
 
@@ -62,8 +44,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
     }
 
     public void validateReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
-        YardiClient client = ServerSideFactory.create(YardiClient.class);
-        client.setPmcYardiCredential(yc);
+        YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
 
         Persistence.service().retrieve(receipt.billingAccount());
         Persistence.service().retrieve(receipt.billingAccount().lease());
@@ -71,16 +52,15 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         Persistence.service().retrieve(receipt.billingAccount().lease().unit().building());
 
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
-        long batchId = openReceiptBatch(client, yc, propertyCode);
+        long batchId = stub.openReceiptBatch(yc, propertyCode);
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
-        addReceiptsToBatch(client, yc, batchId, residentTransactions);
-        cancelReceiptBatch(client, yc, batchId);
+        stub.addReceiptsToBatch(yc, batchId, residentTransactions);
+        stub.cancelReceiptBatch(yc, batchId);
     }
 
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
-        YardiClient client = ServerSideFactory.create(YardiClient.class);
-        client.setPmcYardiCredential(yc);
+        YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
 
         Persistence.service().retrieve(receipt.billingAccount());
         Persistence.service().retrieve(receipt.billingAccount().lease());
@@ -88,131 +68,11 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         Persistence.service().retrieve(receipt.billingAccount().lease().unit().building());
 
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
-        long batchId = openReceiptBatch(client, yc, propertyCode);
+        long batchId = stub.openReceiptBatch(yc, propertyCode);
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
         ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
-        addReceiptsToBatch(client, yc, batchId, residentTransactions);
-        postReceiptBatch(client, yc, batchId);
+        stub.addReceiptsToBatch(yc, batchId, residentTransactions);
+        stub.postReceiptBatch(yc, batchId);
     }
 
-    private long openReceiptBatch(YardiClient c, PmcYardiCredential yc, String propertyId) throws RemoteException {
-
-        c.transactionIdStart();
-        c.setCurrentAction(Action.OpenReceiptBatch);
-
-        OpenReceiptBatch l = new OpenReceiptBatch();
-        l.setUserName(yc.username().getValue());
-        l.setPassword(yc.credential().getValue());
-        l.setServerName(yc.serverName().getValue());
-        l.setDatabase(yc.database().getValue());
-        l.setPlatform(yc.platform().getValue().name());
-        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-        l.setYardiPropertyId(propertyId);
-
-        OpenReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().openReceiptBatch(l);
-
-        long result = response.getOpenReceiptBatchResult();
-        log.info("OpenReceiptBatch: {}", result);
-        return result;
-
-    }
-
-    private void addReceiptsToBatch(YardiClient c, PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions)
-            throws YardiServiceException, RemoteException {
-        try {
-            c.transactionIdStart();
-            c.setCurrentAction(Action.AddReceiptsToBatch);
-
-            AddReceiptsToBatch l = new AddReceiptsToBatch();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            l.setBatchId(batchId);
-
-            TransactionXml_type1 transactionXml = new TransactionXml_type1();
-
-            String batchXml = MarshallUtil.marshall(residentTransactions);
-            log.info(batchXml);
-            OMElement element = AXIOMUtil.stringToOM(batchXml);
-            transactionXml.setExtraElement(element);
-
-            l.setTransactionXml(transactionXml);
-
-            AddReceiptsToBatchResponse response = c.getResidentTransactionsSysBatchService().addReceiptsToBatch(l);
-            String responseXml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
-            log.info("AddReceiptsToBatch: {}", responseXml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
-            if (messages.isError()) {
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (JAXBException e) {
-            throw new Error(e);
-        } catch (XMLStreamException e) {
-            throw new Error(e);
-        }
-    }
-
-    private void postReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        try {
-            c.transactionIdStart();
-            c.setCurrentAction(Action.PostReceiptBatch);
-
-            PostReceiptBatch l = new PostReceiptBatch();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            l.setBatchId(batchId);
-
-            PostReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().postReceiptBatch(l);
-            String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
-            log.info("PostReceiptBatch: {}", xml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (JAXBException e) {
-            throw new Error(e);
-        }
-    }
-
-    private void cancelReceiptBatch(YardiClient c, PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        try {
-            c.transactionIdStart();
-            c.setCurrentAction(Action.PostReceiptBatch);
-
-            CancelReceiptBatch l = new CancelReceiptBatch();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            l.setBatchId(batchId);
-
-            CancelReceiptBatchResponse response = c.getResidentTransactionsSysBatchService().cancelReceiptBatch(l);
-            String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
-            log.info("CancelReceiptBatch: {}", xml);
-
-            Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
-            if (messages.isError()) {
-                throw new YardiServiceException(messages.toString());
-            } else {
-                log.info(messages.toString());
-            }
-        } catch (JAXBException e) {
-            throw new Error(e);
-        }
-    }
 }

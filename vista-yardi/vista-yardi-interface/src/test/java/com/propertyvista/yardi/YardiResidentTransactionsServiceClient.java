@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi;
 
+import java.rmi.RemoteException;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.entity.server.Persistence;
@@ -29,7 +31,7 @@ import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiResidentTransactionsServiceClient {
 
-    public static void main(String[] args) throws YardiServiceException {
+    public static void main(String[] args) throws YardiServiceException, RemoteException {
         ServerSideConfiguration.setInstance(new VistaTestsServerSideConfiguration(DatabaseType.PostgreSQL));
         NamespaceManager.setNamespace(DemoPmc.star.name());
         Persistence.service().startBackgroundProcessTransaction();

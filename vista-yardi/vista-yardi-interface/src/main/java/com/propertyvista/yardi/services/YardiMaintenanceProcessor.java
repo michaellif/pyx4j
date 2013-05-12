@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -386,6 +387,9 @@ public class YardiMaintenanceProcessor {
             YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequestMeta(yc);
             return true;
         } catch (YardiServiceException e) {
+            log.warn("Could not reload service metadata");
+            return false;
+        } catch (RemoteException e) {
             log.warn("Could not reload service metadata");
             return false;
         }
