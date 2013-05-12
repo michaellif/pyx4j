@@ -7,20 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on May 10, 2013
- * @author stanp
+ * Created on May 11, 2013
+ * @author anatolyk
  * @version $Id$
  */
-package com.propertyvista.ils.kijiji.util;
+package com.propertyvista.ils.kijiji.rs;
 
-import com.kijiji.pint.rs.ILSUnit;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.propertyvista.domain.property.asset.unit.AptUnit;
+import javax.ws.rs.core.Application;
 
-public class KijijiListingProcessor {
-    public ILSUnit convert(AptUnit aptUnit) {
-        ILSUnit unit = new ILSUnit();
-        //unit.setClientUnitId(aptUnit.info().number().getValue());
-        return unit;
+public class KijijiApplication extends Application {
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Set<Class<?>> getClasses() {
+        return new HashSet<Class<?>>(Arrays.asList(KijijiExceptionMapper.class, KijijiApiService.class));
     }
 }
