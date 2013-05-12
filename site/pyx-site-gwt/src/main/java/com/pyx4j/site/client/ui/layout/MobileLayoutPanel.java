@@ -211,4 +211,8 @@ public class MobileLayoutPanel extends ComplexPanel implements RequiresResize, P
         screenContent.setPageOrientation(pageOrientation);
     }
 
+    public void expandDetails(boolean expandDetails) {
+        screenContent.expandDetails(expandDetails);
+    }
+
 }

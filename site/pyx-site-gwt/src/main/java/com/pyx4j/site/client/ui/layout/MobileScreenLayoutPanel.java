@@ -33,6 +33,8 @@ import com.pyx4j.site.client.DisplayPanel;
 
 public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
+    private static final int ANIMATION_TIME = 500;
+
     private final Layout layout;
 
     private final DisplayPanel headerDisplay;
@@ -44,6 +46,8 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
     private PageOrientation pageOrientation = PageOrientation.Vertical;
 
     private boolean listerLayout = false;
+
+    private boolean expandDetails = false;
 
     public MobileScreenLayoutPanel() {
         setElement(Document.get().createDivElement());
@@ -98,8 +102,12 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
     }
 
     public void forceLayout() {
+        forceLayout(0);
+    }
+
+    public void forceLayout(int duration) {
         doLayout();
-        layout.layout();
+        layout.layout(duration);
         onResize();
     }
 
@@ -111,14 +119,19 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
 
         headerLayer.setTopHeight(0.0, Unit.PCT, 10.0, Unit.PCT);
 
-        double width = showDetailsDisplay() ? 50.0 : 100.0;
+        double widthLister = showDetailsDisplay() ? 50.0 : 100.0;
+        double widthDetails = 100.0 - widthLister;
+        if (expandDetails) {
+            widthLister = 0.0;
+            widthDetails = 100.0;
+        }
 
         listerLayer.setTopBottom(10.0, Unit.PCT, 0.0, Unit.PCT);
-        listerLayer.setLeftWidth(0.0, Unit.PCT, width, Unit.PCT);
+        listerLayer.setLeftWidth(0.0, Unit.PCT, widthLister, Unit.PCT);
 
         detailsLayer.setTopBottom(10.0, Unit.PCT, 0.0, Unit.PCT);
-        detailsLayer.setRightWidth(0.0, Unit.PCT, width, Unit.PCT);
-        detailsDisplay.setVisible(showDetailsDisplay());
+        detailsLayer.setRightWidth(0.0, Unit.PCT, widthDetails, Unit.PCT);
+        detailsDisplay.setVisible(showDetailsDisplay() || expandDetails);
     }
 
     private boolean showDetailsDisplay() {
@@ -142,6 +155,11 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
     public void setListerLayout(boolean listerLayout) {
         this.listerLayout = listerLayout;
         forceLayout();
+    }
+
+    public void expandDetails(boolean expandDetails) {
+        this.expandDetails = expandDetails;
+        forceLayout(ANIMATION_TIME);
     }
 
 }
