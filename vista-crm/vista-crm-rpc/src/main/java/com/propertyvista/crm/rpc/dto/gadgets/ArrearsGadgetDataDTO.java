@@ -25,43 +25,20 @@ public interface ArrearsGadgetDataDTO extends IEntity {
 
     AgingBuckets buckets();
 
-    /** used for presentation */
     @Caption(name = "Outstanding This Month")
-    IPrimitive<String> outstandingThisMonth();
-
     IPrimitive<Integer> outstandingThisMonthCount();
-
-    /** used for presentation */
-    @Caption(name = "Outstanding 1 to 30 Days")
-    IPrimitive<String> outstanding1to30Days();
 
     @Caption(name = "Outstanding 1 to 30 Days")
     IPrimitive<Integer> outstanding1to30DaysCount();
 
-    /** used for presentation */
-    @Caption(name = "Outstanding 31 to 60 Days")
-    IPrimitive<String> outstanding31to60Days();
-
     @Caption(name = "Outstanding 31 to 60 Days")
     IPrimitive<Integer> outstanding31to60DaysCount();
-
-    /** used for presentation */
-    @Caption(name = "Outstanding 61 to 90 Days")
-    IPrimitive<String> outstanding61to90Days();
 
     @Caption(name = "Outstanding 61 to 90 Days")
     IPrimitive<Integer> outstanding61to90DaysCount();
 
-    /** used for presentation */
-    @Caption(name = "Outstanding 91+ Days")
-    IPrimitive<String> outstanding91andMoreDays();
-
     @Caption(name = "Outstanding 91+ Days")
     IPrimitive<Integer> outstanding91andMoreDaysCount();
-
-    /** used for presentation */
-    @Caption(name = "Delinquent Leases")
-    IPrimitive<String> outstandingTotal();
 
     @Caption(name = "Delinquent Leases")
     IPrimitive<Integer> delinquentLeases();

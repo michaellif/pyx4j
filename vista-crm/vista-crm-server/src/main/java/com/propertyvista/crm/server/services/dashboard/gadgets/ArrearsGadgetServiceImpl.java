@@ -112,17 +112,17 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));
 
-        if (proto.outstandingTotal() == member | proto.delinquentLeases() == member) {
+        if (proto.buckets().totalBalance() == member | proto.delinquentLeases() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().arrears().arrearsAmount(), BigDecimal.ZERO));
-        } else if (proto.outstandingThisMonth() == member | proto.outstandingThisMonthCount() == member) {
+        } else if (proto.buckets().bucketThisMonth() == member | proto.outstandingThisMonthCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucketThisMonth(), BigDecimal.ZERO));
-        } else if (proto.outstanding1to30Days() == member | proto.outstanding1to30DaysCount() == member) {
+        } else if (proto.buckets().bucket30() == member | proto.outstanding1to30DaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucket30(), BigDecimal.ZERO));
-        } else if (proto.outstanding31to60Days() == member | proto.outstanding31to60DaysCount() == member) {
+        } else if (proto.buckets().bucket60() == member | proto.outstanding31to60DaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucket60(), BigDecimal.ZERO));
-        } else if (proto.outstanding61to90Days() == member | proto.outstanding61to90DaysCount() == member) {
+        } else if (proto.buckets().bucket90() == member | proto.outstanding61to90DaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucket90(), BigDecimal.ZERO));
-        } else if (proto.outstanding91andMoreDays() == member | proto.outstanding91andMoreDaysCount() == member) {
+        } else if (proto.buckets().bucketOver90() == member | proto.outstanding91andMoreDaysCount() == member) {
             criteria.add(PropertyCriterion.gt(criteria.proto().arrears().bucketOver90(), BigDecimal.ZERO));
         }
 

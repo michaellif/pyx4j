@@ -55,18 +55,18 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
 
     @Override
     protected void bindDetailsFactories() {
-        bind(proto().outstandingThisMonth());
+        bind(proto().buckets().bucketThisMonth());
         bind(proto().outstandingThisMonthCount());
-        bind(proto().outstanding1to30Days());
+        bind(proto().buckets().bucket30());
         bind(proto().outstanding1to30DaysCount());
-        bind(proto().outstanding31to60Days());
+        bind(proto().buckets().bucket60());
         bind(proto().outstanding31to60DaysCount());
-        bind(proto().outstanding61to90Days());
+        bind(proto().buckets().bucket90());
         bind(proto().outstanding61to90DaysCount());
-        bind(proto().outstanding91andMoreDays());
+        bind(proto().buckets().bucketOver90());
         bind(proto().outstanding91andMoreDaysCount());
         bind(proto().delinquentLeases());
-        bind(proto().outstandingTotal());
+        bind(proto().buckets().totalBalance());
     }
 
     private void bind(final IObject<?> member) {
