@@ -13,6 +13,7 @@
  */
 package com.propertyvista.payment.pad;
 
+import java.io.Closeable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
@@ -85,7 +87,7 @@ public class CaledonPadSftpClient {
         }
     }
 
-    private static class SftpClient {
+    private static class SftpClient implements Closeable {
 
         JSch jsch = new JSch();
 
@@ -94,15 +96,6 @@ public class CaledonPadSftpClient {
         ChannelSftp channel = null;
 
         Credentials credentials = getCredentials();
-
-        void close() {
-            if (channel != null) {
-                channel.exit();
-            }
-            if (session != null) {
-                session.disconnect();
-            }
-        }
 
         void connect() throws JSchException {
             File knownHosts = new File(System.getProperty("user.home") + "/.ssh", "known_hosts");
@@ -118,6 +111,15 @@ public class CaledonPadSftpClient {
             channel.connect();
         }
 
+        @Override
+        public void close() {
+            if (channel != null) {
+                channel.exit();
+            }
+            if (session != null) {
+                session.disconnect();
+            }
+        }
     }
 
     public String sftpPut(File file) {
@@ -148,26 +150,32 @@ public class CaledonPadSftpClient {
             log.error("SFTP error", e);
             return e.getMessage();
         } finally {
-            client.close();
+            IOUtils.closeQuietly(client);
         }
     }
 
-    public List<File> receiveFiles(String companyId, PadFileType padFileType, File targetDirectory) {
+    public List<File> receiveFiles(String companyId, PadFileType padFileType, File targetDirectory) throws EFTTransportConnectionException {
         return receiveFiles(getSrc, companyId, padFileType, targetDirectory);
     }
 
-    public List<File> receiveFilesSim(File targetDirectory) {
+    public List<File> receiveFilesSim(File targetDirectory) throws EFTTransportConnectionException {
         if (!CaledonPadSftpClient.usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
         return receiveFiles(postDst, null, PadFileType.PadFile, targetDirectory);
     }
 
-    private List<File> receiveFiles(String src, String companyId, PadFileType padFileType, File targetDirectory) {
+    private List<File> receiveFiles(String src, String companyId, PadFileType padFileType, File targetDirectory) throws EFTTransportConnectionException {
         SftpClient client = new SftpClient();
         try {
             client.connect();
+        } catch (JSchException e) {
+            log.error("SFTP error", e);
+            IOUtils.closeQuietly(client);
+            throw new EFTTransportConnectionException(e.getMessage(), e);
+        }
 
+        try {
             client.channel.cd(src);
 
             List<File> lFiles = new ArrayList<File>();
@@ -214,11 +222,8 @@ public class CaledonPadSftpClient {
         } catch (SftpException e) {
             log.error("SFTP error", e);
             throw new Error(e.getMessage());
-        } catch (JSchException e) {
-            log.error("SFTP error", e);
-            throw new Error(e.getMessage());
         } finally {
-            client.close();
+            IOUtils.closeQuietly(client);
         }
     }
 
@@ -248,7 +253,7 @@ public class CaledonPadSftpClient {
             log.error("SFTP error", e);
             throw new Error(e.getMessage());
         } finally {
-            client.close();
+            IOUtils.closeQuietly(client);
         }
     }
 }

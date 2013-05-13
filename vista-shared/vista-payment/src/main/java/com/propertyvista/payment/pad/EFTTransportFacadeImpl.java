@@ -78,7 +78,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public PadAckFile receivePadAcknowledgementFile(String companyId) {
+    public PadAckFile receivePadAcknowledgementFile(String companyId) throws EFTTransportConnectionException {
         File padWorkdir = getPadBaseDir();
         List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Acknowledgement, padWorkdir);
         if (files.size() == 0) {
@@ -101,7 +101,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public PadReconciliationFile receivePadReconciliation(String companyId) {
+    public PadReconciliationFile receivePadReconciliation(String companyId) throws EFTTransportConnectionException {
         File padWorkdir = getPadBaseDir();
         List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Reconciliation, padWorkdir);
         if (files.size() == 0) {

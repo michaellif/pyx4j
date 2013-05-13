@@ -21,9 +21,9 @@ public interface EFTTransportFacade {
 
     public void sendPadFile(PadFile padFile);
 
-    public PadAckFile receivePadAcknowledgementFile(String companyId);
+    public PadAckFile receivePadAcknowledgementFile(String companyId) throws EFTTransportConnectionException;
 
-    public PadReconciliationFile receivePadReconciliation(String companyId);
+    public PadReconciliationFile receivePadReconciliation(String companyId) throws EFTTransportConnectionException;
 
     /**
      * Remove the file from remote server directory in success.

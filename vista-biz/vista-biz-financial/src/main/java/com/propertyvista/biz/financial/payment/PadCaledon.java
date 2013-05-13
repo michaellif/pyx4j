@@ -41,6 +41,7 @@ import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.payment.pad.EFTTransportConnectionException;
 import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -216,7 +217,13 @@ public class PadCaledon {
     }
 
     public boolean receivePadAcknowledgementFile(final ExecutionMonitor executionMonitor) {
-        final PadAckFile padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
+        final PadAckFile padAkFile;
+        try {
+            padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
+        } catch (EFTTransportConnectionException e) {
+            executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
+            return false;
+        }
         if (padAkFile == null) {
             executionMonitor.addInfoEvent("Pooled, No file found on server", null);
             return false;
@@ -245,7 +252,13 @@ public class PadCaledon {
     }
 
     public boolean receivePadReconciliation(final ExecutionMonitor executionMonitor) {
-        final PadReconciliationFile reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
+        final PadReconciliationFile reconciliationFile;
+        try {
+            reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
+        } catch (EFTTransportConnectionException e) {
+            executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
+            return false;
+        }
         if (reconciliationFile == null) {
             executionMonitor.addInfoEvent("Pooled, No file found on server", null);
             return false;

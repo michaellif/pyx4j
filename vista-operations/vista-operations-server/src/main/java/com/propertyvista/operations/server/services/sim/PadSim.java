@@ -25,6 +25,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -39,6 +40,7 @@ import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadUtils;
+import com.propertyvista.payment.pad.EFTTransportConnectionException;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
 import com.propertyvista.payment.pad.simulator.PadSimFileParser;
@@ -61,7 +63,12 @@ public class PadSim {
 
     public PadSimFile loadPadFile() {
         File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().receiveFilesSim(padWorkdir);
+        List<File> files;
+        try {
+            files = new CaledonPadSftpClient().receiveFilesSim(padWorkdir);
+        } catch (EFTTransportConnectionException e) {
+            throw new UserRuntimeException(e.getMessage(), e);
+        }
         if (files.size() == 0) {
             return null;
         }
