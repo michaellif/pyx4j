@@ -14,6 +14,8 @@
 package com.propertyvista.server.config;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -23,11 +25,13 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
+import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.NamespaceResolver;
 import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.rpc.IServiceFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -48,6 +52,7 @@ import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.server.preloader.VistaDataPreloaders;
+import com.propertyvista.server.ci.bugs.MemoryLeakJAXBContextLifecycleListener;
 import com.propertyvista.server.common.security.VistaAntiBot;
 import com.propertyvista.server.security.VistaAccessControlList;
 import com.propertyvista.server.security.VistaAclRevalidator;
@@ -258,6 +263,15 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public TenantSureConfiguration getTenantSureConfiguration() {
         return new VistaTenantSureConfiguration(this);
+    }
+
+    @Override
+    public Collection<LifecycleListener> getLifecycleListeners() {
+        Collection<LifecycleListener> rc = new ArrayList<LifecycleListener>(super.getLifecycleListeners());
+        if (ApplicationMode.isDevelopment()) {
+            rc.add(new MemoryLeakJAXBContextLifecycleListener());
+        }
+        return rc;
     }
 
     @Override

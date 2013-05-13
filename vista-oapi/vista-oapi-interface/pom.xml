@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>com.propertyvista</groupId>
-        <artifactId>vista-yardi</artifactId>
+        <artifactId>vista-oapi</artifactId>
         <version>1.1.0-SNAPSHOT</version><!--vista-version-->
         <relativePath>../pom.xml</relativePath>
     </parent>
@@ -69,6 +69,12 @@
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
+        </dependency>
+
+        <!-- use the latest version instead of one ref by jaxws-rt -->
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
         </dependency>
 
         <dependency>
