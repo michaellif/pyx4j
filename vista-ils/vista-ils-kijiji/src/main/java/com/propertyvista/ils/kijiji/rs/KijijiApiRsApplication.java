@@ -19,7 +19,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-public class KijijiApplication extends Application {
+public class KijijiApiRsApplication extends Application {
 
     @SuppressWarnings("unchecked")
     @Override
