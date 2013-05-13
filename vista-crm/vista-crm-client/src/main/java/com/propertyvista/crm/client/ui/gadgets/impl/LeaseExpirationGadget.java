@@ -57,7 +57,7 @@ public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpira
                         filterData.getCounterMember().toString());
             }
         };
-        bindDetailsFactory(proto().unitOccupancyLabel(), new UnitDetailsFactory(this, unitCriteriaProvider));
+        bindDetailsFactory(proto().occupiedUnits(), new UnitDetailsFactory(this, unitCriteriaProvider));
 
         bindLeaseDetailsFactory(proto().numOfLeasesEndingThisMonth());
         bindLeaseDetailsFactory(proto().numOfLeasesEndingNextMonth());

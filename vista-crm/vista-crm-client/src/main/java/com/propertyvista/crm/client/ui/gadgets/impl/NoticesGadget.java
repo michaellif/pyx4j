@@ -53,7 +53,7 @@ public class NoticesGadget extends CounterGadgetInstanceBase<NoticesGadgetDataDT
 
     @Override
     protected void bindDetailsFactories() {
-        bindUnitDetailsFactory(proto().unitVacancyLabel());
+        bindUnitDetailsFactory(proto().vacantUnits());
 
         bindLeaseDetailsFactory(proto().noticesLeavingThisMonth());
         bindLeaseDetailsFactory(proto().noticesLeavingNextMonth());

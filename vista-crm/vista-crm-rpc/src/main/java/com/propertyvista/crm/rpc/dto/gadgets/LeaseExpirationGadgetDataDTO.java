@@ -40,10 +40,4 @@ public interface LeaseExpirationGadgetDataDTO extends IEntity {
     @Caption(name = "Leases on Month to Month")
     IPrimitive<Integer> numOfLeasesOnMonthToMonth();
 
-    /**
-     * Warning: this is for Client side UI usage only, should not be touched by the server
-     */
-    @Caption(name = "Occupied Units")
-    IPrimitive<String> unitOccupancyLabel();
-
 }

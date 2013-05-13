@@ -25,62 +25,21 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
-import com.pyx4j.forms.client.ui.EntityFormComponentFactory;
-import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
 public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecoratableForm<E> {
 
     public interface ZoominRequestHandler {
-
         void onZoomIn(IObject<?> zoomableObject);
-
-    }
-
-    public static class ZoominLinkFactory implements IEditableComponentFactory {
-
-        private final IEditableComponentFactory defaultFactory = new EntityFormComponentFactory();
-
-        private IObject<?>[] zoomableMembers;
-
-        @Override
-        public CComponent<?, ?> create(final IObject<?> member) {
-            assert zoomableMembers != null : "please set zoomable members prior to initializing the form";
-
-            if (isZoomable(member)) {
-                CHyperlink comp = new CHyperlink(member.getMeta().getDescription(), null);
-                return comp;
-            } else {
-                return defaultFactory.create(member);
-            }
-        }
-
-        void initZoomIn(IObject<?>... zoomableMembers) {
-            this.zoomableMembers = zoomableMembers;
-        }
-
-        boolean isZoomable(IObject<?> member) {
-            for (IObject<?> zoomableMember : zoomableMembers) {
-                if (member instanceof ICollection) {
-                    if (zoomableMember.getPath().toString().startsWith(member.getPath().toString())) {
-                        return true;
-                    }
-                } else if (zoomableMember == member) {
-                    return true;
-                }
-            }
-            return false;
-        }
     }
 
     private ZoominRequestHandler zoomInHandler;
 
-    private IObject<?>[] localZoomableMembers;
+    private IObject<?>[] zoomableMembers;
 
     public ZoomableViewForm(Class<E> clazz) {
-        super(clazz, new ZoominLinkFactory());
+        super(clazz);
         setEditable(false);
         setViewable(true);
     }
@@ -89,11 +48,11 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecorat
      * Sets up zoom in callback and defines which members should support it, must be called before {@link ZoomableViewForm#initContent()} to have any effect
      */
     public void initZoomIn(ZoominRequestHandler zoomInHandler, IObject<?>... zoomableMembers) {
-        localZoomableMembers = new IObject<?>[zoomableMembers.length];
+        this.zoomableMembers = new IObject<?>[zoomableMembers.length];
         for (int i = 0; i < zoomableMembers.length; ++i) {
-            localZoomableMembers[i] = proto().getMember(zoomableMembers[i].getPath());
+            this.zoomableMembers[i] = proto().getMember(zoomableMembers[i].getPath());
         }
-        ((ZoominLinkFactory) factory).initZoomIn(localZoomableMembers);
+//        ((ZoominLinkFactory) factory).initZoomIn(localZoomableMembers);
         this.zoomInHandler = zoomInHandler;
 
     }
@@ -102,17 +61,9 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecorat
     public void bind(CComponent<?, ?> component, final IObject<?> member) {
         super.bind(component, member);
         if (zoomInHandler != null) {
-            if ((component instanceof CHyperlink) & ((ZoominLinkFactory) factory).isZoomable(member)) {
-                ((CHyperlink) component).setCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        zoomInHandler.onZoomIn(ZoomableViewForm.this.getValue().getMember(member.getPath()));
-                    }
-                });
-
-            } else if ((component instanceof ZoomableViewFolder) & ((ZoominLinkFactory) factory).isZoomable(member)) {
+            if ((component instanceof ZoomableViewFolder) & isZoomable(member)) {
                 List<IObject<?>> transformedZoomInMembers = new ArrayList<IObject<?>>();
-                for (IObject<?> zoomableMember : localZoomableMembers) {
+                for (IObject<?> zoomableMember : zoomableMembers) {
                     String zoomableMemberPath = zoomableMember.getPath().toString();
                     if (zoomableMemberPath.startsWith(member.getPath().toString())) {
                         IEntity zoomedProto = EntityFactory.getEntityPrototype(((ICollection) member).getValueClass());
@@ -123,8 +74,29 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecorat
                 }
                 ((ZoomableViewFolder<?>) component)
                         .initZoomIn(zoomInHandler, transformedZoomInMembers.toArray(new IObject<?>[transformedZoomInMembers.size()]));
+            } else if (isZoomable(member)) {
+                component.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        zoomInHandler.onZoomIn(ZoomableViewForm.this.getValue().getMember(member.getPath()));
+                    }
+                });
+
             }
 
         }
+    }
+
+    private boolean isZoomable(IObject<?> member) {
+        for (IObject<?> zoomableMember : zoomableMembers) {
+            if (member instanceof ICollection) {
+                if (zoomableMember.getPath().toString().startsWith(member.getPath().toString())) {
+                    return true;
+                }
+            } else if (zoomableMember == member) {
+                return true;
+            }
+        }
+        return false;
     }
 }

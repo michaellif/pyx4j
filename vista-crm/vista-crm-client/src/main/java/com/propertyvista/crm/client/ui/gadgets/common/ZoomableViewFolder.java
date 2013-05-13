@@ -17,15 +17,14 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm.ZoominLinkFactory;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm.ZoominRequestHandler;
 
 public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFolder<E> {
@@ -38,9 +37,9 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
 
     public static abstract class ZoomableViewEntityRowEditor<E extends IEntity> extends CEntityFolderRowEditor<E> {
 
-        private ZoominLinkFactory zoomableFactory;
-
         private ZoominRequestHandler zoomInHandler;
+
+        private IObject<?>[] zoomableMembers;
 
         public ZoomableViewEntityRowEditor(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
             super(clazz, columns);
@@ -49,28 +48,38 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
         }
 
         public void initZoomin(ZoominRequestHandler zoomInHandler, IObject<?>... zoomableMembers) {
-            this.zoomableFactory = new ZoomableViewForm.ZoominLinkFactory();
-            this.zoomableFactory.initZoomIn(zoomableMembers);
+            this.zoomableMembers = zoomableMembers;
             this.zoomInHandler = zoomInHandler;
         }
 
         @Override
         protected CComponent<?, ?> createCell(final EntityFolderColumnDescriptor column) {
-            if (zoomableFactory.isZoomable(column.getObject())) {
-                CComponent<?, ?> comp = inject(column.getObject(), this.zoomableFactory.create(column.getObject()));
-                if (comp instanceof CHyperlink) {
-                    ((CHyperlink) comp).setCommand(new Command() {
-                        @Override
-                        public void execute() {
-                            zoomInHandler.onZoomIn(getValue().getMember(column.getObject().getPath()));
-                        }
-                    });
-                    comp.asWidget().getElement().getStyle().setProperty("textAlign", "right");
-                }
+            if (isZoomable(column.getObject())) {
+                CComponent<?, ?> comp = inject(column.getObject(), this.create(column.getObject()));
+                comp.setNavigationCommand(new Command() {
+                    @Override
+                    public void execute() {
+                        zoomInHandler.onZoomIn(getValue().getMember(column.getObject().getPath()));
+                    }
+                });
+                comp.asWidget().getElement().getStyle().setProperty("textAlign", "right");
                 return comp;
             } else {
                 return super.createCell(column);
             }
+        }
+
+        private boolean isZoomable(IObject<?> member) {
+            for (IObject<?> zoomableMember : zoomableMembers) {
+                if (member instanceof ICollection) {
+                    if (zoomableMember.getPath().toString().startsWith(member.getPath().toString())) {
+                        return true;
+                    }
+                } else if (zoomableMember == member) {
+                    return true;
+                }
+            }
+            return false;
         }
 
     }

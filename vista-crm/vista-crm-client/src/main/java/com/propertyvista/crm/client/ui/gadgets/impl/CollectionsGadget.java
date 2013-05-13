@@ -52,8 +52,8 @@ public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadg
     @Override
     protected void bindDetailsFactories() {
         bindLeaseDetailsFacotry(proto().leasesPaidThisMonth());
-        bindPaymentDetailsFactory(proto().fundsCollectedThisMonthLabel(), proto().fundsCollectedThisMonth());
-        bindPaymentDetailsFactory(proto().fundsInProcessingLabel(), proto().fundsInProcessing());
+        bindPaymentDetailsFactory(proto().fundsCollectedThisMonth());
+        bindPaymentDetailsFactory(proto().fundsInProcessing());
     }
 
     @Override
@@ -71,7 +71,7 @@ public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadg
         bindDetailsFactory(member, new LeasesDetailsFactory(this, criteriaProvider));
     }
 
-    private void bindPaymentDetailsFactory(IObject<?> member, IObject<?> bindingFilter) {
+    private void bindPaymentDetailsFactory(IObject<?> member) {
         ICriteriaProvider<PaymentRecordDTO, CounterGadgetFilter> criteriaProvider = new ICriteriaProvider<PaymentRecordDTO, CounterGadgetFilter>() {
             @Override
             public void makeCriteria(AsyncCallback<EntityListCriteria<PaymentRecordDTO>> callback, CounterGadgetFilter filterData) {

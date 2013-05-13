@@ -13,8 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
+import java.text.ParseException;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -36,7 +40,22 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
         int row = -1;
         if (!VistaFeatures.instance().yardiIntegration()) {
             panel.setH2(++row, 0, 1, i18n.tr("Vacancy:"));
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitVacancyLabel())).customLabel(i18n.tr("Units Vacant")).componentWidth(15).build());
+            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vacantUnits(), new CLabel<Integer>())).customLabel(i18n.tr("Units Vacant"))
+                    .componentWidth(15).build());
+            ((CLabel<Integer>) get(proto().vacantUnits())).setFormat(new IFormat<Integer>() {
+                @Override
+                public Integer parse(String string) throws ParseException {
+                    return null; // NOT supposed to be used
+                }
+
+                @Override
+                public String format(Integer value) {
+                    int vacant = getValue().vacantUnits().getValue();
+                    int total = getValue().totalUnits().getValue();
+                    double percent = total != 0 ? vacant / (double) total : 0d;
+                    return i18n.tr("{0} of {1} ({2,number,percent})", vacant, total, percent);
+                }
+            });
         }
         panel.setH2(++row, 0, 1, i18n.tr("Notices Leaving:"));
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noticesLeavingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5).build());
@@ -48,14 +67,4 @@ public class NoticesSummaryForm extends ZoomableViewForm<NoticesGadgetDataDTO> {
 
     }
 
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            int vacant = getValue().vacantUnits().getValue();
-            int total = getValue().totalUnits().getValue();
-            double percent = total != 0 ? vacant / (double) total : 0d;
-            get(proto().unitVacancyLabel()).setValue(i18n.tr("{0} of {1} ({2,number,percent})", vacant, total, percent));
-        }
-    }
 }

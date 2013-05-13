@@ -30,18 +30,12 @@ public interface CollectionsGadgetDataDTO extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
+    @Caption(name = "Funds Collected This Month")
     IPrimitive<BigDecimal> fundsCollectedThisMonth();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> fundsInProcessing();
-
-    /** for UI only */
-    @Caption(name = "Funds Collected This Month")
-    IPrimitive<String> fundsCollectedThisMonthLabel();
-
-    /** for UI only */
     @Caption(name = "Funds In Processing")
-    IPrimitive<String> fundsInProcessingLabel();
+    IPrimitive<BigDecimal> fundsInProcessing();
 
 }
