@@ -39,6 +39,8 @@ import org.slf4j.LoggerFactory;
 import templates.TemplateResources;
 
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
 
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -74,9 +76,9 @@ public abstract class BasePage extends WebPage {
         }
     }
 
-    private final PMSiteContentManager cm;
+    private PMSiteContentManager cm;
 
-    private final AvailableLocale locale;
+    private AvailableLocale locale;
 
     public BasePage() {
         this(null);
@@ -84,6 +86,13 @@ public abstract class BasePage extends WebPage {
 
     public BasePage(PageParameters parameters) {
         super(parameters);
+
+        // Make sure there is no maintenance
+        if (SystemState.Unavailable.equals(SystemMaintenance.getState())) {
+            getRequestCycle().replaceAllRequestHandlers(
+                    new RenderPageRequestHandler(new PageProvider(MaintenancePage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
+            return;
+        }
 
         cm = ((PMSiteWebRequest) getRequest()).getContentManager();
         locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();

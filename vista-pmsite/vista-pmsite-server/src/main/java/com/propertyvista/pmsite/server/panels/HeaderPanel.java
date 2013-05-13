@@ -16,6 +16,9 @@ package com.propertyvista.pmsite.server.panels;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import com.pyx4j.essentials.rpc.SystemState;
+import com.pyx4j.essentials.server.admin.SystemMaintenance;
+
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.pmsite.server.PMSiteContentManager;
@@ -55,7 +58,8 @@ public class HeaderPanel extends Panel {
         // show login if Residents page is enabled
         boolean residentsEnabled = false;
         try {
-            residentsEnabled = cm.getSiteDescriptor().residentPortalSettings().enabled().isBooleanTrue();
+            residentsEnabled = cm.getSiteDescriptor().residentPortalSettings().enabled().isBooleanTrue()
+                    && SystemState.Online.equals(SystemMaintenance.getState());
         } catch (Exception ignore) {
         }
         add(residentsEnabled ? new AuthenticationPanel("auth") : new Label("auth"));

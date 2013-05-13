@@ -73,6 +73,7 @@ import com.propertyvista.pmsite.server.pages.InquiryPage;
 import com.propertyvista.pmsite.server.pages.InquirySuccessPage;
 import com.propertyvista.pmsite.server.pages.InternalErrorPage;
 import com.propertyvista.pmsite.server.pages.LandingPage;
+import com.propertyvista.pmsite.server.pages.MaintenancePage;
 import com.propertyvista.pmsite.server.pages.ResidentsPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
@@ -110,6 +111,7 @@ public class PMSiteApplication extends AuthenticatedWebApplication {
         MountMap.put("inquiryok", InquirySuccessPage.class);
         MountMap.put("cnt" + PMSiteContentManager.PARAMETER_PATH, StaticPage.class);
         MountMap.put("error", InternalErrorPage.class);
+        MountMap.put("maintenance", MaintenancePage.class);
     }
 
     // custom mapper - supports locale in url and persistent params in dev mode
