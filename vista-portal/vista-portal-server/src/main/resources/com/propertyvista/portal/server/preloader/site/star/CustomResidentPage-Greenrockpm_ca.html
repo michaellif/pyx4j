@@ -27,7 +27,7 @@
     height: auto;
 }
 
-.PortalViewDisplay table,.PortalView table, .Dialog table, .gwt-DatePicker table {
+.PortalViewDisplay table,.PortalView table, .Dialog table, .gwt-DatePicker table, .gwt-SuggestBoxPopup table {
 	border: none;
 	margin-bottom: 0.5em;
 }
@@ -40,13 +40,18 @@
 	border-top: none;
 }
 
-.PortalViewDisplay table th+th,.PortalView table th+th, .Dialog table th+th, .gwt-DatePicker table th+th {
+.PortalViewDisplay table th+th,.PortalView table th+th, .Dialog table th+th, .gwt-DatePicker table th+th, .gwt-SuggestBoxPopup table th+th {
 	border-left: none;
 }
 
-.PortalViewDisplay table td+td,.PortalView table td+td, .Dialog table td+td, .gwt-DatePicker table td+td {
+.PortalViewDisplay table td+td,.PortalView table td+td, .Dialog table td+td, .gwt-DatePicker table td+td, .gwt-SuggestBoxPopup table td+td {
 	border-left: none;
 }
+
+.gwt-SuggestBoxPopup table tr + tr td {
+	border-top: none;
+} 
+
 
 table th, table td {
     padding: 0;
