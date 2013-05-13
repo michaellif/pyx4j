@@ -14,6 +14,9 @@
 package com.propertyvista.operations.domain.scheduler;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
@@ -24,17 +27,17 @@ public enum PmcProcessType implements Serializable {
 
     vistaBusinessReport,
 
-    billing(true),
+    billing(PmcProcessOptions.RunForDay),
 
     depositRefund,
 
     depositInterestAdjustment,
 
     @Translate("PAD 1 - Issue PreAuthorized Payments")
-    paymentsIssue(true),
+    paymentsIssue(PmcProcessOptions.RunForDay),
 
     @Translate("PAD 2 - Update PreAuthorized Payments")
-    paymentsUpdate(true),
+    paymentsUpdate(PmcProcessOptions.RunForDay),
 
     @Translate("PAD 3 - Process Scheduled eCheque Payments")
     paymentsScheduledEcheck,
@@ -46,21 +49,21 @@ public enum PmcProcessType implements Serializable {
     paymentsPadSend,
 
     @Translate("PAD 6A - Payments Pad Receive Acknowledgment from Caledon")
-    paymentsPadReceiveAcknowledgment,
+    paymentsPadReceiveAcknowledgment(PmcProcessOptions.GlobalOnly),
 
     @Translate("PAD 6B - Payments Pad Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
     paymentsPadProcesAcknowledgment,
 
     @Translate("PAD 7A - Payments Pad Receive Reconciliation from Caledon")
-    paymentsPadReceiveReconciliation,
+    paymentsPadReceiveReconciliation(PmcProcessOptions.GlobalOnly),
 
     @Translate("PAD 7B - Receive Payments from BMO")
-    paymentsBmoReceive,
+    paymentsBmoReceive(PmcProcessOptions.GlobalOnly),
 
     @Translate("PAD 7C - Payments Pad Process Reconciliation (auto triggered by ReceiveReconciliation)")
     paymentsPadProcesReconciliation,
 
-    paymentsTenantSure(true),
+    paymentsTenantSure(PmcProcessOptions.RunForDay),
 
     initializeFutureBillingCycles,
 
@@ -76,7 +79,7 @@ public enum PmcProcessType implements Serializable {
 
     updatePaymentsSummary,
 
-    equifaxRetention,
+    equifaxRetention(PmcProcessOptions.GlobalOnly),
 
     yardiImportProcess,
 
@@ -86,34 +89,23 @@ public enum PmcProcessType implements Serializable {
 
     tenantSureReports,
 
-    tenantSureTransactionReports(true),
+    tenantSureTransactionReports(PmcProcessOptions.RunForDay),
 
     // Used for scheduler testing
     test;
 
-    private final boolean dailyExecutions;
+    private final List<PmcProcessOptions> options;
 
     PmcProcessType() {
-        dailyExecutions = false;
+        this.options = Collections.emptyList();
     }
 
-    PmcProcessType(boolean dailyExecutions) {
-        this.dailyExecutions = dailyExecutions;
-    }
-
-    //TODO
     PmcProcessType(PmcProcessOptions... options) {
-        boolean runForDay = false;
-        for (PmcProcessOptions otion : options) {
-            if (otion == PmcProcessOptions.RunForDay) {
-                runForDay = true;
-            }
-        }
-        this.dailyExecutions = runForDay;
+        this.options = Arrays.asList(options);
     }
 
-    public boolean isDailyExecutions() {
-        return dailyExecutions;
+    public boolean hasOption(PmcProcessOptions option) {
+        return options.contains(option);
     }
 
     public String getDescription() {

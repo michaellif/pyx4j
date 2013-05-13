@@ -23,6 +23,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.TriggerPmcSelectionType;
 import com.propertyvista.operations.rpc.TriggerDTO;
 
@@ -86,5 +87,10 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
         get(proto().population()).setVisible(
                 !getValue().populationType().isNull() && getValue().populationType().getValue() != TriggerPmcSelectionType.allPmc
                         && getValue().populationType().getValue() != TriggerPmcSelectionType.none);
+
+        get(proto().triggerType()).setViewable(!getValue().triggerType().isNull());
+
+        get(proto().populationType()).setViewable(
+                !getValue().triggerType().isNull() && getValue().triggerType().getValue().hasOption(PmcProcessOptions.GlobalOnly));
     }
 }

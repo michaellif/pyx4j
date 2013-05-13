@@ -353,6 +353,9 @@ public class PmcProcessDispatcherJob implements Job {
                 throw new Error(e);
             } catch (ExecutionException e) {
                 executionException = e.getCause();
+                if (executionException == null) {
+                    executionException = e;
+                }
                 log.error("pmcProcess {} pmc:{} execution error", pmcProcess.getClass().getSimpleName(), runData.pmc().namespace().getValue(),
                         executionException);
                 break;

@@ -19,6 +19,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerPmcSelectionType;
@@ -33,11 +34,9 @@ public class TriggerPreloader extends AbstractDataPreloader {
             trigger.triggerType().setValue(pmcProcessType);
             trigger.name().setValue(pmcProcessType.getDescription());
 
-            switch (pmcProcessType) {
-            case equifaxRetention:
+            if (pmcProcessType.hasOption(PmcProcessOptions.GlobalOnly)) {
                 trigger.populationType().setValue(TriggerPmcSelectionType.none);
-                break;
-            default:
+            } else {
                 trigger.populationType().setValue(TriggerPmcSelectionType.allPmc);
             }
 

@@ -29,6 +29,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunLister;
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.TriggerDTO;
 
@@ -98,7 +99,8 @@ public class TriggerViewerViewImpl extends OperationsViewerViewImplBase<TriggerD
         super.populate(value);
 
         runImmediately.setVisible(true);
-        runForDate.setVisible(((value != null) && (value.triggerType().getValue() != null) && (value.triggerType().getValue().isDailyExecutions())));
+        runForDate.setVisible(((value != null) && (value.triggerType().getValue() != null) && (value.triggerType().getValue()
+                .hasOption(PmcProcessOptions.RunForDay))));
     }
 
     // Internals:
