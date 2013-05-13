@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -73,7 +74,7 @@ public class YardiExample {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
             stub.getResidentsLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode()
-                    .getValue());
+                    .getValue(), new GregorianCalendar());
 
         } catch (Throwable e) {
             log.error("error", e);

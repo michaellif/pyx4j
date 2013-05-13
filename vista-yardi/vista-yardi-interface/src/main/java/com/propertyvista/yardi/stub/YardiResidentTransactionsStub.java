@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.stub;
 
 import java.rmi.RemoteException;
+import java.util.Calendar;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
@@ -35,5 +36,5 @@ public interface YardiResidentTransactionsStub {
 
     void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
 
-    void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
+    void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId, Calendar calendar) throws YardiServiceException, RemoteException;
 }

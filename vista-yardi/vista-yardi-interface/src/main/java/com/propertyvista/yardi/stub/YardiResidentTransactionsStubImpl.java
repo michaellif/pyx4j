@@ -14,7 +14,7 @@
 package com.propertyvista.yardi.stub;
 
 import java.rmi.RemoteException;
-import java.util.GregorianCalendar;
+import java.util.Calendar;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -259,7 +259,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId, Calendar calendar) throws YardiServiceException, RemoteException {
         try {
             init(Action.GetResidentsLeaseCharges);
 
@@ -271,7 +271,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setPlatform(yc.platform().getValue().name());
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
             request.setYardiPropertyId(propertyId);
-            request.setPostMonth(new GregorianCalendar());
+            request.setPostMonth(calendar);
 
             GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
             String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();

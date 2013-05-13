@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.stub;
 
 import java.rmi.RemoteException;
+import java.util.Calendar;
 
 import org.apache.axis2.AxisFault;
 
@@ -62,7 +63,7 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     }
 
     @Override
-    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId, Calendar calendar) throws YardiServiceException, RemoteException {
         // TODO Auto-generated method stub
 
     }
