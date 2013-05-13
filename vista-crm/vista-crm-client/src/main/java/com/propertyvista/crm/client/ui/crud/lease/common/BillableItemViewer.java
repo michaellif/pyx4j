@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -76,7 +76,8 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityHyperlink<ProductItem>(null, new Command() {
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 25).build());
+        get(proto().item()).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(getTargetPlace());
@@ -93,7 +94,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
                     throw new IllegalArgumentException("Incorrect Product value!");
                 }
             }
-        })), 25).build());
+        });
 
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());

@@ -24,8 +24,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
-import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -126,16 +125,14 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         contentPanel = new FormFlexPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
         int row = -1;
         if (displayTenantOwner) {
-            CComponent<Customer, ?> comp = null;
+            CEntityLabel<Customer> comp = new CEntityLabel<Customer>(i18n.tr("Tenant"));
             if (tenantOwnerClickHandler != null) {
-                comp = new CEntityHyperlink<Customer>(i18n.tr("Tenant"), new Command() {
+                comp.setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         TenantInsuranceCertificateForm.this.tenantOwnerClickHandler.onTenantOwnerClicked(getValue().tenant().<Tenant> createIdentityStub());
                     }
                 });
-            } else {
-                comp = new CLabel<Customer>();
             }
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), comp), 15).build());
         }

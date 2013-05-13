@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -84,26 +84,23 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
-            left.setWidget(
-                    ++row,
-                    0,
-                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityHyperlink<Name>(null,
-                            new Command() {
-                                @Override
-                                public void execute() {
-                                    if (getValue().leaseParticipant().isInstanceOf(LeaseTermTenant.class)) {
-                                        AppSite.getPlaceController().goTo(
-                                                AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().leaseParticipant()
-                                                        .getPrimaryKey()));
-                                    } else if (getValue().leaseParticipant().isInstanceOf(LeaseTermGuarantor.class)) {
-                                        AppSite.getPlaceController().goTo(
-                                                AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().leaseParticipant()
-                                                        .getPrimaryKey()));
-                                    } else {
-                                        throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
-                                    }
-                                }
-                            })), 20).build());
+            left.setWidget(++row, 0,
+                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()), 20)
+                            .build());
+            get(proto().leaseParticipant().leaseParticipant().customer().person().name()).setNavigationCommand(new Command() {
+                @Override
+                public void execute() {
+                    if (getValue().leaseParticipant().isInstanceOf(LeaseTermTenant.class)) {
+                        AppSite.getPlaceController().goTo(
+                                AppPlaceEntityMapper.resolvePlace(Tenant.class, getValue().leaseParticipant().leaseParticipant().getPrimaryKey()));
+                    } else if (getValue().leaseParticipant().isInstanceOf(LeaseTermGuarantor.class)) {
+                        AppSite.getPlaceController().goTo(
+                                AppPlaceEntityMapper.resolvePlace(Guarantor.class, getValue().leaseParticipant().leaseParticipant().getPrimaryKey()));
+                    } else {
+                        throw new IllegalArgumentException("Incorrect LeaseParticipant value!");
+                    }
+                }
+            });
 
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().role()), 15).build());
 

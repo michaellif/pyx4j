@@ -23,7 +23,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -123,12 +122,13 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
                 content.setHR(++row, 0, 2);
                 content.setWidget(++row, 0, amountPlaceholder);
-                content.setWidget(row, 1, inject(proto().paymentMethod(), new CEntityHyperlink<LeasePaymentMethod>(null, new Command() {
+                content.setWidget(row, 1, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()));
+                get(proto().paymentMethod()).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         presenter.viewPaymentMethod(getValue());
                     }
-                })));
+                });
                 content.getCellFormatter().setWidth(row, 0, "25em");
 
                 return content;

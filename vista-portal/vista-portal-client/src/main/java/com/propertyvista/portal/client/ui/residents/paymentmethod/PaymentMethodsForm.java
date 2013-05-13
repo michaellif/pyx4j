@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -115,7 +115,8 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
             public CComponent<?, ?> create(IObject<?> member) {
                 CComponent<?, ?> comp = null;
                 if (member.equals(proto().details())) {
-                    comp = new CEntityHyperlink<PaymentDetails>(null, new Command() {
+                    comp = new CEntityLabel<PaymentDetails>();
+                    comp.setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             presenter.viewPaymentMethod(getValue());

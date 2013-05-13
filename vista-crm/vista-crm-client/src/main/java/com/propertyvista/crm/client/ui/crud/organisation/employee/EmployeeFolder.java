@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
@@ -76,16 +75,13 @@ public class EmployeeFolder extends VistaTableFolder<Employee> {
                     if (proto().title() == column.getObject()) {
                         comp = inject(column.getObject(), new CLabel<String>());
                     } else if (proto().name() == column.getObject()) {
-                        if (isEditable()) {
-                            comp = inject(column.getObject(), new CEntityLabel<Name>());
-                        } else {
-                            comp = inject(column.getObject(), new CEntityHyperlink<Name>(null, new Command() {
-                                @Override
-                                public void execute() {
-                                    AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Employee().formViewerPlace(getValue().id().getValue()));
-                                }
-                            }));
-                        }
+                        comp = inject(column.getObject(), new CEntityLabel<Name>());
+                        comp.setNavigationCommand(new Command() {
+                            @Override
+                            public void execute() {
+                                AppSite.getPlaceController().goTo(new CrmSiteMap.Organization.Employee().formViewerPlace(getValue().id().getValue()));
+                            }
+                        });
                     } else {
                         comp = inject(column.getObject(), new CLabel());
                     }

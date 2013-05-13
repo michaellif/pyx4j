@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityHyperlink;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -51,8 +50,11 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
         this.customViewLabel = customViewLabel;
 
         linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
+        viewComp = new CEntityLabel<Name>();
+        viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
+
         if (linkPlace != null) {
-            viewComp = new CEntityHyperlink<Name>(null, new Command() {
+            viewComp.setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
                     if (getLinkKey() != null) {
@@ -60,9 +62,6 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
                     }
                 }
             });
-        } else {
-            viewComp = new CEntityLabel<Name>();
-            viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
         }
     }
 
