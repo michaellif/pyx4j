@@ -40,7 +40,7 @@ public class PadCaledonDev {
             props.load(is = new FileInputStream(getFile()));
             return props;
         } catch (FileNotFoundException e) {
-            log.error("File Not Found", e);
+            log.debug("File {} Not Found", file);
         } catch (IOException e) {
             log.error("IO Exception", e);
         } finally {
