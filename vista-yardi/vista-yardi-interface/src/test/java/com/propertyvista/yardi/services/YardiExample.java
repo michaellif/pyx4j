@@ -23,7 +23,6 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.server.config.DevYardiCredentials;
-import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 public class YardiExample {
@@ -31,20 +30,10 @@ public class YardiExample {
     private final static Logger log = LoggerFactory.getLogger(YardiExample.class);
 
     public static void main(String[] args) {
-        getPropertyConfigurations();
         getPropertyCodes();
         getResidentTransactions();
         getUnitInformation();
-    }
-
-    private static void getPropertyConfigurations() {
-        try {
-            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            Properties properties = stub.getPropertyConfigurations(DevYardiCredentials.getTestPmcYardiCredential());
-            System.out.println(properties);
-        } catch (Throwable e) {
-            log.error("error", e);
-        }
+        getResidentsLeaseCharges();
     }
 
     private static void getPropertyCodes() {
@@ -73,6 +62,18 @@ public class YardiExample {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
             stub.getUnitInformation(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue());
+
+        } catch (Throwable e) {
+            log.error("error", e);
+        }
+
+    }
+
+    private static void getResidentsLeaseCharges() {
+        try {
+            YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+            stub.getResidentsLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode()
+                    .getValue());
 
         } catch (Throwable e) {
             log.error("error", e);

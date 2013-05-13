@@ -34,4 +34,6 @@ public interface YardiResidentTransactionsStub {
     void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException, RemoteException;
 
     void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
+
+    void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
 }

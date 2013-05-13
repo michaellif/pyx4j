@@ -13,6 +13,8 @@
  */
 package com.propertyvista.yardi.stub;
 
+import java.rmi.RemoteException;
+
 import org.apache.axis2.AxisFault;
 
 import com.yardi.entity.resident.ResidentTransactions;
@@ -55,6 +57,12 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         // TODO Auto-generated method stub
 
     }
