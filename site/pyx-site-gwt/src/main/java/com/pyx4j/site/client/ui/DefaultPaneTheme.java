@@ -171,8 +171,8 @@ public class DefaultPaneTheme extends Theme {
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.05);
         style.addProperty("color", ThemeColor.foreground, 0);
-        style.addProperty("padding", "2px 12px");
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 1.6);
+        style.addProperty("padding", "2px 12px");
         style.addProperty("font-size", "11px");
         style.addProperty("font-weight", "bold");
         style.addProperty("border-radius", "5px");
@@ -189,9 +189,7 @@ public class DefaultPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".gwt-MenuBar-vertical", " .", StyleName.HighlightedAction);
-        style.addProperty("color", ThemeColor.foreground, 0);
-//        style.addProperty("background-color", ThemeColor.object1, 0.2);
-        style.addGradient(ThemeColor.object1, 0.1, ThemeColor.object1, 0.5);
+        style.addGradient(ThemeColor.object1, 0.05, ThemeColor.object1, 0.1);
         style.addProperty("font-weight", "bold");
         addStyle(style);
     }
@@ -201,8 +199,8 @@ public class DefaultPaneTheme extends Theme {
         style.addProperty("border", "1px solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.05);
         style.addProperty("color", ThemeColor.foreground, 0);
-        style.addProperty("padding", "2px 12px");
         style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 2);
+        style.addProperty("padding", "2px 12px");
         style.addProperty("font-size", "11px");
         style.addProperty("font-weight", "bold");
         style.addProperty("border-radius", "5px");
