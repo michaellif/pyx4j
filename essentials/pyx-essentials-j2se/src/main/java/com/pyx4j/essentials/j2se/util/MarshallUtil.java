@@ -34,6 +34,8 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.Result;
 import javax.xml.transform.stream.StreamResult;
 
+import com.pyx4j.gwt.server.IOUtils;
+
 public class MarshallUtil {
 
     public static <T> void printSchema(Class<T> clazz, final java.io.OutputStream os, final boolean allowClose) throws JAXBException, IOException {
@@ -62,17 +64,25 @@ public class MarshallUtil {
     public static <T> T unmarshal(Class<T> clazz, String xml) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(clazz);
         Unmarshaller um = context.createUnmarshaller();
-        @SuppressWarnings("unchecked")
-        T result = (T) um.unmarshal(new StringReader(xml));
-        return result;
+        try {
+            @SuppressWarnings("unchecked")
+            T result = (T) um.unmarshal(new StringReader(xml));
+            return result;
+        } finally {
+            IOUtils.closeQuietlyIfCloseable(um);
+        }
     }
 
     public static <T> T unmarshal(Class<T> clazz, File xmlFile) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(clazz);
         Unmarshaller um = context.createUnmarshaller();
-        @SuppressWarnings("unchecked")
-        T result = (T) um.unmarshal(xmlFile);
-        return result;
+        try {
+            @SuppressWarnings("unchecked")
+            T result = (T) um.unmarshal(xmlFile);
+            return result;
+        } finally {
+            IOUtils.closeQuietlyIfCloseable(um);
+        }
     }
 
     public static <T> void marshal(T data, java.io.OutputStream os) throws JAXBException {

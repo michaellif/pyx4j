@@ -26,12 +26,14 @@ import java.util.Collection;
 import com.pyx4j.config.server.LifecycleListener;
 import com.pyx4j.config.server.LocaleResolver;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.PersistenceContextLifecycleListener;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.essentials.rpc.SystemState;
 import com.pyx4j.essentials.rpc.admin.SystemMaintenanceState;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.essentials.server.dev.bugs.MemoryLeakContextLifecycleListener;
 import com.pyx4j.i18n.server.CookieLocaleResolver;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -57,6 +59,10 @@ public class EssentialsServerSideConfiguration extends ServerSideConfiguration {
                 }
             }
         });
+
+        if (ApplicationMode.isDevelopment()) {
+            rc.add(new MemoryLeakContextLifecycleListener());
+        }
 
         return rc;
     }

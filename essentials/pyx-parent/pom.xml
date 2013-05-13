@@ -469,6 +469,13 @@
                 <version>3.9</version>
             </dependency>
 
+            <!-- use the latest version instead of one ref by poi -->
+            <dependency>
+                <groupId>org.apache.xmlbeans</groupId>
+                <artifactId>xmlbeans</artifactId>
+                <version>2.6.0</version>
+            </dependency>
+
             <!-- poi need this  -->
             <dependency>
                 <groupId>dom4j</groupId>

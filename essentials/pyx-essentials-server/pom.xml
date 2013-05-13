@@ -72,6 +72,12 @@
             <artifactId>poi-ooxml</artifactId>
         </dependency>
 
+        <!-- use the latest version instead of one ref by poi -->
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+        </dependency>
+
         <!-- TODO migrate DevDumpProxyServlet to latest version -->
         <dependency>
             <groupId>commons-httpclient</groupId>

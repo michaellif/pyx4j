@@ -59,6 +59,19 @@ public class IOUtils {
         }
     }
 
+    /**
+     * @param object
+     *            that may implement Closeable
+     */
+    public static void closeQuietlyIfCloseable(Object object) {
+        try {
+            if ((object != null) && (object instanceof Closeable)) {
+                ((Closeable) object).close();
+            }
+        } catch (Throwable e) {
+        }
+    }
+
     public static void copyStream(InputStream in, OutputStream out, int bufferSize) throws IOException {
         byte[] buffer = new byte[bufferSize];
         int bytesRead = 0;
