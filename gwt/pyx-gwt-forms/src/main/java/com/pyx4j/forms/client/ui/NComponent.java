@@ -72,33 +72,34 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     }
 
-    public WIDGET getEditor() {
+    public final WIDGET getEditor() {
         return editor;
+    }
+
+    public final VIEWER getViewer() {
+        return viewer;
     }
 
     public void setTriggerButton(ToggleButton triggerButton) {
         this.triggerButton = triggerButton;
         if (editorPanel != null) {
-            editorPanel.setTriggerButton(triggerButton);
+            editorPanel.setTriggerButton();
         }
     }
 
     public void setActionButton(Button actionButton) {
         this.actionButton = actionButton;
         if (viewerPanel != null) {
-            viewerPanel.setActionButton(actionButton);
+            viewerPanel.setActionButton();
         }
     }
 
+    @Override
     public void setNavigationCommand(Command navigationCommand) {
         this.navigationCommand = navigationCommand;
         if (viewerPanel != null) {
-            viewerPanel.setNavigationCommand(navigationCommand);
+            viewerPanel.setNavigationCommand();
         }
-    }
-
-    public VIEWER getViewer() {
-        return viewer;
     }
 
     @Override
@@ -134,7 +135,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (viewer == null) {
                 viewer = createViewer();
                 onViewerCreate();
-                viewerPanel = new ViewerPanel(actionButton, navigationCommand);
+                viewerPanel = new ViewerPanel();
             }
             onViewerInit();
             setWidget(viewerPanel);
@@ -142,7 +143,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (editor == null) {
                 editor = createEditor();
                 onEditorCreate();
-                editorPanel = new EditorPanel(triggerButton);
+                editorPanel = new EditorPanel();
             }
             onEditorInit();
             setWidget(editorPanel);
@@ -168,12 +169,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             triggerButton.setEnabled(isEditable() && enabled);
         }
 
-        if (getEditor() != null) {
-            getEditor().setEnabled(enabled);
+        if (editor != null) {
+            editor.setEnabled(enabled);
             if (enabled) {
-                getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                editor.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
             } else {
-                getEditor().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
+                editor.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
             }
         }
     }
@@ -183,7 +184,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         if (isViewable()) {
             return false;
         } else {
-            return getEditor().isEnabled();
+            return editor.isEnabled();
         }
     }
 
@@ -193,12 +194,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             triggerButton.setEnabled(isEnabled() && editable);
         }
 
-        if (getEditor() != null) {
-            getEditor().setEditable(editable);
+        if (editor != null) {
+            editor.setEditable(editable);
             if (editable) {
-                getEditor().removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                editor.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
             } else {
-                getEditor().addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
+                editor.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
             }
         }
     }
@@ -208,7 +209,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         if (isViewable()) {
             return false;
         } else {
-            return getEditor().isEditable();
+            return editor.isEditable();
         }
     }
 
@@ -220,21 +221,15 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
 
         assert (debugId != null) : "Unassigned DebugId in native component of " + getCComponent().shortDebugInfo();
-        if (getEditor() != null) {
-            getEditor().ensureDebugId(debugId.debugId());
-
-            if (editorPanel != null)
-                editorPanel.ensureDebugId(debugId.debugId() + "-triggerPanel");
-
+        if (editor != null) {
+            editor.ensureDebugId(debugId.debugId());
         }
-        if (getViewer() != null) {
-            getViewer().ensureDebugId(debugId.debugId());
+        if (viewer != null) {
+            viewer.ensureDebugId(debugId.debugId());
         }
     }
 
     class EditorPanel extends DockPanel implements HasDoubleClickHandlers {
-
-        private ToggleButton triggerButton;
 
         private final GroupFocusHandler focusHandlerManager;
 
@@ -242,7 +237,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         private String baseDebugID;
 
-        public EditorPanel(final ToggleButton triggerButton) {
+        public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.EditorPanel.name());
             setWidth("100%");
@@ -250,30 +245,29 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             SimplePanel editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
             editorHolder.addStyleName(DefaultCComponentsTheme.StyleName.Editor.name());
-            editorHolder.setWidget(NComponent.this.getEditor());
+            editorHolder.setWidget(editor);
             add(editorHolder, DockPanel.CENTER);
             setCellVerticalAlignment(editorHolder, DockPanel.ALIGN_MIDDLE);
 
             focusHandlerManager = new GroupFocusHandler(this);
 
-            if (NComponent.this.getEditor() instanceof NFocusComponent) {
-                ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addFocusHandler(focusHandlerManager);
-                ((NFocusComponent<?, ?, ?, ?>) NComponent.this.getEditor()).addBlurHandler(focusHandlerManager);
+            if (editor instanceof NFocusComponent) {
+                ((NFocusComponent<?, ?, ?, ?>) editor).addFocusHandler(focusHandlerManager);
+                ((NFocusComponent<?, ?, ?, ?>) editor).addBlurHandler(focusHandlerManager);
             }
 
-            setTriggerButton(triggerButton);
+            setTriggerButton();
         }
 
-        public void setTriggerButton(final ToggleButton triggerButton) {
-            if (this.triggerButton != null) {
-                remove(this.triggerButton);
+        public void setTriggerButton() {
+            if (NComponent.this.triggerButton != null) {
+                remove(NComponent.this.triggerButton);
+                NComponent.this.triggerButton = null;
                 for (HandlerRegistration handlerRegistration : triggerButtonHandlerRegistrations) {
                     handlerRegistration.removeHandler();
                 }
                 triggerButtonHandlerRegistrations.clear();
             }
-
-            this.triggerButton = triggerButton;
 
             if (triggerButton != null) {
 
@@ -317,6 +311,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
                 triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
                 add(triggerButton, DockPanel.EAST);
+
             }
         }
 
@@ -337,19 +332,17 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         protected void onEnsureDebugId(String baseID) {
             baseDebugID = baseID;
             //super.onEnsureDebugId(baseID);
-            ((Widget) NComponent.this.getEditor()).ensureDebugId(baseID);
+            ((Widget) editor).ensureDebugId(baseID);
         }
     }
 
     class ViewerPanel extends DockPanel {
 
-        private Button actionButton;
-
         private HandlerRegistration navigationCommandHandlerRegistration;
 
         private final SimplePanel viewerHolder;
 
-        public ViewerPanel(Button actionButton, Command navigationCommand) {
+        public ViewerPanel() {
             super();
 
             setStyleName(DefaultCComponentsTheme.StyleName.ViewerPanel.name());
@@ -363,13 +356,13 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             add(viewerHolder, DockPanel.CENTER);
             setCellVerticalAlignment(viewerHolder, DockPanel.ALIGN_MIDDLE);
 
-            setActionButton(actionButton);
+            setActionButton();
 
-            setNavigationCommand(navigationCommand);
+            setNavigationCommand();
 
         }
 
-        public void setNavigationCommand(final Command navigationCommand) {
+        public void setNavigationCommand() {
             if (navigationCommandHandlerRegistration != null) {
                 navigationCommandHandlerRegistration.removeHandler();
             }
@@ -391,12 +384,10 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             }
         }
 
-        public void setActionButton(final Button actionButton) {
-            if (this.actionButton != null) {
-                remove(this.actionButton);
+        public void setActionButton() {
+            if (actionButton != null) {
+                remove(actionButton);
             }
-
-            this.actionButton = actionButton;
 
             if (actionButton != null) {
                 add(actionButton, DockPanel.EAST);
