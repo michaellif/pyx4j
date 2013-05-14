@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 18, 2013
- * @author michaellif
+ * Created on May 13, 2013
+ * @author TOSHIBA
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins.power;
+package com.propertyvista.pmsite.server.skins.strict;
 
 import com.propertyvista.pmsite.server.skins.base.DefaultAptDetailsTheme;
 

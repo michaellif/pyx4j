@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 18, 2013
- * @author michaellif
+ * Created on Apr 26, 2013
+ * @author Admin
  * @version $Id$
  */
-package com.propertyvista.pmsite.server.skins.power;
+package com.propertyvista.pmsite.server.skins.future;
 
 import com.propertyvista.pmsite.server.skins.base.DefaultAptDetailsTheme;
 
@@ -19,14 +19,13 @@ public class AptDetailsTheme extends DefaultAptDetailsTheme {
 
     @Override
     public void initStyle() {
-        // TODO Auto-generated method stub
         super.initStyle();
     }
 
     @Override
     protected void initCommonStyle() {
-        // TODO Auto-generated method stub
         super.initCommonStyle();
+
     }
 
 }

@@ -7,15 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 18, 2013
- * @author michaellif
+ * Created on May 5, 2013
+ * @author TOSHIBA
  * @version $Id$
  */
 package com.propertyvista.pmsite.server.skins.power;
 
-import com.propertyvista.pmsite.server.skins.base.DefaultAptDetailsTheme;
+import com.propertyvista.pmsite.server.skins.base.DefaultResidentTheme;
 
-public class AptDetailsTheme extends DefaultAptDetailsTheme {
+public class ResidentTheme extends DefaultResidentTheme {
 
     @Override
     public void initStyle() {

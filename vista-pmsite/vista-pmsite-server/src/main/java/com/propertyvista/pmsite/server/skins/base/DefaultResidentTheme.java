@@ -7,40 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Mar 18, 2013
- * @author michaellif
+ * Created on Apr 23, 2013
+ * @author Admin
  * @version $Id$
  */
 package com.propertyvista.pmsite.server.skins.base;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.pmsite.server.skins.PMSiteThemeBase;
 
-public class DefaultAptDetailsTheme extends PMSiteThemeBase {
+public class DefaultResidentTheme extends PMSiteThemeBase {
 
     public static enum StyleName implements IStyleName {
-
-        VistaPmsiteAptDetailsPage,
+        
+        VistaPmsiteResidentPage, VistaPmsiteContent,
 
     }
 
     @Override
-    public final ThemeId getId() {
+    public ThemeId getId() {
         return new ClassBasedThemeId(getClass());
     }
 
     @Override
     public void initStyle() {
         initCommonStyle();
+
     }
 
     protected void initCommonStyle() {
-        Style style = new Style(".", StyleName.VistaPmsiteAptDetailsPage.name());
-        addStyle(style);
 
     }
+
 }

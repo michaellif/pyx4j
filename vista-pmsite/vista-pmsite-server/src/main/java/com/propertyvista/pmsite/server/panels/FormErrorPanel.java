@@ -41,7 +41,7 @@ public class FormErrorPanel extends FeedbackPanel {
         // set the style
         Component ul = get("feedbackul");
         if (ul != null) {
-            ul.add(AttributeModifier.replace("class", "errorPanel"));
+            ul.add(AttributeModifier.replace("class", "ErrorPanel"));
         }
     }
 }
