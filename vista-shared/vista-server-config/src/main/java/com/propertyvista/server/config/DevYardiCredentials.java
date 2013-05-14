@@ -22,14 +22,14 @@ public class DevYardiCredentials {
     public static PmcYardiCredential getTestPmcYardiCredential() {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
-        if (true) {
+        if (false) {
             cr.propertyCode().setValue("gran0002");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             cr.username().setValue("sa");
             cr.credential().setValue("Vista2012!");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
             cr.database().setValue("sl_0507");
-        } else if (false) {
+        } else if (true) {
             cr.propertyCode().setValue("prvista2");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
             cr.username().setValue("propertyvistaws");

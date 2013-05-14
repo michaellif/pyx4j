@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
@@ -83,8 +82,7 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
 
                 dto.preauthorizedPayments().addAll(result.getData());
                 dto.nextScheduledPaymentDate().setValue(
-                        ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(TenantAppContext.getCurrentUserLease()).padExecutionDate()
-                                .getValue());
+                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLease()));
 
                 callback.onSuccess(dto);
             }

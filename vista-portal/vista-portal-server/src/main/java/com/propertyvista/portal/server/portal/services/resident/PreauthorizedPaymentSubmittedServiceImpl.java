@@ -20,8 +20,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -64,7 +64,7 @@ public class PreauthorizedPaymentSubmittedServiceImpl extends EntityDtoBinder<Pr
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).padExecutionDate().getValue());
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(lease));
 
         callback.onSuccess(dto);
     }
