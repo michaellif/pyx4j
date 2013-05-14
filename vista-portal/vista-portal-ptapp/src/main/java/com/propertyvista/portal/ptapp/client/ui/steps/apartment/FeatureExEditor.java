@@ -77,7 +77,7 @@ class FeatureExEditor extends CEntityDecoratableForm<BillableItem> {
             BillableItemExtraData extraData = getValue().extraData();
 
             // add extraData editor if necessary:
-            if (ARCode.Type.features().contains(getValue().item().code().type())) {
+            if (ARCode.Type.features().contains(getValue().item().code().type().getValue())) {
                 switch (getValue().item().code().type().getValue()) {
                 case Parking:
                     editor = new VehicleDataEditor();

@@ -32,9 +32,9 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
+import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
-import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /*
@@ -102,7 +102,7 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
     private int arCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
         if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.rentDebtLast) {
             EnumSet<ARCode.Type> service = ARCode.Type.services();
-            return new Boolean(service.contains(debit1.arCode().type())).compareTo(service.contains(debit2.arCode().type()));
+            return new Boolean(service.contains(debit1.arCode().type().getValue())).compareTo(service.contains(debit2.arCode().type().getValue()));
         } else if (arPolicy.creditDebitRule().getValue() == ARPolicy.CreditDebitRule.oldestDebtFirst) {
             return compareBucketAge(debit1, debit2);
         }
