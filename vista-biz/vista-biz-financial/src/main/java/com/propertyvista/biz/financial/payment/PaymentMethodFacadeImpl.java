@@ -17,11 +17,16 @@ import java.util.List;
 
 import org.apache.commons.lang.Validate;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -31,6 +36,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -111,5 +117,14 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
         return new PreauthorizedPaymentAgreementMananger().retrievePreauthorizedPayments(tenantId);
+    }
+
+    @Override
+    public LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease) {
+        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, new LogicalDate(SystemDateManager.getDate()));
+        if (!cycle.actualPadGenerationDate().isNull()) {
+            cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
+        }
+        return cycle.targetPadGenerationDate().getValue();
     }
 }

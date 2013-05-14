@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
@@ -92,6 +93,19 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         taxes("128.44").
         totalDueAmount("1198.74");
         // @formatter:on
+
+        // we are in the april cycle and pad date is 3 days before Apr 1
+        assertEquals("PAD target date", DateUtils.detectDateformat("29-Mar-2011"), getTargetPadGenerationDate());
+        // the pad for Apr 1 has been executed and the next one is for May 1
+        assertEquals("PAD execution date", DateUtils.detectDateformat("29-Mar-2011"), getActualPadGenerationDate());
+        assertEquals("PAD next target date", DateUtils.detectDateformat("28-Apr-2011"), getNextTargetPadGenerationDate());
+        // if pad did not run - still return the old date for the cycle
+        setSysDate("01-May-2011");
+        assertEquals("PAD next target date", DateUtils.detectDateformat("28-Apr-2011"), getNextTargetPadGenerationDate());
+        // now roll time back and run pad - should see the date for next cycle
+        setSysDate("27-Apr-2011");
+        advanceSysDate("01-May-2011");
+        assertEquals("PAD next target date", DateUtils.detectDateformat("29-May-2011"), getNextTargetPadGenerationDate());
 
         advanceSysDate("18-May-2011");
 

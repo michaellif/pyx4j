@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
+
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -23,6 +25,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -57,4 +60,6 @@ public interface PaymentMethodFacade {
     void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
+
+    LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease);
 }

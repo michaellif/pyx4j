@@ -57,7 +57,9 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.print.BillPrint;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.ARCode;
@@ -677,6 +679,20 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
 
     protected BigDecimal getPADBalance(BillingCycle cycle) {
         return ServerSideFactory.create(ARFacade.class).getPADBalance(retrieveLease().billingAccount(), cycle);
+    }
+
+    protected LogicalDate getTargetPadGenerationDate() {
+        BillingCycle curCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(retrieveLease(), new LogicalDate(getSysDate()));
+        return curCycle.targetPadGenerationDate().getValue();
+    }
+
+    protected LogicalDate getActualPadGenerationDate() {
+        BillingCycle curCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(retrieveLease(), new LogicalDate(getSysDate()));
+        return curCycle.actualPadGenerationDate().getValue();
+    }
+
+    protected LogicalDate getNextTargetPadGenerationDate() {
+        return ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(retrieveLease());
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {
