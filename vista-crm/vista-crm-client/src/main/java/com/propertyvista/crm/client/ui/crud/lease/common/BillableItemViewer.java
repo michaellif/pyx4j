@@ -169,7 +169,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
             extraDataPanel.setWidget(null);
         }
 
-        if (getValue() != null && ARCode.Type.features().contains(getValue().item().code().type())) {
+        if (getValue() != null && ARCode.Type.features().contains(getValue().item().code().type().getValue())) {
             @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
             BillableItemExtraData extraData = value.extraData();
