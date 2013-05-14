@@ -237,6 +237,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         private String baseDebugID;
 
+        private final SimplePanel triggerButtonHolder;
+
         public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.EditorPanel.name());
@@ -256,13 +258,15 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 ((NFocusComponent<?, ?, ?, ?>) editor).addBlurHandler(focusHandlerManager);
             }
 
+            triggerButtonHolder = new SimplePanel();
+            add(triggerButtonHolder, DockPanel.EAST);
+
             setTriggerButton();
         }
 
         public void setTriggerButton() {
-            if (NComponent.this.triggerButton != null) {
-                remove(NComponent.this.triggerButton);
-                NComponent.this.triggerButton = null;
+            if (triggerButtonHolder.getWidget() != null) {
+                triggerButtonHolder.clear();
                 for (HandlerRegistration handlerRegistration : triggerButtonHandlerRegistrations) {
                     handlerRegistration.removeHandler();
                 }
@@ -310,13 +314,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 }));
 
                 triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
-                add(triggerButton, DockPanel.EAST);
-
+                triggerButtonHolder.setWidget(triggerButton);
             }
-        }
-
-        public ToggleButton getTriggerButton() {
-            return triggerButton;
         }
 
         protected GroupFocusHandler getGroupFocusHandler() {
@@ -393,10 +392,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 add(actionButton, DockPanel.EAST);
             }
 
-        }
-
-        public Button getActionButton() {
-            return actionButton;
         }
 
     }
