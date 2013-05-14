@@ -14,10 +14,10 @@ USE sl_0427;
 DROP VIEW tenant_EFT_charges;
 
 CREATE VIEW tenant_EFT_charges AS
-(SELECT	ct.SCODE +' '+CAST(c.hmy AS VARCHAR(50))AS charge_id,
+(SELECT	        ct.SCODE AS charge_code,
+                c.hmy AS charge_id,
+                CASE WHEN (ISNULL(c.BACH,-1) = -1 AND ISNULL(e.bRecur,-1) = -1) THEN 'true' ELSE 'false' END AS pap_applicable,
 		CAST(c.destimated AS NUMERIC(18,2)) AS estimated_charge,
-		--tra.stotalamount AS total_amount,
-		--ISNULL(a.dPercentAllocated ,'') AS percentage,
 		ISNULL(CAST(a.dPercentAllocated AS VARCHAR(50)),'') AS percentage,
 		t.SCODE AS lease_id,
 		ISNULL(r.UCODE,'') tenant_id,
@@ -52,7 +52,5 @@ WHERE	(ISNULL(c.dtto,'01-MAY-2014') >= '01-MAY-2013' AND		c.DTFROM <= '01-MAY-20
 AND		ts.status IN ('Current','Notice')
 AND		pl.SADDR1 LIKE '%Vista%'
 AND		e.SACCT NOT IN ('0','1') 
-AND		e.bRecur = -1
---AND		c.DTACHPOSTED IS NOT NULL
-AND		c.BACH = -1 );
+);
 
