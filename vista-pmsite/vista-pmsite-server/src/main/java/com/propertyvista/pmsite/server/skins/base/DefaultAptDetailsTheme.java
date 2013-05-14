@@ -14,19 +14,11 @@
 package com.propertyvista.pmsite.server.skins.base;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
-import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeId;
 
 import com.propertyvista.pmsite.server.skins.PMSiteThemeBase;
 
 public class DefaultAptDetailsTheme extends PMSiteThemeBase {
-
-    public static enum StyleName implements IStyleName {
-
-        VistaPmsiteAptDetailsPage,
-
-    }
 
     @Override
     public final ThemeId getId() {
@@ -35,12 +27,7 @@ public class DefaultAptDetailsTheme extends PMSiteThemeBase {
 
     @Override
     public void initStyle() {
-        initCommonStyle();
-    }
-
-    protected void initCommonStyle() {
-        Style style = new Style(".", StyleName.VistaPmsiteAptDetailsPage.name());
-        addStyle(style);
+        // TODO Auto-generated method stub
 
     }
 }

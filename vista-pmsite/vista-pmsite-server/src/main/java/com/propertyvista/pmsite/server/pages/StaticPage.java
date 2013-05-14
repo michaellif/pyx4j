@@ -24,7 +24,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import templates.TemplateResources;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -37,7 +36,6 @@ import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourc
 import com.propertyvista.pmsite.server.panels.SecondaryNavigationPanel;
 import com.propertyvista.pmsite.server.panels.StaticNewsPanel;
 import com.propertyvista.pmsite.server.panels.StaticTestimPanel;
-import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 
 public class StaticPage extends BasePage {
 
@@ -92,20 +90,12 @@ public class StaticPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (ApplicationMode.isDevelopment()) {
-            try {
-                response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.Static));
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        } else {
-            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-            String fileCSS = skin + "/" + "static.css";
-            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-            response.renderCSSReference(refCSS);
-            super.renderHead(response);
-        }
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "static.css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
 
     }
 }

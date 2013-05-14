@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 
 import templates.TemplateResources;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.contexts.Context;
 
@@ -26,7 +25,6 @@ import com.propertyvista.pmsite.server.PMSiteClientPreferences;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaPanel;
-import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 import com.propertyvista.shared.config.VistaSettings;
 
 public class FindAptPage extends BasePage {
@@ -52,38 +50,29 @@ public class FindAptPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "findapt.css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+        response.renderCSSReference(refCSS);
 
-        if (ApplicationMode.isDevelopment()) {
-            try {
-                response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.FindApt));
-            } catch (Exception e) {
-                throw new Error(e);
+        if (VistaSettings.googleMapApiVersion.equals("2")) {
+            //TODO This is Hack!
+            final boolean thereArenoMapToShow = true;
+            if (thereArenoMapToShow) {
+                // Do not send key so Google will not validate it.
+                response.renderJavaScriptReference(Context.getRequest().getProtocol()
+                        + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp&amp;key=");
+            } else {
+                response.renderJavaScriptReference(Context.getRequest().getProtocol() + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key="
+                        + VistaDeployment.getPortalGoogleAPIKey());
             }
         } else {
-            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-            String fileCSS = skin + "/" + "findapt.css";
-            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-            response.renderCSSReference(refCSS);
-
-            if (VistaSettings.googleMapApiVersion.equals("2")) {
-                //TODO This is Hack!
-                final boolean thereArenoMapToShow = true;
-                if (thereArenoMapToShow) {
-                    // Do not send key so Google will not validate it.
-                    response.renderJavaScriptReference(Context.getRequest().getProtocol()
-                            + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp&amp;key=");
-                } else {
-                    response.renderJavaScriptReference(Context.getRequest().getProtocol()
-                            + "://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=" + VistaDeployment.getPortalGoogleAPIKey());
-                }
-            } else {
-                response.renderJavaScriptReference(Context.getRequest().getProtocol() + "://maps.googleapis.com/maps/api/js?key="
-                        + VistaDeployment.getPortalGoogleAPIKey() + "&amp;sensor=false");
-            }
-
-            super.renderHead(response);
+            response.renderJavaScriptReference(Context.getRequest().getProtocol() + "://maps.googleapis.com/maps/api/js?key="
+                    + VistaDeployment.getPortalGoogleAPIKey() + "&amp;sensor=false");
         }
+
+        super.renderHead(response);
 
     }
 }

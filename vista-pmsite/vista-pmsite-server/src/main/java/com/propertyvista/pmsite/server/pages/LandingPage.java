@@ -129,14 +129,13 @@ public class LandingPage extends BasePage {
             } catch (Exception e) {
                 throw new Error(e);
             }
-        } else {
-            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-            String fileCSS = skin + "/" + "landing.css";
-            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-
-            response.renderCSSReference(refCSS);
-            super.renderHead(response);
         }
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "landing.css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
     }
 }

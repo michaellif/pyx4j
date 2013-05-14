@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
 
 import templates.TemplateResources;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.pojo.IPojo;
 import com.pyx4j.entity.shared.utils.EntityArgsConverter;
 import com.pyx4j.essentials.rpc.SystemState;
@@ -55,7 +54,6 @@ import com.propertyvista.pmsite.server.model.WicketUtils.CompoundIEntityModel;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.AdvancedSearchCriteriaInputPanel;
 import com.propertyvista.pmsite.server.panels.AptListPanel;
-import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 import com.propertyvista.portal.rpc.portal.PropertySearchCriteria;
 import com.propertyvista.portal.server.portal.PropertyFinder;
 
@@ -203,20 +201,12 @@ public class AptListPage extends BasePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (ApplicationMode.isDevelopment()) {
-            try {
-                response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.AptList));
-            } catch (Exception e) {
-                throw new Error(e);
-            }
-        } else {
-            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-            String fileCSS = skin + "/" + "aptlist.css";
-            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-            response.renderCSSReference(refCSS);
-            super.renderHead(response);
-        }
+        String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+        String fileCSS = skin + "/" + "aptlist.css";
+        VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+        response.renderCSSReference(refCSS);
+        super.renderHead(response);
 
     }
 }

@@ -23,14 +23,12 @@ import org.slf4j.LoggerFactory;
 
 import templates.TemplateResources;
 
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.pmsite.server.PMSiteApplication;
 import com.propertyvista.pmsite.server.PMSiteWebRequest;
 import com.propertyvista.pmsite.server.model.WicketUtils.VolatileTemplateResourceReference;
 import com.propertyvista.pmsite.server.panels.GwtInclude;
-import com.propertyvista.pmsite.server.skins.base.PMSiteTheme;
 
 public class ResidentsPage extends CustomizablePage {
 
@@ -73,25 +71,16 @@ public class ResidentsPage extends CustomizablePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-
-        if (ApplicationMode.isDevelopment()) {
-            try {
-                response.renderCSSReference(getCM().getCssManager().getCssReference(PMSiteTheme.Stylesheet.Resident));
-            } catch (Exception e) {
-                throw new Error(e);
-            }
+        if (getCM().isCustomResidentsContentEnabled()) {
+            response.renderCSSReference(new CssResourceReference(TemplateResources.class, "common/resident.css"));
         } else {
-            if (getCM().isCustomResidentsContentEnabled()) {
-                response.renderCSSReference(new CssResourceReference(TemplateResources.class, "common/resident.css"));
-            } else {
-                String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
-                String fileCSS = skin + "/" + "resident.css";
-                VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
-                        ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
-                response.renderCSSReference(refCSS);
-            }
-            super.renderHead(response);
+            String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
+            String fileCSS = skin + "/" + "resident.css";
+            VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
+                    ((PMSiteWebRequest) getRequest()).getStylesheetTemplateModel());
+            response.renderCSSReference(refCSS);
         }
+        super.renderHead(response);
 
     }
 }

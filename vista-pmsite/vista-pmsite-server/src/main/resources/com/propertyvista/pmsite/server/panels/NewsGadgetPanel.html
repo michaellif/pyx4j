@@ -1,16 +1,16 @@
 <wicket:panel
 	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
-<div class="NewsBox Infobox">
-	<div class="InfoboxHeader">
-		<div class="InfoboxHeaderTitle"><wicket:i18n>News</wicket:i18n></div>
+<div class="newsBox">
+	<div class="infobox_header">
+		<div class="infobox_header_title"><wicket:i18n>News</wicket:i18n></div>
 	</div>
 	
-	<div wicket:id="newsItem" class="InfoboxBody">
-		<div wicket:id="date" class="Date"/>
-		<a wicket:id="headline" class="HeadLine"/>
-		<div class="Text">
+	<div wicket:id="newsItem" class="infobox_content">
+		<div wicket:id="date" class="date"/>
+		<a wicket:id="headline" class="headline"/>
+		<div class="text">
 			<span wicket:id="text"/>
-			<a wicket:id="more" class="ReadMore"/>
+			<a wicket:id="more" class="read_more"/>
 		</div>
 	</div>
 </div>

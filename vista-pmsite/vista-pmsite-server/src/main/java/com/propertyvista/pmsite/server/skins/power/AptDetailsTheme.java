@@ -17,16 +17,4 @@ import com.propertyvista.pmsite.server.skins.base.DefaultAptDetailsTheme;
 
 public class AptDetailsTheme extends DefaultAptDetailsTheme {
 
-    @Override
-    public void initStyle() {
-        // TODO Auto-generated method stub
-        super.initStyle();
-    }
-
-    @Override
-    protected void initCommonStyle() {
-        // TODO Auto-generated method stub
-        super.initCommonStyle();
-    }
-
 }
