@@ -68,8 +68,14 @@ public interface PadFileModel extends IEntity {
     @ImportColumn(names = { "Percent", "Percentage" })
     IPrimitive<String> percent();
 
-    @ImportColumn(names = { "Charge Id", "Charge Code", "ChargeCode", "Charge_Code" })
+    @ImportColumn(names = { "Charge Code", "ChargeCode", "Charge_Code" })
+    IPrimitive<String> chargeCode();
+
+    @ImportColumn(names = { "Charge Id" })
     IPrimitive<String> chargeId();
+
+    // Optional by default TRUE
+    IPrimitive<Boolean> papApplicable();
 
     IPrimitive<String> estimatedCharge();
 

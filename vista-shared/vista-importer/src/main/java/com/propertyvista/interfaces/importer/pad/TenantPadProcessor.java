@@ -288,7 +288,7 @@ public class TenantPadProcessor {
             return;
         }
 
-        boolean allHaveChargeCode = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).chargeId());
+        boolean allHaveChargeCode = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).chargeCode());
         boolean allHaveEstimatedCharge = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).estimatedCharge());
 
         if (allHaveChargeCode && allHaveEstimatedCharge) {
@@ -328,15 +328,15 @@ public class TenantPadProcessor {
             if (padFileModel.charge().isNull()) {
                 double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
 
-                ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(padFileModel.chargeId().getValue());
+                ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(uniqueChargeCode(padFileModel));
                 if (chargeCodeRecords == null) {
                     chargeCodeRecords = new ChargeCodeRecords();
                     chargeCodeRecords.entities.add(padFileModel);
                     chargeCodeRecords.estimatedCharge = estimatedCharge;
-                    recordsByChargeCode.put(padFileModel.chargeId().getValue(), chargeCodeRecords);
+                    recordsByChargeCode.put(uniqueChargeCode(padFileModel), chargeCodeRecords);
                 } else {
                     if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
-                        padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge Id {0} are changing", padFileModel.chargeId()));
+                        padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge {0} are changing", padFileModel.chargeCode()));
                         padFileModel._import().invalid().setValue(Boolean.TRUE);
                         padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
                         continue;
@@ -376,6 +376,10 @@ public class TenantPadProcessor {
         }
     }
 
+    private static String uniqueChargeCode(PadFileModel padFileModel) {
+        return padFileModel.chargeCode().getValue() + "$" + padFileModel.chargeId().getValue();
+    }
+
     static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
         Set<String> chargeCodes = new HashSet<String>();
         double estimatedChargeTotal = 0;
@@ -395,9 +399,9 @@ public class TenantPadProcessor {
                     estimatedChargeSplit = estimatedCharge;
                 }
                 // Count each chargeCode once.
-                if (!chargeCodes.contains(padFileModel.chargeId().getValue())) {
+                if (!chargeCodes.contains(uniqueChargeCode(padFileModel))) {
                     estimatedChargeTotal += estimatedCharge;
-                    chargeCodes.add(padFileModel.chargeId().getValue());
+                    chargeCodes.add(uniqueChargeCode(padFileModel));
                 }
             } else {
                 estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
@@ -414,7 +418,7 @@ public class TenantPadProcessor {
         int idx = 0;
         for (int i = 0; i < accountPadEntities.size(); i++) {
             PadFileModel padFileModel = accountPadEntities.get(i);
-            if (padFileModel._processorInformation().status().isNull()) {
+            if (padFileModel._processorInformation().status().isNull() && padFileModel.papApplicable().getValue(Boolean.TRUE)) {
                 firstPadFileModel = padFileModel;
                 idx = i;
                 break;
@@ -431,6 +435,11 @@ public class TenantPadProcessor {
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
             }
+            if (!padFileModel.papApplicable().getValue(Boolean.TRUE)) {
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.notUsedForACH);
+                continue;
+            }
+
             accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
             padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
             padFileModel._import().message().setValue(i18n.tr("Merged with row {0}", firstPadFileModel._import().row()));

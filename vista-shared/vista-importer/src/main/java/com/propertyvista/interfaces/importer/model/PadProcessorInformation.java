@@ -41,6 +41,8 @@ public interface PadProcessorInformation extends IEntity {
 
         ignoredUinitializedChargeSplit,
 
+        notUsedForACH,
+
         invalidResultingValues,
 
         // Statuses set in persist
