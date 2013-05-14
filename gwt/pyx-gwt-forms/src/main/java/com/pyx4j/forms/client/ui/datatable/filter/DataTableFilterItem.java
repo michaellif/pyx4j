@@ -90,9 +90,9 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
     @com.pyx4j.i18n.annotations.I18n
     public static enum Operator {
 
-        is(Restriction.EQUAL),
+        is(Restriction.EQUAL, true),
 
-        isNot(Restriction.NOT_EQUAL),
+        isNot(Restriction.NOT_EQUAL, true),
 
         like(Restriction.RDB_LIKE),
 
