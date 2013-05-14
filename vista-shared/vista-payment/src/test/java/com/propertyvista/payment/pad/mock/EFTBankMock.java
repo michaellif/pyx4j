@@ -14,10 +14,12 @@
 package com.propertyvista.payment.pad.mock;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
+import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
 
 class EFTBankMock {
@@ -37,10 +39,18 @@ class EFTBankMock {
 
     private final List<PadDebitRecord> uprocessedRecords = new ArrayList<PadDebitRecord>();
 
+    private final List<PadDebitRecord> reconciliationRecords = new ArrayList<PadDebitRecord>();
+
     private final EFTBankMockAck acknowledgment = new EFTBankMockAck();
+
+    private final EFTBankMockReconciliation reconciliation = new EFTBankMockReconciliation();
 
     void receivedPadFile(PadFile padFile) {
         receivedPadFile.add(padFile.<PadFile> duplicate());
+    }
+
+    void addAcknowledgedRecord(PadDebitRecord padDebitRecord) {
+        uprocessedRecords.add(padDebitRecord);
     }
 
     PadAckFile acknowledgeFile(String companyId) {
@@ -61,7 +71,17 @@ class EFTBankMock {
         }
     }
 
-    void addAcknowledgedRecord(PadDebitRecord padDebitRecord) {
-        uprocessedRecords.add(padDebitRecord);
+    public PadReconciliationFile reconciliationFile(String companyId) {
+        List<PadDebitRecord> records = new ArrayList<PadDebitRecord>();
+        Iterator<PadDebitRecord> it = uprocessedRecords.iterator();
+        while (it.hasNext()) {
+            PadDebitRecord padRecord = it.next();
+            if (padRecord.padBatch().padFile().companyId().getValue().equals(companyId)) {
+                it.remove();
+                records.add(padRecord);
+            }
+        }
+        reconciliationRecords.addAll(records);
+        return reconciliation.createReconciliationFile(records);
     }
 }

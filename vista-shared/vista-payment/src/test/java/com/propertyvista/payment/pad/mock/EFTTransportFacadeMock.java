@@ -32,13 +32,11 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
 
     @Override
     public PadReconciliationFile receivePadReconciliation(String companyId) {
-        // TODO Auto-generated method stub
-        return null;
+        return EFTBankMock.instance().reconciliationFile(companyId);
     }
 
     @Override
     public void confirmReceivedFile(String fileName, boolean protocolErrorFlag) {
-        // TODO Auto-generated method stub
     }
 
 }
