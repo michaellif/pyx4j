@@ -65,7 +65,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         this.configuration = configuration;
     }
 
-    // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
+    // TODO this monster needs refactoring:: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
     private CFCAPI getApi() {
         CFCAPI api = null;
         try {
