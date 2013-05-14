@@ -31,6 +31,8 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
 
     static final I18n i18n = I18n.get(LeaseTermParticipantFolder.class);
 
+    private Integer ageOfMajority;
+
     public LeaseTermParticipantFolder(Class<E> clazz, boolean modifiable) {
         super(clazz, modifiable);
         setOrderable(false);
@@ -41,6 +43,11 @@ public abstract class LeaseTermParticipantFolder<E extends LeaseTermParticipant<
         BoxFolderItemDecorator<E> decor = (BoxFolderItemDecorator<E>) super.createItemDecorator();
         decor.setExpended(isEditable());
         return decor;
+    }
+
+    /** Sets age of majority validation, pass <code>null</code> to disable */
+    public void setAgeOfMajority(Integer ageOfMajority) {
+        this.ageOfMajority = ageOfMajority;
     }
 
     @Override

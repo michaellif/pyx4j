@@ -121,4 +121,7 @@ public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IE
     @Transient
     CustomerScreening effectiveScreening();
 
+    /** This is used only for age validation */
+    @Transient
+    IPrimitive<Integer> ageOfMajority();
 }

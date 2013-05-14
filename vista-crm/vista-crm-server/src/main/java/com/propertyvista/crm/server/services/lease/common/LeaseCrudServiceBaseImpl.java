@@ -23,11 +23,14 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 import com.propertyvista.dto.TenantInsuranceCertificateDTO;
@@ -49,13 +52,20 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
         loadDetachedProducts(dto);
 
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(in.unit(), RestrictionsPolicy.class);
         for (LeaseTermTenant item : dto.currentTerm().version().tenants()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
             fillPreauthorizedPayments(item);
+            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+                item.ageOfMajority().setValue((item.role().getValue() != Role.Dependent) ? restrictionsPolicy.ageOfMajority().getValue() : null);
+            }
         }
 
         for (LeaseTermGuarantor item : dto.currentTerm().version().guarantors()) {
             Persistence.service().retrieve(item.screening(), AttachLevel.ToStringMembers);
+            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+                item.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            }
         }
 
         fillTenantInsurance(dto);
