@@ -341,6 +341,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         private final SimplePanel viewerHolder;
 
+        private final SimplePanel actionButtonHolder;
+
         public ViewerPanel() {
             super();
 
@@ -354,6 +356,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
             add(viewerHolder, DockPanel.CENTER);
             setCellVerticalAlignment(viewerHolder, DockPanel.ALIGN_MIDDLE);
+
+            actionButtonHolder = new SimplePanel();
+            add(actionButtonHolder, DockPanel.EAST);
 
             setActionButton();
 
@@ -384,14 +389,12 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
 
         public void setActionButton() {
-            if (actionButton != null) {
-                remove(actionButton);
+            if (actionButtonHolder != null) {
+                actionButtonHolder.clear();
             }
-
             if (actionButton != null) {
-                add(actionButton, DockPanel.EAST);
+                actionButtonHolder.setWidget(actionButton);
             }
-
         }
 
     }
