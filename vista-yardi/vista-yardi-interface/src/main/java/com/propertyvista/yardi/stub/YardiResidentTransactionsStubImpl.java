@@ -60,7 +60,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
     @Override
     public String ping(PmcYardiCredential yc) throws RemoteException {
-        init(Action.ping);
+        init(Action.Ping);
         PingResponse pr = getResidentTransactionsService(yc).ping(new Ping());
         return pr.getPingResult();
     }
@@ -285,9 +285,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                     log.info(messages.toString());
                 }
             }
-            //TODO
-//            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-//            return transactions;
+
+            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
 
         } catch (JAXBException e) {
             throw new Error(e);

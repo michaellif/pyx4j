@@ -89,9 +89,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
      * @throws RemoteException
      * @throws AxisFault
      */
-    public static void ping(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws AxisFault, RemoteException {
-        String result = stub.ping(yc);
-        log.info("Connection to Yardi works: {}", result);
+    public String ping(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws AxisFault, RemoteException {
+        return stub.ping(yc);
     }
 
     /**
@@ -186,7 +185,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         importUnit(building.propertyCode().getValue(), rtCustomer);
                         executionMonitor.addProcessedEvent("Unit");
                         try {
-                            LeaseFinancialState stats = importLease(building.propertyCode().getValue(), rtCustomer);
+                            LeaseFinancialStats stats = importLease(building.propertyCode().getValue(), rtCustomer);
                             executionMonitor.addProcessedEvent("Charges", stats.getCharges());
                             executionMonitor.addProcessedEvent("Payments", stats.getPayments());
                             executionMonitor.addProcessedEvent("Lease");
@@ -241,8 +240,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return unit;
     }
 
-    private LeaseFinancialState importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
-        final LeaseFinancialState state = new LeaseFinancialState();
+    private LeaseFinancialStats importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
+        final LeaseFinancialStats state = new LeaseFinancialStats();
         log.info("      Importing lease");
         if (YardiLeaseProcessor.isSkipped(rtCustomer)) {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
@@ -305,7 +304,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return properties;
     }
 
-    private class LeaseFinancialState {
+    private class LeaseFinancialStats {
 
         private BigDecimal chargesAmount = BigDecimal.ZERO;
 
