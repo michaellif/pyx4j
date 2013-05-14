@@ -67,7 +67,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setH2(++row, 0, 2, i18n.tr("PAD"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetPadGenerationDate())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualPadGenerationDate())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().padExecutionDate())).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetPadExecutionDate())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pads())).build());
         content.setWidget(row, 1, new ViewPadLink());
 

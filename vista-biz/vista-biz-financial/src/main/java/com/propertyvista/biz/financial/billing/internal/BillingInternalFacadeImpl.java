@@ -163,7 +163,7 @@ public final class BillingInternalFacadeImpl implements BillingFacade {
 
                 billingCycle.targetBillExecutionDate().setValue(billExecDate);
                 billingCycle.targetPadGenerationDate().setValue(padCalcDate);
-                billingCycle.padExecutionDate().setValue(padExecDate);
+                billingCycle.targetPadExecutionDate().setValue(padExecDate);
 
                 Persistence.service().persist(billingCycle);
             }

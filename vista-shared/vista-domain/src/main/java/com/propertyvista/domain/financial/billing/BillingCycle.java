@@ -66,7 +66,7 @@ public interface BillingCycle extends IEntity {
     IPrimitive<LogicalDate> targetPadGenerationDate();
 
     // @Comment(name = "PAD Processing Day", description = "Number of days between PAD Processing Day and Billing Period Start Date") 
-    IPrimitive<LogicalDate> padExecutionDate();
+    IPrimitive<LogicalDate> targetPadExecutionDate();
 
     @ReadOnly(allowOverrideNull = true)
     IPrimitive<LogicalDate> actualBillExecutionDate();

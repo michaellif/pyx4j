@@ -82,7 +82,7 @@ class PreauthorisedPaymentsManager {
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.lt(criteria.proto().targetPadGenerationDate(), runDate);
-            criteria.gt(criteria.proto().padExecutionDate(), runDate);
+            criteria.gt(criteria.proto().targetPadExecutionDate(), runDate);
             criteria.isNotNull(criteria.proto().actualPadGenerationDate());
             criteria.asc(criteria.proto().building().propertyCode());
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
@@ -151,7 +151,7 @@ class PreauthorisedPaymentsManager {
             paymentRecord.notice().setValue(record.notice);
             paymentRecord.padBillingCycle().set(billingCycle);
             paymentRecord.billingAccount().set(billingAccount);
-            paymentRecord.targetDate().setValue(billingCycle.padExecutionDate().getValue());
+            paymentRecord.targetDate().setValue(billingCycle.targetPadExecutionDate().getValue());
             createNoticeMessage(paymentRecord, record.notice);
 
             ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);

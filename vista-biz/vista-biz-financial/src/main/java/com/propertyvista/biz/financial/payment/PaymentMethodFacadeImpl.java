@@ -125,6 +125,6 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         if (!cycle.actualPadGenerationDate().isNull()) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
-        return cycle.targetPadGenerationDate().getValue();
+        return cycle.targetPadExecutionDate().getValue();
     }
 }

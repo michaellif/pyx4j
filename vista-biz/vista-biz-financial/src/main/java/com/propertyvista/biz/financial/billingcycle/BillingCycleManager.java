@@ -279,7 +279,7 @@ class BillingCycleManager {
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.billExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
         billingCycle.targetPadGenerationDate().setValue(
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.padCalculationDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
-        billingCycle.padExecutionDate().setValue(
+        billingCycle.targetPadExecutionDate().setValue(
                 BillDateUtils.calculateBillingCycleDateByOffset(policy.padExecutionDayOffset().getValue(), billingCycle.billingCycleStartDate().getValue()));
 
         Persistence.service().persist(billingCycle);

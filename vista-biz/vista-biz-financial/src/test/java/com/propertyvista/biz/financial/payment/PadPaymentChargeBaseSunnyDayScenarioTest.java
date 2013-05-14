@@ -98,14 +98,14 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
         assertEquals("PAD target date", DateUtils.detectDateformat("29-Mar-2011"), getTargetPadGenerationDate());
         // the pad for Apr 1 has been executed and the next one is for May 1
         assertEquals("PAD execution date", DateUtils.detectDateformat("29-Mar-2011"), getActualPadGenerationDate());
-        assertEquals("PAD next target date", DateUtils.detectDateformat("28-Apr-2011"), getNextTargetPadGenerationDate());
+        assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
         // if pad did not run - still return the old date for the cycle
         setSysDate("01-May-2011");
-        assertEquals("PAD next target date", DateUtils.detectDateformat("28-Apr-2011"), getNextTargetPadGenerationDate());
+        assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
         // now roll time back and run pad - should see the date for next cycle
         setSysDate("27-Apr-2011");
         advanceSysDate("01-May-2011");
-        assertEquals("PAD next target date", DateUtils.detectDateformat("29-May-2011"), getNextTargetPadGenerationDate());
+        assertEquals("PAD next target date", DateUtils.detectDateformat("01-Jun-2011"), getNextTargetPadExecutionDate());
 
         advanceSysDate("18-May-2011");
 

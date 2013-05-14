@@ -691,7 +691,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return curCycle.actualPadGenerationDate().getValue();
     }
 
-    protected LogicalDate getNextTargetPadGenerationDate() {
+    protected LogicalDate getNextTargetPadExecutionDate() {
         return ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(retrieveLease());
     }
 
