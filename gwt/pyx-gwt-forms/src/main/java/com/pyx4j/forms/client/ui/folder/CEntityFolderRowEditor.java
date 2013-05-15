@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.IEditableComponentFactory;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 
@@ -47,7 +48,11 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
     protected final List<EntityFolderColumnDescriptor> columns;
 
     public CEntityFolderRowEditor(Class<E> clazz, List<EntityFolderColumnDescriptor> columns) {
-        super(clazz);
+        this(clazz, columns, null);
+    }
+
+    public CEntityFolderRowEditor(Class<E> clazz, List<EntityFolderColumnDescriptor> columns, IEditableComponentFactory factory) {
+        super(clazz, factory);
         this.columns = columns;
     }
 
