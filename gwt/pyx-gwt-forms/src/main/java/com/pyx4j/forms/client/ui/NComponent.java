@@ -33,6 +33,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -90,6 +91,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
+    @Override
     public void setNavigationCommand(Command navigationCommand) {
         this.navigationCommand = navigationCommand;
         if (viewerPanel != null) {
@@ -246,13 +248,17 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.EditorPanel.name());
             setWidth("100%");
+            getElement().getStyle().setProperty("textAlign", "inherit");
 
             SimplePanel editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
             editorHolder.addStyleName(DefaultCComponentsTheme.StyleName.Editor.name());
             editorHolder.setWidget(NComponent.this.getEditor());
+            editorHolder.getElement().getStyle().setProperty("textAlign", "inherit");
+
             add(editorHolder, DockPanel.CENTER);
             setCellVerticalAlignment(editorHolder, DockPanel.ALIGN_MIDDLE);
+            DOM.getParent(editorHolder.getElement()).getStyle().setProperty("textAlign", "inherit");
 
             focusHandlerManager = new GroupFocusHandler(this);
 
@@ -351,6 +357,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         public ViewerPanel(Button actionButton, Command navigationCommand) {
             super();
+            setWidth("100%");
+            getElement().getStyle().setProperty("textAlign", "inherit");
 
             setStyleName(DefaultCComponentsTheme.StyleName.ViewerPanel.name());
 
@@ -359,14 +367,14 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             viewerHolder = new SimplePanel();
             viewerHolder.addStyleName(DefaultCComponentsTheme.StyleName.Viewer.name());
             viewerHolder.setWidget(NComponent.this.getViewer());
+            viewerHolder.getElement().getStyle().setProperty("textAlign", "inherit");
 
             add(viewerHolder, DockPanel.CENTER);
             setCellVerticalAlignment(viewerHolder, DockPanel.ALIGN_MIDDLE);
+            DOM.getParent(viewerHolder.getElement()).getStyle().setProperty("textAlign", "inherit");
 
             setActionButton(actionButton);
-
             setNavigationCommand(navigationCommand);
-
         }
 
         public void setNavigationCommand(final Command navigationCommand) {
