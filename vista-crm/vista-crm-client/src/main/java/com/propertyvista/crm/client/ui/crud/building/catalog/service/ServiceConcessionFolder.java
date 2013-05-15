@@ -83,13 +83,14 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().version().type())) {
                 comp = new CEnumLabel();
-                comp.setNavigationCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Concession.class).formViewerPlace(getValue().getPrimaryKey()));
-                    }
-                });
-
+                if (!ServiceConcessionFolder.this.isEditable()) {
+                    comp.setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Concession.class).formViewerPlace(getValue().getPrimaryKey()));
+                        }
+                    });
+                }
             } else {
                 comp = super.create(member);
             }

@@ -81,13 +81,14 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
             CComponent<?, ?> comp = null;
             if (member.equals(proto().type())) {
                 comp = new CEnumLabel();
-                comp.setNavigationCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Feature.class).formViewerPlace(getValue().getPrimaryKey()));
-                    }
-                });
-
+                if (!ServiceFeatureFolder.this.isEditable()) {
+                    comp.setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Feature.class).formViewerPlace(getValue().getPrimaryKey()));
+                        }
+                    });
+                }
             } else {
                 comp = super.create(member);
             }

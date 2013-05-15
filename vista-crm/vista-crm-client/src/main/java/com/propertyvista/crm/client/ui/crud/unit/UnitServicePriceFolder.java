@@ -74,16 +74,17 @@ public class UnitServicePriceFolder extends VistaTableFolder<AptUnitServicePrice
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp;
             if (column.getObject() == proto().type()) {
-                comp = new CEnumLabel();
-                comp.setNavigationCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        CrudAppPlace place = new CrmSiteMap.Properties.Service();
-                        place.formViewerPlace(getValue().getPrimaryKey());
-                        AppSite.getPlaceController().goTo(place);
-                    }
-                });
-                inject(proto().type(), comp);
+                comp = inject(proto().type(), new CEnumLabel());
+                if (!isEditable()) {
+                    comp.setNavigationCommand(new Command() {
+                        @Override
+                        public void execute() {
+                            CrudAppPlace place = new CrmSiteMap.Properties.Service();
+                            place.formViewerPlace(getValue().getPrimaryKey());
+                            AppSite.getPlaceController().goTo(place);
+                        }
+                    });
+                }
             } else {
                 comp = super.createCell(column);
             }
