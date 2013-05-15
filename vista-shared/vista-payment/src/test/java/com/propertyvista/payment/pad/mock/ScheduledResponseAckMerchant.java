@@ -15,30 +15,30 @@ package com.propertyvista.payment.pad.mock;
 
 import com.propertyvista.test.mock.MockEvent;
 
-public class ScheduledResponseReconciliation extends MockEvent<ScheduledResponseReconciliation.Handler> {
+public class ScheduledResponseAckMerchant extends MockEvent<ScheduledResponseAckMerchant.Handler> {
 
-    public final String transactionId;
+    public final String merchantTerminalId;
 
-    public final String reasonCode;
-
-    public final String reasonText;
+    // 4 characters
+    public final String acknowledgmentStatusCode;
 
     public interface Handler {
 
-        void scheduleTransactionReconciliationResponse(ScheduledResponseReconciliation event);
+        void scheduleMerchantAcknowledgmentResponse(ScheduledResponseAckMerchant event);
 
     }
 
-    public ScheduledResponseReconciliation(String transactionId, String reasonCode, String reasonText) {
+    public ScheduledResponseAckMerchant(String merchantTerminalId, String acknowledgmentStatusCode) {
         super();
-        this.transactionId = transactionId;
-        this.reasonCode = reasonCode;
-        this.reasonText = reasonText;
+        this.merchantTerminalId = merchantTerminalId;
+        if (acknowledgmentStatusCode.length() > 4) {
+            throw new IllegalArgumentException();
+        }
+        this.acknowledgmentStatusCode = acknowledgmentStatusCode;
     }
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.scheduleTransactionReconciliationResponse(this);
+        handler.scheduleMerchantAcknowledgmentResponse(this);
     }
-
 }

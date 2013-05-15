@@ -299,19 +299,19 @@ class PadReconciliationProcessor {
         switch (debitRecord.reconciliationStatus().getValue()) {
         case PROCESSED:
             if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationReceived) {
-                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' was not attached to AggregatedTransfer");
+                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
             }
             if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
             }
             reconciliationClearedPayment(debitRecord, paymentRecord);
             break;
         case REJECTED:
             if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationReceived) {
-                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' was not attached to AggregatedTransfer");
+                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not attached to AggregatedTransfer");
             }
             if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+                throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
             }
             reconciliationRejectPayment(debitRecord, paymentRecord);
             break;

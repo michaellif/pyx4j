@@ -32,21 +32,29 @@ import com.propertyvista.payment.pad.data.PadAckDebitRecord;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.test.mock.MockEventBus;
 
-class EFTBankMockAck implements ScheduledResponseAcknowledgment.Handler {
+class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, ScheduledResponseAckMerchant.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
-    private final Map<String, ScheduledResponseAcknowledgment> scheduled = new HashMap<String, ScheduledResponseAcknowledgment>();
+    private final Map<String, ScheduledResponseAckTransaction> transactionsScheduled = new HashMap<String, ScheduledResponseAckTransaction>();
+
+    private final Map<String, ScheduledResponseAckMerchant> merchantScheduled = new HashMap<String, ScheduledResponseAckMerchant>();
 
     EFTBankMockAck() {
-        MockEventBus.addHandler(ScheduledResponseAcknowledgment.class, this);
-        // TODO add Bach reject request
+        MockEventBus.addHandler(ScheduledResponseAckTransaction.class, this);
+        MockEventBus.addHandler(ScheduledResponseAckMerchant.class, this);
     }
 
     @Override
-    public void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAcknowledgment event) {
-        log.debug("schedule reject in acknowledgment for transactionId:{}", event.transactionId);
-        scheduled.put(event.transactionId, event);
+    public void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAckTransaction event) {
+        log.debug("schedule transaction reject in acknowledgment for transactionId:{}", event.transactionId);
+        transactionsScheduled.put(event.transactionId, event);
+    }
+
+    @Override
+    public void scheduleMerchantAcknowledgmentResponse(ScheduledResponseAckMerchant event) {
+        log.debug("schedule merchant reject in acknowledgment for merchant:{}", event.merchantTerminalId);
+        merchantScheduled.put(event.merchantTerminalId, event);
     }
 
     PadAckFile createAcknowledgementFile(PadFile unacknowledgedFile) {
@@ -55,25 +63,28 @@ class EFTBankMockAck implements ScheduledResponseAcknowledgment.Handler {
         boolean batchLevelReject = false;
         boolean transactionReject = false;
         for (PadBatch padBatch : unacknowledgedFile.batches()) {
-            // TODO Has Bach reject request
-            if (false) {
+            // Has Bach reject request?
+            ScheduledResponseAckMerchant merchantReject = merchantScheduled.get(padBatch.merchantTerminalId().getValue());
+            if (merchantReject != null) {
+                merchantScheduled.remove(padBatch.merchantTerminalId().getValue());
+                log.debug("merchant reject in acknowledgment for merchant:{}", padBatch.merchantTerminalId().getValue());
                 PadAckBatch batch = EntityFactory.create(PadAckBatch.class);
                 batch.batchId().setValue(String.valueOf(padBatch.batchNumber().getValue()));
                 batch.terminalId().setValue(padBatch.merchantTerminalId().getValue());
-                batch.acknowledgmentStatusCode().setValue("");
-                batch.batchAmount().setValue(padBatch.accountNumber().getValue());
+                batch.acknowledgmentStatusCode().setValue(merchantReject.acknowledgmentStatusCode);
+                batch.batchAmount().setValue(CaledonPadUtils.formatAmount(padBatch.batchAmount().getValue()));
                 ackFile.batches().add(batch);
                 batchLevelReject = true;
             } else {
-                // Find TRANSACTION  REJECT RECORD
+                // Find TRANSACTION REJECT RECORDs
                 for (PadDebitRecord padDebitRecord : padBatch.records()) {
-                    ScheduledResponseAcknowledgment askReject = scheduled.get(padDebitRecord.transactionId().getValue());
+                    ScheduledResponseAckTransaction askReject = transactionsScheduled.get(padDebitRecord.transactionId().getValue());
                     if (askReject == null) {
                         EFTBankMock.instance().addAcknowledgedRecord(padDebitRecord);
                     } else {
                         log.debug("reject in acknowledgment for transactionId:{}", padDebitRecord.transactionId().getValue());
 
-                        scheduled.remove(padDebitRecord.transactionId().getValue());
+                        transactionsScheduled.remove(padDebitRecord.transactionId().getValue());
 
                         PadAckDebitRecord record = EntityFactory.create(PadAckDebitRecord.class);
                         record.terminalId().setValue(padBatch.merchantTerminalId().getValue());

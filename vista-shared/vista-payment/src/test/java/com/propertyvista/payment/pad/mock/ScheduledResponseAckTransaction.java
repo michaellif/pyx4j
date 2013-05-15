@@ -15,7 +15,7 @@ package com.propertyvista.payment.pad.mock;
 
 import com.propertyvista.test.mock.MockEvent;
 
-public class ScheduledResponseAcknowledgment extends MockEvent<ScheduledResponseAcknowledgment.Handler> {
+public class ScheduledResponseAckTransaction extends MockEvent<ScheduledResponseAckTransaction.Handler> {
 
     public final String transactionId;
 
@@ -24,16 +24,11 @@ public class ScheduledResponseAcknowledgment extends MockEvent<ScheduledResponse
 
     public interface Handler {
 
-        void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAcknowledgment event);
+        void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAckTransaction event);
 
     }
 
-    static {
-        // TODO Make it better Initialize listeners
-        EFTBankMock.instance();
-    }
-
-    public ScheduledResponseAcknowledgment(String transactionId, String acknowledgmentStatusCode) {
+    public ScheduledResponseAckTransaction(String transactionId, String acknowledgmentStatusCode) {
         super();
         this.transactionId = transactionId;
         if (acknowledgmentStatusCode.length() > 4) {

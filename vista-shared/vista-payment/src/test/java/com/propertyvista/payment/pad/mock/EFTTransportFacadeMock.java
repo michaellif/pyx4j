@@ -20,6 +20,11 @@ import com.propertyvista.payment.pad.data.PadAckFile;
 
 public class EFTTransportFacadeMock implements EFTTransportFacade {
 
+    public static void init() {
+        // Initialize listeners
+        EFTBankMock.instance();
+    }
+
     @Override
     public void sendPadFile(PadFile padFile) {
         EFTBankMock.instance().receivedPadFile(padFile);

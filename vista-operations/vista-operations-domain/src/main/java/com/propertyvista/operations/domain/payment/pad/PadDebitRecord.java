@@ -68,6 +68,7 @@ public interface PadDebitRecord extends IEntity {
     IPrimitive<Boolean> processed();
 
     // Not coming from Caledon, this is our processing flag
+    @ToString
     IPrimitive<PadDebitRecordProcessingStatus> processingStatus();
 
 }
