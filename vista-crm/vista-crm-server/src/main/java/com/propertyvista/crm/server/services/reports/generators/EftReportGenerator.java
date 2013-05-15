@@ -68,10 +68,12 @@ public class EftReportGenerator implements ReportGenerator {
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
+        if (!reportMetadata.paymentStatus().isNull()) {
+            criteria.eq(criteria.proto().paymentStatus(), reportMetadata.paymentStatus().getValue());
+        }
         if (reportMetadata.onlyWithNotice().isBooleanTrue()) {
             criteria.isNotNull(criteria.proto().notice());
         }
-
         if (reportMetadata.filterByBillingCycle().isBooleanTrue()) {
             criteria.eq(criteria.proto().padBillingCycle().billingType().billingPeriod(), reportMetadata.billingPeriod());
             criteria.eq(criteria.proto().padBillingCycle().billingCycleStartDate(), reportMetadata.billingCycleStartDate());

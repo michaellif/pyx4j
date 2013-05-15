@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -43,5 +44,7 @@ public interface EftReportMetadata extends ReportMetadata {
     IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> selectedBuildings();
+
+    IPrimitive<PaymentRecord.PaymentStatus> paymentStatus();
 
 }
