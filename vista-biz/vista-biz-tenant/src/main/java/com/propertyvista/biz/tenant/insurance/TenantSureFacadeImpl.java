@@ -359,21 +359,16 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         }
         validateIsCancellable(insuranceTenantSure);
 
-        try {
-            LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
-                    CfcApiAdapterFacade.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
+        LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
+                CfcApiAdapterFacade.CancellationType.PROACTIVE, getTenantsEmail(tenantId));
 
-            insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
-            insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
-            insuranceTenantSure.expiryDate().setValue(expiryDate);
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        insuranceTenantSure.status().setValue(TenantSureStatus.PendingCancellation);
+        insuranceTenantSure.cancellation().setValue(CancellationType.CancelledByTenant);
+        insuranceTenantSure.expiryDate().setValue(expiryDate);
 
-            Persistence.service().merge(insuranceTenantSure);
-            Persistence.service().commit();
-        } catch (CfcApiException e) {
-            log.error("Failed to reinstate insurace for tenant " + tenantId.getPrimaryKey() + "'", e);
-            throw new UserRuntimeException(i18n.tr("Failed to cancel due to TenantSure interface error"));
-        }
+        Persistence.service().merge(insuranceTenantSure);
+        Persistence.service().commit();
     }
 
     @Override
@@ -384,19 +379,15 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             throw new IllegalStateException("insurance should ped pending cancellationd due to skipped payment to proceed (insurance pk = "
                     + insuranceTenantSure.getPrimaryKey());
         }
-        try {
-            LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
-                    CfcApiAdapterFacade.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
+        LogicalDate expiryDate = ServerSideFactory.create(CfcApiAdapterFacade.class).cancel(insuranceTenantSure.insuranceCertificateNumber().getValue(),
+                CfcApiAdapterFacade.CancellationType.RETROACTIVE, getTenantsEmail(tenantId));
 
-            insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            insuranceTenantSure.status().setValue(TenantSureStatus.Cancelled);
-            insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
-            insuranceTenantSure.expiryDate().setValue(expiryDate);
+        insuranceTenantSure.cancellationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        insuranceTenantSure.status().setValue(TenantSureStatus.Cancelled);
+        insuranceTenantSure.cancellation().setValue(CancellationType.SkipPayment);
+        insuranceTenantSure.expiryDate().setValue(expiryDate);
 
-            Persistence.service().merge(insuranceTenantSure);
-        } catch (CfcApiException e) {
-            throw new Error(e);
-        }
+        Persistence.service().merge(insuranceTenantSure);
     }
 
     @Override
@@ -465,15 +456,10 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Persistence.service().merge(insuranceTenantSure);
 
         String tenantsEmail = getTenantsEmail(tenantId);
-        try {
-            ServerSideFactory.create(CfcApiAdapterFacade.class).reinstate(insuranceTenantSure.insuranceCertificateNumber().getValue(),
-                    ReinstatementType.REINSTATEMENT_PROACTIVE, tenantsEmail);
+        ServerSideFactory.create(CfcApiAdapterFacade.class).reinstate(insuranceTenantSure.insuranceCertificateNumber().getValue(),
+                ReinstatementType.REINSTATEMENT_PROACTIVE, tenantsEmail);
 
-            Persistence.service().commit();
-        } catch (CfcApiException error) {
-            log.error("Failed to reinstate insurace for tenant " + tenantId.getPrimaryKey() + "'", error);
-            throw new UserRuntimeException(i18n.tr("Failed to reinstate due to TenantSure interface error"));
-        }
+        Persistence.service().commit();
     }
 
     private InsuranceTenantSureClient initializeClient(Tenant tenantId, String name, String phone) {
@@ -483,13 +469,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         if (tenantSureClient == null) {
             tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
             tenantSureClient.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
-            String clientReferenceNumber = null;
-            try {
-                clientReferenceNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).createClient(tenantId, name, phone);
-            } catch (CfcApiException e) {
-                log.error("Failed to register tenant '" + tenantId.getPrimaryKey() + "' via CFC API", e);
-                throw new UserRuntimeException(i18n.tr("Failed to register client via TenantSure interface"));
-            }
+            String clientReferenceNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).createClient(tenantId, name, phone);
             tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
             Persistence.service().persist(tenantSureClient);
             Persistence.service().commit();
@@ -526,24 +506,14 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             emails.add(email != null ? email : getTenantsEmail(tenantId));
         }
         InsuranceTenantSure insuranceTenantSure = retrieveActiveInsuranceTenantSure(tenantId);
-        try {
-            ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.insuranceCertificateNumber().getValue(), emails);
-        } catch (CfcApiException e) {
-            log.error("Failed to send certificate to tenant '" + tenantId.getPrimaryKey() + "'", e);
-            throw new UserRuntimeException(i18n.tr("Failed to send email due to TenantSure interface error"));
-        }
+        ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(insuranceTenantSure.insuranceCertificateNumber().getValue(), emails);
         return emails.get(0);
     }
 
     @Override
     public String sendQuote(Tenant tenantId, String quoteId) {
         List<String> emails = Arrays.asList(getTenantsEmail(tenantId));
-        try {
-            ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(quoteId, emails);
-        } catch (CfcApiException e) {
-            log.error("Failed to send quote to tenant '" + tenantId.getPrimaryKey() + "'", e);
-            throw new UserRuntimeException(i18n.tr("Failed to send email due to TenantSure interface error"));
-        }
+        ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(quoteId, emails);
         return emails.get(0);
     }
 

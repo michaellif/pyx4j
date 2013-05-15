@@ -43,23 +43,22 @@ public interface CfcApiAdapterFacade {
      * 
      * @return reference ID for the client
      */
-    public String createClient(Tenant tenant, String tenantName, String tenantPhone) throws CfcApiException;
+    public String createClient(Tenant tenant, String tenantName, String tenantPhone);
 
-    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) throws TooManyPreviousClaimsException,
-            CfcApiException;
+    public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) throws TooManyPreviousClaimsException, CfcApiException;
 
     /**
      * Binds quote in CFC system
      * 
      * @return insurance certificate number
      */
-    public String bindQuote(String quoteId) throws CfcApiException;
+    public String bindQuote(String quoteId);
 
     /** Send policy related documentation to the list of e-mail addresses */
-    public void requestDocument(String quoteId, List<String> emails) throws CfcApiException;
+    public void requestDocument(String quoteId, List<String> emails);
 
-    public LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress) throws CfcApiException;
+    LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress);
 
-    public void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress) throws CfcApiException;
+    void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress);
 
 }

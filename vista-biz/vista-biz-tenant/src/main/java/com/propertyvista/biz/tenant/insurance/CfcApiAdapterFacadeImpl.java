@@ -65,7 +65,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         this.configuration = configuration;
     }
 
-    // TODO this monster needs refactoring:: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
+    // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
     private CFCAPI getApi() {
         CFCAPI api = null;
         try {
@@ -90,7 +90,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     @Override
-    public String createClient(Tenant tenant, String tenantName, String tenantPhone) throws CfcApiException {
+    public String createClient(Tenant tenant, String tenantName, String tenantPhone) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
@@ -103,7 +103,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
         SimpleClientResponse createClientRssult = api.runCreateClient(simpleClient);
         if (!isSuccessfulCode(createClientRssult.getSimpleClientResult().getCode())) {
-            throw new CfcApiException(createClientRssult.getSimpleClientResult().getCode());
+            throw new Error(createClientRssult.getSimpleClientResult().getCode());
         }
         return createClientRssult.getSimpleClientResult().getId();
     }
@@ -171,20 +171,20 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     @Override
-    public String bindQuote(String quoteId) throws CfcApiException {
+    public String bindQuote(String quoteId) {
         CFCAPISoap api = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(api);
 
         Result bindResult = api.requestBind(quoteId, sessionId);
         if (!isSuccessfulCode(bindResult.getCode())) {
-            throw new CfcApiException(bindResult.getCode());
+            throw new Error(bindResult.getCode());
         }
 
         return bindResult.getId();
     }
 
     @Override
-    public void requestDocument(String quoteId, List<String> emails) throws CfcApiException {
+    public void requestDocument(String quoteId, List<String> emails) {
         CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
         String sessionId = makeNewCfcSession(cfcApiSoap);
 
@@ -195,7 +195,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     @Override
-    public LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress) throws CfcApiException {
+    public LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress) {
         CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
 
         String sessionId = makeNewCfcSession(cfcApiSoap);
@@ -211,7 +211,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     @Override
-    public void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress) throws CfcApiException {
+    public void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress) {
         CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
 
         String sessionId = makeNewCfcSession(cfcApiSoap);
@@ -225,9 +225,10 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         assertSuccessfulResponse(result);
     }
 
-    private void assertSuccessfulResponse(Result response) throws CfcApiException {
+    // TODO create a special CFC API exception
+    private void assertSuccessfulResponse(Result response) {
         if (!isSuccessfulCode(response.getCode())) {
-            throw new CfcApiException(response.getCode());
+            throw new Error(response.getCode());
         }
     }
 
@@ -235,9 +236,8 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
      * Opens a new session to CFC
      * 
      * @return session id, or throw an <code>Error<code>
-     * @throws CfcApiException
      */
-    private String makeNewCfcSession(CFCAPISoap cfcApiSoap) throws CfcApiException {
+    private String makeNewCfcSession(CFCAPISoap cfcApiSoap) {
         Credentials crs = getCredentials();
         Result authResult = cfcApiSoap.userAuthentication(crs.userName, crs.password);
         assertSuccessfulResponse(authResult);
