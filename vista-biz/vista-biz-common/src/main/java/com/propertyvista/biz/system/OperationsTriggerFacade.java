@@ -17,6 +17,6 @@ import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
 public interface OperationsTriggerFacade {
 
-    public void startProcess(PmcProcessType pmcProcessType);
+    public void startProcess(PmcProcessType processType);
 
 }

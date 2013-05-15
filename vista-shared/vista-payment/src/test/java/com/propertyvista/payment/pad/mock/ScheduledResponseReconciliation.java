@@ -29,6 +29,11 @@ public class ScheduledResponseReconciliation extends MockEvent<ScheduledResponse
 
     }
 
+    static {
+        // TODO Make it better Initialize listeners
+        EFTBankMock.instance();
+    }
+
     public ScheduledResponseReconciliation(String transactionId, String reasonCode, String reasonText) {
         super();
         this.transactionId = transactionId;

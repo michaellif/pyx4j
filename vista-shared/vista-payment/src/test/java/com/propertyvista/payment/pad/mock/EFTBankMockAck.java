@@ -17,6 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.validator.EntityValidator;
 
@@ -31,6 +34,8 @@ import com.propertyvista.test.mock.MockEventBus;
 
 class EFTBankMockAck implements ScheduledResponseAcknowledgment.Handler {
 
+    private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
+
     private final Map<String, ScheduledResponseAcknowledgment> scheduled = new HashMap<String, ScheduledResponseAcknowledgment>();
 
     EFTBankMockAck() {
@@ -40,6 +45,7 @@ class EFTBankMockAck implements ScheduledResponseAcknowledgment.Handler {
 
     @Override
     public void scheduleTransactionAcknowledgmentResponse(ScheduledResponseAcknowledgment event) {
+        log.debug("schedule reject in acknowledgment for transactionId:{}", event.transactionId);
         scheduled.put(event.transactionId, event);
     }
 
@@ -65,6 +71,8 @@ class EFTBankMockAck implements ScheduledResponseAcknowledgment.Handler {
                     if (askReject == null) {
                         EFTBankMock.instance().addAcknowledgedRecord(padDebitRecord);
                     } else {
+                        log.debug("reject in acknowledgment for transactionId:{}", padDebitRecord.transactionId().getValue());
+
                         scheduled.remove(padDebitRecord.transactionId().getValue());
 
                         PadAckDebitRecord record = EntityFactory.create(PadAckDebitRecord.class);

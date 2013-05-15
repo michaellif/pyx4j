@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -40,7 +39,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.cache.CacheService;
-import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -91,9 +89,6 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.TransactionHistoryDTO;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
-import com.propertyvista.server.jobs.PmcProcess;
-import com.propertyvista.server.jobs.PmcProcessContext;
-import com.propertyvista.server.jobs.PmcProcessFactory;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
@@ -113,6 +108,7 @@ import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
+import com.propertyvista.test.mock.schedule.SchedulerMock;
 
 public abstract class FinancialTestBase extends VistaDBTestBase {
 
@@ -812,12 +808,15 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         scheduler.schedulePmcProcess(PmcProcessType.paymentsPadReceiveReconciliation, new Schedule());
     }
 
+    //TODO move to SchedulerMock
     public static class TaskScheduler {
+
         public interface Task {
             void execute() throws Exception;
         }
 
         public static class Schedule {
+
             private final int[] fields = new int[Calendar.FIELD_COUNT];
 
             public Schedule set(int field, int value) {
@@ -840,7 +839,21 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
             }
         }
 
-        private final HashMap<Schedule, Task> taskSchedule = new HashMap<Schedule, Task>();
+        private static class ScheduledTask {
+
+            Task task;
+
+            Schedule schedule;
+
+            public ScheduledTask(Task task, Schedule schedule) {
+                super();
+                this.task = task;
+                this.schedule = schedule;
+            }
+
+        }
+
+        private final List<ScheduledTask> taskSchedule = new ArrayList<ScheduledTask>();
 
         protected void clearSchedule() {
             taskSchedule.clear();
@@ -854,50 +867,30 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
                 entry.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
                 entry.set(Calendar.MONTH, cal.get(Calendar.MONTH));
                 entry.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-                taskSchedule.put(entry, task);
+                taskSchedule.add(new ScheduledTask(task, entry));
             }
         }
 
         protected void scheduleTask(Task task, Schedule entry) {
-            taskSchedule.put(entry, task);
+            taskSchedule.add(new ScheduledTask(task, entry));
         }
 
         protected void schedulePmcProcess(final PmcProcessType triggerType, Schedule entry) {
-            taskSchedule.put(entry, new Task() {
+            taskSchedule.add(new ScheduledTask(new Task() {
                 @Override
                 public void execute() throws Exception {
-
-                    try {
-                        Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
-                        Date runDate = getSysDate();
-                        PmcProcessContext sharedContext = new PmcProcessContext(runDate);
-                        PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(triggerType);
-                        if (pmcProcess.start(sharedContext)) {
-                            PmcProcessContext pmcContext = new PmcProcessContext(runDate);
-                            pmcProcess.executePmcJob(pmcContext);
-                            log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", getSysDate(), pmcProcess.getClass().getSimpleName(),
-                                    pmcContext.getExecutionMonitor());
-                            pmcProcess.complete(sharedContext);
-                        }
-                    } finally {
-                        Persistence.service().endTransaction();
-                    }
-
+                    SchedulerMock.runProcess(triggerType);
                 }
-            });
+            }, entry));
         }
 
         protected void runInterval(Calendar calFrom, Calendar calTo) throws Exception {
             while (calFrom.before(calTo)) {
                 calFrom.add(Calendar.DATE, 1);
-                for (Schedule entry : taskSchedule.keySet()) {
-                    if (!entry.match(calFrom)) {
-                        continue;
-                    }
-                    Task task = taskSchedule.get(entry);
-                    if (task != null) {
+                for (ScheduledTask entry : taskSchedule) {
+                    if (entry.schedule.match(calFrom)) {
                         setSysDate(calFrom.getTime());
-                        task.execute();
+                        entry.task.execute();
                     }
                 }
             }

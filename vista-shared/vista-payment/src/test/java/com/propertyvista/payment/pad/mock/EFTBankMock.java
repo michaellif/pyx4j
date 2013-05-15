@@ -17,12 +17,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.pyx4j.essentials.server.dev.DataDump;
+
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
 
 class EFTBankMock {
+
+    private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
     private EFTBankMock() {
     }
@@ -46,10 +53,13 @@ class EFTBankMock {
     private final EFTBankMockReconciliation reconciliation = new EFTBankMockReconciliation();
 
     void receivedPadFile(PadFile padFile) {
+        log.debug("receivedPadFile {}, records {}", padFile.fileCreationNumber().getValue(), padFile.recordsCount().getValue());
         receivedPadFile.add(padFile.<PadFile> duplicate());
+        DataDump.dumpToDirectory("eft", "pad", padFile);
     }
 
     void addAcknowledgedRecord(PadDebitRecord padDebitRecord) {
+        log.debug("Acknowledged transactionId:{}", padDebitRecord.transactionId().getValue());
         uprocessedRecords.add(padDebitRecord);
     }
 
@@ -64,10 +74,13 @@ class EFTBankMock {
         }
 
         if (unacknowledgedFile == null) {
+            log.debug("No file acknowledge for companyId {} ", companyId);
             return null;
         } else {
             receivedPadFile.remove(unacknowledgedFile);
-            return acknowledgment.createAcknowledgementFile(unacknowledgedFile);
+            PadAckFile ack = acknowledgment.createAcknowledgementFile(unacknowledgedFile);
+            DataDump.dumpToDirectory("eft", "acknowledgment", ack);
+            return ack;
         }
     }
 
@@ -81,7 +94,14 @@ class EFTBankMock {
                 records.add(padRecord);
             }
         }
-        reconciliationRecords.addAll(records);
-        return reconciliation.createReconciliationFile(records);
+        if (records.size() == 0) {
+            log.debug("No uprocessed records for companyId {} ", companyId);
+            return null;
+        } else {
+            reconciliationRecords.addAll(records);
+            PadReconciliationFile rec = reconciliation.createReconciliationFile(records);
+            DataDump.dumpToDirectory("eft", "reconciliation", rec);
+            return rec;
+        }
     }
 }

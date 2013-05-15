@@ -17,9 +17,10 @@ import com.propertyvista.test.mock.MockEvent;
 
 public class ScheduledResponseAcknowledgment extends MockEvent<ScheduledResponseAcknowledgment.Handler> {
 
-    public String transactionId;
+    public final String transactionId;
 
-    public String acknowledgmentStatusCode;
+    // 4 characters
+    public final String acknowledgmentStatusCode;
 
     public interface Handler {
 
@@ -27,9 +28,17 @@ public class ScheduledResponseAcknowledgment extends MockEvent<ScheduledResponse
 
     }
 
+    static {
+        // TODO Make it better Initialize listeners
+        EFTBankMock.instance();
+    }
+
     public ScheduledResponseAcknowledgment(String transactionId, String acknowledgmentStatusCode) {
         super();
         this.transactionId = transactionId;
+        if (acknowledgmentStatusCode.length() > 4) {
+            throw new IllegalArgumentException();
+        }
         this.acknowledgmentStatusCode = acknowledgmentStatusCode;
     }
 

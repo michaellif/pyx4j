@@ -24,15 +24,27 @@ public class MockEventBus {
 
     private static Logger log = LoggerFactory.getLogger(MockEventBus.class);
 
-    public static EventBus instance = new SimpleEventBus();
+    private final EventBus eventBus;
+
+    private MockEventBus() {
+        eventBus = new SimpleEventBus();
+    }
+
+    private static class SingletonHolder {
+        public static final MockEventBus INSTANCE = new MockEventBus();
+    }
+
+    static MockEventBus instance() {
+        return SingletonHolder.INSTANCE;
+    }
 
     public static <H> HandlerRegistration addHandler(Class<? extends MockEvent<H>> eventClass, H handler) {
-        return instance.addHandler(MockEvent.getTypeByClass(eventClass), handler);
+        return instance().eventBus.addHandler(MockEvent.getTypeByClass(eventClass), handler);
     }
 
     public static void fireEvent(MockEvent<?> event) {
-        log.trace("fireEvent {}", event.getClass().getSimpleName());
-        instance.fireEvent(event);
+        log.debug("fireEvent {}", event.getClass().getSimpleName());
+        instance().eventBus.fireEvent(event);
     }
 
 }

@@ -18,9 +18,11 @@ import java.math.BigDecimal;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.FinancialTestBase;
 import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -35,6 +37,7 @@ import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
+import com.propertyvista.test.mock.schedule.OperationsTriggerFacadeMock;
 
 @Category(RegressionTests.class)
 public class PadProcessingTest extends FinancialTestBase {
@@ -44,6 +47,7 @@ public class PadProcessingTest extends FinancialTestBase {
         super.setUp();
         preloadData();
         ServerSideFactory.register(EFTTransportFacade.class, EFTTransportFacadeMock.class);
+        ServerSideFactory.register(OperationsTriggerFacade.class, OperationsTriggerFacadeMock.class);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class PadProcessingTest extends FinancialTestBase {
         preloadData(config);
     }
 
-    public void testSuccessfulPad() throws Exception {
+    public void testPadSuccessful() throws Exception {
         setSysDate("2011-04-01");
         setCaledonPAdPaymentBatchProcess();
 
@@ -69,17 +73,40 @@ public class PadProcessingTest extends FinancialTestBase {
         PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(paymentMethod, "100");
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        Persistence.service().commit();
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
 
+        advanceSysDate("2011-04-02");
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+    }
+
+    public void testPadRejected() throws Exception {
         setSysDate("2011-04-01");
+        setCaledonPAdPaymentBatchProcess();
 
-        if (false) {
-            new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
-        }
+        Customer customer = getDataModel(CustomerDataModel.class).addCustomer();
+        getDataModel(CustomerDataModel.class).setCurrentItem(customer);
 
-        if (false) {
-            MockEventBus.fireEvent(new ScheduledResponseAcknowledgment(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()), "Bad Account#"));
-        }
+        Lease lease = getDataModel(LeaseDataModel.class).addLease("2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
+        getDataModel(LeaseDataModel.class).setCurrentItem(lease);
+
+        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(PaymentType.Echeck);
+
+        // Make a payment
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(paymentMethod, "100");
+
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        Persistence.service().commit();
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
+
+        MockEventBus.fireEvent(new ScheduledResponseAcknowledgment(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()), "2001"));
+
+        advanceSysDate("2011-04-02");
+
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Rejected);
+
     }
 }

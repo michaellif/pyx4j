@@ -17,10 +17,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
@@ -28,6 +32,8 @@ import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 
 class EFTBankMockReconciliation {
+
+    private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
     EFTBankMockReconciliation() {
 
@@ -37,6 +43,8 @@ class EFTBankMockReconciliation {
         PadReconciliationFile reconciliationFile = EntityFactory.create(PadReconciliationFile.class);
 
         Map<String, PadReconciliationSummary> byMID = new HashMap<String, PadReconciliationSummary>();
+
+        log.debug("Creatig Reconciliation for {} records", records.size());
 
         for (PadDebitRecord padRecord : records) {
             PadReconciliationSummary summary = getSummary(reconciliationFile, byMID, padRecord.padBatch().merchantTerminalId().getValue());
@@ -51,6 +59,8 @@ class EFTBankMockReconciliation {
         if (summary == null) {
             summary = EntityFactory.create(PadReconciliationSummary.class);
             summary.processingStatus().setValue(Boolean.FALSE);
+            summary.reconciliationStatus().setValue(MerchantReconciliationStatus.PAID);
+            summary.merchantTerminalId().setValue(merchantTerminalId);
 
             byMID.put(merchantTerminalId, summary);
             reconciliationFile.batches().add(summary);
