@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
@@ -259,22 +260,20 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     }
                 });
 
-// TODO: disable age restriction tweaks so far...                 
-//                get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-//                    @Override
-//                    public void onValueChange(ValueChangeEvent<LogicalDate> event) {
-//                        if (event.getValue() != null) {
-//                            boolean mature = ValidationUtils.isOlderThen18(event.getValue());
-//
-//                            if (!mature) {
-//                                get(proto().role()).setValue(LeaseTermParticipant.Role.Dependent);
-//                                get(proto().percentage()).setValue(BigDecimal.ZERO);
-//                            }
-//                            get(proto().role()).setEditable(mature);
-//                            get(proto().percentage()).setEditable(mature);
-//                        }
-//                    }
-//                });
+                get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
+                    @Override
+                    public ValidationError isValid(CComponent<LeaseTermParticipant.Role, ?> component, LeaseTermParticipant.Role role) {
+                        if (getAgeOfMajority() != null) {
+                            if (role != null && role == Role.Applicant) {
+                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                    return new ValidationError(component, i18n.tr(
+                                            "This tenant is too young to be an applicant: the minimum age required is {0}.", getAgeOfMajority()));
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                });
             }
 
             preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
@@ -312,12 +311,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     role.setOptions(Role.tenantRelated());
                 }
 
-// TODO: disable age restriction tweaks so far...                 
-//                if (!getValue().leaseParticipant().customer().person().birthDate().isNull()) {
-//                    if (!ValidationUtils.isOlderThen18(getValue().leaseParticipant().customer().person().birthDate().getValue())) {
-//                        get(proto().role()).setEditable(false);
-//                    }
-//                }
             }
         }
 

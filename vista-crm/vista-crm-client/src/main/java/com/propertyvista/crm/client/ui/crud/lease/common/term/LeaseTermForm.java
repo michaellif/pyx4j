@@ -112,6 +112,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
+
+        ((LeaseTermParticipantFolder) get(proto().version().tenants())).setAgeOfMajority(getValue().ageOfMajority().getValue());
+        ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setAgeOfMajority(getValue().ageOfMajority().getValue());
+
     }
 
     private FormFlexPanel createDetailsTab(String title) {

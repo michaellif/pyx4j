@@ -99,6 +99,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
         }
+
+        CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
+        ((TenantInLeaseFolder) comp).setAgeOfMajority(getValue().ageOfMajority().getValue());
     }
 
     public void onTenantInsuranceOwnerClicked(Tenant tenantId) {

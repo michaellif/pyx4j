@@ -23,6 +23,8 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -59,6 +61,11 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         }
 
         fillTenantInsurance(dto);
+
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
+        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+            dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+        }
     }
 
     @Override

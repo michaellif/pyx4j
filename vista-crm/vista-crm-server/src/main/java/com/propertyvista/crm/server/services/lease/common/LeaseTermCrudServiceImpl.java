@@ -27,6 +27,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
@@ -35,6 +36,7 @@ import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
+import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -142,6 +144,12 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             }
 
             checkUnitMoveOut(dto);
+        }
+
+        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class)
+                .obtainEffectivePolicy(dto.lease().unit(), RestrictionsPolicy.class);
+        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+            dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
         }
     }
 

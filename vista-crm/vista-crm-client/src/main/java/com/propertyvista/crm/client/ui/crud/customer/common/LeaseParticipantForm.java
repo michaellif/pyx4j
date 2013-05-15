@@ -87,7 +87,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             public ValidationError isValid(CComponent<Date, ?> component, Date value) {
                 if (value != null && !getValue().ageOfMajority().isNull()) {
                     if (!TimeUtils.isOlderThan(value, getValue().ageOfMajority().getValue() - 1)) {
-                        return new ValidationError(component, i18n.tr("this lease participant is to young: the minimum age required is {0}.", getValue()
+                        return new ValidationError(component, i18n.tr("this lease participant is too young: the minimum age required is {0}.", getValue()
                                 .ageOfMajority().getValue()));
                     }
                 }

@@ -56,4 +56,9 @@ public interface LeaseTermDTO extends LeaseTerm {
     @Editor(type = EditorType.money)
     @Caption(name = "Initial Balance")
     IPrimitive<BigDecimal> carryforwardBalance();
+
+    /**
+     * this value is passed for validation of age of the tenant
+     */
+    IPrimitive<Integer> ageOfMajority();
 }
