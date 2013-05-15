@@ -156,25 +156,25 @@ class PadReconciliationProcessor {
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' was not Acknowledged");
+                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
                 }
                 paymentRecord.aggregatedTransfer().set(at);
                 break;
             case REJECTED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' was not Acknowledged");
+                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' already received");
+                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
                 }
                 paymentRecord.aggregatedTransfer().set(at);
                 break;
             case RETURNED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcesed) {
-                    throw new Error("Payment PAD transaction '" + debitRecord.transactionId().getValue() + "' was not processed");
+                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not processed");
                 }
                 paymentRecord.aggregatedTransferReturn().set(at);
                 break;
