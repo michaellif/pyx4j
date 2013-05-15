@@ -29,6 +29,7 @@ import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.S
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabelHolder;
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -99,6 +100,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         final Widget nativeComponent = component.asWidget();
         nativeComponent.addStyleName(WidgetDecoratorComponent.name());
         nativeComponent.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
+        nativeComponent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         String caption = builder.customLabel;
 

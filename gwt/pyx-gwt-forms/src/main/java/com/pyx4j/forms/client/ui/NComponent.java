@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -34,7 +35,7 @@ import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Event;
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -69,7 +70,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     public NComponent(CCOMP cComponent) {
         super();
         this.cComponent = cComponent;
-
+        setWidth(cComponent.getWidth());
     }
 
     public final WIDGET getEditor() {
@@ -112,7 +113,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     protected abstract VIEWER createViewer();
 
     protected void onEditorCreate() {
-        editor.asWidget().setWidth(getCComponent().getWidth());
+        getEditor().setWidth("100%");
         setDebugId(getCComponent().getDebugId());
     }
 
@@ -121,6 +122,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
     }
 
     protected void onViewerCreate() {
+        getViewer().setWidth("100%");
         setDebugId(getCComponent().getDebugId());
     }
 
@@ -229,7 +231,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
-    class EditorPanel extends DockPanel implements HasDoubleClickHandlers {
+    class EditorPanel extends FlowPanel implements HasDoubleClickHandlers {
 
         private final GroupFocusHandler focusHandlerManager;
 
@@ -242,14 +244,16 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.EditorPanel.name());
+            getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
             SimplePanel editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
+            editorHolder.getElement().getStyle().setProperty("display", "table-cell");
+
             editorHolder.addStyleName(DefaultCComponentsTheme.StyleName.Editor.name());
             editorHolder.setWidget(editor);
-            add(editorHolder, DockPanel.CENTER);
-            setCellVerticalAlignment(editorHolder, DockPanel.ALIGN_MIDDLE);
+            add(editorHolder);
 
             focusHandlerManager = new GroupFocusHandler(this);
 
@@ -259,7 +263,10 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             }
 
             triggerButtonHolder = new SimplePanel();
-            add(triggerButtonHolder, DockPanel.EAST);
+            triggerButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
+            triggerButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
+            add(triggerButtonHolder);
 
             setTriggerButton();
         }
@@ -335,7 +342,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         }
     }
 
-    class ViewerPanel extends DockPanel {
+    class ViewerPanel extends FlowPanel {
 
         private HandlerRegistration navigationCommandHandlerRegistration;
 
@@ -347,18 +354,19 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             super();
 
             setStyleName(DefaultCComponentsTheme.StyleName.ViewerPanel.name());
-
-            NComponent.this.getViewer().asWidget().setWidth("100%");
+            getElement().getStyle().setProperty("display", "table");
+            setWidth("100%");
 
             viewerHolder = new SimplePanel();
+            viewerHolder.setWidth("100%");
+            viewerHolder.getElement().getStyle().setProperty("display", "table-cell");
             viewerHolder.addStyleName(DefaultCComponentsTheme.StyleName.Viewer.name());
-            viewerHolder.setWidget(NComponent.this.getViewer());
-
-            add(viewerHolder, DockPanel.CENTER);
-            setCellVerticalAlignment(viewerHolder, DockPanel.ALIGN_MIDDLE);
+            viewerHolder.setWidget(viewer);
+            add(viewerHolder);
 
             actionButtonHolder = new SimplePanel();
-            add(actionButtonHolder, DockPanel.EAST);
+            actionButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
+            add(actionButtonHolder);
 
             setActionButton();
 

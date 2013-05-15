@@ -51,6 +51,9 @@ public class TesterWidgetDecorator extends WidgetDecorator {
 
         public Builder(CComponent<?, ?> component) {
             super(component);
+            component.setWidth("150px");
+            componentAlignment(Alignment.right);
+
         }
 
         @Override

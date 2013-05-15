@@ -93,9 +93,9 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private EventBus eventBus;
 
-    private String width = "";
+    private String width = "auto";
 
-    private String height = "";
+    private String height = "auto";
 
     private IDebugId debugId;
 
