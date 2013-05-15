@@ -15,6 +15,8 @@ package com.propertyvista.yardi.stub;
 
 import java.rmi.RemoteException;
 
+import com.yardi.entity.resident.ResidentTransactions;
+
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
