@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,13 +34,15 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -49,18 +52,20 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
+import com.propertyvista.portal.rpc.portal.dto.CoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentWizardForm extends VistaWizardForm<PreauthorizedPaymentDTO> {
@@ -72,12 +77,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
-
-    private final SimplePanel amountPlaceholder = new SimplePanel();
-
-    private final Widget percent;
-
-    private final Widget value;
 
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
@@ -104,10 +103,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     public PreauthorizedPaymentWizardForm(IWizard<PreauthorizedPaymentDTO> view) {
         super(PreauthorizedPaymentDTO.class, view);
 
-        amountPlaceholder.setWidth("15em");
-        percent = new DecoratorBuilder(inject(proto().percent()), 10).customLabel(i18n.tr("Percent of Lease Balance")).build();
-        value = new DecoratorBuilder(inject(proto().value()), 10).build();
-
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
         paymentMethodStep = addStep(createPaymentMethodStep());
@@ -119,22 +114,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         int row = -1;
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
-
-//        panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountType()), 10).build());
-        panel.setWidget(++row, 0, amountPlaceholder);
-
-        // tweak UI:
-        get(proto().amountType()).addValueChangeHandler(new ValueChangeHandler<AmountType>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<AmountType> event) {
-                setAmountEditor(event.getValue());
-            }
-        });
-
-//  filled with 'percent' by default and isn't allowed to change!
-//        get(proto().amountType()).setEditable(false);
-        get(proto().amountType()).setVisible(false);
+        panel.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
         return panel;
     }
@@ -249,8 +229,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     protected void onValueSet(final boolean populate) {
         super.onValueSet(populate);
 
-        setAmountEditor(getValue().amountType().getValue());
-
         paymentMethodEditor.setElectronicPaymentsEnabled(getValue().electronicPaymentsAllowed().getValue(Boolean.FALSE));
 
         loadProfiledPaymentMethods(new DefaultAsyncCallback<Void>() {
@@ -267,29 +245,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         });
     }
 
-    private void setAmountEditor(AmountType amountType) {
-        amountPlaceholder.clear();
-        get(proto().percent()).setVisible(false);
-        get(proto().value()).setVisible(false);
-
-        if (amountType != null) {
-            switch (amountType) {
-            case Percent:
-                amountPlaceholder.setWidget(percent);
-                get(proto().percent()).setVisible(true);
-                break;
-
-            case Value:
-                amountPlaceholder.setWidget(value);
-                get(proto().value()).setVisible(true);
-                break;
-
-            default:
-                throw new IllegalArgumentException();
-            }
-        }
-    }
-
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
         ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
@@ -301,6 +256,54 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 }
             }
         });
+    }
+
+    private class CoveredItemFolder extends VistaTableFolder<CoveredItemDTO> {
+
+        public CoveredItemFolder() {
+            super(CoveredItemDTO.class, false);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto().billableItem(),"35em"),
+                    new EntityFolderColumnDescriptor(proto().percent(), "5em"),
+                    new EntityFolderColumnDescriptor(proto().amount(), "10em"));
+              //@formatter:on                
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof CoveredItemDTO) {
+                return new CoveredItemEditor();
+            }
+            return super.create(member);
+        }
+
+        class CoveredItemEditor extends CEntityFolderRowEditor<CoveredItemDTO> {
+
+            public CoveredItemEditor() {
+                super(CoveredItemDTO.class, columns());
+            }
+
+            @Override
+            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                CComponent<?, ?> comp;
+
+                if (column.getObject() == proto().billableItem()) {
+                    comp = inject(column.getObject(), new CEntityLabel<BillableItem>());
+                } else {
+                    comp = super.createCell(column);
+                }
+
+                if (column.getObject() == proto().amount()) {
+                    comp.setVisible(true);
+                }
+
+                return comp;
+            }
+        }
     }
 
     private Widget createConfirmationDetailsPanel() {
@@ -318,28 +321,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         panel.add(pm);
-
-        HorizontalPanel amount = new HorizontalPanel();
-
-        switch (get(proto().amountType()).getValue()) {
-        case Percent:
-            amount.add(w = new HTML(i18n.tr("Percent to pay:")));
-            w.setWidth("10em");
-            amount.add(w = new HTML(((CTextFieldBase<?, ?>) get(proto().percent())).getFormattedValue()));
-            w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            break;
-
-        case Value:
-            amount.add(w = new HTML(i18n.tr("Amount to pay:")));
-            w.setWidth("10em");
-            amount.add(w = new HTML(((CTextFieldBase<?, ?>) get(proto().value())).getFormattedValue()));
-            w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-            break;
-
-        default:
-            throw new IllegalArgumentException();
-        }
-        panel.add(amount);
 
         return panel;
     }

@@ -24,6 +24,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.rpc.shared.ServiceExecution;
@@ -31,13 +32,17 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.payment.PreauthorizedPayment.CoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseProducts;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.portal.dto.CoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -80,15 +85,31 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(lease));
 
-//        ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), )
-//        dto.allowedAmountTypes().
-
-        // some default values:
-        dto.amountType().setValue(AmountType.Percent);
-        dto.percent().setValue(BigDecimal.ONE);
-        dto.value().setValue(BigDecimal.ZERO);
+        fillCoveredItems(dto);
 
         callback.onSuccess(dto);
+    }
+
+    private void fillCoveredItems(PreauthorizedPaymentDTO dto) {
+        LeaseProducts products = TenantAppContext.getCurrentUserLease().currentTerm().version().leaseProducts();
+
+        dto.coveredItems().add(createCoveredItem(products.serviceItem()));
+        for (BillableItem billableItem : products.featureItems()) {
+            Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
+            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())) {
+                dto.coveredItems().add(createCoveredItem(billableItem));
+            }
+        }
+    }
+
+    private CoveredItem createCoveredItem(BillableItem billableItem) {
+        CoveredItemDTO item = EntityFactory.create(CoveredItemDTO.class);
+
+        item.billableItem().set(billableItem);
+        item.percent().setValue(BigDecimal.ONE);
+        item.amount().setValue(billableItem.agreedPrice().getValue().multiply(item.percent().getValue()));
+
+        return item;
     }
 
     @Override

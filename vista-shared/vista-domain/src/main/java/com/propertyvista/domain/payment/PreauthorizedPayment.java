@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -32,15 +33,36 @@ import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @ToStringFormat("{0}, {1,choice,null#|!null#{1}}{2,choice,null#|!null#{2}} - {3}")
 public interface PreauthorizedPayment extends IEntity {
 
+    public interface CoveredItem extends IEntity {
+
+        @NotNull
+        @ReadOnly
+        @ToString(index = 0)
+        BillableItem billableItem();
+
+        @NotNull
+        @ReadOnly
+        @ToString(index = 1)
+        @Format("#,##0.00")
+        @Editor(type = EditorType.percentage)
+        IPrimitive<BigDecimal> percent();
+    }
+
+    @Owned
+    IList<CoveredItem> coveredItems();
+
+    @Deprecated
     @I18n
     public enum AmountType {
 
@@ -52,12 +74,14 @@ public interface PreauthorizedPayment extends IEntity {
         }
     }
 
+    @Deprecated
     @NotNull
     @ReadOnly
     @ToString(index = 0)
     @Caption(name = "Type")
     IPrimitive<AmountType> amountType();
 
+    @Deprecated
     @NotNull
     @ReadOnly
     @ToString(index = 1)
@@ -66,6 +90,7 @@ public interface PreauthorizedPayment extends IEntity {
     @MemberColumn(precision = 5, scale = 4)
     IPrimitive<BigDecimal> percent();
 
+    @Deprecated
     @NotNull
     @ReadOnly
     @ToString(index = 2)
@@ -96,5 +121,4 @@ public interface PreauthorizedPayment extends IEntity {
 
     @Timestamp(Update.Created)
     IPrimitive<LogicalDate> creationDate();
-
 }

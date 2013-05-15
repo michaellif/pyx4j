@@ -7,20 +7,28 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-16
- * @author vlads
+ * Created on 2013-05-15
+ * @author VladL
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
 @Transient
-public interface PreauthorizedPaymentItemDTO extends PreauthorizedPayment {
+public
+interface CoveredItemDTO extends PreauthorizedPayment.CoveredItem {
 
-    IPrimitive<Boolean> isCoTenant();
-
+    @Transient
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> amount();
 }

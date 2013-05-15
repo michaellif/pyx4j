@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 
+import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderItemDecorator;
 
@@ -76,7 +77,7 @@ public abstract class VistaTableFolder<E extends IEntity> extends CEntityFolder<
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (clazz.equals(member.getObjectClass())) {
-            return new CEntityFolderRowEditor<E>(clazz, columns());
+            return new CEntityFolderRowEditor<E>(clazz, columns(), new VistaViewersComponentFactory());
         } else {
             return super.create(member);
         }

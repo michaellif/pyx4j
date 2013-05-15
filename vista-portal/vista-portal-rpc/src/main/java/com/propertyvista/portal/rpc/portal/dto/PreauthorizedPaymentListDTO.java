@@ -20,10 +20,14 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.lease.BillableItem;
+
 @Transient
 public interface PreauthorizedPaymentListDTO extends IEntity {
 
     IList<PreauthorizedPaymentItemDTO> preauthorizedPayments();
+
+    IList<BillableItem> availableItems();
 
     @Caption(name = "Your next automated payment is scheduled for")
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
