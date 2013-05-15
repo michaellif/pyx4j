@@ -67,11 +67,25 @@ public class DefaultWidgetsTheme extends Theme {
         initListBoxStyle();
         initButtonStyle();
         initToolbarStyle();
+        initAnchorStyle();
         initStatusBarStyle();
         initRateItStyle();
         initImageGalleryStyle();
         initRadioGroupStyle();
         initGlassPanelStyle();
+    }
+
+    private void initAnchorStyle() {
+        Style style = new Style(".", StyleName.Anchor);
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("cursor", "pointer");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled);
+        style.addProperty("cursor", "default");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
     }
 
     protected void initTextBoxStyle() {

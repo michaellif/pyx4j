@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -34,6 +35,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -42,6 +44,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 import com.pyx4j.widgets.client.ToggleButton;
@@ -250,8 +253,6 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             SimplePanel editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
             editorHolder.getElement().getStyle().setProperty("display", "table-cell");
-
-            editorHolder.addStyleName(DefaultCComponentsTheme.StyleName.Editor.name());
             editorHolder.setWidget(editor);
             add(editorHolder);
 
@@ -346,7 +347,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         private HandlerRegistration navigationCommandHandlerRegistration;
 
-        private final SimplePanel viewerHolder;
+        private final Link viewerHolder;
 
         private final SimplePanel actionButtonHolder;
 
@@ -357,10 +358,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
-            viewerHolder = new SimplePanel();
+            viewerHolder = new Link();
             viewerHolder.setWidth("100%");
             viewerHolder.getElement().getStyle().setProperty("display", "table-cell");
-            viewerHolder.addStyleName(DefaultCComponentsTheme.StyleName.Viewer.name());
             viewerHolder.setWidget(viewer);
             add(viewerHolder);
 
@@ -390,9 +390,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                     }
                 }, ClickEvent.getType());
 
-                viewerHolder.addStyleDependentName(DefaultCComponentsTheme.StyleDependent.anchor.name());
+                viewerHolder.setEnabled(true);
             } else {
-                viewerHolder.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.anchor.name());
+                viewerHolder.setEnabled(false);
             }
         }
 
@@ -403,6 +403,27 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (actionButton != null) {
                 actionButtonHolder.setWidget(actionButton);
             }
+        }
+
+        class Link extends SimplePanel {
+            private static final String DEFAULT_HREF = "javascript:;";
+
+            public Link() {
+                super(DOM.createAnchor());
+                AnchorElement.as(getElement()).setHref(DEFAULT_HREF);
+                setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
+                setEnabled(false);
+            }
+
+            public void setEnabled(boolean enabled) {
+                DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
+                if (enabled) {
+                    removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                } else {
+                    addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
+                }
+            }
+
         }
 
     }

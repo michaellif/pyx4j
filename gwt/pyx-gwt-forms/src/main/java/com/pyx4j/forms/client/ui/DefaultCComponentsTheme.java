@@ -32,11 +32,11 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Editor, EditorPanel, Viewer, ViewerPanel, ValidationLabel, NoteLabel
+        EditorPanel, ViewerPanel, ValidationLabel, NoteLabel
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        disabled, readonly, info, anchor, warning
+        disabled, readonly, info, warning
     }
 
     public DefaultCComponentsTheme() {
@@ -54,15 +54,6 @@ public class DefaultCComponentsTheme extends Theme {
         initTriggerButtonStyle();
         initValidationLabelStyle();
         initNoteStyle();
-        initViewerHyperlinkStyle();
-    }
-
-    private void initViewerHyperlinkStyle() {
-        Style style = new Style(".", StyleName.Viewer, "-", StyleDependent.anchor);
-        style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.6);
-        style.addProperty("cursor", "pointer");
-        addStyle(style);
     }
 
     protected void initTextBoxStyle() {
