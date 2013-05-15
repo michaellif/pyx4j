@@ -41,10 +41,6 @@ import com.propertyvista.test.mock.MockDataModel;
 
 public class BuildingDataModel extends MockDataModel<Building> {
 
-    enum Usage {
-        available, used
-    }
-
     private static Map<ARCode.Type, List<ARCode>> arCodes;
 
     private final Map<Building, Service> standardResidentialServices;
