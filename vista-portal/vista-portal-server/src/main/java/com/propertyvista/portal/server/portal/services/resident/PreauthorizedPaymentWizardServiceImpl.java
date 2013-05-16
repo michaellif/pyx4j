@@ -132,6 +132,13 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
     }
 
+    @Override
+    public void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue) {
+        PreauthorizedPayment entity = createDBO(currentValue);
+        updateCoveredItems(entity, currentValue);
+        callback.onSuccess(entity);
+    }
+
     private void fillCoveredItems(PreauthorizedPaymentDTO dto, LeaseProducts products) {
         dto.coveredItemsDTO().add(createCoveredItemDTO(products.serviceItem()));
         for (BillableItem billableItem : products.featureItems()) {

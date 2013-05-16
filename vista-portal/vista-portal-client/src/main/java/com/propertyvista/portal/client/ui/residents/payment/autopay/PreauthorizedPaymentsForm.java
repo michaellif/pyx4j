@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -26,7 +23,6 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -34,9 +30,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
@@ -127,21 +121,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
                 return content;
-            }
-
-            private class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredItem> {
-
-                public CoveredItemFolder() {
-                    super(PreauthorizedPayment.CoveredItem.class, false);
-                }
-
-                @Override
-                public List<EntityFolderColumnDescriptor> columns() {
-                    return Arrays.asList(//@formatter:off
-                            new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
-                            new EntityFolderColumnDescriptor(proto().percent(), "5em"));
-                      //@formatter:on                
-                }
             }
         }
     }

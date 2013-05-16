@@ -21,6 +21,7 @@ import com.pyx4j.entity.rpc.AbstractWizardService;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public interface PreauthorizedPaymentWizardService extends AbstractWizardService<PreauthorizedPaymentDTO> {
@@ -28,4 +29,6 @@ public interface PreauthorizedPaymentWizardService extends AbstractWizardService
     void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback);
+
+    void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue);
 }

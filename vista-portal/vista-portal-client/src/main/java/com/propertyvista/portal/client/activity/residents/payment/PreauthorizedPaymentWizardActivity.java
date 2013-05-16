@@ -27,6 +27,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
@@ -58,6 +59,16 @@ public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<P
                 callback.onSuccess(result);
             }
         });
+    }
+
+    @Override
+    public void preview(final AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue) {
+        ((PreauthorizedPaymentWizardService) getService()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
+            @Override
+            public void onSuccess(PreauthorizedPayment result) {
+                callback.onSuccess(result);
+            }
+        }, currentValue);
     }
 
     @Override

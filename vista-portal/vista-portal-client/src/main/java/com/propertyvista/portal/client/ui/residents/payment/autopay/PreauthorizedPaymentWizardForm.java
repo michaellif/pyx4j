@@ -59,6 +59,7 @@ import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
@@ -115,7 +116,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         int row = -1;
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
-        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new CoveredItemFolder()));
+        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new CoveredItemDtoFolder()));
 
         return panel;
     }
@@ -206,6 +207,10 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setBR(++row, 0, 1);
 
+        panel.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
+
+        panel.setBR(++row, 0, 1);
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7).labelWidth(25).build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
@@ -223,6 +228,12 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
+            ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
+                @Override
+                public void onSuccess(PreauthorizedPayment result) {
+                    ((CComponent<List<PreauthorizedPayment.CoveredItem>, ?>) get(proto().coveredItems())).populate(result.coveredItems());
+                }
+            }, getValue());
         }
     }
 
@@ -259,9 +270,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         });
     }
 
-    private class CoveredItemFolder extends VistaTableFolder<CoveredItemDTO> {
+    private class CoveredItemDtoFolder extends VistaTableFolder<CoveredItemDTO> {
 
-        public CoveredItemFolder() {
+        public CoveredItemDtoFolder() {
             super(CoveredItemDTO.class, false);
         }
 

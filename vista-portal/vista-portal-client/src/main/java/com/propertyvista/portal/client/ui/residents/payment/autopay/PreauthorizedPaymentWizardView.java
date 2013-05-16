@@ -21,6 +21,7 @@ import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public interface PreauthorizedPaymentWizardView extends IWizard<PreauthorizedPaymentDTO> {
@@ -31,5 +32,6 @@ public interface PreauthorizedPaymentWizardView extends IWizard<PreauthorizedPay
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
+        void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue);
     }
 }
