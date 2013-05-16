@@ -215,17 +215,17 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     protected Bill getBill(int billSequenceNumber) {
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(retrieveLease(), billSequenceNumber);
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getBill(getLease(), billSequenceNumber);
         return bill;
     }
 
     protected Bill getLatestBill() {
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(retrieveLease());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(getLease());
         return bill;
     }
 
     protected Bill getLatestConfirmedBill() {
-        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(retrieveLease());
+        Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(getLease());
         return bill;
     }
 
