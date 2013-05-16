@@ -34,6 +34,7 @@ import com.pyx4j.essentials.j2se.util.MarshallUtil;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.config.tests.VistaTestDBSetup;
 import com.propertyvista.config.tests.VistaTestsNamespaceResolver;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -48,6 +49,13 @@ import com.propertyvista.yardi.services.YardiBuildingProcessor;
 public class XmlBeanTest {
 
     private final static Logger log = LoggerFactory.getLogger(XmlBeanTest.class);
+
+    @BeforeClass
+    //TODO clean init of tests without persistence
+    public static void init() {
+        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
+        VistaTestDBSetup.init();
+    }
 
     @Test
     public void testGetPropertyConfigurations() throws IOException, JAXBException {
@@ -145,8 +153,4 @@ public class XmlBeanTest {
 
     }
 
-    @BeforeClass
-    public static void init() {
-        NamespaceManager.setNamespace(VistaTestsNamespaceResolver.demoNamespace);
-    }
 }

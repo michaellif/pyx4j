@@ -13,25 +13,41 @@
  */
 package com.propertyvista.yardi.mock;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.yardi.entity.resident.ResidentTransactions;
 
 public class YardiMockServer {
 
     private static final Logger log = LoggerFactory.getLogger(YardiMockServer.class);
 
-    private final PropertyManager propertyManager;
+    private final Map<String, PropertyManager> propertyManagers;
 
     private static class SingletonHolder {
         public static final YardiMockServer INSTANCE = new YardiMockServer();
     }
 
-    static YardiMockServer instance() {
+    public static YardiMockServer instance() {
         return SingletonHolder.INSTANCE;
     }
 
     private YardiMockServer() {
-        propertyManager = new PropertyManager();
+        propertyManagers = new HashMap<String, PropertyManager>();
     }
 
+    public ResidentTransactions getAllResidentTransactions(String propertyId) {
+        if (!propertyManagers.containsKey(propertyId)) {
+            propertyManagers.put(propertyId, createProperty(propertyId));
+        }
+        return propertyManagers.get(propertyId).getAllResidentTransactions();
+    }
+
+    private PropertyManager createProperty(String propertyId) {
+        PropertyManager propertyManager = new PropertyManager(propertyId);
+        return propertyManager;
+    }
 }

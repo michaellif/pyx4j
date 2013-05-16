@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -21,7 +20,6 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-@Ignore
 public class YardiImportTest extends YardiTestBase {
 
     @Test

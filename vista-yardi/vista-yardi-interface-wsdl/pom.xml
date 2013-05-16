@@ -89,6 +89,14 @@
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>
+                            <wsdlOptions>
+                                <wsdlOption>
+                                    <wsdl>${basedir}/src/main/resources/common/ItfResidentTransactions20.wsdl</wsdl>
+                                    <extraargs>
+                                        <extraarg>-xjc-Xcollection-setter-injector</extraarg>
+                                    </extraargs>
+                                </wsdlOption>
+                            </wsdlOptions>
                             <wsdlFile>${basedir}/src/main/resources/common/ItfResidentTransactions20.wsdl</wsdlFile>
                             <packageName>com.yardi.ws</packageName>
                         </configuration>

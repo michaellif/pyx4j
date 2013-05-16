@@ -24,6 +24,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 public class YardiMockResidentTransactionsStubImpl implements YardiResidentTransactionsStub {
@@ -36,19 +37,17 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        return YardiMockServer.instance().getAllResidentTransactions(propertyId);
     }
 
     @Override
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
-        // TODO Auto-generated method stub
+
         return null;
     }
 
