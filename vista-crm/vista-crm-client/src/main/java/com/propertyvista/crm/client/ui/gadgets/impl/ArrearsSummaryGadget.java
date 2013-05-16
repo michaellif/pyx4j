@@ -13,11 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 
-import java.util.Vector;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
@@ -26,13 +26,14 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetF
 import com.propertyvista.crm.client.ui.gadgets.components.details.DelinquentLeasesDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryMetadataForm;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
+import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
-import com.propertyvista.domain.property.asset.building.Building;
 
-public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, Vector<Building>, ArrearsSummaryGadgetMetadata> {
+public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, ArrearsGadgetQueryDataDTO, ArrearsSummaryGadgetMetadata> {
 
     ICriteriaProvider<DelinquentLeaseDTO, CounterGadgetFilter> criteriaProvider;
 
@@ -44,13 +45,17 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
                 GWT.<ArrearsGadgetService> create(ArrearsGadgetService.class),
                 new ArrearsGadgetSummaryForm(),
                 metadata,
-                ArrearsSummaryGadgetMetadata.class
+                ArrearsSummaryGadgetMetadata.class,
+                new ArrearsGadgetSummaryMetadataForm()
        );//@formatter:on
     }
 
     @Override
-    protected Vector<Building> makeSummaryQuery() {
-        return new Vector<Building>(buildingsFilterContainer.getSelectedBuildingsStubs());
+    protected ArrearsGadgetQueryDataDTO makeSummaryQuery() {
+        ArrearsGadgetQueryDataDTO query = EntityFactory.create(ArrearsGadgetQueryDataDTO.class);
+        query.buildingsFilter().addAll(buildingsFilterContainer.getSelectedBuildingsStubs());
+        query.asOf().setValue(getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate());
+        return query;
     }
 
     @Override
@@ -73,7 +78,7 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
         bindDetailsFactory(member, new DelinquentLeasesDetailsFactory(this, new ICriteriaProvider<DelinquentLeaseDTO, CounterGadgetFilter>() {
             @Override
             public void makeCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, CounterGadgetFilter filterData) {
-                service.makeDelinquentLeaseCriteria(callback, filterData.getBuildings(), member.getPath().toString());
+                service.makeDelinquentLeaseCriteria(callback, makeSummaryQuery(), filterData.getCounterMember());
             }
         }));
     }

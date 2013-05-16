@@ -13,17 +13,15 @@
  */
 package com.propertyvista.crm.rpc.services.dashboard.gadgets.filters;
 
-import java.util.Vector;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 
+import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public interface DelinquentLeaseCriteriaProvider {
 
-    void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, Vector<Building> buildingsFilter, String criteriaPreset);
+    void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, ArrearsGadgetQueryDataDTO query, String criteriaPreset);
 
 }

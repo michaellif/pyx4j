@@ -29,6 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
+import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.crm.server.services.dashboard.util.Util;
@@ -39,29 +40,32 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
     @Override
-    public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
+    public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, ArrearsGadgetQueryDataDTO query) {
+        Vector<Building> buildingsFilter = Util.enforcePortfolio(query.buildingsFilter());
+        query.buildingsFilter().clear();
+        query.buildingsFilter().addAll(buildingsFilter);
 
         ArrearsGadgetDataDTO data = EntityFactory.create(ArrearsGadgetDataDTO.class);
 
-        calculateArrearsSummary(data.buckets(), buildingsFilter);
-        count(data.delinquentLeases(), buildingsFilter);
-        count(data.outstandingThisMonthCount(), buildingsFilter);
-        count(data.outstanding1to30DaysCount(), buildingsFilter);
-        count(data.outstanding31to60DaysCount(), buildingsFilter);
-        count(data.outstanding61to90DaysCount(), buildingsFilter);
-        count(data.outstanding91andMoreDaysCount(), buildingsFilter);
+        calculateArrearsSummary(data.buckets(), query);
+
+        count(data.delinquentLeases(), query);
+        count(data.outstandingThisMonthCount(), query);
+        count(data.outstanding1to30DaysCount(), query);
+        count(data.outstanding31to60DaysCount(), query);
+        count(data.outstanding61to90DaysCount(), query);
+        count(data.outstanding91andMoreDaysCount(), query);
 
         callback.onSuccess(data);
     }
 
     @Override
-    public void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, Vector<Building> buildingsFilter,
+    public void makeDelinquentLeaseCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, ArrearsGadgetQueryDataDTO query,
             String criteriaPreset) {
-        callback.onSuccess(delinquentLeasesCriteria(buildingsFilter, criteriaPreset));
+        callback.onSuccess(delinquentLeasesCriteria(query, criteriaPreset));
     }
 
-    private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, Vector<Building> buildings) {
+    private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, ArrearsGadgetQueryDataDTO query) {
 
         aggregatedBuckets.bucketThisMonth().setValue(BigDecimal.ZERO);
         aggregatedBuckets.bucketCurrent().setValue(BigDecimal.ZERO);
@@ -75,8 +79,8 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
-        for (Building b : buildings) {
-            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, Util.dayOfCurrentTransaction());
+        for (Building b : query.buildingsFilter()) {
+            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, query.asOf().getValue());
             if (snapshot == null) {
                 continue;
             } else {
@@ -95,19 +99,19 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         }
     }
 
-    private void count(IPrimitive<Integer> counter, Vector<Building> buildings) {
+    private void count(IPrimitive<Integer> counter, ArrearsGadgetQueryDataDTO query) {
         counter.setValue(Persistence.service().count(
-                new DelinquentLeaseListServiceImpl().convertCriteria(delinquentLeasesCriteria(buildings, counter.getPath().toString()))));
+                new DelinquentLeaseListServiceImpl().convertCriteria(delinquentLeasesCriteria(query, counter.getPath().toString()))));
     }
 
-    private EntityListCriteria<DelinquentLeaseDTO> delinquentLeasesCriteria(Vector<Building> buildingsFilter, String criteriaPreset) {
+    private EntityListCriteria<DelinquentLeaseDTO> delinquentLeasesCriteria(ArrearsGadgetQueryDataDTO query, String criteriaPreset) {
 
         EntityListCriteria<DelinquentLeaseDTO> criteria = EntityListCriteria.create(DelinquentLeaseDTO.class);
-        if (!buildingsFilter.isEmpty()) {
-            criteria.in(criteria.proto().building(), buildingsFilter);
+        if (!query.buildingsFilter().isEmpty()) {
+            criteria.in(criteria.proto().building(), query.buildingsFilter());
         }
 
-        criteria.add(PropertyCriterion.eq(criteria.proto().asOf(), Util.dayOfCurrentTransaction()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().asOf(), query.asOf().getValue()));
 
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));

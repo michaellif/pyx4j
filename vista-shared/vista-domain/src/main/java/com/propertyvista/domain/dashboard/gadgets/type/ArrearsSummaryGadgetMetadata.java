@@ -13,9 +13,12 @@
  */
 package com.propertyvista.domain.dashboard.gadgets.type;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
@@ -51,4 +54,9 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 )//@formatter:on
 public interface ArrearsSummaryGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
+    IPrimitive<Boolean> customizeDate();
+
+    /** <code>null</code> means now */
+    @NotNull
+    IPrimitive<LogicalDate> asOf();
 }
