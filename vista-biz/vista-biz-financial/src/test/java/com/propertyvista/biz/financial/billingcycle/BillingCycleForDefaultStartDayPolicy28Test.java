@@ -31,9 +31,11 @@ public class BillingCycleForDefaultStartDayPolicy28Test extends LeaseFinancialTe
         MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = 28;
         preloadData(config);
+        createLease("23-Mar-2013", "03-Aug-2013");
     }
 
     public void testBillingCycleCreation() throws ParseException {
+
         // @formatter:off
         new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "28-Apr-2013")).
         billingCycleStartDate("28-Apr-2013").
@@ -73,7 +75,6 @@ public class BillingCycleForDefaultStartDayPolicy28Test extends LeaseFinancialTe
     }
 
     public void testBillingForDate() {
-        createLease("23-Mar-2013", "03-Aug-2013");
 
         // @formatter:off
         new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "27-May-2013")).

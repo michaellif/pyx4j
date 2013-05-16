@@ -55,8 +55,8 @@ public class LeaseDataModel extends MockDataModel<Lease> {
     protected void generate() {
     }
 
-    protected void addLease(Building building, String leaseDateFrom, String leaseDateTo) {
-        addLease(building, leaseDateFrom, leaseDateTo, null, null);
+    protected Lease addLease(Building building, String leaseDateFrom, String leaseDateTo) {
+        return addLease(building, leaseDateFrom, leaseDateTo, null, null);
     }
 
     public Lease addLease(Building building, String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {

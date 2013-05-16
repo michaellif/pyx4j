@@ -27,6 +27,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
@@ -38,6 +39,9 @@ public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
     @Override
     protected void generate() {
 
+    }
+
+    public MerchantAccount addMerchantAccount(Building building) {
         MerchantAccount merchantAccount = Persistence.service().retrieve(EntityQueryCriteria.create(MerchantAccount.class));
 
         if (merchantAccount == null) {
@@ -69,9 +73,10 @@ public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
 
         BuildingMerchantAccount bma = EntityFactory.create(BuildingMerchantAccount.class);
         bma.merchantAccount().set(merchantAccount);
-        bma.building().set(getDataModel(BuildingDataModel.class).getItem(0));
+        bma.building().set(building);
         Persistence.service().persist(bma);
         addItem(merchantAccount);
+        return merchantAccount;
     }
 
 }

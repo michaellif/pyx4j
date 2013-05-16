@@ -31,9 +31,11 @@ public class BillingCycleForSameDayAsLeaseStartDayPolicyTest extends LeaseFinanc
         MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = null;
         preloadData(config);
+        createLease("23-Mar-2013", "03-Aug-2013");
     }
 
     public void testBillingCycleCreation() throws ParseException {
+
         // @formatter:off
         new BillingCycleTester(BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly,  "28-Apr-2013")).
         billingCycleStartDate("28-Apr-2013").

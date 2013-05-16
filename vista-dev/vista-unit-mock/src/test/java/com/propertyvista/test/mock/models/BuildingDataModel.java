@@ -49,7 +49,17 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
     @Override
     protected void generate() {
-        createServiceMeta();
+        arCodes = new HashMap<ARCode.Type, List<ARCode>>();
+
+        for (ARCode arCode : getDataModel(ARCodeDataModel.class).getAllItems()) {
+            if (!arCodes.containsKey(arCode.type().getValue())) {
+                arCodes.put(arCode.type().getValue(), new ArrayList<ARCode>());
+            }
+            arCodes.get(arCode.type().getValue()).add(arCode);
+        }
+    }
+
+    public Building addBuilding() {
 
         Building building = EntityFactory.create(Building.class);
         building.propertyCode().setValue(String.valueOf(System.currentTimeMillis()).substring(5));
@@ -67,6 +77,8 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
         Persistence.service().persist(building);
         addItem(building);
+
+        return building;
     }
 
     public ProductItem addResidentialUnitServiceItem(Building building, BigDecimal price) {
@@ -104,18 +116,6 @@ public class BuildingDataModel extends MockDataModel<Building> {
         LockerArea lockerArea = EntityFactory.create(LockerArea.class);
         building.lockerAreas().setAttachLevel(AttachLevel.Attached);
         building.lockerAreas().add(lockerArea);
-    }
-
-    private void createServiceMeta() {
-        arCodes = new HashMap<ARCode.Type, List<ARCode>>();
-
-        for (ARCode arCode : getDataModel(ARCodeDataModel.class).getAllItems()) {
-            if (!arCodes.containsKey(arCode.type().getValue())) {
-                arCodes.put(arCode.type().getValue(), new ArrayList<ARCode>());
-            }
-            arCodes.get(arCode.type().getValue()).add(arCode);
-        }
-
     }
 
     private Service generateCatalog(Building building) {

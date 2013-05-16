@@ -25,7 +25,6 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 
-import com.propertyvista.oapi.model.BuildingIO;
 import com.propertyvista.oapi.model.BuildingsIO;
 import com.propertyvista.oapi.model.UnitIO;
 import com.propertyvista.oapi.xml.IntegerIO;
@@ -71,14 +70,6 @@ public class RSPropertyServiceTest extends RSOapiTestBase {
         WebResource webResource = resource();
         ClientResponse response = webResource.path("buildings/MockCode/units/MockNumber").get(ClientResponse.class);
         Assert.assertEquals(ClientResponse.Status.INTERNAL_SERVER_ERROR, response.getClientResponseStatus());
-    }
-
-    //@Test
-    public void testUpdateBuilding() {
-        WebResource webResource = resource();
-        BuildingIO building = new BuildingIO(getBuilding().propertyCode().getValue());
-        ClientResponse response = webResource.path("buildings/updateBuilding").accept(MediaType.APPLICATION_XML).post(ClientResponse.class, building);
-        Assert.assertEquals(ClientResponse.Status.OK, response.getClientResponseStatus());
     }
 
     @Test

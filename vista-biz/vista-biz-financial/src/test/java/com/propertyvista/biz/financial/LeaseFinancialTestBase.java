@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -53,6 +54,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -111,16 +113,16 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         return models;
     }
 
-    protected void setLease(Lease lease) {
-        this.lease = lease;
-    }
-
     protected Lease getLease() {
         return lease;
     }
 
     protected Building getBuilding() {
-        return getDataModel(BuildingDataModel.class).getItem(0);
+        if (building == null) {
+            building = getDataModel(BuildingDataModel.class).addBuilding();
+            getDataModel(MerchantAccountDataModel.class).addMerchantAccount(building);
+        }
+        return building;
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo) {
@@ -128,7 +130,12 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        lease = getDataModel(LeaseDataModel.class).addLease(getBuilding(), leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
+        createLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance, getDataModel(CustomerDataModel.class).addCustomer());
+    }
+
+    protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, Customer customer) {
+        lease = getDataModel(LeaseDataModel.class).addLease(getBuilding(), leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance,
+                Arrays.asList(new Customer[] { customer }));
     }
 
     protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {

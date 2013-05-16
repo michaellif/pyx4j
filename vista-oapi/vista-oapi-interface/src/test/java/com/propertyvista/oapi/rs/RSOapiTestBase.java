@@ -22,15 +22,8 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.test.framework.JerseyTest;
 
-import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
-
 import com.propertyvista.config.tests.VistaTestDBSetup;
-import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.MockManager;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
@@ -41,10 +34,14 @@ public class RSOapiTestBase extends JerseyTest {
 
     private static final Logger log = LoggerFactory.getLogger(RSOapiTestBase.class);
 
-    private MockManager mockManager;
-
     public RSOapiTestBase(String... packages) {
         super(packages);
+    }
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
     }
 
     @Before
@@ -58,28 +55,6 @@ public class RSOapiTestBase extends JerseyTest {
         return 7771;
     }
 
-    protected void preloadData() {
-        preloadData(new MockConfig());
-    }
-
-    protected void preloadData(final MockConfig config) {
-
-        mockManager = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
-
-            @Override
-            public MockManager execute() {
-
-                MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
-                    mockManager.addModel(modelType);
-                }
-
-                return mockManager;
-            }
-        });
-
-    }
-
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
@@ -90,7 +65,4 @@ public class RSOapiTestBase extends JerseyTest {
         return models;
     }
 
-    protected Building getBuilding() {
-        return mockManager.getDataModel(BuildingDataModel.class).getItem(0);
-    }
 }

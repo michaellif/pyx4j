@@ -26,10 +26,7 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 
@@ -39,10 +36,6 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
     private Customer customer;
 
-    private Lease lease;
-
-    private Building building;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
@@ -50,9 +43,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         setSysDate("01-Feb-2012");
         customerDataModel = getDataModel(CustomerDataModel.class);
         customer = customerDataModel.addCustomer();
-        building = getDataModel(BuildingDataModel.class).getItem(0);
-        lease = getDataModel(LeaseDataModel.class).addLease(getDataModel(BuildingDataModel.class).getItem(0), "01-Feb-2012", "01-Sep-2012",
-                new BigDecimal(100), null, customer);
+        createLease("01-Feb-2012", "01-Sep-2012", new BigDecimal(100), null, customer);
     }
 
     protected void testPersistPaymentMethod(PaymentType type) throws PaymentException {
@@ -63,7 +54,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
         Customer customer = getDataModel(CustomerDataModel.class).getItem(0);
 
-        LeasePaymentMethod paymentMethod = customerDataModel.addPaymentMethod(customer, building, type);
+        LeasePaymentMethod paymentMethod = customerDataModel.addPaymentMethod(customer, getBuilding(), type);
 
         List<LeasePaymentMethod> profileMethods = customerDataModel.retrieveSerializableProfilePaymentMethods(customer);
         assertRpcTransientMemebers(profileMethods);
@@ -71,7 +62,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(lease, profileMethods.get(0), "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), profileMethods.get(0), "100");
 
         Assert.assertEquals("Just one PaymentMethod remains", existingPaymentMethodsCount + 1, customerDataModel.retrieveAllPaymentMethods(customer).size());
 
@@ -91,7 +82,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
         int existingPaymentMethodsCount = customerDataModel.retrieveAllPaymentMethods(customer).size();
 
-        customerDataModel.addPaymentMethod(customer, building, type);
+        customerDataModel.addPaymentMethod(customer, getBuilding(), type);
 
         List<LeasePaymentMethod> profileMethods = customerDataModel.retrieveSerializableProfilePaymentMethods(customer);
         assertRpcTransientMemebers(profileMethods);
@@ -99,7 +90,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
         Assert.assertEquals("PaymentMethod Added to profile", 1, profileMethods.size());
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(lease, profileMethods.get(0), "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), profileMethods.get(0), "100");
 
         Persistence.service().commit();
 
@@ -122,8 +113,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
                     throw new IllegalArgumentException();
                 }
                 try {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
-                            getDataModel(BuildingDataModel.class).getItem(0));
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate, getBuilding());
                     Assert.fail("Obfuscated Account numbers should be validated during save");
                 } catch (IllegalArgumentException ok) {
                     Persistence.service().rollback();
@@ -135,8 +125,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
                 CreditCardInfo cc = paymentMethodUpdate.details().cast();
                 cc.token().setValue("garbage");
                 try {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
-                            getDataModel(BuildingDataModel.class).getItem(0));
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate, getBuilding());
                     Assert.fail("token changes should be validated during save");
                 } catch (Error ok) {
                     Persistence.service().rollback();
@@ -151,8 +140,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
             profileMethods = customerDataModel.retrieveSerializableProfilePaymentMethods(customer);
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             // Nothing changed, save will not change anything
-            ServerSideFactory.create(PaymentMethodFacade.class)
-                    .persistLeasePaymentMethod(paymentMethodUpdate, getDataModel(BuildingDataModel.class).getItem(0));
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate, getBuilding());
         }
 
         {
@@ -171,8 +159,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
                 throw new IllegalArgumentException();
             }
             try {
-                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
-                        getDataModel(BuildingDataModel.class).getItem(0));
+                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate, getBuilding());
                 Assert.fail("Obfuscated Account numbers should be validated during save");
             } catch (IllegalArgumentException ok) {
                 Persistence.service().rollback();
@@ -183,8 +170,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
                 CreditCardInfo cc = paymentMethodUpdate.details().cast();
                 cc.token().setValue("garbage");
                 try {
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate,
-                            getDataModel(BuildingDataModel.class).getItem(0));
+                    ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate, getBuilding());
                     Assert.fail("token changes should be validated during save");
                 } catch (Error ok) {
                     Persistence.service().rollback();
@@ -196,8 +182,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
             profileMethods = customerDataModel.retrieveSerializableProfilePaymentMethods(customer);
             LeasePaymentMethod paymentMethodUpdate = profileMethods.get(0);
             customerDataModel.updatePaymentMethod(paymentMethodUpdate);
-            ServerSideFactory.create(PaymentMethodFacade.class)
-                    .persistLeasePaymentMethod(paymentMethodUpdate, getDataModel(BuildingDataModel.class).getItem(0));
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethodUpdate, getBuilding());
         }
 
         profileMethods = customerDataModel.retrieveSerializableProfilePaymentMethods(customer);
