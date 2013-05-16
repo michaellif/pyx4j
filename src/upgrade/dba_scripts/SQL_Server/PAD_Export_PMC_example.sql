@@ -12,6 +12,7 @@ SELECT  property_id "Property Code",
         charge_id "Charge Id",
         charge_code "Charge Code",
         pap_applicable "PAP Applicable",
+        recurring_eft   "Recurring EFT",
         estimated_charge "Estimated Charge",
         percentage "Percentage"
 FROM tenant_EFT_charges
