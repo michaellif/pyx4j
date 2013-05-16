@@ -14,14 +14,13 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -36,6 +35,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -51,10 +51,10 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -356,61 +356,36 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
 
-            private final SimplePanel amountPlaceholder = new SimplePanel();
-
-            private final Widget percent;
-
-            private final Widget value;
-
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPayment.class);
-
-                percent = new DecoratorBuilder(inject(proto().percent()), 10, 5).build();
-                value = new DecoratorBuilder(inject(proto().value()), 10, 5).build();
             }
 
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
 
-                content.setWidget(0, 0, amountPlaceholder);
-                content.setWidget(0, 1, new DecoratorBuilder(inject(proto().paymentMethod()), 30, 10).build());
-
-                // tweaks:
-                content.getColumnFormatter().setWidth(0, "15em");
+                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().paymentMethod()), 40, 10).build());
+                content.setWidget(1, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
                 return content;
             }
 
-            @Override
-            protected void onValueSet(boolean populate) {
-                super.onValueSet(populate);
-                setAmountEditor(getValue().amountType().getValue());
-            }
+            class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredItem> {
 
-            private void setAmountEditor(AmountType amountType) {
-                amountPlaceholder.clear();
-                get(proto().percent()).setVisible(false);
-                get(proto().value()).setVisible(false);
+                public CoveredItemFolder() {
+                    super(PreauthorizedPayment.CoveredItem.class, false);
+                    setViewable(true);
+                    inheritViewable(false);
+                }
 
-                if (amountType != null) {
-                    switch (amountType) {
-                    case Percent:
-                        amountPlaceholder.setWidget(percent);
-                        get(proto().percent()).setVisible(true);
-                        break;
-
-                    case Value:
-                        amountPlaceholder.setWidget(value);
-                        get(proto().value()).setVisible(true);
-                        break;
-
-                    default:
-                        throw new IllegalArgumentException();
-                    }
+                @Override
+                public List<EntityFolderColumnDescriptor> columns() {
+                    return Arrays.asList(//@formatter:off
+                            new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
+                            new EntityFolderColumnDescriptor(proto().percent(), "5em"));
+                      //@formatter:on                
                 }
             }
-
         }
     }
 }
