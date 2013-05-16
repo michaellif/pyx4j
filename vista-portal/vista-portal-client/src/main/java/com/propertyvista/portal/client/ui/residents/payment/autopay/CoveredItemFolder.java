@@ -25,8 +25,8 @@ class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredIte
 
     public CoveredItemFolder() {
         super(PreauthorizedPayment.CoveredItem.class, false);
-        setEditable(false);
         setViewable(true);
+        inheritViewable(false);
     }
 
     @Override

@@ -28,7 +28,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
@@ -37,18 +36,10 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
 
     private final SimplePanel amountPlaceholder = new SimplePanel();
 
-    private final Widget percent;
-
-    private final Widget value;
-
     public PreauthorizedPaymentSubmittedViewForm() {
         super(PreauthorizedPaymentDTO.class);
         setViewable(true);
         inheritViewable(false);
-
-        amountPlaceholder.setWidth("15em");
-        percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).labelAlignment(Alignment.left).build();
-        value = new DecoratorBuilder(inject(proto().value()), 10, 10).labelAlignment(Alignment.left).build();
     }
 
     @Override
@@ -65,7 +56,6 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
 
         content.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
-        content.setWidget(++row, 0, amountPlaceholder);
 
         content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
@@ -73,35 +63,5 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
                 .labelWidth(25).build());
 
         return content;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        setAmountEditor(getValue().amountType().getValue());
-    }
-
-    private void setAmountEditor(AmountType amountType) {
-        amountPlaceholder.clear();
-        get(proto().percent()).setVisible(false);
-        get(proto().value()).setVisible(false);
-
-        if (amountType != null) {
-            switch (amountType) {
-            case Percent:
-                amountPlaceholder.setWidget(percent);
-                get(proto().percent()).setVisible(true);
-                break;
-
-            case Value:
-                amountPlaceholder.setWidget(value);
-                get(proto().value()).setVisible(true);
-                break;
-
-            default:
-                throw new IllegalArgumentException();
-            }
-        }
     }
 }
