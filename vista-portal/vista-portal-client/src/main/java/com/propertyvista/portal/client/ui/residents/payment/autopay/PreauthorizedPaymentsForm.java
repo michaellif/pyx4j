@@ -113,7 +113,9 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 int row = -1;
 
                 content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
+
                 content.setHR(++row, 0, 1);
+
                 content.setWidget(row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()));
                 get(proto().paymentMethod()).setNavigationCommand(new Command() {
                     @Override
@@ -121,9 +123,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                         presenter.viewPaymentMethod(getValue());
                     }
                 });
-                content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
-//                content.getCellFormatter().setWidth(row, 0, "25em");
+                content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
                 return content;
             }
