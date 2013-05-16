@@ -92,6 +92,7 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
     @Override
     protected void onEditorCreate() {
         super.onEditorCreate();
+        getEditor().setWidth("8em");
         getEditor().addMouseDownHandler(new MouseDownHandler() {
             @Override
             public void onMouseDown(MouseDownEvent event) {
