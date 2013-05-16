@@ -43,17 +43,21 @@ import com.propertyvista.yardi.merger.TenantMerger;
 public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
-    public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
+    public Lease findLease(RTCustomer rtCustomer, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
-        if (Persistence.service().exists(criteria)) {
-            Lease existingLease = Persistence.service().query(criteria).get(0);
+        return Persistence.service().retrieve(criteria);
+    }
+
+    public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
+        Lease existingLease = findLease(rtCustomer, propertyCode);
+        if (existingLease != null) {
             log.info("      Updating lease {}", rtCustomer.getCustomerID());
             return updateLease(rtCustomer, existingLease);
+        } else {
+            log.info("      Creating new lease {}", rtCustomer.getCustomerID());
+            return createLease(rtCustomer, propertyCode);
         }
-
-        log.info("      Creating new lease {}", rtCustomer.getCustomerID());
-        return createLease(rtCustomer, propertyCode);
     }
 
     private Lease updateLease(RTCustomer rtCustomer, Lease lease) {

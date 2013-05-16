@@ -30,6 +30,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -104,17 +105,21 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
-        List<ResidentTransactions> allTransactions;
+        List<String> propertyCodes;
         if (yc.propertyCode().isNull()) {
-            List<String> propertyCodes = getPropertyCodes(stub, yc);
-            allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
+            propertyCodes = getPropertyCodes(stub, yc);
         } else {
-            List<String> propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s*,\\s*"));
-            allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
+            propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s*,\\s*"));
         }
 
+        List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
         for (ResidentTransactions transaction : allTransactions) {
             importTransaction(transaction, executionMonitor);
+        }
+
+        List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, propertyCodes);
+        for (ResidentTransactions leaseCharges : allLeaseCharges) {
+            importLeaseCharges(leaseCharges, executionMonitor);
         }
 
         log.info("Update completed.");
@@ -288,6 +293,54 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
             ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
+            if (residentTransactions != null) {
+                transactions.add(residentTransactions);
+            }
+        }
+
+        return transactions;
+    }
+
+    private void importLeaseCharges(ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor) {
+        log.info("LeaseCharges: import started...");
+
+        List<Property> properties = getProperties(leaseCharges);
+
+        for (final Property property : properties) {
+            String propertyId = null;
+            if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
+                propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
+            }
+
+            try {
+                final Building building = new YardiBuildingProcessor().getBuildingFromProperty(property);
+                executionMonitor.addProcessedEvent("Building");
+                for (final RTCustomer rtCustomer : property.getRTCustomer()) {
+                    try {
+                        Lease lease = new YardiLeaseProcessor().findLease(rtCustomer, building.propertyCode().getValue());
+                        if (lease == null) {
+                            throw new YardiServiceException("Lease not found");
+                        }
+                        // create/update billable items
+                    } catch (YardiServiceException e) {
+                        executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
+                    } catch (Throwable t) {
+                        executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
+                    }
+                }
+            } catch (Throwable t) {
+                executionMonitor.addErredEvent("Building", propertyId, t);
+            }
+
+        }
+        log.info("LeaseCharges: import complete.");
+    }
+
+    List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
+            throws YardiServiceException, RemoteException {
+        List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
+        for (String propertyCode : propertyCodes) {
+            ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, new LogicalDate());
             if (residentTransactions != null) {
                 transactions.add(residentTransactions);
             }
