@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.services;
 
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.server.config.DevYardiCredentials;
@@ -60,7 +60,7 @@ public class YardiExample {
     private static void getResidentTransactions() {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            ResidentTransactions residentTransactions = stub.getResidentTransactions(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials
+            ResidentTransactions residentTransactions = stub.getAllResidentTransactions(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials
                     .getTestPmcYardiCredential().propertyCode().getValue());
             System.out.println(residentTransactions);
         } catch (Throwable e) {
@@ -83,8 +83,8 @@ public class YardiExample {
     private static void getResidentsLeaseCharges() {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            stub.getResidentsLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode()
-                    .getValue(), new GregorianCalendar());
+            stub.getAllLeaseCharges(DevYardiCredentials.getTestPmcYardiCredential(), DevYardiCredentials.getTestPmcYardiCredential().propertyCode().getValue(),
+                    new LogicalDate());
 
         } catch (Throwable e) {
             log.error("error", e);

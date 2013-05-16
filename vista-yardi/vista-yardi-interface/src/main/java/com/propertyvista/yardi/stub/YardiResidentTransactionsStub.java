@@ -14,9 +14,10 @@
 package com.propertyvista.yardi.stub;
 
 import java.rmi.RemoteException;
-import java.util.Calendar;
 
 import com.yardi.entity.resident.ResidentTransactions;
+
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -28,13 +29,17 @@ public interface YardiResidentTransactionsStub {
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
-    ResidentTransactions getResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
+    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
 
-    ResidentTransactions getResidentTransaction(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException, RemoteException;
+    ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
+            RemoteException;
 
     void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException, RemoteException;
 
     void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
 
-    void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId, Calendar calendar) throws YardiServiceException, RemoteException;
+    ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException;
+
+    ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date) throws YardiServiceException,
+            RemoteException;
 }

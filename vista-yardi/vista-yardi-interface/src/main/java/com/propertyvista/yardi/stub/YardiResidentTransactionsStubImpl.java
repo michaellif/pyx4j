@@ -15,6 +15,7 @@ package com.propertyvista.yardi.stub;
 
 import java.rmi.RemoteException;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -30,6 +31,8 @@ import com.yardi.ws.ItfResidentTransactions2_0;
 import com.yardi.ws.ItfResidentTransactions2_0Stub;
 import com.yardi.ws.operations.transactions.GetPropertyConfigurations;
 import com.yardi.ws.operations.transactions.GetPropertyConfigurationsResponse;
+import com.yardi.ws.operations.transactions.GetResidentLeaseCharges_Login;
+import com.yardi.ws.operations.transactions.GetResidentLeaseCharges_LoginResponse;
 import com.yardi.ws.operations.transactions.GetResidentTransaction_Login;
 import com.yardi.ws.operations.transactions.GetResidentTransaction_LoginResponse;
 import com.yardi.ws.operations.transactions.GetResidentTransactions_Login;
@@ -44,6 +47,7 @@ import com.yardi.ws.operations.transactions.Ping;
 import com.yardi.ws.operations.transactions.PingResponse;
 import com.yardi.ws.operations.transactions.TransactionXml_type1;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
@@ -110,7 +114,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public ResidentTransactions getResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
         try {
 
             init(Action.GetResidentTransactions);
@@ -151,7 +155,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public ResidentTransactions getResidentTransaction(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
+            RemoteException {
         try {
             init(Action.GetResidentTransaction);
 
@@ -259,9 +264,12 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId, Calendar calendar) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
         try {
             init(Action.GetResidentsLeaseCharges);
+
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(date);
 
             GetResidentsLeaseCharges_Login request = new GetResidentsLeaseCharges_Login();
             request.setUserName(yc.username().getValue());
@@ -288,6 +296,48 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
 
+            return transactions;
+        } catch (JAXBException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
+            throws YardiServiceException, RemoteException {
+        try {
+            init(Action.GetResidentLeaseCharges);
+
+            Calendar calendar = GregorianCalendar.getInstance();
+            calendar.setTime(date);
+
+            GetResidentLeaseCharges_Login request = new GetResidentLeaseCharges_Login();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(yc.credential().getValue());
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setYardiPropertyId(propertyId);
+            request.setTenantId(tenantId);
+            request.setPostMonth(calendar);
+
+            GetResidentLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentLeaseCharges_Login(request);
+            String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
+
+            log.info("GetResidentLeaseCharges: {}", xml);
+            if (Messages.isMessageResponse(xml)) {
+                Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
+                if (messages.isError()) {
+                    throw new YardiServiceException(messages.toString());
+                } else {
+                    log.info(messages.toString());
+                }
+            }
+
+            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+
+            return transactions;
         } catch (JAXBException e) {
             throw new Error(e);
         }

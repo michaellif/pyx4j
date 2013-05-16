@@ -14,11 +14,12 @@
 package com.propertyvista.yardi.mock.stub;
 
 import java.rmi.RemoteException;
-import java.util.Calendar;
 
 import org.apache.axis2.AxisFault;
 
 import com.yardi.entity.resident.ResidentTransactions;
+
+import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -40,13 +41,13 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     }
 
     @Override
-    public ResidentTransactions getResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
+    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public ResidentTransactions getResidentTransaction(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
+    public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
         // TODO Auto-generated method stub
         return null;
     }
@@ -64,9 +65,16 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     }
 
     @Override
-    public void getResidentsLeaseCharges(PmcYardiCredential yc, String propertyId, Calendar calendar) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
         // TODO Auto-generated method stub
+        return null;
+    }
 
+    @Override
+    public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
+            throws YardiServiceException, RemoteException {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

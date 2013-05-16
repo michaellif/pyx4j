@@ -125,7 +125,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         Persistence.service().retrieve(lease.unit().building());
         String propertyCode = lease.unit().building().propertyCode().getValue();
-        ResidentTransactions transaction = stub.getResidentTransaction(yc, propertyCode, lease.leaseId().getValue());
+        ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
         if (transaction != null) {
             for (Property property : transaction.getProperty()) {
                 for (RTCustomer rtCustomer : property.getRTCustomer()) {
@@ -287,7 +287,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             throws YardiServiceException, RemoteException {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
-            ResidentTransactions residentTransactions = stub.getResidentTransactions(yc, propertyCode);
+            ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
             if (residentTransactions != null) {
                 transactions.add(residentTransactions);
             }
