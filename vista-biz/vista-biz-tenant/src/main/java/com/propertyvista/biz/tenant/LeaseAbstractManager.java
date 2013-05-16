@@ -46,7 +46,6 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
@@ -59,15 +58,11 @@ import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.InternalBillingAccount;
-import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.financial.offering.Service;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.note.NotesAndAttachments;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -94,11 +89,19 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.shared.NotesParentId;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class LeaseFacadeImpl implements LeaseFacade {
+public abstract class LeaseAbstractManager implements LeaseFacade {
 
-    private static final Logger log = LoggerFactory.getLogger(LeaseFacadeImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(LeaseAbstractManager.class);
 
-    private static final I18n i18n = I18n.get(LeaseFacadeImpl.class);
+    private static final I18n i18n = I18n.get(LeaseAbstractManager.class);
+
+    protected abstract BillingAccount createBillingAccount();
+
+    protected abstract void onLeaseApprovalError(Lease lease, String error);
+
+    protected abstract void onLeaseApprovalSuccess(Lease lease, Lease.Status leaseStatus);
+
+    protected abstract void ensureLeaseUniqness(Lease lease);
 
     @Override
     public Lease create(Status status) {
@@ -139,16 +142,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.currentTerm().lease().set(lease);
 
         if (lease.billingAccount().isNull()) {
-            if (VistaFeatures.instance().yardiIntegration()) {
-                YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
-                billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
-                lease.billingAccount().set(billingAccount);
-            } else {
-                InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
-                billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
-                billingAccount.billCounter().setValue(0);
-                lease.billingAccount().set(billingAccount);
-            }
+            lease.billingAccount().set(createBillingAccount());
         }
         lease.billingAccount().accountNumber().setValue(ServerSideFactory.create(IdAssignmentFacade.class).createAccountNumber());
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.Any);
@@ -374,12 +368,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
                 errorMessages.add(failure.getMessage());
             }
             String jointErrors = StringUtils.join(errorMessages, ",\n");
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to following validation errors:\n{0}", jointErrors));
-            } else {
-                log.warn("Lease approval validation for lease pk='" + lease.getPrimaryKey() + "', id='" + lease.leaseId().getValue()
-                        + "' has discovered the following errors: " + jointErrors);
-            }
+            onLeaseApprovalError(lease, jointErrors);
         }
 
         // memorize entry LeaseStatus:
@@ -400,17 +389,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         finalize(lease);
 
         // Billing-related stuff:
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            Bill bill = ServerSideFactory.create(BillingFacade.class).runBilling(lease);
-
-            if (bill.billStatus().getValue() == Bill.BillStatus.Failed) {
-                throw new UserRuntimeException(i18n.tr("This lease cannot be approved due to failed first time bill"));
-            }
-
-            if (bill.billStatus().getValue() != Bill.BillStatus.Confirmed) {
-                ServerSideFactory.create(BillingFacade.class).confirmBill(bill);
-            }
-        }
+        onLeaseApprovalSuccess(lease, leaseStatus);
 
         switch (leaseStatus) {
         case Application:
@@ -432,16 +411,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             break;
 
         case ExistingLease:
-            if (!VistaFeatures.instance().yardiIntegration()) {
-                // for zero cycle bill also create the next bill if we are past the executionTargetDate of the cycle
-                Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
-                LogicalDate curDate = new LogicalDate(SystemDateManager.getDate());
-                LogicalDate nextExecDate = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
-                if (BillType.ZeroCycle.equals(bill.billType().getValue()) && !curDate.before(nextExecDate)) {
-                    ServerSideFactory.create(BillingFacade.class).runBilling(lease);
-                }
-            }
-
             ServerSideFactory.create(OccupancyFacade.class).migratedApprove(lease.unit().<AptUnit> createIdentityStub());
             break;
 
@@ -477,9 +446,7 @@ public class LeaseFacadeImpl implements LeaseFacade {
         lease.activationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.secureSave(lease);
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            ensureLeaseUniqness(lease);
-        }
+        ensureLeaseUniqness(lease);
 
         ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
     }
@@ -1012,30 +979,6 @@ public class LeaseFacadeImpl implements LeaseFacade {
             leaseParticipant.leaseParticipant().id().set(leaseCustomer.id());
             leaseParticipant.leaseParticipant().lease().set(leaseTerm.lease());
             leaseParticipant.leaseParticipant().participantId().set(leaseCustomer.participantId());
-        }
-    }
-
-    /**
-     * Terminate-complete all other active, but completion marked (Evicted/Skipped/etc.) leases on the unit.
-     * 
-     * @param lease
-     *            - primary lease.
-     */
-    private void ensureLeaseUniqness(Lease lease) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), lease.unit()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
-        criteria.add(PropertyCriterion.ne(criteria.proto().id(), lease.getPrimaryKey()));
-
-        for (Lease concurrent : Persistence.service().query(criteria)) {
-            if (concurrent.completion().isNull()) {
-                throw new IllegalStateException("Lease has no completion mark");
-            }
-            // set termination date to day before current(new) lease:
-            concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), -1));
-            updateLeaseDates(concurrent);
-            Persistence.secureSave(concurrent);
-            complete(concurrent);
         }
     }
 
