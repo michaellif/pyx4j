@@ -41,6 +41,14 @@ import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToO
 
 public abstract class TransactionTestCase extends DatastoreTestBase {
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        // Initialize table before tests for postgresql to work
+        srv.count(EntityQueryCriteria.create(Simple1.class));
+        srv.count(EntityQueryCriteria.create(Simple2.class));
+    }
+
     private Simple1 createEntity(String setId, String id) {
         Simple1 emp = EntityFactory.create(Simple1.class);
         emp.testId().setValue(setId);
