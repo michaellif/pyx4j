@@ -23,6 +23,7 @@ import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Category(RegressionTests.class)
 public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase {
@@ -37,7 +38,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         setSysDate("10-Mar-2011");
 
-        createLease("1-Apr-2011", "31-Mar-2012");
+        Lease lease = createLease("1-Apr-2011", "31-Mar-2012");
         addOutdoorParking();
         addLargeLocker();
 
@@ -71,7 +72,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         receiveAndPostPayment("20-Mar-2011", "1070.30"); //2269.04 - 1198.74(pad) = 1070.30
 
-        setPreauthorizedPayment("1");
+        setPreauthorizedPayment(lease, "1");
 
         advanceSysDate("18-Apr-2011");
 

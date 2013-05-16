@@ -15,8 +15,6 @@ package com.propertyvista.test.mock.models;
 
 import java.util.concurrent.Callable;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.pyx4j.entity.rdb.EntityPersistenceServiceRDB;
 import com.pyx4j.entity.rdb.RDBUtils;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
@@ -88,12 +86,6 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         });
 
         addItem(pmc);
-        super.setCurrentItem(pmc);
-    }
-
-    @Override
-    public void setCurrentItem(Pmc item) {
-        throw new NotImplementedException();
     }
 
     public OrganizationPoliciesNode getOrgNode() {

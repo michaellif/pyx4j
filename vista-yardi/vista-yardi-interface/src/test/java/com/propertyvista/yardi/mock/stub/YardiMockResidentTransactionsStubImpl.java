@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.stub;
+package com.propertyvista.yardi.mock.stub;
 
 import java.rmi.RemoteException;
 import java.util.Calendar;
@@ -23,6 +23,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 public class YardiMockResidentTransactionsStubImpl implements YardiResidentTransactionsStub {
 

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.test.mock.models;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -33,11 +31,6 @@ public class ARPolicyDataModel extends MockDataModel<ARPolicy> {
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
-        super.setCurrentItem(policy);
     }
 
-    @Override
-    public void setCurrentItem(ARPolicy item) {
-        throw new NotImplementedException();
-    }
 }

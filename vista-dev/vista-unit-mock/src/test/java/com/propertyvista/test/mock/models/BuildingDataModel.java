@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -69,22 +67,16 @@ public class BuildingDataModel extends MockDataModel<Building> {
 
         Persistence.service().persist(building);
         addItem(building);
-        super.setCurrentItem(building);
     }
 
-    @Override
-    public void setCurrentItem(Building item) {
-        throw new NotImplementedException();
-    }
-
-    public ProductItem addResidentialUnitServiceItem(BigDecimal price) {
-        Service standardResidentialService = standardResidentialServices.get(getCurrentItem());
+    public ProductItem addResidentialUnitServiceItem(Building building, BigDecimal price) {
+        Service standardResidentialService = standardResidentialServices.get(building);
 
         standardResidentialService = Persistence.retrieveDraftForEdit(Service.class, standardResidentialService.getPrimaryKey());
 
         ProductItem productItem = EntityFactory.create(ProductItem.class);
         productItem.code().set(arCodes.get(ARCode.Type.Residential).get(0));
-        productItem.element().set(generateResidentialUnit(getCurrentItem()));
+        productItem.element().set(generateResidentialUnit(building));
         productItem.price().setValue(price);
         productItem.description().setValue(productItem.code().name().getValue());
 

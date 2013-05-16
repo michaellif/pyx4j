@@ -159,7 +159,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Lease getLease() {
-        return getDataModel(LeaseDataModel.class).getCurrentItem();
+        return getDataModel(LeaseDataModel.class).getItem(0);
     }
 
     protected void preloadData() {
@@ -208,7 +208,7 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
     }
 
     protected Building getBuilding() {
-        return mockManager.getDataModel(BuildingDataModel.class).getCurrentItem();
+        return mockManager.getDataModel(BuildingDataModel.class).getItem(0);
     }
 
     protected Bill runBilling() {
@@ -273,13 +273,12 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         }
     }
 
-    protected void createLease(String leaseDateFrom, String leaseDateTo) {
-        createLease(leaseDateFrom, leaseDateTo, null, null);
+    protected Lease createLease(String leaseDateFrom, String leaseDateTo) {
+        return createLease(leaseDateFrom, leaseDateTo, null, null);
     }
 
-    protected void createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        Lease lease = getDataModel(LeaseDataModel.class).addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
-        getDataModel(LeaseDataModel.class).setCurrentItem(lease);
+    protected Lease createLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
+        return getDataModel(LeaseDataModel.class).addLease(getBuilding(), leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance);
     }
 
     protected void renewLease(String leaseDateTo, BigDecimal agreedPrice, LeaseTerm.Type leaseTermType) {
@@ -607,8 +606,8 @@ public abstract class FinancialTestBase extends VistaDBTestBase {
         return adjustment;
     }
 
-    protected void setPreauthorizedPayment(String value) {
-        PreauthorizedPayment preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(value);
+    protected void setPreauthorizedPayment(Lease lease, String value) {
+        PreauthorizedPayment preauthorizedPayment = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, value);
         Assert.assertNotNull("CreatePreauthorizedPayment failed to create PAP", preauthorizedPayment);
         Persistence.service().commit();
     }

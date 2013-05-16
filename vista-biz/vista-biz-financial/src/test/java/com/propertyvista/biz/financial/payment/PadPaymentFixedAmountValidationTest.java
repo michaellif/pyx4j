@@ -27,6 +27,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.mock.MockConfig;
 
 @Category(RegressionTests.class)
@@ -41,42 +42,6 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         preloadData(config);
     }
 
-    private void setupScenario() throws Exception {
-        setSysDate("31-Mar-2013");
-
-        setBillingBatchProcess();
-        setLeaseBatchProcess();
-        setDepositBatchProcess();
-        setPaymentBatchProcess();
-
-        createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(977.77), null);
-        BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
-        BillableItem locker = addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
-
-        addFeatureAdjustment(parking.uid().getValue(), "-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
-        addFeatureAdjustment(locker.uid().getValue(), "-20", Type.monetary, "1-Apr-2013", "31-Mar-2014");
-
-        approveApplication(true);
-
-        advanceSysDate("1-Apr-2013");
-
-        // @formatter:off
-        new BillTester(getLatestBill()).
-        paymentReceivedAmount("0.00").
-        taxes("122.13").
-        totalDueAmount("2210.20"); // 1070.30(deposit) + 977.77(lease) + 122.13(tax) + 140(locker + parking) - 100(adjustments)
-        // @formatter:on
-
-        advanceSysDate("1-May-2013");
-
-        // @formatter:off
-        new BillTester(getLatestBill()).
-        paymentReceivedAmount("0.00").
-        taxes("122.13").
-        totalDueAmount("3400.10"); // 2210.20(previous) + 1139.90(monthly charges) + 50(late payment fees)
-        // @formatter:on
-    }
-
     public void testScenario1() throws Exception {
 
         setSysDate("31-Mar-2013");
@@ -86,7 +51,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         setDepositBatchProcess();
         setPaymentBatchProcess();
 
-        createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(977.77), null);
+        Lease lease = createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(977.77), null);
         BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
         BillableItem locker = addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
 
@@ -113,7 +78,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         totalDueAmount("3400.10"); // 2210.20(previous) + 1139.90(monthly charges) + 50(late payment fees)
         // @formatter:on
 
-        setPreauthorizedPayment("2000.00");
+        setPreauthorizedPayment(lease, "2000.00");
 
         advanceSysDate("1-Jun-2013");
 
@@ -183,7 +148,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         setDepositBatchProcess();
         setPaymentBatchProcess();
 
-        createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(977.77), null);
+        Lease lease = createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(977.77), null);
         addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
         addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
 
@@ -210,7 +175,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         totalDueAmount("3400.10"); // 2210.20(previous) + 1139.90(monthly charges) + 50(late payment fees) = 3400.10
         // @formatter:on
 
-        setPreauthorizedPayment("1139.90");
+        setPreauthorizedPayment(lease, "1139.90");
 
         advanceSysDate("1-Jun-2013");
 
@@ -253,9 +218,41 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
     }
 
     public void testScenario3() throws Exception {
-        setupScenario();
+        setSysDate("31-Mar-2013");
 
-        setPreauthorizedPayment("376.16"); // 1139.90 * .33
+        setBillingBatchProcess();
+        setLeaseBatchProcess();
+        setDepositBatchProcess();
+        setPaymentBatchProcess();
+
+        Lease lease = createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(977.77), null);
+        BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
+        BillableItem locker = addLargeLocker("1-Apr-2013", "31-Mar-2014"); // $60
+
+        addFeatureAdjustment(parking.uid().getValue(), "-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
+        addFeatureAdjustment(locker.uid().getValue(), "-20", Type.monetary, "1-Apr-2013", "31-Mar-2014");
+
+        approveApplication(true);
+
+        advanceSysDate("1-Apr-2013");
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        paymentReceivedAmount("0.00").
+        taxes("122.13").
+        totalDueAmount("2210.20"); // 1070.30(deposit) + 977.77(lease) + 122.13(tax) + 140(locker + parking) - 100(adjustments)
+        // @formatter:on
+
+        advanceSysDate("1-May-2013");
+
+        // @formatter:off
+        new BillTester(getLatestBill()).
+        paymentReceivedAmount("0.00").
+        taxes("122.13").
+        totalDueAmount("3400.10"); // 2210.20(previous) + 1139.90(monthly charges) + 50(late payment fees)
+        // @formatter:on
+
+        setPreauthorizedPayment(lease, "376.16"); // 1139.90 * .33
 
         advanceSysDate("1-Jun-2013");
 
@@ -275,7 +272,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         totalDueAmount("5403.74"); // 4590.00(previous) + 1139.90(monthly charges) + 50(late payment fees) - 376.16(received amount)
         // @formatter:on
 
-        setPreauthorizedPayment("3897.48");
+        setPreauthorizedPayment(lease, "3897.48");
 
         advanceSysDate("1-Aug-2013");
 
@@ -327,7 +324,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
         setDepositBatchProcess();
         setPaymentBatchProcess();
 
-        createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(0), null);
+        Lease lease = createLease("1-Apr-2013", "31-Mar-2014", new BigDecimal(0), null);
         BillableItem parking = addOutdoorParking("1-Apr-2013", "31-Mar-2014"); // $80
 
         addFeatureAdjustment(parking.uid().getValue(), "-80", Type.monetary, "1-Apr-2013", "31-Mar-2014");
@@ -336,7 +333,7 @@ public class PadPaymentFixedAmountValidationTest extends FinancialTestBase {
 
         advanceSysDate("1-Apr-2013");
 
-        setPreauthorizedPayment("50");
+        setPreauthorizedPayment(lease, "50");
 
         advanceSysDate("1-Jun-2013");
 

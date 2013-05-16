@@ -28,6 +28,7 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 
@@ -50,7 +51,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
     public void testScenario() throws Exception {
         setSysDate("2011-03-10");
 
-        createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
+        final Lease lease = createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
 
         setBillingBatchProcess();
         setLeaseBatchProcess();
@@ -70,7 +71,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
 
                     @Override
                     public PreauthorizedPayment execute() {
-                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment("1");
+                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, "1");
                     }
 
                 });
@@ -112,7 +113,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
 
                     @Override
                     public PreauthorizedPayment execute() {
-                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment("1");
+                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, "1");
                     }
 
                 });

@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.person.Person.Sex;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.misc.CreditCardNumberGenerator;
 import com.propertyvista.test.mock.MockDataModel;
@@ -75,17 +76,15 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         customer.person().birthDate().setValue(new LogicalDate(DateUtils.detectDateformat((String) customerMeta[5])));
         Persistence.service().persist(customer);
 
-        createPaymentMethod(customer, PaymentType.Echeck);
-
         addItem(customer);
         return customer;
     }
 
-    public LeasePaymentMethod addPaymentMethod(PaymentType type) {
-        return createPaymentMethod(getCurrentItem(), type);
+    public LeasePaymentMethod addPaymentMethod(Customer customer, Building building, PaymentType type) {
+        return createPaymentMethod(customer, building, type);
     }
 
-    private LeasePaymentMethod createPaymentMethod(Customer customer, PaymentType type) {
+    private LeasePaymentMethod createPaymentMethod(Customer customer, Building building, PaymentType type) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
         paymentMethod.customer().set(customer);
         paymentMethod.type().setValue(type);
@@ -108,7 +107,7 @@ public class CustomerDataModel extends MockDataModel<Customer> {
             throw new IllegalArgumentException();
         }
 
-        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, getDataModel(BuildingDataModel.class).getCurrentItem());
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
 
         return paymentMethod;
     }
@@ -131,8 +130,8 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
     }
 
-    public void deleteAllPaymentMethods() {
-        for (LeasePaymentMethod paymentMethod : retrieveAllPaymentMethods()) {
+    public void deleteAllPaymentMethods(Customer customer) {
+        for (LeasePaymentMethod paymentMethod : retrieveAllPaymentMethods(customer)) {
             deletePaymentMethod(paymentMethod);
         }
     }
@@ -149,19 +148,16 @@ public class CustomerDataModel extends MockDataModel<Customer> {
         details.expiryDate().setValue(new LogicalDate(2015 - 1900, 1, 1));
     }
 
-    public List<LeasePaymentMethod> retrieveAllPaymentMethods() {
+    public List<LeasePaymentMethod> retrieveAllPaymentMethods(Customer customer) {
         EntityQueryCriteria<LeasePaymentMethod> criteria = new EntityQueryCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), getCurrentItem()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), customer));
         return Persistence.service().query(criteria);
     }
 
-    List<LeasePaymentMethod> retrieveSerializableProfilePaymentMethods(Customer customer) {
+    public List<LeasePaymentMethod> retrieveSerializableProfilePaymentMethods(Customer customer) {
         List<LeasePaymentMethod> profileMethods = ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(customer);
         RpcEntityServiceFilter.filterRpcTransient((Serializable) profileMethods);
         return profileMethods;
     }
 
-    public List<LeasePaymentMethod> retrieveSerializableProfilePaymentMethods() {
-        return retrieveSerializableProfilePaymentMethods(getCurrentItem());
-    }
 }

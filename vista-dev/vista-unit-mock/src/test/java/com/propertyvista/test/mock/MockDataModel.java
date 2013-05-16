@@ -28,8 +28,6 @@ public abstract class MockDataModel<E extends IEntity> {
 
     private final List<E> items;
 
-    private E currentItem;
-
     protected abstract void generate();
 
     public MockDataModel() {
@@ -56,12 +54,8 @@ public abstract class MockDataModel<E extends IEntity> {
         return items;
     }
 
-    public E getCurrentItem() {
-        return currentItem;
-    }
-
-    public void setCurrentItem(E item) {
-        currentItem = item;
+    public E getItem(int index) {
+        return items.get(index);
     }
 
     protected static LogicalDate parseDate(String date) {

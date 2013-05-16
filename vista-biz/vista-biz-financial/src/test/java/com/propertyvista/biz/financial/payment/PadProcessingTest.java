@@ -33,6 +33,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.payment.pad.EFTTransportFacade;
@@ -42,6 +43,7 @@ import com.propertyvista.payment.pad.mock.ScheduledResponseAckTransaction;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockEventBus;
+import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.schedule.OperationsTriggerFacadeMock;
@@ -70,15 +72,14 @@ public class PadProcessingTest extends FinancialTestBase {
         setCaledonPAdPaymentBatchProcess();
 
         Customer customer = getDataModel(CustomerDataModel.class).addCustomer();
-        getDataModel(CustomerDataModel.class).setCurrentItem(customer);
+        Building building = getDataModel(BuildingDataModel.class).getItem(0);
 
-        Lease lease = getDataModel(LeaseDataModel.class).addLease("2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
-        getDataModel(LeaseDataModel.class).setCurrentItem(lease);
+        Lease lease = getDataModel(LeaseDataModel.class).addLease(building, "2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
 
-        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(PaymentType.Echeck);
+        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(customer, building, PaymentType.Echeck);
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(paymentMethod, "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(lease, paymentMethod, "100");
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
         Persistence.service().commit();
@@ -95,15 +96,14 @@ public class PadProcessingTest extends FinancialTestBase {
         setCaledonPAdPaymentBatchProcess();
 
         Customer customer = getDataModel(CustomerDataModel.class).addCustomer();
-        getDataModel(CustomerDataModel.class).setCurrentItem(customer);
+        Building building = getDataModel(BuildingDataModel.class).getItem(0);
 
-        Lease lease = getDataModel(LeaseDataModel.class).addLease("2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
-        getDataModel(LeaseDataModel.class).setCurrentItem(lease);
+        Lease lease = getDataModel(LeaseDataModel.class).addLease(building, "2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
 
-        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(PaymentType.Echeck);
+        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(customer, building, PaymentType.Echeck);
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(paymentMethod, "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(lease, paymentMethod, "100");
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
         Persistence.service().commit();
@@ -122,16 +122,15 @@ public class PadProcessingTest extends FinancialTestBase {
         setSysDate("2011-04-01");
         setCaledonPAdPaymentBatchProcess();
 
+        Building building = getDataModel(BuildingDataModel.class).getItem(0);
         Customer customer = getDataModel(CustomerDataModel.class).addCustomer();
-        getDataModel(CustomerDataModel.class).setCurrentItem(customer);
 
-        Lease lease = getDataModel(LeaseDataModel.class).addLease("2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
-        getDataModel(LeaseDataModel.class).setCurrentItem(lease);
+        Lease lease = getDataModel(LeaseDataModel.class).addLease(building, "2011-04-01", "2012-03-10", new BigDecimal(100), null, customer);
 
-        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(PaymentType.Echeck);
+        LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(customer, building, PaymentType.Echeck);
 
         // Make a payment
-        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(paymentMethod, "100");
+        PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(lease, paymentMethod, "100");
 
         ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
         Persistence.service().commit();

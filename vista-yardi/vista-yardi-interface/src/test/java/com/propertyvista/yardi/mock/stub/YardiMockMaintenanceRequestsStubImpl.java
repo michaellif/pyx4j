@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.yardi.stub;
+package com.propertyvista.yardi.mock.stub;
 
 import java.rmi.RemoteException;
 
@@ -22,6 +22,7 @@ import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 
 public class YardiMockMaintenanceRequestsStubImpl implements YardiMaintenanceRequestsStub {
 

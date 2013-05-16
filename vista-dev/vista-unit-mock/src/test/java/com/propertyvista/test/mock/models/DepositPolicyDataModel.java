@@ -15,8 +15,6 @@ package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -84,11 +82,6 @@ public class DepositPolicyDataModel extends MockDataModel<DepositPolicy> {
 
         Persistence.service().persist(policy);
         addItem(policy);
-        super.setCurrentItem(policy);
     }
 
-    @Override
-    public void setCurrentItem(DepositPolicy item) {
-        throw new NotImplementedException();
-    }
 }

@@ -36,6 +36,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.policy.policies.PADPolicy;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -54,22 +55,27 @@ public class LeaseDataModel extends MockDataModel<Lease> {
     protected void generate() {
     }
 
-    protected void addLease(String leaseDateFrom, String leaseDateTo) {
-        addLease(leaseDateFrom, leaseDateTo, null, null);
+    protected void addLease(Building building, String leaseDateFrom, String leaseDateTo) {
+        addLease(building, leaseDateFrom, leaseDateTo, null, null);
     }
 
-    public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
-        return this.addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance,
+    public Lease addLease(Building building, String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance) {
+        return addLease(building, leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance,
                 Arrays.asList(new Customer[] { getDataModel(CustomerDataModel.class).addCustomer() }));
     }
 
-    public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, Customer customer) {
-        return this.addLease(leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance, Arrays.asList(new Customer[] { customer }));
+    public Lease addLease(Building building, String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, Customer customer) {
+        return this.addLease(building, leaseDateFrom, leaseDateTo, agreedPrice, carryforwardBalance, Arrays.asList(new Customer[] { customer }));
     }
 
-    public Lease addLease(String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance, List<Customer> customers) {
+    public Lease addLease(Building building, String leaseDateFrom, String leaseDateTo, BigDecimal agreedPrice, BigDecimal carryforwardBalance,
+            List<Customer> customers) {
 
-        ProductItem serviceItem = getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(new BigDecimal("930.30"));
+        for (Customer customer : customers) {
+            getDataModel(CustomerDataModel.class).addPaymentMethod(customer, building, PaymentType.Echeck);
+        }
+
+        ProductItem serviceItem = getDataModel(BuildingDataModel.class).addResidentialUnitServiceItem(building, new BigDecimal("930.30"));
 
         Lease lease;
         if (carryforwardBalance != null) {
@@ -119,14 +125,14 @@ public class LeaseDataModel extends MockDataModel<Lease> {
         return lease;
     }
 
-    public PaymentRecord createPaymentRecord(LeasePaymentMethod paymentMethod, String amount) {
+    public PaymentRecord createPaymentRecord(Lease lease, LeasePaymentMethod paymentMethod, String amount) {
         // Just use the first tenant
-        LeaseTermParticipant<?> leaseParticipant = getCurrentItem().currentTerm().version().tenants().get(0);
+        LeaseTermParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().get(0);
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.amount().setValue(new BigDecimal(amount));
         paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Submitted);
-        paymentRecord.billingAccount().set(getCurrentItem().billingAccount());
+        paymentRecord.billingAccount().set(lease.billingAccount());
         paymentRecord.leaseTermParticipant().set(leaseParticipant);
 
         paymentRecord.paymentMethod().set(paymentMethod);
@@ -139,10 +145,10 @@ public class LeaseDataModel extends MockDataModel<Lease> {
      * 
      * Set Preauthorized Payment to first found tenant with eCheck payment method, otherwise returns false
      */
-    public PreauthorizedPayment createPreauthorizedPayment(String value) {
-        Persistence.service().retrieveMember(getCurrentItem().leaseParticipants());
-        while (getCurrentItem().leaseParticipants().iterator().hasNext()) {
-            Tenant tenant = getCurrentItem().leaseParticipants().iterator().next().cast();
+    public PreauthorizedPayment createPreauthorizedPayment(Lease lease, String value) {
+        Persistence.service().retrieveMember(lease.leaseParticipants());
+        while (lease.leaseParticipants().iterator().hasNext()) {
+            Tenant tenant = lease.leaseParticipants().iterator().next().cast();
 
             List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods(tenant.customer());
 
@@ -151,7 +157,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
                     PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
                     pap.paymentMethod().set(paymentMethod);
 
-                    PADPolicy policy = getDataModel(PADPolicyDataModel.class).getCurrentItem();
+                    PADPolicy policy = getDataModel(PADPolicyDataModel.class).getItem(0);
                     if (policy.chargeType().getValue() == PADPolicy.PADChargeType.OwingBalance) {
                         pap.amountType().setValue(AmountType.Percent);
                         pap.percent().setValue(new BigDecimal(value));

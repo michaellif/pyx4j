@@ -15,8 +15,6 @@ package com.propertyvista.test.mock.models;
 
 import java.math.BigDecimal;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -63,11 +61,6 @@ public class TaxesDataModel extends MockDataModel<Tax> {
 
         Persistence.service().persist(getAllItems());
 
-    }
-
-    @Override
-    public void setCurrentItem(Tax item) {
-        throw new NotImplementedException();
     }
 
     private Tax generateTax(String name, String authority, BigDecimal rate, Boolean compound) {

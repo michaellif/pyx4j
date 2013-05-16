@@ -16,8 +16,6 @@ package com.propertyvista.test.mock.models;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.lang.NotImplementedException;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -71,12 +69,6 @@ public class PADPolicyDataModel extends MockDataModel<PADPolicy> {
         policy.node().set(pmcDataModel.getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
-        super.setCurrentItem(policy);
-    }
-
-    @Override
-    public void setCurrentItem(PADPolicy item) {
-        throw new NotImplementedException();
     }
 
 }
