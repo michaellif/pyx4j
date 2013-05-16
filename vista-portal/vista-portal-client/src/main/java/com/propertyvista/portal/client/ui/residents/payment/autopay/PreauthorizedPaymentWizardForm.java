@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -114,7 +115,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         int row = -1;
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
-        panel.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
+        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new CoveredItemFolder()));
 
         return panel;
     }
@@ -269,7 +270,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             return Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().billableItem(),"35em"),
                     new EntityFolderColumnDescriptor(proto().percent(), "5em"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "10em"));
+                    new EntityFolderColumnDescriptor(proto().amount(), "7em"));
               //@formatter:on                
         }
 
@@ -287,6 +288,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 super(CoveredItemDTO.class, columns());
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                 CComponent<?, ?> comp;
@@ -297,8 +299,21 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                     comp = super.createCell(column);
                 }
 
-                if (column.getObject() == proto().amount()) {
-                    comp.setVisible(true);
+                // handle value changes: 
+                if (column.getObject() == proto().percent()) {
+                    ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                            // TODO Auto-generated method stub
+                        }
+                    });
+                } else if (column.getObject() == proto().amount()) {
+                    ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                        @Override
+                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
+                            // TODO Auto-generated method stub
+                        }
+                    });
                 }
 
                 return comp;

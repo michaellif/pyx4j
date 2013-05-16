@@ -85,31 +85,9 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(lease));
 
-        fillCoveredItems(dto);
+        fillCoveredItems(dto, lease.currentTerm().version().leaseProducts());
 
         callback.onSuccess(dto);
-    }
-
-    private void fillCoveredItems(PreauthorizedPaymentDTO dto) {
-        LeaseProducts products = TenantAppContext.getCurrentUserLease().currentTerm().version().leaseProducts();
-
-        dto.coveredItems().add(createCoveredItem(products.serviceItem()));
-        for (BillableItem billableItem : products.featureItems()) {
-            Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
-            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())) {
-                dto.coveredItems().add(createCoveredItem(billableItem));
-            }
-        }
-    }
-
-    private CoveredItem createCoveredItem(BillableItem billableItem) {
-        CoveredItemDTO item = EntityFactory.create(CoveredItemDTO.class);
-
-        item.billableItem().set(billableItem);
-        item.percent().setValue(BigDecimal.ONE);
-        item.amount().setValue(billableItem.agreedPrice().getValue().multiply(item.percent().getValue()));
-
-        return item;
     }
 
     @Override
@@ -135,6 +113,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
             }
         }
 
+        updateCoveredItems(entity, dto);
+
         ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(entity,
                 EntityFactory.createIdentityStub(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey()));
         Persistence.service().commit();
@@ -143,12 +123,41 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     @Override
+    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
+        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
+    }
+
+    @Override
     public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
         callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
     }
 
-    @Override
-    public void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback) {
-        callback.onSuccess(new Vector<LeasePaymentMethod>(LeaseParticipantUtils.getProfiledPaymentMethods(TenantAppContext.getCurrentUserTenantInLease())));
+    private void fillCoveredItems(PreauthorizedPaymentDTO dto, LeaseProducts products) {
+        dto.coveredItemsDTO().add(createCoveredItemDTO(products.serviceItem()));
+        for (BillableItem billableItem : products.featureItems()) {
+            Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
+            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())) {
+                dto.coveredItemsDTO().add(createCoveredItemDTO(billableItem));
+            }
+        }
+    }
+
+    private CoveredItemDTO createCoveredItemDTO(BillableItem billableItem) {
+        CoveredItemDTO item = EntityFactory.create(CoveredItemDTO.class);
+
+        item.billableItem().set(billableItem);
+        item.percent().setValue(BigDecimal.ONE);
+        item.amount().setValue(billableItem.agreedPrice().getValue().multiply(item.percent().getValue()));
+
+        return item;
+    }
+
+    private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
+        entity.coveredItems().clear();
+        for (CoveredItemDTO item : dto.coveredItemsDTO()) {
+            if (item.percent().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                entity.coveredItems().add(item.duplicate(CoveredItem.class));
+            }
+        }
     }
 }

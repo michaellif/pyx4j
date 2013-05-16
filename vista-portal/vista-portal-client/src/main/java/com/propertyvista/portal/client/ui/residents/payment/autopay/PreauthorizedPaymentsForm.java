@@ -123,7 +123,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 });
                 content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
 
-                content.getCellFormatter().setWidth(row, 0, "25em");
+//                content.getCellFormatter().setWidth(row, 0, "25em");
 
                 return content;
             }
@@ -137,7 +137,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 @Override
                 public List<EntityFolderColumnDescriptor> columns() {
                     return Arrays.asList(//@formatter:off
-                            new EntityFolderColumnDescriptor(proto().billableItem(),"20em"),
+                            new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
                             new EntityFolderColumnDescriptor(proto().percent(), "5em"));
                       //@formatter:on                
                 }
