@@ -24,8 +24,8 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -34,7 +34,7 @@ import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
 @Category(FunctionalTests.class)
-public class BillableItemAdjustmentTest extends FinancialTestBase {
+public class BillableItemAdjustmentTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

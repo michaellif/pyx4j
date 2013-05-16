@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -36,7 +36,7 @@ import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
+public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
 
     private ArrearsSnapshot actualArrearsSnapshot;
 
@@ -94,9 +94,8 @@ public abstract class ArrearsSnapshotTestBase extends FinancialTestBase {
 
         for (AgingBuckets expected : prevExpectedAgingBuckets.values()) {
             if (expected.arCode().getValue() != null) {
-                assertArrearsCategory(expected.arCode().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue()
-                        .toString(), expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue()
-                        .toString());
+                assertArrearsCategory(expected.arCode().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue().toString(),
+                        expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue().toString());
             }
         }
 

@@ -22,15 +22,15 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import org.junit.experimental.categories.Category;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 
 @Category(FunctionalTests.class)
-public class BillingFeatureEagerScenarioTest extends FinancialTestBase {
+public class BillingFeatureEagerScenarioTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

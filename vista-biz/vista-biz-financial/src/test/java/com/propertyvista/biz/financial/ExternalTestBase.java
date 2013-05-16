@@ -30,7 +30,7 @@ import com.propertyvista.domain.financial.billingext.dto.ChargeDTO;
 import com.propertyvista.domain.financial.billingext.dto.PaymentDTO;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class ExternalTestBase extends FinancialTestBase {
+public class ExternalTestBase extends LeaseFinancialTestBase {
 
     public void postExternalCharge(String amount, String description, String fromDate, String toDate) {
         ChargeDTO charge = EntityFactory.create(ChargeDTO.class);

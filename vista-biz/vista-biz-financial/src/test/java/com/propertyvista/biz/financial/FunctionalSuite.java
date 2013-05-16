@@ -18,7 +18,7 @@ import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 
 @RunWith(Categories.class)
 @IncludeCategory(FunctionalTests.class)

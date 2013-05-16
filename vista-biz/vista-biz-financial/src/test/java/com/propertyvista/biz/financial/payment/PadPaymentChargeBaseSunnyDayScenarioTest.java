@@ -18,15 +18,14 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
-import com.propertyvista.domain.tenant.lease.Lease;
 
 @Category(RegressionTests.class)
-public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase {
+public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
@@ -38,7 +37,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         setSysDate("10-Mar-2011");
 
-        Lease lease = createLease("1-Apr-2011", "31-Mar-2012");
+        createLease("1-Apr-2011", "31-Mar-2012");
         addOutdoorParking();
         addLargeLocker();
 
@@ -72,7 +71,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends FinancialTestBase 
 
         receiveAndPostPayment("20-Mar-2011", "1070.30"); //2269.04 - 1198.74(pad) = 1070.30
 
-        setPreauthorizedPayment(lease, "1");
+        setPreauthorizedPayment("1");
 
         advanceSysDate("18-Apr-2011");
 

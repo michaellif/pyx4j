@@ -24,14 +24,14 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 
 @Category(FunctionalTests.class)
-public class BillingLeaseOnlyAgingScenarioTest extends FinancialTestBase {
+public class BillingLeaseOnlyAgingScenarioTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

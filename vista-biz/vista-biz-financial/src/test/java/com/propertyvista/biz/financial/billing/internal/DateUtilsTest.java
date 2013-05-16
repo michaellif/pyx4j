@@ -15,13 +15,13 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import org.junit.experimental.categories.Category;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.DateRange;
 
 @Category(FunctionalTests.class)
-public class DateUtilsTest extends FinancialTestBase {
+public class DateUtilsTest extends LeaseFinancialTestBase {
 
     public void testOverlappingRange() {
         {

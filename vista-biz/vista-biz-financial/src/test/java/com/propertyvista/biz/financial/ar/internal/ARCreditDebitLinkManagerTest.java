@@ -27,8 +27,8 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
 import com.propertyvista.domain.financial.ARCode;
@@ -40,7 +40,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
 @Category(FunctionalTests.class)
-public class ARCreditDebitLinkManagerTest extends FinancialTestBase {
+public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

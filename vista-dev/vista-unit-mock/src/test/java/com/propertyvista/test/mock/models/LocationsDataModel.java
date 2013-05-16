@@ -40,20 +40,22 @@ public class LocationsDataModel extends MockDataModel<Country> {
         List<Province> provinces = loadProvincesFromFile();
 
         Map<String, Country> countriesByName = new HashMap<String, Country>();
-        List<Country> countries = new Vector<Country>();
 
         for (Province province : provinces) {
             Country country = countriesByName.get(province.country().name().getValue());
             if (country == null) {
                 country = province.country();
                 countriesByName.put(country.name().getValue(), country);
-                countries.add(country);
+                addItem(country);
             }
             country.provinces().add(province);
 
             provincesMap.put(province.code().getValue(), province);
         }
-        Persistence.service().persist(countries);
+
+        for (Country country : getAllItems()) {
+            Persistence.service().persist(country);
+        }
     }
 
     private static List<Province> loadProvincesFromFile() {

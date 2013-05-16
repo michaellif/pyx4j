@@ -19,7 +19,7 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.billing.internal.LatePaymentUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;

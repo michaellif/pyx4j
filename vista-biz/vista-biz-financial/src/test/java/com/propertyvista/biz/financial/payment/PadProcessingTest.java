@@ -21,8 +21,8 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade_TEMP;
 import com.propertyvista.config.VistaDeployment;
@@ -49,7 +49,7 @@ import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.schedule.OperationsTriggerFacadeMock;
 
 @Category(RegressionTests.class)
-public class PadProcessingTest extends FinancialTestBase {
+public class PadProcessingTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {

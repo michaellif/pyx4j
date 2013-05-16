@@ -21,8 +21,8 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -41,7 +41,7 @@ import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
 
 @Category(FunctionalTests.class)
-public class BillPrintTest extends FinancialTestBase {
+public class BillPrintTest extends LeaseFinancialTestBase {
 
     public void testBillPrint() throws FileNotFoundException {
 

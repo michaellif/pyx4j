@@ -15,7 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import org.junit.experimental.categories.Category;
 
-import com.propertyvista.biz.financial.FinancialTestBase.FunctionalTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.domain.payment.PaymentType;
 
 @Category({ FunctionalTests.class })

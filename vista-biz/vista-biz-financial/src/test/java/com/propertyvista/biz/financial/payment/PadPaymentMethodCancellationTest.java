@@ -22,18 +22,16 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.mock.MockConfig;
-import com.propertyvista.test.mock.models.LeaseDataModel;
 
 @Category(RegressionTests.class)
-public class PadPaymentMethodCancellationTest extends FinancialTestBase {
+public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
@@ -51,7 +49,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
     public void testScenario() throws Exception {
         setSysDate("2011-03-10");
 
-        final Lease lease = createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
+        createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
 
         setBillingBatchProcess();
         setLeaseBatchProcess();
@@ -66,15 +64,7 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
 
         // Add 100% PAP
-        final PreauthorizedPayment preauthorizedPayment1 = new UnitOfWork(TransactionScopeOption.RequiresNew)
-                .execute(new Executable<PreauthorizedPayment, RuntimeException>() {
-
-                    @Override
-                    public PreauthorizedPayment execute() {
-                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, "1");
-                    }
-
-                });
+        final PreauthorizedPayment preauthorizedPayment1 = setPreauthorizedPayment("1");
 
         advanceSysDate("2011-03-29");
 
@@ -93,30 +83,13 @@ public class PadPaymentMethodCancellationTest extends FinancialTestBase {
 
         new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Scheduled);
 
-        // Cancel preauthorizedPayment
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-            @Override
-            public Void execute() {
-                ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(preauthorizedPayment1);
-                return null;
-            }
-
-        });
+        deletePreauthorizedPayment(preauthorizedPayment1);
 
         // Scheduled payment is Canceled
 
         new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Canceled);
 
-        final PreauthorizedPayment preauthorizedPayment2 = new UnitOfWork(TransactionScopeOption.RequiresNew)
-                .execute(new Executable<PreauthorizedPayment, RuntimeException>() {
-
-                    @Override
-                    public PreauthorizedPayment execute() {
-                        return getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, "1");
-                    }
-
-                });
+        final PreauthorizedPayment preauthorizedPayment2 = setPreauthorizedPayment("1");
 
         // new payment is not automatically created
 

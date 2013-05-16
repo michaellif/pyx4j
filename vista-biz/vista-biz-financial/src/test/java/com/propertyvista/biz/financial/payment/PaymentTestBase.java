@@ -17,12 +17,12 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 
-public class PaymentTestBase extends FinancialTestBase {
+public class PaymentTestBase extends LeaseFinancialTestBase {
 
     public void assertRpcTransientMemebers(List<LeasePaymentMethod> methods) {
         for (LeasePaymentMethod method : methods) {

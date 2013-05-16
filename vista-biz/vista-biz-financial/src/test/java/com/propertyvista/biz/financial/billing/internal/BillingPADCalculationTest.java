@@ -26,15 +26,15 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.FinancialTestBase;
-import com.propertyvista.biz.financial.FinancialTestBase.RegressionTests;
+import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
+import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 
 @Category(RegressionTests.class)
-public class BillingPADCalculationTest extends FinancialTestBase {
+public class BillingPADCalculationTest extends LeaseFinancialTestBase {
 
     @Override
     protected void setUp() throws Exception {
