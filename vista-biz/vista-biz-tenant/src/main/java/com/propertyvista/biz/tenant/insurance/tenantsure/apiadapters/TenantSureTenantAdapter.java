@@ -16,12 +16,16 @@ package com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters;
 import com.cfcprograms.api.SimpleClient;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class TenantSureTenantAdapter {
+
+    private static final I18n i18n = I18n.get(TenantSureTenantAdapter.class);
 
     public static void setClientsAddress(Tenant tenantId, SimpleClient parameters) {
 
@@ -43,7 +47,7 @@ public class TenantSureTenantAdapter {
         if ("Canada".equals(country)) {
             parameters.setCountryCode("CA");
         } else {
-            throw new Error(SimpleMessageFormat.format("tenant''s country ({0}) is not supported!", country));
+            throw new UserRuntimeException(i18n.tr("Country \"{0}\" is not supported by TenantSure!", country));
         }
 
         parameters.setEmailAddress(tenant.customer().person().email().getValue());
