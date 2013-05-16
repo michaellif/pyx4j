@@ -29,12 +29,13 @@ import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.PageOrientation;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.field.client.theme.FieldPalette;
 import com.propertyvista.field.client.theme.FieldTheme;
-import com.propertyvista.field.client.ui.FieldPanel;
+import com.propertyvista.field.client.ui.FieldRootPane;
 import com.propertyvista.field.rpc.FieldSiteMap;
 import com.propertyvista.field.rpc.services.FieldAuthenticationService;
 
@@ -53,7 +54,7 @@ public class FieldSite extends VistaSite {
 
         RootPanel.get().add(RootLayoutPanel.get());
 
-        RootLayoutPanel.get().add(new FieldPanel());
+        RootLayoutPanel.get().add(new FieldRootPane());
 
         FieldEntityMapper.init();
 
@@ -99,7 +100,7 @@ public class FieldSite extends VistaSite {
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
     }
 
-    public static boolean isVerticalOrientation() {
-        return true;
+    public static PageOrientation getPageOrientation() {
+        return PageOrientation.Vertical;
     }
 }

@@ -18,9 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface ApplicationSelectionView extends IsWidget {
 
     interface Presenter {
-
-        void checkAlerts();
-
     }
 
     void setPresenter(Presenter presenter);

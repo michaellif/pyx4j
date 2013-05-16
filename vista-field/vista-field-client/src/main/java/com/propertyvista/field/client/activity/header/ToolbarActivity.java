@@ -18,20 +18,31 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.field.client.event.ChangeHeaderEvent;
+import com.propertyvista.field.client.event.ChangeHeaderHandler;
+import com.propertyvista.field.client.event.HeaderAction;
 import com.propertyvista.field.client.ui.components.header.ToolbarView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class ToolbarActivity extends AbstractActivity {
+public class ToolbarActivity extends AbstractActivity implements ChangeHeaderHandler {
 
     private final ToolbarView view;
 
     public ToolbarActivity(Place place) {
         view = FieldViewFactory.instance(ToolbarView.class);
+        AppSite.getEventBus().addHandler(ChangeHeaderEvent.getType(), this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+    }
+
+    @Override
+    public void onChangeHeader(ChangeHeaderEvent event) {
+        view.showNavigationDetails(event.getAction() == HeaderAction.ShowNavigDetails);
     }
 
 }

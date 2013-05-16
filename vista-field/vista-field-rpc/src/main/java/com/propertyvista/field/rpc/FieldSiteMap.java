@@ -19,32 +19,29 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
-import com.propertyvista.field.rpc.HeaderMode.NavigationToolbar;
+import com.propertyvista.field.rpc.HeaderMode.AlertToolbar;
 import com.propertyvista.field.rpc.HeaderMode.SearchToolbar;
 import com.propertyvista.field.rpc.HeaderMode.Toolbar;
-import com.propertyvista.field.rpc.ScreenMode.FullScreen;
-import com.propertyvista.field.rpc.ScreenMode.HeaderLister;
-import com.propertyvista.field.rpc.ScreenMode.HeaderListerDetails;
 
 public class FieldSiteMap implements SiteMap {
 
-    public static class Login extends AppPlace implements PublicPlace, FullScreen {
+    public static class Login extends AppPlace implements PublicPlace {
     }
 
     /**
      * A place where a unfortunate user can perform request to reset his password.
      */
-    public static class PasswordResetRequest extends AppPlace implements PublicPlace, FullScreen {
+    public static class PasswordResetRequest extends AppPlace implements PublicPlace {
     }
 
     /**
      * Used while user is waiting for authentication required for password reset.
      */
-    public static class LoginWithToken extends AppPlace implements PublicPlace, FullScreen {
+    public static class LoginWithToken extends AppPlace implements PublicPlace {
     }
 
     @PlaceProperties(caption = "Reset Password")
-    public static class PasswordReset extends AppPlace implements FullScreen {
+    public static class PasswordReset extends AppPlace {
     }
 
     @PlaceProperties(caption = "Change Password")
@@ -54,7 +51,7 @@ public class FieldSiteMap implements SiteMap {
     public static class Properties extends AppPlace {
 
         @PlaceProperties(navigLabel = "Buildings")
-        public static class Building extends CrudAppPlace {
+        public static class Building extends CrudAppPlace implements Toolbar {
         }
 
         @PlaceProperties(navigLabel = "Units")
@@ -107,18 +104,16 @@ public class FieldSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "Runtime Errors")
-    public static class RuntimeError extends AppPlace implements FullScreen {
+    public static class RuntimeError extends AppPlace {
     }
 
-    public static class ApplicationSelection extends AppPlace implements FullScreen {
+    public static class ApplicationSelection extends AppPlace {
     }
 
-    public static class Search extends AppPlace implements HeaderLister, SearchToolbar {
+    public static class Search extends AppPlace implements SearchToolbar {
     }
 
-    public static class BuildingLister extends AppPlace implements HeaderLister, Toolbar {
+    public static class AlertViewer extends AppPlace implements AlertToolbar {
     }
 
-    public static class BuildingListerDetails extends AppPlace implements HeaderListerDetails, NavigationToolbar {
-    }
 }

@@ -17,26 +17,56 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.widgets.client.DropDownPanel;
+import com.pyx4j.site.client.ui.layout.PageOrientation;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.field.client.event.EventSource;
-import com.propertyvista.field.client.event.ScreenShiftEvent;
+import com.propertyvista.field.client.FieldSite;
+import com.propertyvista.field.client.event.ChangeLayoutEvent;
+import com.propertyvista.field.client.event.LayoutAction;
+import com.propertyvista.field.client.event.ListerNavigateEvent;
+import com.propertyvista.field.client.event.NavigateAction;
 import com.propertyvista.field.client.resources.FieldImages;
-import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.components.sort.SortDropDownPanel;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
-public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
+public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
     private static final I18n i18n = I18n.get(ToolbarViewImpl.class);
 
+    private final HorizontalPanel mainToolbar;
+
+    private final HorizontalPanel navigDetailsToolbar;
+
+    private Image contextMenuImage;
+
     public ToolbarViewImpl() {
         setSize("100%", "100%");
-        setStyleName(FieldTheme.StyleName.Toolbar.name());
+
+        mainToolbar = createMainToolbar();
+        navigDetailsToolbar = createNavigDetailsToolbar();
+
+        add(mainToolbar);
+        add(navigDetailsToolbar);
+
+        showNavigationDetails(false);
+        setContextMenuVisibility();
+    }
+
+    private HorizontalPanel createMainToolbar() {
+        HorizontalPanel container = new HorizontalPanel();
+        container.setSize("100%", "100%");
+
+        final Toolbar leftActionsContainer = new Toolbar();
+        final Toolbar rightActionsContainer = new Toolbar();
+
+        container.add(leftActionsContainer);
+        container.add(rightActionsContainer);
+        container.setCellHorizontalAlignment(leftActionsContainer, ALIGN_LEFT);
+        container.setCellHorizontalAlignment(rightActionsContainer, ALIGN_RIGHT);
 
         final SortDropDownPanel sortPanel = new SortDropDownPanel();
 
@@ -45,7 +75,7 @@ public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getEventBus().fireEvent(new ScreenShiftEvent(EventSource.ToolbarMenuImage));
+                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.ShiftMenu));
             }
         });
 
@@ -57,11 +87,76 @@ public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
                 if (sortPanel.isShowing()) {
                     sortPanel.hide();
                 } else {
-                    showPanel(sortPanel);
+                    sortPanel.showRelativeTo(leftActionsContainer);
                 }
             }
         });
 
+        contextMenuImage = new Image(FieldImages.INSTANCE.contextMenu());
+        final Image searchImage = createSearchImage();
+
+        leftActionsContainer.add(menuImage);
+        leftActionsContainer.add(sortImage);
+        rightActionsContainer.add(contextMenuImage);
+        rightActionsContainer.add(searchImage);
+
+        return container;
+    }
+
+    private HorizontalPanel createNavigDetailsToolbar() {
+        HorizontalPanel container = new HorizontalPanel();
+        container.setSize("100%", "100%");
+
+        final Toolbar leftActionsContainer = new Toolbar();
+        final Toolbar rightActionsContainer = new Toolbar();
+
+        container.add(leftActionsContainer);
+        container.add(rightActionsContainer);
+        container.setCellHorizontalAlignment(leftActionsContainer, ALIGN_LEFT);
+        container.setCellHorizontalAlignment(rightActionsContainer, ALIGN_RIGHT);
+
+        final Image backImage = new Image(FieldImages.INSTANCE.back());
+        backImage.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                showNavigationDetails(false);
+                AppSite.getEventBus().fireEvent(new ListerNavigateEvent(NavigateAction.Back));
+                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.CollapseDetails));
+            }
+        });
+
+        final Image previousImage = new Image(FieldImages.INSTANCE.previous());
+        previousImage.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getEventBus().fireEvent(new ListerNavigateEvent(NavigateAction.PreviousItem));
+            }
+        });
+
+        final Image nextImage = new Image(FieldImages.INSTANCE.next());
+        nextImage.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getEventBus().fireEvent(new ListerNavigateEvent(NavigateAction.NextItem));
+            }
+        });
+
+        final Image searchImage = createSearchImage();
+        final Image contextMenuImage = new Image(FieldImages.INSTANCE.contextMenu());
+
+        leftActionsContainer.add(backImage);
+        leftActionsContainer.add(previousImage);
+        leftActionsContainer.add(nextImage);
+        rightActionsContainer.add(contextMenuImage);
+        rightActionsContainer.add(searchImage);
+
+        return container;
+    }
+
+    private Image createSearchImage() {
         final Image searchImage = new Image(FieldImages.INSTANCE.search());
         searchImage.addClickHandler(new ClickHandler() {
 
@@ -70,21 +165,20 @@ public class ToolbarViewImpl extends HorizontalPanel implements ToolbarView {
                 AppSite.getPlaceController().goTo(new FieldSiteMap.Search());
             }
         });
-
-        add(createHolder(menuImage));
-        add(createHolder(sortImage));
-        add(createHolder(searchImage));
+        return searchImage;
     }
 
-    private void showPanel(DropDownPanel panel) {
-        panel.showRelativeTo(this);
+    @Override
+    public void showNavigationDetails(boolean isVisible) {
+        boolean isNavigVisible = isVisible && (PageOrientation.Vertical == FieldSite.getPageOrientation());
+
+        navigDetailsToolbar.setVisible(isNavigVisible);
+        mainToolbar.setVisible(!isNavigVisible);
     }
 
-    private SimplePanel createHolder(Image image) {
-        SimplePanel holder = new SimplePanel();
-        holder.setStyleName(FieldTheme.StyleName.ToolbarImageHolder.name());
-        holder.setWidget(image);
-        return holder;
+    @Override
+    public void setContextMenuVisibility() {
+        contextMenuImage.setVisible(PageOrientation.Horizontal == FieldSite.getPageOrientation());
     }
 
 }

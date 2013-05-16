@@ -17,4 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface ToolbarView extends IsWidget {
 
+    void showNavigationDetails(boolean isVisible);
+
+    void setContextMenuVisibility();
 }

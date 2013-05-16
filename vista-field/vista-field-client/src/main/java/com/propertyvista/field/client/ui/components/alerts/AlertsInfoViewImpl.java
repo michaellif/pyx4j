@@ -15,40 +15,82 @@ package com.propertyvista.field.client.ui.components.alerts;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.field.client.event.EventSource;
-import com.propertyvista.field.client.event.ScreenShiftEvent;
+import com.propertyvista.field.client.event.ChangeLayoutEvent;
+import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.resources.FieldImages;
 
-public class AlertsInfoViewImpl extends SimplePanel implements AlertsInfoView {
+public class AlertsInfoViewImpl extends FlowPanel implements AlertsInfoView {
 
     private int unreadAlerts = 0;
 
+    private final Image alertsImage;
+
+    private final Image closeImage;
+
     public AlertsInfoViewImpl() {
-        final Image alertsImage = new Image(FieldImages.INSTANCE.alerts());
-        alertsImage.addClickHandler(new ClickHandler() {
+        alertsImage = createImage(FieldImages.INSTANCE.alerts());
+        closeImage = createImage(FieldImages.INSTANCE.close());
+        closeImage.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.instance();
-                AppSite.getEventBus().fireEvent(new ScreenShiftEvent(EventSource.AlertsImage));
+                setNoUnreadStyle();
             }
         });
+        setUnreadStyle();
 
         add(alertsImage);
+        add(closeImage);
     }
 
     @Override
     public void setUnread(int alertsNumber) {
+        assert (alertsNumber >= 0);
         this.unreadAlerts = alertsNumber;
+        setUnreadStyle();
     }
 
     @Override
-    public boolean isVisible() {
-        return unreadAlerts > 0 && super.isVisible();
+    public void decreaseUnread() {
+        if (unreadAlerts > 0) {
+            unreadAlerts--;
+            if (unreadAlerts == 0) {
+                setCloseStyle();
+            }
+        }
+    }
+
+    private Image createImage(ImageResource resource) {
+        Image image = new Image(resource);
+        image.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
+                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.ShiftAlerts));
+            }
+        });
+
+        return image;
+    }
+
+    private void setUnreadStyle() {
+        alertsImage.setVisible(true);
+        closeImage.setVisible(false);
+    }
+
+    private void setCloseStyle() {
+        alertsImage.setVisible(false);
+        closeImage.setVisible(true);
+    }
+
+    private void setNoUnreadStyle() {
+        alertsImage.setVisible(false);
+        closeImage.setVisible(false);
     }
 }

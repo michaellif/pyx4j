@@ -23,6 +23,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.field.rpc.services.FieldAuthenticationService;
+import com.propertyvista.field.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -44,7 +45,7 @@ public class FieldAuthenticationServiceImpl extends VistaAuthenticationServicesI
 
     @Override
     protected VistaBasicBehavior getApplicationBehavior() {
-        return VistaBasicBehavior.Field;
+        return VistaBasicBehavior.CRM;
     }
 
     @Override
@@ -61,9 +62,9 @@ public class FieldAuthenticationServiceImpl extends VistaAuthenticationServicesI
     @Override
     protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
         Set<Behavior> behaviors = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential);
-//        if (!userCredential.accessAllBuildings().isBooleanTrue()) {
-//            BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
-//        }
+        if (!userCredential.accessAllBuildings().isBooleanTrue()) {
+            BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
+        }
         return behaviors;
     }
 

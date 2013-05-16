@@ -16,10 +16,12 @@ package com.propertyvista.field.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.field.client.ui.building.BuildingDetailsView;
-import com.propertyvista.field.client.ui.building.BuildingDetailsViewImpl;
-import com.propertyvista.field.client.ui.building.BuildingListerView;
-import com.propertyvista.field.client.ui.building.BuildingListerViewImpl;
+import com.propertyvista.field.client.ui.crud.building.BuildingEditorView;
+import com.propertyvista.field.client.ui.crud.building.BuildingEditorViewImpl;
+import com.propertyvista.field.client.ui.crud.building.BuildingListerView;
+import com.propertyvista.field.client.ui.crud.building.BuildingListerViewImpl;
+import com.propertyvista.field.client.ui.crud.building.BuildingViewerView;
+import com.propertyvista.field.client.ui.crud.building.BuildingViewerViewImpl;
 
 public class BuildingViewFactory extends ViewFactoryBase {
 
@@ -27,9 +29,10 @@ public class BuildingViewFactory extends ViewFactoryBase {
         if (!map.containsKey(type)) {
             if (BuildingListerView.class.equals(type)) {
                 map.put(type, new BuildingListerViewImpl());
-            }
-            if (BuildingDetailsView.class.equals(type)) {
-                map.put(type, new BuildingDetailsViewImpl());
+            } else if (BuildingEditorView.class.equals(type)) {
+                map.put(type, new BuildingEditorViewImpl());
+            } else if (BuildingViewerView.class.equals(type)) {
+                map.put(type, new BuildingViewerViewImpl());
             }
         }
 

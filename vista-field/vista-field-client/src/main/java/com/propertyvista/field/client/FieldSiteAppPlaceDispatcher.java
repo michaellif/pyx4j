@@ -36,7 +36,7 @@ public class FieldSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     protected boolean isApplicationAuthenticated() {
-        return SecurityController.checkBehavior(VistaBasicBehavior.Field);
+        return SecurityController.checkBehavior(VistaBasicBehavior.CRM);
     }
 
     @Override

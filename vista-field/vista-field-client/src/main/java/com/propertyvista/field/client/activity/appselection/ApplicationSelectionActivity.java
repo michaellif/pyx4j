@@ -17,10 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.field.client.activity.alerts.AlertsActivity;
-import com.propertyvista.field.client.event.CheckAlertsEvent;
 import com.propertyvista.field.client.ui.appselection.ApplicationSelectionView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
@@ -30,18 +26,12 @@ public class ApplicationSelectionActivity extends AbstractActivity implements Ap
 
     public ApplicationSelectionActivity() {
         view = FieldViewFactory.instance(ApplicationSelectionView.class);
-        AppSite.getEventBus().addHandler(CheckAlertsEvent.getType(), AlertsActivity.instance());
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         panel.setWidget(view);
-    }
-
-    @Override
-    public void checkAlerts() {
-        AppSite.getEventBus().fireEvent(new CheckAlertsEvent());
     }
 
 }

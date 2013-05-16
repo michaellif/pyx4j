@@ -21,14 +21,14 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.field.client.event.CheckAlertsEvent;
-import com.propertyvista.field.client.event.CheckAlertsHandler;
-import com.propertyvista.field.client.event.ShowAlertsEvent;
+import com.propertyvista.field.client.event.AlertsAction;
+import com.propertyvista.field.client.event.ChangeAlertsEvent;
+import com.propertyvista.field.client.event.ChangeAlertsHandler;
 import com.propertyvista.field.client.ui.components.alerts.AlertsInfoView;
 import com.propertyvista.field.client.ui.components.alerts.AlertsScreenView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class AlertsActivity extends AbstractActivity implements CheckAlertsHandler {
+public class AlertsActivity extends AbstractActivity implements ChangeAlertsHandler {
 
     private static class SingletonHolder {
         public static final AlertsActivity INSTANCE = new AlertsActivity();
@@ -52,12 +52,22 @@ public class AlertsActivity extends AbstractActivity implements CheckAlertsHandl
     }
 
     @Override
-    public void onCheckAlerts(CheckAlertsEvent event) {
-        // TODO add logic to fetch alerts
-        String[] alerts = { "Alert #1", "Alert #2", "Alert #3", "Alert #4" };
-        alertsScreen.setAlerts(Arrays.asList(alerts));
-        alertsInfo.setUnread(alerts.length);
-        AppSite.getEventBus().fireEvent(new ShowAlertsEvent());
+    public void onChangeAlerts(ChangeAlertsEvent event) {
+        switch (event.getAction()) {
+        case CheckAlerts:
+            // TODO add logic to fetch alerts
+            String[] alerts = { "Alert #1", "Alert #2", "Alert #3", "Alert #4" };
+            alertsScreen.setAlerts(Arrays.asList(alerts));
+            alertsInfo.setUnread(alerts.length);
+            AppSite.getEventBus().fireEvent(new ChangeAlertsEvent(AlertsAction.ShowAlerts));
+            break;
+        case AlertRead:
+            alertsInfo.decreaseUnread();
+            break;
+        default:
+            break;
+        }
+
     }
 
 }

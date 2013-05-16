@@ -17,10 +17,12 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.field.client.activity.header.NavigToolbarActivity;
+import com.pyx4j.site.rpc.AppPlace;
+
+import com.propertyvista.field.client.activity.header.AlertToolbarActivity;
 import com.propertyvista.field.client.activity.header.SearchToolbarActivity;
 import com.propertyvista.field.client.activity.header.ToolbarActivity;
-import com.propertyvista.field.rpc.HeaderMode.NavigationToolbar;
+import com.propertyvista.field.rpc.HeaderMode.AlertToolbar;
 import com.propertyvista.field.rpc.HeaderMode.SearchToolbar;
 import com.propertyvista.field.rpc.HeaderMode.Toolbar;
 
@@ -34,10 +36,10 @@ public class HeaderActivityMapper implements ActivityMapper {
 
         if (place instanceof Toolbar) {
             return new ToolbarActivity(place);
-        } else if (place instanceof NavigationToolbar) {
-            return new NavigToolbarActivity(place);
         } else if (place instanceof SearchToolbar) {
             return new SearchToolbarActivity(place);
+        } else if (place instanceof AppPlace && place instanceof AlertToolbar) {
+            return new AlertToolbarActivity((AppPlace) place);
         }
 
         return null;

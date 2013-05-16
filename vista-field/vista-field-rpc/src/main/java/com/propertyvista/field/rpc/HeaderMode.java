@@ -18,10 +18,10 @@ public interface HeaderMode {
     public interface Toolbar {
     }
 
-    public interface NavigationToolbar {
+    public interface SearchToolbar {
     }
 
-    public interface SearchToolbar {
+    public interface AlertToolbar {
     }
 
 }

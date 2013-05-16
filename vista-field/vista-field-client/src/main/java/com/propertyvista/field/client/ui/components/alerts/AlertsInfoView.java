@@ -18,4 +18,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 public interface AlertsInfoView extends IsWidget {
 
     void setUnread(int alertsNumber);
+
+    void decreaseUnread();
 }

@@ -28,6 +28,9 @@ public interface FieldImages extends VistaImages {
     @Source("menu.png")
     ImageResource menu();
 
+    @Source("context_menu.png")
+    ImageResource contextMenu();
+
     @Source("search.png")
     ImageResource search();
 
@@ -39,4 +42,13 @@ public interface FieldImages extends VistaImages {
 
     @Source("alerts.png")
     ImageResource alerts();
+
+    @Source("close.png")
+    ImageResource close();
+
+    @Source("previous.png")
+    ImageResource previous();
+
+    @Source("next.png")
+    ImageResource next();
 }

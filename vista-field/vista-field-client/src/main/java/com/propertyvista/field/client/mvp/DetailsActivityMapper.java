@@ -17,7 +17,10 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.field.client.activity.building.BuildingDetailsActivity;
+import com.pyx4j.site.rpc.CrudAppPlace;
+
+import com.propertyvista.field.client.activity.crud.building.BuildingEditorActivity;
+import com.propertyvista.field.client.activity.crud.building.BuildingViewerActivity;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
 public class DetailsActivityMapper implements ActivityMapper {
@@ -28,10 +31,23 @@ public class DetailsActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
 
-        if (place instanceof FieldSiteMap.BuildingListerDetails) {
-            return new BuildingDetailsActivity();
+        Activity activity = null;
+        if (place instanceof CrudAppPlace) {
+            CrudAppPlace crudPlace = (CrudAppPlace) place;
+
+            if (crudPlace instanceof FieldSiteMap.Properties.Building) {
+                switch (crudPlace.getType()) {
+                case editor:
+                    activity = new BuildingEditorActivity(crudPlace);
+                    break;
+                case viewer:
+                    activity = new BuildingViewerActivity(crudPlace);
+                    break;
+                }
+            }
+
         }
 
-        return null;
+        return activity;
     }
 }
