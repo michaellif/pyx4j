@@ -15,10 +15,11 @@ package com.propertyvista.operations.rpc;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
+
+import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 
 public class OperationsSiteMap implements SiteMap {
 
@@ -47,33 +48,33 @@ public class OperationsSiteMap implements SiteMap {
     public static class Management extends AppPlace {
 
         @PlaceProperties(navigLabel = "Property Management Companies (PMCs)")
-        public static class PMC extends CrudAppPlace {
+        public static class PMC extends CrmCrudAppPlace {
         }
 
-        public static class EquifaxApproval extends CrudAppPlace {
+        public static class EquifaxApproval extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Onboarding Users")
-        public static class OnboardingUser extends CrudAppPlace {
+        public static class OnboardingUser extends CrmCrudAppPlace {
         }
 
-        public static class PmcMerchantAccounts extends CrudAppPlace {
+        public static class PmcMerchantAccounts extends CrmCrudAppPlace {
 
         }
 
         @PlaceProperties(navigLabel = "Triggers")
-        public static class Trigger extends CrudAppPlace {
+        public static class Trigger extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Trigger Runs")
-        public static class TriggerRun extends CrudAppPlace {
+        public static class TriggerRun extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Trigger Runs Data")
-        public static class TriggerRunData extends CrudAppPlace {
+        public static class TriggerRunData extends CrmCrudAppPlace {
         }
 
-        public static class BillingSetup extends CrudAppPlace {
+        public static class BillingSetup extends CrmCrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public BillingSetup() {
                 formViewerPlace(new Key(-1));
@@ -84,7 +85,7 @@ public class OperationsSiteMap implements SiteMap {
     public static class Security extends AppPlace {
 
         @PlaceProperties(navigLabel = "Audit Records")
-        public static class AuditRecord extends CrudAppPlace {
+        public static class AuditRecord extends CrmCrudAppPlace {
 
         }
     }
@@ -92,30 +93,30 @@ public class OperationsSiteMap implements SiteMap {
     public static class Legal extends AppPlace {
 
         @PlaceProperties(navigLabel = "Tenant Portal Terms and Conditions", caption = "Tenant Portal Terms and Conditions")
-        public static class PortalTerms extends CrudAppPlace {
+        public static class PortalTerms extends CrmCrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "PMC Terms and Conditions", caption = "PMC Terms and Conditions")
-        public static class PmcTerms extends CrudAppPlace {
+        public static class PmcTerms extends CrmCrudAppPlace {
         }
 
-        public static class PmcCaledonTermsTemplate extends CrudAppPlace {
+        public static class PmcCaledonTermsTemplate extends CrmCrudAppPlace {
         }
 
-        public static class PmcCaldedonSolePropetorshipSectionTerms extends CrudAppPlace {
+        public static class PmcCaldedonSolePropetorshipSectionTerms extends CrmCrudAppPlace {
         }
 
-        public static class PmcPaymentPad extends CrudAppPlace {
+        public static class PmcPaymentPad extends CrmCrudAppPlace {
         }
 
-        public static class TenantSurePreAuthorizedPayments extends CrudAppPlace {
+        public static class TenantSurePreAuthorizedPayments extends CrmCrudAppPlace {
         }
     }
 
     public static class Administration extends AppPlace {
 
         @PlaceProperties(navigLabel = "System Maintenance", caption = "System Maintenance")
-        public static class Maintenance extends CrudAppPlace {
+        public static class Maintenance extends CrmCrudAppPlace {
             // set default place type as Viewer one (we have no lister for this item!)
             public Maintenance() {
                 formViewerPlace(new Key(-1));
@@ -123,7 +124,7 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Simulations")
-        public static class Simulation extends CrudAppPlace {
+        public static class Simulation extends CrmCrudAppPlace {
 
             public Simulation() {
                 formViewerPlace(new Key(-1));
@@ -131,7 +132,7 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(navigLabel = "Users", caption = "User")
-        public static class AdminUsers extends CrudAppPlace {
+        public static class AdminUsers extends CrmCrudAppPlace {
         }
 
         public static class EncryptedStorage extends AppPlace {
@@ -141,34 +142,34 @@ public class OperationsSiteMap implements SiteMap {
 
     public static class Simulation extends AppPlace {
 
-        public static class CardServiceSimulation extends CrudAppPlace {
+        public static class CardServiceSimulation extends CrmCrudAppPlace {
 
-            public static class CardServiceSimulationCard extends CrudAppPlace {
-
-            }
-
-            public static class CardServiceSimulationTransaction extends CrudAppPlace {
+            public static class CardServiceSimulationCard extends CrmCrudAppPlace {
 
             }
 
-            public static class CardServiceSimulationMerchantAccount extends CrudAppPlace {
+            public static class CardServiceSimulationTransaction extends CrmCrudAppPlace {
+
+            }
+
+            public static class CardServiceSimulationMerchantAccount extends CrmCrudAppPlace {
 
             }
         }
 
-        public static class PadSimulation extends CrudAppPlace {
+        public static class PadSimulation extends CrmCrudAppPlace {
 
             @PlaceProperties(navigLabel = "Simulated PAD", caption = "Simulated PAD")
-            public static class PadSimFile extends CrudAppPlace {
+            public static class PadSimFile extends CrmCrudAppPlace {
             }
 
             @PlaceProperties(navigLabel = "PAD Batches", caption = "PAD Batch")
-            public static class PadSimBatch extends CrudAppPlace {
+            public static class PadSimBatch extends CrmCrudAppPlace {
             }
 
         }
 
-        public static class SimulatedDataPreload extends CrudAppPlace {
+        public static class SimulatedDataPreload extends CrmCrudAppPlace {
 
             public SimulatedDataPreload() {
                 formViewerPlace(new Key(-1));
@@ -179,6 +180,6 @@ public class OperationsSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "Accounts")
-    public static class Account extends CrudAppPlace {
+    public static class Account extends CrmCrudAppPlace {
     }
 }
