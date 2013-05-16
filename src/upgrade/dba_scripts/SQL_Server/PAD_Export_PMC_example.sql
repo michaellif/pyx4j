@@ -1,5 +1,5 @@
 -- Change accordingly
-USE sl_0427; 
+USE sl_0427;
 
 SELECT  property_id "Property Code",
         SUNITCODE "Unit",
@@ -12,11 +12,11 @@ SELECT  property_id "Property Code",
         charge_id "Charge Id",
         charge_code "Charge Code",
         pap_applicable "PAP Applicable",
-        estimated_charge "Estimated Charge",     
+        estimated_charge "Estimated Charge",
         percentage "Percentage"
 FROM tenant_EFT_charges
 WHERE property_list like 'cog%'		-- CHANGE HERE !!!!
-order by property_id,lease_id,tenant_id,charge_id,bdefault;
+order by property_id,lease_id,bdefault,tenant_id,charge_id;
 
 
-       
+
