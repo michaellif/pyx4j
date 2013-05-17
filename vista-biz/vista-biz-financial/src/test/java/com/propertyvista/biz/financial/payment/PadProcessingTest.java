@@ -155,7 +155,6 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
 
         advanceSysDate("2011-04-03");
 
-        //TODO
-        // new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
+        new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Cleared);
     }
 }

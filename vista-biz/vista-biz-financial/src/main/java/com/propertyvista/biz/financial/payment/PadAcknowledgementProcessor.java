@@ -110,12 +110,12 @@ class PadAcknowledgementProcessor {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgeProcesed);
+                padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgeReject);
                 Persistence.service().persist(padBatch);
 
                 // mark BatchRecords as AcknowledgeProcesed
                 for (PadDebitRecord debitRecord : padBatch.records()) {
-                    debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeProcesed);
+                    debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeReject);
                     Persistence.service().persist(debitRecord);
                 }
                 return null;

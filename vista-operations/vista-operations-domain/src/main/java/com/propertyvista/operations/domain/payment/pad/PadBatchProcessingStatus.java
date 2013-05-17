@@ -17,6 +17,8 @@ public enum PadBatchProcessingStatus {
 
     AcknowledgedReceived,
 
-    AcknowledgeProcesed
+    AcknowledgeProcesed,
+
+    AcknowledgeReject
 
 }

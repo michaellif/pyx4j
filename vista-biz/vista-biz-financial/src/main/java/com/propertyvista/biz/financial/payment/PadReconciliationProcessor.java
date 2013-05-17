@@ -281,6 +281,7 @@ class PadReconciliationProcessor {
             public PadDebitRecord call() throws Exception {
                 EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
                 criteria.eq(criteria.proto().transactionId(), debitRecord.transactionId());
+                criteria.ne(criteria.proto().processingStatus(), PadDebitRecordProcessingStatus.AcknowledgeReject);
                 criteria.eq(criteria.proto().padBatch().pmc(), pmc);
                 return Persistence.service().retrieve(criteria);
             }
