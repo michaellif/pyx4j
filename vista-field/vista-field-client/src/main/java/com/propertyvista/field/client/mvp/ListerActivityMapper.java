@@ -17,9 +17,6 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.pyx4j.site.rpc.CrudAppPlace;
-import com.pyx4j.site.rpc.CrudAppPlace.Type;
-
 import com.propertyvista.field.client.activity.alerts.AlertDetailsActivity;
 import com.propertyvista.field.client.activity.crud.building.BuildingListerActivity;
 import com.propertyvista.field.client.activity.search.SearchResultsActivity;
@@ -33,7 +30,7 @@ public class ListerActivityMapper implements ActivityMapper {
     @Override
     public Activity getActivity(Place place) {
 
-        if (place instanceof FieldSiteMap.Properties.Building && isListerPlace(place)) {
+        if (place instanceof FieldSiteMap.Properties.Building) {
             return new BuildingListerActivity(place);
         } else if (place instanceof FieldSiteMap.Search) {
             return new SearchResultsActivity();
@@ -42,10 +39,6 @@ public class ListerActivityMapper implements ActivityMapper {
         }
 
         return null;
-    }
-
-    private boolean isListerPlace(Place place) {
-        return place instanceof CrudAppPlace && ((CrudAppPlace) place).getType() == Type.lister;
     }
 
 }

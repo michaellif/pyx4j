@@ -21,10 +21,7 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.field.client.event.ChangeLayoutEvent;
-import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.resources.FieldImages;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.client.ui.decorators.WatermarkDecoratorBuilder;
@@ -42,7 +39,6 @@ public class SearchToolbarViewImpl extends HorizontalPanel implements SearchTool
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.DiscardListerLayout));
                 History.back();
             }
         });
@@ -65,5 +61,4 @@ public class SearchToolbarViewImpl extends HorizontalPanel implements SearchTool
 
         add(container);
     }
-
 }

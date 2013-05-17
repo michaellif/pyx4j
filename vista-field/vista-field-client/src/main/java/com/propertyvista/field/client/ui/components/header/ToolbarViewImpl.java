@@ -21,10 +21,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.PageOrientation;
+import com.pyx4j.site.client.PageOrientation;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.field.client.FieldSite;
 import com.propertyvista.field.client.event.ChangeLayoutEvent;
 import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.event.ListerNavigateEvent;
@@ -43,8 +42,11 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
     private Image contextMenuImage;
 
+    private PageOrientation pageOrientation;
+
     public ToolbarViewImpl() {
         setSize("100%", "100%");
+        pageOrientation = AppSite.initialPageOrientation();
 
         mainToolbar = createMainToolbar();
         navigDetailsToolbar = createNavigDetailsToolbar();
@@ -122,7 +124,6 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
             public void onClick(ClickEvent event) {
                 showNavigationDetails(false);
                 AppSite.getEventBus().fireEvent(new ListerNavigateEvent(NavigateAction.Back));
-                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.CollapseDetails));
             }
         });
 
@@ -170,7 +171,7 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
     @Override
     public void showNavigationDetails(boolean isVisible) {
-        boolean isNavigVisible = isVisible && (PageOrientation.Vertical == FieldSite.getPageOrientation());
+        boolean isNavigVisible = isVisible && (PageOrientation.Vertical == pageOrientation);
 
         navigDetailsToolbar.setVisible(isNavigVisible);
         mainToolbar.setVisible(!isNavigVisible);
@@ -178,7 +179,11 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
     @Override
     public void setContextMenuVisibility() {
-        contextMenuImage.setVisible(PageOrientation.Horizontal == FieldSite.getPageOrientation());
+        contextMenuImage.setVisible(PageOrientation.Horizontal == pageOrientation);
     }
 
+    @Override
+    public void setPageOrientation(PageOrientation pageOrientation) {
+        this.pageOrientation = pageOrientation;
+    }
 }

@@ -17,8 +17,6 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.field.client.event.ChangeLayoutEvent;
-import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.ui.components.search.SearchResultsView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
@@ -33,7 +31,6 @@ public class SearchResultsActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        eventBus.fireEvent(new ChangeLayoutEvent(LayoutAction.SetListerLayout));
     }
 
 }

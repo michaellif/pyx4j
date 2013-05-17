@@ -29,7 +29,6 @@ import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.PageOrientation;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.site.VistaSite;
@@ -100,7 +99,4 @@ public class FieldSite extends VistaSite {
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
     }
 
-    public static PageOrientation getPageOrientation() {
-        return PageOrientation.Vertical;
-    }
 }

@@ -19,30 +19,46 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.PageOrientation;
+import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
+import com.propertyvista.common.client.events.ChangePageOrientationEvent;
+import com.propertyvista.common.client.events.ChangePageOrientationHandler;
 import com.propertyvista.field.client.event.ChangeHeaderEvent;
 import com.propertyvista.field.client.event.ChangeHeaderHandler;
 import com.propertyvista.field.client.event.HeaderAction;
 import com.propertyvista.field.client.ui.components.header.ToolbarView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class ToolbarActivity extends AbstractActivity implements ChangeHeaderHandler {
+public class ToolbarActivity extends AbstractActivity implements ChangeHeaderHandler, ChangePageOrientationHandler {
 
     private final ToolbarView view;
 
     public ToolbarActivity(Place place) {
         view = FieldViewFactory.instance(ToolbarView.class);
-        AppSite.getEventBus().addHandler(ChangeHeaderEvent.getType(), this);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        eventBus.addHandler(ChangeHeaderEvent.getType(), this);
+        eventBus.addHandler(ChangePageOrientationEvent.getType(), this);
     }
 
     @Override
     public void onChangeHeader(ChangeHeaderEvent event) {
         view.showNavigationDetails(event.getAction() == HeaderAction.ShowNavigDetails);
+    }
+
+    @Override
+    public void onChangePageOrientation(ChangePageOrientationEvent event) {
+        view.setPageOrientation(event.getPageOrientation());
+        view.showNavigationDetails(isViewerPlace(AppSite.getWhere()) && event.getPageOrientation() == PageOrientation.Vertical);
+    }
+
+    private static boolean isViewerPlace(Place place) {
+        return place instanceof CrudAppPlace && ((CrudAppPlace) place).getType() == Type.viewer;
     }
 
 }
