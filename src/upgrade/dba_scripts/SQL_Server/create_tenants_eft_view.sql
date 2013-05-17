@@ -9,7 +9,7 @@
 **/
 
 -- Adjust for the database in use
-USE sl_0427;
+USE sl_0422;
 
 DROP VIEW tenant_EFT_charges;
 
@@ -17,7 +17,8 @@ CREATE VIEW tenant_EFT_charges AS
 (SELECT	        ct.SCODE AS charge_code,
                 c.hmy AS charge_id,
                 CASE WHEN ISNULL(c.BACH,-1) = -1  THEN 'true' ELSE 'false' END AS pap_applicable,
-                CASE WHEN ISNULL(e.bRecur,-1) = -1) THEN 'true' ELSE 'false' END AS recurring_eft,
+                CASE WHEN ISNULL(e.bRecur,-1) = -1 THEN 'true' ELSE 'false' END AS recurring_eft,
+                CASE WHEN ISNULL(t.bach,0) = -1 THEN 'true' ELSE 'false' END AS tenant_eft,
 		CAST(c.destimated AS NUMERIC(18,2)) AS estimated_charge,
 		ISNULL(CAST(a.dPercentAllocated AS VARCHAR(50)),'') AS percentage,
 		t.SCODE AS lease_id,
@@ -54,4 +55,5 @@ AND		ts.status IN ('Current','Notice')
 AND		pl.SADDR1 LIKE '%Vista%'
 AND		e.SACCT NOT IN ('0','1') 
 );
+
 
