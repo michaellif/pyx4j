@@ -16,8 +16,9 @@ package com.propertyvista.yardi;
 import org.junit.Test;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiImportTest extends YardiTestBase {
@@ -25,7 +26,19 @@ public class YardiImportTest extends YardiTestBase {
     @Test
     public void testImport() throws Exception {
         preloadData();
-        PmcYardiCredential yardiCredential = VistaDeployment.getPmcYardiCredential();
-        YardiResidentTransactionsService.getInstance().updateAll(yardiCredential, new ExecutionMonitor());
+        String propertyCode = "prop123";
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
+
+        Building building = getBuilding(propertyCode);
+        assertEquals(propertyCode, building.propertyCode().getValue());
+
+        AptUnit unit = getUnit(building, "0111");
+        assertNotNull(unit);
+
+        Lease lease = getCurrentLease(unit);
+        assertNotNull(lease);
+
+        System.out.println(lease);
+
     }
 }

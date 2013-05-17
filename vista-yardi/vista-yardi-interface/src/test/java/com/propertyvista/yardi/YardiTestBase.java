@@ -18,9 +18,18 @@ import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
@@ -52,10 +61,12 @@ public class YardiTestBase extends IntegrationTestBase {
 
     }
 
+    @Override
     protected void preloadData() {
         preloadData(new MockConfig());
     }
 
+    @Override
     protected void preloadData(final MockConfig config) {
 
         config.yardiIntegration = true;
@@ -76,6 +87,7 @@ public class YardiTestBase extends IntegrationTestBase {
 
     }
 
+    @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
@@ -87,6 +99,34 @@ public class YardiTestBase extends IntegrationTestBase {
         models.add(PADPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
         return models;
+    }
+
+    protected Building getBuilding(String propertyCode) {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().propertyCode(), propertyCode));
+        return Persistence.service().retrieve(criteria);
+    }
+
+    protected AptUnit getUnit(Building building, String unitId) {
+        EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
+        criteria.add(PropertyCriterion.eq(criteria.proto().info().number(), unitId));
+        return Persistence.service().retrieve(criteria);
+    }
+
+    protected Lease getCurrentLease(AptUnit unit) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), unit));
+        criteria.add(PropertyCriterion.eq(criteria.proto().status(), Status.Active));
+        return Persistence.service().retrieve(criteria);
+    }
+
+    protected PmcYardiCredential getYardiCredential(String propertyCode) {
+        PmcYardiCredential credential = EntityFactory.create(PmcYardiCredential.class);
+
+        credential.propertyCode().setValue(propertyCode);
+
+        return credential;
     }
 
 }

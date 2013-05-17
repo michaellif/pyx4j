@@ -48,10 +48,13 @@ public class PropertyManager {
 
     private final ResidentTransactions transactions;
 
+    private final ResidentTransactions leaseCharges;
+
     public PropertyManager(String propertyId) {
         this.propertyId = propertyId;
         property = new Property();
         transactions = new ResidentTransactions();
+        leaseCharges = new ResidentTransactions();
 
         com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
 
@@ -73,99 +76,120 @@ public class PropertyManager {
             rtProperty.getPropertyID().add(propertyID);
         }
 
-        //=========== <RT_Customer> ===========
+        transactions.getProperty().add(rtProperty);
+
+        addRtCustomer("t000111");
+        addTransactionCharge("t000111");
+        addLeaseCharge("t000111");
+    }
+
+    public void addRtCustomer(String customerID) {
+        RTCustomer rtCustomer = new RTCustomer();
+        rtCustomer.setCustomerID(customerID);
+
+        YardiCustomers customers = new YardiCustomers();
+        rtCustomer.setCustomers(customers);
+        rtCustomer.setPaymentAccepted("0");
+
         {
-            RTCustomer rtCustomer = new RTCustomer();
-            rtCustomer.setCustomerID("t000111");
+            YardiCustomer customer = new YardiCustomer();
+            customer.setType(Customerinfo.CURRENT_RESIDENT);
+            customer.setCustomerID(customerID);
+            Name name = new Name();
+            name.setFirstName("John");
+            name.setLastName("Smith");
+            customer.setName(name);
 
-            YardiCustomers customers = new YardiCustomers();
-            rtCustomer.setCustomers(customers);
-            rtCustomer.setPaymentAccepted("0");
+            YardiLease lease = new YardiLease();
+            lease.setCurrentRent(new BigDecimal("1234.56"));
+            lease.setLeaseFromDate(DateUtils.detectDateformat("01-Jun-2012"));
+            lease.setLeaseToDate(DateUtils.detectDateformat("31-Jul-2014"));
+            lease.setResponsibleForLease(true);
+            customer.setLease(lease);
 
-            {
-                YardiCustomer customer = new YardiCustomer();
-                customer.setType(Customerinfo.CURRENT_RESIDENT);
-                customer.setCustomerID("t000111");
-                Name name = new Name();
-                name.setFirstName("John");
-                name.setLastName("Smith");
-                customer.setName(name);
-
-                YardiLease lease = new YardiLease();
-                lease.setCurrentRent(new BigDecimal("1234.56"));
-                lease.setLeaseFromDate(DateUtils.detectDateformat("01-Jun-2012"));
-                lease.setLeaseToDate(DateUtils.detectDateformat("31-Jul-2014"));
-                lease.setResponsibleForLease(true);
-                customer.setLease(lease);
-
-                customers.getCustomer().add(customer);
-            }
-
-            {
-                YardiCustomer customer = new YardiCustomer();
-                customer.setType(Customerinfo.CUSTOMER);
-                customer.setCustomerID("r000222");
-                Name name = new Name();
-                name.setFirstName("Jane");
-                name.setLastName("Smith");
-                customer.setName(name);
-
-                YardiLease lease = new YardiLease();
-                lease.setResponsibleForLease(true);
-                customer.setLease(lease);
-
-                customers.getCustomer().add(customer);
-            }
-
-            //=========== <RT_Unit> ===========
-            {
-
-                RTUnit rtunit = new RTUnit();
-                rtunit.setUnitID("00101");
-
-                Unit unit = new Unit();
-                Information info = new Information();
-                info.setUnitID("00101");
-                info.setUnitType("2bdrm");
-                info.setUnitBedrooms(new BigDecimal("2"));
-                info.setUnitBathrooms(new BigDecimal("1"));
-                info.setUnitRent(new BigDecimal("1300.00"));
-                unit.getInformation().add(info);
-                info.setFloorPlanID("2bdrm");
-                info.setFloorplanName("2 Bedroom");
-                rtunit.setUnit(unit);
-
-                rtCustomer.setRTUnit(rtunit);
-            }
-
-            //=========== <RTServiceTransactions> ===========
-            {
-                RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
-                Transactions transactions = new Transactions();
-                rtServiceTransactions.getTransactions().add(transactions);
-                Charge charge = new Charge();
-                transactions.setCharge(charge);
-                ChargeDetail detail = new ChargeDetail();
-                detail.setDescription("Rent");
-                detail.setTransactionDate(DateUtils.detectDateformat("01-May-2013"));
-                detail.setTransactionID("700324302");
-                detail.setChargeCode("rrent");
-                detail.setGLAccountNumber("40000301");
-                detail.setCustomerID("t000111");
-                detail.setUnitID("00101");
-                detail.setAmountPaid("1.00");
-                detail.setBalanceDue("1234.56");
-                detail.setAmount("1234.56");
-                detail.setComment("Rent (05/2013)");
-                charge.setDetail(detail);
-
-                rtCustomer.setRTServiceTransactions(rtServiceTransactions);
-            }
-
-            rtProperty.getRTCustomer().add(rtCustomer);
+            customers.getCustomer().add(customer);
         }
 
-        transactions.getProperty().add(rtProperty);
+        {
+            YardiCustomer customer = new YardiCustomer();
+            customer.setType(Customerinfo.CUSTOMER);
+            customer.setCustomerID("r" + customerID.substring(1));
+            Name name = new Name();
+            name.setFirstName("Jane");
+            name.setLastName("Smith");
+            customer.setName(name);
+
+            YardiLease lease = new YardiLease();
+            lease.setResponsibleForLease(true);
+            customer.setLease(lease);
+
+            customers.getCustomer().add(customer);
+        }
+
+        //=========== <RT_Unit> ===========
+        {
+
+            RTUnit rtunit = new RTUnit();
+            rtunit.setUnitID(customerID.substring(3));
+
+            Unit unit = new Unit();
+            Information info = new Information();
+            info.setUnitID(rtunit.getUnitID());
+            info.setUnitType("2bdrm");
+            info.setUnitBedrooms(new BigDecimal("2"));
+            info.setUnitBathrooms(new BigDecimal("1"));
+            info.setUnitRent(new BigDecimal("1300.00"));
+            unit.getInformation().add(info);
+            info.setFloorPlanID("2bdrm");
+            info.setFloorplanName("2 Bedroom");
+            rtunit.setUnit(unit);
+
+            rtCustomer.setRTUnit(rtunit);
+        }
+
+        transactions.getProperty().get(0).getRTCustomer().add(rtCustomer);
+    }
+
+    private void addTransactionCharge(String customerID) {
+        RTCustomer rtCustomer = null;
+        for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
+            if (customer.getCustomerID() == customerID) {
+                rtCustomer = customer;
+            }
+        }
+
+        if (rtCustomer == null) {
+            throw new Error("Customer with id " + customerID + " is not found.");
+        }
+
+        //=========== <RTServiceTransactions> ===========
+        {
+            RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
+            Transactions transactions = new Transactions();
+            rtServiceTransactions.getTransactions().add(transactions);
+            Charge charge = new Charge();
+            transactions.setCharge(charge);
+            ChargeDetail detail = new ChargeDetail();
+            detail.setDescription("Rent");
+            detail.setTransactionDate(DateUtils.detectDateformat("01-May-2013"));
+            detail.setTransactionID("700324302");
+            detail.setChargeCode("rrent");
+            detail.setGLAccountNumber("40000301");
+            detail.setCustomerID("t000111");
+            detail.setUnitID(rtCustomer.getRTUnit().getUnitID());
+            detail.setAmountPaid("1.00");
+            detail.setBalanceDue("1234.56");
+            detail.setAmount("1234.56");
+            detail.setComment("Rent (05/2013)");
+            charge.setDetail(detail);
+
+            rtCustomer.setRTServiceTransactions(rtServiceTransactions);
+        }
+
+    }
+
+    private void addLeaseCharge(String customerID) {
+
     }
 
     public ResidentTransactions getAllResidentTransactions() {
@@ -177,11 +201,19 @@ public class PropertyManager {
     }
 
     public ResidentTransactions getResidentTransactionsForTenant(String tenantId) {
-        return transactions;
+        return null;
     }
 
     public ResidentTransactions getAllLeaseCharges() {
-        // TODO Auto-generated method stub
+        try {
+            return (ResidentTransactions) SerializationUtils.clone(leaseCharges);
+        } catch (Exception e) {
+            throw new Error(e);
+        }
+    }
+
+    public ResidentTransactions getLeaseChargesForTenant(String tenantId) {
         return null;
     }
+
 }
