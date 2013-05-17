@@ -20,6 +20,8 @@ import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -75,9 +77,11 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
 
     private final Class<Data> dataClass;
 
-    private FlowPanel titlePanel;
+    private SimplePanel mainTitlePanel;
 
-    private HTML title;
+    private FlowPanel detailsTitlePanel;
+
+    private HTML detailsTitle;
 
     private final ZoomableViewForm<Data> summaryForm;
 
@@ -127,7 +131,7 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
                 String activeDetails = activeDetails();
                 boolean isZoomInModeActive = activeDetails != null;
                 CounterGadgetInstanceBase.this.summaryForm.setVisible(!isZoomInModeActive);
-                CounterGadgetInstanceBase.this.titlePanel.setVisible(isZoomInModeActive);
+                CounterGadgetInstanceBase.this.detailsTitlePanel.setVisible(isZoomInModeActive);
                 CounterGadgetInstanceBase.this.detailsPanel.setVisible(isZoomInModeActive);
 
                 if (!isZoomInModeActive) {
@@ -141,10 +145,12 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
                 } else {
                     String currentDetailsCaption = EntityFactory.getEntityPrototype(CounterGadgetInstanceBase.this.dataClass)
                             .getMember(new Path(activeDetails)).getMeta().getCaption();
-                    title.setHTML(new SafeHtmlBuilder().appendEscaped(currentDetailsCaption).toSafeHtml());
+                    detailsTitle.setHTML(new SafeHtmlBuilder().appendEscaped(currentDetailsCaption).toSafeHtml());
                     detailsPanel.setWidget(detailsFactories.get(activeDetails).createDetailsWidget());
                     populateSucceded();
                 }
+
+                mainTitlePanel.setWidget(renderTitle());
             }
 
         });
@@ -203,8 +209,13 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         FlowPanel content = new FlowPanel();
         content.setWidth("100%");
 
-        titlePanel = new FlowPanel();
-        titlePanel.setWidth("100%");
+        mainTitlePanel = new SimplePanel();
+        mainTitlePanel.setWidth("100%");
+        content.add(mainTitlePanel);
+
+        detailsTitlePanel = new FlowPanel();
+        detailsTitlePanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        detailsTitlePanel.setWidth("100%");
 
         Button returnButton = new Button(i18n.tr("return to summary"), new Command() {
             @Override
@@ -212,18 +223,22 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
                 switchToDisplayMode(null);
             }
         });
-        returnButton.getElement().getStyle().setFloat(Float.LEFT);
-        returnButton.getElement().getStyle().setMarginRight(2, Unit.EM);
-        titlePanel.add(returnButton);
+        returnButton.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        returnButton.getElement().getStyle().setLeft(0, Unit.PX);
+        returnButton.getElement().getStyle().setWidth(150, Unit.PX);
+        returnButton.getElement().getStyle().setTop(0, Unit.PX);
+        detailsTitlePanel.add(returnButton);
 
-        title = new HTML();
-        title.setStyleName(StyleNames.CounterGadgetCaption.name());
-        title.getElement().getStyle().setDisplay(Display.INLINE);
-        title.getElement().getStyle().setFloat(Float.LEFT);
+        detailsTitle = new HTML();
+        detailsTitle.setStyleName(StyleNames.CounterGadgetCaption.name());
+        detailsTitle.getElement().getStyle().setDisplay(Display.INLINE);
+        detailsTitle.getElement().getStyle().setFloat(Float.LEFT);
+        detailsTitle.getElement().getStyle().setWidth(100, Unit.PCT);
+        detailsTitle.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        titlePanel.add(title);
+        detailsTitlePanel.add(detailsTitle);
 
-        content.add(titlePanel);
+        content.add(detailsTitlePanel);
 
         summaryForm.asWidget().getElement().getStyle().setProperty("clear", "both");
         content.add(summaryForm);
@@ -233,6 +248,10 @@ public abstract class CounterGadgetInstanceBase<Data extends IEntity, Query, Gad
         content.add(detailsPanel);
 
         return content;
+    }
+
+    protected Widget renderTitle() {
+        return null;
     }
 
     protected abstract Query makeSummaryQuery();

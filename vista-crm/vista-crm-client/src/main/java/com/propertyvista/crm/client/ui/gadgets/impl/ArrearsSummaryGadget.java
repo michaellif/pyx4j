@@ -15,11 +15,14 @@ package com.propertyvista.crm.client.ui.gadgets.impl;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
@@ -34,6 +37,8 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 
 public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, ArrearsGadgetQueryDataDTO, ArrearsSummaryGadgetMetadata> {
+
+    private final static I18n i18n = I18n.get(ArrearsSummaryGadget.class);
 
     ICriteriaProvider<DelinquentLeaseDTO, CounterGadgetFilter> criteriaProvider;
 
@@ -72,6 +77,12 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
         bind(proto().outstanding91andMoreDaysCount());
         bind(proto().delinquentLeases());
         bind(proto().buckets().totalBalance());
+    }
+
+    @Override
+    protected Widget renderTitle() {
+        Label title = new Label(i18n.tr("Arrears as of {0,date,short}", makeSummaryQuery().asOf().getValue()));
+        return title;
     }
 
     private void bind(final IObject<?> member) {

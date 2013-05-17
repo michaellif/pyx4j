@@ -14,13 +14,11 @@
 package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
@@ -30,15 +28,8 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
 
     private static final I18n i18n = I18n.get(ArrearsGadgetSummaryForm.class);
 
-    private final NumberFormat currencyFormat;
-
-    public ArrearsGadgetSummaryForm(NumberFormat currencyFormat) {
-        super(ArrearsGadgetDataDTO.class);
-        this.currencyFormat = currencyFormat;
-    }
-
     public ArrearsGadgetSummaryForm() {
-        this(NumberFormat.getFormat(CMoneyField.symbol + "#,##0.00"));
+        super(ArrearsGadgetDataDTO.class);
     }
 
     @Override
