@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.yardi.maintenance;
+package com.propertyvista.yardi.services;
 
 import java.io.IOException;
 

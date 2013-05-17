@@ -40,6 +40,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
+import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 
 @Ignore
