@@ -20,47 +20,17 @@
  */
 package com.pyx4j.server.contexts;
 
+import com.pyx4j.commons.UserAgentDetection;
+
 public class UserAgentInfo {
 
-    public static final UserAgenDetection get() {
-        UserAgenDetection d = (UserAgenDetection) Context.getRequest().getAttribute(UserAgenDetection.class.getName());
+    public static final UserAgentDetection get() {
+        UserAgentDetection d = (UserAgentDetection) Context.getRequest().getAttribute(UserAgentDetection.class.getName());
         if (d == null) {
-            d = new UserAgenDetection(Context.getRequestHeader("User-Agent"));
-            Context.getRequest().setAttribute(UserAgenDetection.class.getName(), d);
+            d = new UserAgentDetection(Context.getRequestHeader("User-Agent"));
+            Context.getRequest().setAttribute(UserAgentDetection.class.getName(), d);
         }
         return d;
-    }
-
-    public static class UserAgenDetection {
-
-        private boolean appleWebKit;
-
-        private boolean iPad;
-
-        private boolean mobile;
-
-        protected UserAgenDetection(String userAgent) {
-            if (userAgent != null) {
-                appleWebKit = userAgent.contains("AppleWebKit");
-                mobile = userAgent.contains("Mobile");
-                if (appleWebKit) {
-                    iPad = userAgent.contains("iPad");
-                }
-            }
-        }
-
-        public final boolean isIPad() {
-            return iPad;
-        }
-
-        public final boolean isWebKit() {
-            return appleWebKit;
-        }
-
-        public final boolean isMobile() {
-            return mobile;
-        }
-
     }
 
 }

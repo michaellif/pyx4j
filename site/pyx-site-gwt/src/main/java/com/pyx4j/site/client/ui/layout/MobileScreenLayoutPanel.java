@@ -24,14 +24,18 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.layout.client.Layout;
 import com.google.gwt.layout.client.Layout.Layer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.site.client.PageOrientation;
 
 public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
+
+    public static final int MOBILE_SCREEN_WIDTH = 640;
 
     private static final int ANIMATION_TIME = 500;
 
@@ -105,6 +109,10 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
         forceLayout(0);
     }
 
+    public void forceAnimatedLayout() {
+        forceLayout(ANIMATION_TIME);
+    }
+
     public void forceLayout(int duration) {
         doLayout();
         layout.layout(duration);
@@ -119,19 +127,28 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
 
         headerLayer.setTopHeight(0.0, Unit.PCT, 10.0, Unit.PCT);
 
-        double widthLister = showDetailsDisplay() ? 50.0 : 100.0;
-        double widthDetails = 100.0 - widthLister;
+        double widthLister = listerLayout ? Window.getClientWidth() : MOBILE_SCREEN_WIDTH;
+
+        double delta = Window.getClientWidth() - MOBILE_SCREEN_WIDTH;
+        double widthDetails = delta > 0 && showDetailsDisplay() ? delta : 0.0;
         if (expandDetails) {
             widthLister = 0.0;
-            widthDetails = 100.0;
+            widthDetails = Window.getClientWidth();
         }
 
         listerLayer.setTopBottom(10.0, Unit.PCT, 0.0, Unit.PCT);
-        listerLayer.setLeftWidth(0.0, Unit.PCT, widthLister, Unit.PCT);
+        listerLayer.setLeftWidth(0.0, Unit.PCT, widthLister, Unit.PX);
 
         detailsLayer.setTopBottom(10.0, Unit.PCT, 0.0, Unit.PCT);
-        detailsLayer.setRightWidth(0.0, Unit.PCT, widthDetails, Unit.PCT);
+        detailsLayer.setRightWidth(0.0, Unit.PCT, widthDetails, Unit.PX);
         detailsDisplay.setVisible(showDetailsDisplay() || expandDetails);
+
+        resetParameters();
+    }
+
+    private void resetParameters() {
+        this.expandDetails = false;
+        this.listerLayout = false;
     }
 
     private boolean showDetailsDisplay() {
@@ -149,7 +166,10 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
 
     public void setPageOrientation(PageOrientation pageOrientation) {
         this.pageOrientation = pageOrientation;
-        forceLayout();
+    }
+
+    public PageOrientation getPageOrientation() {
+        return pageOrientation;
     }
 
     public void setListerLayout(boolean listerLayout) {

@@ -40,6 +40,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.UIObject;
 
+import com.pyx4j.commons.UserAgentDetection;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.client.ClientEntityFactory;
 import com.pyx4j.gwt.commons.BrowserType;
@@ -72,6 +73,8 @@ public abstract class AppSite implements EntryPoint {
     private RootPane<?> rootPane;
 
     public final long applicationStartTime = System.currentTimeMillis();
+
+    private final UserAgentDetection userAgentDetection;
 
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
         this.appId = appId;
@@ -114,6 +117,8 @@ public abstract class AppSite implements EntryPoint {
         historyMapper = new AppPlaceHistoryMapper(siteMapClass);
         historyHandler = new AppPlaceHistoryHandler(historyMapper);
         placeController = new AppPlaceContorller(ClientEventBus.instance, dispatcher);
+
+        userAgentDetection = new UserAgentDetection(Window.Navigator.getUserAgent());
     }
 
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass) {
@@ -181,6 +186,14 @@ public abstract class AppSite implements EntryPoint {
 
     public static String getPlaceId(Place place) {
         return instance().historyMapper.getPlaceId(place);
+    }
+
+    public static UserAgentDetection getUserAgentDetection() {
+        return instance().userAgentDetection;
+    }
+
+    public static PageOrientation initialPageOrientation() {
+        return instance().userAgentDetection.isMobile() ? PageOrientation.Vertical : PageOrientation.Horizontal;
     }
 
     public abstract void onSiteLoad();

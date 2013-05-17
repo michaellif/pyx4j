@@ -33,6 +33,8 @@ import com.pyx4j.site.client.DisplayPanel;
 
 public class MobileLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
+    public static final int MOBILE_SCREEN_THRESHOLD = 640;
+
     private static final int ANIMATION_TIME = 500;
 
     private final Layout layout;
@@ -159,7 +161,6 @@ public class MobileLayoutPanel extends ComplexPanel implements RequiresResize, P
 
         alertsInfoLayer.setBottomHeight(0.0, Unit.PX, 50.0, Unit.PX);
         alertsInfoLayer.setRightWidth(0.0, Unit.PX, 50.0, Unit.PX);
-        alertsInfoDisplay.setVisible(alertsInfoVisible);
 
         if (shiftMenu) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
@@ -184,6 +185,7 @@ public class MobileLayoutPanel extends ComplexPanel implements RequiresResize, P
 
     public void showApplicationContent() {
         screenDisplay.setWidget(screenContent);
+        screenContent.forceLayout();
         forceLayout();
     }
 
@@ -199,20 +201,14 @@ public class MobileLayoutPanel extends ComplexPanel implements RequiresResize, P
 
     public void showAlerts(boolean visible) {
         this.alertsInfoVisible = visible;
-        forceLayout();
+        alertsInfoDisplay.setVisible(alertsInfoVisible);
     }
 
-    public void setListerLayout(boolean listerLayout) {
-        screenContent.setListerLayout(listerLayout);
-        alertsInfoDisplay.setVisible(!listerLayout && alertsInfoVisible);
+    public MobileScreenLayoutPanel screenContent() {
+        return screenContent;
     }
 
-    public void setPageOrientation(PageOrientation pageOrientation) {
-        screenContent.setPageOrientation(pageOrientation);
+    public void allowAlertInfo(boolean isAllowable) {
+        alertsInfoDisplay.setVisible(isAllowable && alertsInfoVisible);
     }
-
-    public void expandDetails(boolean expandDetails) {
-        screenContent.expandDetails(expandDetails);
-    }
-
 }

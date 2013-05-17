@@ -35,9 +35,11 @@ public class MobileScreenLayoutPanelTheme extends Theme {
     public MobileScreenLayoutPanelTheme() {
 
         Style style = new Style(".", StyleName.Lister.name());
+        style.addProperty("background-color", "white");
         addStyle(style);
 
         style = new Style(".", StyleName.Details.name());
+        style.addProperty("background-color", "white");
         addStyle(style);
 
     }

@@ -18,7 +18,7 @@
  * @author Mykola
  * @version $Id$
  */
-package com.pyx4j.site.client.ui.layout;
+package com.pyx4j.site.client;
 
 public enum PageOrientation {
     Vertical, Horizontal;
