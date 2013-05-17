@@ -33,176 +33,147 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
 
     @Override
     public Lease create(Status status) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().create(status);
     }
 
     @Override
     public Lease init(Lease lease) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().init(lease);
     }
 
     @Override
     public Lease setUnit(Lease lease, AptUnit unitId) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().setUnit(lease, unitId);
     }
 
     @Override
     public Lease setService(Lease lease, ProductItem serviceId) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().setService(lease, serviceId);
     }
 
     @Override
     public Lease persist(Lease lease) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().persist(lease);
     }
 
     @Override
     public Lease finalize(Lease lease) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().finalize(lease);
     }
 
     @Override
     public Lease load(Lease leaseId, boolean forEdit) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().load(leaseId, forEdit);
     }
 
     @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().setUnit(leaseTerm, unitId);
     }
 
     @Override
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().setService(leaseTerm, serviceId);
     }
 
     @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().persist(leaseTerm);
     }
 
     @Override
     public LeaseTerm finalize(LeaseTerm leaseTerm) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().finalize(leaseTerm);
     }
 
     @Override
     public void createMasterOnlineApplication(Lease leaseId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().createMasterOnlineApplication(leaseId);
     }
 
     @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().declineApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().cancelApplication(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().approve(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void activate(Lease leaseId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().activate(leaseId);
     }
 
     @Override
     public void renew(Lease leaseId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().renew(leaseId);
     }
 
     @Override
     public void complete(Lease leaseId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().complete(leaseId);
     }
 
     @Override
     public void close(Lease leaseId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().close(leaseId);
     }
 
     @Override
     public LeaseTerm createOffer(Lease leaseId, Type type) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().createOffer(leaseId, type);
     }
 
     @Override
     public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().acceptOffer(leaseId, leaseTermId);
     }
 
     @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate, LogicalDate leaseEndDate) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().createCompletionEvent(leaseId, completionType, eventDate, moveOutDate, leaseEndDate);
     }
 
     @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().cancelCompletionEvent(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().cancelLease(leaseId, decidedBy, decisionReason);
     }
 
     @Override
     public void moveOut(Lease leaseId) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().moveOut(leaseId);
     }
 
     @Override
     public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
-        // TODO Auto-generated method stub
-        return null;
+        return new LeaseYardiManager().createBillableItem(lease, itemId, node);
     }
 
     @Override
     public void updateLeaseDates(Lease lease) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().updateLeaseDates(lease);
     }
 
     @Override
     public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().setLeaseAgreedPrice(lease, price);
     }
 
     @Override
     public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
-        // TODO Auto-generated method stub
-
+        new LeaseYardiManager().simpleLeaseRenew(leaseId, leaseEndDate);
     }
 
 }
