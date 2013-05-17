@@ -15,8 +15,8 @@ package com.propertyvista.biz.financial.payment;
 
 import org.junit.experimental.categories.Category;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category({ FunctionalTests.class })
 public class PaymentMethodPersistenceEcheckTest extends PaymentMethodPersistenceTestBase {

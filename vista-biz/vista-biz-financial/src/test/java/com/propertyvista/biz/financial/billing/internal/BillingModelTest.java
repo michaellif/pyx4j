@@ -21,10 +21,10 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.xml.XMLEntitySchemaWriter;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
 public class BillingModelTest extends VistaDBTestBase {

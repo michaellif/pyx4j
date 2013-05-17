@@ -21,7 +21,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.PaymentRecord;
 

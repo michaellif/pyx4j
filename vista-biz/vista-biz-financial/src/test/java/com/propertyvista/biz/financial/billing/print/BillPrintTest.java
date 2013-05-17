@@ -21,7 +21,6 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
@@ -39,6 +38,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge.ProductTy
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment.ExecutionType;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
 public class BillPrintTest extends LeaseFinancialTestBase {

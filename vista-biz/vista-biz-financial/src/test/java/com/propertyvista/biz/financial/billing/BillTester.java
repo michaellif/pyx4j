@@ -15,10 +15,10 @@ package com.propertyvista.biz.financial.billing;
 
 import java.math.BigDecimal;
 
-import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
+import com.propertyvista.test.integration.Tester;
 
 public class BillTester extends Tester {
 

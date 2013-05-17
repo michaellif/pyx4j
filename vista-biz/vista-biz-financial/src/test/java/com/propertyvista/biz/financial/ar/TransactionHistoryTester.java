@@ -19,7 +19,6 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.InternalBillingAccount;
@@ -27,6 +26,7 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.dto.TransactionHistoryDTO;
+import com.propertyvista.test.integration.Tester;
 
 public class TransactionHistoryTester extends Tester {
 

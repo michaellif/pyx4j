@@ -65,8 +65,7 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+        return YardiMockServer.instance().getAllLeaseCharges(propertyId);
     }
 
     @Override

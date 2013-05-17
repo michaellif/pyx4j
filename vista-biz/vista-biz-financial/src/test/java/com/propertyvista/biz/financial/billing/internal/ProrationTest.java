@@ -18,11 +18,11 @@ import java.text.ParseException;
 
 import org.junit.experimental.categories.Category;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.ProrationUtils;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.portal.rpc.shared.BillingException;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
 public class ProrationTest extends LeaseFinancialTestBase {

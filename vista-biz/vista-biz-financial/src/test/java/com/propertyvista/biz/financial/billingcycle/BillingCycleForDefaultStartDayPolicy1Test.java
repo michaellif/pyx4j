@@ -17,9 +17,9 @@ import java.text.ParseException;
 
 import org.junit.experimental.categories.Category;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.test.mock.MockConfig;
 
 @Category(FunctionalTests.class)

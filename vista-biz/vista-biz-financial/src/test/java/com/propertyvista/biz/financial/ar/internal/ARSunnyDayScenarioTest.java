@@ -26,12 +26,12 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @Category(RegressionTests.class)
 public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {

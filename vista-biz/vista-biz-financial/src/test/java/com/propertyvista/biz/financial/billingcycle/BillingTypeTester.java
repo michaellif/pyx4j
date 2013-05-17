@@ -13,10 +13,10 @@
  */
 package com.propertyvista.biz.financial.billingcycle;
 
-import com.propertyvista.biz.financial.Tester;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.test.integration.Tester;
 
 public class BillingTypeTester extends Tester {
 

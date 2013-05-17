@@ -18,7 +18,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.biz.financial;
+package com.propertyvista.test.integration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,10 +40,10 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.TaskScheduler.Schedule;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.test.integration.IntegrationTestBase.TaskScheduler.Schedule;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;

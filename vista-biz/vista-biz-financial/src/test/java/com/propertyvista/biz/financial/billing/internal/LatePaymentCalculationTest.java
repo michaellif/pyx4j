@@ -19,12 +19,12 @@ import org.junit.experimental.categories.Category;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.FunctionalTests;
 import com.propertyvista.biz.financial.billing.internal.LatePaymentUtils;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.BaseFeeType;
 import com.propertyvista.domain.policy.policies.domain.LateFeeItem.MaxTotalFeeType;
+import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
 public class LatePaymentCalculationTest extends VistaDBTestBase {

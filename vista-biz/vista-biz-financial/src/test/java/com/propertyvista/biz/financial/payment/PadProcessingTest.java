@@ -21,7 +21,6 @@ import org.junit.experimental.categories.Category;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.biz.financial.IntegrationTestBase.RegressionTests;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade_TEMP;
@@ -39,6 +38,7 @@ import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
 import com.propertyvista.payment.pad.mock.ScheduledResponseAckMerchant;
 import com.propertyvista.payment.pad.mock.ScheduledResponseAckTransaction;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.test.mock.models.CustomerDataModel;

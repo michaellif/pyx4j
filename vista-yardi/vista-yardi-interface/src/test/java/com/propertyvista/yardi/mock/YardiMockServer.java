@@ -25,14 +25,17 @@ public class YardiMockServer {
 
     private static final Logger log = LoggerFactory.getLogger(YardiMockServer.class);
 
+    static final ThreadLocal<YardiMockServer> threadLocalContext = new ThreadLocal<YardiMockServer>() {
+        @Override
+        protected YardiMockServer initialValue() {
+            return new YardiMockServer();
+        }
+    };
+
     private final Map<String, PropertyManager> propertyManagers;
 
-    private static class SingletonHolder {
-        public static final YardiMockServer INSTANCE = new YardiMockServer();
-    }
-
     public static YardiMockServer instance() {
-        return SingletonHolder.INSTANCE;
+        return threadLocalContext.get();
     }
 
     private YardiMockServer() {
@@ -46,8 +49,16 @@ public class YardiMockServer {
         return propertyManagers.get(propertyId).getAllResidentTransactions();
     }
 
+    public ResidentTransactions getAllLeaseCharges(String propertyId) {
+        if (!propertyManagers.containsKey(propertyId)) {
+            throw new Error(propertyId + " not found");
+        }
+        return propertyManagers.get(propertyId).getAllLeaseCharges();
+    }
+
     private PropertyManager createProperty(String propertyId) {
         PropertyManager propertyManager = new PropertyManager(propertyId);
         return propertyManager;
     }
+
 }
