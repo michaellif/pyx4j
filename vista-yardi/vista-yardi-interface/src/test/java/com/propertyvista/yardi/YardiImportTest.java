@@ -43,6 +43,20 @@ public class YardiImportTest extends YardiTestBase {
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
 
+        //Add RtCustomer, main tenant and Unit
+        {
+            //TODO Mykola
+            //RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "cust id"); 
+            //MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        //Add second Customer
+        {
+            //TODO Mykola
+            //CustomerUpdater updater = new CustomerUpdater("prop123", "rtcust id", "custid"); 
+            //MockEventBus.fireEvent(new CustomerUpdateEvent(updater));
+        }
+
         {
             // @formatter:off
             TransactionChargeUpdater updater = new TransactionChargeUpdater("prop123", "t000111").

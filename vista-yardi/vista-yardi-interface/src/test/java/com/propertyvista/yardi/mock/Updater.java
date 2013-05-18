@@ -17,8 +17,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.propertyvista.yardi.mock.TransactionChargeUpdater.Name;
-
 public class Updater<PROP, INST> {
 
     private final Map<Name, Property<?>> map = new HashMap<Name, Property<?>>();

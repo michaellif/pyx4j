@@ -21,7 +21,7 @@ public class TransactionChargeUpdater extends Updater<ChargeDetail, TransactionC
 
     private final String propertyID;
 
-    public enum Name {
+    public enum Name implements com.propertyvista.yardi.mock.Name {
 
         Description,
 

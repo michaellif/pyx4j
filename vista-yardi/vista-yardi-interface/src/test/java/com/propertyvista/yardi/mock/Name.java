@@ -13,23 +13,6 @@
  */
 package com.propertyvista.yardi.mock;
 
-import com.yardi.entity.resident.ChargeDetail;
-
-public class PropertyUpdater extends Updater<ChargeDetail, TransactionChargeUpdater> {
-
-    private final String propertyID;
-
-    public enum Name implements com.propertyvista.yardi.mock.Name {
-
-    }
-
-    public PropertyUpdater(String propertyID) {
-        assert propertyID != null : "Property with id " + propertyID + " is not found.";
-        this.propertyID = propertyID;
-    }
-
-    public String getPropertyID() {
-        return propertyID;
-    }
+public interface Name {
 
 }
