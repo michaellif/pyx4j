@@ -79,8 +79,23 @@ public class PropertyManager {
         transactions.getProperty().add(rtProperty);
 
         addRtCustomer("t000111");
-        addTransactionCharge("t000111");
-        addLeaseCharge("t000111");
+
+        // @formatter:off
+        TransactionChargeUpdater updater = new TransactionChargeUpdater("t000111").
+        set(TransactionChargeUpdater.Name.Description, "Rent").
+        set(TransactionChargeUpdater.Name.TransactionDate, DateUtils.detectDateformat("01-May-2013")).
+        set(TransactionChargeUpdater.Name.TransactionID, "700324302").
+        set(TransactionChargeUpdater.Name.ChargeCode, "rrent").
+        set(TransactionChargeUpdater.Name.GLAccountNumber, "40000301").
+        set(TransactionChargeUpdater.Name.CustomerID, "t000111").
+        set(TransactionChargeUpdater.Name.AmountPaid, "1.00").
+        set(TransactionChargeUpdater.Name.BalanceDue, "1234.56").
+        set(TransactionChargeUpdater.Name.Amount, "1234.56").
+        set(TransactionChargeUpdater.Name.Comment, "Rent (05/2013)");        
+        // @formatter:on
+
+        addOrUpdateTransactionCharge(updater);
+//        addLeaseCharge("t000111");
     }
 
     public void addRtCustomer(String customerID) {
@@ -150,37 +165,24 @@ public class PropertyManager {
         transactions.getProperty().get(0).getRTCustomer().add(rtCustomer);
     }
 
-    private void addTransactionCharge(String customerID) {
+    private void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
         RTCustomer rtCustomer = null;
         for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
-            if (customer.getCustomerID() == customerID) {
+            if (customer.getCustomerID() == updater.getCustomerID()) {
                 rtCustomer = customer;
             }
         }
 
-        if (rtCustomer == null) {
-            throw new Error("Customer with id " + customerID + " is not found.");
-        }
-
-        //=========== <RTServiceTransactions> ===========
         {
             RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
             Transactions transactions = new Transactions();
             rtServiceTransactions.getTransactions().add(transactions);
+
             Charge charge = new Charge();
             transactions.setCharge(charge);
-            ChargeDetail detail = new ChargeDetail();
-            detail.setDescription("Rent");
-            detail.setTransactionDate(DateUtils.detectDateformat("01-May-2013"));
-            detail.setTransactionID("700324302");
-            detail.setChargeCode("rrent");
-            detail.setGLAccountNumber("40000301");
-            detail.setCustomerID("t000111");
+            ChargeDetail detail = updater.update(new ChargeDetail());
+
             detail.setUnitID(rtCustomer.getRTUnit().getUnitID());
-            detail.setAmountPaid("1.00");
-            detail.setBalanceDue("1234.56");
-            detail.setAmount("1234.56");
-            detail.setComment("Rent (05/2013)");
             charge.setDetail(detail);
 
             rtCustomer.setRTServiceTransactions(rtServiceTransactions);

@@ -58,7 +58,6 @@ public class YardiTestBase extends IntegrationTestBase {
         ServerSideFactory.register(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
 
         super.setUp();
-
     }
 
     @Override
