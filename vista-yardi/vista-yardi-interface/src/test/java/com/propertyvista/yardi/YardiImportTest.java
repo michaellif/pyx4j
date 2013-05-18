@@ -13,7 +13,11 @@
  */
 package com.propertyvista.yardi;
 
+import java.math.BigDecimal;
+
 import org.junit.Test;
+
+import com.yardi.entity.mits.Customerinfo;
 
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -25,6 +29,8 @@ import com.propertyvista.test.integration.BillableItemTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
+import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.mock.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.TransactionChargeUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
@@ -45,9 +51,24 @@ public class YardiImportTest extends YardiTestBase {
 
         //Add RtCustomer, main tenant and Unit
         {
-            //TODO Mykola
-            //RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "cust id"); 
-            //MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+            // @formatter:off
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111").
+            set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.CURRENT_RESIDENT).
+            set(RtCustomerUpdater.YCUSTOMER.CustomerID, "t000111").
+            set(RtCustomerUpdater.YCUSTOMERNAME.FirstName, "John").
+            set(RtCustomerUpdater.YCUSTOMERNAME.LastName, "Smith").
+            set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1234.56")).
+            set(RtCustomerUpdater.YLEASE.LeaseFromDate, DateUtils.detectDateformat("01-Jun-2012")).
+            set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("31-Jul-2014")).
+            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).
+            set(RtCustomerUpdater.UNITINFO.UnitType, "2bdrm").
+            set(RtCustomerUpdater.UNITINFO.UnitBedrooms, new BigDecimal("2")).
+            set(RtCustomerUpdater.UNITINFO.UnitBathrooms, new BigDecimal("1")).
+            set(RtCustomerUpdater.UNITINFO.UnitRent, new BigDecimal("1300.00")).
+            set(RtCustomerUpdater.UNITINFO.FloorPlanID, "2bdrm").
+            set(RtCustomerUpdater.UNITINFO.FloorplanName, "2 Bedroom");
+            // @formatter:on
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
         //Add second Customer

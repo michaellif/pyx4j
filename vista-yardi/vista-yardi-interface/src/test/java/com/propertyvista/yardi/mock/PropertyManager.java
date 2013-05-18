@@ -78,7 +78,7 @@ public class PropertyManager {
 
         transactions.getProperty().add(rtProperty);
 
-        addRtCustomer("t000111");
+//        addRtCustomer("t000111");
 
 //        addLeaseCharge("t000111");
 
@@ -208,4 +208,22 @@ public class PropertyManager {
 
     }
 
+    public void addOrUpdateRtCustomer(RtCustomerUpdater updater) {
+        RTCustomer rtCustomer = null;
+        for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
+            if (customer.getCustomerID() == updater.getCustomerID()) {
+                rtCustomer = customer;
+                break;
+            }
+        }
+
+        if (rtCustomer == null) {
+            rtCustomer = new RTCustomer();
+            rtCustomer.setCustomerID(updater.getCustomerID());
+        }
+
+        rtCustomer = updater.update(rtCustomer);
+
+        transactions.getProperty().get(0).getRTCustomer().add(rtCustomer);
+    }
 }
