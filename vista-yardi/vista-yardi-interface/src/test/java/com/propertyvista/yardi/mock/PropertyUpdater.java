@@ -15,9 +15,7 @@ package com.propertyvista.yardi.mock;
 
 import com.yardi.entity.resident.ChargeDetail;
 
-public class TransactionChargeUpdater extends Updater<ChargeDetail, TransactionChargeUpdater> {
-
-    private final String customerID;
+public class PropertyUpdater extends Updater<ChargeDetail, TransactionChargeUpdater> {
 
     private final String propertyID;
 
@@ -45,18 +43,13 @@ public class TransactionChargeUpdater extends Updater<ChargeDetail, TransactionC
 
     }
 
-    public TransactionChargeUpdater(String propertyID, String customerID) {
+    public PropertyUpdater(String propertyID) {
         assert propertyID != null : "Property with id " + propertyID + " is not found.";
         this.propertyID = propertyID;
-        assert customerID != null : "Customer with id " + customerID + " is not found.";
-        this.customerID = customerID;
     }
 
     public String getPropertyID() {
         return propertyID;
     }
 
-    public String getCustomerID() {
-        return customerID;
-    }
 }

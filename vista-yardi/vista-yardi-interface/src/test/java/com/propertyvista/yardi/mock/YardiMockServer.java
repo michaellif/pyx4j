@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.resident.ResidentTransactions;
 
-public class YardiMockServer {
+import com.propertyvista.test.mock.MockEventBus;
+
+public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(YardiMockServer.class);
 
@@ -40,11 +42,13 @@ public class YardiMockServer {
 
     private YardiMockServer() {
         propertyManagers = new HashMap<String, PropertyManager>();
+        MockEventBus.addHandler(PropertyUpdateEvent.class, this);
+        MockEventBus.addHandler(TransactionChargeUpdateEvent.class, this);
     }
 
     public ResidentTransactions getAllResidentTransactions(String propertyId) {
         if (!propertyManagers.containsKey(propertyId)) {
-            propertyManagers.put(propertyId, createProperty(propertyId));
+            throw new Error(propertyId + " not found");
         }
         return propertyManagers.get(propertyId).getAllResidentTransactions();
     }
@@ -56,9 +60,25 @@ public class YardiMockServer {
         return propertyManagers.get(propertyId).getAllLeaseCharges();
     }
 
-    private PropertyManager createProperty(String propertyId) {
-        PropertyManager propertyManager = new PropertyManager(propertyId);
-        return propertyManager;
+    @Override
+    public void addOrUpdateProperty(PropertyUpdateEvent event) {
+        PropertyUpdater updater = event.getUpdater();
+        String propertyId = updater.getPropertyID();
+        if (!propertyManagers.containsKey(propertyId)) {
+            PropertyManager propertyManager = new PropertyManager(propertyId);
+            propertyManagers.put(propertyId, propertyManager);
+        }
+        propertyManagers.get(propertyId).updateProperty(updater);
+    }
+
+    @Override
+    public void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event) {
+        TransactionChargeUpdater updater = event.getUpdater();
+        String propertyId = updater.getPropertyID();
+        if (!propertyManagers.containsKey(updater.getPropertyID())) {
+            throw new Error(propertyId + " not found");
+        }
+        propertyManagers.get(propertyId).addOrUpdateTransactionCharge(updater);
     }
 
 }

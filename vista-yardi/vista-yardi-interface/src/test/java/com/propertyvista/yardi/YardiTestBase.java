@@ -42,6 +42,7 @@ import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.mock.stub.YardiMockMaintenanceRequestsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockResidentTransactionsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockSystemBatchesStubImpl;
@@ -57,6 +58,8 @@ public class YardiTestBase extends IntegrationTestBase {
         ServerSideFactory.register(YardiSystemBatchesStub.class, YardiMockSystemBatchesStubImpl.class);
         ServerSideFactory.register(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
 
+        //Init YardiMockServer
+        YardiMockServer.instance();
         super.setUp();
     }
 
