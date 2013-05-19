@@ -16,16 +16,11 @@ package com.propertyvista.yardi.mock;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.propertyvista.test.mock.MockEventBus;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler {
-
-    private static final Logger log = LoggerFactory.getLogger(YardiMockServer.class);
 
     static final ThreadLocal<YardiMockServer> threadLocalContext = new ThreadLocal<YardiMockServer>() {
         @Override
