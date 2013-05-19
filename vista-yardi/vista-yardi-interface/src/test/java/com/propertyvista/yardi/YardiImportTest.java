@@ -26,6 +26,8 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.test.integration.BillableItemTester;
 import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.mock.CoTenantUpdateEvent;
@@ -124,21 +126,23 @@ public class YardiImportTest extends YardiTestBase {
         // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
         firstName("John").
-        lastName("Smith");
+        lastName("Smith").
+        role(Role.Applicant);
         // @formatter:on
 
         // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
         firstName("Jane").
-        lastName("Smith");
+        lastName("Smith").
+        role(Role.CoApplicant);
         // @formatter:on
 
-//        // @formatter:off
-//        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-//        agreedPrice("1234.56").
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
+        agreedPrice("1234.56");
 //        effectiveDate("01-Jun-2012").
 //        expirationDate("31-Jul-2014");
-//        // @formatter:on
+        // @formatter:on
 
         {
             // @formatter:off

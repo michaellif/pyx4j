@@ -14,6 +14,7 @@
 package com.propertyvista.test.integration;
 
 import com.propertyvista.domain.tenant.PersonRelationship;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class LeaseTermTenantTester extends Tester {
@@ -31,6 +32,11 @@ public class LeaseTermTenantTester extends Tester {
 
     public LeaseTermTenantTester lastName(String value) {
         assertEquals("Last Name", value, tenant.leaseParticipant().customer().person().name().lastName().getValue());
+        return this;
+    }
+
+    public LeaseTermTenantTester role(Role value) {
+        assertEquals("Last Name", value, tenant.role().getValue());
         return this;
     }
 
