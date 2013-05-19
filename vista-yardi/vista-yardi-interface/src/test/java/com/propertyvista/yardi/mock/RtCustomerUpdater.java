@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.mock;
 
-import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.mits.Information;
 import com.yardi.entity.mits.Name;
 import com.yardi.entity.mits.Unit;
@@ -23,7 +22,7 @@ import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTUnit;
 
-public class RtCustomerUpdater extends MultiUpdater<RTCustomer, RtCustomerUpdater> {
+public class RtCustomerUpdater extends Updater<RTCustomer, RtCustomerUpdater> {
 
     public enum YCUSTOMER implements com.propertyvista.yardi.mock.Name {
         Type, CustomerID;
@@ -45,44 +44,11 @@ public class RtCustomerUpdater extends MultiUpdater<RTCustomer, RtCustomerUpdate
 
     private final String propertyID;
 
-    YardiCustomer customer;
-
-    RTUnit rtunit;
-
     public RtCustomerUpdater(String propertyID, String customerID) {
         assert propertyID != null : "Property with id " + propertyID + " is not found.";
         this.propertyID = propertyID;
         assert customerID != null : "Customer with id " + customerID + " is not found.";
         this.customerID = customerID;
-
-        //=========== <Customer> ===========
-        {
-            customer = new YardiCustomer();
-            addForUpdate(YCUSTOMER.class, customer);
-
-            com.yardi.entity.mits.Name name = new com.yardi.entity.mits.Name();
-            customer.setName(name);
-            addForUpdate(YCUSTOMERNAME.class, name);
-
-            YardiLease lease = new YardiLease();
-            addForUpdate(YLEASE.class, lease);
-
-            customer.setLease(lease);
-        }
-
-        //=========== <RT_Unit> ===========
-        {
-            rtunit = new RTUnit();
-            rtunit.setUnitID(customerID.substring(3));
-
-            Unit unit = new Unit();
-            Information info = new Information();
-            info.setUnitID(rtunit.getUnitID());
-            unit.getInformation().add(info);
-            addForUpdate(UNITINFO.class, info);
-
-            rtunit.setUnit(unit);
-        }
     }
 
     public String getPropertyID() {
@@ -94,36 +60,58 @@ public class RtCustomerUpdater extends MultiUpdater<RTCustomer, RtCustomerUpdate
     }
 
     @Override
-    public RTCustomer update(RTCustomer rtCustomer) {
+    public void update(RTCustomer model) {
+        for (com.propertyvista.yardi.mock.Name name : map.keySet()) {
+            Property<?> property = map.get(name);
+            if (property.getName() instanceof YCUSTOMER) {
 
-        YardiCustomers customers = new YardiCustomers();
-        rtCustomer.setCustomers(customers);
-        rtCustomer.setPaymentAccepted("0");
+                if (model.getCustomers() == null) {
+                    model.setCustomers(new YardiCustomers());
+                }
 
-        customers.getCustomer().add(customer);
+                if (model.getCustomers().getCustomer().size() == 0) {
+                    model.getCustomers().getCustomer().add(new YardiCustomer());
+                }
 
-        {
-            YardiCustomer customer = new YardiCustomer();
-            customer.setType(Customerinfo.CUSTOMER);
-            customer.setCustomerID("r" + customerID.substring(1));
-            Name name = new Name();
-            name.setFirstName("Jane");
-            name.setLastName("Smith");
-            customer.setName(name);
+                updateProperty(model.getCustomers().getCustomer().get(0), property);
 
-            YardiLease lease = new YardiLease();
-            lease.setResponsibleForLease(true);
-            customer.setLease(lease);
+            } else if (property.getName() instanceof YCUSTOMERNAME) {
 
-            customers.getCustomer().add(customer);
+                if (model.getCustomers().getCustomer().get(0).getName() == null) {
+                    Name custName = new Name();
+                    model.getCustomers().getCustomer().get(0).setName(custName);
+                }
+
+                updateProperty(model.getCustomers().getCustomer().get(0).getName(), property);
+
+            } else if (property.getName() instanceof YLEASE) {
+
+                if (model.getCustomers().getCustomer().get(0).getLease() == null) {
+                    YardiLease lease = new YardiLease();
+                    model.getCustomers().getCustomer().get(0).setLease(lease);
+                }
+
+                updateProperty(model.getCustomers().getCustomer().get(0).getLease(), property);
+
+            } else if (property.getName() instanceof UNITINFO) {
+
+                if (model.getRTUnit() == null) {
+                    RTUnit rtunit = new RTUnit();
+                    rtunit.setUnitID(customerID.substring(3));
+
+                    Unit unit = new Unit();
+                    Information info = new Information();
+                    info.setUnitID(rtunit.getUnitID());
+                    unit.getInformation().add(info);
+
+                    rtunit.setUnit(unit);
+                    model.setRTUnit(rtunit);
+                }
+
+                updateProperty(model.getRTUnit().getUnit().getInformation().get(0), property);
+
+            }
         }
-
-        rtCustomer.setRTUnit(rtunit);
-
-        //run update
-        update();
-
-        return rtCustomer;
     }
 
 }

@@ -15,19 +15,25 @@ package com.propertyvista.yardi.mock;
 
 public class Property<E> {
 
-    private E value;
+    private final Name name;
 
-    public void set(E value) {
+    private final E value;
+
+    public Property(Name name, E value) {
         this.value = value;
+        this.name = name;
     }
 
-    public E get() {
-        return this.value;
+    public Name getName() {
+        return name;
     }
 
-    public static <T> Property<T> create(T value) {
-        Property<T> ref = new Property<T>();
-        ref.set(value);
+    public E getValue() {
+        return value;
+    }
+
+    public static <T> Property<T> create(Name name, T value) {
+        Property<T> ref = new Property<T>(name, value);
         return ref;
     }
 }

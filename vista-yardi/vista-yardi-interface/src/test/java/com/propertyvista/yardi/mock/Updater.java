@@ -14,39 +14,42 @@
 package com.propertyvista.yardi.mock;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Updater<PROP, INST> {
+public class Updater<MODEL, INST_CLASS> {
 
-    private final Map<Name, Property<?>> map = new HashMap<Name, Property<?>>();
+    protected final Map<Name, Property<?>> map = new LinkedHashMap<Name, Property<?>>();
 
     @SuppressWarnings("unchecked")
-    public <T> INST set(Name name, T value) {
-        map.put(name, Property.create(value));
-        return (INST) this;
+    public <T> INST_CLASS set(Name name, T value) {
+        map.put(name, Property.create(name, value));
+        return (INST_CLASS) this;
     }
 
-    public PROP update(PROP detail) {
+    public void update(MODEL model) {
         for (Name name : map.keySet()) {
             Property<?> property = map.get(name);
-            try {
-                Method setter = null;
-                if (property.get() != null) {
-                    setter = detail.getClass().getMethod("set" + name, property.get().getClass());
-                } else {
-                    Method[] methods = detail.getClass().getMethods();
-                    for (Method method : methods) {
-                        if (method.getName().equals("set" + name)) {
-                            setter = method;
-                        }
+            updateProperty(model, property);
+        }
+    }
+
+    protected void updateProperty(Object model, Property<?> property) {
+        try {
+            Method setter = null;
+            if (property.getValue() != null) {
+                setter = model.getClass().getMethod("set" + property.getName(), property.getValue().getClass());
+            } else {
+                Method[] methods = model.getClass().getMethods();
+                for (Method method : methods) {
+                    if (method.getName().equals("set" + property.getName())) {
+                        setter = method;
                     }
                 }
-                setter.invoke(detail, property.get());
-            } catch (Exception e) {
-                throw new RuntimeException(e);
             }
+            setter.invoke(model, property.getValue());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-        return detail;
     }
 }
