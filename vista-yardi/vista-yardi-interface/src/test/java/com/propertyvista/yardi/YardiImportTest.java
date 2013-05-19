@@ -83,7 +83,7 @@ public class YardiImportTest extends YardiTestBase {
             set(CoTenantUpdater.YCUSTOMER.Type, Customerinfo.CUSTOMER).
             set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
             set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
-            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith").
+            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Doe").
             set(CoTenantUpdater.YLEASE.ResponsibleForLease, true);
             // @formatter:on
             MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
@@ -121,8 +121,8 @@ public class YardiImportTest extends YardiTestBase {
         assertNotNull(unit);
 
         Lease lease = getCurrentLease(unit);
-
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
         // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
         firstName("John").
@@ -133,7 +133,7 @@ public class YardiImportTest extends YardiTestBase {
         // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
         firstName("Jane").
-        lastName("Smith").
+        lastName("Doe").
         role(Role.CoApplicant);
         // @formatter:on
 
@@ -151,10 +151,26 @@ public class YardiImportTest extends YardiTestBase {
             // @formatter:on
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
+        {
+            // @formatter:off
+            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith");
+            // @formatter:on
+            MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
+
+        }
 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
 
         lease = getCurrentLease(unit);
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+        // @formatter:off
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
+        firstName("Jane").
+        lastName("Smith").
+        role(Role.CoApplicant);
+        // @formatter:on
 
 //        // @formatter:off
 //        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
