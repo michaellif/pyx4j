@@ -46,9 +46,9 @@ public class TransactionChargeUpdater extends Updater<ChargeDetail, TransactionC
     }
 
     public TransactionChargeUpdater(String propertyID, String customerID) {
-        assert propertyID != null : "Property with id " + propertyID + " is not found.";
+        assert propertyID != null : "propertyID should not be null";
         this.propertyID = propertyID;
-        assert customerID != null : "Customer with id " + customerID + " is not found.";
+        assert customerID != null : "customerID should not be null";
         this.customerID = customerID;
     }
 

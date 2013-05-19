@@ -19,14 +19,17 @@ import org.junit.Test;
 
 import com.yardi.entity.mits.Customerinfo;
 
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.test.integration.BillableItemTester;
+import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockEventBus;
+import com.propertyvista.yardi.mock.CoTenantUpdateEvent;
+import com.propertyvista.yardi.mock.CoTenantUpdater;
 import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
@@ -71,11 +74,17 @@ public class YardiImportTest extends YardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
-        //Add second Customer
         {
-            //TODO Mykola
-            //CustomerUpdater updater = new CustomerUpdater("prop123", "rtcust id", "custid"); 
-            //MockEventBus.fireEvent(new CustomerUpdateEvent(updater));
+
+            // @formatter:off
+            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            set(CoTenantUpdater.YCUSTOMER.Type, Customerinfo.CUSTOMER).
+            set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
+            set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
+            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith").
+            set(CoTenantUpdater.YLEASE.ResponsibleForLease, true);
+            // @formatter:on
+            MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
         }
 
         {
@@ -110,14 +119,42 @@ public class YardiImportTest extends YardiTestBase {
         assertNotNull(unit);
 
         Lease lease = getCurrentLease(unit);
-        assertNotNull(lease);
+
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        // @formatter:off
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
+        firstName("John").
+        lastName("Smith");
+        // @formatter:on
 
         // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-        agreedPrice("1234.56");
-        //.
-        //effectiveDate("1-May-2011").
-        //expirationDate("31-May-2011");
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
+        firstName("Jane").
+        lastName("Smith");
         // @formatter:on
+
+//        // @formatter:off
+//        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
+//        agreedPrice("1234.56").
+//        effectiveDate("01-Jun-2012").
+//        expirationDate("31-Jul-2014");
+//        // @formatter:on
+
+        {
+            // @formatter:off
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111").
+            set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1250.00"));
+            // @formatter:on
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
+
+        lease = getCurrentLease(unit);
+
+//        // @formatter:off
+//        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
+//        agreedPrice("1250.00");
+
     }
 }

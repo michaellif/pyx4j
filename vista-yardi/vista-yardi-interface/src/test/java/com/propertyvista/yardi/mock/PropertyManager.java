@@ -18,6 +18,7 @@ import org.apache.commons.lang.SerializationUtils;
 import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Identification;
 import com.yardi.entity.mits.Propertyidinfo;
+import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.resident.Charge;
 import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.PropertyID;
@@ -97,13 +98,7 @@ public class PropertyManager {
     }
 
     public void addOrUpdateRtCustomer(RtCustomerUpdater updater) {
-        RTCustomer rtCustomer = null;
-        for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
-            if (customer.getCustomerID() == updater.getCustomerID()) {
-                rtCustomer = customer;
-                break;
-            }
-        }
+        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
 
         if (rtCustomer == null) {
             rtCustomer = new RTCustomer();
@@ -116,13 +111,30 @@ public class PropertyManager {
 
     }
 
-    public void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
-        RTCustomer rtCustomer = null;
-        for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
-            if (customer.getCustomerID() == updater.getCustomerID()) {
-                rtCustomer = customer;
+    public void addOrUpdateCoTenant(CoTenantUpdater updater) {
+        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
+        if (rtCustomer == null) {
+            throw new RuntimeException("rtCustomer with customerID " + updater.getCustomerID() + " not found");
+        }
+
+        YardiCustomer coTenant = null;
+        for (int i = 1; i < rtCustomer.getCustomers().getCustomer().size(); i++) {
+            if (rtCustomer.getCustomers().getCustomer().get(i).getCustomerID().equals(updater.getCoTenantCustomerID())) {
+                coTenant = rtCustomer.getCustomers().getCustomer().get(i);
+                break;
             }
         }
+
+        if (coTenant == null) {
+            coTenant = new YardiCustomer();
+            rtCustomer.getCustomers().getCustomer().add(coTenant);
+        }
+
+        updater.update(coTenant);
+    }
+
+    public void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
+        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
 
         {
             RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
@@ -142,4 +154,13 @@ public class PropertyManager {
 
     }
 
+    private RTCustomer getRTCustomer(String customerID) {
+        RTCustomer rtCustomer = null;
+        for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
+            if (customer.getCustomerID() == customerID) {
+                rtCustomer = customer;
+            }
+        }
+        return rtCustomer;
+    }
 }
