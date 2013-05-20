@@ -13,7 +13,6 @@
  */
 package com.propertyvista.yardi.mock;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,22 +30,4 @@ public class Updater<MODEL, INST_CLASS> {
         return map;
     }
 
-    protected void updateProperty(Object model, Property<?> property) {
-        try {
-            Method setter = null;
-            if (property.getValue() != null) {
-                setter = model.getClass().getMethod("set" + property.getName(), property.getValue().getClass());
-            } else {
-                Method[] methods = model.getClass().getMethods();
-                for (Method method : methods) {
-                    if (method.getName().equals("set" + property.getName())) {
-                        setter = method;
-                    }
-                }
-            }
-            setter.invoke(model, property.getValue());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

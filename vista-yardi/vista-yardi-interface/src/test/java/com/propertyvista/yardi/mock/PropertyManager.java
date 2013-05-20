@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.mock;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -138,7 +139,7 @@ public class PropertyManager {
                     rtCustomer.getCustomers().getCustomer().add(new YardiCustomer());
                 }
 
-                updater.updateProperty(rtCustomer.getCustomers().getCustomer().get(0), property);
+                updateProperty(rtCustomer.getCustomers().getCustomer().get(0), property);
 
             } else if (property.getName() instanceof RtCustomerUpdater.YCUSTOMERNAME) {
 
@@ -147,7 +148,7 @@ public class PropertyManager {
                     rtCustomer.getCustomers().getCustomer().get(0).setName(custName);
                 }
 
-                updater.updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getName(), property);
+                updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getName(), property);
 
             } else if (property.getName() instanceof RtCustomerUpdater.YLEASE) {
 
@@ -156,7 +157,7 @@ public class PropertyManager {
                     rtCustomer.getCustomers().getCustomer().get(0).setLease(lease);
                 }
 
-                updater.updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getLease(), property);
+                updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getLease(), property);
 
             } else if (property.getName() instanceof RtCustomerUpdater.UNITINFO) {
 
@@ -173,7 +174,7 @@ public class PropertyManager {
                     rtCustomer.setRTUnit(rtunit);
                 }
 
-                updater.updateProperty(rtCustomer.getRTUnit().getUnit().getInformation().get(0), property);
+                updateProperty(rtCustomer.getRTUnit().getUnit().getInformation().get(0), property);
 
             }
         }
@@ -194,7 +195,7 @@ public class PropertyManager {
 
             for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
                 Property<?> property = updater.getPropertyMap().get(name);
-                updater.updateProperty(detail, property);
+                updateProperty(detail, property);
             }
 
             detail.setUnitID(rtCustomer.getRTUnit().getUnitID());
@@ -228,7 +229,7 @@ public class PropertyManager {
             Property<?> property = updater.getPropertyMap().get(name);
             if (property.getName() instanceof CoTenantUpdater.YCUSTOMER) {
 
-                updater.updateProperty(coTenant, property);
+                updateProperty(coTenant, property);
 
             } else if (property.getName() instanceof CoTenantUpdater.YCUSTOMERNAME) {
 
@@ -237,7 +238,7 @@ public class PropertyManager {
                     coTenant.setName(custName);
                 }
 
-                updater.updateProperty(coTenant.getName(), property);
+                updateProperty(coTenant.getName(), property);
 
             } else if (property.getName() instanceof CoTenantUpdater.YLEASE) {
 
@@ -246,7 +247,7 @@ public class PropertyManager {
                     coTenant.setLease(lease);
                 }
 
-                updater.updateProperty(coTenant.getLease(), property);
+                updateProperty(coTenant.getLease(), property);
 
             }
         }
@@ -272,7 +273,7 @@ public class PropertyManager {
 
         for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
             Property<?> property = updater.getPropertyMap().get(name);
-            updater.updateProperty(detail, property);
+            updateProperty(detail, property);
         }
 
     }
@@ -285,5 +286,24 @@ public class PropertyManager {
             }
         }
         return rtCustomer;
+    }
+
+    protected void updateProperty(Object model, Property<?> property) {
+        try {
+            Method setter = null;
+            if (property.getValue() != null) {
+                setter = model.getClass().getMethod("set" + property.getName(), property.getValue().getClass());
+            } else {
+                Method[] methods = model.getClass().getMethods();
+                for (Method method : methods) {
+                    if (method.getName().equals("set" + property.getName())) {
+                        setter = method;
+                    }
+                }
+            }
+            setter.invoke(model, property.getValue());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
