@@ -80,7 +80,7 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
             set(LeaseChargeUpdater.Name.Description, "Rent").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
@@ -167,6 +167,21 @@ public class YardiImportTest extends YardiTestBase {
             // @formatter:on
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
+
+        {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
+            set(LeaseChargeUpdater.Name.Amount, "1250.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+
+            // @formatter:off
+            updater = new LeaseChargeUpdater("prop123", "t000111", "").
+            set(LeaseChargeUpdater.Name.Amount, "1250.00");
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
         {
             // @formatter:off
             CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").

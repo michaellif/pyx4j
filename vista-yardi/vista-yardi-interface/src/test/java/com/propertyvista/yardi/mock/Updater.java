@@ -20,10 +20,16 @@ public class Updater<MODEL, INST_CLASS> {
 
     protected final Map<Name, Property<?>> map = new LinkedHashMap<Name, Property<?>>();
 
+    protected boolean remove = false;
+
     @SuppressWarnings("unchecked")
     public <T> INST_CLASS set(Name name, T value) {
         map.put(name, Property.create(name, value));
         return (INST_CLASS) this;
+    }
+
+    public void remove() {
+        remove = true;
     }
 
     Map<Name, Property<?>> getPropertyMap() {

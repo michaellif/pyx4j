@@ -21,6 +21,8 @@ public class LeaseChargeUpdater extends Updater<ChargeDetail, LeaseChargeUpdater
 
     private final String propertyID;
 
+    private final String leaseChargeID;
+
     public enum Name implements com.propertyvista.yardi.mock.Name {
 
         Description,
@@ -41,11 +43,13 @@ public class LeaseChargeUpdater extends Updater<ChargeDetail, LeaseChargeUpdater
 
     }
 
-    public LeaseChargeUpdater(String propertyID, String customerID) {
+    public LeaseChargeUpdater(String propertyID, String customerID, String leaseChargeID) {
         assert propertyID != null : "propertyID should not be null";
         this.propertyID = propertyID;
         assert customerID != null : "customerID should not be null";
         this.customerID = customerID;
+        assert leaseChargeID != null : "leaseChargeId should not be null";
+        this.leaseChargeID = leaseChargeID;
     }
 
     public String getPropertyID() {
@@ -54,5 +58,9 @@ public class LeaseChargeUpdater extends Updater<ChargeDetail, LeaseChargeUpdater
 
     public String getCustomerID() {
         return customerID;
+    }
+
+    public String getLeaseChargeID() {
+        return leaseChargeID;
     }
 }
