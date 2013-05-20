@@ -13,35 +13,39 @@
  */
 package com.propertyvista.yardi.mock;
 
-import com.yardi.entity.mits.YardiCustomer;
+import com.yardi.entity.resident.ChargeDetail;
 
-public class CoTenantUpdater extends Updater<YardiCustomer, CoTenantUpdater> {
-
-    public enum YCUSTOMER implements com.propertyvista.yardi.mock.Name {
-        Type, CustomerID;
-    }
-
-    public enum YCUSTOMERNAME implements com.propertyvista.yardi.mock.Name {
-        FirstName, LastName;
-    }
-
-    public enum YLEASE implements com.propertyvista.yardi.mock.Name {
-        ActualMoveIn, ResponsibleForLease;
-    }
-
-    private final String propertyID;
+public class LeaseChargeUpdater extends Updater<ChargeDetail, LeaseChargeUpdater> {
 
     private final String customerID;
 
-    private final String coTenantCustomerID;
+    private final String propertyID;
 
-    public CoTenantUpdater(String propertyID, String customerID, String coTenantCustomerID) {
+    public enum Name implements com.propertyvista.yardi.mock.Name {
+
+        Description,
+
+        ServiceToDate,
+
+        ServiceFromDate,
+
+        ChargeCode,
+
+        GLAccountNumber,
+
+        Amount,
+
+        Comment,
+
+        PropertyPrimaryID;
+
+    }
+
+    public LeaseChargeUpdater(String propertyID, String customerID) {
         assert propertyID != null : "propertyID should not be null";
         this.propertyID = propertyID;
         assert customerID != null : "customerID should not be null";
         this.customerID = customerID;
-        assert coTenantCustomerID != null : "co-tenant customerID should not be null";
-        this.coTenantCustomerID = coTenantCustomerID;
     }
 
     public String getPropertyID() {
@@ -51,9 +55,4 @@ public class CoTenantUpdater extends Updater<YardiCustomer, CoTenantUpdater> {
     public String getCustomerID() {
         return customerID;
     }
-
-    public String getCoTenantCustomerID() {
-        return coTenantCustomerID;
-    }
-
 }

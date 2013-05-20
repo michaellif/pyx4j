@@ -13,37 +13,44 @@
  */
 package com.propertyvista.yardi.mock;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.SerializationUtils;
 
 import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Identification;
+import com.yardi.entity.mits.Information;
+import com.yardi.entity.mits.Name;
 import com.yardi.entity.mits.Propertyidinfo;
+import com.yardi.entity.mits.Unit;
 import com.yardi.entity.mits.YardiCustomer;
+import com.yardi.entity.mits.YardiCustomers;
+import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.Charge;
 import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTServiceTransactions;
+import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
-
-import com.propertyvista.yardi.bean.Property;
 
 public class PropertyManager {
 
     private final String propertyId;
 
-    private final Property property;
+    private final com.yardi.entity.mits.Property property;
 
     private final ResidentTransactions transactions;
 
-    private final ResidentTransactions leaseCharges;
+    private final Map<String, RTServiceTransactions> leaseCharges;
 
     public PropertyManager(String propertyId) {
         this.propertyId = propertyId;
-        property = new Property();
+        property = new com.yardi.entity.mits.Property();
         transactions = new ResidentTransactions();
-        leaseCharges = new ResidentTransactions();
+        leaseCharges = new HashMap<String, RTServiceTransactions>();
 
         com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
 
@@ -82,11 +89,17 @@ public class PropertyManager {
     }
 
     public ResidentTransactions getAllLeaseCharges() {
-        try {
-            return (ResidentTransactions) SerializationUtils.clone(leaseCharges);
-        } catch (Exception e) {
-            throw new Error(e);
+        ResidentTransactions retVal = new ResidentTransactions();
+        com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
+        retVal.getProperty().add(rtProperty);
+
+        for (String customerId : leaseCharges.keySet()) {
+            RTCustomer rtCustomer = new RTCustomer();
+            rtProperty.getRTCustomer().add(rtCustomer);
+            rtCustomer.setRTServiceTransactions((RTServiceTransactions) SerializationUtils.clone(leaseCharges.get(customerId)));
         }
+
+        return retVal;
     }
 
     public ResidentTransactions getLeaseChargesForTenant(String tenantId) {
@@ -107,7 +120,88 @@ public class PropertyManager {
             transactions.getProperty().get(0).getRTCustomer().add(rtCustomer);
         }
 
-        updater.update(rtCustomer);
+        if (!leaseCharges.containsKey(updater.getCustomerID())) {
+            RTServiceTransactions st = new RTServiceTransactions();
+            leaseCharges.put(updater.getCustomerID(), st);
+        }
+
+        Map<com.propertyvista.yardi.mock.Name, Property<?>> map = updater.getPropertyMap();
+        for (com.propertyvista.yardi.mock.Name name : map.keySet()) {
+            Property<?> property = map.get(name);
+            if (property.getName() instanceof RtCustomerUpdater.YCUSTOMER) {
+
+                if (rtCustomer.getCustomers() == null) {
+                    rtCustomer.setCustomers(new YardiCustomers());
+                }
+
+                if (rtCustomer.getCustomers().getCustomer().size() == 0) {
+                    rtCustomer.getCustomers().getCustomer().add(new YardiCustomer());
+                }
+
+                updater.updateProperty(rtCustomer.getCustomers().getCustomer().get(0), property);
+
+            } else if (property.getName() instanceof RtCustomerUpdater.YCUSTOMERNAME) {
+
+                if (rtCustomer.getCustomers().getCustomer().get(0).getName() == null) {
+                    Name custName = new Name();
+                    rtCustomer.getCustomers().getCustomer().get(0).setName(custName);
+                }
+
+                updater.updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getName(), property);
+
+            } else if (property.getName() instanceof RtCustomerUpdater.YLEASE) {
+
+                if (rtCustomer.getCustomers().getCustomer().get(0).getLease() == null) {
+                    YardiLease lease = new YardiLease();
+                    rtCustomer.getCustomers().getCustomer().get(0).setLease(lease);
+                }
+
+                updater.updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getLease(), property);
+
+            } else if (property.getName() instanceof RtCustomerUpdater.UNITINFO) {
+
+                if (rtCustomer.getRTUnit() == null) {
+                    RTUnit rtunit = new RTUnit();
+                    rtunit.setUnitID(rtCustomer.getCustomerID().substring(3));
+
+                    Unit unit = new Unit();
+                    Information info = new Information();
+                    info.setUnitID(rtunit.getUnitID());
+                    unit.getInformation().add(info);
+
+                    rtunit.setUnit(unit);
+                    rtCustomer.setRTUnit(rtunit);
+                }
+
+                updater.updateProperty(rtCustomer.getRTUnit().getUnit().getInformation().get(0), property);
+
+            }
+        }
+
+    }
+
+    public void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
+        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
+
+        {
+            RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
+            Transactions transactions = new Transactions();
+            rtServiceTransactions.getTransactions().add(transactions);
+
+            Charge charge = new Charge();
+            transactions.setCharge(charge);
+            ChargeDetail detail = new ChargeDetail();
+
+            for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+                Property<?> property = updater.getPropertyMap().get(name);
+                updater.updateProperty(detail, property);
+            }
+
+            detail.setUnitID(rtCustomer.getRTUnit().getUnitID());
+            charge.setDetail(detail);
+
+            rtCustomer.setRTServiceTransactions(rtServiceTransactions);
+        }
 
     }
 
@@ -130,26 +224,55 @@ public class PropertyManager {
             rtCustomer.getCustomers().getCustomer().add(coTenant);
         }
 
-        updater.update(coTenant);
+        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+            Property<?> property = updater.getPropertyMap().get(name);
+            if (property.getName() instanceof CoTenantUpdater.YCUSTOMER) {
+
+                updater.updateProperty(coTenant, property);
+
+            } else if (property.getName() instanceof CoTenantUpdater.YCUSTOMERNAME) {
+
+                if (coTenant.getName() == null) {
+                    Name custName = new Name();
+                    coTenant.setName(custName);
+                }
+
+                updater.updateProperty(coTenant.getName(), property);
+
+            } else if (property.getName() instanceof CoTenantUpdater.YLEASE) {
+
+                if (coTenant.getLease() == null) {
+                    YardiLease lease = new YardiLease();
+                    coTenant.setLease(lease);
+                }
+
+                updater.updateProperty(coTenant.getLease(), property);
+
+            }
+        }
+
     }
 
-    public void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
-        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
+    public void addOrUpdateLeaseCharge(LeaseChargeUpdater updater) {
 
-        {
-            RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
-            Transactions transactions = new Transactions();
-            rtServiceTransactions.getTransactions().add(transactions);
+        RTServiceTransactions transactions = leaseCharges.get(updater.getCustomerID());
 
-            Charge charge = new Charge();
-            transactions.setCharge(charge);
-            ChargeDetail detail = new ChargeDetail();
-            updater.update(detail);
+        Transactions t = new Transactions();
+        transactions.getTransactions().add(t);
 
-            detail.setUnitID(rtCustomer.getRTUnit().getUnitID());
-            charge.setDetail(detail);
+        Charge c = new Charge();
+        t.setCharge(c);
 
-            rtCustomer.setRTServiceTransactions(rtServiceTransactions);
+        ChargeDetail detail = new ChargeDetail();
+        c.setDetail(detail);
+
+        detail.setCustomerID(updater.getCustomerID());
+        detail.setUnitID(updater.getCustomerID().substring(3));
+        detail.setPropertyPrimaryID(updater.getPropertyID());
+
+        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+            Property<?> property = updater.getPropertyMap().get(name);
+            updater.updateProperty(detail, property);
         }
 
     }

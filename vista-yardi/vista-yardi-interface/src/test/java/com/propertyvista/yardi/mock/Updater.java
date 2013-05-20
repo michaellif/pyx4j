@@ -27,11 +27,8 @@ public class Updater<MODEL, INST_CLASS> {
         return (INST_CLASS) this;
     }
 
-    public void update(MODEL model) {
-        for (Name name : map.keySet()) {
-            Property<?> property = map.get(name);
-            updateProperty(model, property);
-        }
+    Map<Name, Property<?>> getPropertyMap() {
+        return map;
     }
 
     protected void updateProperty(Object model, Property<?> property) {

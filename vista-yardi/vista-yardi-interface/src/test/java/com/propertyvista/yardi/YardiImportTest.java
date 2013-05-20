@@ -32,6 +32,8 @@ import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.mock.CoTenantUpdateEvent;
 import com.propertyvista.yardi.mock.CoTenantUpdater;
+import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
+import com.propertyvista.yardi.mock.LeaseChargeUpdater;
 import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
@@ -65,7 +67,7 @@ public class YardiImportTest extends YardiTestBase {
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1234.56")).
             set(RtCustomerUpdater.YLEASE.LeaseFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("31-Jul-2014")).
-            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).
+            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).         
             set(RtCustomerUpdater.UNITINFO.UnitType, "2bdrm").
             set(RtCustomerUpdater.UNITINFO.UnitBedrooms, new BigDecimal("2")).
             set(RtCustomerUpdater.UNITINFO.UnitBathrooms, new BigDecimal("1")).
@@ -74,6 +76,20 @@ public class YardiImportTest extends YardiTestBase {
             set(RtCustomerUpdater.UNITINFO.FloorplanName, "2 Bedroom");
             // @formatter:on
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111").
+            set(LeaseChargeUpdater.Name.Description, "Rent").
+            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
+            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
+            set(LeaseChargeUpdater.Name.ChargeCode, "rrent").
+            set(LeaseChargeUpdater.Name.GLAccountNumber, "40000301").
+            set(LeaseChargeUpdater.Name.Amount, "1234.56").
+            set(LeaseChargeUpdater.Name.Comment, "Rent (05/2013)");        
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
         {

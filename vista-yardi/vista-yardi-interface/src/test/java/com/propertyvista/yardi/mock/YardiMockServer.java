@@ -21,7 +21,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.propertyvista.test.mock.MockEventBus;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
-        CoTenantUpdateEvent.Handler {
+        CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler {
 
     static final ThreadLocal<YardiMockServer> threadLocalContext = new ThreadLocal<YardiMockServer>() {
         @Override
@@ -42,6 +42,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         MockEventBus.addHandler(TransactionChargeUpdateEvent.class, this);
         MockEventBus.addHandler(RtCustomerUpdateEvent.class, this);
         MockEventBus.addHandler(CoTenantUpdateEvent.class, this);
+        MockEventBus.addHandler(LeaseChargeUpdateEvent.class, this);
     }
 
     public ResidentTransactions getAllResidentTransactions(String propertyId) {
@@ -97,6 +98,16 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
             throw new Error(propertyId + " not found");
         }
         propertyManagers.get(propertyId).addOrUpdateCoTenant(updater);
+    }
+
+    @Override
+    public void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event) {
+        LeaseChargeUpdater updater = event.getUpdater();
+        String propertyId = updater.getPropertyID();
+        if (!propertyManagers.containsKey(updater.getPropertyID())) {
+            throw new Error(propertyId + " not found");
+        }
+        propertyManagers.get(propertyId).addOrUpdateLeaseCharge(updater);
     }
 
 }
