@@ -66,6 +66,14 @@
 	opacity: 0.4;
 }
 
+.Anchor-disabled:hover {
+	    text-decoration: none;
+}
+
+.Anchor-disabled {
+	    text-decoration: none;
+}
+
 .Toolbar {
 	white-space: nowrap;
 }
