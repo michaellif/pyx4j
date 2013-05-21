@@ -158,11 +158,6 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        return ARInternalTransactionManager.instance().getPADBalance(billingAccount, cycle);
-    }
-
-    @Override
     public ARCode getReservedARCode(Type type) {
         return ARInternalTransactionManager.instance().getDefaultARCode(type);
     }

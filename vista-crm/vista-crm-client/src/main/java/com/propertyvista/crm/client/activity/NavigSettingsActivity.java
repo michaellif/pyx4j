@@ -119,7 +119,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.LegalDocumentation());
 //      folder.addNavigItem(new CrmSiteMap.Settings.Policies.Pet());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.PADs());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.PaymentTypeSelection());
         if (!VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.ProductTax());

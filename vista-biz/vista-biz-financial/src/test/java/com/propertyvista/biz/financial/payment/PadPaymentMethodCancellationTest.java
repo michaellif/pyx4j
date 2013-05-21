@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -30,6 +31,7 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 
+@Ignore
 @Category(RegressionTests.class)
 public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
 

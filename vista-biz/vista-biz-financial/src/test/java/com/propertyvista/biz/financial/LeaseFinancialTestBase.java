@@ -81,7 +81,6 @@ import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.MerchantAccountDataModel;
-import com.propertyvista.test.mock.models.PADPolicyDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
 import com.propertyvista.test.mock.models.ProductTaxPolicyDataModel;
 import com.propertyvista.test.mock.models.TaxesDataModel;
@@ -108,7 +107,6 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         models.add(LeaseAdjustmentPolicyDataModel.class);
         models.add(CustomerDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
-        models.add(PADPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
         models.add(LeaseDataModel.class);
         return models;
@@ -596,10 +594,6 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException {
         ServerSideFactory.create(ARFacade.class).rejectPayment(paymentRecord, applyNSF);
         Persistence.service().commit();
-    }
-
-    protected BigDecimal getPADBalance(BillingCycle cycle) {
-        return ServerSideFactory.create(ARFacade.class).getPADBalance(retrieveLease().billingAccount(), cycle);
     }
 
     protected LogicalDate getTargetPadGenerationDate() {

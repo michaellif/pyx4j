@@ -13,13 +13,7 @@
  */
 package com.propertyvista.test.mock;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
-import com.propertyvista.domain.policy.policies.PADPolicy.PADChargeType;
 
 public class MockConfig {
 
@@ -29,20 +23,6 @@ public class MockConfig {
 
     public boolean yardiIntegration = false;
 
-    public Map<ARCode, OwingBalanceType> padBalanceTypeMap;
-
-    public PADChargeType padChargeType;
-
     public boolean useCaledonMerchantAccounts = false;
 
-    public void setPadChargeType(PADChargeType type) {
-        padChargeType = type;
-    }
-
-    public void setPadBalanceType(ARCode arCode, OwingBalanceType type) {
-        if (padBalanceTypeMap == null) {
-            padBalanceTypeMap = new HashMap<ARCode, OwingBalanceType>();
-        }
-        padBalanceTypeMap.put(arCode, type);
-    }
 }

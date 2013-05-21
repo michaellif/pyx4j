@@ -474,10 +474,6 @@ public class CrmSiteMap implements SiteMap {
 
             public static class TenantInsurance extends CrmCrudAppPlace {
             }
-
-            @PlaceProperties(caption = "PADs", navigLabel = "PADs")
-            public static class PADs extends CrmCrudAppPlace {
-            }
         }
     }
 

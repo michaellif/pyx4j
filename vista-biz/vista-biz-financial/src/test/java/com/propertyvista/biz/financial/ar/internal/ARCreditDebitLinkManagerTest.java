@@ -22,6 +22,7 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -40,6 +41,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.test.integration.IntegrationTestBase.FunctionalTests;
 
 @Category(FunctionalTests.class)
+@Ignore
 public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
 
     @Override

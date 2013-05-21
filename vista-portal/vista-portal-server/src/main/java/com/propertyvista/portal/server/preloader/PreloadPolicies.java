@@ -26,9 +26,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.LegalDocum
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupDepositPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseAdjustmentPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupLeaseBillingPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupPADPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.MockupProductTaxPolicyPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.PADPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMethodSelectionPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
@@ -58,14 +56,12 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
             add(new DepositPolicyPreloader());
             add(new LeaseAdjustmentPolicyPreloader());
             add(new LeaseBillingPolicyPreloader());
-            add(new PADPolicyPreloader());
         } else {
             add(new LegalDocumentationPolicyPreloader());
             add(new MockupProductTaxPolicyPreloader());
             add(new MockupDepositPolicyPreloader());
             add(new MockupLeaseAdjustmentPolicyPreloader());
             add(new MockupLeaseBillingPolicyPreloader());
-            add(new MockupPADPolicyPreloader());
         }
     }
 

@@ -34,8 +34,6 @@ import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
-import com.propertyvista.domain.policy.policies.PADPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
@@ -157,14 +155,6 @@ public class LeaseDataModel extends MockDataModel<Lease> {
                     PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
                     pap.paymentMethod().set(paymentMethod);
 
-                    PADPolicy policy = getDataModel(PADPolicyDataModel.class).getItem(0);
-                    if (policy.chargeType().getValue() == PADPolicy.PADChargeType.OwingBalance) {
-                        pap.amountType().setValue(AmountType.Percent);
-                        pap.percent().setValue(new BigDecimal(value));
-                    } else {
-                        pap.amountType().setValue(AmountType.Value);
-                        pap.value().setValue(new BigDecimal(value));
-                    }
                     pap.comments().setValue("Preauthorized Payment");
 
                     ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);

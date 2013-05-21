@@ -16,22 +16,16 @@ package com.propertyvista.biz.financial.ar.internal;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
@@ -46,9 +40,6 @@ import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.financial.billing.InvoiceWithdrawal;
-import com.propertyvista.domain.policy.policies.PADPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
-import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 /**
@@ -100,33 +91,6 @@ class ARInternalCreditDebitLinkManager {
 
         InternalBillingAccount billingAccount = credit.billingAccount().<InternalBillingAccount> cast();
         List<InvoiceDebit> debits = ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount);
-
-        // if this is a pad payment, filter out not PAD debits
-        if (credit instanceof InvoicePayment) {
-            BillingCycle padBillingCycle = credit.<InvoicePayment> cast().paymentRecord().padBillingCycle();
-            if (!padBillingCycle.isNull()) {
-
-                // get PAD policy
-                PADPolicy policy = ServerSideFactory.create(PolicyFacade.class)
-                        .obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
-                // create product map
-                Map<ARCode, OwingBalanceType> debitBalanceType = new HashMap<ARCode, OwingBalanceType>();
-                for (PADDebitPolicyItem item : policy.debitBalanceTypes()) {
-                    debitBalanceType.put(item.arCode(), item.owingBalanceType().getValue());
-                }
-                List<InvoiceDebit> padDebits = new ArrayList<InvoiceDebit>();
-                for (InvoiceDebit debit : debits) {
-                    OwingBalanceType balanceType = debitBalanceType.get(debit.arCode());
-                    if (balanceType == null) {
-                        continue;
-                    }
-                    if (balanceType.equals(OwingBalanceType.ToDateTotal) || debit.billingCycle().equals(padBillingCycle)) {
-                        padDebits.add(debit);
-                    }
-                }
-                debits = padDebits;
-            }
-        }
 
         for (InvoiceDebit debit : debits) {
 

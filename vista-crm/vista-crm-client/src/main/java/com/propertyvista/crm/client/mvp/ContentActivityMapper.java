@@ -24,8 +24,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.crm.client.activity.NotificationsActivity;
 import com.propertyvista.crm.client.activity.MessageActivity;
+import com.propertyvista.crm.client.activity.NotificationsActivity;
 import com.propertyvista.crm.client.activity.RuntimeErrorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountEditorActivity;
 import com.propertyvista.crm.client.activity.crud.account.AccountViewerActivity;
@@ -188,9 +188,6 @@ import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentat
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.pad.PADPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.pad.PADPolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.pad.PADPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerActivity;
@@ -1111,21 +1108,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new PaymentTypeSelectionPolicyViewerActivity(crudPlace);
                             break;
                         }
-
-                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.PADs) {
-                        switch (crudPlace.getType()) {
-                        case lister:
-                            activity = new PADPolicyListerActivity(crudPlace);
-                            break;
-                        case editor:
-                            activity = new PADPolicyEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new PADPolicyViewerActivity(crudPlace);
-                            break;
-                        }
 // - Security
-
                     } else if (crudPlace instanceof CrmSiteMap.Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
                         case lister:

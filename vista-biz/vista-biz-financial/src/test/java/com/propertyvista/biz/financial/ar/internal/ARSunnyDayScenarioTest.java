@@ -22,6 +22,7 @@ package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
 
+import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -33,6 +34,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
+@Ignore
 @Category(RegressionTests.class)
 public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
 

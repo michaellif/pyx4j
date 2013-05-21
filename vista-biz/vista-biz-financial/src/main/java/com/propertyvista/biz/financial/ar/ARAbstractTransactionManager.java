@@ -27,13 +27,10 @@
 package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang.Validate;
 
@@ -47,7 +44,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
-import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -56,13 +52,8 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.policy.policies.PADCreditPolicyItem;
-import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
-import com.propertyvista.domain.policy.policies.PADPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TransactionHistoryDTO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public abstract class ARAbstractTransactionManager {
 
@@ -121,41 +112,6 @@ public abstract class ARAbstractTransactionManager {
     abstract protected List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount);
 
     abstract protected BigDecimal getCurrentBallance(BillingAccount billingAccount);
-
-    public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        // get PAD policy
-        PADPolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(), PADPolicy.class);
-        // create product map
-        Map<ARCode, OwingBalanceType> debitBalanceType = new HashMap<ARCode, OwingBalanceType>();
-        for (PADDebitPolicyItem item : policy.debitBalanceTypes()) {
-            debitBalanceType.put(item.arCode(), item.owingBalanceType().getValue());
-        }
-        BigDecimal balance = BigDecimal.ZERO;
-        for (InvoiceDebit debit : getNotCoveredDebitInvoiceLineItems(billingAccount)) {
-            OwingBalanceType balanceType = debitBalanceType.get(debit.arCode());
-            if (balanceType == null) {
-                continue;
-            }
-            if (balanceType.equals(OwingBalanceType.ToDateTotal) || debit.billingCycle().equals(cycle)) {
-                balance = balance.add(debit.outstandingDebit().getValue());
-            }
-        }
-        List<ARCode> padCreditCodes = new ArrayList<ARCode>();
-        for (PADCreditPolicyItem item : policy.creditBalanceTypes()) {
-            padCreditCodes.add(item.arCode());
-        }
-        for (InvoiceCredit credit : getNotConsumedCreditInvoiceLineItems(billingAccount)) {
-            // TODO - work around for yardi integration - only consider credits for the given cycle
-            if (VistaFeatures.instance().yardiIntegration() && !credit.billingCycle().equals(cycle)) {
-                continue;
-            }
-            if (padCreditCodes.contains(credit.arCode())) {
-                balance = balance.add(credit.outstandingCredit().getValue());
-            }
-        }
-        // no charge for negative balance
-        return balance.compareTo(BigDecimal.ZERO) > 0 ? balance : BigDecimal.ZERO;
-    }
 
     public LogicalDate getTransactionDueDate(BillingAccount billingAccount, LogicalDate postDate) {
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);

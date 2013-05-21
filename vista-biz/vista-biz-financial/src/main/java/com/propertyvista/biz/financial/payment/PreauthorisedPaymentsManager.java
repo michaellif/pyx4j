@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
@@ -43,7 +42,6 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.util.DomainUtil;
 
 class PreauthorisedPaymentsManager {
 
@@ -218,18 +216,7 @@ class PreauthorisedPaymentsManager {
 
                 switch (pap.amountType().getValue()) {
                 case Percent:
-                    if (currentBalance == null) {
-                        // Lazy currentBalance initialization
-                        currentBalance = ServerSideFactory.create(ARFacade.class).getPADBalance(billingAccount, billingCycle);
-                    }
-                    percentTotal = percentTotal.add(pap.percent().getValue());
-                    record.amount = DomainUtil.roundMoney(currentBalance.multiply(pap.percent().getValue()));
-                    percentAmountTotal = percentAmountTotal.add(record.amount);
-                    total = total.add(record.amount);
-                    if ((recordLargest == null) || (record.amount.compareTo(recordLargest.amount) > 0)) {
-                        recordLargest = record;
-                    }
-                    break;
+                    throw new IllegalArgumentException("No longer in use");
 
                 case Value:
                     record.amount = pap.value().getValue();

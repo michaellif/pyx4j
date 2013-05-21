@@ -17,8 +17,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -32,9 +30,6 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
-import com.propertyvista.domain.policy.policies.PADDebitPolicyItem;
-import com.propertyvista.domain.policy.policies.PADPolicy;
-import com.propertyvista.domain.policy.policies.PADPolicy.OwingBalanceType;
 import com.propertyvista.domain.property.asset.building.Building;
 
 /*
@@ -48,8 +43,6 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
 
     private final ARPolicy arPolicy;
 
-    private final Map<ARCode, OwingBalanceType> padDebitTypes = new HashMap<ARCode, OwingBalanceType>();
-
     public InvoiceDebitComparator(BillingAccount billingAccount) {
 
         //Find building that billingAccount belongs to
@@ -60,43 +53,19 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
             building = Persistence.service().retrieve(criteria);
         }
 
-        // Sort items according to AR and PAD policies
+        // Sort items according to AR policy
         arPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, ARPolicy.class);
-        PADPolicy padPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(building, PADPolicy.class);
-
-        // create product map
-        for (PADDebitPolicyItem item : padPolicy.debitBalanceTypes()) {
-            padDebitTypes.put(item.arCode(), item.owingBalanceType().getValue());
-        }
     }
 
     @Override
     public int compare(InvoiceDebit debit1, InvoiceDebit debit2) {
-        int padComp = padCompare(debit1, debit2);
-        return padComp == 0 ? amtCompare(debit1, debit2) : padComp;
+        int arComp = arCompare(debit1, debit2);
+        return arComp == 0 ? amtCompare(debit1, debit2) : arComp;
     }
 
     private int amtCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
         // smaller amount first
         return debit1.amount().getValue().compareTo(debit2.amount().getValue());
-    }
-
-    private int padCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
-        OwingBalanceType padType1 = padDebitType(debit1), padType2 = padDebitType(debit2);
-        if (padType1 != null && padType2 != null) {
-            if (padType1 == OwingBalanceType.ToDateTotal && padType2 == OwingBalanceType.ToDateTotal) {
-                return arCompare(debit1, debit2);
-            } else {
-                // LastBill goes last
-                return new Boolean(padType1 == OwingBalanceType.LastBill).compareTo(padType2 == OwingBalanceType.LastBill);
-            }
-        } else if (padType1 == null && padType2 == null) {
-            // per ar policy
-            return arCompare(debit1, debit2);
-        } else {
-            // non-pad first
-            return new Boolean(padType1 != null).compareTo(padType2 != null);
-        }
     }
 
     private int arCompare(InvoiceDebit debit1, InvoiceDebit debit2) {
@@ -107,10 +76,6 @@ public class InvoiceDebitComparator implements Comparator<InvoiceDebit> {
             return compareBucketAge(debit1, debit2);
         }
         return 0;
-    }
-
-    private OwingBalanceType padDebitType(InvoiceDebit debit) {
-        return padDebitTypes.get(debit.arCode());
     }
 
     public static int compareBucketAge(InvoiceDebit debit1, InvoiceDebit debit2) {

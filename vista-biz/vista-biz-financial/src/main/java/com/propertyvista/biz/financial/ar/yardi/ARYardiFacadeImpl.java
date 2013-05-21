@@ -140,11 +140,6 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BigDecimal getPADBalance(BillingAccount billingAccount, BillingCycle cycle) {
-        return ARYardiTransactionManager.instance().getPADBalance(billingAccount, cycle);
-    }
-
-    @Override
     public void updateArrearsHistory(BillingAccount billingAccount) {
         ARArrearsManager.instance().updateArrearsHistory(billingAccount);
     }
