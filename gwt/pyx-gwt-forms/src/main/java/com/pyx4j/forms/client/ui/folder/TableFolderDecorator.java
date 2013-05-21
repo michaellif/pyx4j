@@ -79,9 +79,14 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             headerLabelPanel.setWidth(column.getWidth());
             headerLabelPanel.setStyleName(EntityFolderTableHeaderLabel.name());
 
-            String caption = column.getObject().getMeta().getCaption();
-            if (caption == "") {
-                caption = "&nbsp";
+            String caption;
+            if (column.getCaption() != null) {
+                caption = column.getCaption();
+            } else {
+                caption = column.getObject().getMeta().getCaption();
+                if (caption == "") {
+                    caption = "&nbsp";
+                }
             }
 
             if (column.getObject().getMeta().isValidatorAnnotationPresent(NotNull.class)) {

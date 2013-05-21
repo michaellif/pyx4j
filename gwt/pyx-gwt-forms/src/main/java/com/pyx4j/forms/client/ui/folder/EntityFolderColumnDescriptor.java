@@ -30,15 +30,26 @@ public class EntityFolderColumnDescriptor {
 
     private final boolean readOnly;
 
+    private final String caption;
+
     public EntityFolderColumnDescriptor(IObject<?> object, String width) {
-        this(object, width, false);
+        this(object, width, null, false);
+    }
+
+    public EntityFolderColumnDescriptor(IObject<?> object, String width, String caption) {
+        this(object, width, caption, false);
     }
 
     public EntityFolderColumnDescriptor(IObject<?> object, String width, boolean readOnly) {
+        this(object, width, null, readOnly);
+    }
+
+    public EntityFolderColumnDescriptor(IObject<?> object, String width, String caption, boolean readOnly) {
         super();
         this.object = object;
         this.width = width;
         this.readOnly = readOnly;
+        this.caption = caption;
     }
 
     public IObject<?> getObject() {
@@ -51,6 +62,10 @@ public class EntityFolderColumnDescriptor {
 
     public boolean isReadOnly() {
         return readOnly;
+    }
+
+    public String getCaption() {
+        return caption;
     }
 
 }
