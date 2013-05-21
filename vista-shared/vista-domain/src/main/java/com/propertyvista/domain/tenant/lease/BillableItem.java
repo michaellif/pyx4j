@@ -66,5 +66,7 @@ public interface BillableItem extends IEntity {
     @Caption(description = "Empty value assumes Lease end date")
     IPrimitive<LogicalDate> expirationDate();
 
+    IPrimitive<String> description();
+
     IPrimitive<Boolean> finalized();
 }
