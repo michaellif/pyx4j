@@ -160,8 +160,8 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-//        effectiveDate("01-Jun-2012").
-//        expirationDate("31-Jul-2014").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
         agreedPrice("1234.56");
         // @formatter:on
 
@@ -203,29 +203,8 @@ public class YardiImportTest extends YardiTestBase {
         // @formatter:on
 
         // @formatter:off
-//        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-//        agreedPrice("1250.00");
-
-        // ================= Update Co-tenant Last Name ======================
-        {
-            // @formatter:off
-            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
-            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Bender");
-            // @formatter:on
-            MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
-
-        }
-
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
-
-        lease = getCurrentLease(unit);
-        Persistence.service().retrieve(lease.currentTerm().version().tenants());
-
-        // @formatter:off
-        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
-        firstName("Jane").
-        lastName("Bender").
-        role(Role.CoApplicant);
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
+        agreedPrice("1250.00");
 
     }
     

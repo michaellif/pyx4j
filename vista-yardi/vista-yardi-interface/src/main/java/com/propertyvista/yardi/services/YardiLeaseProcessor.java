@@ -69,34 +69,45 @@ public class YardiLeaseProcessor {
         }
     }
 
-    private Lease updateLease(RTCustomer rtCustomer, Lease lease) {
+    private Lease updateLease(RTCustomer rtCustomer, Lease leaseId) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
-        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
+        Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+        boolean modified = false;
         if (new LeaseMerger().isLeaseChanged(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLease(yardiLease, lease);
+            modified = true;
         }
 
         if (new LeaseMerger().isTermChanged(yardiLease, lease.currentTerm())) {
             lease.currentTerm().set(new LeaseMerger().mergeTerm(yardiLease, lease.currentTerm()));
+            modified = true;
         }
 
         if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {
             new LeaseMerger().mergePaymentType(rtCustomer, lease);
+            modified = true;
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         if (new TenantMerger().checkChanges(yardiCustomers, lease.currentTerm().version().tenants())) {
             lease.currentTerm().set(new TenantMerger().updateTenants(yardiCustomers, lease.currentTerm()));
+            modified = true;
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         if (new TenantMerger().changedNames(yardiCustomers, lease.currentTerm().version().tenants())) {
             new TenantMerger().updateTenantNames(rtCustomer, lease);
+            modified = true;
         }
 
-        return ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+        if (modified) {
+            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+        }
+
+        return lease;
     }
 
     private Lease createLease(RTCustomer rtCustomer, String propertyCode) {
@@ -158,9 +169,10 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    public Lease updateLeaseProducts(List<Transactions> transactions, Lease lease) {
+    public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
         // TODO YardiLeaseIntegrationAgent.updateBillabelItem(lease, billableItem);
         log.info("      Updating billable item");
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         List<BillableItem> newItems = new ArrayList<BillableItem>();
         boolean modified = false;
         for (Transactions tr : transactions) {
@@ -183,7 +195,7 @@ public class YardiLeaseProcessor {
                     leaseItems.remove();
                 }
             }
-            Persistence.service().persist(lease);
+            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
         }
         return lease;
     }
