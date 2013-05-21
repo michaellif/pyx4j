@@ -31,7 +31,9 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javassist.CannotCompileException;
@@ -45,6 +47,7 @@ import javassist.CtMethod;
 import javassist.Modifier;
 import javassist.NotFoundException;
 import javassist.bytecode.AnnotationsAttribute;
+import javassist.bytecode.ClassFile;
 import javassist.bytecode.ConstPool;
 import javassist.bytecode.annotation.Annotation;
 
@@ -68,6 +71,21 @@ public class EntityImplGenerator {
     public static final String MARKER_RESOURCE_NAME = "META-INF/MANIFEST.MF";
 
     public static final String ALREADY_GENERATED_MARKER_RESOURCE_NAME = "META-INF/domain-generated.txt";
+
+    static final Map<String, int[]> javaVersion = new HashMap<String, int[]>();
+
+    static {
+        javaVersion.put("1.0", new int[] { 45, 3 });
+        javaVersion.put("1.1", new int[] { 45, 3 });
+        javaVersion.put("1.2", new int[] { 46, 3 });
+        javaVersion.put("1.3", new int[] { 47, 0 });
+        javaVersion.put("1.4", new int[] { 48, 0 });
+        javaVersion.put("1.5", new int[] { 49, 0 });
+        javaVersion.put("1.6", new int[] { 50, 0 });
+        javaVersion.put("6", new int[] { 50, 0 });
+        javaVersion.put("1.7", new int[] { 51, 0 });
+        javaVersion.put("7", new int[] { 51, 0 });
+    }
 
     private static EntityImplGenerator instance;
 
@@ -133,15 +151,19 @@ public class EntityImplGenerator {
         if (instance == null) {
             instance = new EntityImplGenerator(webapp);
         } else if (instance.webapp != webapp) {
-            log.error("chaning webapp classpath configuration at runtime");
+            log.error("changing webapp classpath configuration at runtime");
         }
         return instance;
     }
 
     public static void main(String[] args) {
         File target;
+        String classVersion = "1.6";
         if ((args != null) && (args.length > 0)) {
             target = new File(args[0]);
+            if (args.length > 1) {
+                classVersion = args[1];
+            }
         } else {
             target = new File(new File("target"), "classes");
         }
@@ -156,6 +178,17 @@ public class EntityImplGenerator {
         EntityImplGenerator gen = new EntityImplGenerator(false);
         for (String c : classes) {
             CtClass klass = gen.createImplementation(c);
+
+            if (classVersion != null) {
+                int[] majorMinor = javaVersion.get(classVersion);
+                if (majorMinor == null) {
+                    throw new RuntimeException("Unknown classVersion " + classVersion);
+                }
+                ClassFile cf = klass.getClassFile();
+                cf.setMajorVersion(majorMinor[0]);
+                cf.setMinorVersion(majorMinor[1]);
+            }
+
             try {
                 @SuppressWarnings("unchecked")
                 Class<? extends IEntity> entityClass = klass.toClass(gen.getContextClassLoader(), null);
