@@ -188,8 +188,8 @@ public class YardiImportTest extends YardiTestBase {
         new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
+        description("Regular Residential Unit").
         agreedPrice("1234.56");
-      //  description("Regular Residential Unit");
         // @formatter:on
 
         //TODO When uid will be unique use uid instead of index in list
@@ -199,8 +199,8 @@ public class YardiImportTest extends YardiTestBase {
         uid("rpark").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
+        description("Parking B").
         agreedPrice("60.00");  
-      //  description("Parking B");
         // @formatter:on
 
         // @formatter:off
@@ -208,8 +208,8 @@ public class YardiImportTest extends YardiTestBase {
         uid("rinpark").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
+        description("Indoor Parking").
         agreedPrice("50.00");  
-      //  description("Indoor Parking");
         // @formatter:on
 
         {

@@ -37,9 +37,12 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -196,6 +199,7 @@ public class YardiLeaseProcessor {
                 }
             }
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            suspendPADPayments(lease);
         }
         return lease;
     }
@@ -240,20 +244,34 @@ public class YardiLeaseProcessor {
         return date;
     }
 
-    private BillableItem createBillableItem(ChargeDetail charge) {
+    // TODO - may need a way to suspend PAD payments only for modified BillableItems (after yardi implements chargeId)
+    private void suspendPADPayments(Lease lease) {
+        EntityQueryCriteria<PreauthorizedPayment> crit = EntityQueryCriteria.create(PreauthorizedPayment.class);
+        crit.in(crit.proto().tenant().lease(), lease);
+        for (PreauthorizedPayment pap : Persistence.service().query(crit)) {
+            ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+        }
+    }
+
+    private BillableItem createBillableItem(ChargeDetail detail) {
         BillableItem billableItem = EntityFactory.create(BillableItem.class);
-        billableItem.uid().setValue(charge.getChargeCode());
-        billableItem.agreedPrice().setValue(new BigDecimal(charge.getAmount()));
+        billableItem.uid().setValue(detail.getChargeCode());
+        billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
         billableItem.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
-        billableItem.effectiveDate().setValue(new LogicalDate(charge.getServiceFromDate()));
-        billableItem.expirationDate().setValue(new LogicalDate(charge.getServiceToDate()));
+        billableItem.effectiveDate().setValue(new LogicalDate(detail.getServiceFromDate()));
+        billableItem.expirationDate().setValue(new LogicalDate(detail.getServiceToDate()));
+        billableItem.description().setValue(getLeaseChargeDescription(detail));
 
         YardiLeaseChargeData extraData = EntityFactory.create(YardiLeaseChargeData.class);
-        extraData.chargeCode().setValue(charge.getChargeCode());
-        extraData.description().setValue(charge.getDescription());
+        extraData.chargeCode().setValue(detail.getChargeCode());
         billableItem.extraData().set(extraData);
 
         return billableItem;
+    }
+
+    private String getLeaseChargeDescription(ChargeDetail detail) {
+        ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, detail.getChargeCode());
+        return arCode == null ? detail.getDescription() : arCode.name().getValue();
     }
 
 }

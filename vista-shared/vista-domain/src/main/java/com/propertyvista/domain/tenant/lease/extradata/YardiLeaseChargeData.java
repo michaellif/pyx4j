@@ -22,6 +22,4 @@ import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 public interface YardiLeaseChargeData extends BillableItemExtraData {
 
     IPrimitive<String> chargeCode();
-
-    IPrimitive<String> description();
 }
