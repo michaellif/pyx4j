@@ -45,6 +45,7 @@ import com.propertyvista.crm.client.ui.components.LegalTermsContentViewer;
 import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
+import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
@@ -123,8 +124,6 @@ public class CrmTheme extends VistaTheme {
 
         initSuggestBoxStyle();
 
-        initReportsStyles();
-
         initKeywordBoxStyles();
 
         initWizardPanelStyles();
@@ -132,7 +131,9 @@ public class CrmTheme extends VistaTheme {
         initPmcSignatureFormStyles();
         initLegalTermsContentViewerStyles();
 
+        initReportsStyles();
         initReportRelatedStyles();
+        initGadgetStyles();
     }
 
     @Override
@@ -622,6 +623,12 @@ public class CrmTheme extends VistaTheme {
     private void initReportRelatedStyles() {
         Style style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
         style.addProperty("display", "none");
+        addStyle(style);
+    }
+
+    private void initGadgetStyles() {
+        Style style = new Style("." + ArrearsGadgetSummaryForm.Styles.ArrearsSummaryPanel.name() + " .ViewerPanel");
+        style.addProperty("display", "inline");
         addStyle(style);
     }
 

@@ -18,7 +18,9 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
@@ -28,12 +30,20 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
 
     private static final I18n i18n = I18n.get(ArrearsGadgetSummaryForm.class);
 
+    public enum Styles implements IStyleName {
+
+        ArrearsSummaryPanel;
+
+    }
+
     public ArrearsGadgetSummaryForm() {
         super(ArrearsGadgetDataDTO.class);
     }
 
     @Override
     public IsWidget createContent() {
+        SimplePanel panel = new SimplePanel();
+        panel.addStyleName(Styles.ArrearsSummaryPanel.name());
         FlexTable content = new FlexTable();
         int row = -1;
         content.setWidget(++row, 0, new Label(i18n.tr("This Month:")));
@@ -83,7 +93,8 @@ public class ArrearsGadgetSummaryForm extends ZoomableViewForm<ArrearsGadgetData
 
         content.getColumnFormatter().setWidth(1, "100px");
         content.getColumnFormatter().setWidth(2, "150px");
-        return content;
+        panel.setWidget(content);
+        return panel;
     }
 
 }
