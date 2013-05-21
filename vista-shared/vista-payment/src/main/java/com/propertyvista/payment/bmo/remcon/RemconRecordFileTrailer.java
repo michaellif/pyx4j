@@ -18,8 +18,8 @@ import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 public class RemconRecordFileTrailer implements RemconRecord {
 
     @Override
-    public String recordType() {
-        return "9";
+    public char recordType() {
+        return '9';
     };
 
     //Consists of File Serial date followed by File Serial number as defined under File Header
@@ -34,6 +34,6 @@ public class RemconRecordFileTrailer implements RemconRecord {
     @RemconField(14)
     public String totalAmount;
 
-    @RemconField(value = 113, type = RemconFieldType.Alphanumeric)
+    @RemconField(value = 113, type = RemconFieldType.Filler)
     public String filler;
 }

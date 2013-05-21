@@ -18,8 +18,8 @@ import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 public class RemconRecordFileHeader implements RemconRecord {
 
     @Override
-    public String recordType() {
-        return "0";
+    public char recordType() {
+        return '0';
     };
 
     //Numeric; File creation date (YYMMDD)
@@ -34,6 +34,6 @@ public class RemconRecordFileHeader implements RemconRecord {
     @RemconField(value = 6, type = RemconFieldType.DateYYMMDD)
     public String fileSerialDate;
 
-    @RemconField(value = 131, type = RemconFieldType.Alphanumeric)
+    @RemconField(value = 131, type = RemconFieldType.Filler)
     public String filler;
 }

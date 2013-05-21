@@ -13,6 +13,9 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 
 /**
@@ -22,8 +25,8 @@ import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 public class RemconRecordBatchHeader implements RemconRecord {
 
     @Override
-    public String recordType() {
-        return "2";
+    public char recordType() {
+        return '2';
     };
 
     //Numeric; Last two are cents
@@ -102,6 +105,11 @@ public class RemconRecordBatchHeader implements RemconRecord {
     @RemconField(value = 30, type = RemconFieldType.Alphanumeric)
     public String traceNumber;
 
-    @RemconField(value = 40, type = RemconFieldType.Alphanumeric)
+    @RemconField(value = 40, type = RemconFieldType.Filler)
     public String filler;
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }

@@ -13,13 +13,16 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 
 public class RemconRecordDetailRecord implements RemconRecord {
 
     @Override
-    public String recordType() {
-        return "5";
+    public char recordType() {
+        return '5';
     };
 
     //Same batch number as in the Batch Header
@@ -63,6 +66,11 @@ public class RemconRecordDetailRecord implements RemconRecord {
     @RemconField(value = 35, type = RemconFieldType.Alphanumeric)
     public String customerName;
 
-    @RemconField(value = 5, type = RemconFieldType.Alphanumeric)
+    @RemconField(value = 5, type = RemconFieldType.Filler)
     public String filler;
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }

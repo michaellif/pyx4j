@@ -18,8 +18,8 @@ import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 public class RemconRecordBatchTrailer implements RemconRecord {
 
     @Override
-    public String recordType() {
-        return "8";
+    public char recordType() {
+        return '8';
     };
 
     //Cumulative amount of total dollar value of remittances within the batch
@@ -96,6 +96,6 @@ public class RemconRecordBatchTrailer implements RemconRecord {
     @RemconField(value = 30, type = RemconFieldType.Alphanumeric)
     public String traceNumber;
 
-    @RemconField(value = 40, type = RemconFieldType.Alphanumeric)
+    @RemconField(value = 40, type = RemconFieldType.Filler)
     public String filler;
 }

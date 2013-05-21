@@ -18,14 +18,14 @@ import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 public class RemconRecordBoxHeader implements RemconRecord {
 
     @Override
-    public String recordType() {
-        return "1";
+    public char recordType() {
+        return '1';
     };
 
     //Numeric; Static box number assigned to customer by the Bank
     @RemconField(4)
     public String boxNumber;
 
-    @RemconField(value = 145, type = RemconFieldType.Alphanumeric)
+    @RemconField(value = 145, type = RemconFieldType.Filler)
     public String filler;
 }

@@ -13,10 +13,20 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RemconFile {
 
-    List<RemconRecord> records;
+    public List<RemconRecord> records = new ArrayList<RemconRecord>();
 
+    public List<RemconRecordDetailRecord> getDetailRecords() {
+        List<RemconRecordDetailRecord> detailRecords = new ArrayList<RemconRecordDetailRecord>();
+        for (RemconRecord record : records) {
+            if (record instanceof RemconRecordDetailRecord) {
+                detailRecords.add((RemconRecordDetailRecord) record);
+            }
+        }
+        return detailRecords;
+    }
 }
