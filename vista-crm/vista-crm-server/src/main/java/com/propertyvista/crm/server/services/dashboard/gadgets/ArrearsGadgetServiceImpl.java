@@ -84,17 +84,32 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             if (snapshot == null) {
                 continue;
             } else {
-                if (!snapshot.totalAgingBuckets().bucketThisMonth().isNull()) {
-                    add(aggregatedBuckets.bucketThisMonth(), snapshot.totalAgingBuckets().bucketThisMonth());
+                AgingBuckets buckets = null;
+                if (query.category().isNull()) {
+                    buckets = snapshot.totalAgingBuckets();
+                } else {
+                    foundBuckets: for (AgingBuckets bucketsCandidate : snapshot.agingBuckets()) {
+                        if (bucketsCandidate.arCode().getValue() == query.category().getValue()) {
+                            buckets = bucketsCandidate;
+                            break foundBuckets;
+                        }
+                    }
                 }
-                add(aggregatedBuckets.bucketCurrent(), snapshot.totalAgingBuckets().bucketCurrent());
-                add(aggregatedBuckets.bucket30(), snapshot.totalAgingBuckets().bucket30());
-                add(aggregatedBuckets.bucket60(), snapshot.totalAgingBuckets().bucket60());
-                add(aggregatedBuckets.bucket90(), snapshot.totalAgingBuckets().bucket90());
-                add(aggregatedBuckets.bucketOver90(), snapshot.totalAgingBuckets().bucketOver90());
-                add(aggregatedBuckets.arrearsAmount(), snapshot.totalAgingBuckets().arrearsAmount());
-                add(aggregatedBuckets.totalBalance(), snapshot.totalAgingBuckets().totalBalance());
-                add(aggregatedBuckets.creditAmount(), snapshot.totalAgingBuckets().creditAmount());
+                if (buckets == null) {
+                    continue;
+                }
+
+                if (!buckets.bucketThisMonth().isNull()) {
+                    add(aggregatedBuckets.bucketThisMonth(), buckets.bucketThisMonth());
+                }
+                add(aggregatedBuckets.bucketCurrent(), buckets.bucketCurrent());
+                add(aggregatedBuckets.bucket30(), buckets.bucket30());
+                add(aggregatedBuckets.bucket60(), buckets.bucket60());
+                add(aggregatedBuckets.bucket90(), buckets.bucket90());
+                add(aggregatedBuckets.bucketOver90(), buckets.bucketOver90());
+                add(aggregatedBuckets.arrearsAmount(), buckets.arrearsAmount());
+                add(aggregatedBuckets.totalBalance(), buckets.totalBalance());
+                add(aggregatedBuckets.creditAmount(), buckets.creditAmount());
             }
         }
     }
@@ -110,6 +125,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         if (!query.buildingsFilter().isEmpty()) {
             criteria.in(criteria.proto().building(), query.buildingsFilter());
         }
+        query.category().setValue(query.category().getValue());
 
         criteria.add(PropertyCriterion.eq(criteria.proto().asOf(), query.asOf().getValue()));
 

@@ -33,6 +33,15 @@ public class ArrearsGadgetSummaryMetadataForm extends CEntityDecoratableForm<Arr
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeCategory())).build());
+        get(proto().customizeCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().category()).setVisible(event.getValue() == true);
+            }
+        });
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -48,6 +57,7 @@ public class ArrearsGadgetSummaryMetadataForm extends CEntityDecoratableForm<Arr
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
+        get(proto().category()).setVisible(getValue().customizeCategory().isBooleanTrue());
     }
 
 }

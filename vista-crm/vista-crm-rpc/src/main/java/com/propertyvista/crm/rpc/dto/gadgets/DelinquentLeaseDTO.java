@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -60,5 +61,7 @@ public interface DelinquentLeaseDTO extends IEntity {
     IPrimitive<LogicalDate> asOf();
 
     Building building();
+
+    IPrimitive<ARCode.Type> category();
 
 }

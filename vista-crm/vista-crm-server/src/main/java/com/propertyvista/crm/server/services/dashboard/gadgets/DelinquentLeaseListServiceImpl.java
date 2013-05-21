@@ -78,6 +78,11 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
                     } else if (propertyCriterion.getPropertyPath().equals(dtoProto.building().getPath().toString())) {
                         dbCriteria.in(dbCriteria.proto().billingAccount().lease().unit().building(), (Vector<Building>) propertyCriterion.getValue());
                         i.remove();
+                    } else if (propertyCriterion.getPropertyPath().equals(dtoProto.category().getPath().toString())) {
+                        i.remove();
+                        if (propertyCriterion.getValue() == null) {
+
+                        }
                     }
                 }
             }

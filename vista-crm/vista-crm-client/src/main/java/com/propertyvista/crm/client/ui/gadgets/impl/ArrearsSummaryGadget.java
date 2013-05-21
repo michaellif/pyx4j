@@ -60,6 +60,7 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
         ArrearsGadgetQueryDataDTO query = EntityFactory.create(ArrearsGadgetQueryDataDTO.class);
         query.buildingsFilter().addAll(buildingsFilterContainer.getSelectedBuildingsStubs());
         query.asOf().setValue(getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate());
+        query.category().setValue(getMetadata().customizeCategory().isBooleanTrue() ? getMetadata().category().getValue() : null);
         return query;
     }
 
@@ -81,7 +82,9 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
 
     @Override
     protected Widget renderTitle() {
-        Label title = new Label(i18n.tr("Arrears as of {0,date,short}", makeSummaryQuery().asOf().getValue()));
+        ArrearsGadgetQueryDataDTO query = makeSummaryQuery();
+        String category = query.category().isNull() ? i18n.tr("Total") : query.category().getValue().toString();
+        Label title = new Label(i18n.tr("{0} arrears as of {1,date,short}", category, query.asOf().getValue()));
         return title;
     }
 

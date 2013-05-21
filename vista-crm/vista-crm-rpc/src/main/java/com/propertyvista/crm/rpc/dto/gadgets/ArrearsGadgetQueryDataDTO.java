@@ -14,11 +14,14 @@
 package com.propertyvista.crm.rpc.dto.gadgets;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -27,4 +30,9 @@ public interface ArrearsGadgetQueryDataDTO extends IEntity {
     IPrimitive<LogicalDate> asOf();
 
     IList<Building> buildingsFilter();
+
+    @Caption(description = "Choose which category of arrears to display")
+    @NotNull
+    IPrimitive<ARCode.Type> category();
+
 }

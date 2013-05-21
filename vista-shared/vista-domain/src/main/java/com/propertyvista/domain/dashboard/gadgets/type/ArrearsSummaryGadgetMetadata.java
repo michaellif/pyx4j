@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("Arrears Gadget Metadata")
@@ -59,4 +60,10 @@ public interface ArrearsSummaryGadgetMetadata extends CounterGadgetBaseMetadata,
     /** <code>null</code> means now */
     @NotNull
     IPrimitive<LogicalDate> asOf();
+
+    IPrimitive<Boolean> customizeCategory();
+
+    @Caption(description = "Choose which category of arrears to display")
+    @NotNull
+    IPrimitive<ARCode.Type> category();
 }
