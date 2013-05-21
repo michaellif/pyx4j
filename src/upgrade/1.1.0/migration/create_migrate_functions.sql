@@ -84,8 +84,8 @@ BEGIN
                 max_beds                        INT,
                 min_baths                       INT,
                 max_baths                       INT,
-                min_price                       INT,
-                max_price                       INT,
+                min_price                       NUMERIC(18,2),
+                max_price                       NUMERIC(18,2),
                 policy                          BIGINT                  NOT NULL,
                 order_in_parent                 INT,
                         CONSTRAINT      ilspolicy_item_pk PRIMARY KEY(id)
@@ -133,6 +133,7 @@ BEGIN
                 id                              BIGINT                  NOT NULL,
                 owner                           BIGINT,
                 value                           BIGINT,
+                seq                             INT,
                         CONSTRAINT      preauthorized_payment$covered_items_pk PRIMARY KEY(id)              
         );
         
