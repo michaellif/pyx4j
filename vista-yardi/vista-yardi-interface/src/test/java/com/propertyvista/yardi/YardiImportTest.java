@@ -163,6 +163,7 @@ public class YardiImportTest extends YardiTestBase {
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         agreedPrice("1234.56");
+      //  description("Regular Residential Unit");
         // @formatter:on
 
         {

@@ -40,4 +40,8 @@ public class BillableItemTester extends Tester {
         return this;
     }
 
+    public BillableItemTester description(String value) {
+        assertEquals("Description", value, billableItem.description().getValue());
+        return this;
+    }
 }
