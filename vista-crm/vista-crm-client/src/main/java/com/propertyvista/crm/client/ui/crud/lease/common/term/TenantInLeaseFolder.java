@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -35,7 +34,6 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -50,8 +48,8 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -365,26 +363,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 FormFlexPanel content = new FormFlexPanel();
 
                 content.setWidget(0, 0, new DecoratorBuilder(inject(proto().paymentMethod()), 40, 10).build());
-                content.setWidget(1, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
+                content.setWidget(1, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;
-            }
-
-            class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredItem> {
-
-                public CoveredItemFolder() {
-                    super(PreauthorizedPayment.CoveredItem.class, false);
-                    setViewable(true);
-                    inheritViewable(false);
-                }
-
-                @Override
-                public List<EntityFolderColumnDescriptor> columns() {
-                    return Arrays.asList(//@formatter:off
-                            new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
-                            new EntityFolderColumnDescriptor(proto().amount(), "5em"));
-                      //@formatter:on                
-                }
             }
         }
     }

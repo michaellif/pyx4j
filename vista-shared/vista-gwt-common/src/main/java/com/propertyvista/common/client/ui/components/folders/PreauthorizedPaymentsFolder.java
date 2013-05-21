@@ -98,8 +98,11 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
                         }
                     };
                 }
-            }), 33, 10).build());
-            content.getFlexCellFormatter().setColSpan(row, 0, 2);
+            }), 38, 10).build());
+
+            content.setBR(++row, 0, 1);
+
+            content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder(isEditable())));
 
             return content;
         }

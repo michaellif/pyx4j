@@ -29,6 +29,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -118,7 +119,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                     }
                 });
 
-                content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
+                content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;
             }

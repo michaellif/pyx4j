@@ -39,11 +39,15 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         dto.tenant().set(tenantId);
         dto.preauthorizedPayments().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(tenantId));
-
+        fillPreauthorizedPaymentItems(dto, tenantId);
         fillTenantInfo(dto, tenantId);
         fillAvailablePaymentMethods(dto, tenantId);
 
         callback.onSuccess(dto);
+    }
+
+    private void fillPreauthorizedPaymentItems(PreauthorizedPaymentsDTO dto, Tenant tenantId) {
+
     }
 
     private void fillTenantInfo(PreauthorizedPaymentsDTO pads, Tenant tenant) {

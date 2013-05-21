@@ -41,10 +41,8 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -55,7 +53,9 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
@@ -63,7 +63,6 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
@@ -210,7 +209,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
+        panel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        get(proto().coveredItems()).setViewable(true);
+        get(proto().coveredItems()).inheritViewable(false);
 
         panel.setBR(++row, 0, 1);
 
@@ -282,9 +283,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().billableItem(),"35em"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "7em"),
-                    new EntityFolderColumnDescriptor(proto().percent(), "5em"));
+                    new EntityFolderColumnDescriptor(proto().billableItem(),"36em"),
+                    new EntityFolderColumnDescriptor(proto().amount(), "8em"),
+                    new EntityFolderColumnDescriptor(proto().percent(), "4em"));
               //@formatter:on                
         }
 
@@ -308,27 +309,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 CComponent<?, ?> comp;
 
                 if (column.getObject() == proto().billableItem()) {
-                    comp = inject(column.getObject(), new CEntityLabel<BillableItem>());
-                    ((CLabel<BillableItem>) comp).setFormat(new IFormat<BillableItem>() {
-                        @Override
-                        public String format(BillableItem value) {
-                            if (value != null) {
-                                if (!value.description().isNull()) {
-                                    return value.description().getValue();
-                                } else if (!value.item().isNull() && !value.item().description().isNull()) {
-                                    return value.item().description().getValue();
-                                }
-                                return "";
-                            } else {
-                                return null;
-                            }
-                        }
-
-                        @Override
-                        public BillableItem parse(String string) {
-                            return null;
-                        }
-                    });
+                    comp = inject(column.getObject(), new PapBillableItemLabel());
                 } else {
                     comp = super.createCell(column);
                 }

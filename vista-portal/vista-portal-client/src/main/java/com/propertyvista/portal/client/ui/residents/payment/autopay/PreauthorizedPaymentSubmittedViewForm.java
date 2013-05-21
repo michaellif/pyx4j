@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
@@ -57,7 +58,7 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
         content.setWidget(++row, 0,
                 new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
 
-        content.setWidget(++row, 0, inject(proto().coveredItems(), new CoveredItemFolder()));
+        content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelAlignment(Alignment.left)
                 .labelWidth(25).build());

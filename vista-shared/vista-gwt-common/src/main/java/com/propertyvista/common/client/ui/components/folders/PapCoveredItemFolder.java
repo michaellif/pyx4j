@@ -11,37 +11,41 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.payment.autopay;
+package com.propertyvista.common.client.ui.components.folders;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.CoveredItem;
-import com.propertyvista.domain.tenant.lease.BillableItem;
 
-class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredItem> {
+public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredItem> {
 
-    public CoveredItemFolder() {
+    private static final I18n i18n = I18n.get(PapCoveredItemFolder.class);
+
+    private final boolean editable;
+
+    public PapCoveredItemFolder() {
+        this(false);
+    }
+
+    public PapCoveredItemFolder(boolean editable) {
         super(PreauthorizedPayment.CoveredItem.class, false);
-        setViewable(true);
-        inheritViewable(false);
+        this.editable = editable;
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
-                new EntityFolderColumnDescriptor(proto().amount(), "5em"));
+                new EntityFolderColumnDescriptor(proto().billableItem(),"40em", i18n.tr("Lease Charges")),
+                new EntityFolderColumnDescriptor(proto().amount(), "8em"));
           //@formatter:on                
     }
 
@@ -59,33 +63,12 @@ class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredIte
             super(CoveredItem.class, columns());
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
             CComponent<?, ?> comp;
 
             if (column.getObject() == proto().billableItem()) {
-                comp = inject(column.getObject(), new CEntityLabel<BillableItem>());
-                ((CLabel<BillableItem>) comp).setFormat(new IFormat<BillableItem>() {
-                    @Override
-                    public String format(BillableItem value) {
-                        if (value != null) {
-                            if (!value.description().isNull()) {
-                                return value.description().getValue();
-                            } else if (!value.item().isNull() && !value.item().description().isNull()) {
-                                return value.item().description().getValue();
-                            }
-                            return "";
-                        } else {
-                            return null;
-                        }
-                    }
-
-                    @Override
-                    public BillableItem parse(String string) {
-                        return null;
-                    }
-                });
+                comp = inject(column.getObject(), new PapBillableItemLabel());
             } else {
                 comp = super.createCell(column);
             }
