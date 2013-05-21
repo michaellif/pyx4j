@@ -14,6 +14,7 @@
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -282,8 +283,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().billableItem(),"35em"),
-                    new EntityFolderColumnDescriptor(proto().percent(), "5em"),
-                    new EntityFolderColumnDescriptor(proto().amount(), "7em"));
+                    new EntityFolderColumnDescriptor(proto().amount(), "7em"),
+                    new EntityFolderColumnDescriptor(proto().percent(), "5em"));
               //@formatter:on                
         }
 
@@ -314,7 +315,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                             if (value != null) {
                                 if (!value.description().isNull()) {
                                     return value.description().getValue();
-                                } else if (!value.item().isNull()) {
+                                } else if (!value.item().isNull() && !value.item().description().isNull()) {
                                     return value.item().description().getValue();
                                 }
                                 return "";
@@ -337,9 +338,11 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                     ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                            // TODO Auto-generated method stub
+                            get(proto().percent()).setValue(event.getValue().divide(getValue().billableItem().agreedPrice().getValue(), 2, RoundingMode.FLOOR));
                         }
                     });
+                } else if (column.getObject() == proto().percent()) {
+                    comp.setEditable(false);
                 }
 
                 return comp;

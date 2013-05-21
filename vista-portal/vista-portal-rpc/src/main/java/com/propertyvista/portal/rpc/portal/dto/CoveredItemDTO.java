@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -28,7 +27,6 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 @Transient
 public interface CoveredItemDTO extends PreauthorizedPayment.CoveredItem {
 
-    @ReadOnly
     @ToString(index = 1)
     @Format("#,##00")
     @Editor(type = EditorType.percentage)

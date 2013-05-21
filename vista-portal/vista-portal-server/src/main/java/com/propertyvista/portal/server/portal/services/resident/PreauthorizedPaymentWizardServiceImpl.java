@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -154,7 +155,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         item.billableItem().set(billableItem);
         item.amount().setValue(billableItem.agreedPrice().getValue());
-        item.percent().setValue(billableItem.agreedPrice().getValue().divide(item.amount().getValue()).multiply(new BigDecimal(100)));
+        item.percent().setValue(item.amount().getValue().divide(billableItem.agreedPrice().getValue(), 2, RoundingMode.FLOOR));
 
         return item;
     }
