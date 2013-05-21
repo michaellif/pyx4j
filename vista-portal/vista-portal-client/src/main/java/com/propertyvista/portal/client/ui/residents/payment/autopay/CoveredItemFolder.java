@@ -33,7 +33,7 @@ class CoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredIte
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
                 new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
-                new EntityFolderColumnDescriptor(proto().percent(), "5em"));
+                new EntityFolderColumnDescriptor(proto().amount(), "5em"));
           //@formatter:on                
     }
 }

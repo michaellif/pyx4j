@@ -153,8 +153,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         CoveredItemDTO item = EntityFactory.create(CoveredItemDTO.class);
 
         item.billableItem().set(billableItem);
-        item.percent().setValue(BigDecimal.ONE);
-        item.amount().setValue(billableItem.agreedPrice().getValue().multiply(item.percent().getValue()));
+        item.amount().setValue(billableItem.agreedPrice().getValue());
+        item.percent().setValue(billableItem.agreedPrice().getValue().divide(item.amount().getValue()).multiply(new BigDecimal(100)));
 
         return item;
     }
@@ -162,7 +162,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
         entity.coveredItems().clear();
         for (CoveredItemDTO item : dto.coveredItemsDTO()) {
-            if (item.percent().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            if (item.amount().getValue().compareTo(BigDecimal.ZERO) != 0) {
                 entity.coveredItems().add(item.duplicate(CoveredItem.class));
             }
         }

@@ -40,8 +40,10 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -306,19 +308,32 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
                 if (column.getObject() == proto().billableItem()) {
                     comp = inject(column.getObject(), new CEntityLabel<BillableItem>());
+                    ((CLabel<BillableItem>) comp).setFormat(new IFormat<BillableItem>() {
+                        @Override
+                        public String format(BillableItem value) {
+                            if (value != null) {
+                                if (!value.description().isNull()) {
+                                    return value.description().getValue();
+                                } else if (!value.item().isNull()) {
+                                    return value.item().description().getValue();
+                                }
+                                return "";
+                            } else {
+                                return null;
+                            }
+                        }
+
+                        @Override
+                        public BillableItem parse(String string) {
+                            return null;
+                        }
+                    });
                 } else {
                     comp = super.createCell(column);
                 }
 
                 // handle value changes: 
-                if (column.getObject() == proto().percent()) {
-                    ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                            // TODO Auto-generated method stub
-                        }
-                    });
-                } else if (column.getObject() == proto().amount()) {
+                if (column.getObject() == proto().amount()) {
                     ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<BigDecimal> event) {

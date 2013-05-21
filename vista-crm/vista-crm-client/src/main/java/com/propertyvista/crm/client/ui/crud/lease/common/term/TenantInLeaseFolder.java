@@ -349,14 +349,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         @Override
         public CComponent<?, ?> create(IObject<?> member) {
             if (member instanceof PreauthorizedPayment) {
-                return new PreauthorizedPaymentEditor();
+                return new PreauthorizedPaymentViewer();
             }
             return super.create(member);
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
+        private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
 
-            public PreauthorizedPaymentEditor() {
+            public PreauthorizedPaymentViewer() {
                 super(PreauthorizedPayment.class);
             }
 
@@ -382,7 +382,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 public List<EntityFolderColumnDescriptor> columns() {
                     return Arrays.asList(//@formatter:off
                             new EntityFolderColumnDescriptor(proto().billableItem(),"40em"),
-                            new EntityFolderColumnDescriptor(proto().percent(), "5em"));
+                            new EntityFolderColumnDescriptor(proto().amount(), "5em"));
                       //@formatter:on                
                 }
             }

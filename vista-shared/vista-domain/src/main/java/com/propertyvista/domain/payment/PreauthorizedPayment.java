@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -55,8 +56,21 @@ public interface PreauthorizedPayment extends IEntity {
         @ReadOnly
         @ToString(index = 1)
         @Format("#,##0.00")
-        @Editor(type = EditorType.percentage)
-        IPrimitive<BigDecimal> percent();
+        @Editor(type = EditorType.money)
+        IPrimitive<BigDecimal> amount();
+
+        // -----------------------------
+
+        @Owner
+        @ReadOnly
+        @Detached
+        @NotNull
+        @JoinColumn
+        @MemberColumn(notNull = true)
+        PreauthorizedPayment pap();
+
+        @OrderColumn
+        IPrimitive<Integer> orderId();
     }
 
     @Owned

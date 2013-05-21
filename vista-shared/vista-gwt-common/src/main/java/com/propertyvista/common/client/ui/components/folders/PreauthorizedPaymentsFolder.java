@@ -13,16 +13,11 @@
  */
 package com.propertyvista.common.client.ui.components.folders;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
@@ -39,7 +34,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
 
 public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<PreauthorizedPayment> {
 
@@ -59,17 +53,8 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
     }
 
     @Override
-    protected CEntityFolderItem<PreauthorizedPayment> createItem(boolean first) {
-        // TODO Auto-generated method stub
-        return super.createItem(first);
-    }
-
-    @Override
     protected void createNewEntity(AsyncCallback<PreauthorizedPayment> callback) {
         PreauthorizedPayment newEntity = EntityFactory.create(PreauthorizedPayment.class);
-
-        newEntity.amountType().setValue(AmountType.Value);
-        newEntity.percent().setValue(BigDecimal.ZERO);
 
         callback.onSuccess(newEntity);
     }
@@ -88,28 +73,14 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
 
     private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
 
-        private final SimplePanel amountPlaceholder = new SimplePanel();
-
-        private final Widget percent;
-
-        private final Widget value;
-
         public PreauthorizedPaymentEditor() {
             super(PreauthorizedPayment.class);
-
-            amountPlaceholder.setWidth("21em");
-            percent = new DecoratorBuilder(inject(proto().percent()), 10, 10).build();
-            value = new DecoratorBuilder(inject(proto().value()), 10, 10).build();
         }
 
         @Override
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
             int row = -1;
-
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amountType()), 10, 10).build());
-            content.getFlexCellFormatter().setWidth(row, 0, "21em");
-            content.setWidget(row, 1, amountPlaceholder);
 
             content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
                 @Override
@@ -130,45 +101,7 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
             }), 33, 10).build());
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-            get(proto().amountType()).addValueChangeHandler(new ValueChangeHandler<AmountType>() {
-                @Override
-                public void onValueChange(ValueChangeEvent<AmountType> event) {
-                    setAmountEditor(event.getValue());
-                }
-            });
-
             return content;
-        }
-
-        @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
-            setAmountEditor(getValue().amountType().getValue());
-
-            setEditable(getValue().getPrimaryKey() == null);
-        }
-
-        private void setAmountEditor(AmountType amountType) {
-            amountPlaceholder.clear();
-            get(proto().percent()).setVisible(false);
-            get(proto().value()).setVisible(false);
-
-            if (amountType != null) {
-                switch (amountType) {
-                case Percent:
-                    amountPlaceholder.setWidget(percent);
-                    get(proto().percent()).setVisible(true);
-                    break;
-
-                case Value:
-                    amountPlaceholder.setWidget(value);
-                    get(proto().value()).setVisible(true);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException();
-                }
-            }
         }
     }
 }
