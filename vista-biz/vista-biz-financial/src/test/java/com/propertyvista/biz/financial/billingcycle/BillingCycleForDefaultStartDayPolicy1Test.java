@@ -31,7 +31,6 @@ public class BillingCycleForDefaultStartDayPolicy1Test extends LeaseFinancialTes
         MockConfig config = new MockConfig();
         config.defaultBillingCycleSartDay = 1;
         preloadData(config);
-        createLease("23-Mar-2013", "03-Aug-2013");
 
     }
 
@@ -76,6 +75,7 @@ public class BillingCycleForDefaultStartDayPolicy1Test extends LeaseFinancialTes
     }
 
     public void testBillingForDate() {
+        createLease("23-Mar-2013", "03-Aug-2013");
 
         // @formatter:off
         new BillingCycleTester(BillingCycleTester.getBillingCycleForDate(getLease(), "30-Apr-2013")).

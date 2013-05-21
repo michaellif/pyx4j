@@ -120,6 +120,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         if (building == null) {
             building = getDataModel(BuildingDataModel.class).addBuilding();
             getDataModel(MerchantAccountDataModel.class).addMerchantAccount(building);
+            Persistence.service().commit();
         }
         return building;
     }
