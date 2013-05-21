@@ -20,12 +20,13 @@ import com.propertyvista.biz.financial.payment.PadPaymentChargeBaseSunnyDayScena
 import com.propertyvista.biz.financial.payment.PadPaymentFixedAmountValidationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentMethodCancellationTest;
 import com.propertyvista.biz.financial.payment.PadPaymentPercentAmountValidationTest;
+import com.propertyvista.biz.financial.payment.PadProcessingTest;
 import com.propertyvista.biz.financial.payment.PadTransactionUtilsTest;
 import com.propertyvista.biz.financial.payment.PaymentMethodPersistenceEcheckTest;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ PaymentMethodPersistenceEcheckTest.class, PadTransactionUtilsTest.class, PadPaymentChargeBaseSunnyDayScenarioTest.class,
-        PadPaymentMethodCancellationTest.class, PadPaymentPercentAmountValidationTest.class, PadPaymentFixedAmountValidationTest.class })
+        PadPaymentMethodCancellationTest.class, PadPaymentPercentAmountValidationTest.class, PadPaymentFixedAmountValidationTest.class, PadProcessingTest.class })
 public class PaymentSuite {
 
 }

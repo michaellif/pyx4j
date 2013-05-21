@@ -25,6 +25,11 @@ public class BillableItemTester extends Tester {
         this.billableItem = billableItem;
     }
 
+    public BillableItemTester uid(String value) {
+        assertEquals("uid", value, billableItem.uid().getValue());
+        return this;
+    }
+
     public BillableItemTester agreedPrice(String value) {
         assertEquals("Agreed Price", new BigDecimal(value), billableItem.agreedPrice().getValue());
         return this;

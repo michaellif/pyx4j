@@ -98,6 +98,32 @@ public class YardiImportTest extends YardiTestBase {
         }
 
         {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkA").
+            set(LeaseChargeUpdater.Name.Description, "Parking A").
+            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
+            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
+            set(LeaseChargeUpdater.Name.ChargeCode, "rinpark").
+            set(LeaseChargeUpdater.Name.Amount, "50.00").
+            set(LeaseChargeUpdater.Name.Comment, "Parking A");        
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkB").
+            set(LeaseChargeUpdater.Name.Description, "Parking B").
+            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
+            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
+            set(LeaseChargeUpdater.Name.ChargeCode, "rpark").
+            set(LeaseChargeUpdater.Name.Amount, "60.00").
+            set(LeaseChargeUpdater.Name.Comment, "Parking B");        
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        {
 
             // @formatter:off
             CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
@@ -164,6 +190,26 @@ public class YardiImportTest extends YardiTestBase {
         expirationDate("31-Jul-2014").
         agreedPrice("1234.56");
       //  description("Regular Residential Unit");
+        // @formatter:on
+
+        //TODO When uid will be unique use uid instead of index in list
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
+        uid("rpark").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        agreedPrice("60.00");  
+      //  description("Parking B");
+        // @formatter:on
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
+        uid("rinpark").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        agreedPrice("50.00");  
+      //  description("Indoor Parking");
         // @formatter:on
 
         {
