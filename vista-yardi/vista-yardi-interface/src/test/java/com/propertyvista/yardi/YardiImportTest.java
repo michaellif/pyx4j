@@ -18,7 +18,9 @@ import java.math.BigDecimal;
 import org.junit.Test;
 
 import com.yardi.entity.mits.Customerinfo;
+import com.yardi.entity.resident.ResidentTransactions;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -41,6 +43,7 @@ import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.mock.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.TransactionChargeUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
+import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 public class YardiImportTest extends YardiTestBase {
 
@@ -51,7 +54,9 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
-            PropertyUpdater updater = new PropertyUpdater("prop123");        
+            PropertyUpdater updater = new PropertyUpdater("prop123").
+            set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
+            set(PropertyUpdater.ADDRESS.Country, "Canada");        
             // @formatter:on
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
@@ -222,5 +227,32 @@ public class YardiImportTest extends YardiTestBase {
         lastName("Bender").
         role(Role.CoApplicant);
 
+    }
+    
+    @Test
+    public void testGetResidentTransactionsForTenant() throws Exception {
+
+        String propertyCode = "prop123";
+        String tenantId = "t000111";
+        
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        
+        ResidentTransactions transactions = stub.getResidentTransactionsForTenant(getYardiCredential(propertyCode), propertyCode, tenantId);
+        assertNotNull(transactions);
+        assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
+        assertEquals(tenantId, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
+    }
+    
+    @Test
+    public void testGetLeaseChargesForTenant() throws Exception {
+
+        String propertyCode = "prop123";
+        String tenantId = "t000111";
+        
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        
+        ResidentTransactions transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
+        assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
+        assertTrue(transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size() > 0);
     }
 }

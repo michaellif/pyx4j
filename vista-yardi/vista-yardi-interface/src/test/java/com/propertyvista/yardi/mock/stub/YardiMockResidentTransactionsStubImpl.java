@@ -47,8 +47,7 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException {
-
-        return null;
+        return YardiMockServer.instance().getResidentTransactionsForTenant(propertyId, tenantId);
     }
 
     @Override
@@ -71,8 +70,7 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return null;
+        return YardiMockServer.instance().getLeaseChargesForTenant(propertyId, tenantId);
     }
 
 }

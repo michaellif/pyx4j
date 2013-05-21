@@ -52,11 +52,25 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         return propertyManagers.get(propertyId).getAllResidentTransactions();
     }
 
+    public ResidentTransactions getResidentTransactionsForTenant(String propertyId, String tenantId) {
+        if (!propertyManagers.containsKey(propertyId)) {
+            throw new Error(propertyId + " not found");
+        }
+        return propertyManagers.get(propertyId).getResidentTransactionsForTenant(tenantId);
+    }
+
     public ResidentTransactions getAllLeaseCharges(String propertyId) {
         if (!propertyManagers.containsKey(propertyId)) {
             throw new Error(propertyId + " not found");
         }
         return propertyManagers.get(propertyId).getAllLeaseCharges();
+    }
+
+    public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId) {
+        if (!propertyManagers.containsKey(propertyId)) {
+            throw new Error(propertyId + " not found");
+        }
+        return propertyManagers.get(propertyId).getLeaseChargesForTenant(tenantId);
     }
 
     @Override

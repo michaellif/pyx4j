@@ -15,12 +15,12 @@ package com.propertyvista.yardi.mock;
 
 import com.yardi.entity.resident.ChargeDetail;
 
-public class PropertyUpdater extends Updater<ChargeDetail, TransactionChargeUpdater> {
+public class PropertyUpdater extends Updater<ChargeDetail, PropertyUpdater> {
 
     private final String propertyID;
 
-    public enum Name implements com.propertyvista.yardi.mock.Name {
-
+    public enum ADDRESS implements com.propertyvista.yardi.mock.Name {
+        Address1, Country;
     }
 
     public PropertyUpdater(String propertyID) {

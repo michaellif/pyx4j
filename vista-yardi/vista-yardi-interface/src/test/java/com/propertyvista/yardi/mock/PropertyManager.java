@@ -15,6 +15,7 @@ package com.propertyvista.yardi.mock;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.lang.SerializationUtils;
@@ -53,28 +54,7 @@ public class PropertyManager {
         transactions = new ResidentTransactions();
         leaseCharges = new HashMap<String, Map<String, Charge>>();
 
-        com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
-
-        //=========== <PropertyID> ===========
-        {
-            PropertyID propertyID = new PropertyID();
-            Identification identification = new Identification();
-            identification.setType(Propertyidinfo.OTHER);
-            identification.setPrimaryID(propertyId);
-            identification.setMarketingName("Marketing" + propertyId);
-
-            Address address = new Address();
-            address.setAddress1("11 " + propertyId + " str");
-            address.setCountry("Canada");
-
-            propertyID.getAddress().add(address);
-
-            propertyID.setIdentification(identification);
-            rtProperty.getPropertyID().add(propertyID);
-        }
-
-        transactions.getProperty().add(rtProperty);
-
+        transactions.getProperty().add(new com.yardi.entity.resident.Property());
     }
 
     public ResidentTransactions getAllResidentTransactions() {
@@ -86,7 +66,26 @@ public class PropertyManager {
     }
 
     public ResidentTransactions getResidentTransactionsForTenant(String tenantId) {
-        return null;
+        if (getRTCustomer(tenantId) == null) {
+            throw new RuntimeException("rtCustomer with tenantId " + tenantId + " not found");
+        }
+
+        ResidentTransactions transaction = null;
+        try {
+            transaction = (ResidentTransactions) SerializationUtils.clone(transactions);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        //remove redundant rtCustomers
+        for (Iterator<RTCustomer> iterator = transaction.getProperty().get(0).getRTCustomer().iterator(); iterator.hasNext();) {
+            RTCustomer rtCustomer = iterator.next();
+            if (!tenantId.equals(rtCustomer.getCustomerID())) {
+                iterator.remove();
+            }
+        }
+
+        return transaction;
     }
 
     public ResidentTransactions getAllLeaseCharges() {
@@ -96,30 +95,68 @@ public class PropertyManager {
 
         for (String customerId : leaseCharges.keySet()) {
 
-            RTCustomer rtCustomer = new RTCustomer();
+            RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(customerId));
             rtProperty.getRTCustomer().add(rtCustomer);
 
-            RTServiceTransactions st = new RTServiceTransactions();
-            rtCustomer.setRTServiceTransactions(st);
-
-            Map<String, Charge> charges = leaseCharges.get(customerId);
-            for (String chargeId : charges.keySet()) {
-
-                Transactions t = new Transactions();
-                st.getTransactions().add(t);
-                t.setCharge((Charge) SerializationUtils.clone(charges.get(chargeId)));
-            }
         }
 
         return retVal;
     }
 
     public ResidentTransactions getLeaseChargesForTenant(String tenantId) {
-        return null;
+        if (!leaseCharges.containsKey(tenantId)) {
+            throw new RuntimeException("lease charges for tenantId " + tenantId + " not found");
+        }
+
+        ResidentTransactions retVal = new ResidentTransactions();
+        com.yardi.entity.resident.Property rtProperty = new com.yardi.entity.resident.Property();
+        retVal.getProperty().add(rtProperty);
+
+        RTCustomer rtCustomer = createRtCustomerWithCharges(leaseCharges.get(tenantId));
+        rtProperty.getRTCustomer().add(rtCustomer);
+
+        return retVal;
+    }
+
+    private RTCustomer createRtCustomerWithCharges(Map<String, Charge> charges) {
+        RTCustomer rtCustomer = new RTCustomer();
+
+        RTServiceTransactions st = new RTServiceTransactions();
+        rtCustomer.setRTServiceTransactions(st);
+
+        for (String chargeId : charges.keySet()) {
+            Transactions t = new Transactions();
+            st.getTransactions().add(t);
+            t.setCharge((Charge) SerializationUtils.clone(charges.get(chargeId)));
+        }
+
+        return rtCustomer;
     }
 
     public void updateProperty(PropertyUpdater updater) {
-        //TODO
+        com.yardi.entity.resident.Property rtProperty = transactions.getProperty().get(0);
+
+        if (rtProperty.getPropertyID().isEmpty()) {
+            PropertyID propertyID = new PropertyID();
+
+            Identification identification = new Identification();
+            identification.setType(Propertyidinfo.OTHER);
+            identification.setPrimaryID(propertyId);
+            identification.setMarketingName("Marketing" + propertyId);
+
+            propertyID.setIdentification(identification);
+            propertyID.getAddress().add(new Address());
+
+            rtProperty.getPropertyID().add(propertyID);
+        }
+
+        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+            Property<?> property = updater.getPropertyMap().get(name);
+            if (property.getName() instanceof PropertyUpdater.ADDRESS) {
+                Address address = rtProperty.getPropertyID().get(0).getAddress().get(0);
+                updateProperty(address, property);
+            }
+        }
     }
 
     public void addOrUpdateRtCustomer(RtCustomerUpdater updater) {
