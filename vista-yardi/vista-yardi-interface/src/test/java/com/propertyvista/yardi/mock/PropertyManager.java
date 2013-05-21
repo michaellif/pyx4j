@@ -276,12 +276,12 @@ public class PropertyManager {
                 charge = new Charge();
                 ChargeDetail detail = new ChargeDetail();
                 charge.setDetail(detail);
-
-                detail.setCustomerID(updater.getCustomerID());
-                detail.setUnitID(updater.getCustomerID().substring(3));
-                detail.setPropertyPrimaryID(updater.getPropertyID());
-
+                charges.put(updater.getLeaseChargeID(), charge);
             }
+            ChargeDetail detail = charge.getDetail();
+            detail.setCustomerID(updater.getCustomerID());
+            detail.setUnitID(updater.getCustomerID().substring(3));
+            detail.setPropertyPrimaryID(updater.getPropertyID());
 
             for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
                 Property<?> property = updater.getPropertyMap().get(name);

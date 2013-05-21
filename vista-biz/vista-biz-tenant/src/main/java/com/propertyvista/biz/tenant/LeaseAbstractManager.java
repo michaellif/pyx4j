@@ -89,7 +89,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.shared.NotesParentId;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public abstract class LeaseAbstractManager implements LeaseFacade {
+public abstract class LeaseAbstractManager {
 
     private static final Logger log = LoggerFactory.getLogger(LeaseAbstractManager.class);
 
@@ -103,14 +103,12 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
 
     protected abstract void ensureLeaseUniqness(Lease lease);
 
-    @Override
     public Lease create(Status status) {
         Lease lease = EntityFactory.create(Lease.class);
         lease.status().setValue(status);
         return init(lease);
     }
 
-    @Override
     public Lease init(Lease lease) {
         // check client supplied initial status value:
         assert !lease.status().isNull();
@@ -150,30 +148,25 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         return lease;
     }
 
-    @Override
     public Lease setUnit(Lease lease, AptUnit unitId) {
         assert !lease.currentTerm().isNull();
         return setUnit(lease, lease.currentTerm(), unitId);
     }
 
-    @Override
     public Lease setService(Lease lease, ProductItem serviceId) {
         assert !lease.currentTerm().isNull();
         setService(lease, lease.currentTerm(), serviceId);
         return lease;
     }
 
-    @Override
     public Lease persist(Lease lease) {
         return persist(lease, false);
     }
 
-    @Override
     public Lease finalize(Lease lease) {
         return persist(lease, true);
     }
 
-    @Override
     public Lease load(Lease leaseId, boolean editingTerm) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease == null) {
@@ -195,20 +188,17 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
 
     // Lease term operations: -----------------------------------------------------------------------------------------
 
-    @Override
     public LeaseTerm setUnit(LeaseTerm leaseTerm, AptUnit unitId) {
         assert !leaseTerm.lease().isNull();
         setUnit(leaseTerm.lease(), leaseTerm, unitId);
         return leaseTerm;
     }
 
-    @Override
     public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
         assert !leaseTerm.lease().isNull();
         return setService(leaseTerm.lease(), leaseTerm, serviceId);
     }
 
-    @Override
     public LeaseTerm persist(LeaseTerm leaseTerm) {
         persistCustomers(leaseTerm);
 
@@ -229,7 +219,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         return leaseTerm;
     }
 
-    @Override
     public LeaseTerm finalize(LeaseTerm leaseTerm) {
         finalizeBillableItems(leaseTerm);
 
@@ -258,7 +247,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
 
     // Operations: ----------------------------------------------------------------------------------------------------
 
-    @Override
     public void createMasterOnlineApplication(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
@@ -315,7 +303,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void declineApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
@@ -342,7 +329,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void cancelApplication(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
@@ -357,7 +343,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }
 
-    @Override
     public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = load(leaseId, false);
 
@@ -427,7 +412,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
     }
 
     // TODO review code here
-    @Override
     public void activate(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
@@ -451,7 +435,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         ServerSideFactory.create(LeadFacade.class).setLeadRentedState(lease);
     }
 
-    @Override
     public void renew(Lease leaseId) {
         Lease lease = load(leaseId, false);
 
@@ -479,7 +462,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void complete(Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
@@ -501,7 +483,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         Persistence.secureSave(lease);
     }
 
-    @Override
     public void close(Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
@@ -510,7 +491,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         Persistence.secureSave(lease);
     }
 
-    @Override
     public LeaseTerm createOffer(Lease leaseId, Type type) {
         Lease lease = load(leaseId, false);
 
@@ -538,7 +518,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         return term;
     }
 
-    @Override
     public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
         Lease lease = load(leaseId, false);
         LeaseTerm leaseTerm = Persistence.secureRetrieve(LeaseTerm.class, leaseTermId.getPrimaryKey());
@@ -557,7 +536,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDay, LogicalDate leaseEndDate) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
@@ -593,7 +571,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
@@ -633,7 +610,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void moveOut(Lease leaseId) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
@@ -663,7 +639,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         }
     }
 
-    @Override
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
@@ -691,7 +666,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
 
     // Utils : --------------------------------------------------------------------------------------------------------
 
-    @Override
     public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
@@ -714,7 +688,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         return newItem;
     }
 
-    @Override
     public void setLeaseAgreedPrice(Lease lease, BigDecimal price) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
@@ -724,7 +697,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
     /**
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
      */
-    @Override
     public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
         Lease lease = load(leaseId, true);
 
@@ -843,7 +815,7 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         return leaseTerm;
     }
 
-    private void finalizeBillableItems(LeaseTerm leaseTerm) {
+    protected void finalizeBillableItems(LeaseTerm leaseTerm) {
         leaseTerm.version().leaseProducts().serviceItem().finalized().setValue(Boolean.TRUE);
         for (BillableItem item : leaseTerm.version().leaseProducts().featureItems()) {
             item.finalized().setValue(Boolean.TRUE);
@@ -995,7 +967,6 @@ public abstract class LeaseAbstractManager implements LeaseFacade {
         return naa;
     }
 
-    @Override
     public void updateLeaseDates(Lease lease) {
         if (lease.status().getValue().isDraft()) {
             assert (!lease.currentTerm().isEmpty());

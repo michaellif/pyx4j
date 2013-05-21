@@ -304,32 +304,37 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private void importLeaseCharges(ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor) {
         log.info("LeaseCharges: import started...");
 
+        // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
         List<Property> properties = getProperties(leaseCharges);
-
         for (final Property property : properties) {
-            String propertyId = null;
-            if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
-                propertyId = property.getPropertyID().get(0).getIdentification().getPrimaryID();
-            }
-
             try {
-                final Building building = new YardiBuildingProcessor().getBuildingFromProperty(property);
+                // grab propertyCode from the first available ChargeDetail element
+                final String propertyCode = property.getRTCustomer().get(0).getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()
+                        .getPropertyPrimaryID();
                 executionMonitor.addProcessedEvent("Building");
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
+                    String customerId = null;
                     try {
-                        Lease lease = new YardiLeaseProcessor().findLease(rtCustomer, building.propertyCode().getValue());
+                        customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
+                        final Lease lease = new YardiLeaseProcessor().findLease(customerId, propertyCode);
                         if (lease == null) {
                             throw new YardiServiceException("Lease not found");
                         }
-                        // create/update billable items
-                    } catch (YardiServiceException e) {
-                        executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
+
+                        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+                            @Override
+                            public Void execute() throws YardiServiceException {
+                                // create/update billable items
+                                new YardiLeaseProcessor().updateLeaseProducts(rtCustomer.getRTServiceTransactions().getTransactions(), lease);
+                                return null;
+                            }
+                        });
                     } catch (Throwable t) {
-                        executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
+                        executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", customerId), t);
                     }
                 }
             } catch (Throwable t) {
-                executionMonitor.addErredEvent("Building", propertyId, t);
+                executionMonitor.addErredEvent("Building", t);
             }
 
         }

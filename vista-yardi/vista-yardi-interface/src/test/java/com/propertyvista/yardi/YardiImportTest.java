@@ -155,9 +155,9 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-        agreedPrice("1234.56");
 //        effectiveDate("01-Jun-2012").
-//        expirationDate("31-Jul-2014");
+//        expirationDate("31-Jul-2014").
+        agreedPrice("1234.56");
         // @formatter:on
 
         {
@@ -174,18 +174,38 @@ public class YardiImportTest extends YardiTestBase {
             set(LeaseChargeUpdater.Name.Amount, "1250.00");
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-
-            // @formatter:off
-            updater = new LeaseChargeUpdater("prop123", "t000111", "").
-            set(LeaseChargeUpdater.Name.Amount, "1250.00");
-            // @formatter:on
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
         {
             // @formatter:off
             CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
             set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith");
+            // @formatter:on
+            MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
+        }
+
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(propertyCode), new ExecutionMonitor());
+
+        lease = getCurrentLease(unit);
+        Persistence.service().retrieveMember(lease.currentTerm().versions());
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+
+        // @formatter:off
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
+        firstName("Jane").
+        lastName("Smith").
+        role(Role.CoApplicant);
+        // @formatter:on
+
+        // @formatter:off
+//        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
+//        agreedPrice("1250.00");
+
+        // ================= Update Co-tenant Last Name ======================
+        {
+            // @formatter:off
+            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Bender");
             // @formatter:on
             MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
 
@@ -199,13 +219,8 @@ public class YardiImportTest extends YardiTestBase {
         // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
         firstName("Jane").
-        lastName("Smith").
+        lastName("Bender").
         role(Role.CoApplicant);
-        // @formatter:on
-
-//        // @formatter:off
-//        new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
-//        agreedPrice("1250.00");
 
     }
 }

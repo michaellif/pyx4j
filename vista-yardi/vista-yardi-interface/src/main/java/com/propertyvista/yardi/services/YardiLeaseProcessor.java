@@ -13,6 +13,9 @@
  */
 package com.propertyvista.yardi.services;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -21,12 +24,16 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.mits.YardiLease;
+import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.RTCustomer;
+import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
@@ -34,8 +41,10 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.yardi.mapper.TenantMapper;
 import com.propertyvista.yardi.merger.LeaseMerger;
 import com.propertyvista.yardi.merger.TenantMerger;
@@ -43,14 +52,14 @@ import com.propertyvista.yardi.merger.TenantMerger;
 public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
-    public Lease findLease(RTCustomer rtCustomer, String propertyCode) {
+    public Lease findLease(String customerId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.eq(criteria.proto().leaseId(), rtCustomer.getCustomerID());
+        criteria.eq(criteria.proto().leaseId(), customerId);
         return Persistence.service().retrieve(criteria);
     }
 
     public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
-        Lease existingLease = findLease(rtCustomer, propertyCode);
+        Lease existingLease = findLease(rtCustomer.getCustomerID(), propertyCode);
         if (existingLease != null) {
             log.info("      Updating lease {}", rtCustomer.getCustomerID());
             return updateLease(rtCustomer, existingLease);
@@ -149,6 +158,36 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
+    public Lease updateLeaseProducts(List<Transactions> transactions, Lease lease) {
+        // TODO YardiLeaseIntegrationAgent.updateBillabelItem(lease, billableItem);
+        log.info("      Updating billable item");
+        List<BillableItem> newItems = new ArrayList<BillableItem>();
+        boolean modified = false;
+        for (Transactions tr : transactions) {
+            if (tr == null || tr.getCharge() == null) {
+                continue;
+            }
+            BillableItem item = createBillableItem(tr.getCharge().getDetail());
+            if (new LeaseMerger().mergeBillableItem(item, lease)) {
+                modified = true;
+            }
+            newItems.add(item);
+        }
+        if (modified) {
+            // remove unmatched features from new version
+            LeaseMerger merger = new LeaseMerger();
+            Iterator<BillableItem> leaseItems = lease.currentTerm().version().leaseProducts().featureItems().iterator();
+            while (leaseItems.hasNext()) {
+                BillableItem item = leaseItems.next();
+                if (merger.findBillableItem(item, newItems) == null) {
+                    leaseItems.remove();
+                }
+            }
+            Persistence.service().persist(lease);
+        }
+        return lease;
+    }
+
     //
     // Some public utils:
     //
@@ -188,4 +227,21 @@ public class YardiLeaseProcessor {
 
         return date;
     }
+
+    private BillableItem createBillableItem(ChargeDetail charge) {
+        BillableItem billableItem = EntityFactory.create(BillableItem.class);
+        billableItem.uid().setValue(charge.getChargeCode());
+        billableItem.agreedPrice().setValue(new BigDecimal(charge.getAmount()));
+        billableItem.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
+        billableItem.effectiveDate().setValue(new LogicalDate(charge.getServiceFromDate()));
+        billableItem.expirationDate().setValue(new LogicalDate(charge.getServiceToDate()));
+
+        YardiLeaseChargeData extraData = EntityFactory.create(YardiLeaseChargeData.class);
+        extraData.chargeCode().setValue(charge.getChargeCode());
+        extraData.description().setValue(charge.getDescription());
+        billableItem.extraData().set(extraData);
+
+        return billableItem;
+    }
+
 }

@@ -14,6 +14,7 @@
 package com.propertyvista.yardi.merger;
 
 import java.util.Date;
+import java.util.List;
 
 import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.RTCustomer;
@@ -22,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.yardi.services.YardiLeaseProcessor;
@@ -77,7 +79,42 @@ public class LeaseMerger {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
     }
 
-    // internals:
+    public boolean mergeBillableItem(BillableItem item, Lease lease) {
+        if (//@formatter:off
+                itemsEqual(item, lease.currentTerm().version().leaseProducts().serviceItem()) ||
+                findBillableItem(item, lease.currentTerm().version().leaseProducts().featureItems()) != null
+        ) {//@formatter:on
+            return false;
+        }
+        // add new item
+        if ("rrent".equals(item.uid().getValue())) {
+            // TODO - better service evaluation
+            lease.currentTerm().version().leaseProducts().serviceItem().set(item);
+        } else {
+            lease.currentTerm().version().leaseProducts().featureItems().add(item);
+        }
+        return true;
+    }
+
+    // internals
+
+    public BillableItem findBillableItem(BillableItem item, List<BillableItem> items) {
+        for (BillableItem leaseItem : items) {
+            if (itemsEqual(item, leaseItem)) {
+                return leaseItem;
+            }
+        }
+        return null;
+    }
+
+    private boolean itemsEqual(BillableItem item1, BillableItem item2) {
+        return// @formatter:off
+                item1.uid().equals(item2.uid()) &&
+                item1.agreedPrice().equals(item2.agreedPrice()) &&
+                ((item1.expirationDate().isNull() && item2.expirationDate().isNull()) || item1.expirationDate().equals(item2.expirationDate())) &&
+                ((item1.effectiveDate().isNull() && item2.effectiveDate().isNull()) || item1.effectiveDate().equals(item2.effectiveDate()));
+        // @formatter:on
+    }
 
     private void compare(IPrimitive<LogicalDate> existing, Date imported) {
         if (!isNew) {

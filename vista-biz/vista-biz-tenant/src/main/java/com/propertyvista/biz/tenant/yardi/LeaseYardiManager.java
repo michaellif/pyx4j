@@ -44,10 +44,12 @@ public class LeaseYardiManager extends LeaseAbstractManager {
 
     @Override
     protected void onLeaseApprovalSuccess(Lease lease, Status leaseStatus) {
+        // N/A - internal impl only
     }
 
     @Override
     protected void ensureLeaseUniqness(Lease lease) {
+        // N/A - internal impl only
     }
 
 }
