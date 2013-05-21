@@ -86,6 +86,11 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("text-decoration", "none");
         addStyle(style);
 
+        style = new Style(".", StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled, ":hover");
+        style.addProperty("cursor", "default");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
     }
 
     protected void initTextBoxStyle() {
