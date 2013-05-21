@@ -79,6 +79,7 @@ public class DefaultWidgetsTheme extends Theme {
         Style style = new Style(".", StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("cursor", "pointer");
+        style.addProperty("text-decoration", "underline");
         addStyle(style);
 
         style = new Style(".", StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled);
