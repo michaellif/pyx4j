@@ -32,8 +32,19 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentStatus())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forthcomingEft())).componentWidth(10).build());
+        get(proto().forthcomingEft()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().filterByBillingCycle()).setValue(event.getValue() == true, true);
+                get(proto().filterByBillingCycle()).setEditable(event.getValue() != true);
+                get(proto().paymentStatus()).setVisible(event.getValue() != true);
+                get(proto().onlyWithNotice()).setVisible(event.getValue() != true);
+            }
+        });
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onlyWithNotice())).componentWidth(10).build());
+        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().paymentStatus())).componentWidth(10).build());
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(10).build());
         get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -45,7 +56,7 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriod())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(10).build());
 
-        row = 0;
+        row = 1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
@@ -27,7 +28,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 @Caption(name = "EFT Report")
-public interface EftReportMetadata extends ReportMetadata {
+public interface EftReportMetadata extends ReportMetadata, ExportableReport {
 
     IPrimitive<Boolean> onlyWithNotice();
 
@@ -47,4 +48,5 @@ public interface EftReportMetadata extends ReportMetadata {
 
     IPrimitive<PaymentRecord.PaymentStatus> paymentStatus();
 
+    IPrimitive<Boolean> forthcomingEft();
 }
