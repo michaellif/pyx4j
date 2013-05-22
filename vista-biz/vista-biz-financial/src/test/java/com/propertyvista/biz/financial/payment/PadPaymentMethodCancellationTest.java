@@ -15,7 +15,6 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -31,7 +30,6 @@ import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 
-@Ignore
 @Category(RegressionTests.class)
 public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
 
@@ -66,7 +64,9 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
 
         // Add 100% PAP
-        final PreauthorizedPayment preauthorizedPayment1 = setPreauthorizedPayment("1");
+        final PreauthorizedPayment preauthorizedPayment1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
+                add(getLease().currentTerm().version().leaseProducts().serviceItem(), "1120.00"). // 1000.00 + 12%
+                build());
 
         advanceSysDate("2011-03-29");
 
@@ -87,20 +87,20 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
 
         deletePreauthorizedPayment(preauthorizedPayment1);
 
-        // Scheduled payment is Canceled
+        // Scheduled payment is NOT Canceled
+        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Scheduled);
 
-        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Canceled);
+        final PreauthorizedPayment preauthorizedPayment2 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder().add(
+                getLease().currentTerm().version().leaseProducts().serviceItem(), "1120.00").build());
 
-        final PreauthorizedPayment preauthorizedPayment2 = setPreauthorizedPayment("1");
-
-        // new payment is not automatically created
+        // new payment is not automatically created, existing record sent to Caleodon
 
         advanceSysDate("2011-05-02");
 
-        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Canceled);
+        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Queued);
 
         advanceSysDate("2011-05-20");
-        new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-06-01").totalDueAmount("3270.30");
+        new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-06-01").totalDueAmount("2150.30");
 
         advanceSysDate("2011-05-29");
 

@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.config.server.ServerSideFactory;
@@ -22,11 +21,11 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
+import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
-@Ignore
 @Category(RegressionTests.class)
 public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTestBase {
 
@@ -72,11 +71,19 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         advanceSysDate("20-Mar-2011");
 
+        receiveAndPostPayment("20-Mar-2011", eval("2269.04 /*DueAmount*/- 1198.74 /*pap*/")); // DueAmount - Pad = 1070.30
+
+        // PAD will be triggered at the end of this month
         setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
-                add(getLease().currentTerm().version().leaseProducts().serviceItem(), "930.30"). //
-                add(parking, "80.00"). //
-                add(largeLocker, "60.00"). //
+                add(getLease().currentTerm().version().leaseProducts().serviceItem(), "1041.94"). // 930.30 + 12%
+                add(parking, "89.60"). // 80.00 + 12%
+                add(largeLocker, "67.20"). // 60.00 + 12%
                 build());
+
+        advanceSysDate("1-Apr-2011");
+        // Expect PAD executed, verify amount
+        new PaymentRecordTester(getLease().billingAccount()).count(2). //
+                lastRecordStatus(PaymentStatus.Queued).lastRecordAmount("1198.74");
 
         advanceSysDate("18-Apr-2011");
 
@@ -91,12 +98,13 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(3).
-        paymentReceivedAmount(eval("-(930.3 + 80 + 60)")).
+        paymentReceivedAmount(eval("-(930.30 + 80 + 60 + 128.44 /*tax*/) - (2269.04 - 1198.74)")).
+
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").
         taxes("128.44").
-        totalDueAmount("1198.74");
+        totalDueAmount(eval("1198.74"));
         // @formatter:on
 
         // we are in the april cycle and pad date is 3 days before Apr 1
@@ -109,8 +117,12 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
         // now roll time back and run pad - should see the date for next cycle
         setSysDate("27-Apr-2011");
+
         advanceSysDate("01-May-2011");
+        // Expect PAD executed,
         assertEquals("PAD next target date", DateUtils.detectDateformat("01-Jun-2011"), getNextTargetPadExecutionDate());
+        new PaymentRecordTester(getLease().billingAccount()).count(3). //
+                lastRecordStatus(PaymentStatus.Queued).lastRecordAmount("1198.74");
 
         advanceSysDate("18-May-2011");
 

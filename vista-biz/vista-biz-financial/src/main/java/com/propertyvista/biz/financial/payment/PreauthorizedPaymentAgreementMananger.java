@@ -31,11 +31,11 @@ class PreauthorizedPaymentAgreementMananger {
         return null;
     }
 
+    //If Tenant removes PAP - payment will NOT be canceled.
     void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
         PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
         preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
         Persistence.service().merge(preauthorizedPayment);
-        new ScheduledPaymentsManager().cancelScheduledPayments(preauthorizedPayment);
     }
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
@@ -52,6 +52,7 @@ class PreauthorizedPaymentAgreementMananger {
 
         for (PreauthorizedPayment preauthorizedPayment : Persistence.service().query(criteria, AttachLevel.IdOnly)) {
             deletePreauthorizedPayment(preauthorizedPayment);
+            new ScheduledPaymentsManager().cancelScheduledPayments(preauthorizedPayment);
         }
 
     }
