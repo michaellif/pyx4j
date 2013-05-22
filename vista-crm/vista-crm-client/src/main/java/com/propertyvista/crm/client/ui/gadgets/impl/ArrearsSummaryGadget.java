@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
@@ -30,11 +31,13 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.DelinquentLeas
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryMetadataForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 
 public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadgetDataDTO, ArrearsGadgetQueryDataDTO, ArrearsSummaryGadgetMetadata> {
 
@@ -93,6 +96,22 @@ public class ArrearsSummaryGadget extends CounterGadgetInstanceBase<ArrearsGadge
             @Override
             public void makeCriteria(AsyncCallback<EntityListCriteria<DelinquentLeaseDTO>> callback, CounterGadgetFilter filterData) {
                 service.makeDelinquentLeaseCriteria(callback, makeSummaryQuery(), filterData.getCounterMember());
+            }
+        }, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().delinquentLeasesListerSettings();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
             }
         }));
     }

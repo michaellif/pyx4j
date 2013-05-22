@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
@@ -27,30 +31,29 @@ import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<Appointment, CounterGadgetFilter> {
 
-    private static class AppointmentsDetailsLister extends AbstractDetailsLister<Appointment> {
+    private static final List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
+    static {
+        Appointment proto = EntityFactory.getEntityPrototype(Appointment.class);
+        DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.date()).build(),
+                new MemberColumnDescriptor.Builder(proto.time()).build(),
+                new MemberColumnDescriptor.Builder(proto.agent()).build(),
+                new MemberColumnDescriptor.Builder(proto.phone()).build(),
+                new MemberColumnDescriptor.Builder(proto.email()).build(),
+                new MemberColumnDescriptor.Builder(proto.status()).build()
+        );//@formatter:on
 
-        public AppointmentsDetailsLister() {
-            super(Appointment.class);
-            setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().date()).build(),
-                    new MemberColumnDescriptor.Builder(proto().time()).build(),
-                    new MemberColumnDescriptor.Builder(proto().agent()).build(),
-                    new MemberColumnDescriptor.Builder(proto().phone()).build(),
-                    new MemberColumnDescriptor.Builder(proto().email()).build(),
-                    new MemberColumnDescriptor.Builder(proto().status()).build()
-            );//@formatter:on
-
-        }
     }
 
     public AppointmentsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
             ICriteriaProvider<Appointment, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 Appointment.class,
-                new AppointmentsDetailsLister(),
+                DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<AppointmentCrudService>create(AppointmentCrudService.class),
                 filterDataProvider,
-                criteriaProvider
+                criteriaProvider,
+                null                
         );//@formatter:on
     }
 }

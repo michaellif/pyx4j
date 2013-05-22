@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
+import java.util.Arrays;
+
 import com.google.gwt.core.client.GWT;
 
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestLister;
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
@@ -26,23 +27,15 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestsDetailsFactory extends AbstractListerDetailsFactory<MaintenanceRequestDTO, CounterGadgetFilter> {
 
-    public static class MaintenanceRequestsDetailsLister extends AbstractDetailsLister<MaintenanceRequestDTO> {
-
-        public MaintenanceRequestsDetailsLister() {
-            super(MaintenanceRequestDTO.class);
-            setColumnDescriptors(MaintenanceRequestLister.createColumnDescriptors());
-        }
-
-    }
-
     public MaintenanceRequestsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
             ICriteriaProvider<MaintenanceRequestDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 MaintenanceRequestDTO.class,
-                new MaintenanceRequestsDetailsLister(),
+                Arrays.asList(MaintenanceRequestLister.createColumnDescriptors()),
                 GWT.<MaintenanceCrudService>create(MaintenanceCrudService.class),
                 filterDataProvider,
-                criteriaProvider
+                criteriaProvider,
+                null
         );//@formatter:on
     }
 }

@@ -13,11 +13,15 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
@@ -27,35 +31,33 @@ import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentDetailsFactory extends AbstractListerDetailsFactory<PaymentRecordDTO, CounterGadgetFilter> {
 
-    private static class PaymentsDetailsLister extends AbstractDetailsLister<PaymentRecordDTO> {
-
-        public PaymentsDetailsLister() {
-            super(PaymentRecordDTO.class);
-            setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().id()).build(),
-                    new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
-                    new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().leaseParticipant().customer().person().name()).build(),
-                    new MemberColumnDescriptor.Builder(proto().leaseTermParticipant().role()).build(),
-                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
-                    new MemberColumnDescriptor.Builder(proto().paymentMethod().type()).build(),
-                    new MemberColumnDescriptor.Builder(proto().createdDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().lastStatusChangeDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().targetDate()).build(),
-                    new MemberColumnDescriptor.Builder(proto().paymentStatus()).build()
+    private static final List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
+    static {
+        PaymentRecordDTO proto = EntityFactory.getEntityPrototype(PaymentRecordDTO.class);
+        DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto.id()).build(),
+                    new MemberColumnDescriptor.Builder(proto.leaseTermParticipant().leaseParticipant().customer().customerId()).build(),
+                    new MemberColumnDescriptor.Builder(proto.leaseTermParticipant().leaseParticipant().customer().person().name()).build(),
+                    new MemberColumnDescriptor.Builder(proto.leaseTermParticipant().role()).build(),
+                    new MemberColumnDescriptor.Builder(proto.amount()).build(),
+                    new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build(),
+                    new MemberColumnDescriptor.Builder(proto.createdDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto.receivedDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto.lastStatusChangeDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto.targetDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto.paymentStatus()).build()
                 );//@formatter:on
-        }
-
     }
 
     public PaymentDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
             ICriteriaProvider<PaymentRecordDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 PaymentRecordDTO.class,
-                new PaymentsDetailsLister(),
+                DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<PaymentCrudService>create(PaymentCrudService.class),
                 filterDataProvider,
-                criteriaProvider
+                criteriaProvider,
+                null
         );//@formatter:on
     }
 

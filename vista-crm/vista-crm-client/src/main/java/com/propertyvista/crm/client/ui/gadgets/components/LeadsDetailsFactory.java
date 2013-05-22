@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
@@ -28,33 +32,32 @@ import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, CounterGadgetFilter> {
 
-    private static class LeadsDetailsLister extends AbstractDetailsLister<Lead> {
+    private static final I18n i18n = I18n.get(LeadsDetailsFactory.class);
 
-        private static final I18n i18n = I18n.get(LeadsDetailsLister.class);
-
-        public LeadsDetailsLister() {
-            super(Lead.class);
-
-            setColumnDescriptors(//@formatter:off
-                    new MemberColumnDescriptor.Builder(proto().leadId(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().guests(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly().build(),
-                    new MemberColumnDescriptor.Builder(proto().moveInDate(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().leaseTerm(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().floorplan(), true).searchable(false).build(),
-                    new MemberColumnDescriptor.Builder(proto().createDate(), true).build(),
-                    new MemberColumnDescriptor.Builder(proto().status(), true).build()
+    private static final List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
+    static {
+        Lead proto = EntityFactory.getEntityPrototype(Lead.class);
+        DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto.leadId(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto.guests(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto.guests().$().person().name().lastName()).columnTitle(i18n.tr("Guest Last Name")).searchableOnly().build(),
+                    new MemberColumnDescriptor.Builder(proto.moveInDate(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto.leaseTerm(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto.floorplan(), true).searchable(false).build(),
+                    new MemberColumnDescriptor.Builder(proto.createDate(), true).build(),
+                    new MemberColumnDescriptor.Builder(proto.status(), true).build()
             );//@formatter:on
-        }
+
     }
 
     public LeadsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<Lead, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
                 Lead.class,
-                new LeadsDetailsLister(),
+                DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<LeadCrudService>create(LeadCrudService.class),
                 filterDataProvider,
-                criteriaProvider
+                criteriaProvider,
+                null
         );//@formatter:on
     }
 

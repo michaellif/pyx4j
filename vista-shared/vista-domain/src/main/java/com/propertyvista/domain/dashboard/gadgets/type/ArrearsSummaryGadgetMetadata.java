@@ -16,6 +16,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -23,6 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
@@ -66,4 +68,7 @@ public interface ArrearsSummaryGadgetMetadata extends CounterGadgetBaseMetadata,
     @Caption(description = "Choose which category of arrears to display")
     @NotNull
     IPrimitive<ARCode.Type> category();
+
+    @EmbeddedEntity
+    ListerUserSettings delinquentLeasesListerSettings();
 }

@@ -13,12 +13,16 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.components;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractDetailsLister;
 import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractListerDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
@@ -28,38 +32,38 @@ import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO, CounterGadgetFilter> {
 
-    public static class UnitsDetailsLister extends AbstractDetailsLister<AptUnitDTO> {
+    private static final I18n i18n = I18n.get(UnitDetailsFactory.class);
 
-        private static final I18n i18n = I18n.get(UnitsDetailsLister.class);
+    private static List<ColumnDescriptor> DEFAULT_COLUMN_DESCRIPTORS;
 
-        public UnitsDetailsLister() {
-            super(AptUnitDTO.class);
-            setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().buildingCode()).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
-                new MemberColumnDescriptor.Builder(proto().info().economicStatus()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().info().floor()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().number()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
-                new MemberColumnDescriptor.Builder(proto().info().areaUnits()).visible(false).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().financial()._unitRent()).build(),
-                new MemberColumnDescriptor.Builder(proto().financial()._marketRent()).build(),
-                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
+    static {
+        AptUnitDTO proto = EntityFactory.create(AptUnitDTO.class);
+        DEFAULT_COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
+                new MemberColumnDescriptor.Builder(proto.buildingCode()).build(),
+                new MemberColumnDescriptor.Builder(proto.floorplan().name()).title(i18n.tr("Floorplan Name")).build(),
+                new MemberColumnDescriptor.Builder(proto.floorplan().marketingName()).title(i18n.tr("Floorplan Marketing Name")).build(),
+                new MemberColumnDescriptor.Builder(proto.info().economicStatus()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.info().floor()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().number()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().area()).build(),
+                new MemberColumnDescriptor.Builder(proto.info().areaUnits()).visible(false).build(),
+                new MemberColumnDescriptor.Builder(proto.info()._bedrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto.info()._bathrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto.financial()._unitRent()).build(),
+                new MemberColumnDescriptor.Builder(proto.financial()._marketRent()).build(),
+                new MemberColumnDescriptor.Builder(proto._availableForRent()).build()
             );//@formatter:on
-
-        }
-
     }
 
     public UnitDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<AptUnitDTO, CounterGadgetFilter> criteriaProvider) {
         super(//@formatter:off
-                AptUnitDTO.class, new UnitsDetailsLister(),
+                AptUnitDTO.class,
+                DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<UnitCrudService> create(UnitCrudService.class),
                 filterDataProvider,
-                criteriaProvider
-                );//@formatter:on
+                criteriaProvider,
+                null
+        );//@formatter:on
     }
+
 }
