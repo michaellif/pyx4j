@@ -127,4 +127,10 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         }
         return cycle.targetPadExecutionDate().getValue();
     }
+
+    @Override
+    public LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease) {
+        // TODO
+        return null;
+    }
 }

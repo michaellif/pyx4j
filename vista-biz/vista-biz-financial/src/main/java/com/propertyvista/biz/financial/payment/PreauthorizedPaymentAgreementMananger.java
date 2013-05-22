@@ -15,10 +15,14 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -27,6 +31,32 @@ class PreauthorizedPaymentAgreementMananger {
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
         preauthorizedPayment.tenant().set(tenantId);
+
+        // Creates a new version of PAP if values changed and there are payments created
+        if (!preauthorizedPayment.id().isNull()) {
+            boolean hasPaymentRecords = false;
+            {
+                EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+                criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
+                hasPaymentRecords = Persistence.service().count(criteria) > 0;
+            }
+            // TODO If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
+            LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(tenantId.lease());
+
+            if (hasPaymentRecords) {
+                PreauthorizedPayment origPreauthorizedPayment = Persistence.service()
+                        .retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
+
+                if (!EntityGraph.fullyEqualValues(origPreauthorizedPayment, preauthorizedPayment)) {
+
+                    origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+                    Persistence.service().merge(origPreauthorizedPayment);
+
+                    preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                }
+            }
+        }
+
         Persistence.service().merge(preauthorizedPayment);
         return null;
     }

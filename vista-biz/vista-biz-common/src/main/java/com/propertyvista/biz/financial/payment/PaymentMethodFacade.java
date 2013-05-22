@@ -62,4 +62,6 @@ public interface PaymentMethodFacade {
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 
     LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease);
+
+    LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
 }
