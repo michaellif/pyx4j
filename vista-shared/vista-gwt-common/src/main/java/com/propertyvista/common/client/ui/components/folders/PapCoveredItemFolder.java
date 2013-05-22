@@ -30,15 +30,12 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
 
     private static final I18n i18n = I18n.get(PapCoveredItemFolder.class);
 
-    private final boolean editable;
-
     public PapCoveredItemFolder() {
         this(false);
     }
 
     public PapCoveredItemFolder(boolean editable) {
         super(PreauthorizedPayment.PreauthorizedPaymentCoveredItem.class, false);
-        this.editable = editable;
     }
 
     @Override

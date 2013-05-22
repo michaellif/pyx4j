@@ -16,10 +16,8 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -50,13 +48,6 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
             return new PreauthorizedPaymentEditor();
         }
         return super.create(member);
-    }
-
-    @Override
-    protected void createNewEntity(AsyncCallback<PreauthorizedPayment> callback) {
-        PreauthorizedPayment newEntity = EntityFactory.create(PreauthorizedPayment.class);
-
-        callback.onSuccess(newEntity);
     }
 
     @Override

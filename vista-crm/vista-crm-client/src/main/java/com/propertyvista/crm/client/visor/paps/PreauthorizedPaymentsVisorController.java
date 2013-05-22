@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.visor.paps;
 
 import java.util.List;
+import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
@@ -69,6 +70,10 @@ public abstract class PreauthorizedPaymentsVisorController extends AbstractVisor
         service.save(callback, pads);
     }
 
+    void create(AsyncCallback<PreauthorizedPayment> callback) {
+        service.create(callback, EntityFactory.createIdentityStub(Tenant.class, tenantId));
+    }
+
     /**
      * Implement in caller to get editing result.
      * 
@@ -83,7 +88,6 @@ public abstract class PreauthorizedPaymentsVisorController extends AbstractVisor
         save(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-
             }
         }, visor.getValue());
     }
@@ -93,11 +97,15 @@ public abstract class PreauthorizedPaymentsVisorController extends AbstractVisor
         save(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                if (onClose(visor.getValue().preauthorizedPayments())) {
-                    getParentView().hideVisor();
-                }
+                service.recollect(new DefaultAsyncCallback<Vector<PreauthorizedPayment>>() {
+                    @Override
+                    public void onSuccess(Vector<PreauthorizedPayment> result) {
+                        if (onClose(result)) {
+                            getParentView().hideVisor();
+                        }
+                    }
+                }, EntityFactory.createIdentityStub(Tenant.class, tenantId));
             }
         }, visor.getValue());
     }
-
 }

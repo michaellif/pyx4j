@@ -17,20 +17,26 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PreauthorizedPaymentsFolder;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 
 public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentsDTO> {
 
-    public PreauthorizedPaymentsForm() {
+    private final PreauthorizedPaymentsVisorView visor;
+
+    public PreauthorizedPaymentsForm(PreauthorizedPaymentsVisorView visor) {
         super(PreauthorizedPaymentsDTO.class);
+        this.visor = visor;
     }
 
     @Override
@@ -40,9 +46,20 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         main.setWidget(0, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
         main.setH3(1, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(2, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentsFolder() {
+
             @Override
             public List<LeasePaymentMethod> getAvailablePaymentMethods() {
                 return PreauthorizedPaymentsForm.this.getValue().availablePaymentMethods();
+            }
+
+            @Override
+            protected void createNewEntity(final AsyncCallback<PreauthorizedPayment> callback) {
+                visor.getController().create(new DefaultAsyncCallback<PreauthorizedPayment>() {
+                    @Override
+                    public void onSuccess(PreauthorizedPayment result) {
+                        callback.onSuccess(result);
+                    }
+                });
             }
         }));
 

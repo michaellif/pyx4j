@@ -23,12 +23,12 @@ import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 
 public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<PreauthorizedPaymentsDTO> {
 
-    private final CEntityForm<PreauthorizedPaymentsDTO> form = new PreauthorizedPaymentsForm();
+    private final CEntityForm<PreauthorizedPaymentsDTO> form;
 
     public PreauthorizedPaymentsVisorView(PreauthorizedPaymentsVisorController controller) {
         super(controller);
 
-        setForm(form);
+        setForm(form = new PreauthorizedPaymentsForm(this));
         getElement().getStyle().setProperty("padding", "6px");
     }
 
@@ -46,5 +46,4 @@ public class PreauthorizedPaymentsVisorView extends AbstractVisorEditor<Preautho
             }
         });
     }
-
 }

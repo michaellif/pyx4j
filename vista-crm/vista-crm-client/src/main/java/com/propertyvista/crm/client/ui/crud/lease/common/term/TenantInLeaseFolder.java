@@ -113,13 +113,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                         public boolean onClose(List<PreauthorizedPayment> pads) {
                             for (CComponent<?, ?> comp : item.getComponents()) {
                                 if (comp instanceof TenantInLeaseEditor) {
-                                    ((TenantInLeaseEditor) comp).get((((TenantInLeaseEditor) comp).proto().leaseParticipant().preauthorizedPayments()))
-                                            .setValue(pads);
+                                    ((TenantInLeaseEditor) comp).setPreauthorizedPayments(pads);
                                 }
                             }
                             return true;
                         }
-
                     }.show();
                 }
             });
@@ -215,6 +213,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         private final FormFlexPanel preauthorizedPaymentsPanel = new FormFlexPanel();
 
+        private final PreauthorizedPayments preauthorizedPayments = new PreauthorizedPayments();
+
         public TenantInLeaseEditor() {
             super(LeaseTermTenant.class);
         }
@@ -275,7 +275,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             }
 
             preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
-            preauthorizedPaymentsPanel.setWidget(1, 0, inject(proto().leaseParticipant().preauthorizedPayments(), new PreauthorizedPayments()));
+            preauthorizedPaymentsPanel.setWidget(1, 0, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
 
             // assemble main panel:
             main.setWidget(0, 0, left);
@@ -335,6 +335,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             get(proto().leaseParticipant().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
             get(proto().role()).setValue(LeaseTermParticipant.Role.Applicant);
             get(proto().percentage()).setValue(new BigDecimal(1));
+        }
+
+        void setPreauthorizedPayments(List<PreauthorizedPayment> pads) {
+            getValue().leaseParticipant().preauthorizedPayments().clear();
+            getValue().leaseParticipant().preauthorizedPayments().addAll(pads);
+            preauthorizedPayments.setValue(getValue().leaseParticipant().preauthorizedPayments());
         }
     }
 

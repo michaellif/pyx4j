@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.rpc.services.customer;
 
+import java.util.Vector;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
@@ -28,5 +30,9 @@ public interface PreauthorizedPaymentsVisorService extends IService {
 
     void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads);
 
+    void create(AsyncCallback<PreauthorizedPayment> callback, Tenant tenantId);
+
     void delete(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment pad);
+
+    void recollect(AsyncCallback<Vector<PreauthorizedPayment>> callback, Tenant tenantId);
 }

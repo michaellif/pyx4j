@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.customer;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -61,15 +62,25 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
 
         for (PreauthorizedPayment pap : dto.preauthorizedPayments()) {
-            for (BillableItem billableItem : tenant.lease().currentTerm().version().leaseProducts().featureItems()) {
-                Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
-                //@formatter:off
+            fillPreauthorizedPaymentItem(pap, tenant);
+        }
+    }
+
+    private void fillPreauthorizedPaymentItem(PreauthorizedPayment pap, Tenant tenant) {
+        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+
+        if (!isCoveredItemExist(pap, tenant.lease().currentTerm().version().leaseProducts().serviceItem())) {
+            pap.coveredItems().add(createCoveredItem(tenant.lease().currentTerm().version().leaseProducts().serviceItem()));
+        }
+
+        for (BillableItem billableItem : tenant.lease().currentTerm().version().leaseProducts().featureItems()) {
+            Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
+            //@formatter:off
                 if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
                     && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
                     && !isCoveredItemExist(pap, billableItem)) {                                                                                                    // absent
                 //@formatter:on
-                    pap.coveredItems().add(createCoveredItem(billableItem));
-                }
+                pap.coveredItems().add(createCoveredItem(billableItem));
             }
         }
     }
@@ -88,7 +99,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
 
         item.billableItem().set(billableItem);
-        item.amount().setValue(billableItem.agreedPrice().getValue());
+//        item.amount().setValue(billableItem.agreedPrice().getValue());
 
         return item;
     }
@@ -131,8 +142,12 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
             // remove zero covered items:
             Iterator<PreauthorizedPaymentCoveredItem> iterator = pap.coveredItems().iterator();
             while (iterator.hasNext()) {
-                if (iterator.next().amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                PreauthorizedPaymentCoveredItem item = iterator.next();
+                if (item.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
                     iterator.remove();
+                    if (item.getPrimaryKey() != null) {
+                        Persistence.service().delete(item);
+                    }
                 }
             }
 
@@ -145,10 +160,28 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     @Override
+    public void create(AsyncCallback<PreauthorizedPayment> callback, Tenant tenantId) {
+        PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+
+        pap.tenant().set(tenantId);
+
+        Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
+
+        fillPreauthorizedPaymentItem(pap, tenant);
+
+        callback.onSuccess(pap);
+    }
+
+    @Override
     public void delete(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment pad) {
         ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pad);
         Persistence.service().commit();
 
         callback.onSuccess(null);
+    }
+
+    @Override
+    public void recollect(AsyncCallback<Vector<PreauthorizedPayment>> callback, Tenant tenantId) {
+        callback.onSuccess(new Vector<PreauthorizedPayment>(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(tenantId)));
     }
 }
