@@ -13,9 +13,14 @@
  */
 package com.propertyvista.crm.server.services.customer;
 
+import java.math.BigDecimal;
+import java.util.Iterator;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,8 +31,11 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.CoveredItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -39,19 +47,53 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         dto.tenant().set(tenantId);
         dto.preauthorizedPayments().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(tenantId));
-        fillPreauthorizedPaymentItems(dto, tenantId);
-        fillTenantInfo(dto, tenantId);
-        fillAvailablePaymentMethods(dto, tenantId);
+
+        Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
+
+        fillTenantInfo(dto, tenant);
+        fillPreauthorizedPaymentItems(dto, tenant);
+        fillAvailablePaymentMethods(dto, tenant);
 
         callback.onSuccess(dto);
     }
 
-    private void fillPreauthorizedPaymentItems(PreauthorizedPaymentsDTO dto, Tenant tenantId) {
+    private void fillPreauthorizedPaymentItems(PreauthorizedPaymentsDTO dto, Tenant tenant) {
+        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
 
+        for (PreauthorizedPayment pap : dto.preauthorizedPayments()) {
+            for (BillableItem billableItem : tenant.lease().currentTerm().version().leaseProducts().featureItems()) {
+                Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
+                //@formatter:off
+                if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
+                    && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
+                    && !isCoveredItemExist(pap, billableItem)) {                                                                                                    // absent
+                //@formatter:on
+                    pap.coveredItems().add(createCoveredItem(billableItem));
+                }
+            }
+        }
+    }
+
+    private boolean isCoveredItemExist(PreauthorizedPayment pap, BillableItem billableItem) {
+        for (CoveredItem item : pap.coveredItems()) {
+            if (item.billableItem().uid().getValue().equals(billableItem.uid().getValue())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private CoveredItem createCoveredItem(BillableItem billableItem) {
+        CoveredItem item = EntityFactory.create(CoveredItem.class);
+
+        item.billableItem().set(billableItem);
+        item.amount().setValue(billableItem.agreedPrice().getValue());
+
+        return item;
     }
 
     private void fillTenantInfo(PreauthorizedPaymentsDTO pads, Tenant tenant) {
-        Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
         Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
 
         pads.tenantInfo().name().set(tenant.customer().person().name());
@@ -67,8 +109,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO pads, Tenant tenant) {
-        Persistence.ensureRetrieve(tenant, AttachLevel.Attached);
-
         EntityListCriteria<LeasePaymentMethod> criteria = new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant.customer()));
         criteria.add(PropertyCriterion.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE));
@@ -80,15 +120,23 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     @Override
     public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads) {
         // delete payment methods removed in UI:
-        for (PreauthorizedPayment pad : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(pads.tenant())) {
-            if (!pads.preauthorizedPayments().contains(pad)) {
-                ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pad);
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(pads.tenant())) {
+            if (!pads.preauthorizedPayments().contains(pap)) {
+                ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
             }
         }
 
         // save new/edited ones:
-        for (PreauthorizedPayment pad : pads.preauthorizedPayments()) {
-            ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pad, pads.tenant());
+        for (PreauthorizedPayment pap : pads.preauthorizedPayments()) {
+            // remove zero covered items:
+            Iterator<CoveredItem> iterator = pap.coveredItems().iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next().amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                    iterator.remove();
+                }
+            }
+
+            ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, pads.tenant());
         }
 
         Persistence.service().commit();

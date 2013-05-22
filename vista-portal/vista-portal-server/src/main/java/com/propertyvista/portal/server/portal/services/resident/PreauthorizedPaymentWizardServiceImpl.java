@@ -163,7 +163,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
         entity.coveredItems().clear();
         for (CoveredItemDTO item : dto.coveredItemsDTO()) {
-            if (item.amount().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            if (item.amount().getValue().compareTo(BigDecimal.ZERO) >= 0) {
                 entity.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
             }
         }
