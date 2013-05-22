@@ -34,6 +34,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -45,8 +46,11 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.tenant.yardi.YardiLeaseIntegrationAgent;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
@@ -343,9 +347,17 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
             throws YardiServiceException, RemoteException {
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
-            ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, new LogicalDate());
+            BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
+            BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
+            // don't query yardi after pad cut-off date
+            if (!now.before(nextCycle.targetPadGenerationDate().getValue())) {
+                continue;
+            }
+            ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, nextCycle.billingCycleStartDate().getValue());
             if (residentTransactions != null) {
                 transactions.add(residentTransactions);
             }

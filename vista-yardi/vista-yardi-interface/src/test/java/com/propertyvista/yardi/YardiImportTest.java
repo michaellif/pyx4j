@@ -52,6 +52,7 @@ public class YardiImportTest extends YardiTestBase {
         super.setUp();
         preloadData();
 
+        setSysDate("01-May-2013");
         {
             // @formatter:off
             PropertyUpdater updater = new PropertyUpdater("prop123").
@@ -282,10 +283,19 @@ public class YardiImportTest extends YardiTestBase {
         new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
         agreedPrice("1250.00");
 
-        assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
+        assertEquals(3, lease.currentTerm().version().leaseProducts().featureItems().size());
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
+        uid("rpark").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-May-2013"). // end of current cycle
+        description("Parking B").
+        agreedPrice("60.00");  
+        // @formatter:on
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
         uid("rinpark").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
@@ -294,7 +304,7 @@ public class YardiImportTest extends YardiTestBase {
         // @formatter:on
 
         // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(2)).
         uid("rlock").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").

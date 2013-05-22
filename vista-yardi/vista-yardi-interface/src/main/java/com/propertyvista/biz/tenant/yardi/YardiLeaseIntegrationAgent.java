@@ -13,10 +13,37 @@
  */
 package com.propertyvista.biz.tenant.yardi;
 
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class YardiLeaseIntegrationAgent {
+
+    public static BillingCycle getBillingCycleForDate(String propertyCode, LogicalDate date) {
+        // get building
+        EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
+        crit.eq(crit.proto().propertyCode(), propertyCode);
+        Building building = Persistence.service().retrieve(crit);
+        // create dummy lease
+        Lease yardiLease = EntityFactory.create(Lease.class);
+        yardiLease.billingAccount().set(EntityFactory.create(YardiBillingAccount.class));
+        yardiLease.billingAccount().billingPeriod().setValue(BillingPeriod.Monthly);
+        yardiLease.billingAccount().billingType().billingPeriod().setValue(BillingPeriod.Monthly);
+        yardiLease.billingAccount().billingType().billingCycleStartDay().setValue(1);
+        yardiLease.unit().building().set(building);
+
+        return ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(yardiLease, date);
+    }
 
     public static void updateBillabelItem(Lease lease, BillableItem item) {
 //        new LeaseYardiManager().persistBillabelItem(lease, item);

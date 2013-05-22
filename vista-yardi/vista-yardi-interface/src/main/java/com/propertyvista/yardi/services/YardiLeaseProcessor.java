@@ -15,7 +15,6 @@ package com.propertyvista.yardi.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -37,11 +36,13 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -189,13 +190,13 @@ public class YardiLeaseProcessor {
             newItems.add(item);
         }
         if (modified) {
-            // remove unmatched features from new version
+            // terminate unmatched features - set expiration date at the end of billing cycle
+            LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+            BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
             LeaseMerger merger = new LeaseMerger();
-            Iterator<BillableItem> leaseItems = lease.currentTerm().version().leaseProducts().featureItems().iterator();
-            while (leaseItems.hasNext()) {
-                BillableItem item = leaseItems.next();
+            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
                 if (merger.findBillableItem(item, newItems) == null) {
-                    leaseItems.remove();
+                    item.expirationDate().set(currCycle.billingCycleEndDate());
                 }
             }
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
