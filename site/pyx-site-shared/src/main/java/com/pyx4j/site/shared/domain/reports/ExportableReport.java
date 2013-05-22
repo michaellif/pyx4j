@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2012 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,24 +14,12 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Aug 2, 2012
+ * Created on 2013-05-22
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.rpc.reports;
+package com.pyx4j.site.shared.domain.reports;
 
-import java.io.Serializable;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
-
-public interface IReportsService extends IService {
-
-    /** prepares and returns a report for the provided report metadata */
-    void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata);
-
-    void export(AsyncCallback<String> callback, ReportMetadata reportMetadata);
+public interface ExportableReport {
 
 }

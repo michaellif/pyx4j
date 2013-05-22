@@ -27,6 +27,8 @@ public interface IReportsView extends IPane {
 
     public interface Presenter extends IPane.Presenter {
 
+        void export(ReportMetadata settings);
+
         void apply(ReportMetadata settings);
 
         void loadSettings(String reportSettingsId);

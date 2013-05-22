@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.AbstractPane;
+import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.widgets.client.Button;
@@ -120,6 +121,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     private String settingsId;
 
+    private Button exportButton;
+
     public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
@@ -189,7 +192,13 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
                 print();
             }
         }));
-//        addHeaderToolbarItem(new Button(i18n.tr("Export")));
+
+        addHeaderToolbarItem(exportButton = new Button(i18n.tr("Export"), new Command() {
+            @Override
+            public void execute() {
+                presenter.export(settingsForm.getValue());
+            }
+        }));
 
         resetCaption();
         setContentPane(new ScrollPanel(viewPanel));
@@ -216,6 +225,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
             ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
             report = factory.getReport();
             reportPanel.setWidget(report);
+
+            exportButton.setVisible(reportSettings instanceof ExportableReport);
         }
         resetCaption();
     }

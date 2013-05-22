@@ -49,4 +49,9 @@ public class AbstractReportsService implements IReportsService {
 
     }
 
+    @Override
+    public void export(AsyncCallback<String> callback, ReportMetadata reportMetadata) {
+        String deferredProcessId = null;
+        callback.onSuccess(deferredProcessId);
+    }
 }

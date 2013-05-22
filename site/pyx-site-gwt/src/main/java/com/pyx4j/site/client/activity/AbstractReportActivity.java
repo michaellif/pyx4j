@@ -21,15 +21,21 @@
 package com.pyx4j.site.client.activity;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.essentials.client.ReportDialog;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
+import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -90,13 +96,16 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
     private ReportSettingsManagementVizorController reportSettingsManagementVizorController;
 
+    private final String downloadServletPath;
+
     public AbstractReportActivity(IReportsService reportsService, ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService,
-            IReportsView view, ReportsAppPlace place) {
+            IReportsView view, ReportsAppPlace place, String dowloadServletPath) {
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
         this.view = view;
         this.view.setPresenter(this);
         this.place = place;
+        this.downloadServletPath = dowloadServletPath;
     }
 
     public ReportSettingsManagementVizorController getReportSettingsManagementVizorController() {
@@ -122,6 +131,28 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
             }
 
         }, settings);
+    }
+
+    @Override
+    public void export(ReportMetadata settings) {
+        ReportDialog d = new ReportDialog("DB Summary", "Creating DB summary...");
+        d.setDownloadServletPath(downloadServletPath);
+        ReportRequest request = new ReportRequest();
+        final String METADATA_KEY = "METADATA";
+        HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
+        parameters.put(METADATA_KEY, settings);
+        request.setParameters(parameters);
+        d.start(new ReportService<IEntity>() {
+            @Override
+            public void cancelDownload(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
+                callback.onSuccess(null);
+            }
+
+            @Override
+            public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
+                reportsService.export(callback, (ReportMetadata) reportRequest.getParameters().get(METADATA_KEY));
+            }
+        }, request);
     }
 
     @Override
