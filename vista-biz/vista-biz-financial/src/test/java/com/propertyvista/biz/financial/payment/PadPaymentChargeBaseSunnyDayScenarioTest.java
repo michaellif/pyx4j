@@ -91,7 +91,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(3).
-        paymentReceivedAmount(eval("-(930.30 + 80 + 60)")).
+        paymentReceivedAmount(eval("-(930.3 + 80 + 60)")).
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").

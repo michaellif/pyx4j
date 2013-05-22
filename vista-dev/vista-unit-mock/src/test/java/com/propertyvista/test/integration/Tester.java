@@ -13,6 +13,8 @@
  */
 package com.propertyvista.test.integration;
 
+import java.math.BigDecimal;
+
 import junit.framework.AssertionFailedError;
 
 import com.pyx4j.commons.LogicalDate;
@@ -34,6 +36,20 @@ public class Tester {
             return;
         }
         if ((expected != null) && (expected.equals(actual))) {
+            return;
+        }
+        if (continueOnError) {
+            System.out.println(new StringBuilder().append(format(message, expected, actual)).append("\nat ").append(Thread.currentThread().getStackTrace()[3]));
+        } else {
+            throw new AssertionFailedError(format(message, expected, actual));
+        }
+    }
+
+    protected void assertEquals(String message, BigDecimal expected, BigDecimal actual) {
+        if ((expected == null) && (actual == null)) {
+            return;
+        }
+        if ((expected != null) && (expected.compareTo(actual) == 0)) {
             return;
         }
         if (continueOnError) {

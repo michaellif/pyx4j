@@ -532,7 +532,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     protected String eval(String amount) {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         try {
-            return new BigDecimal(engine.eval(amount).toString()).setScale(2).toString();
+            return new BigDecimal(engine.eval(amount).toString()).toString();
         } catch (ScriptException e) {
             throw new Error(e);
         }
