@@ -20,7 +20,6 @@
  */
 package com.propertyvista.test.integration;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -286,7 +285,7 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
     protected String eval(String amount) {
         ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
         try {
-            return new BigDecimal(engine.eval(amount).toString()).toString();
+            return engine.eval(amount).toString();
         } catch (ScriptException e) {
             throw new Error(e);
         }
