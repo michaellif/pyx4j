@@ -34,7 +34,7 @@ import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorSer
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.CoveredItem;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -75,7 +75,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     private boolean isCoveredItemExist(PreauthorizedPayment pap, BillableItem billableItem) {
-        for (CoveredItem item : pap.coveredItems()) {
+        for (PreauthorizedPaymentCoveredItem item : pap.coveredItems()) {
             if (item.billableItem().uid().getValue().equals(billableItem.uid().getValue())) {
                 return true;
             }
@@ -84,8 +84,8 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         return false;
     }
 
-    private CoveredItem createCoveredItem(BillableItem billableItem) {
-        CoveredItem item = EntityFactory.create(CoveredItem.class);
+    private PreauthorizedPaymentCoveredItem createCoveredItem(BillableItem billableItem) {
+        PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
 
         item.billableItem().set(billableItem);
         item.amount().setValue(billableItem.agreedPrice().getValue());
@@ -129,7 +129,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         // save new/edited ones:
         for (PreauthorizedPayment pap : pads.preauthorizedPayments()) {
             // remove zero covered items:
-            Iterator<CoveredItem> iterator = pap.coveredItems().iterator();
+            Iterator<PreauthorizedPaymentCoveredItem> iterator = pap.coveredItems().iterator();
             while (iterator.hasNext()) {
                 if (iterator.next().amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
                     iterator.remove();
