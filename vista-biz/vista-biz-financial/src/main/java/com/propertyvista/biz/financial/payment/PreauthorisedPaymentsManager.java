@@ -39,7 +39,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -163,9 +163,6 @@ class PreauthorisedPaymentsManager {
      */
     private List<PreauthorizedAmount> calulatePapAmounts(BillingCycle billingCycle, BillingAccount billingAccount) {
         List<PreauthorizedAmount> records = new ArrayList<PreauthorizedAmount>();
-
-        BigDecimal currentBalance = null;
-
         List<LeaseTermTenant> leaseParticipants;
         {
             EntityQueryCriteria<LeaseTermTenant> criteria = EntityQueryCriteria.create(LeaseTermTenant.class);
@@ -187,16 +184,6 @@ class PreauthorisedPaymentsManager {
             }
         }
 
-        // Need building for getPADBalance
-        Persistence.service().retrieve(billingAccount.lease());
-
-        BigDecimal total = BigDecimal.ZERO;
-        // Calculate Percentage with rounding.
-        BigDecimal percentTotal = BigDecimal.ZERO;
-        BigDecimal percentAmountTotal = BigDecimal.ZERO;
-
-        PreauthorizedAmount recordLargest = null;
-
         for (LeaseTermTenant leaseParticipant : leaseParticipants) {
             List<PreauthorizedPayment> preauthorizedPayments;
             {
@@ -214,38 +201,13 @@ class PreauthorisedPaymentsManager {
                 record.leaseTermTenant = leaseParticipant;
                 record.preauthorizedPayment = pap;
 
-                switch (pap.amountType().getValue()) {
-                case Percent:
-                    throw new IllegalArgumentException("No longer in use");
-
-                case Value:
-                    record.amount = pap.value().getValue();
-                    total = total.add(record.amount);
-                    break;
-
-                default:
-                    throw new IllegalArgumentException();
+                record.amount = BigDecimal.ZERO;
+                for (PreauthorizedPaymentCoveredItem item : pap.coveredItems()) {
+                    record.amount = record.amount.add(item.amount().getValue());
                 }
                 records.add(record);
             }
         }
-
-        // Percent rounding case of total 100%  e.g. 33% + 66%
-        if (percentTotal.compareTo(BigDecimal.ONE) == 0) {
-            BigDecimal unapidBalance = currentBalance.subtract(percentAmountTotal);
-            // Make the Largest to  pay fractions
-            recordLargest.amount = recordLargest.amount.add(unapidBalance);
-            total = total.add(unapidBalance);
-        }
-
-        if ((currentBalance != null) && (total.compareTo(currentBalance) != 0)) {
-            // Validate total
-            String notice = i18n.tr("Outstanding account Balance {0} is not equal sum of payments {1}", currentBalance, total);
-            for (PreauthorizedAmount record : records) {
-                record.notice = notice;
-            }
-        }
-
         return records;
     }
 
@@ -261,10 +223,6 @@ class PreauthorisedPaymentsManager {
                     criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
 
                     criteria.eq(criteria.proto().payments().$().padBillingCycle(), billingCycle);
-                    // Update only Percent records
-                    //criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
-                    criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().amountType(),
-                            AmountType.Percent);
                     billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
                 }
                 try {
@@ -285,7 +243,6 @@ class PreauthorisedPaymentsManager {
             criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
             criteria.eq(criteria.proto().billingAccount(), billingAccount);
             criteria.in(criteria.proto().paymentStatus(), PaymentStatus.Scheduled, PaymentStatus.PendingAction);
-            criteria.eq(criteria.proto().preauthorizedPayment().amountType(), AmountType.Percent);
             if (Persistence.service().count(criteria) == 0) {
                 //Nothing to update
                 return;
@@ -298,7 +255,6 @@ class PreauthorisedPaymentsManager {
             criteria.eq(criteria.proto().padBillingCycle(), billingCycle);
             criteria.eq(criteria.proto().billingAccount(), billingAccount);
             criteria.in(criteria.proto().paymentStatus(), PaymentStatus.PendingAction);
-            criteria.eq(criteria.proto().preauthorizedPayment().amountType(), AmountType.Percent);
             hasPendingAction = (Persistence.service().count(criteria) != 0);
 
         }

@@ -235,7 +235,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
                 @Override
                 public void onSuccess(PreauthorizedPayment result) {
-                    ((CComponent<List<PreauthorizedPayment.CoveredItem>, ?>) get(proto().coveredItems())).populate(result.coveredItems());
+                    ((CComponent<List<PreauthorizedPayment.PreauthorizedPaymentCoveredItem>, ?>) get(proto().coveredItems())).populate(result.coveredItems());
                 }
             }, getValue());
         }

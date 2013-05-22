@@ -23,6 +23,7 @@ import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.billing.Bill;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @Ignore
@@ -40,8 +41,8 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         setSysDate("10-Mar-2011");
 
         createLease("1-Apr-2011", "31-Mar-2012");
-        addOutdoorParking();
-        addLargeLocker();
+        BillableItem parking = addOutdoorParking();
+        BillableItem largeLocker = addLargeLocker();
 
         setBillingBatchProcess();
         setLeaseBatchProcess();
@@ -71,9 +72,11 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         advanceSysDate("20-Mar-2011");
 
-        receiveAndPostPayment("20-Mar-2011", "1070.30"); //2269.04 - 1198.74(pad) = 1070.30
-
-        setPreauthorizedPayment("1");
+        setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
+                add(getLease().currentTerm().version().leaseProducts().serviceItem(), "930.30"). //
+                add(parking, "80.00"). //
+                add(largeLocker, "60.00"). //
+                build());
 
         advanceSysDate("18-Apr-2011");
 
@@ -88,7 +91,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         billingPeriodStartDate("01-May-2011").
         billingPeriodEndDate("31-May-2011").
         numOfProductCharges(3).
-        paymentReceivedAmount("-2269.04").
+        paymentReceivedAmount(eval("-(930.30 + 80 + 60)")).
         serviceCharge("930.30").
         recurringFeatureCharges("140.00").
         oneTimeFeatureCharges("0.00").

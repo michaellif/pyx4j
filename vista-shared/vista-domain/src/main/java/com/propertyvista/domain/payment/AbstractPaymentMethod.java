@@ -13,6 +13,8 @@
  */
 package com.propertyvista.domain.payment;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
@@ -20,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -55,5 +58,8 @@ public interface AbstractPaymentMethod extends IEntity {
      */
     @NotNull
     IPrimitive<Boolean> isDeleted();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 
 }

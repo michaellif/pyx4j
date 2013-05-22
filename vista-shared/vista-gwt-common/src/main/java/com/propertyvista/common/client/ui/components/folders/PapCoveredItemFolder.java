@@ -24,9 +24,9 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.CoveredItem;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 
-public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.CoveredItem> {
+public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.PreauthorizedPaymentCoveredItem> {
 
     private static final I18n i18n = I18n.get(PapCoveredItemFolder.class);
 
@@ -37,7 +37,7 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
     }
 
     public PapCoveredItemFolder(boolean editable) {
-        super(PreauthorizedPayment.CoveredItem.class, false);
+        super(PreauthorizedPayment.PreauthorizedPaymentCoveredItem.class, false);
         this.editable = editable;
     }
 
@@ -51,16 +51,16 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof CoveredItem) {
+        if (member instanceof PreauthorizedPaymentCoveredItem) {
             return new CoveredItemViewer();
         }
         return super.create(member);
     }
 
-    class CoveredItemViewer extends CEntityFolderRowEditor<CoveredItem> {
+    class CoveredItemViewer extends CEntityFolderRowEditor<PreauthorizedPaymentCoveredItem> {
 
         public CoveredItemViewer() {
-            super(CoveredItem.class, columns());
+            super(PreauthorizedPaymentCoveredItem.class, columns());
         }
 
         @Override

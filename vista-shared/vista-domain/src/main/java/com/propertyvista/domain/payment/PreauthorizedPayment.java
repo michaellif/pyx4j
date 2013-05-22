@@ -14,6 +14,7 @@
 package com.propertyvista.domain.payment;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
@@ -29,7 +30,6 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -45,7 +45,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 @ToStringFormat("{0}, {1,choice,null#|!null#{1}}{2,choice,null#|!null#{2}} - {3}")
 public interface PreauthorizedPayment extends IEntity {
 
-    public interface CoveredItem extends IEntity {
+    public interface PreauthorizedPaymentCoveredItem extends IEntity {
 
         @NotNull
         @ReadOnly
@@ -74,7 +74,7 @@ public interface PreauthorizedPayment extends IEntity {
     }
 
     @Owned
-    IList<CoveredItem> coveredItems();
+    IList<PreauthorizedPaymentCoveredItem> coveredItems();
 
     @Deprecated
     @I18n
@@ -133,6 +133,9 @@ public interface PreauthorizedPayment extends IEntity {
     @MemberColumn(notNull = true)
     Tenant tenant();
 
-    @Timestamp(Update.Created)
+    @Timestamp(Timestamp.Update.Created)
     IPrimitive<LogicalDate> creationDate();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 }

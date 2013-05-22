@@ -53,7 +53,7 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -280,8 +280,11 @@ public class LeaseLifecycleSimulator {
                 PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
 
                 pap.paymentMethod().set(mainTenant.leaseParticipant().customer().paymentMethods().iterator().next());
-                pap.amountType().setValue(AmountType.Percent);
-                pap.percent().setValue(BigDecimal.ONE);
+
+                PreauthorizedPaymentCoveredItem papItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+                papItem.billableItem().set(lease.currentTerm().version().leaseProducts().serviceItem());
+                papItem.amount().setValue(papItem.billableItem().agreedPrice().getValue());
+                pap.coveredItems().add(papItem);
                 pap.comments().setValue("Default preauthorization...");
 
                 pap.tenant().set(mainTenant.leaseParticipant());

@@ -37,7 +37,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.CoveredItem;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -164,7 +164,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         entity.coveredItems().clear();
         for (CoveredItemDTO item : dto.coveredItemsDTO()) {
             if (item.amount().getValue().compareTo(BigDecimal.ZERO) != 0) {
-                entity.coveredItems().add(item.duplicate(CoveredItem.class));
+                entity.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
             }
         }
     }

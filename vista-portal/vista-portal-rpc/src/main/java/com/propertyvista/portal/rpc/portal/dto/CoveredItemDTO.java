@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
 @Transient
-public interface CoveredItemDTO extends PreauthorizedPayment.CoveredItem {
+public interface CoveredItemDTO extends PreauthorizedPayment.PreauthorizedPaymentCoveredItem {
 
     @ToString(index = 1)
     @Format("#,##00")
