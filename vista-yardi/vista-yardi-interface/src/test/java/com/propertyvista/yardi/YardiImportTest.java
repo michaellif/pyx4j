@@ -192,6 +192,8 @@ public class YardiImportTest extends YardiTestBase {
         agreedPrice("1234.56");
         // @formatter:on
 
+        assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
+
         //TODO When uid will be unique use uid instead of index in list
 
         // @formatter:off
@@ -230,6 +232,26 @@ public class YardiImportTest extends YardiTestBase {
 
         {
             // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkB").remove();
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
+            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "lockerA").
+            set(LeaseChargeUpdater.Name.Description, "Locker A").
+            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("01-Jun-2012")).
+            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Jul-2014")).
+            set(LeaseChargeUpdater.Name.ChargeCode, "rlock").
+            set(LeaseChargeUpdater.Name.Amount, "150.00").
+            set(LeaseChargeUpdater.Name.Comment, "Locker A");        
+            // @formatter:on
+            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
+        }
+
+        {
+            // @formatter:off
             CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
             set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Smith");
             // @formatter:on
@@ -243,6 +265,13 @@ public class YardiImportTest extends YardiTestBase {
         Persistence.service().retrieve(lease.currentTerm().version().tenants());
 
         // @formatter:off
+        new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
+        firstName("John").
+        lastName("Smith").
+        role(Role.Applicant);
+        // @formatter:on
+
+        // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
         firstName("Jane").
         lastName("Smith").
@@ -253,30 +282,49 @@ public class YardiImportTest extends YardiTestBase {
         new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
         agreedPrice("1250.00");
 
+        assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
+        uid("rinpark").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        description("Indoor Parking").
+        agreedPrice("50.00");  
+        // @formatter:on
+
+        // @formatter:off
+        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
+        uid("rlock").
+        effectiveDate("01-Jun-2012").
+        expirationDate("31-Jul-2014").
+        description("Locker A").
+        agreedPrice("150.00");  
+        // @formatter:on
     }
-    
+
     @Test
     public void testGetResidentTransactionsForTenant() throws Exception {
 
         String propertyCode = "prop123";
         String tenantId = "t000111";
-        
+
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        
+
         ResidentTransactions transactions = stub.getResidentTransactionsForTenant(getYardiCredential(propertyCode), propertyCode, tenantId);
         assertNotNull(transactions);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
         assertEquals(tenantId, transactions.getProperty().get(0).getRTCustomer().get(0).getCustomerID());
     }
-    
+
     @Test
     public void testGetLeaseChargesForTenant() throws Exception {
 
         String propertyCode = "prop123";
         String tenantId = "t000111";
-        
+
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-        
+
         ResidentTransactions transactions = stub.getLeaseChargesForTenant(getYardiCredential(propertyCode), propertyCode, tenantId, null);
         assertEquals(1, transactions.getProperty().get(0).getRTCustomer().size());
         assertTrue(transactions.getProperty().get(0).getRTCustomer().get(0).getRTServiceTransactions().getTransactions().size() > 0);

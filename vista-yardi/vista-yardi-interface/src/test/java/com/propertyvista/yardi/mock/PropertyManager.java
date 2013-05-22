@@ -304,28 +304,27 @@ public class PropertyManager {
     public void addOrUpdateLeaseCharge(LeaseChargeUpdater updater) {
 
         Map<String, Charge> charges = leaseCharges.get(updater.getCustomerID());
-
-        if (charges.containsKey(updater.getLeaseChargeID()) && updater.remove) {
-            leaseCharges.remove(updater.getLeaseChargeID());
-        } else {
-            Charge charge = charges.get(updater.getLeaseChargeID());
-            if (charge == null) {
-                charge = new Charge();
-                ChargeDetail detail = new ChargeDetail();
-                charge.setDetail(detail);
-                charges.put(updater.getLeaseChargeID(), charge);
-            }
-            ChargeDetail detail = charge.getDetail();
-            detail.setCustomerID(updater.getCustomerID());
-            detail.setUnitID(updater.getCustomerID().substring(3));
-            detail.setPropertyPrimaryID(updater.getPropertyID());
-
-            for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
-                Property<?> property = updater.getPropertyMap().get(name);
-                updateProperty(charge.getDetail(), property);
-            }
+        Charge charge = charges.get(updater.getLeaseChargeID());
+        if (charge == null) {
+            charge = new Charge();
+            ChargeDetail detail = new ChargeDetail();
+            charge.setDetail(detail);
+            charges.put(updater.getLeaseChargeID(), charge);
         }
+        ChargeDetail detail = charge.getDetail();
+        detail.setCustomerID(updater.getCustomerID());
+        detail.setUnitID(updater.getCustomerID().substring(3));
+        detail.setPropertyPrimaryID(updater.getPropertyID());
 
+        for (com.propertyvista.yardi.mock.Name name : updater.getPropertyMap().keySet()) {
+            Property<?> property = updater.getPropertyMap().get(name);
+            updateProperty(charge.getDetail(), property);
+        }
+    }
+
+    public void removeLeaseCharge(LeaseChargeUpdater updater) {
+        Map<String, Charge> charges = leaseCharges.get(updater.getCustomerID());
+        charges.remove(updater.getLeaseChargeID());
     }
 
     private RTCustomer getRTCustomer(String customerID) {
@@ -356,4 +355,5 @@ public class PropertyManager {
             throw new RuntimeException(e);
         }
     }
+
 }

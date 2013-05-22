@@ -28,8 +28,10 @@ public class Updater<MODEL, INST_CLASS> {
         return (INST_CLASS) this;
     }
 
-    public void remove() {
+    @SuppressWarnings("unchecked")
+    public INST_CLASS remove() {
         remove = true;
+        return (INST_CLASS) this;
     }
 
     Map<Name, Property<?>> getPropertyMap() {

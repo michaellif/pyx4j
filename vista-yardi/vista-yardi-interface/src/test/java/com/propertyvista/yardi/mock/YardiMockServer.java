@@ -124,4 +124,13 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         propertyManagers.get(propertyId).addOrUpdateLeaseCharge(updater);
     }
 
+    @Override
+    public void removeLeaseCharge(LeaseChargeUpdateEvent event) {
+        LeaseChargeUpdater updater = event.getUpdater();
+        String propertyId = updater.getPropertyID();
+        if (!propertyManagers.containsKey(updater.getPropertyID())) {
+            throw new Error(propertyId + " not found");
+        }
+        propertyManagers.get(propertyId).removeLeaseCharge(updater);
+    }
 }

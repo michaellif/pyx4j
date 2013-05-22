@@ -23,6 +23,8 @@ public class LeaseChargeUpdateEvent extends MockEvent<LeaseChargeUpdateEvent.Han
 
         void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event);
 
+        void removeLeaseCharge(LeaseChargeUpdateEvent event);
+
     }
 
     public LeaseChargeUpdateEvent(LeaseChargeUpdater updater) {
@@ -32,7 +34,11 @@ public class LeaseChargeUpdateEvent extends MockEvent<LeaseChargeUpdateEvent.Han
 
     @Override
     protected final void dispatch(Handler handler) {
-        handler.addOrUpdateLeaseCharge(this);
+        if (updater.remove) {
+            handler.removeLeaseCharge(this);
+        } else {
+            handler.addOrUpdateLeaseCharge(this);
+        }
     }
 
     public LeaseChargeUpdater getUpdater() {
