@@ -39,7 +39,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        LoginInputField, LoginViewPanel, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, MenuScreenItem, AlertsScreenContent, AlertsInfo, SortPanel, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, AlertView;
+        LoginInputField, LoginViewPanel, VistaLogo, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, MenuScreenItem, AlertsScreenContent, AlertsInfo, SortPanel, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, AlertView;
     }
 
     public FieldTheme() {
@@ -93,6 +93,12 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("width", "6em");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
+        addStyle(style);
+
+        style = new Style(".", StyleName.VistaLogo);
+        style.addProperty("position", "relative");
+        style.addProperty("text-align", "center");
+        style.addProperty("maxHeight", "70px");
         addStyle(style);
 
         style = new Style(".", StyleName.LoginViewPanel);
@@ -183,38 +189,6 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("background-color", "#C0C0C0");
         addStyle(style);
 
-        style = new Style(".", StyleName.Dialog);
-        style.addProperty("background-color", ThemeColor.object1, 1);
-        style.addProperty("width", "390px");
-        style.addProperty("box-shadow", "10px 10px 5px rgba(0, 0, 0, 0.3)");
-        addStyle(style);
-
-        style = new Style(".", StyleName.DialogCaption);
-        style.addProperty("background", ThemeColor.object1, 0.8);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        style.addProperty("color", ThemeColor.object1, 0.1);
-        style.addProperty("font-weight", "bold");
-        style.addProperty("padding-left", "10px");
-        style.addProperty("width", "380px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.DialogResizer);
-        style.addProperty("background", ThemeColor.object1, 0.8);
-        style.addProperty("filter", "alpha(opacity=95)");
-        style.addProperty("opacity", "0.95");
-        addStyle(style);
-
-        style = new Style(".", StyleName.DialogContent);
-        style.addProperty("background-color", ThemeColor.background);
-        style.addProperty("width", "380px");
-        style.addProperty("height", "100%");
-        style.addProperty("padding", "10px");
-        addStyle(style);
-
-        style = new Style(".", StyleName.AlertView);
-        style.addProperty("background-color", "#8B0000");
-        addStyle(style);
     }
 
 }
