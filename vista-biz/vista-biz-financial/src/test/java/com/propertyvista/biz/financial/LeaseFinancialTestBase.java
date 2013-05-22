@@ -21,10 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-
 import junit.framework.Assert;
 
 import com.pyx4j.commons.LogicalDate;
@@ -527,15 +523,6 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
             Persistence.service().commit();
         }
         return adjustment;
-    }
-
-    protected String eval(String amount) {
-        ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
-        try {
-            return new BigDecimal(engine.eval(amount).toString()).toString();
-        } catch (ScriptException e) {
-            throw new Error(e);
-        }
     }
 
     @Deprecated

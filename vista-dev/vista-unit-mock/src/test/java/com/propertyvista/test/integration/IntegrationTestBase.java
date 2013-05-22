@@ -20,11 +20,16 @@
  */
 package com.propertyvista.test.integration;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -276,5 +281,14 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
             return null;
         }
         return new LogicalDate(DateUtils.detectDateformat(date));
+    }
+
+    protected String eval(String amount) {
+        ScriptEngine engine = new ScriptEngineManager().getEngineByName("JavaScript");
+        try {
+            return new BigDecimal(engine.eval(amount).toString()).toString();
+        } catch (ScriptException e) {
+            throw new Error(e);
+        }
     }
 }
