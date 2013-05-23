@@ -151,6 +151,9 @@ public class YardiBuildingProcessor {
         Pmc pmc = VistaDeployment.getCurrentPmc();
         String yardiCountry = building.info().address().country().name().getValue();
         String countryOfOperation = pmc.features().countryOfOperation().getValue().toString();
+        if (yardiCountry == null) {
+            throw new YardiServiceException("Country of Operation not found for this building. Building not imported.");
+        }
         return yardiCountry.equals(countryOfOperation);
     }
 
