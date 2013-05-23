@@ -18,23 +18,14 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.pyx4j.site.rpc.reports;
+package com.pyx4j.essentials.server.services.reports;
 
 import java.io.Serializable;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.rpc.shared.IService;
-import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public interface IReportsService extends IService {
+public interface ReportGenerator {
 
-    /** prepares and returns a report for the provided report metadata */
-    void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata);
-
-    void export(AsyncCallback<String> callback, ReportMetadata reportMetadata);
-
-    void cancelExport(AsyncCallback<VoidSerializable> callback, String downloadUrl);
+    Serializable generateReport(ReportMetadata reportMetadata);
 
 }

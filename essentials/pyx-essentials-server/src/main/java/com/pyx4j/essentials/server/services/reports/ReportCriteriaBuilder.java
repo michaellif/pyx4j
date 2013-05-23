@@ -18,7 +18,7 @@
  * @author Artyom
  * @version $Id$
  */
-package com.pyx4j.site.server.services.reports;
+package com.pyx4j.essentials.server.services.reports;
 
 import java.io.Serializable;
 import java.util.List;

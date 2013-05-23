@@ -143,15 +143,17 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
         parameters.put(METADATA_KEY, settings);
         request.setParameters(parameters);
         d.start(new ReportService<IEntity>() {
-            @Override
-            public void cancelDownload(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
-                callback.onSuccess(null);
-            }
 
             @Override
             public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
                 reportsService.export(callback, (ReportMetadata) reportRequest.getParameters().get(METADATA_KEY));
             }
+
+            @Override
+            public void cancelDownload(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
+                reportsService.cancelExport(callback, downloadUrl);
+            }
+
         }, request);
     }
 
