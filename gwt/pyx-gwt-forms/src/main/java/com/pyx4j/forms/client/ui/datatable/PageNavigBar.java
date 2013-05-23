@@ -204,13 +204,14 @@ public class PageNavigBar extends Toolbar {
     public void onTableModelChanged(DataTableModelEvent e) {
         int from = actionsBar.getDataTableModel().getPageNumber() * actionsBar.getDataTableModel().getPageSize() + 1;
         int to = from + actionsBar.getDataTableModel().getData().size() - 1;
+        int of = actionsBar.getDataTableModel().getTotalRows();
         if (from > to) {
             countLabel.setText(String.valueOf(CommonsStringUtils.NO_BREAK_SPACE_UTF8));
         } else {
-            countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, actionsBar.getDataTableModel().getTotalRows()));
+            countLabel.setText(i18n.tr("{0}-{1} of {2}", from, to, of));
         }
 
-        boolean fitsOnOnePage = actionsBar.getDataTableModel().getPageSize() >= actionsBar.getDataTableModel().getTotalRows();
+        boolean fitsOnOnePage = actionsBar.getDataTableModel().getPageSize() >= of;
         prevButton.setVisible(!fitsOnOnePage);
         firstButton.setVisible(!fitsOnOnePage);
         nextButton.setVisible(!fitsOnOnePage);
@@ -223,6 +224,7 @@ public class PageNavigBar extends Toolbar {
 
         if (pageSizeOptions != null) {
             pageSizeSelector.setSelectedIndex(pageSizeOptions.indexOf(actionsBar.getDataTableModel().getPageSize()));
+            pageSizeContentPanel.setVisible(pageSizeOptions.get(0) < of);
         }
     }
 
