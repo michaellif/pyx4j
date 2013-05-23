@@ -31,7 +31,6 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -42,7 +41,6 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
-@ToStringFormat("{0}, {1,choice,null#|!null#{1}}{2,choice,null#|!null#{2}} - {3}")
 public interface PreauthorizedPayment extends IEntity {
 
     public interface PreauthorizedPaymentCoveredItem extends IEntity {
@@ -91,14 +89,12 @@ public interface PreauthorizedPayment extends IEntity {
     @Deprecated
     @NotNull
     @ReadOnly
-    @ToString(index = 0)
     @Caption(name = "Type")
     IPrimitive<AmountType> amountType();
 
     @Deprecated
     @NotNull
     @ReadOnly
-    @ToString(index = 1)
     @Format("#,##0.00")
     @Editor(type = EditorType.percentage)
     @MemberColumn(precision = 5, scale = 4)
@@ -107,7 +103,6 @@ public interface PreauthorizedPayment extends IEntity {
     @Deprecated
     @NotNull
     @ReadOnly
-    @ToString(index = 2)
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> value();
@@ -117,7 +112,7 @@ public interface PreauthorizedPayment extends IEntity {
 
     @NotNull
     @ReadOnly
-    @ToString(index = 3)
+    @ToString(index = 0)
     LeasePaymentMethod paymentMethod();
 
     @Length(40)
