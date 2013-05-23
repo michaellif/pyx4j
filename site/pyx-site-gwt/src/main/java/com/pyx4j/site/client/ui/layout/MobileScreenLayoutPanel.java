@@ -35,6 +35,8 @@ import com.pyx4j.site.client.PageOrientation;
 
 public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize {
 
+    private static final double HEADER_SIZE = 50.0;
+
     public static final int MOBILE_SCREEN_WIDTH = 640;
 
     private static final int ANIMATION_TIME = 500;
@@ -125,7 +127,7 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
         Layer listerLayer = (Layer) listerDisplay.getLayoutData();
         Layer detailsLayer = (Layer) detailsDisplay.getLayoutData();
 
-        headerLayer.setTopHeight(0.0, Unit.PCT, 10.0, Unit.PCT);
+        headerLayer.setTopHeight(0.0, Unit.PCT, HEADER_SIZE, Unit.PX);
 
         double widthLister = listerLayout ? Window.getClientWidth() : MOBILE_SCREEN_WIDTH;
 
@@ -136,10 +138,10 @@ public class MobileScreenLayoutPanel extends ComplexPanel implements RequiresRes
             widthDetails = Window.getClientWidth();
         }
 
-        listerLayer.setTopBottom(10.0, Unit.PCT, 0.0, Unit.PCT);
+        listerLayer.setTopBottom(HEADER_SIZE, Unit.PX, 0.0, Unit.PX);
         listerLayer.setLeftWidth(0.0, Unit.PCT, widthLister, Unit.PX);
 
-        detailsLayer.setTopBottom(10.0, Unit.PCT, 0.0, Unit.PCT);
+        detailsLayer.setTopBottom(HEADER_SIZE, Unit.PX, 0.0, Unit.PX);
         detailsLayer.setRightWidth(0.0, Unit.PCT, widthDetails, Unit.PX);
         detailsDisplay.setVisible(showDetailsDisplay() || expandDetails);
 
