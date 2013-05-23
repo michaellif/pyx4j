@@ -44,9 +44,14 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         FormFlexPanel main = new FormFlexPanel();
 
         main.setWidget(0, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
+        main.getWidget(0, 0).getElement().getStyle().setMargin(0.5, Unit.EM);
+        main.getWidget(0, 0).getElement().getStyle().setMarginLeft(1, Unit.EM);
+        main.getWidget(0, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        main.getWidget(0, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
+        main.getWidget(0, 0).setWidth("50em");
+
         main.setH3(1, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(2, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentsFolder() {
-
             @Override
             public List<LeasePaymentMethod> getAvailablePaymentMethods() {
                 return PreauthorizedPaymentsForm.this.getValue().availablePaymentMethods();
@@ -62,12 +67,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 });
             }
         }));
-
-        main.getWidget(0, 0).setWidth("50em");
-        main.getWidget(0, 0).getElement().getStyle().setMargin(0.5, Unit.EM);
-        main.getWidget(0, 0).getElement().getStyle().setMarginLeft(1, Unit.EM);
-        main.getWidget(0, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        main.getWidget(0, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
 
         return main;
     }

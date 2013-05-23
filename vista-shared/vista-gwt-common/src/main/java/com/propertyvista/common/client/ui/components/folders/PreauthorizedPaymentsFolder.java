@@ -60,6 +60,11 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
         });
     }
 
+    /**
+     * Implement in caller to get PaymentMethods to select.
+     * 
+     * @return list of the PaymentMethods.
+     */
     public abstract List<LeasePaymentMethod> getAvailablePaymentMethods();
 
     private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPayment> {
