@@ -19,7 +19,7 @@ import java.util.Vector;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.site.server.services.reports.ReportGenerator;
+import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;

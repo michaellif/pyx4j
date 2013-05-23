@@ -16,8 +16,8 @@ package com.propertyvista.crm.server.services.reports;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.pyx4j.site.server.services.reports.AbstractReportsService;
-import com.pyx4j.site.server.services.reports.ReportGenerator;
+import com.pyx4j.essentials.server.services.reports.AbstractReportsService;
+import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
