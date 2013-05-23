@@ -17,10 +17,12 @@ import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.propertyvista.field.client.event.SearchRequestEvent;
+import com.propertyvista.field.client.event.SearchRequestHandler;
 import com.propertyvista.field.client.ui.components.search.SearchResultsView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class SearchResultsActivity extends AbstractActivity {
+public class SearchResultsActivity extends AbstractActivity implements SearchRequestHandler {
 
     private final SearchResultsView view;
 
@@ -31,6 +33,12 @@ public class SearchResultsActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        eventBus.addHandler(SearchRequestEvent.getType(), this);
+    }
+
+    @Override
+    public void onSearchRequest(SearchRequestEvent event) {
+        view.populateResults(event.getSearchCriterion());
     }
 
 }

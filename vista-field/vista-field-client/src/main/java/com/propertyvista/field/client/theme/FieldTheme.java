@@ -39,7 +39,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        LoginInputField, LoginViewPanel, VistaLogo, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, MenuScreenItem, AlertsScreenContent, AlertsInfo, SortPanel, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, AlertView;
+        SearchPanel, SearchField, LoginInputField, LoginViewPanel, VistaLogo, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, MenuScreenItem, AlertsScreenContent, AlertsInfo, SortPanel, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, AlertView;
     }
 
     public FieldTheme() {
@@ -90,7 +90,7 @@ public class FieldTheme extends VistaTheme {
 
         //Login fields:
         Style style = new Style(".", StyleName.LoginInputField.name());
-        style.addProperty("width", "6em");
+        style.addProperty("width", "5em");
         style.addProperty("margin-left", "auto");
         style.addProperty("margin-right", "auto");
         addStyle(style);
@@ -111,7 +111,7 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "bottom");
         style.addProperty("text-align", "center");
-        style.addProperty("margin-top", "10%");
+        style.addProperty("margin-top", "50px");
         addStyle(style);
 
         style = new Style(".", StyleName.LoginViewSectionContent.name());
@@ -164,6 +164,7 @@ public class FieldTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.Toolbar);
+        style.addProperty("height", "50px");
         addStyle(style);
 
         style = new Style(".", StyleName.MenuScreenItem);
@@ -184,11 +185,25 @@ public class FieldTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style(".", StyleName.SearchResults);
-        style.addProperty("margin-top", "auto");
+        style.addProperty("margin-top", "10px");
         style.addProperty("margin-bottom", "auto");
         style.addProperty("background-color", "#C0C0C0");
         addStyle(style);
 
+        style = new Style(".", StyleName.SearchPanel);
+        style.addProperty("position", "relative");
+        style.addProperty("width", "100%");
+        style.addProperty("vertical-align", "middle");
+        style.addProperty("height", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.SearchField);
+        style.addProperty("position", "relative");
+        style.addProperty("width", "100%");
+        style.addProperty("vertical-align", "bottom");
+        style.addProperty("margin-top", "17px");
+        style.addProperty("height", "auto");
+        addStyle(style);
     }
 
 }

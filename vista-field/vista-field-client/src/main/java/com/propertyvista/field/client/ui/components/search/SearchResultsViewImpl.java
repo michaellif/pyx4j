@@ -13,17 +13,31 @@
  */
 package com.propertyvista.field.client.ui.components.search;
 
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
+
+import com.pyx4j.forms.client.ui.CTextArea;
 
 import com.propertyvista.field.client.theme.FieldTheme;
 
 public class SearchResultsViewImpl extends FlowPanel implements SearchResultsView {
 
+    private final CTextArea searchPanel;
+
     public SearchResultsViewImpl() {
         setSize("100%", "100%");
         setStyleName(FieldTheme.StyleName.SearchResults.name());
-        add(new Button("Search Results"));
+
+        searchPanel = new CTextArea();
+        searchPanel.setHeight("100%");
+        searchPanel.setWidth("70%");
+        searchPanel.setTitle("Search Results");
+
+        add(searchPanel);
+    }
+
+    @Override
+    public void populateResults(String result) {
+        searchPanel.setValue(result);
     }
 
 }

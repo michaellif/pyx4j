@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,15 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 1, 2013
- * @author Mykola
+ * Created on Feb 15, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.components.search;
+package com.propertyvista.field.client.event;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.event.shared.EventHandler;
 
-public interface SearchResultsView extends IsWidget {
+public interface SearchRequestHandler extends EventHandler {
 
-    void populateResults(String result);
+    void onSearchRequest(SearchRequestEvent event);
 }

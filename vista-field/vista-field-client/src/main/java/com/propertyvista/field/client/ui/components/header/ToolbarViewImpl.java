@@ -61,6 +61,7 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
     private HorizontalPanel createMainToolbar() {
         HorizontalPanel container = new HorizontalPanel();
         container.setSize("100%", "100%");
+        container.setVerticalAlignment(ALIGN_MIDDLE);
 
         final Toolbar leftActionsContainer = new Toolbar();
         final Toolbar rightActionsContainer = new Toolbar();
@@ -108,6 +109,7 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
     private HorizontalPanel createNavigDetailsToolbar() {
         HorizontalPanel container = new HorizontalPanel();
         container.setSize("100%", "100%");
+        container.setVerticalAlignment(ALIGN_MIDDLE);
 
         final Toolbar leftActionsContainer = new Toolbar();
         final Toolbar rightActionsContainer = new Toolbar();
