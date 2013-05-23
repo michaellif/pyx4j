@@ -52,6 +52,9 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         approveApplication(true);
 
+        // We did not run the PAP yet :( so we show last month.  I think it should be "01-Apr-2011"
+        assertEquals("PAD next target date", DateUtils.detectDateformat("01-Mar-2011"), getNextTargetPadExecutionDate());
+
         // @formatter:off
         new BillTester(getLatestBill()).
         billSequenceNumber(1).
@@ -84,6 +87,8 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         // Expect PAD executed, verify amount
         new PaymentRecordTester(getLease().billingAccount()).count(2). //
                 lastRecordStatus(PaymentStatus.Queued).lastRecordAmount("1198.74");
+
+        assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
 
         advanceSysDate("18-Apr-2011");
 
