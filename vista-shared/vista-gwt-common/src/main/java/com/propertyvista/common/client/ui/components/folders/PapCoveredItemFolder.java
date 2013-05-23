@@ -41,8 +41,9 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().billableItem(),"40em", i18n.tr("Lease Charges")),
-                new EntityFolderColumnDescriptor(proto().amount(), "8em"));
+                new EntityFolderColumnDescriptor(proto().billableItem(),"31em", i18n.tr("Lease Charge")),
+                new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"8em", i18n.tr("Price"), true),
+                new EntityFolderColumnDescriptor(proto().amount(), "8em", i18n.tr("Payment")));
           //@formatter:on                
     }
 

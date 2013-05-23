@@ -285,9 +285,10 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().billableItem(),"36em", i18n.tr("Lease Charges")),
-                    new EntityFolderColumnDescriptor(proto().amount(), "8em"),
-                    new EntityFolderColumnDescriptor(proto().percent(), "4em"));
+                    new EntityFolderColumnDescriptor(proto().billableItem(),"30em", i18n.tr("Lease Charge")),
+                    new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"8em", i18n.tr("Price"), true),
+                    new EntityFolderColumnDescriptor(proto().amount(), "8em", i18n.tr("Payment")),
+                    new EntityFolderColumnDescriptor(proto().percent(), "4em", true));
               //@formatter:on                
         }
 

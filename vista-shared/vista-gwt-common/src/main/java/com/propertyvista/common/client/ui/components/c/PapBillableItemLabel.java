@@ -40,7 +40,7 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
                         res += value.item().description().getValue() + " ";
                     }
 
-                    return res += "$" + value.agreedPrice().getStringView();
+                    return res;
                 } else {
                     return null;
                 }

@@ -45,6 +45,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
     public PreauthorizedPaymentsForm() {
         super(PreauthorizedPaymentListDTO.class, new VistaViewersComponentFactory());
+        setViewable(true);
     }
 
     public void setPresenter(Presenter presenter) {
