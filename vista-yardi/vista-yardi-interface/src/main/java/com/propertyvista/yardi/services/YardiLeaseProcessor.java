@@ -250,7 +250,7 @@ public class YardiLeaseProcessor {
         EntityQueryCriteria<PreauthorizedPayment> crit = EntityQueryCriteria.create(PreauthorizedPayment.class);
         crit.in(crit.proto().tenant().lease(), lease);
         for (PreauthorizedPayment pap : Persistence.service().query(crit)) {
-            ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+            ServerSideFactory.create(PaymentMethodFacade.class).suspendPreauthorizedPayment(pap);
         }
     }
 

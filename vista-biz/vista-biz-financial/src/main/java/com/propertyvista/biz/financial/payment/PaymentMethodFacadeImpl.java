@@ -140,4 +140,9 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
             return cycle.targetPadGenerationDate().getValue();
         }
     }
+
+    @Override
+    public void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
+        // TODO Auto-generated method stub
+    }
 }

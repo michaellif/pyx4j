@@ -59,6 +59,8 @@ public interface PaymentMethodFacade {
 
     void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 
+    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
+
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 
     LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease);
