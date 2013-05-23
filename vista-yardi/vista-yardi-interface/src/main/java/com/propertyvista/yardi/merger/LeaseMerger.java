@@ -22,10 +22,14 @@ import com.yardi.entity.resident.RTCustomer;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
+import com.propertyvista.yardi.services.ARCodeAdapter;
 import com.propertyvista.yardi.services.YardiLeaseProcessor;
 
 public class LeaseMerger {
@@ -87,16 +91,13 @@ public class LeaseMerger {
             return false;
         }
         // add new item
-        if ("rrent".equals(item.uid().getValue())) {
-            // TODO - better service evaluation
+        if (isServiceItem(item)) {
             lease.currentTerm().version().leaseProducts().serviceItem().set(item);
         } else {
             lease.currentTerm().version().leaseProducts().featureItems().add(item);
         }
         return true;
     }
-
-    // internals
 
     public BillableItem findBillableItem(BillableItem item, List<BillableItem> items) {
         for (BillableItem leaseItem : items) {
@@ -105,6 +106,12 @@ public class LeaseMerger {
             }
         }
         return null;
+    }
+
+    // internals
+    private boolean isServiceItem(BillableItem item) {
+        ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue());
+        return arCode != null && ARCode.Type.Residential.equals(arCode.type().getValue());
     }
 
     private boolean itemsEqual(BillableItem item1, BillableItem item2) {
