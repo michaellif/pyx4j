@@ -59,6 +59,7 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolde
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -117,7 +118,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 25).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 30, 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyAddress(), new CEntityLabel<AddressSimple>()), 40, 10).build());
         panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new CoveredItemDtoFolder()));
 
         return panel;
@@ -283,7 +285,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         @Override
         public List<EntityFolderColumnDescriptor> columns() {
             return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().billableItem(),"36em"),
+                    new EntityFolderColumnDescriptor(proto().billableItem(),"36em", i18n.tr("Lease Charges")),
                     new EntityFolderColumnDescriptor(proto().amount(), "8em"),
                     new EntityFolderColumnDescriptor(proto().percent(), "4em"));
               //@formatter:on                
