@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -31,28 +32,32 @@ class PreauthorizedPaymentAgreementMananger {
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
         preauthorizedPayment.tenant().set(tenantId);
-
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
-            boolean hasPaymentRecords = false;
-            {
-                EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
-                criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
-                hasPaymentRecords = Persistence.service().count(criteria) > 0;
-            }
-            // TODO If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
-            LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(tenantId.lease());
+            PreauthorizedPayment origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
 
-            if (hasPaymentRecords) {
-                PreauthorizedPayment origPreauthorizedPayment = Persistence.service()
-                        .retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
-
-                if (!EntityGraph.fullyEqualValues(origPreauthorizedPayment, preauthorizedPayment)) {
-
+            if (!EntityGraph.fullyEqualValues(origPreauthorizedPayment, preauthorizedPayment)) {
+                // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
+                LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(tenantId.lease());
+                if (SystemDateManager.getDate().after(cutOffDate)) {
                     origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+                    origPreauthorizedPayment.expiring().setValue(cutOffDate);
                     Persistence.service().merge(origPreauthorizedPayment);
 
                     preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                } else {
+                    boolean hasPaymentRecords = false;
+                    {
+                        EntityQueryCriteria<PaymentRecord> criteria = new EntityQueryCriteria<PaymentRecord>(PaymentRecord.class);
+                        criteria.eq(criteria.proto().preauthorizedPayment(), preauthorizedPayment);
+                        hasPaymentRecords = Persistence.service().count(criteria) > 0;
+                    }
+                    if (hasPaymentRecords) {
+                        origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+                        Persistence.service().merge(origPreauthorizedPayment);
+
+                        preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
+                    }
                 }
             }
         }

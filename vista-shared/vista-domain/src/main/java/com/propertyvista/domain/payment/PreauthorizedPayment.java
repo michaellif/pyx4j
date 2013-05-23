@@ -110,6 +110,9 @@ public interface PreauthorizedPayment extends IEntity {
     @NotNull
     IPrimitive<Boolean> isDeleted();
 
+    // Set when tenant modifies PAP after cut off date
+    IPrimitive<LogicalDate> expiring();
+
     @NotNull
     @ReadOnly
     @ToString(index = 0)

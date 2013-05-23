@@ -17,10 +17,12 @@ import java.math.BigDecimal;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.billing.BillTester;
@@ -62,6 +64,15 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // TODO - deposit of 930.30 added to total for test to pass through.
         // Need to investigate the diff with lease agreed price of 1000.00
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
+
+        //TODO
+        if (false) {
+            assertEquals(DateUtils.detectDateformat("2011-04-01"), ServerSideFactory.create(PaymentMethodFacade.class)
+                    .getNextScheduledPreauthorizedPaymentDate(getLease()));
+        }
+
+        assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-03-29")), ServerSideFactory.create(PaymentMethodFacade.class)
+                .getPreauthorizedPaymentCutOffDate(getLease()));
 
         // Add 100% PAP
         final PreauthorizedPayment preauthorizedPayment1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
