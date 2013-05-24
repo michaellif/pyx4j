@@ -761,10 +761,10 @@ public class TenantPadProcessor {
 
         for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
             boolean found = false;
-            for (PreauthorizedPaymentCoveredItem item : pap.coveredItems()) {
-                if (!charge.chargeCode().getValue().equals(item.billableItem().extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
+            for (PreauthorizedPaymentCoveredItem padItem : pap.coveredItems()) {
+                if (!charge.chargeCode().getValue().equals(padItem.billableItem().extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
                     continue;
-                } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(item.amount().getValue()) != 0) {
+                } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(padItem.amount().getValue()) != 0) {
                     continue;
                 } else {
                     found = true;
@@ -790,12 +790,13 @@ public class TenantPadProcessor {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
         List<BillableItem> billableItems = new ArrayList<BillableItem>();
+        billableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
         billableItems.addAll(lease.currentTerm().version().leaseProducts().featureItems());
 
         for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
             boolean found = false;
 
-            // TODO Ignore credits for now
+            // TODO Ignore credits for now, Apply them in second pass
             if (charge._processorInformation().chargeEftAmount().getValue().compareTo(BigDecimal.ZERO) < 0) {
                 continue;
             }
@@ -826,7 +827,26 @@ public class TenantPadProcessor {
             }
         }
 
+        // Process credits
+        for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
+            if (charge._processorInformation().chargeEftAmount().getValue().compareTo(BigDecimal.ZERO) >= 0) {
+                continue;
+            }
+            boolean found = false;
+            for (PreauthorizedPaymentCoveredItem padItem : pap.coveredItems()) {
+                if (padItem.billableItem().equals(lease.currentTerm().version().leaseProducts().serviceItem())) {
+                    found = true;
+                    padItem.amount().setValue(padItem.amount().getValue().add(charge._processorInformation().chargeEftAmount().getValue()));
+                    break;
+                }
+            }
+            if (!found) {
+                throw new Error("service billableItem not found in PAP to apply credit" + charge.chargeCode().getValue() + " "
+                        + charge._processorInformation().chargeEftAmount().getValue() + "$ not found");
+            }
+
+        }
+
         return pap;
     }
-
 }
