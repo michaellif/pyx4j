@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
 @Transient
-public interface CoveredItemDTO extends PreauthorizedPayment.PreauthorizedPaymentCoveredItem {
+public interface PreauthorizedPaymentCoveredItemDTO extends PreauthorizedPayment.PreauthorizedPaymentCoveredItem {
 
     @ReadOnly
     @ToString(index = 10)

@@ -13,9 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,15 +33,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
-import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -53,10 +47,9 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.PapBillableItemLabel;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
-import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -70,12 +63,11 @@ import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
-import com.propertyvista.portal.rpc.portal.dto.CoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentWizardForm extends VistaWizardForm<PreauthorizedPaymentDTO> {
 
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardForm.class);
+    static final I18n i18n = I18n.get(PreauthorizedPaymentWizardForm.class);
 
     private final VistaWizardStep paymentMethodStep, comfirmationStep;
 
@@ -120,7 +112,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 30, 10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 40, 10).build());
-        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new CoveredItemDtoFolder()));
+        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
 
         return panel;
     }
@@ -274,65 +266,6 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 }
             }
         });
-    }
-
-    private class CoveredItemDtoFolder extends VistaTableFolder<CoveredItemDTO> {
-
-        public CoveredItemDtoFolder() {
-            super(CoveredItemDTO.class, false);
-        }
-
-        @Override
-        public List<EntityFolderColumnDescriptor> columns() {
-            return Arrays.asList(//@formatter:off
-                    new EntityFolderColumnDescriptor(proto().billableItem(),"26em", i18n.tr("Lease Charge")),
-                    new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"6em", i18n.tr("Price"), true),
-                    new EntityFolderColumnDescriptor(proto().covered(), "6em", true),
-                    new EntityFolderColumnDescriptor(proto().amount(), "6em", i18n.tr("Payment")),
-                    new EntityFolderColumnDescriptor(proto().percent(), "4em", true));
-              //@formatter:on                
-        }
-
-        @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            if (member instanceof CoveredItemDTO) {
-                return new CoveredItemEditor();
-            }
-            return super.create(member);
-        }
-
-        class CoveredItemEditor extends CEntityFolderRowEditor<CoveredItemDTO> {
-
-            public CoveredItemEditor() {
-                super(CoveredItemDTO.class, columns());
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                CComponent<?, ?> comp;
-
-                if (column.getObject() == proto().billableItem()) {
-                    comp = inject(column.getObject(), new PapBillableItemLabel());
-                } else {
-                    comp = super.createCell(column);
-                }
-
-                // handle value changes: 
-                if (column.getObject() == proto().amount()) {
-                    ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
-                        @Override
-                        public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                            get(proto().percent()).setValue(event.getValue().divide(getValue().billableItem().agreedPrice().getValue(), 2, RoundingMode.FLOOR));
-                        }
-                    });
-                } else if (column.getObject() == proto().percent()) {
-                    comp.setEditable(false);
-                }
-
-                return comp;
-            }
-        }
     }
 
     private Widget createConfirmationDetailsPanel() {

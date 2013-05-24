@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.crm.rpc.services.customer.PreauthorizedPaymentsVisorService;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public abstract class PreauthorizedPaymentsVisorController extends AbstractVisorController implements IVisorEditor.Controller {
 
@@ -70,7 +71,7 @@ public abstract class PreauthorizedPaymentsVisorController extends AbstractVisor
         service.save(callback, pads);
     }
 
-    void create(AsyncCallback<PreauthorizedPayment> callback) {
+    void create(AsyncCallback<PreauthorizedPaymentDTO> callback) {
         service.create(callback, EntityFactory.createIdentityStub(Tenant.class, tenantId));
     }
 

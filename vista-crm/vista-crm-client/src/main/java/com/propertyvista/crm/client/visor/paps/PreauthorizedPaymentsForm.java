@@ -13,24 +13,35 @@
  */
 package com.propertyvista.crm.client.visor.paps;
 
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
+import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
+import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
+import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.PreauthorizedPaymentsFolder;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentsDTO> {
+
+    private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
 
     private final PreauthorizedPaymentsVisorView visor;
 
@@ -50,24 +61,83 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         main.getWidget(0, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
         main.getWidget(0, 0).setWidth("50em");
 
-        main.setH3(1, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
-        main.setWidget(2, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentsFolder() {
-            @Override
-            public List<LeasePaymentMethod> getAvailablePaymentMethods() {
-                return PreauthorizedPaymentsForm.this.getValue().availablePaymentMethods();
-            }
-
-            @Override
-            protected void createNewEntity(final AsyncCallback<PreauthorizedPayment> callback) {
-                visor.getController().create(new DefaultAsyncCallback<PreauthorizedPayment>() {
-                    @Override
-                    public void onSuccess(PreauthorizedPayment result) {
-                        callback.onSuccess(result);
-                    }
-                });
-            }
-        }));
+        main.setH3(1, 0, 1, proto().preauthorizedPaymentsDTO().getMeta().getCaption());
+        main.setWidget(2, 0, inject(proto().preauthorizedPaymentsDTO(), new PreauthorizedPaymentFolder()));
 
         return main;
+    }
+
+    private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
+
+        public PreauthorizedPaymentFolder() {
+            super(PreauthorizedPaymentDTO.class, true);
+            setOrderable(false);
+        }
+
+        @Override
+        public CComponent<?, ?> create(IObject<?> member) {
+            if (member instanceof PreauthorizedPaymentDTO) {
+                return new PreauthorizedPaymentEditor();
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected void createNewEntity(final AsyncCallback<PreauthorizedPaymentDTO> callback) {
+            visor.getController().create(new DefaultAsyncCallback<PreauthorizedPaymentDTO>() {
+                @Override
+                public void onSuccess(PreauthorizedPaymentDTO result) {
+                    callback.onSuccess(result);
+                }
+            });
+        }
+
+        @Override
+        protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentDTO> item) {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
+                @Override
+                public void execute() {
+                    PreauthorizedPaymentFolder.super.removeItem(item);
+                }
+            });
+        }
+
+        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
+
+            public PreauthorizedPaymentEditor() {
+                super(PreauthorizedPaymentDTO.class);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
+                    @Override
+                    protected AppPlace getTargetPlace() {
+                        return null; // not intended to navigate - just edit mode!
+                    }
+
+                    @Override
+                    protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
+                        return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, PreauthorizedPaymentsForm.this
+                                .getValue().availablePaymentMethods()) {
+                            @Override
+                            public boolean onClickOk() {
+                                get(proto().paymentMethod()).setValue(getSelectedItems().iterator().next());
+                                return true;
+                            }
+                        };
+                    }
+                }), 38, 10).build());
+
+                content.setBR(++row, 0, 1);
+
+                content.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
+
+                return content;
+            }
+        }
     }
 }

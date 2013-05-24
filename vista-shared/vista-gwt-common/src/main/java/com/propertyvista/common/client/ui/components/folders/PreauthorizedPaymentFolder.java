@@ -33,11 +33,11 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
-public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<PreauthorizedPayment> {
+public abstract class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPayment> {
 
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentsFolder.class);
+    private static final I18n i18n = I18n.get(PreauthorizedPaymentFolder.class);
 
-    public PreauthorizedPaymentsFolder() {
+    public PreauthorizedPaymentFolder() {
         super(PreauthorizedPayment.class);
         setOrderable(false);
     }
@@ -55,7 +55,7 @@ public abstract class PreauthorizedPaymentsFolder extends VistaBoxFolder<Preauth
         MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
             @Override
             public void execute() {
-                PreauthorizedPaymentsFolder.super.removeItem(item);
+                PreauthorizedPaymentFolder.super.removeItem(item);
             }
         });
     }

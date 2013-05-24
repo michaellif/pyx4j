@@ -7,27 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-11
+ * Created on 2013-05-24
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.dto;
 
-import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.ExtendsDBO;
-import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.dto.PaymentDataDTO;
 
 @Transient
-@ToStringFormat("")
-@ExtendsDBO(PreauthorizedPayment.class)
-public interface PreauthorizedPaymentDTO extends PaymentDataDTO, com.propertyvista.dto.PreauthorizedPaymentDTO {
+public interface PreauthorizedPaymentDTO extends PreauthorizedPayment {
 
-    @Caption(name = "Your next automated payment is scheduled for")
-    IPrimitive<LogicalDate> nextScheduledPaymentDate();
+    @Owned
+    IList<PreauthorizedPaymentCoveredItemDTO> coveredItemsDTO();
 }

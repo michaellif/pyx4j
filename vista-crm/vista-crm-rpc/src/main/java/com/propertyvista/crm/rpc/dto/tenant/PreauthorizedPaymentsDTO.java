@@ -21,10 +21,10 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 @Transient
 public interface PreauthorizedPaymentsDTO extends IEntity {
@@ -44,7 +44,7 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
 
     TenantInfo tenantInfo();
 
-    IList<PreauthorizedPayment> preauthorizedPayments();
+    IList<PreauthorizedPaymentDTO> preauthorizedPaymentsDTO();
 
     IList<LeasePaymentMethod> availablePaymentMethods();
 }

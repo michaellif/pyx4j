@@ -44,7 +44,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseProducts;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.dto.CoveredItemDTO;
+import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -153,8 +153,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         }
     }
 
-    private CoveredItemDTO createCoveredItemDTO(BillableItem billableItem) {
-        CoveredItemDTO item = EntityFactory.create(CoveredItemDTO.class);
+    private PreauthorizedPaymentCoveredItemDTO createCoveredItemDTO(BillableItem billableItem) {
+        PreauthorizedPaymentCoveredItemDTO item = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
 
         // calculate already covered amount by other tenants/paps: 
         EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
@@ -181,7 +181,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
     private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
         entity.coveredItems().clear();
-        for (CoveredItemDTO item : dto.coveredItemsDTO()) {
+        for (PreauthorizedPaymentCoveredItemDTO item : dto.coveredItemsDTO()) {
             if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
                 entity.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
             }

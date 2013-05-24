@@ -14,7 +14,10 @@
 package com.propertyvista.crm.server.services.customer;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,7 +29,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -37,8 +42,11 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
+import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPaymentsVisorService {
 
@@ -47,98 +55,50 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         PreauthorizedPaymentsDTO dto = EntityFactory.create(PreauthorizedPaymentsDTO.class);
 
         dto.tenant().set(tenantId);
-        dto.preauthorizedPayments().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(tenantId));
 
-        Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
-
-        fillTenantInfo(dto, tenant);
-        fillPreauthorizedPaymentItems(dto, tenant);
-        fillAvailablePaymentMethods(dto, tenant);
+        fillTenantInfo(dto);
+        fillPreauthorizedPayments(dto);
+        fillAvailablePaymentMethods(dto);
 
         callback.onSuccess(dto);
     }
 
-    private void fillPreauthorizedPaymentItems(PreauthorizedPaymentsDTO dto, Tenant tenant) {
-        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+    @Override
+    public void create(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId) {
+        PreauthorizedPaymentDTO papDto = EntityFactory.create(PreauthorizedPaymentDTO.class);
 
-        for (PreauthorizedPayment pap : dto.preauthorizedPayments()) {
-            fillPreauthorizedPaymentItem(pap, tenant);
-        }
-    }
+        papDto.tenant().set(tenantId);
 
-    private void fillPreauthorizedPaymentItem(PreauthorizedPayment pap, Tenant tenant) {
-        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
+        fillCoveredItemsDto(papDto);
 
-        if (!isCoveredItemExist(pap, tenant.lease().currentTerm().version().leaseProducts().serviceItem())) {
-            pap.coveredItems().add(createCoveredItem(tenant.lease().currentTerm().version().leaseProducts().serviceItem()));
-        }
-
-        for (BillableItem billableItem : tenant.lease().currentTerm().version().leaseProducts().featureItems()) {
-            Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
-            //@formatter:off
-                if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
-                    && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
-                    && !isCoveredItemExist(pap, billableItem)) {                                                                                                    // absent
-                //@formatter:on
-                pap.coveredItems().add(createCoveredItem(billableItem));
-            }
-        }
-    }
-
-    private boolean isCoveredItemExist(PreauthorizedPayment pap, BillableItem billableItem) {
-        for (PreauthorizedPaymentCoveredItem item : pap.coveredItems()) {
-            if (item.billableItem().uid().getValue().equals(billableItem.uid().getValue())) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private PreauthorizedPaymentCoveredItem createCoveredItem(BillableItem billableItem) {
-        PreauthorizedPaymentCoveredItem item = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
-
-        item.billableItem().set(billableItem);
-//        item.amount().setValue(billableItem.agreedPrice().getValue());
-
-        return item;
-    }
-
-    private void fillTenantInfo(PreauthorizedPaymentsDTO pads, Tenant tenant) {
-        Persistence.ensureRetrieve(tenant.lease(), AttachLevel.Attached);
-
-        pads.tenantInfo().name().set(tenant.customer().person().name());
-
-        EntityListCriteria<LeaseTermParticipant> criteria = new EntityListCriteria<LeaseTermParticipant>(LeaseTermParticipant.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), tenant));
-        criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV().holder(), tenant.lease().currentTerm()));
-
-        LeaseTermParticipant<?> ltp = Persistence.service().retrieve(criteria);
-        if (ltp != null) {
-            pads.tenantInfo().role().setValue(ltp.role().getValue());
-        }
-    }
-
-    private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO pads, Tenant tenant) {
-        EntityListCriteria<LeasePaymentMethod> criteria = new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), tenant.customer()));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE));
-        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
-
-        pads.availablePaymentMethods().addAll(Persistence.service().query(criteria));
+        callback.onSuccess(papDto);
     }
 
     @Override
-    public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO pads) {
+    public void delete(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment pad) {
+        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pad);
+        Persistence.service().commit();
+
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO dto) {
+        List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
+        for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPaymentsDTO()) {
+            updateCoveredItems(papDTO);
+            paps.add(new PapConverter().createDBO(papDTO));
+        }
+
         // delete payment methods removed in UI:
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(pads.tenant())) {
-            if (!pads.preauthorizedPayments().contains(pap)) {
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(dto.tenant())) {
+            if (!paps.contains(pap)) {
                 ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
             }
         }
 
         // save new/edited ones:
-        for (PreauthorizedPayment pap : pads.preauthorizedPayments()) {
+        for (PreauthorizedPayment pap : paps) {
             // remove zero covered items:
             Iterator<PreauthorizedPaymentCoveredItem> iterator = pap.coveredItems().iterator();
             while (iterator.hasNext()) {
@@ -151,7 +111,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
                 }
             }
 
-            ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, pads.tenant());
+            ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, dto.tenant());
         }
 
         Persistence.service().commit();
@@ -160,28 +120,162 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     @Override
-    public void create(AsyncCallback<PreauthorizedPayment> callback, Tenant tenantId) {
-        PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
-
-        pap.tenant().set(tenantId);
-
-        Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
-
-        fillPreauthorizedPaymentItem(pap, tenant);
-
-        callback.onSuccess(pap);
-    }
-
-    @Override
-    public void delete(AsyncCallback<VoidSerializable> callback, PreauthorizedPayment pad) {
-        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pad);
-        Persistence.service().commit();
-
-        callback.onSuccess(null);
-    }
-
-    @Override
     public void recollect(AsyncCallback<Vector<PreauthorizedPayment>> callback, Tenant tenantId) {
         callback.onSuccess(new Vector<PreauthorizedPayment>(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(tenantId)));
+    }
+
+    private void fillTenantInfo(PreauthorizedPaymentsDTO dto) {
+        Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.Attached);
+
+        dto.tenantInfo().name().set(dto.tenant().customer().person().name());
+
+        EntityListCriteria<LeaseTermParticipant> criteria = new EntityListCriteria<LeaseTermParticipant>(LeaseTermParticipant.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseParticipant(), dto.tenant()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseTermV().holder(), dto.tenant().lease().currentTerm()));
+
+        LeaseTermParticipant<?> ltp = Persistence.service().retrieve(criteria);
+        if (ltp != null) {
+            dto.tenantInfo().role().setValue(ltp.role().getValue());
+        }
+    }
+
+    private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO papDto) {
+        Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
+
+        EntityListCriteria<LeasePaymentMethod> criteria = new EntityListCriteria<LeasePaymentMethod>(LeasePaymentMethod.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().customer(), papDto.tenant().customer()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isProfiledMethod(), Boolean.TRUE));
+        criteria.add(PropertyCriterion.eq(criteria.proto().isDeleted(), Boolean.FALSE));
+
+        papDto.availablePaymentMethods().addAll(Persistence.service().query(criteria));
+    }
+
+    private void fillPreauthorizedPayments(PreauthorizedPaymentsDTO dto) {
+        Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.Attached);
+
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(dto.tenant())) {
+            dto.preauthorizedPaymentsDTO().add(createPreauthorizedPaymentDto(pap));
+        }
+    }
+
+    private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
+        PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
+
+        updateCoveredItemsDto(papDto);
+        fillCoveredItemsDto(papDto);
+
+        return papDto;
+    }
+
+    private void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
+        Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
+
+        Lease lease = papDto.tenant().lease();
+
+        if (!isCoveredItemExist(papDto, lease.currentTerm().version().leaseProducts().serviceItem())) {
+            papDto.coveredItemsDTO().add(createCoveredItemDto(lease.currentTerm().version().leaseProducts().serviceItem(), lease));
+        }
+
+        for (BillableItem billableItem : lease.currentTerm().version().leaseProducts().featureItems()) {
+            Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
+            //@formatter:off
+                if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
+                    && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
+                    && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
+            //@formatter:on
+                papDto.coveredItemsDTO().add(createCoveredItemDto(billableItem, lease));
+            }
+        }
+
+    }
+
+    private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
+        for (PreauthorizedPaymentCoveredItem item : papDto.coveredItemsDTO()) {
+            if (item.billableItem().uid().getValue().equals(billableItem.uid().getValue())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private PreauthorizedPaymentCoveredItemDTO createCoveredItemDto(BillableItem billableItem, Lease lease) {
+        PreauthorizedPaymentCoveredItemDTO item = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
+
+        // calculate already covered amount by other tenants/paps: 
+        EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
+                PreauthorizedPaymentCoveredItem.class);
+        criteria.eq(criteria.proto().pap().tenant().lease(), lease);
+        criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
+        criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
+        criteria.isNull(criteria.proto().pap().expiring());
+
+        item.covered().setValue(BigDecimal.ZERO);
+        for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
+            item.covered().setValue(item.covered().getValue().add(papci.amount().getValue()));
+        }
+
+        BigDecimal itemPrice = billableItem.agreedPrice().getValue();
+
+        item.amount().setValue(itemPrice.subtract(item.covered().getValue()));
+        item.percent().setValue(item.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
+
+        item.billableItem().set(billableItem);
+
+        return item;
+    }
+
+    private void updateCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
+        Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
+
+        papDto.coveredItemsDTO().clear();
+        for (PreauthorizedPaymentCoveredItem item : papDto.coveredItems()) {
+            PreauthorizedPaymentCoveredItemDTO itemDto = item.duplicate(PreauthorizedPaymentCoveredItemDTO.class);
+            papDto.coveredItemsDTO().add(updateCoveredItemDto(itemDto, papDto.tenant().lease()));
+        }
+    }
+
+    private PreauthorizedPaymentCoveredItemDTO updateCoveredItemDto(PreauthorizedPaymentCoveredItemDTO item, Lease lease) {
+        // calculate already covered amount by other tenants/paps: 
+        EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
+                PreauthorizedPaymentCoveredItem.class);
+        criteria.eq(criteria.proto().pap().tenant().lease(), lease);
+        criteria.eq(criteria.proto().billableItem().uid(), item.billableItem().uid());
+        criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
+        criteria.isNull(criteria.proto().pap().expiring());
+
+        item.covered().setValue(BigDecimal.ZERO);
+        for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
+            item.covered().setValue(item.covered().getValue().add(papci.amount().getValue()));
+        }
+
+        BigDecimal itemPrice = item.billableItem().agreedPrice().getValue();
+        item.percent().setValue(item.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
+
+        return item;
+    }
+
+    private void updateCoveredItems(PreauthorizedPaymentDTO papDto) {
+        papDto.coveredItems().clear();
+        for (PreauthorizedPaymentCoveredItemDTO item : papDto.coveredItemsDTO()) {
+            if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
+                papDto.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
+            }
+        }
+    }
+
+    private class PapConverter extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> {
+
+        protected PapConverter() {
+            super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+        }
+
+        @Override
+        protected void bind() {
+            bindCompleteDBO();
+        }
     }
 }
