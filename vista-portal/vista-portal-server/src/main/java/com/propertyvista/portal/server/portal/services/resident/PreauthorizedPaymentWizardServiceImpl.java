@@ -75,7 +75,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.propertyAddress());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());
@@ -160,7 +160,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
                 PreauthorizedPaymentCoveredItem.class);
         criteria.eq(criteria.proto().pap().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub());
-        criteria.eq(criteria.proto().billableItem(), billableItem);
+        criteria.eq(criteria.proto().billableItem().uid(), billableItem.uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
         criteria.isNull(criteria.proto().pap().expiring());
 

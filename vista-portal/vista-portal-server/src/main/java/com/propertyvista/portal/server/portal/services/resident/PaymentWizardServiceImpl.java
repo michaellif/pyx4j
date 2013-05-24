@@ -74,7 +74,7 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
 
-        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.propertyAddress());
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
         dto.propertyCode().set(lease.unit().building().propertyCode());
         dto.unitNumber().set(lease.unit().info().number());

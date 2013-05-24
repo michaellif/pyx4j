@@ -31,18 +31,18 @@ public interface PaymentDataDTO extends IEntity {
 
     @I18n
     enum PaymentSelect {
-    
+
         New,
-    
+
         Profiled;
-    
+
         @Override
         public String toString() {
             return I18nEnum.toString(this);
         }
     }
 
-    AddressSimple propertyAddress();
+    AddressSimple address();
 
     IPrimitive<String> propertyCode();
 

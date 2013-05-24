@@ -119,7 +119,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         int row = -1;
 
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 30, 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyAddress(), new CEntityLabel<AddressSimple>()), 40, 10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 40, 10).build());
         panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new CoveredItemDtoFolder()));
 
         return panel;
@@ -340,7 +340,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         Widget w;
 
         panel.add(new HTML(getValue().tenant().getStringView()));
-        panel.add(new HTML(getValue().propertyAddress().getStringView()));
+        panel.add(new HTML(getValue().address().getStringView()));
 
         panel.add(new HTML("<br/>"));
 

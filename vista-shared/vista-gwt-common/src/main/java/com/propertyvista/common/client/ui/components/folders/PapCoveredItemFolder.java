@@ -16,6 +16,8 @@ package com.propertyvista.common.client.ui.components.folders;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.FontWeight;
+
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -69,6 +71,10 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
                 comp = inject(column.getObject(), new PapBillableItemLabel());
             } else {
                 comp = super.createCell(column);
+            }
+
+            if (column.getObject() == proto().amount()) {
+                comp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
             }
 
             return comp;

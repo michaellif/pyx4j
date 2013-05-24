@@ -111,13 +111,13 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                         .build());
 
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, inject(proto().propertyAddress(), new AddressSimpleEditor()));
+        panel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
         panel.setHR(++row, 0, 1);
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
 
         // tweak UI:
-        get(proto().propertyAddress()).setViewable(true);
+        get(proto().address()).setViewable(true);
 
         return panel;
     }
@@ -304,7 +304,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         Widget w;
 
         panel.add(new HTML(getValue().leaseTermParticipant().getStringView()));
-        panel.add(new HTML(getValue().propertyAddress().getStringView()));
+        panel.add(new HTML(getValue().address().getStringView()));
 
         panel.add(new HTML("<br/>"));
 
