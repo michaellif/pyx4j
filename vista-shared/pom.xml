@@ -30,7 +30,7 @@
         <module>vista-equifax</module>
         <module>vista-payment</module>
         <module>vista-selenium</module>
-        <!--module>vista-integration</module-->
+        <module>vista-integration</module>
     </modules>
 
 </project>
