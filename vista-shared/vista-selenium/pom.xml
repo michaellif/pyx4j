@@ -13,8 +13,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>vista-integration</artifactId>
-    <name>vista-integration</name>
+    <artifactId>vista-selenium</artifactId>
+    <name>vista-selenium</name>
 
     <dependencies>
 
