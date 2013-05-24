@@ -48,6 +48,8 @@ public class GWTCacheFilter implements Filter {
 
     private static final Logger log = LoggerFactory.getLogger(GWTCacheFilter.class);
 
+    public static String PARAM_cacheExpiresHours = "cacheExpiresHours";
+
     private int cacheExpiresHours = 24;
 
     private String cacheControl;
@@ -62,7 +64,7 @@ public class GWTCacheFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        String rate = filterConfig.getInitParameter("cacheExpiresHours");
+        String rate = filterConfig.getInitParameter(PARAM_cacheExpiresHours);
         if (rate != null) {
             cacheExpiresHours = Integer.parseInt(rate);
         }

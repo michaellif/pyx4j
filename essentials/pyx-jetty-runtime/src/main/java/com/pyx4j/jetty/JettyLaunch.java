@@ -24,6 +24,7 @@ import java.io.File;
 import java.net.ServerSocket;
 import java.util.TimeZone;
 
+import org.eclipse.jetty.annotations.AnnotationConfiguration;
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -33,7 +34,10 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.webapp.WebInfConfiguration;
+import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 public abstract class JettyLaunch {
 
@@ -135,6 +139,7 @@ public abstract class JettyLaunch {
         webAppContext.setParentLoaderPriority(true);
         webAppContext.getInitParams().put("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
         webAppContext.setResourceBase(jettyLaunch.getWarResourceBase());
+        webAppContext.setConfigurations(new Configuration[] { new WebInfConfiguration(), new WebXmlConfiguration(), new AnnotationConfiguration() });
 
         if (jettyLaunch.getSessionCookiePath() != null) {
             webAppContext.getSessionHandler().getSessionManager().getSessionCookieConfig().setPath(jettyLaunch.getSessionCookiePath());
