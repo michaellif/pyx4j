@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import org.junit.experimental.categories.Category;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
@@ -52,8 +53,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
 
         approveApplication(true);
 
-        // We did not run the PAP yet :( so we show last month.  I think it should be "01-Apr-2011"
-        assertEquals("PAD next target date", DateUtils.detectDateformat("01-Mar-2011"), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", new LogicalDate(DateUtils.detectDateformat("01-Apr-2011")), getNextTargetPadExecutionDate());
 
         // @formatter:off
         new BillTester(getLatestBill()).
@@ -119,7 +119,7 @@ public class PadPaymentChargeBaseSunnyDayScenarioTest extends LeaseFinancialTest
         assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
         // if pad did not run - still return the old date for the cycle
         setSysDate("01-May-2011");
-        assertEquals("PAD next target date", DateUtils.detectDateformat("01-May-2011"), getNextTargetPadExecutionDate());
+        assertEquals("PAD next target date", DateUtils.detectDateformat("01-Jun-2011"), getNextTargetPadExecutionDate());
         // now roll time back and run pad - should see the date for next cycle
         setSysDate("27-Apr-2011");
 

@@ -247,9 +247,10 @@ public class YardiLeaseProcessor {
 
     // TODO - may need a way to suspend PAD payments only for modified BillableItems (after yardi implements chargeId)
     private void suspendPADPayments(Lease lease) {
-        EntityQueryCriteria<PreauthorizedPayment> crit = EntityQueryCriteria.create(PreauthorizedPayment.class);
-        crit.in(crit.proto().tenant().lease(), lease);
-        for (PreauthorizedPayment pap : Persistence.service().query(crit)) {
+        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        criteria.in(criteria.proto().tenant().lease(), lease);
+        for (PreauthorizedPayment pap : Persistence.service().query(criteria)) {
             ServerSideFactory.create(PaymentMethodFacade.class).suspendPreauthorizedPayment(pap);
         }
     }

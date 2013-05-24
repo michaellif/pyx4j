@@ -121,8 +121,10 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
     public LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease) {
-        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, new LogicalDate(SystemDateManager.getDate()));
-        if (!cycle.actualPadGenerationDate().isNull()) {
+        LogicalDate when = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
+        cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
+        if (!when.before(cycle.targetPadGenerationDate().getValue())) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
         return cycle.targetPadExecutionDate().getValue();
@@ -133,16 +135,14 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-        if (when.before(cycle.targetPadExecutionDate().getValue())) {
-            return cycle.targetPadGenerationDate().getValue();
-        } else {
+        if (!when.before(cycle.targetPadGenerationDate().getValue())) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-            return cycle.targetPadGenerationDate().getValue();
         }
+        return cycle.targetPadGenerationDate().getValue();
     }
 
     @Override
     public void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
-        // TODO Auto-generated method stub
+        new PreauthorizedPaymentAgreementMananger().suspendPreauthorizedPayment(preauthorizedPaymentId);
     }
 }

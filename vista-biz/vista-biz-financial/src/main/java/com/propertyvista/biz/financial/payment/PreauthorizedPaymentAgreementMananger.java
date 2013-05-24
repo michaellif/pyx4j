@@ -15,6 +15,8 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import org.apache.commons.lang.time.DateUtils;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -40,7 +42,6 @@ class PreauthorizedPaymentAgreementMananger {
                 // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
                 LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(tenantId.lease());
                 if (SystemDateManager.getDate().after(cutOffDate)) {
-                    origPreauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
                     origPreauthorizedPayment.expiring().setValue(cutOffDate);
                     Persistence.service().merge(origPreauthorizedPayment);
 
@@ -59,7 +60,14 @@ class PreauthorizedPaymentAgreementMananger {
                         preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
                     }
                 }
+                preauthorizedPayment.effectiveFrom().setValue(
+                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(tenantId.lease()));
+
             }
+        } else {
+            preauthorizedPayment.effectiveFrom().setValue(
+                    ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(tenantId.lease()));
+
         }
 
         Persistence.service().merge(preauthorizedPayment);
@@ -90,5 +98,16 @@ class PreauthorizedPaymentAgreementMananger {
             new ScheduledPaymentsManager().cancelScheduledPayments(preauthorizedPayment);
         }
 
+    }
+
+    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
+        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
+        Persistence.service().retrieve(preauthorizedPayment.tenant());
+        LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(preauthorizedPayment.tenant().lease());
+        DateUtils.addDays(cutOffDate, -1);
+        preauthorizedPayment.expiring().setValue(cutOffDate);
+        Persistence.service().merge(preauthorizedPayment);
+
+        // TODO VISTA-3003 send notification to PMC
     }
 }

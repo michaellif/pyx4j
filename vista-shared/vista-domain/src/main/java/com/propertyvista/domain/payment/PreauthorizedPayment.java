@@ -113,7 +113,10 @@ public interface PreauthorizedPayment extends IEntity {
     @NotNull
     IPrimitive<Boolean> isDeleted();
 
-    // Set when tenant modifies PAP after cut off date
+    // set to getNextScheduledPreauthorizedPaymentDate during creation
+    IPrimitive<LogicalDate> effectiveFrom();
+
+    // Set when tenant modifies PAP after cut off date to cutOffDate or when is called suspendPreauthorizedPayment to cutOffDate date -1 so it will not work for next PAP
     IPrimitive<LogicalDate> expiring();
 
     @NotNull

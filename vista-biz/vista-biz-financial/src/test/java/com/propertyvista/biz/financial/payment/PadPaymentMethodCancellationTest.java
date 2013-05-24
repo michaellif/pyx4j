@@ -48,7 +48,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         preloadData(config);
     }
 
-    public void testScenario() throws Exception {
+    public void testMethrodsRemovalScenario() throws Exception {
         setSysDate("2011-03-10");
 
         createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);
@@ -65,11 +65,8 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Need to investigate the diff with lease agreed price of 1000.00
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
 
-        //TODO
-        if (false) {
-            assertEquals(DateUtils.detectDateformat("2011-04-01"), ServerSideFactory.create(PaymentMethodFacade.class)
-                    .getNextScheduledPreauthorizedPaymentDate(getLease()));
-        }
+        assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-04-01")), ServerSideFactory.create(PaymentMethodFacade.class)
+                .getNextScheduledPreauthorizedPaymentDate(getLease()));
 
         assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-03-29")), ServerSideFactory.create(PaymentMethodFacade.class)
                 .getPreauthorizedPaymentCutOffDate(getLease()));
@@ -80,6 +77,8 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
                 build());
 
         advanceSysDate("2011-03-29");
+        assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-05-01")), ServerSideFactory.create(PaymentMethodFacade.class)
+                .getNextScheduledPreauthorizedPaymentDate(getLease()));
 
         // @formatter:off
         new PaymentRecordTester(getLease().billingAccount()).
@@ -94,6 +93,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
 
         advanceSysDate("2011-04-28");
 
+        // New record created
         new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Scheduled);
 
         deletePreauthorizedPayment(preauthorizedPayment1);
