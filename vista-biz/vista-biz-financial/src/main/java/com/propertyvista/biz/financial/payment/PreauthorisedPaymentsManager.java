@@ -31,6 +31,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -190,6 +191,11 @@ class PreauthorisedPaymentsManager {
                 EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
                 criteria.eq(criteria.proto().tenant(), leaseParticipant.leaseParticipant().cast());
                 criteria.eq(criteria.proto().isDeleted(), false);
+
+                OrCriterion or = criteria.or();
+                or.right().ge(criteria.proto().expiring(), billingCycle.targetPadGenerationDate());
+                or.left().isNull(criteria.proto().expiring());
+
                 criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);
             }
