@@ -13,6 +13,8 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.List;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -101,6 +103,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     @Override
     public void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
         new PreauthorisedPaymentsManager().createPreauthorisedPayments(executionMonitor, runDate);
+    }
+
+    @Override
+    public List<PaymentRecord> reportPreauthorisedPayments(LogicalDate dueDate) {
+        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(dueDate);
     }
 
     @Override

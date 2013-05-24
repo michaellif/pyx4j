@@ -13,9 +13,12 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.List;
+
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
@@ -36,6 +39,8 @@ public interface PaymentProcessFacade {
     void processPmcPadReconciliation(ExecutionMonitor executionMonitor);
 
     void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
+
+    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate dueDate);
 
     void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
 

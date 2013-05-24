@@ -59,7 +59,18 @@ class PreauthorisedPaymentsManager {
         String notice;
     }
 
+    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate runDate) {
+        List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
+        createPreauthorisedPayments(new ExecutionMonitor(), runDate, true, paymentRecords);
+        return paymentRecords;
+    }
+
     void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate) {
+        createPreauthorisedPayments(executionMonitor, runDate, false, null);
+    }
+
+    private void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate, boolean reportOny,
+            List<PaymentRecord> resultingPaymentRecords) {
         ICursorIterator<BillingCycle> billingCycleIterator;
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
@@ -69,7 +80,7 @@ class PreauthorisedPaymentsManager {
         }
         try {
             while (billingCycleIterator.hasNext()) {
-                createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor);
+                createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor, reportOny, resultingPaymentRecords);
             }
         } finally {
             billingCycleIterator.close();
@@ -95,7 +106,8 @@ class PreauthorisedPaymentsManager {
         }
     }
 
-    private void createBillingCyclePreauthorisedPayments(final BillingCycle billingCycle, final ExecutionMonitor executionMonitor) {
+    private void createBillingCyclePreauthorisedPayments(final BillingCycle billingCycle, final ExecutionMonitor executionMonitor, final boolean reportOny,
+            final List<PaymentRecord> resultingPaymentRecords) {
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
@@ -113,21 +125,29 @@ class PreauthorisedPaymentsManager {
                 }
                 try {
                     while (billingAccountIterator.hasNext()) {
-                        createBillingAccountPreauthorisedPayments(billingCycle, billingAccountIterator.next(), executionMonitor);
+                        List<PaymentRecord> records = createBillingAccountPreauthorisedPayments(billingCycle, billingAccountIterator.next(), executionMonitor,
+                                reportOny);
+                        if (resultingPaymentRecords != null) {
+                            resultingPaymentRecords.addAll(records);
+                        }
                     }
                 } finally {
                     billingAccountIterator.close();
                 }
 
-                billingCycle.actualPadGenerationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-                Persistence.service().persist(billingCycle);
+                if (!reportOny) {
+                    billingCycle.actualPadGenerationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+                    Persistence.service().persist(billingCycle);
+                }
 
                 return null;
             }
         });
     }
 
-    private void createBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount, ExecutionMonitor executionMonitor) {
+    private List<PaymentRecord> createBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount,
+            ExecutionMonitor executionMonitor, boolean reportOny) {
+        List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
         // Validate that PAD was not created for this account
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
@@ -153,10 +173,17 @@ class PreauthorisedPaymentsManager {
             paymentRecord.targetDate().setValue(billingCycle.targetPadExecutionDate().getValue());
             createNoticeMessage(paymentRecord, record.notice);
 
-            ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-            ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+            if (!reportOny) {
+                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+                ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+            }
+
+            paymentRecords.add(paymentRecord);
+
             executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
         }
+
+        return paymentRecords;
     }
 
     /**
