@@ -32,6 +32,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -42,14 +43,17 @@ import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.AmountType;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.interfaces.importer.model.PadProcessorInformation;
 import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;
 import com.propertyvista.server.common.util.AddressRetriever;
 
@@ -213,6 +217,7 @@ public class TenantPadProcessor {
         if (!validateLeasePads(leasePadEntities, counters)) {
             return;
         }
+        correctPadParsing(leasePadEntities);
         calulateLeasePercents(leasePadEntities);
 
         for (final PadFileModel padFileModel : leasePadEntities) {
@@ -232,8 +237,21 @@ public class TenantPadProcessor {
                 });
                 counters.add(saveCounter);
             } catch (Throwable e) {
+                padFileModel._import().invalid().setValue(true);
+                padFileModel._import().message().setValue(e.getMessage());
                 log.error("pad save error", e);
                 counters.invalid++;
+            }
+        }
+    }
+
+    private void correctPadParsing(List<PadFileModel> leasePadEntities) {
+        for (PadFileModel padFileModel : leasePadEntities) {
+            if (!padFileModel.chargeCode().isNull()) {
+                padFileModel.chargeCode().setValue(padFileModel.chargeCode().getValue().trim());
+            }
+            if (!padFileModel.chargeId().isNull()) {
+                padFileModel.chargeId().setValue(padFileModel.chargeId().getValue().trim());
             }
         }
     }
@@ -346,7 +364,7 @@ public class TenantPadProcessor {
 
             if (!padFileModel.percent().isNull()) {
                 BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100));
-                BigDecimal percentRound = percent.setScale(PreauthorizedPayment.PERCENT_SCALE, BigDecimal.ROUND_HALF_UP);
+                BigDecimal percentRound = percent.setScale(PadProcessorInformation.PERCENT_SCALE, BigDecimal.ROUND_HALF_UP);
                 padFileModel._processorInformation().percent().setValue(percentRound);
             } else if (padFileModel.charge().isNull()) {
                 //Default Yardi records import, first row, no percent only estimated charges
@@ -356,7 +374,7 @@ public class TenantPadProcessor {
                 padFileModel._processorInformation().accountChargeTotal().setValue(Double.valueOf(padFileModel.estimatedCharge().getValue()));
                 BigDecimal calulatedEftAmount = padFileModel._processorInformation().percent().getValue()
                         .multiply(new BigDecimal(padFileModel._processorInformation().accountChargeTotal().getValue()));
-                padFileModel._processorInformation().calulatedEftAmount().setValue(DomainUtil.roundMoney(calulatedEftAmount));
+                padFileModel._processorInformation().calulatedEftTotalAmount().setValue(DomainUtil.roundMoney(calulatedEftAmount));
             }
             return;
         }
@@ -471,12 +489,14 @@ public class TenantPadProcessor {
                     // 100% assumed
                     estimatedChargeSplit = estimatedCharge;
                 }
+                padFileModel._processorInformation().chargeEftAmount().setValue(DomainUtil.roundMoney(new BigDecimal(estimatedChargeSplit)));
                 // Count each chargeCode once.
                 if (!chargeCodes.contains(uniqueChargeCode(padFileModel))) {
                     estimatedChargeTotal += estimatedCharge;
                     chargeCodes.add(uniqueChargeCode(padFileModel));
                 }
             } else {
+                padFileModel._processorInformation().chargeEftAmount().setValue(DomainUtil.roundMoney(new BigDecimal(padFileModel.charge().getValue())));
                 estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
                 estimatedChargeTotal += estimatedChargeSplit;
             }
@@ -500,6 +520,7 @@ public class TenantPadProcessor {
             }
             if (isPapApplicable(padFileModel)) {
                 firstPadFileModel = padFileModel;
+                firstPadFileModel._processorInformation().accountCharges().add(firstPadFileModel);
                 idx = i;
                 break;
             } else {
@@ -517,14 +538,14 @@ public class TenantPadProcessor {
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
             }
-            if (!isPapApplicable(padFileModel)) {
+            if (isPapApplicable(padFileModel)) {
+                accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
+                padFileModel._import().message().setValue(i18n.tr("Merged with row {0}", firstPadFileModel._import().row()));
+                firstPadFileModel._processorInformation().accountCharges().add(padFileModel);
+            } else {
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.notUsedForACH);
-                continue;
             }
-
-            accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
-            padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
-            padFileModel._import().message().setValue(i18n.tr("Merged with row {0}", firstPadFileModel._import().row()));
         }
 
         firstPadFileModel._processorInformation().estimatedChargeSplit().setValue(accountChargeTotal);
@@ -612,7 +633,7 @@ public class TenantPadProcessor {
             }
             if (isPapApplicable(padFileModel) && !padFileModel._processorInformation().percentNotRounded().isNull()) {
                 BigDecimal percent = new BigDecimal(padFileModel._processorInformation().percentNotRounded().getValue());
-                BigDecimal percentRound = percent.setScale(PreauthorizedPayment.PERCENT_SCALE, BigDecimal.ROUND_HALF_UP);
+                BigDecimal percentRound = percent.setScale(PadProcessorInformation.PERCENT_SCALE, BigDecimal.ROUND_HALF_UP);
                 padFileModel._processorInformation().percent().setValue(percentRound);
                 percentTotal = percentTotal.add(percent);
                 percentRoundTotal = percentRoundTotal.add(percentRound);
@@ -624,7 +645,7 @@ public class TenantPadProcessor {
 
         // Percent rounding case of total 100% (+-.01%)  e.g. 33.3% + 66.6%  
         // Make the Largest to pay fractions
-        String zeroes = CommonsStringUtils.padding(PreauthorizedPayment.PERCENT_SCALE - 1, '0');
+        String zeroes = CommonsStringUtils.padding(PadProcessorInformation.PERCENT_SCALE - 1, '0');
         if ((percentTotal.compareTo(percentRoundTotal) != 0)
                 && (percentTotal.subtract(BigDecimal.ONE).abs().compareTo(new BigDecimal("0." + zeroes + "1")) < 1)) {
             BigDecimal unapidPercentBalance = percentRoundTotal.subtract(BigDecimal.ONE);
@@ -635,13 +656,13 @@ public class TenantPadProcessor {
         for (PadFileModel padFileModel : leasePadEntities) {
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
-    }
+            }
             if (isPapApplicable(padFileModel) && !padFileModel._processorInformation().percent().isNull() && (!padFileModel.estimatedCharge().isNull())) {
                 if (padFileModel._processorInformation().accountChargeTotal().isNull()) {
                     throw new Error("accountChargeTotal null for: " + padFileModel.leaseId().getValue());
                 }
                 BigDecimal calulatedEftAmount = new BigDecimal(padFileModel._processorInformation().accountChargeTotal().getValue());
-                padFileModel._processorInformation().calulatedEftAmount().setValue(DomainUtil.roundMoney(calulatedEftAmount));
+                padFileModel._processorInformation().calulatedEftTotalAmount().setValue(DomainUtil.roundMoney(calulatedEftAmount));
             }
         }
 
@@ -674,18 +695,17 @@ public class TenantPadProcessor {
                     EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
                     criteria.eq(criteria.proto().paymentMethod(), existingPaymentMethod);
                     criteria.eq(criteria.proto().tenant(), tenant);
+                    criteria.eq(criteria.proto().isDeleted(), false);
                     paps = Persistence.service().query(criteria);
                 }
                 //We do not support import of more then one PAP per PaymentMethod
                 boolean sameAmountPapFound = false;
                 for (PreauthorizedPayment pap : paps) {
-                    if (!pap.isDeleted().getValue()) {
-                        if (!isSameAmount(pap, padFileModel)) {
-                            pap.isDeleted().setValue(Boolean.TRUE);
-                            Persistence.service().persist(pap);
-                        } else {
-                            sameAmountPapFound = true;
-                        }
+                    if (!isSameAmount(pap, padFileModel)) {
+                        pap.isDeleted().setValue(Boolean.TRUE);
+                        Persistence.service().persist(pap);
+                    } else {
+                        sameAmountPapFound = true;
                     }
                 }
                 if (!sameAmountPapFound) {
@@ -735,44 +755,77 @@ public class TenantPadProcessor {
     }
 
     private boolean isSameAmount(PreauthorizedPayment pap, PadFileModel padFileModel) {
-        if (!padFileModel._processorInformation().percent().isNull()) {
-            if (pap.amountType().getValue() != AmountType.Percent) {
-                return false;
-            }
-            return pap.percent().getValue().compareTo(padFileModel._processorInformation().percent().getValue()) == 0;
-        } else if (!padFileModel.charge().isNull()) {
-            if (pap.amountType().getValue() != AmountType.Value) {
-                return false;
-            }
-            BigDecimal amount = new BigDecimal(padFileModel.charge().getValue()).setScale(2, BigDecimal.ROUND_HALF_UP);
-            return pap.value().getValue().compareTo(amount) == 0;
-        } else {
+        if (pap.coveredItems().size() != padFileModel._processorInformation().accountCharges().size()) {
             return false;
         }
+
+        for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
+            boolean found = false;
+            for (PreauthorizedPaymentCoveredItem item : pap.coveredItems()) {
+                if (!charge.chargeCode().getValue().equals(item.billableItem().extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
+                    continue;
+                } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(item.amount().getValue()) != 0) {
+                    continue;
+                } else {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                return false;
+            }
+        }
+
+        // all charges are found
+        return true;
     }
 
     private PreauthorizedPayment createPAP(LeasePaymentMethod method, PadFileModel padFileModel, Tenant tenant) {
         PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
         pap.paymentMethod().set(method);
-
-        if (!padFileModel._processorInformation().percent().isNull()) {
-            pap.amountType().setValue(AmountType.Percent);
-            BigDecimal percent = padFileModel._processorInformation().percent().getValue();
-            if (percent.compareTo(BigDecimal.ZERO) < 0) {
-                percent = BigDecimal.ZERO;
-            }
-            pap.percent().setValue(percent);
-        } else if (!padFileModel.charge().isNull()) {
-            pap.amountType().setValue(AmountType.Value);
-            BigDecimal amount = new BigDecimal(padFileModel.charge().getValue());
-            if (amount.compareTo(BigDecimal.ZERO) < 0) {
-                amount = BigDecimal.ZERO;
-            }
-            pap.value().setValue(amount);
-        } else {
-            throw new IllegalArgumentException();
-        }
         pap.tenant().set(tenant);
+
+        Lease lease = tenant.lease();
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+
+        List<BillableItem> billableItems = new ArrayList<BillableItem>();
+        billableItems.addAll(lease.currentTerm().version().leaseProducts().featureItems());
+
+        for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
+            boolean found = false;
+
+            // TODO Ignore credits for now
+            if (charge._processorInformation().chargeEftAmount().getValue().compareTo(BigDecimal.ZERO) < 0) {
+                continue;
+            }
+
+            for (BillableItem billableItem : billableItems) {
+                if (!charge.chargeCode().getValue().equals(billableItem.extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
+                    continue;
+                } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(billableItem.agreedPrice().getValue()) != 0) {
+                    continue;
+                } else {
+                    found = true;
+
+                    billableItems.remove(billableItem);
+
+                    PreauthorizedPaymentCoveredItem padItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
+                    padItem.billableItem().set(billableItem);
+                    padItem.amount().setValue(charge._processorInformation().chargeEftAmount().getValue());
+
+                    pap.coveredItems().add(padItem);
+
+                    break;
+                }
+            }
+
+            if (!found) {
+                throw new Error("BillableItem " + charge.chargeCode().getValue() + " " + charge._processorInformation().chargeEftAmount().getValue()
+                        + "$ not found");
+            }
+        }
+
         return pap;
     }
 

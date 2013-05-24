@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -54,14 +55,20 @@ public interface PadProcessorInformation extends IEntity {
 
     IPrimitive<PadProcessingStatus> status();
 
+    IList<PadFileModel> accountCharges();
+
+    public static final int PERCENT_SCALE = 6;
+
     IPrimitive<BigDecimal> percent();
 
     IPrimitive<Double> percentNotRounded();
 
     IPrimitive<Double> estimatedChargeSplit();
 
+    IPrimitive<BigDecimal> chargeEftAmount();
+
     IPrimitive<Double> accountChargeTotal();
 
-    IPrimitive<BigDecimal> calulatedEftAmount();
+    IPrimitive<BigDecimal> calulatedEftTotalAmount();
 
 }

@@ -93,8 +93,8 @@ public class PadEFTPCalulations {
             reportModel.message().setValue(reportModel._import().message().getValue());
             reportModel.status().setValue(reportModel._processorInformation().status().getValue());
 
-            if (!reportModel._processorInformation().calulatedEftAmount().isNull()) {
-                reportModel.calulatedEftAmount().setValue(reportModel._processorInformation().calulatedEftAmount().getValue());
+            if (!reportModel._processorInformation().calulatedEftTotalAmount().isNull()) {
+                reportModel.calulatedEftAmount().setValue(reportModel._processorInformation().calulatedEftTotalAmount().getValue());
             }
             if (!reportModel._processorInformation().percent().isNull()) {
                 reportModel.percentStored().setValue(reportModel._processorInformation().percent().getValue().doubleValue() * 100);

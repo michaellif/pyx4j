@@ -96,6 +96,11 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         for (PmcDnsName alias : entity.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
+
+        if (entity.features().yardiIntegration().getValue(false)) {
+            entity.features().defaultProductCatalog().setValue(Boolean.TRUE);
+        }
+
         super.persist(entity, dto);
 
         // Ppopagate onboardingAccountId to accounts

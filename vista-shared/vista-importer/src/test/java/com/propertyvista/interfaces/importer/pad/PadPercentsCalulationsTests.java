@@ -25,8 +25,8 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
+import com.propertyvista.interfaces.importer.model.PadProcessorInformation;
 import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;
 
 public class PadPercentsCalulationsTests {
@@ -51,7 +51,7 @@ public class PadPercentsCalulationsTests {
     }
 
     private void assertEquals(BigDecimal expected, BigDecimal actual) {
-        Assert.assertEquals(expected.setScale(PreauthorizedPayment.PERCENT_SCALE).toString(), (actual == null) ? null : actual.toString());
+        Assert.assertEquals(expected.setScale(PadProcessorInformation.PERCENT_SCALE).toString(), (actual == null) ? null : actual.toString());
     }
 
     private void assertEquals(int scale, BigDecimal expected, BigDecimal actual) {

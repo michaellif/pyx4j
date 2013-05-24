@@ -61,6 +61,7 @@ public class PmcCreatorDev {
         if ((!mini) && pmcName.equals(DemoPmc.star.name())) {
             pmc.features().occupancyModel().setValue(Boolean.FALSE);
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
+            pmc.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }
 
         pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.Active);

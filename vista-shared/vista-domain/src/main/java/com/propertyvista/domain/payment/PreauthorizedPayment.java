@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -35,8 +34,6 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.i18n.annotations.I18n;
-import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -73,42 +70,6 @@ public interface PreauthorizedPayment extends IEntity {
 
     @Owned
     IList<PreauthorizedPaymentCoveredItem> coveredItems();
-
-    @Deprecated
-    @I18n
-    public enum AmountType {
-
-        Percent, Value;
-
-        @Override
-        public String toString() {
-            return I18nEnum.toString(this);
-        }
-    }
-
-    @Deprecated
-    @NotNull
-    @ReadOnly
-    @Caption(name = "Type")
-    IPrimitive<AmountType> amountType();
-
-    @Deprecated
-    public static final int PERCENT_SCALE = 6;
-
-    @Deprecated
-    @NotNull
-    @ReadOnly
-    @Format("#,##0.0000")
-    @Editor(type = EditorType.percentage)
-    @MemberColumn(precision = PERCENT_SCALE + 1, scale = PERCENT_SCALE)
-    IPrimitive<BigDecimal> percent();
-
-    @Deprecated
-    @NotNull
-    @ReadOnly
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> value();
 
     @NotNull
     IPrimitive<Boolean> isDeleted();
