@@ -7,10 +7,12 @@
     The spaces are important!
     If some pace is added the replacement during branch creation will fail and old version would be used.
 
-2.  Each new vista project need to have .settings folder with context added!
+2.  Each new VISTA project(maven module) need to have .settings folder with context added!
     It is ignored by default, you need to explicitly add it to svn.
 
-     file org.eclipse.jdt.ui.prefs            required for each vista project
+     file org.eclipse.jdt.ui.prefs            required for each VISTA project
      file com.google.gwt.eclipse.core.prefs   only for gwt client projects that will compile to javascript
 
     best paractive to copy the .settings from another project
+
+3.  Each new VISTA project should have directory "target" added to svn:ignore
