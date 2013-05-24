@@ -52,7 +52,6 @@ public class YardiImportTest extends YardiTestBase {
         super.setUp();
         preloadData();
 
-        setSysDate("01-May-2013");
         {
             // @formatter:off
             PropertyUpdater updater = new PropertyUpdater("prop123").
@@ -157,6 +156,8 @@ public class YardiImportTest extends YardiTestBase {
 
     @Test
     public void testImport() throws Exception {
+
+        setSysDate("25-May-2013");
 
         String propertyCode = "prop123";
 
