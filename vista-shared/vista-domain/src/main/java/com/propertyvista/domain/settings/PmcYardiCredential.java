@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -65,6 +66,7 @@ public interface PmcYardiCredential extends IEntity {
 
     IPrimitive<Platform> platform();
 
+    @Length(2048)
     IPrimitive<String> propertyCode();
 
 }
