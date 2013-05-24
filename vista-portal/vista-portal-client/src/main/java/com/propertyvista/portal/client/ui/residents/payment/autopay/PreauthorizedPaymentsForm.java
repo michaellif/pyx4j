@@ -22,9 +22,12 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
@@ -88,11 +91,25 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
                 @Override
                 public void execute() {
-                    presenter.deletePreauthorizedPayment(item.getValue());
                     PreauthorizedPaymentFolder.super.removeItem(item);
+                    presenter.deletePreauthorizedPayment(item.getValue());
                 }
             });
         }
+
+//        @Override
+//        public IFolderItemDecorator<PreauthorizedPaymentItemDTO> createItemDecorator() {
+//            return new VistaBoxFolderItemDecorator<PreauthorizedPaymentItemDTO>() {
+//                @Override
+//                public void setComponent(CEntityFolderItem<PreauthorizedPaymentItemDTO> folderItem) {
+//                    super.setComponent(folderItem);
+//
+//                    boolean isCurrentTenant = folderItem.getValue().tenant().customer().user().getPrimaryKey()
+//                            .equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
+//                    ((BoxFolderItemDecorator<?>) getDecorator()).setActionsState(isCurrentTenant, false, false);
+//                }
+//            };
+//        }
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentItemDTO> {
 
@@ -123,6 +140,28 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                if (getDecorator() instanceof BoxFolderItemDecorator) {
+                    boolean isCurrentTenant = getValue().tenant().customer().user().getPrimaryKey()
+                            .equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
+                    ((BoxFolderItemDecorator<?>) getDecorator()).setActionsState(isCurrentTenant, false, false);
+                }
+            }
+
+            @Override
+            public void setDecorator(IDecorator decorator) {
+                super.setDecorator(decorator);
+
+                if (getDecorator() instanceof BoxFolderItemDecorator) {
+                    boolean isCurrentTenant = getValue().tenant().customer().user().getPrimaryKey()
+                            .equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
+                    ((BoxFolderItemDecorator<?>) getDecorator()).setActionsState(isCurrentTenant, false, false);
+                }
             }
         }
     }
