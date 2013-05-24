@@ -14,8 +14,11 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -25,6 +28,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -38,8 +42,18 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
             // Create forthcoming payment records here
             Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
 
-            paymentRecords.addAll(ServerSideFactory.create(PaymentProcessFacade.class).reportPreauthorisedPayments(
-                    reportMetadata.billingCycleStartDate().getValue()));
+            // Find PadGenerationDate for each BillingCycle in system, they may be different
+            Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
+            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
+            criteria.isNull(criteria.proto().actualPadGenerationDate());
+            for (BillingCycle cycle : Persistence.service().query(criteria)) {
+                padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
+            }
+
+            for (LogicalDate padGenerationDate : padGenerationDays) {
+                paymentRecords.addAll(ServerSideFactory.create(PaymentProcessFacade.class).reportPreauthorisedPayments(padGenerationDate));
+            }
 
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enahancePaymentRecord(paymentRecord);

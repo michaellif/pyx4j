@@ -38,11 +38,11 @@ public interface PaymentProcessFacade {
 
     void processPmcPadReconciliation(ExecutionMonitor executionMonitor);
 
-    void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
+    void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate padGenerationDate);
 
-    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate dueDate);
+    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate);
 
-    void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate dueDate);
+    void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate);
 
     void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType);
 
