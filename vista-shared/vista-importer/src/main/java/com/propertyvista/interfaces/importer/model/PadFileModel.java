@@ -77,6 +77,9 @@ public interface PadFileModel extends IEntity {
     // Optional by default TRUE
     IPrimitive<Boolean> papApplicable();
 
+    // Optional by default TRUE
+    IPrimitive<Boolean> recurringEFT();
+
     IPrimitive<String> estimatedCharge();
 
 }

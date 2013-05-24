@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.interfaces.importer.model.PadFileModel;
 import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadProcessingStatus;
 
@@ -50,18 +51,37 @@ public class PadPercentsCalulationsTests {
     }
 
     private void assertEquals(BigDecimal expected, BigDecimal actual) {
-        Assert.assertEquals(expected.setScale(4).toString(), (actual == null) ? null : actual.toString());
+        Assert.assertEquals(expected.setScale(PreauthorizedPayment.PERCENT_SCALE).toString(), (actual == null) ? null : actual.toString());
+    }
+
+    private void assertEquals(int scale, BigDecimal expected, BigDecimal actual) {
+        Assert.assertEquals(expected.setScale(scale).toString(), (actual == null) ? null : actual.toString());
+    }
+
+    private BigDecimal createBigDecimalFromDouble(int scale, String string) {
+        double percentNotRounded = (Double.parseDouble(string)) / 100.0;
+        //System.out.println(string + " -> " + percentNotRounded);
+        return new BigDecimal(percentNotRounded).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    }
+
+    @Test
+    public void testBigDecimal() {
+        assertEquals(4, new BigDecimal("0.3333"), createBigDecimalFromDouble(4, "33.333"));
+        assertEquals(4, new BigDecimal("0.6667"), createBigDecimalFromDouble(4, "66.666"));
+
+        assertEquals(6, new BigDecimal("0.333333"), createBigDecimalFromDouble(6, "33.33333"));
+        assertEquals(6, new BigDecimal("0.666667"), createBigDecimalFromDouble(6, "66.66666"));
     }
 
     @Test
     public void test_30_60() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
-        leasePadEntities.add(createModelPercent("33.333"));
-        leasePadEntities.add(createModelPercent("66.666"));
+        leasePadEntities.add(createModelPercent("33.33333"));
+        leasePadEntities.add(createModelPercent("66.66666"));
         TenantPadProcessor.calulateLeasePercents(leasePadEntities);
 
-        assertEquals(new BigDecimal("0.3333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
-        assertEquals(new BigDecimal("0.6667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.333333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.666667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
     }
 
     private PadFileModel createModelFull(String account, String chargeCode, String percent, double estimatedCharge) {
@@ -87,12 +107,12 @@ public class PadPercentsCalulationsTests {
     @Test
     public void testRent_30_60() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
-        leasePadEntities.add(createModelFull("1", "rent", "33.333", 1000));
-        leasePadEntities.add(createModelFull("2", "rent", "66.666", 1000));
+        leasePadEntities.add(createModelFull("1", "rent", "33.33333", 1000));
+        leasePadEntities.add(createModelFull("2", "rent", "66.66666", 1000));
         TenantPadProcessor.calulateLeasePercents(leasePadEntities);
 
-        assertEquals(new BigDecimal("0.3333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
-        assertEquals(new BigDecimal("0.6667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.333333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.666667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
     }
 
     @Test
@@ -128,8 +148,8 @@ public class PadPercentsCalulationsTests {
 
         TenantPadProcessor.calulateLeasePercents(leasePadEntities);
 
-        assertEquals(new BigDecimal("0.5455"), leasePadEntities.get(0)._processorInformation().percent().getValue());
-        assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.545455"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.454545"), leasePadEntities.get(1)._processorInformation().percent().getValue());
 
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(2)._processorInformation().status().getValue());
     }
@@ -154,7 +174,7 @@ public class PadPercentsCalulationsTests {
 
         TenantPadProcessor.calulateLeasePercents(leasePadEntities);
 
-        assertEquals(new BigDecimal("0.9091"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.909091"), leasePadEntities.get(0)._processorInformation().percent().getValue());
 
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(1)._processorInformation().status().getValue());
     }
@@ -202,7 +222,7 @@ public class PadPercentsCalulationsTests {
 
         TenantPadProcessor.calulateLeasePercents(leasePadEntities);
 
-        assertEquals(new BigDecimal("0.5455"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.545455"), leasePadEntities.get(0)._processorInformation().percent().getValue());
 
         Assert.assertEquals(PadProcessingStatus.ignoredUinitializedChargeSplit, leasePadEntities.get(1)._processorInformation().status().getValue());
 
@@ -210,7 +230,7 @@ public class PadPercentsCalulationsTests {
 
         Assert.assertNull("record accepted, but was " + leasePadEntities.get(3)._processorInformation().status().getValue(), leasePadEntities.get(3)
                 ._processorInformation().status().getValue());
-        assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(3)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.454545"), leasePadEntities.get(3)._processorInformation().percent().getValue());
 
     }
 
@@ -229,8 +249,8 @@ public class PadPercentsCalulationsTests {
 
         Assert.assertEquals(PadProcessingStatus.ignoredUinitializedChargeSplit, leasePadEntities.get(0)._processorInformation().status().getValue());
 
-        assertEquals(new BigDecimal("0.5455"), leasePadEntities.get(1)._processorInformation().percent().getValue());
-        assertEquals(new BigDecimal("0.4545"), leasePadEntities.get(2)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.545455"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(new BigDecimal("0.454545"), leasePadEntities.get(2)._processorInformation().percent().getValue());
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(3)._processorInformation().status().getValue());
 
     }

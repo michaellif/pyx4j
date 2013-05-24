@@ -93,11 +93,14 @@ public interface PreauthorizedPayment extends IEntity {
     IPrimitive<AmountType> amountType();
 
     @Deprecated
+    public static final int PERCENT_SCALE = 6;
+
+    @Deprecated
     @NotNull
     @ReadOnly
-    @Format("#,##0.00")
+    @Format("#,##0.0000")
     @Editor(type = EditorType.percentage)
-    @MemberColumn(precision = 5, scale = 4)
+    @MemberColumn(precision = PERCENT_SCALE + 1, scale = PERCENT_SCALE)
     IPrimitive<BigDecimal> percent();
 
     @Deprecated

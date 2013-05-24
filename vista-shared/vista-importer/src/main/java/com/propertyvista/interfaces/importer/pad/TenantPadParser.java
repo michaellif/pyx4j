@@ -71,7 +71,7 @@ public class TenantPadParser {
 
     }
 
-    private static class PadFileCSVReciver extends EntityCSVReciver<PadFileModel> {
+    public static class PadFileCSVReciver extends EntityCSVReciver<PadFileModel> {
         String sheetNumber;
 
         public PadFileCSVReciver(String sheetName) {
