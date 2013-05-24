@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 public class YardiPaymentProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiPaymentProcessor.class);
 
-    void removeOldPayments(YardiBillingAccount account) {
+    void removeOldPayments(BillingAccount account) {
         EntityQueryCriteria<YardiPayment> oldPayments = EntityQueryCriteria.create(YardiPayment.class);
         oldPayments.add(PropertyCriterion.eq(oldPayments.proto().billingAccount(), account));
         oldPayments.add(PropertyCriterion.isNull(oldPayments.proto().paymentRecord()));

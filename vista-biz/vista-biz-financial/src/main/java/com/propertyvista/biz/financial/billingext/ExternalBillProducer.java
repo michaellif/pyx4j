@@ -37,7 +37,7 @@ import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.DateRange;
 import com.propertyvista.biz.financial.billing.internal.BillingManager;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -76,7 +76,7 @@ class ExternalBillProducer {
     }
 
     Bill produceBill() {
-        InternalBillingAccount billingAccount = lease.billingAccount().<InternalBillingAccount> cast();
+        BillingAccount billingAccount = lease.billingAccount();
 
         Persistence.service().retrieve(billingAccount.adjustments());
 

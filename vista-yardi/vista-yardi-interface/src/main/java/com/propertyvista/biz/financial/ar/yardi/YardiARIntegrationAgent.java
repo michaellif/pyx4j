@@ -42,7 +42,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiCharge;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
 import com.propertyvista.domain.financial.yardi.YardiDebit;
@@ -84,7 +83,7 @@ public class YardiARIntegrationAgent {
     /*
      * ChargeProcessor utils
      */
-    public static YardiBillingAccount getYardiBillingAccount(RTCustomer customer) {
+    public static BillingAccount getYardiBillingAccount(RTCustomer customer) {
         EntityQueryCriteria<Lease> leaseCrit = EntityQueryCriteria.create(Lease.class);
         leaseCrit.add(PropertyCriterion.eq(leaseCrit.proto().leaseId(), customer.getCustomerID()));
         Lease lease = Persistence.service().retrieve(leaseCrit);
@@ -92,20 +91,17 @@ public class YardiARIntegrationAgent {
             // no lease found - quit
             return null;
         }
-        EntityQueryCriteria<YardiBillingAccount> accntCrit = EntityQueryCriteria.create(YardiBillingAccount.class);
-        accntCrit.add(PropertyCriterion.eq(accntCrit.proto().lease(), lease));
-        YardiBillingAccount account = Persistence.service().retrieve(accntCrit);
-        if (account == null) {
+        if (lease.billingAccount().isNull()) {
             // create new account
-            account = EntityFactory.create(YardiBillingAccount.class);
-            account.lease().set(lease);
+            BillingAccount account = EntityFactory.create(BillingAccount.class);
+            lease.billingAccount().set(account);
             Persistence.service().persist(account);
         }
 
-        return account;
+        return lease.billingAccount();
     }
 
-    public static InvoiceLineItem createCharge(YardiBillingAccount account, ChargeDetail detail) {
+    public static InvoiceLineItem createCharge(BillingAccount account, ChargeDetail detail) {
         BigDecimal amount = new BigDecimal(detail.getAmount());
         // TODO - This calculation assumes that TransactionDate is set to or shortly after start date of cycle
         LogicalDate transactionDate = new LogicalDate(detail.getTransactionDate().getTime());

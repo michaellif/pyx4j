@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -89,7 +89,7 @@ class ARInternalCreditDebitLinkManager {
 
     InvoiceCredit consumeCredit(InvoiceCredit credit) {
 
-        InternalBillingAccount billingAccount = credit.billingAccount().<InternalBillingAccount> cast();
+        BillingAccount billingAccount = credit.billingAccount();
         List<InvoiceDebit> debits = ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount);
 
         for (InvoiceDebit debit : debits) {
@@ -143,8 +143,7 @@ class ARInternalCreditDebitLinkManager {
             throw new BillingException(i18n.tr("Provided amount exceeds Payment"));
         }
 
-        InvoicePayment payment = ARInternalTransactionManager.instance().getCorrespodingCreditByPayment(
-                paymentRecord.billingAccount().<InternalBillingAccount> cast(), paymentRecord);
+        InvoicePayment payment = ARInternalTransactionManager.instance().getCorrespodingCreditByPayment(paymentRecord.billingAccount(), paymentRecord);
 
         // check if amount covers all soft links paid by credit
         BigDecimal sum = BigDecimal.ZERO;
@@ -181,7 +180,7 @@ class ARInternalCreditDebitLinkManager {
             }
         }
 
-        List<InvoiceCredit> credits = restoreBackwardPayments(payment.billingAccount().<InternalBillingAccount> cast(), firstCredit, false);
+        List<InvoiceCredit> credits = restoreBackwardPayments(payment.billingAccount(), firstCredit, false);
 
         // pointer to updated credit
         InvoiceCredit hardLinkCredit = null;
@@ -240,8 +239,7 @@ class ARInternalCreditDebitLinkManager {
     }
 
     InvoiceDebit coverDebit(InvoiceDebit debit) {
-        List<InvoiceCredit> credits = ARInternalTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(
-                debit.billingAccount().<InternalBillingAccount> cast());
+        List<InvoiceCredit> credits = ARInternalTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(debit.billingAccount());
         for (InvoiceCredit credit : credits) {
 
             DebitCreditLink link = EntityFactory.create(DebitCreditLink.class);
@@ -279,13 +277,13 @@ class ARInternalCreditDebitLinkManager {
     }
 
     void declinePayment(InvoicePaymentBackOut backOut) {
-        InvoicePayment invoicePaymentToReturn = ARInternalTransactionManager.instance().getCorrespodingCreditByPayment(
-                backOut.billingAccount().<InternalBillingAccount> cast(), backOut.paymentRecord());
+        InvoicePayment invoicePaymentToReturn = ARInternalTransactionManager.instance().getCorrespodingCreditByPayment(backOut.billingAccount(),
+                backOut.paymentRecord());
         if (invoicePaymentToReturn == null) {
             throw new BillingException(i18n.tr("Cannot find Payment Record"));
         }
 
-        List<InvoiceCredit> credits = restoreBackwardPayments(backOut.billingAccount().<InternalBillingAccount> cast(), invoicePaymentToReturn, true);
+        List<InvoiceCredit> credits = restoreBackwardPayments(backOut.billingAccount(), invoicePaymentToReturn, true);
 
         // Pay available debits by Succeeding credits. Skip the first one
         for (InvoiceCredit credit : credits) {
@@ -295,7 +293,7 @@ class ARInternalCreditDebitLinkManager {
         }
     }
 
-    private List<InvoiceCredit> restoreBackwardPayments(InternalBillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
+    private List<InvoiceCredit> restoreBackwardPayments(BillingAccount billingAccount, InvoiceCredit creditStartPoint, boolean skipFirst) {
 
         Collection<DebitCreditLink> itemsToRemove = new ArrayList<DebitCreditLink>();
         List<InvoiceCredit> credits = ARInternalTransactionManager.instance().getSuccedingCreditInvoiceLineItems(billingAccount, creditStartPoint);

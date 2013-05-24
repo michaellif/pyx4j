@@ -40,7 +40,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceDeposit;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -116,7 +116,7 @@ public class DepositFacadeImpl implements DepositFacade {
     }
 
     @Override
-    public DepositLifecycle createDepositLifecycle(Deposit deposit, InternalBillingAccount billingAccount) {
+    public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount) {
 
         DepositLifecycle depositLifecycle = EntityFactory.create(DepositLifecycle.class);
 

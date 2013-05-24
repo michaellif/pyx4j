@@ -28,7 +28,6 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -112,7 +111,7 @@ public class LeaseDataModel extends MockDataModel<Lease> {
             lease.currentTerm().version().tenants().add(tenantInLease);
         }
 
-        lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(carryforwardBalance);
+        lease.billingAccount().carryforwardBalance().setValue(carryforwardBalance);
 
         lease.creationDate().setValue(new LogicalDate(getSysDate()));
 

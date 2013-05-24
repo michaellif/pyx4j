@@ -13,35 +13,42 @@
  */
 package com.propertyvista.domain.financial;
 
+import java.math.BigDecimal;
+
 import javax.xml.bind.annotation.XmlType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-@AbstractEntity
-@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface BillingAccount extends IEntity {
 
     final static Logger log = LoggerFactory.getLogger(BillingAccount.class);
@@ -175,5 +182,45 @@ public interface BillingAccount extends IEntity {
     ISet<PaymentRecord> payments();
 
     IPrimitive<PaymentAccepted> paymentAccepted();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    ISet<Bill> bills();
+
+    /**
+     * Counter for all (including failed) bills for given lease
+     * 
+     * @return
+     */
+    IPrimitive<Integer> billCounter();
+
+    @Owned
+    @OrderBy(LeaseAdjustment.OrderId.class)
+    @Caption(name = "Lease Adjustments")
+    @Detached()
+    IList<LeaseAdjustment> adjustments();
+
+    @Owned(cascade = {})
+    @Detached
+    IList<DepositLifecycle> deposits();
+
+    //Should have deposit value field
+
+    // atb report
+
+    /**
+     * for newly created/converted existing leases:
+     */
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    @Caption(name = "Initial Balance")
+    IPrimitive<BigDecimal> carryforwardBalance();
+
+//    TODO VladS Fix Me
+//    @Override
+//    @Owned(cascade = {})
+//    @Detached(level = AttachLevel.Detached)
+//    ISet<LeaseArrearsSnapshot> arrearsSnapshots();
 
 }

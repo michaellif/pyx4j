@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -44,7 +44,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
     @Override
     public boolean postCharge(ChargeDTO chargeDTO, final String leaseId) {
-        InternalBillingAccount billingAccount = getBillingAccount(leaseId);
+        BillingAccount billingAccount = getBillingAccount(leaseId);
         if (billingAccount == null) {
             return false;
         }
@@ -73,7 +73,7 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
 
     @Override
     public boolean postPayment(PaymentDTO paymentDTO, final String leaseId) {
-        InternalBillingAccount billingAccount = getBillingAccount(leaseId);
+        BillingAccount billingAccount = getBillingAccount(leaseId);
         if (billingAccount == null) {
             return false;
         }
@@ -178,10 +178,10 @@ public class ExternalBillingFacadeImpl implements ExternalBillingFacade {
         return Persistence.service().query(criteria);
     }
 
-    private InternalBillingAccount getBillingAccount(final String leaseId) {
+    private BillingAccount getBillingAccount(final String leaseId) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
         Lease lease = Persistence.service().retrieve(criteria);
-        return lease == null ? null : lease.billingAccount().<InternalBillingAccount> cast();
+        return lease == null ? null : lease.billingAccount();
     }
 }

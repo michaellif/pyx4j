@@ -30,7 +30,6 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -155,7 +154,7 @@ class ARInternalTransactionManager extends ARAbstractTransactionManager {
         BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), now);
         if (prevCycle != null) {
             BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(prevCycle);
-            List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems((InternalBillingAccount) billingAccount, nextCycle);
+            List<InvoiceLineItem> items = BillingUtils.getUnclaimedLineItems((BillingAccount) billingAccount, nextCycle);
 
             for (InvoiceLineItem item : items) {
                 currentBallanceAmount = currentBallanceAmount.add(BillingUtils.calculateTotal(item));

@@ -41,7 +41,6 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -416,8 +415,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         assert (billableItem != null);
 
         Deposit deposit = ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, billableItem, lease.unit().building());
-        DepositLifecycle depositLifecycle = ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit,
-                lease.billingAccount().<InternalBillingAccount> cast());
+        DepositLifecycle depositLifecycle = ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount());
 
         billableItem.deposits().add(deposit);
         ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());

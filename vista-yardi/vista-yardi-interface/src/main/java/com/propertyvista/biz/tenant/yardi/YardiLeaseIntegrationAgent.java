@@ -20,9 +20,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -36,7 +36,7 @@ public class YardiLeaseIntegrationAgent {
         Building building = Persistence.service().retrieve(crit);
         // create dummy lease
         Lease yardiLease = EntityFactory.create(Lease.class);
-        yardiLease.billingAccount().set(EntityFactory.create(YardiBillingAccount.class));
+        yardiLease.billingAccount().set(EntityFactory.create(BillingAccount.class));
         yardiLease.billingAccount().billingPeriod().setValue(BillingPeriod.Monthly);
         yardiLease.billingAccount().billingType().billingPeriod().setValue(BillingPeriod.Monthly);
         yardiLease.billingAccount().billingType().billingCycleStartDay().setValue(1);

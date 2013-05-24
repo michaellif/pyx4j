@@ -58,7 +58,6 @@ import com.propertyvista.biz.validation.validators.lease.ScreeningValidator;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -781,8 +780,8 @@ public abstract class LeaseAbstractManager {
             }
             if (false) {
                 // TODO This code never worked propely because deposits() are @Owned(cascade = {})
-                Persistence.service().retrieve(lease.billingAccount().<InternalBillingAccount> cast().deposits());
-                lease.billingAccount().<InternalBillingAccount> cast().deposits().clear();
+                Persistence.service().retrieve(lease.billingAccount().deposits());
+                lease.billingAccount().deposits().clear();
             }
         }
 
@@ -1038,22 +1037,17 @@ public abstract class LeaseAbstractManager {
     }
 
     private void updateLeaseDeposits(Lease lease) {
-        if (lease.billingAccount().isAssignableFrom(InternalBillingAccount.class)) {
+        List<Deposit> currentDeposits = new ArrayList<Deposit>();
+        currentDeposits.addAll(lease.currentTerm().version().leaseProducts().serviceItem().deposits());
+        for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
+            currentDeposits.addAll(item.deposits());
+        }
 
-            List<Deposit> currentDeposits = new ArrayList<Deposit>();
-            currentDeposits.addAll(lease.currentTerm().version().leaseProducts().serviceItem().deposits());
-            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-                currentDeposits.addAll(item.deposits());
-            }
-
-            // wrap newly added deposits in DepositLifecycle:
-            for (Deposit deposit : currentDeposits) {
-                if (deposit.lifecycle().isNull()) {
-                    Persistence.service().persist(
-                            ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit,
-                                    lease.billingAccount().<InternalBillingAccount> cast()));
-                    Persistence.service().merge(deposit);
-                }
+        // wrap newly added deposits in DepositLifecycle:
+        for (Deposit deposit : currentDeposits) {
+            if (deposit.lifecycle().isNull()) {
+                Persistence.service().persist(ServerSideFactory.create(DepositFacade.class).createDepositLifecycle(deposit, lease.billingAccount()));
+                Persistence.service().merge(deposit);
             }
         }
     }

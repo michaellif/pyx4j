@@ -21,7 +21,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.propertyvista.biz.tenant.LeaseAbstractManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 
@@ -31,7 +30,7 @@ public class LeaseYardiManager extends LeaseAbstractManager {
 
     @Override
     protected BillingAccount createBillingAccount() {
-        YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
+        BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
         billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
         return billingAccount;
     }

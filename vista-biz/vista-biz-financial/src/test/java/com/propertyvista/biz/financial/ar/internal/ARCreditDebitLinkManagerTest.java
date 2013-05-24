@@ -32,7 +32,6 @@ import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
@@ -107,8 +106,7 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
         setSysDate("18-Mar-2011");
         runBilling(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         setSysDate("25-Mar-2011");
 
@@ -118,8 +116,7 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
         Persistence.service().retrieve(invoiceDebitLease);
         createHardDebitCreditLink(payment, invoiceDebitLease, "149.00");
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         setSysDate("31-Mar-2011");
 
@@ -127,8 +124,7 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
         Persistence.service().retrieve(invoiceDebitLease);
         createHardDebitCreditLink(payment, invoiceDebitLease, "151.00");
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         //==================== RUN 3 ======================//
 
@@ -136,14 +132,12 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         setSysDate("25-Apr-2011");
         receiveAndPostPayment("25-Apr-2011", "302.00");
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         //==================== RUN 4 ======================//
 
@@ -151,14 +145,12 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         setSysDate("25-May-2011");
         receiveAndPostPayment("25-May-2011", "100.00");
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         //==================== RUN 5 ======================//
 
@@ -166,8 +158,7 @@ public class ARCreditDebitLinkManagerTest extends LeaseFinancialTestBase {
 
         rejectPayment(payment, false);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
     }
 
 }

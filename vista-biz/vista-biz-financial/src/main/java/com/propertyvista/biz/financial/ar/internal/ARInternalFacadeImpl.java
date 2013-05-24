@@ -35,7 +35,6 @@ import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -99,17 +98,17 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.instance().getTransactionHistory(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getTransactionHistory(billingAccount);
     }
 
     @Override
     public List<InvoiceDebit> getNotCoveredDebitInvoiceLineItems(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getNotCoveredDebitInvoiceLineItems(billingAccount);
     }
 
     @Override
     public List<InvoiceCredit> getNotConsumedCreditInvoiceLineItems(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getNotConsumedCreditInvoiceLineItems(billingAccount);
     }
 
     @Override
@@ -146,7 +145,7 @@ public class ARInternalFacadeImpl implements ARFacade {
 
     @Override
     public BigDecimal getCurrentBalance(BillingAccount billingAccount) {
-        return ARInternalTransactionManager.instance().getCurrentBallance(billingAccount.<InternalBillingAccount> cast());
+        return ARInternalTransactionManager.instance().getCurrentBallance(billingAccount);
     }
 
     @Override
@@ -154,7 +153,7 @@ public class ARInternalFacadeImpl implements ARFacade {
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
         BillingCycle prevCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(billingAccount.lease(), now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(prevCycle);
-        return BillingUtils.getUnclaimedLineItems(billingAccount.<InternalBillingAccount> cast(), nextCycle);
+        return BillingUtils.getUnclaimedLineItems(billingAccount, nextCycle);
     }
 
     @Override

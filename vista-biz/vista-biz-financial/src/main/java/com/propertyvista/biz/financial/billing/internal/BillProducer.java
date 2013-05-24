@@ -27,6 +27,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -40,7 +41,7 @@ import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.DateRange;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -73,9 +74,26 @@ class BillProducer {
 
     }
 
+    public static Bill produceProductBillPreview(BillingCycle billingCycle, Lease lease) {
+        // make up required lease prototype
+        Lease serviceLease = lease.duplicate();
+        serviceLease.setPrimaryKey(new Key(0));
+        serviceLease.status().setValue(Lease.Status.Application);
+        // first bill start date should match lease start date
+        serviceLease.currentTerm().termFrom().set(billingCycle.billingCycleStartDate());
+        // billing account is used for previous bill lookup
+        serviceLease.billingAccount().setPrimaryKey(new Key(0));
+        serviceLease.billingAccount().carryforwardBalance().setValue(BigDecimal.ZERO);
+
+        BillProducer producer = new BillProducer(billingCycle, serviceLease, true);
+        Bill billPreview = producer.produceBill();
+
+        return billPreview;
+    }
+
     Bill produceBill() {
 
-        InternalBillingAccount billingAccount = lease.billingAccount().<InternalBillingAccount> cast();
+        BillingAccount billingAccount = lease.billingAccount();
 
         Persistence.service().retrieve(billingAccount.adjustments());
 
@@ -126,7 +144,7 @@ class BillProducer {
 
             prepareAccumulators();
 
-            Bill lastBill = BillingManager.instance().getLatestConfirmedBill(nextPeriodBill.billingAccount().lease());
+            Bill lastBill = BillingManager.instance().getLatestConfirmedBill(lease);
             if (lastBill != null) {
                 nextPeriodBill.balanceForwardAmount().setValue(lastBill.totalDueAmount().getValue());
             } else {
@@ -304,7 +322,7 @@ class BillProducer {
             if (BillingManager.instance().getLatestConfirmedBill(lease) != null) {
                 return Bill.BillType.Regular;
             } else {
-                if (lease.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().isNull()) {
+                if (lease.billingAccount().carryforwardBalance().isNull()) {
                     return Bill.BillType.First;
                 } else {
                     return Bill.BillType.ZeroCycle;

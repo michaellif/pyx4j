@@ -31,7 +31,6 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.crm.server.util.CrmAppContext;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.ProductCatalog;
 import com.propertyvista.domain.financial.offering.ProductItem;
@@ -72,9 +71,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             dbo.lease().currentTerm().set(dbo);
 
             ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
-            if (dto.lease().billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
-                dbo.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
-            }
+            dbo.lease().billingAccount().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);
@@ -85,9 +82,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     protected void save(LeaseTerm dbo, LeaseTermDTO in) {
         updateAdjustments(dbo);
 
-        if (in.lease().billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
-            dbo.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().setValue(in.carryforwardBalance().getValue());
-        }
+        dbo.lease().billingAccount().carryforwardBalance().setValue(in.carryforwardBalance().getValue());
 
         if (VersionedEntityUtils.equalsIgnoreVersion(dbo, dbo.lease().currentTerm())) {
             dbo.lease().currentTerm().set(dbo);
@@ -113,9 +108,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         Persistence.service().retrieve(dto.lease());
 
-        if (dto.lease().billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
-            dto.carryforwardBalance().setValue(dto.lease().billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
-        }
+        dto.carryforwardBalance().setValue(dto.lease().billingAccount().carryforwardBalance().getValue());
         if (in.getPrimaryKey() != null) {
             Persistence.service().retrieve(dto.version().tenants());
         }

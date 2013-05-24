@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceAccountCharge;
@@ -80,7 +80,7 @@ public class BillingUtils {
         return isFeature && !((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
     }
 
-    public static List<InvoiceLineItem> getUnclaimedLineItems(InternalBillingAccount billingAccount, BillingCycle cycle) {
+    public static List<InvoiceLineItem> getUnclaimedLineItems(BillingAccount billingAccount, BillingCycle cycle) {
         // 1. get cycle from last approved bill and retrieve all items from that cycle that are not in the bill
         List<InvoiceLineItem> lineItems = new ArrayList<InvoiceLineItem>();
         Persistence.ensureRetrieve(billingAccount.lease(), AttachLevel.Attached);

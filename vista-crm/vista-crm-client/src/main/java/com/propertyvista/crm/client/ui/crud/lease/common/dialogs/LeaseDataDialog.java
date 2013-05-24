@@ -26,14 +26,12 @@ import com.pyx4j.widgets.client.dialog.OkCancelOption;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseTermEditorActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.dto.LeaseTermDTO;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class LeaseDataDialog extends SelectEnumDialog<ARCode.Type> implements OkCancelOption {
 
@@ -100,16 +98,10 @@ public class LeaseDataDialog extends SelectEnumDialog<ARCode.Type> implements Ok
 
         newLease.type().setValue(leaseType);
 
-        if (VistaFeatures.instance().yardiIntegration()) {
-            YardiBillingAccount billingAccount = EntityFactory.create(YardiBillingAccount.class);
-            billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
-            newLease.billingAccount().set(billingAccount);
-        } else {
-            InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
-            billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
-            billingAccount.billCounter().setValue(0);
-            newLease.billingAccount().set(billingAccount);
-        }
+        BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
+        billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
+        billingAccount.billCounter().setValue(0);
+        newLease.billingAccount().set(billingAccount);
 
         newLease.unit().set(selectedUnitId);
 

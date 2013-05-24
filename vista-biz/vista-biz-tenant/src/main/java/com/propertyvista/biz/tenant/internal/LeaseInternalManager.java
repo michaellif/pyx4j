@@ -28,7 +28,6 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.LeaseAbstractManager;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.Bill.BillType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -39,7 +38,7 @@ public class LeaseInternalManager extends LeaseAbstractManager {
 
     @Override
     protected BillingAccount createBillingAccount() {
-        InternalBillingAccount billingAccount = EntityFactory.create(InternalBillingAccount.class);
+        BillingAccount billingAccount = EntityFactory.create(BillingAccount.class);
         billingAccount.billingPeriod().setValue(BillingPeriod.Monthly);
         billingAccount.billCounter().setValue(0);
         return billingAccount;

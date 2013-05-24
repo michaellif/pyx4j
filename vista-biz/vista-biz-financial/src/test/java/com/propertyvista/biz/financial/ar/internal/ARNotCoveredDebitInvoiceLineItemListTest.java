@@ -29,7 +29,6 @@ import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ARPolicy.CreditDebitRule;
@@ -78,8 +77,7 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends LeaseFinancialTest
         setSysDate("18-May-2011");
         runBilling(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         //
         ARPolicy policy = getDataModel(ARPolicyDataModel.class).getItem(0);
@@ -87,15 +85,14 @@ public class ARNotCoveredDebitInvoiceLineItemListTest extends LeaseFinancialTest
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(
-                retrieveLease().billingAccount().<InternalBillingAccount> cast());
+        List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
 
         policy = getDataModel(ARPolicyDataModel.class).getItem(0);
         policy.creditDebitRule().setValue(CreditDebitRule.oldestDebtFirst);
         Persistence.service().persist(policy);
         Persistence.service().commit();
 
-        debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount().<InternalBillingAccount> cast());
+        debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(retrieveLease().billingAccount());
 
     }
 

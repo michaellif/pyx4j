@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface PaymentRecordExternal extends IEntity {
@@ -33,7 +33,7 @@ public interface PaymentRecordExternal extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    InternalBillingAccount billingAccount();
+    BillingAccount billingAccount();
 
     PaymentRecord paymentRecord();
 

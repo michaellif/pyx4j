@@ -19,7 +19,7 @@ import java.util.Map;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.policy.framework.PolicyNode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -59,7 +59,7 @@ public interface DepositFacade {
     /*
      * Create DepositLifecycle wrapper on supplied Deposit
      */
-    public DepositLifecycle createDepositLifecycle(Deposit deposit, InternalBillingAccount billingAccount);
+    public DepositLifecycle createDepositLifecycle(Deposit deposit, BillingAccount billingAccount);
 
     /*
      * Retrieves corresponding Deposit for DepositLifecycle wrapper

@@ -21,7 +21,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
@@ -38,7 +37,7 @@ public class TransactionHistoryTester extends Tester {
 
     public TransactionHistoryTester(BillingAccount billingAccount) {
         super();
-        InternalBillingAccount internalBillingAccount = billingAccount.<InternalBillingAccount> cast();
+        BillingAccount internalBillingAccount = billingAccount;
         transactionHistory = ServerSideFactory.create(ARFacade.class).getTransactionHistory(internalBillingAccount);
         notCoveredDebitInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(internalBillingAccount);
         notConsumedCreditInvoiceLineItems = ServerSideFactory.create(ARFacade.class).getNotConsumedCreditInvoiceLineItems(internalBillingAccount);

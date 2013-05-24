@@ -37,7 +37,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 
 public interface DepositLifecycle extends IEntity {
 
@@ -61,7 +61,7 @@ public interface DepositLifecycle extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
-    InternalBillingAccount billingAccount();
+    BillingAccount billingAccount();
 
     @OrderColumn()
     IPrimitive<Integer> orderInParent();

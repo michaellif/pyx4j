@@ -44,7 +44,6 @@ import com.propertyvista.crm.server.services.lease.common.LeaseTermCrudServiceIm
 import com.propertyvista.crm.server.services.lease.common.LeaseViewerCrudServiceBaseImpl;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -100,9 +99,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
 
         if (!dto.billingAccount().isNull()) {
             dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));
-            if (dto.billingAccount().getInstanceValueClass().equals(InternalBillingAccount.class)) {
-                dto.carryforwardBalance().setValue(dto.billingAccount().<InternalBillingAccount> cast().carryforwardBalance().getValue());
-            }
+            dto.carryforwardBalance().setValue(dto.billingAccount().carryforwardBalance().getValue());
         }
     }
 

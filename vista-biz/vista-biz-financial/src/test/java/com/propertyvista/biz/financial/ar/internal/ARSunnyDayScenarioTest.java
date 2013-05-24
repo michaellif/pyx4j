@@ -31,7 +31,6 @@ import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.TransactionHistoryTester;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @Ignore
@@ -55,8 +54,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
         setSysDate("18-Mar-2011");
         approveApplication(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         // @formatter:off
         new TransactionHistoryTester(retrieveLease().billingAccount()).
@@ -87,8 +85,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
         receiveAndPostPayment("19-Mar-2011", "1067.01");
         receiveAndPostPayment("20-Mar-2011", "100.00");
@@ -146,8 +143,7 @@ public class ARSunnyDayScenarioTest extends LeaseFinancialTestBase {
 
         runBilling(true);
 
-        printTransactionHistory(ServerSideFactory.create(ARFacade.class)
-                .getTransactionHistory(retrieveLease().billingAccount().<InternalBillingAccount> cast()));
+        printTransactionHistory(ServerSideFactory.create(ARFacade.class).getTransactionHistory(retrieveLease().billingAccount()));
 
     }
 

@@ -52,7 +52,6 @@ import com.propertyvista.biz.tenant.yardi.YardiLeaseIntegrationAgent;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiBillingAccount;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.PropertyContact;
@@ -265,7 +264,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
 
                 // update charges and payments
-                final YardiBillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
+                final BillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
                 new YardiChargeProcessor().removeOldCharges(account);
                 new YardiPaymentProcessor().removeOldPayments(account);
 
@@ -345,6 +344,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("LeaseCharges: import complete.");
     }
 
+    // TODO - we may need to request yardi charges for one more cycle forward
     List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
             throws YardiServiceException, RemoteException {
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
@@ -353,10 +353,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         for (String propertyCode : propertyCodes) {
             BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
             BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
-            // don't query yardi after pad cut-off date
-            if (!now.before(nextCycle.targetPadGenerationDate().getValue())) {
-                continue;
-            }
             ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, nextCycle.billingCycleStartDate().getValue());
             if (residentTransactions != null) {
                 transactions.add(residentTransactions);

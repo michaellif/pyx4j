@@ -32,7 +32,6 @@ import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
-import com.propertyvista.domain.financial.InternalBillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
@@ -87,8 +86,7 @@ class BillingCycleManager {
     protected BillingCycle getLeaseFirstBillingCycle(Lease lease) {
         BillingAccount billingAccount = lease.billingAccount();
         LogicalDate firstCycleStartDate = null;
-        if (billingAccount.getInstanceValueClass().equals(InternalBillingAccount.class)
-                && !billingAccount.<InternalBillingAccount> cast().carryforwardBalance().isNull()) {
+        if (!billingAccount.carryforwardBalance().isNull()) {
             if (!lease.leaseFrom().getValue().before(lease.creationDate().getValue())) {
                 throw new BillingException("Existing lease start date should be earlier than creation date");
             }

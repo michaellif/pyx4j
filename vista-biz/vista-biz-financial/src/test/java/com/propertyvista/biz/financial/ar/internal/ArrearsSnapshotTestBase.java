@@ -30,7 +30,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.InternalBillingAccount;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
@@ -158,8 +158,8 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
         return new LogicalDate(DateUtils.detectDateformat(date));
     }
 
-    private InternalBillingAccount billingAccount() {
-        return Persistence.service().<Lease> retrieve(Lease.class, getLease().getPrimaryKey()).billingAccount().<InternalBillingAccount> cast();
+    private BillingAccount billingAccount() {
+        return Persistence.service().<Lease> retrieve(Lease.class, getLease().getPrimaryKey()).billingAccount();
     }
 
 }
