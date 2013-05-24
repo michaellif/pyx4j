@@ -64,6 +64,7 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -381,6 +382,25 @@ public class MessageTemplates {
         //@formatter:on
         email.setHtmlBody(wrapAdminHtml(emailBody));
 
+        return email;
+    }
+
+    public static MailMessage createPapSuspentionNotificationEmail(Lease lease) {
+        MailMessage email = new MailMessage();
+        email.setSender(getSender());
+
+        String emailBody = "";
+        try {
+            emailBody = IOUtils.getTextResource("email/pap-suspention-notification.html");
+        } catch (IOException e) {
+            throw new Error("Failed to load email template for nsf notifications", e);
+        }
+
+        String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
+        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey()));
+        emailBody.replace("${leaseUrl}", leaseUrl);
+        email.setSubject(i18n.tr("PAP suspention alrert"));
+        email.setHtmlBody(wrapAdminHtml(emailBody));
         return email;
     }
 

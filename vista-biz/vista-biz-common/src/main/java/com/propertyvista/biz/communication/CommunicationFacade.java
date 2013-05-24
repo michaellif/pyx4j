@@ -24,6 +24,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.tenant.Customer;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -70,6 +71,8 @@ public interface CommunicationFacade {
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
     void sendPaymentReversalWithNsfNotification(List<String> targetEmail, YardiReceiptReversal paymentReversal);
+
+    void sendPapSuspentionNotification(List<String> targetEmail, Lease lease);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 
