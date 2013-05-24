@@ -34,13 +34,16 @@ class PreauthorizedPaymentAgreementMananger {
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
         preauthorizedPayment.tenant().set(tenantId);
+        Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
+
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
             PreauthorizedPayment origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
 
             if (!EntityGraph.fullyEqualValues(origPreauthorizedPayment, preauthorizedPayment)) {
                 // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
-                LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(tenantId.lease());
+                LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
+                        preauthorizedPayment.tenant().lease());
                 if (SystemDateManager.getDate().after(cutOffDate)) {
                     origPreauthorizedPayment.expiring().setValue(cutOffDate);
                     Persistence.service().merge(origPreauthorizedPayment);
@@ -61,12 +64,12 @@ class PreauthorizedPaymentAgreementMananger {
                     }
                 }
                 preauthorizedPayment.effectiveFrom().setValue(
-                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(tenantId.lease()));
+                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease()));
 
             }
         } else {
             preauthorizedPayment.effectiveFrom().setValue(
-                    ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(tenantId.lease()));
+                    ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease()));
 
         }
 
