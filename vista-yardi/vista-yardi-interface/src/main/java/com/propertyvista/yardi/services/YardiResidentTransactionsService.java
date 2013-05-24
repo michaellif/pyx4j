@@ -39,6 +39,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
@@ -57,8 +58,10 @@ import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
@@ -154,7 +157,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         if (reversal.applyNSF().isBooleanTrue()) {
             try {
                 List<String> targetEmails = getEmailsForNsfNotification(reversal);
-                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmails, reversal);
+                if (!targetEmails.isEmpty()) {
+                    ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmails, reversal);
+                } else {
+                    throw new Exception(i18n.tr("Found no email addresses for NSF notifications (Add building property contact with name 'NSF_NOTIFICATIONS'"));
+                }
             } catch (Throwable e) {
                 log.error("failed to send email", e);
             }
@@ -419,8 +426,24 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
             return emails;
         } else {
-            throw new Exception(i18n.tr("Email address for NSF notification for payment record '" + receiptReversal.paymentRecord().getPrimaryKey()
-                    + "' was not defined (define a contact named 'NSF_NOTIFICATIONS' at building/marketing/property_contacts)"));
+            return getPmcAccountOwnerEmails();
         }
+    }
+
+    private List<String> getPmcAccountOwnerEmails() {
+        List<String> accountOwnerEmails = new ArrayList<String>();
+
+        EntityQueryCriteria<CrmUserCredential> criteria = EntityQueryCriteria.create(CrmUserCredential.class);
+        criteria.eq(criteria.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner);
+        List<CrmUserCredential> accountOwnerCredentials = Persistence.service().query(criteria);
+        for (CrmUserCredential accountOwnerCredential : accountOwnerCredentials) {
+            Persistence.service().retrieve(accountOwnerCredential.user());
+            if (!accountOwnerCredential.user().email().isNull()) {
+                accountOwnerEmails.add(accountOwnerCredential.user().email().getValue());
+            }
+        }
+
+        return accountOwnerEmails;
+
     }
 }
