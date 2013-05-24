@@ -398,7 +398,7 @@ public class MessageTemplates {
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
         String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey()));
-        emailBody.replace("${leaseUrl}", leaseUrl);
+        emailBody = emailBody.replace("${leaseUrl}", leaseUrl);
         email.setSubject(i18n.tr("PAP suspention alrert"));
         email.setHtmlBody(wrapAdminHtml(emailBody));
         return email;
