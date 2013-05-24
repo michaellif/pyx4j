@@ -29,6 +29,7 @@ import com.propertyvista.domain.maintenance.YardiServiceRequest;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
 import com.propertyvista.domain.ref.City;
@@ -225,6 +226,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(PaymentRecord.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(LeasePaymentMethod.class, CRUD));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(PreauthorizedPayment.class, CRUD));
+        grant(VistaCustomerBehavior.Tenant, new EntityPermission(PreauthorizedPaymentCoveredItem.class, CRUD));
 
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(YardiServiceRequest.class, CRUD));
 

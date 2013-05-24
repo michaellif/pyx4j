@@ -30,7 +30,6 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
         setFormat(new IFormat<BillableItem>() {
             @Override
             public String format(BillableItem value) {
-
                 if (value != null) {
                     String res = "";
 
@@ -41,9 +40,9 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
                     }
 
                     return res;
-                } else {
-                    return null;
                 }
+
+                return null;
             }
 
             @Override

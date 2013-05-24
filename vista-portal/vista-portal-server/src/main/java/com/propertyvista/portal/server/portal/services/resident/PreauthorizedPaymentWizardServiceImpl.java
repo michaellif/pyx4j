@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.rpc.shared.ServiceExecution;
 
@@ -136,7 +137,9 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     @Override
     public void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue) {
         PreauthorizedPayment entity = createDBO(currentValue);
+
         updateCoveredItems(entity, currentValue);
+
         callback.onSuccess(entity);
     }
 
@@ -153,9 +156,25 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     private CoveredItemDTO createCoveredItemDTO(BillableItem billableItem) {
         CoveredItemDTO item = EntityFactory.create(CoveredItemDTO.class);
 
+        // calculate already covered amount by other tenants/paps: 
+        EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
+                PreauthorizedPaymentCoveredItem.class);
+        criteria.eq(criteria.proto().pap().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub());
+        criteria.eq(criteria.proto().billableItem(), billableItem);
+        criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
+        criteria.isNull(criteria.proto().pap().expiring());
+
+        item.covered().setValue(BigDecimal.ZERO);
+        for (PreauthorizedPaymentCoveredItem papci : Persistence.secureQuery(criteria)) {
+            item.covered().setValue(item.covered().getValue().add(papci.amount().getValue()));
+        }
+
+        BigDecimal itemPrice = billableItem.agreedPrice().getValue();
+
+        item.amount().setValue(itemPrice.subtract(item.covered().getValue()));
+        item.percent().setValue(item.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
+
         item.billableItem().set(billableItem);
-        item.amount().setValue(billableItem.agreedPrice().getValue());
-        item.percent().setValue(item.amount().getValue().divide(billableItem.agreedPrice().getValue(), 2, RoundingMode.FLOOR));
 
         return item;
     }
@@ -163,7 +182,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
         entity.coveredItems().clear();
         for (CoveredItemDTO item : dto.coveredItemsDTO()) {
-            if (item.amount().getValue().compareTo(BigDecimal.ZERO) >= 0) {
+            if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {
                 entity.coveredItems().add(item.duplicate(PreauthorizedPaymentCoveredItem.class));
             }
         }
