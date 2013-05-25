@@ -31,9 +31,12 @@ public class YardiLeaseIntegrationAgent {
 
     public static BillingCycle getBillingCycleForDate(String propertyCode, LogicalDate date) {
         // get building
-        EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
-        crit.eq(crit.proto().propertyCode(), propertyCode);
-        Building building = Persistence.service().retrieve(crit);
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().propertyCode(), propertyCode);
+        Building building = Persistence.service().retrieve(criteria);
+        if (building == null) {
+            throw new Error("Building '" + propertyCode + "' not found");
+        }
         // create dummy lease
         Lease yardiLease = EntityFactory.create(Lease.class);
         yardiLease.billingAccount().set(EntityFactory.create(BillingAccount.class));

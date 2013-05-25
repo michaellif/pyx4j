@@ -62,7 +62,7 @@ class PolicyManager {
             node = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         }
         if (node == null || node.isNull()) {
-            throw new IllegalArgumentException("PolicyNode must not be null for policy " + policyClass);
+            throw new IllegalArgumentException("PolicyNode must not be null for policy " + policyClass.getSimpleName());
         }
 
         PolicyNode currentNode = node;
