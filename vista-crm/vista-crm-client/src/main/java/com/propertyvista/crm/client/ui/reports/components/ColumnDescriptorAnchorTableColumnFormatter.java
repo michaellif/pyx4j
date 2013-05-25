@@ -26,8 +26,15 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
 
     protected final ColumnDescriptor columnDescriptor;
 
+    private final boolean linkOptional;
+
     public ColumnDescriptorAnchorTableColumnFormatter(ColumnDescriptor columnDescriptor) {
+        this(columnDescriptor, false);
+    }
+
+    public ColumnDescriptorAnchorTableColumnFormatter(ColumnDescriptor columnDescriptor, boolean linkOptional) {
         this.columnDescriptor = columnDescriptor;
+        this.linkOptional = linkOptional;
     }
 
     @Override
@@ -36,14 +43,21 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
     }
 
     @Override
-    public SafeHtml formatContent(IEntity entity) {//@formatter:off
-        String url = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, makePlace(entity));
-        return new SafeHtmlBuilder()
+    public SafeHtml formatContent(IEntity entity) {
+        if (linkOptional && entity.id().isNull()) {
+            return new SafeHtmlBuilder().appendEscaped(columnDescriptor.convert(entity)).toSafeHtml();
+        } else {
+            //@formatter:off
+            String url = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, makePlace(entity));
+            return new SafeHtmlBuilder()
                 .appendHtmlConstant("<a href=\"" + url + "\">")
                 .appendEscaped(columnDescriptor.convert(entity))
                 .appendHtmlConstant("</a>")
                 .toSafeHtml();
-    }//@formatter:on
+            //@formatter:on
+        }
+
+    }
 
     protected abstract CrudAppPlace makePlace(IEntity entity);
 }
