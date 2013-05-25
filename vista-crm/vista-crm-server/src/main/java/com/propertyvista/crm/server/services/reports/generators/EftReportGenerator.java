@@ -91,14 +91,13 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
-
     }
 
     @Override
     public ExportedReport export(Serializable report) {
+        @SuppressWarnings("unchecked")
         Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) report;
-        // TODO convert to excel sheet here:
-        return new ExportedReport("blablabla.txt", "text/html", "blablabla".getBytes());
+        return new EftReportExport().createReport(paymentRecords);
     }
 
     private EntityQueryCriteria<PaymentRecord> makeCriteria(EftReportMetadata reportMetadata) {
