@@ -15,6 +15,7 @@ package com.propertyvista.yardi.services;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -259,9 +260,9 @@ public class YardiLeaseProcessor {
         BillableItem billableItem = EntityFactory.create(BillableItem.class);
         billableItem.uid().setValue(detail.getChargeCode());
         billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
-        billableItem.updated().setValue(new LogicalDate(SystemDateManager.getDate()));
-        billableItem.effectiveDate().setValue(new LogicalDate(detail.getServiceFromDate()));
-        billableItem.expirationDate().setValue(new LogicalDate(detail.getServiceToDate()));
+        billableItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
+        billableItem.effectiveDate().setValue(getLogicalDate(detail.getServiceFromDate()));
+        billableItem.expirationDate().setValue(getLogicalDate(detail.getServiceToDate()));
         billableItem.description().setValue(getLeaseChargeDescription(detail));
 
         YardiLeaseChargeData extraData = EntityFactory.create(YardiLeaseChargeData.class);
@@ -269,6 +270,10 @@ public class YardiLeaseProcessor {
         billableItem.extraData().set(extraData);
 
         return billableItem;
+    }
+
+    private LogicalDate getLogicalDate(Date date) {
+        return date == null ? null : new LogicalDate(date);
     }
 
     private String getLeaseChargeDescription(ChargeDetail detail) {

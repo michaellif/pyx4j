@@ -50,6 +50,7 @@ import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.biz.tenant.yardi.YardiLeaseIntegrationAgent;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -354,6 +355,14 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     // TODO - we may need to request yardi charges for one more cycle forward
     List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
             throws YardiServiceException, RemoteException {
+        // Make sure YardiChargeCodes have been configured
+        EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
+        criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
+        criteria.isNotNull(criteria.proto().yardiChargeCodes());
+        if (Persistence.service().count(criteria) < 1) {
+            throw new YardiServiceException("Yardi Charge Codes not configured");
+        }
+
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
 
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
