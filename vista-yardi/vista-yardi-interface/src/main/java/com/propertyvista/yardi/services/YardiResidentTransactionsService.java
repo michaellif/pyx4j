@@ -145,6 +145,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
         }
+        // import lease charges
+        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+        BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
+        ResidentTransactions leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate()
+                .getValue());
+        importLeaseCharges(leaseCharges, null);
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
@@ -322,7 +329,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 // grab propertyCode from the first available ChargeDetail element
                 final String propertyCode = property.getRTCustomer().get(0).getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()
                         .getPropertyPrimaryID();
-                executionMonitor.addProcessedEvent("Building");
+                if (executionMonitor != null) {
+                    executionMonitor.addProcessedEvent("Building");
+                }
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     String customerId = null;
                     try {
@@ -341,11 +350,20 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             }
                         });
                     } catch (Throwable t) {
-                        executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", customerId), t);
+                        String msg = SimpleMessageFormat.format("Lease for customer {0}", customerId);
+                        if (executionMonitor != null) {
+                            executionMonitor.addErredEvent("Lease", msg, t);
+                        } else {
+                            log.warn(msg, t);
+                        }
                     }
                 }
             } catch (Throwable t) {
-                executionMonitor.addErredEvent("Building", t);
+                if (executionMonitor != null) {
+                    executionMonitor.addErredEvent("Building", t);
+                } else {
+                    log.warn("Building", t);
+                }
             }
 
         }
