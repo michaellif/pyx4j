@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi.merger;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -83,20 +84,27 @@ public class LeaseMerger {
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
     }
 
-    public boolean mergeBillableItem(BillableItem item, Lease lease) {
-        if (//@formatter:off
-                itemsEqual(item, lease.currentTerm().version().leaseProducts().serviceItem()) ||
-                findBillableItem(item, lease.currentTerm().version().leaseProducts().featureItems()) != null
-        ) {//@formatter:on
-            return false;
+    public boolean mergeBillableItems(List<BillableItem> items, Lease lease) {
+        boolean modified = false;
+        List<BillableItem> lookupList = new ArrayList<BillableItem>(lease.currentTerm().version().leaseProducts().featureItems());
+        for (BillableItem item : items) {
+            if (itemsEqual(item, lease.currentTerm().version().leaseProducts().serviceItem())) {
+                continue;
+            }
+            BillableItem found = findBillableItem(item, lookupList);
+            if (found != null) {
+                lookupList.remove(found);
+                continue;
+            }
+            // add new item
+            if (isServiceItem(item)) {
+                lease.currentTerm().version().leaseProducts().serviceItem().set(item);
+            } else {
+                lease.currentTerm().version().leaseProducts().featureItems().add(item);
+            }
+            modified = true;
         }
-        // add new item
-        if (isServiceItem(item)) {
-            lease.currentTerm().version().leaseProducts().serviceItem().set(item);
-        } else {
-            lease.currentTerm().version().leaseProducts().featureItems().add(item);
-        }
-        return true;
+        return modified;
     }
 
     public BillableItem findBillableItem(BillableItem item, List<BillableItem> items) {

@@ -179,18 +179,13 @@ public class YardiLeaseProcessor {
         log.info("      Updating billable item");
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         List<BillableItem> newItems = new ArrayList<BillableItem>();
-        boolean modified = false;
         for (Transactions tr : transactions) {
             if (tr == null || tr.getCharge() == null) {
                 continue;
             }
-            BillableItem item = createBillableItem(tr.getCharge().getDetail());
-            if (new LeaseMerger().mergeBillableItem(item, lease)) {
-                modified = true;
-            }
-            newItems.add(item);
+            newItems.add(createBillableItem(tr.getCharge().getDetail()));
         }
-        if (modified) {
+        if (new LeaseMerger().mergeBillableItems(newItems, lease)) {
             // terminate unmatched features - set expiration date at the end of billing cycle
             LogicalDate now = new LogicalDate(SystemDateManager.getDate());
             BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
