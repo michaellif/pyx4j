@@ -28,7 +28,7 @@ public class DevYardiCredentials {
             cr.username().setValue("sa");
             cr.credential().setValue("Vista2012!");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
-            cr.database().setValue("sl_0507");
+            cr.database().setValue("sl_0422");
         } else if (false) {
             cr.propertyCode().setValue("prvista2");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
