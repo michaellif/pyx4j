@@ -58,6 +58,13 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
+        -- admin_pmc_payment_method
+        
+        ALTER TABLE admin_pmc_payment_method ADD COLUMN updated TIMESTAMP;
+        
+        -- admin_pmc_yardi_credential
+        
+        ALTER TABLE admin_pmc_yardi_credential ALTER COLUMN property_code TYPE VARCHAR(2048);
        
        
         /**
