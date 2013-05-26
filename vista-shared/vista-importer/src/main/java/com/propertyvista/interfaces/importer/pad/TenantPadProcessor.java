@@ -491,8 +491,9 @@ public class TenantPadProcessor {
             }
             double estimatedChargeSplit = 0;
             if (padFileModel.charge().isNull()) {
-                double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
-
+                BigDecimal charge = DomainUtil.roundMoney(new BigDecimal(padFileModel.estimatedCharge().getValue()));
+                padFileModel._processorInformation().chargeAmount().setValue(charge);
+                double estimatedCharge = charge.doubleValue();
                 if (!padFileModel.percent().isNull()) {
                     double percent = Double.parseDouble(padFileModel.percent().getValue());
                     estimatedChargeSplit = percent * estimatedCharge / 100.0;
@@ -507,8 +508,10 @@ public class TenantPadProcessor {
                     chargeCodes.add(uniqueChargeCode(padFileModel));
                 }
             } else {
-                padFileModel._processorInformation().chargeEftAmount().setValue(DomainUtil.roundMoney(new BigDecimal(padFileModel.charge().getValue())));
-                estimatedChargeSplit = Double.parseDouble(padFileModel.charge().getValue());
+                BigDecimal charge = DomainUtil.roundMoney(new BigDecimal(padFileModel.charge().getValue()));
+                padFileModel._processorInformation().chargeAmount().setValue(charge);
+                padFileModel._processorInformation().chargeEftAmount().setValue(charge);
+                estimatedChargeSplit = charge.doubleValue();
                 estimatedChargeTotal += estimatedChargeSplit;
             }
 
@@ -821,7 +824,7 @@ public class TenantPadProcessor {
             for (BillableItem billableItem : billableItems) {
                 if (!charge.chargeCode().getValue().equals(billableItem.extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue())) {
                     continue;
-                } else if (charge._processorInformation().chargeEftAmount().getValue().compareTo(billableItem.agreedPrice().getValue()) != 0) {
+                } else if (charge._processorInformation().chargeAmount().getValue().compareTo(billableItem.agreedPrice().getValue()) != 0) {
                     continue;
                 } else {
                     found = true;
@@ -839,7 +842,7 @@ public class TenantPadProcessor {
             }
 
             if (!found) {
-                throw new Error("BillableItem " + charge.chargeCode().getValue() + " " + charge._processorInformation().chargeEftAmount().getValue()
+                throw new Error("BillableItem " + charge.chargeCode().getValue() + " " + charge._processorInformation().chargeAmount().getValue()
                         + "$ not found");
             }
         }

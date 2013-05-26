@@ -65,6 +65,8 @@ public interface PadProcessorInformation extends IEntity {
 
     IPrimitive<Double> estimatedChargeSplit();
 
+    IPrimitive<BigDecimal> chargeAmount();
+
     IPrimitive<BigDecimal> chargeEftAmount();
 
     IPrimitive<Double> accountChargeTotal();
