@@ -21,7 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,12 +75,15 @@ public class TenantPadProcessor {
 
         public int invalid;
 
+        public int removed;
+
         public TenantPadCounter() {
             this.notFound = 0;
             this.imported = 0;
             this.unchanged = 0;
             this.updated = 0;
             this.invalid = 0;
+            this.removed = 0;
         }
 
         public void add(TenantPadCounter counters) {
@@ -90,6 +92,7 @@ public class TenantPadProcessor {
             this.updated += counters.updated;
             this.notFound += counters.notFound;
             this.invalid += counters.invalid;
+            this.removed += counters.removed;
         }
     }
 
@@ -130,6 +133,10 @@ public class TenantPadProcessor {
 
         String message = SimpleMessageFormat.format("{0} payment methods created, {1} unchanged, {2} amounts updated", counters.imported, counters.unchanged,
                 counters.updated);
+        if (counters.removed != 0) {
+            message += SimpleMessageFormat.format(", {0} removed old pap records", counters.removed);
+        }
+
         if (counters.invalid != 0 || counters.notFound != 0) {
             message += SimpleMessageFormat.format(", {0} invalid records, {1} tenants not found", counters.invalid, counters.notFound);
         }
@@ -214,14 +221,14 @@ public class TenantPadProcessor {
      * TODO Load existing LeasePaymentMethods.
      * Calculate proper percentage with consideration of rounding
      */
-    private void processLeasePads(final Lease lease, List<PadFileModel> leasePadEntities, TenantPadCounter counters) {
+    private void processLeasePads(final Lease lease, List<PadFileModel> leasePadEntities, final TenantPadCounter counters) {
         if (!validateLeasePads(leasePadEntities, counters)) {
             return;
         }
         correctPadParsing(leasePadEntities);
         calulateLeasePercents(leasePadEntities);
 
-        final AtomicBoolean first = new AtomicBoolean(true);
+        final List<PreauthorizedPayment> createdOrExistingPaps = new ArrayList<PreauthorizedPayment>();
 
         for (final PadFileModel padFileModel : leasePadEntities) {
             if ((!padFileModel._processorInformation().status().isNull())
@@ -229,22 +236,20 @@ public class TenantPadProcessor {
                 continue;
             }
 
-            TenantPadCounter saveCounter;
+            final TenantPadCounter saveCounter = new TenantPadCounter();
             try {
-                saveCounter = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<TenantPadCounter, RuntimeException>() {
+                PreauthorizedPayment pap = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PreauthorizedPayment, RuntimeException>() {
 
                     @Override
-                    public TenantPadCounter execute() throws RuntimeException {
-                        if (first.get()) {
-                            //removePrevious
-                        }
-                        return savePad(padFileModel);
+                    public PreauthorizedPayment execute() throws RuntimeException {
+                        return savePad(padFileModel, saveCounter);
                     }
                 });
 
                 counters.add(saveCounter);
-                first.set(false);
-
+                if (pap != null) {
+                    createdOrExistingPaps.add(pap);
+                }
             } catch (Throwable e) {
                 padFileModel._import().invalid().setValue(true);
                 padFileModel._import().message().setValue(e.getMessage());
@@ -252,6 +257,27 @@ public class TenantPadProcessor {
                 counters.invalid++;
             }
         }
+
+        // Remove other PreauthorizedPayment on this lease
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+            @Override
+            public Void execute() throws RuntimeException {
+
+                EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+                criteria.eq(criteria.proto().tenant().lease(), lease);
+                criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+                for (PreauthorizedPayment pap : Persistence.service().query(criteria)) {
+                    if (!createdOrExistingPaps.contains(pap)) {
+                        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+                        counters.removed++;
+                    }
+                }
+
+                return null;
+            }
+        });
+
     }
 
     private void correctPadParsing(List<PadFileModel> leasePadEntities) {
@@ -653,8 +679,7 @@ public class TenantPadProcessor {
 
     }
 
-    private TenantPadCounter savePad(PadFileModel padFileModel) {
-        TenantPadCounter counters = new TenantPadCounter();
+    private PreauthorizedPayment savePad(PadFileModel padFileModel, TenantPadCounter counters) {
 
         Tenant tenant = padFileModel._processorInformation().tenant();
 
@@ -668,6 +693,8 @@ public class TenantPadProcessor {
         } else {
             details.nameOn().setValue(tenant.customer().person().name().getStringView());
         }
+
+        PreauthorizedPayment correspondingPap = null;
 
         Persistence.service().retrieve(tenant.customer());
         Persistence.service().retrieveMember(tenant.customer().paymentMethods());
@@ -687,14 +714,15 @@ public class TenantPadProcessor {
                 boolean sameAmountPapFound = false;
                 for (PreauthorizedPayment pap : paps) {
                     if (!isSameAmount(pap, padFileModel)) {
-                        pap.isDeleted().setValue(Boolean.TRUE);
-                        Persistence.service().persist(pap);
+                        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
                     } else {
                         sameAmountPapFound = true;
+                        correspondingPap = pap;
                     }
                 }
                 if (!sameAmountPapFound) {
-                    Persistence.service().persist(createPAP(existingPaymentMethod, padFileModel, tenant));
+                    Persistence.service().persist(correspondingPap = createPAP(existingPaymentMethod, padFileModel, tenant));
+                    counters.removed++;
                     counters.updated++;
                 } else {
                     counters.unchanged++;
@@ -718,11 +746,11 @@ public class TenantPadProcessor {
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(method, tenant.lease().unit().building());
 
             if (!padFileModel.charge().isNull() || !padFileModel._processorInformation().percent().isNull()) {
-                Persistence.service().persist(createPAP(method, padFileModel, tenant));
+                Persistence.service().persist(correspondingPap = createPAP(method, padFileModel, tenant));
             }
             counters.imported++;
         }
-        return counters;
+        return correspondingPap;
     }
 
     private LeasePaymentMethod retrievePaymentMethod(Customer customer, EcheckInfo newInfo) {
