@@ -21,6 +21,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -213,12 +214,14 @@ public class TenantPadProcessor {
      * TODO Load existing LeasePaymentMethods.
      * Calculate proper percentage with consideration of rounding
      */
-    private void processLeasePads(Lease lease, List<PadFileModel> leasePadEntities, TenantPadCounter counters) {
+    private void processLeasePads(final Lease lease, List<PadFileModel> leasePadEntities, TenantPadCounter counters) {
         if (!validateLeasePads(leasePadEntities, counters)) {
             return;
         }
         correctPadParsing(leasePadEntities);
         calulateLeasePercents(leasePadEntities);
+
+        final AtomicBoolean first = new AtomicBoolean(true);
 
         for (final PadFileModel padFileModel : leasePadEntities) {
             if ((!padFileModel._processorInformation().status().isNull())
@@ -232,10 +235,16 @@ public class TenantPadProcessor {
 
                     @Override
                     public TenantPadCounter execute() throws RuntimeException {
+                        if (first.get()) {
+                            //removePrevious
+                        }
                         return savePad(padFileModel);
                     }
                 });
+
                 counters.add(saveCounter);
+                first.set(false);
+
             } catch (Throwable e) {
                 padFileModel._import().invalid().setValue(true);
                 padFileModel._import().message().setValue(e.getMessage());
@@ -355,30 +364,6 @@ public class TenantPadProcessor {
     }
 
     static void calulateLeasePercents(List<PadFileModel> leasePadEntities) {
-        if (leasePadEntities.size() == 1) {
-            // Split is not required
-            PadFileModel padFileModel = leasePadEntities.get(0);
-            if (!isPapApplicable(padFileModel)) {
-                return;
-            }
-
-            if (!padFileModel.percent().isNull()) {
-                BigDecimal percent = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100));
-                BigDecimal percentRound = percent.setScale(PadProcessorInformation.PERCENT_SCALE, BigDecimal.ROUND_HALF_UP);
-                padFileModel._processorInformation().percent().setValue(percentRound);
-            } else if (padFileModel.charge().isNull()) {
-                //Default Yardi records import, first row, no percent only estimated charges
-                padFileModel._processorInformation().percent().setValue(BigDecimal.ONE);
-            }
-            if (!padFileModel.estimatedCharge().isNull()) {
-                padFileModel._processorInformation().accountChargeTotal().setValue(Double.valueOf(padFileModel.estimatedCharge().getValue()));
-                BigDecimal calulatedEftAmount = padFileModel._processorInformation().percent().getValue()
-                        .multiply(new BigDecimal(padFileModel._processorInformation().accountChargeTotal().getValue()));
-                padFileModel._processorInformation().calulatedEftTotalAmount().setValue(DomainUtil.roundMoney(calulatedEftAmount));
-            }
-            return;
-        }
-
         boolean allHaveChargeCode = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).chargeCode());
         boolean allHaveEstimatedCharge = allHaveMember(leasePadEntities, EntityFactory.getEntityPrototype(PadFileModel.class).estimatedCharge());
 
@@ -792,6 +777,10 @@ public class TenantPadProcessor {
         List<BillableItem> billableItems = new ArrayList<BillableItem>();
         billableItems.add(lease.currentTerm().version().leaseProducts().serviceItem());
         billableItems.addAll(lease.currentTerm().version().leaseProducts().featureItems());
+
+        if (padFileModel._processorInformation().accountCharges().size() == 0) {
+            throw new Error("Charges not created for PAP");
+        }
 
         for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
             boolean found = false;
