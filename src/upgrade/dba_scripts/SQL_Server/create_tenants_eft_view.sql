@@ -3,13 +3,13 @@
 ***
 ***              @version $Revision$ ($Author$) $Date$
 ***
-***             View to export PAP from Yardi 
-*** 
+***             View to export PAP from Yardi
+***
 ***     =======================================================================================================================
 **/
 
 -- Adjust for the database in use
-USE sl_0422;
+USE sl_0507;
 
 DROP VIEW tenant_EFT_charges;
 
@@ -39,21 +39,21 @@ CREATE VIEW tenant_EFT_charges AS
 		t.SCITY,
 		t.SSTATE,
 		t.SZIPCODE,
-		pl.SADDR1 AS property_list  
-FROM CAMRULE C 
+		pl.SADDR1 AS property_list
+FROM CAMRULE C
 JOIN chargtyp ct ON (ct.hmy = c.HCHARGECODE)
 JOIN TENANT t ON (c.HTENANT = t.HMYPERSON)
 JOIN PROPERTY p ON (t.HPROPERTY = p.HMY)
 JOIN	ACHDATA e ON (t.HMYPERSON = e.HPERSON)
 LEFT JOIN ACHAllocation a ON (a.hCamRule = c.HMY AND a.hACHData = e.Hmy)
-JOIN tenstatus ts ON (t.ISTATUS = ts.istatus) 
+JOIN tenstatus ts ON (t.ISTATUS = ts.istatus)
 LEFT JOIN	LISTPROP lp ON (p.HMY = lp.HPROPERTY)
 LEFT JOIN	PROPERTY pl ON (lp.HPROPLIST = pl.HMY)
-LEFT JOIN PERSON r ON (e.hRoommate = r.HMY)  
-WHERE	(ISNULL(c.dtto,'01-MAY-2014') >= '01-MAY-2013' AND		c.DTFROM <= '01-MAY-2013')
+LEFT JOIN PERSON r ON (e.hRoommate = r.HMY)
+WHERE	(ISNULL(c.dtto,'01-JAN-2020') >= '01-JUN-2013' AND c.DTFROM <= '01-JUN-2013')
 AND		ts.status IN ('Current','Notice')
 AND		pl.SADDR1 LIKE '%Vista%'
-AND		e.SACCT NOT IN ('0','1') 
+AND		e.SACCT NOT IN ('0','1')
 );
 
 
