@@ -144,11 +144,18 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     private void fillCoveredItems(PreauthorizedPaymentDTO dto, LeaseProducts products) {
-        dto.coveredItemsDTO().add(createCoveredItemDTO(products.serviceItem()));
+        dto.total().setValue(BigDecimal.ZERO);
+
+        PreauthorizedPaymentCoveredItemDTO item = createCoveredItemDTO(products.serviceItem());
+        dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
+        dto.coveredItemsDTO().add(item);
+
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())) {
-                dto.coveredItemsDTO().add(createCoveredItemDTO(billableItem));
+                item = createCoveredItemDTO(billableItem);
+                dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
+                dto.coveredItemsDTO().add(item);
             }
         }
     }

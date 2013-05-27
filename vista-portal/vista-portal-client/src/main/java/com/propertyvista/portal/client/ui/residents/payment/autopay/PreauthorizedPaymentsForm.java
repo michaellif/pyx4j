@@ -121,7 +121,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 int row = -1;
 
                 content.setWidget(++row, 0, expirationWarning);
-
                 content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
 
                 content.setHR(++row, 0, 1);
@@ -135,6 +134,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 });
 
                 content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+                get(proto().coveredItems()).setViewable(true);
+                get(proto().coveredItems()).inheritViewable(false);
 
                 return content;
             }
@@ -144,7 +145,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                setEditable(getValue().expiring().isNull());
                 expirationWarning.setVisible(!getValue().expiring().isNull());
 
                 boolean isCurrentTenant = getValue().tenant().customer().user().getPrimaryKey().equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());

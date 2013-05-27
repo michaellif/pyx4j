@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -23,6 +25,7 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
@@ -65,6 +68,11 @@ public class PreauthorizedPaymentSubmittedServiceImpl extends EntityDtoBinder<Pr
         dto.leaseStatus().set(lease.status());
 
         dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(lease));
+
+        dto.total().setValue(BigDecimal.ZERO);
+        for (PreauthorizedPaymentCoveredItem item : dto.coveredItems()) {
+            dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
+        }
 
         callback.onSuccess(dto);
     }

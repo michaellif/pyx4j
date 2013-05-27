@@ -200,6 +200,8 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         // activate, actually, existing lease only:  
         if (leaseStatus == Status.ExistingLease) {
             ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
+//        } else if (leaseStatus == Status.NewLease ) {
+//            ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
         }
 
         Persistence.service().commit();

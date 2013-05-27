@@ -17,7 +17,6 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CDateLabel;
@@ -34,8 +33,6 @@ import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentSubmittedViewForm.class);
-
-    private final SimplePanel amountPlaceholder = new SimplePanel();
 
     public PreauthorizedPaymentSubmittedViewForm() {
         super(PreauthorizedPaymentDTO.class);
@@ -59,6 +56,7 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
                 new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
 
         content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total()), 10, 39).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelAlignment(Alignment.left)
                 .labelWidth(25).build());

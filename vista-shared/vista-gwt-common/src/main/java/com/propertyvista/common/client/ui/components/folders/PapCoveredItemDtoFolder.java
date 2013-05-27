@@ -41,12 +41,15 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto().billableItem(),"26em", i18n.tr("Lease Charge")),
+                new EntityFolderColumnDescriptor(proto().billableItem(),"25em", i18n.tr("Lease Charge")),
                 new EntityFolderColumnDescriptor(proto().billableItem().agreedPrice(),"6em", i18n.tr("Price"), true),
                 new EntityFolderColumnDescriptor(proto().covered(), "6em", true),
                 new EntityFolderColumnDescriptor(proto().amount(), "6em", i18n.tr("Payment")),
                 new EntityFolderColumnDescriptor(proto().percent(), "4em", true));
           //@formatter:on                
+    }
+
+    public void onAmontValueChange() {
     }
 
     @Override
@@ -80,6 +83,7 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
                     @Override
                     public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                         get(proto().percent()).setValue(event.getValue().divide(getValue().billableItem().agreedPrice().getValue(), 2, RoundingMode.FLOOR));
+                        onAmontValueChange();
                     }
                 });
             } else if (column.getObject() == proto().percent()) {

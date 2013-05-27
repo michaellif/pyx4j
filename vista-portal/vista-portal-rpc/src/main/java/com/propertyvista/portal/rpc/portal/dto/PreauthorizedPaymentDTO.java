@@ -13,9 +13,16 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -27,6 +34,13 @@ import com.propertyvista.dto.PaymentDataDTO;
 @ToStringFormat("")
 @ExtendsDBO(PreauthorizedPayment.class)
 public interface PreauthorizedPaymentDTO extends PaymentDataDTO, com.propertyvista.dto.PreauthorizedPaymentDTO {
+
+    @ReadOnly
+    @ToString(index = 10)
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    @Caption(name = "Payment total amount")
+    IPrimitive<BigDecimal> total();
 
     @Caption(name = "Your next automated payment is scheduled for")
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
