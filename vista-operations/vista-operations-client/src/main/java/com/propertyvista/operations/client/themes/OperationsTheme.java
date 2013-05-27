@@ -85,6 +85,7 @@ public class OperationsTheme extends VistaTheme {
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();
+        initMessageStyles();
 
         initSearchBoxStyles();
         initButtonStylesEx();

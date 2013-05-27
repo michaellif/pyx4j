@@ -17,10 +17,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
-public interface PreauthorizedPaymentListService extends AbstractListService<PreauthorizedPaymentItemDTO> {
+public interface PreauthorizedPaymentListService extends AbstractListService<PreauthorizedPaymentListDTO.ListItemDTO> {
 
     public void getData(AsyncCallback<PreauthorizedPaymentListDTO> callback);
 }

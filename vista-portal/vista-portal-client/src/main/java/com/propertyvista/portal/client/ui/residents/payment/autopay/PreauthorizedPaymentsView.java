@@ -15,18 +15,17 @@ package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
 public interface PreauthorizedPaymentsView extends IsWidget {
 
     interface Presenter {
 
-        void viewPaymentMethod(PreauthorizedPaymentItemDTO preauthorizedPayment);
+        void viewPaymentMethod(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment);
 
         void addPreauthorizedPayment();
 
-        void deletePreauthorizedPayment(PreauthorizedPaymentItemDTO preauthorizedPayment);
+        void deletePreauthorizedPayment(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment);
     }
 
     void populate(PreauthorizedPaymentListDTO preauthorizedPayments);

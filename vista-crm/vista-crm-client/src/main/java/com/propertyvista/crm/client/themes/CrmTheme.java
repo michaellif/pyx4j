@@ -108,6 +108,7 @@ public class CrmTheme extends VistaTheme {
         initGeneralStyles();
         initBodyStyles();
         initCellListStyle();
+        initMessageStyles();
 
         initSearchBoxStyles();
         initButtonStylesEx();
@@ -123,7 +124,6 @@ public class CrmTheme extends VistaTheme {
         initArrearsViewStyles();
 
         initSuggestBoxStyle();
-
         initKeywordBoxStyles();
 
         initWizardPanelStyles();

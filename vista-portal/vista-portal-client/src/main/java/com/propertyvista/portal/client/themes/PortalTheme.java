@@ -47,9 +47,12 @@ public class PortalTheme extends VistaTheme {
     public PortalTheme(Skin skin) {
         this.skin = skin;
         initStyles();
+
     }
 
     protected void initStyles() {
+        super.initGeneralStyles();
+
         addTheme(new HorizontalAlignCenterMixin());
 
         addTheme(new DefaultWidgetsTheme());
@@ -164,6 +167,7 @@ public class PortalTheme extends VistaTheme {
         initSiteViewStyles();
         initPropertyMarkerStyle();
         initSuggestBoxStyle();
+        initMessageStyles();
 
         initTenantInsuranceStyles(); // TODO move this to a theme class
     }

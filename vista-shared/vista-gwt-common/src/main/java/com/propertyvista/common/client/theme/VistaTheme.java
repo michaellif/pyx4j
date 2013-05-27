@@ -106,13 +106,6 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
-
-        style = new Style(".", StyleName.warningMessage);
-        style.addProperty("margin-left", "5em");
-        style.addProperty("font-size", "1.2em");
-        style.addProperty("font-weight", "bolder");
-        style.addProperty("color", "#C03A47");
-        addStyle(style);
     }
 
     protected void initBodyStyles() {
@@ -594,6 +587,14 @@ public class VistaTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0);
         addStyle(style);
 
+    }
+
+    protected void initMessageStyles() {
+        Style style = new Style(".", StyleName.warningMessage);
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("color", "#C03A47");
+        addStyle(style);
     }
 
 }
