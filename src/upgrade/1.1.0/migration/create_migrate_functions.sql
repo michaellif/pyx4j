@@ -243,6 +243,18 @@ BEGIN
                 
         END IF;
       
+        /**
+        ***     ----------------------------------------------------------------------------------------------------------
+        ***     Set Is_deleted to true for all yardi-enabled pmc
+        ***     ----------------------------------------------------------------------------------------------------------
+        **/
+        
+        IF EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
+                        ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
+        THEN
+                EXECUTE 'UPDATE '||v_schema_name||'.preauthorized_payment SET is_deleted = TRUE ';
+        END IF;
+      
         
         /**
         ***     ==========================================================================================================
