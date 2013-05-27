@@ -146,6 +146,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
     }
 
     private void assertAgingBuckets(AgingBuckets expected, AgingBuckets actual) {
+        assertEquals("bucket current", expected.bucketCurrent().getValue(), actual.bucketCurrent().getValue());
         assertEquals("bucket 30", expected.bucket30().getValue(), actual.bucket30().getValue());
         assertEquals("bucket 60", expected.bucket60().getValue(), actual.bucket60().getValue());
         assertEquals("bucket 90", expected.bucket90().getValue(), actual.bucket90().getValue());

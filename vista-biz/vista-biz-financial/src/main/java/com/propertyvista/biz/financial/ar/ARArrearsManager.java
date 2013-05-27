@@ -218,13 +218,12 @@ public class ARArrearsManager {
     private LeaseArrearsSnapshot takeArrearsSnapshot(BillingAccount billingAccount) {
         LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
 
+        LeaseAgingBuckets total = arrearsSnapshot.agingBuckets().get(0);
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
-        LeaseAgingBuckets total = arrearsSnapshot.agingBuckets().$();
         ARArreasManagerUtils.addInPlace(//@formatter:off
                         ARArreasManagerUtils.initAgingBuckets(total, null),
                         arrearsSnapshot.agingBuckets()
-        );//@formatter:on
-        arrearsSnapshot.agingBuckets().add(total);
+        );//@formatter:on        
 
         // FIXME what the hell is going on with the following two lines???
         arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
