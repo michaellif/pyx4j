@@ -48,7 +48,7 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
             Persistence.service().retrieve(tenant.leaseTermV());
             Persistence.service().retrieve(tenant.leaseTermV().holder().lease());
 
-            entityId = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenant.leaseTermV().holder().lease()).getPrimaryKey();
+            entityId = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(tenant.leaseTermV().holder().lease()).getPrimaryKey();
         }
         super.retrieve(callback, entityId, retrieveTraget);
     }
