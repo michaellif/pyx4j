@@ -53,7 +53,7 @@ public class PmcEditorActivity extends AbstractEditorActivity<PmcDTO> {
         entity.features().leases().setValue(Boolean.TRUE);
         entity.features().onlineApplication().setValue(Boolean.FALSE);
         entity.features().xmlSiteExport().setValue(Boolean.FALSE);
-        entity.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
+        entity.features().defaultProductCatalog().setValue(true);
         entity.features().yardiIntegration().setValue(Boolean.FALSE);
         entity.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 

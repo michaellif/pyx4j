@@ -91,7 +91,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 pmc.features().leases().setValue(Boolean.TRUE);
                 pmc.features().onlineApplication().setValue(Boolean.FALSE);
                 pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
-                pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
+                pmc.features().defaultProductCatalog().setValue(true);
 
                 //TODO remove this IF when tenantSure Is Ok to go Live!
                 if (VistaDeployment.isVistaProduction() && VistaTODO.tenantSureDisabledForProduction) {

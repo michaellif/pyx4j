@@ -30,7 +30,6 @@ import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.server.domain.PmcDocumentBlob;
 import com.propertyvista.shared.config.VistaDemo;
@@ -49,7 +48,7 @@ public class PmcCreatorDev {
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
         pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
-        pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
+        pmc.features().defaultProductCatalog().setValue(true);
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 

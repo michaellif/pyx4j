@@ -31,7 +31,6 @@ import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.ReservedPmcNames;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.CreatePMCRequestIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
@@ -86,7 +85,7 @@ public class CreatePmcRequestHandler extends AbstractRequestHandler<CreatePMCReq
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.FALSE);
         pmc.features().xmlSiteExport().setValue(Boolean.FALSE);
-        pmc.features().defaultProductCatalog().setValue(VistaTODO.VISTA_2256_Default_Product_Catalog);
+        pmc.features().defaultProductCatalog().setValue(true);
         pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
 
         // TODO For future
