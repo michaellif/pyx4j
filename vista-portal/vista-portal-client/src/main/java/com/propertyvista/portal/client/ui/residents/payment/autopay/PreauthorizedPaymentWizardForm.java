@@ -240,7 +240,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().equals(detailsStep)) {
-            switchTotal(detailsTotalHolder);
+            switchTotal(detailsTotalHolder, 38);
         } else if (event.getSelectedItem().equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
@@ -252,17 +252,17 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 }
             }, getValue());
 
-            switchTotal(confirmationTotalHolder);
+            switchTotal(confirmationTotalHolder, 40);
         }
     }
 
-    private void switchTotal(SimplePanel holder) {
+    private void switchTotal(SimplePanel holder, double width) {
         BigDecimal total = BigDecimal.ZERO;
         if (isBound(proto().total())) {
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new DecoratorBuilder(inject(proto().total()), 10, 39).build());
+        holder.setWidget(new DecoratorBuilder(inject(proto().total()), 10, width).build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }

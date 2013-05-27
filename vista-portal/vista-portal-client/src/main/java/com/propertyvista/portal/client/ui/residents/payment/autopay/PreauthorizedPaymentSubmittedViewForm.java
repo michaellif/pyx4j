@@ -56,7 +56,7 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
                 new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
 
         content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total()), 10, 39).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total()), 10, 40).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelAlignment(Alignment.left)
                 .labelWidth(25).build());
