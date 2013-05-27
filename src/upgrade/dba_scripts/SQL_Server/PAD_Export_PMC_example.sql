@@ -18,7 +18,7 @@ SELECT  property_id "Property Code",
         percentage "Percentage"
 FROM tenant_EFT_charges
 WHERE property_list like 'green%'		-- CHANGE HERE !!!!
-order by property_id,lease_id,bdefault,tenant_id,charge_id;
+order by property_id,lease_id,achDefault,achId,tenant_id,charge_id;
 
 
 
