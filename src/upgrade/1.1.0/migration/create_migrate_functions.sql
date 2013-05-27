@@ -116,6 +116,8 @@ BEGIN
                         CONSTRAINT      ilspolicy_item_pk PRIMARY KEY(id)
         );
         
+        ALTER TABLE ilspolicy_item OWNER TO vista;
+        
         CREATE TABLE ilspolicy_item$buildings
         (
                 id                              BIGINT                  NOT NULL,
