@@ -204,6 +204,9 @@ public interface CrmImages extends VistaImages {
 
     EditIconButtonImages editButton();
 
+    @Source("Notice_warning.png")
+    ImageResource noticeWarning();
+
     public interface EditIconButtonImages extends IconButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
