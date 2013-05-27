@@ -150,6 +150,10 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         components.remove(member.getPath());
     }
 
+    public boolean isBound(IObject<?> member) {
+        return (components.get(member.getPath()) != null);
+    }
+
     @Override
     public void adopt(CComponent<?, ?> component) {
         IObject<?> member = proto().getMember(binding.get(component));
