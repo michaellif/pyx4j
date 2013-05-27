@@ -15,6 +15,7 @@ package com.propertyvista.common.client.theme;
 
 import com.pyx4j.commons.css.CSSClass;
 import com.pyx4j.commons.css.ClassBasedThemeId;
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
@@ -35,6 +36,10 @@ public class VistaTheme extends Theme {
      * The label width is 15em by default, so maximum components width is 25 (two column layout).
      */
     public static final String columnWidth = "492px";
+
+    public static enum StyleName implements IStyleName {
+        warningMessage
+    }
 
     public VistaTheme() {
 
@@ -102,6 +107,12 @@ public class VistaTheme extends Theme {
         style.addProperty("margin-right", "40px");
         addStyle(style);
 
+        style = new Style(".", StyleName.warningMessage);
+        style.addProperty("margin-left", "5em");
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("color", "#C03A47");
+        addStyle(style);
     }
 
     protected void initBodyStyles() {

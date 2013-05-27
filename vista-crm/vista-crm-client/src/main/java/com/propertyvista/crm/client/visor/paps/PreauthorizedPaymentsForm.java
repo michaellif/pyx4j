@@ -17,7 +17,9 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -32,6 +34,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -104,14 +107,24 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
+            private final FormFlexPanel expirationWarning = new FormFlexPanel();
+
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
+
+                Widget expirationWarningLabel = new HTML(i18n.tr("This Preauthorized Payment is expired - needs to be replaced with new one!"));
+                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
+                expirationWarning.setWidget(0, 0, expirationWarningLabel);
+                expirationWarning.setHR(1, 0, 1);
+                expirationWarning.setBR(2, 0, 1);
             }
 
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
+
+                content.setWidget(++row, 0, expirationWarning);
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
                     @Override
@@ -137,6 +150,14 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
 
                 return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+
+                setEditable(getValue().expiring().isNull());
+                expirationWarning.setVisible(!getValue().expiring().isNull());
             }
         }
     }
