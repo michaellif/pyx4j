@@ -14,13 +14,13 @@
 package com.propertyvista.interfaces.importer.pad;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -396,7 +396,7 @@ public class TenantPadProcessor {
         if (allHaveChargeCode && allHaveEstimatedCharge) {
             // Yardi Migration Mode
             eliminateUninitializedChargeSplitYardi(leasePadEntities);
-            double estimatedChargeTotal = calulateEstimatedChargeTotal(leasePadEntities);
+            BigDecimal estimatedChargeTotal = calulateEstimatedChargesTotal(leasePadEntities);
             // Merge PaymentMethods from the same account
             Map<String, List<PadFileModel>> mappedByAccount = mapByAccount(leasePadEntities);
 
@@ -413,9 +413,11 @@ public class TenantPadProcessor {
 
     private static class ChargeCodeRecords {
 
-        double estimatedCharge;
+        BigDecimal estimatedCharge;
 
         List<PadFileModel> entities = new ArrayList<PadFileModel>();
+
+        BigDecimal entitiesTotal;
 
         int uninitializedCount = 0;
 
@@ -431,7 +433,7 @@ public class TenantPadProcessor {
                 continue;
             }
             if (padFileModel.charge().isNull()) {
-                double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
+                BigDecimal estimatedCharge = new BigDecimal(padFileModel.estimatedCharge().getValue());
 
                 ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(uniqueChargeCode(padFileModel));
                 if (chargeCodeRecords == null) {
@@ -440,7 +442,7 @@ public class TenantPadProcessor {
                     chargeCodeRecords.estimatedCharge = estimatedCharge;
                     recordsByChargeCode.put(uniqueChargeCode(padFileModel), chargeCodeRecords);
                 } else {
-                    if (chargeCodeRecords.estimatedCharge != estimatedCharge) {
+                    if (chargeCodeRecords.estimatedCharge.compareTo(estimatedCharge) != 0) {
                         padFileModel._import().message().setValue(i18n.tr("estimatedCharge for Charge {0} are changing", padFileModel.chargeCode()));
                         padFileModel._import().invalid().setValue(Boolean.TRUE);
                         padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
@@ -485,40 +487,58 @@ public class TenantPadProcessor {
         return padFileModel.chargeCode().getValue() + "$" + padFileModel.chargeId().getValue();
     }
 
-    static double calulateEstimatedChargeTotal(List<PadFileModel> leasePadEntities) {
-        Set<String> chargeCodes = new HashSet<String>();
-        double estimatedChargeTotal = 0;
+    static BigDecimal calulateEstimatedChargesTotal(List<PadFileModel> leasePadEntities) {
+        Map<String, ChargeCodeRecords> recordsByChargeCode = new HashMap<String, ChargeCodeRecords>();
+        BigDecimal estimatedChargeTotal = BigDecimal.ZERO;
         for (PadFileModel padFileModel : leasePadEntities) {
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
             }
-            double estimatedChargeSplit = 0;
+            BigDecimal estimatedChargeSplit;
             if (padFileModel.charge().isNull()) {
                 BigDecimal charge = DomainUtil.roundMoney(new BigDecimal(padFileModel.estimatedCharge().getValue()));
                 padFileModel._processorInformation().chargeAmount().setValue(charge);
-                double estimatedCharge = charge.doubleValue();
+                BigDecimal estimatedCharge = charge;
                 if (!padFileModel.percent().isNull()) {
-                    double percent = Double.parseDouble(padFileModel.percent().getValue());
-                    estimatedChargeSplit = percent * estimatedCharge / 100.0;
+                    BigDecimal percent = new BigDecimal(padFileModel.percent().getValue());
+                    // This is the way yardi does this
+                    estimatedChargeSplit = estimatedCharge.multiply(percent).divide(new BigDecimal(100));
                 } else {
                     // 100% assumed
                     estimatedChargeSplit = estimatedCharge;
                 }
-                padFileModel._processorInformation().chargeEftAmount().setValue(DomainUtil.roundMoney(new BigDecimal(estimatedChargeSplit)));
+                padFileModel._processorInformation().chargeEftAmount().setValue(estimatedChargeSplit.setScale(2, RoundingMode.DOWN));
                 // Count each chargeCode once.
-                if (!chargeCodes.contains(uniqueChargeCode(padFileModel))) {
-                    estimatedChargeTotal += estimatedCharge;
-                    chargeCodes.add(uniqueChargeCode(padFileModel));
+                ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(uniqueChargeCode(padFileModel));
+                if (chargeCodeRecords == null) {
+                    estimatedChargeTotal = estimatedChargeTotal.add(estimatedCharge);
+                    chargeCodeRecords = new ChargeCodeRecords();
+                    chargeCodeRecords.estimatedCharge = charge;
+                    chargeCodeRecords.entities.add(padFileModel);
+                    chargeCodeRecords.entitiesTotal = padFileModel._processorInformation().chargeEftAmount().getValue();
+                    recordsByChargeCode.put(uniqueChargeCode(padFileModel), chargeCodeRecords);
+                } else {
+                    chargeCodeRecords.entities.add(padFileModel);
+                    chargeCodeRecords.entitiesTotal = chargeCodeRecords.entitiesTotal.add(padFileModel._processorInformation().chargeEftAmount().getValue());
                 }
             } else {
                 BigDecimal charge = DomainUtil.roundMoney(new BigDecimal(padFileModel.charge().getValue()));
                 padFileModel._processorInformation().chargeAmount().setValue(charge);
                 padFileModel._processorInformation().chargeEftAmount().setValue(charge);
-                estimatedChargeSplit = charge.doubleValue();
-                estimatedChargeTotal += estimatedChargeSplit;
+                estimatedChargeSplit = charge;
+                estimatedChargeTotal = estimatedChargeTotal.add(estimatedChargeSplit);
             }
 
             padFileModel._processorInformation().estimatedChargeSplit().setValue(estimatedChargeSplit);
+        }
+
+        // 1c moved to last account
+        for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
+            if (chargeCodeRecords.estimatedCharge.compareTo(chargeCodeRecords.entitiesTotal) != 0) {
+                BigDecimal delta = chargeCodeRecords.estimatedCharge.subtract(chargeCodeRecords.entitiesTotal);
+                PadFileModel lastRecord = chargeCodeRecords.entities.get(chargeCodeRecords.entities.size() - 1);
+                lastRecord._processorInformation().chargeEftAmount().setValue(lastRecord._processorInformation().chargeEftAmount().getValue().add(delta));
+            }
         }
         return estimatedChargeTotal;
     }
@@ -527,7 +547,7 @@ public class TenantPadProcessor {
         return padFileModel.papApplicable().getValue(Boolean.TRUE) && padFileModel.recurringEFT().getValue(true);
     }
 
-    private static void mergeToFirstRow(double estimatedChargeTotal, List<PadFileModel> accountPadEntities) {
+    private static void mergeToFirstRow(BigDecimal estimatedChargeTotal, List<PadFileModel> accountPadEntities) {
         PadFileModel firstPadFileModel = null;
         int idx = 0;
         for (int i = 0; i < accountPadEntities.size(); i++) {
@@ -548,7 +568,10 @@ public class TenantPadProcessor {
             // Non of the records was initialized or valid
             return;
         }
-        double accountChargeTotal = firstPadFileModel._processorInformation().estimatedChargeSplit().getValue();
+        BigDecimal accountChargeTotal = firstPadFileModel._processorInformation().estimatedChargeSplit().getValue();
+
+        BigDecimal accountEftAmountTotal = BigDecimal.ZERO;
+        accountEftAmountTotal = accountEftAmountTotal.add(firstPadFileModel._processorInformation().chargeEftAmount().getValue());
 
         for (int i = idx + 1; i < accountPadEntities.size(); i++) {
             PadFileModel padFileModel = accountPadEntities.get(i);
@@ -556,10 +579,12 @@ public class TenantPadProcessor {
                 continue;
             }
             if (isPapApplicable(padFileModel)) {
-                accountChargeTotal += padFileModel._processorInformation().estimatedChargeSplit().getValue();
+                accountChargeTotal = accountChargeTotal.add(padFileModel._processorInformation().estimatedChargeSplit().getValue());
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.mergedWithAnotherRecord);
                 padFileModel._import().message().setValue(i18n.tr("Merged with row {0}", firstPadFileModel._import().row()));
                 firstPadFileModel._processorInformation().accountCharges().add(padFileModel);
+
+                accountEftAmountTotal = accountEftAmountTotal.add(padFileModel._processorInformation().chargeEftAmount().getValue());
             } else {
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.notUsedForACH);
             }
@@ -567,12 +592,13 @@ public class TenantPadProcessor {
 
         firstPadFileModel._processorInformation().estimatedChargeSplit().setValue(accountChargeTotal);
         firstPadFileModel._processorInformation().accountChargeTotal().setValue(accountChargeTotal);
+        firstPadFileModel._processorInformation().accountEftAmountTotal().setValue(accountEftAmountTotal);
 
-        double percentNotRounded;
-        if (estimatedChargeTotal == 0) {
-            percentNotRounded = 0;
+        BigDecimal percentNotRounded;
+        if (estimatedChargeTotal.compareTo(BigDecimal.ZERO) == 0) {
+            percentNotRounded = BigDecimal.ZERO;
         } else {
-            percentNotRounded = accountChargeTotal / estimatedChargeTotal;
+            percentNotRounded = accountChargeTotal.divide(estimatedChargeTotal, new MathContext(PadProcessorInformation.PERCENT_SCALE, RoundingMode.HALF_DOWN));
         }
         firstPadFileModel._processorInformation().percentNotRounded().setValue(percentNotRounded);
     }
@@ -604,7 +630,7 @@ public class TenantPadProcessor {
 
     private static void enshurePercentNotRoundedIsSet(PadFileModel padFileModel) {
         if (!padFileModel.percent().isNull() && padFileModel._processorInformation().percentNotRounded().isNull()) {
-            double percentNotRounded = (Double.parseDouble(padFileModel.percent().getValue())) / 100.0;
+            BigDecimal percentNotRounded = new BigDecimal(padFileModel.percent().getValue()).divide(new BigDecimal(100));
             padFileModel._processorInformation().percentNotRounded().setValue(percentNotRounded);
         }
     }
@@ -623,7 +649,7 @@ public class TenantPadProcessor {
             }
             enshurePercentNotRoundedIsSet(padFileModel);
             if (!padFileModel._processorInformation().percentNotRounded().isNull()) {
-                if (padFileModel._processorInformation().percentNotRounded().getValue() < 0) {
+                if (padFileModel._processorInformation().percentNotRounded().getValue().compareTo(BigDecimal.ZERO) < 0) {
                     invalid = padFileModel;
                     padFileModel._import().invalid().setValue(Boolean.TRUE);
                     padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalidResultingValues);
@@ -649,7 +675,7 @@ public class TenantPadProcessor {
                 continue;
             }
             if (isPapApplicable(padFileModel) && !padFileModel._processorInformation().percentNotRounded().isNull()) {
-                BigDecimal percent = new BigDecimal(padFileModel._processorInformation().percentNotRounded().getValue());
+                BigDecimal percent = padFileModel._processorInformation().percentNotRounded().getValue();
                 BigDecimal percentRound = percent.setScale(PadProcessorInformation.PERCENT_SCALE, BigDecimal.ROUND_HALF_UP);
                 padFileModel._processorInformation().percent().setValue(percentRound);
                 percentTotal = percentTotal.add(percent);
@@ -678,7 +704,7 @@ public class TenantPadProcessor {
                 if (padFileModel._processorInformation().accountChargeTotal().isNull()) {
                     throw new Error("accountChargeTotal null for: " + padFileModel.leaseId().getValue());
                 }
-                BigDecimal calulatedEftAmount = new BigDecimal(padFileModel._processorInformation().accountChargeTotal().getValue());
+                BigDecimal calulatedEftAmount = padFileModel._processorInformation().accountChargeTotal().getValue();
                 padFileModel._processorInformation().calulatedEftTotalAmount().setValue(DomainUtil.roundMoney(calulatedEftAmount));
             }
         }

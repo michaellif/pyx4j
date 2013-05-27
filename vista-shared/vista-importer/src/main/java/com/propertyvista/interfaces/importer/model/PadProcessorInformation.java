@@ -61,15 +61,17 @@ public interface PadProcessorInformation extends IEntity {
 
     IPrimitive<BigDecimal> percent();
 
-    IPrimitive<Double> percentNotRounded();
+    IPrimitive<BigDecimal> percentNotRounded();
 
-    IPrimitive<Double> estimatedChargeSplit();
+    IPrimitive<BigDecimal> estimatedChargeSplit();
 
     IPrimitive<BigDecimal> chargeAmount();
 
     IPrimitive<BigDecimal> chargeEftAmount();
 
-    IPrimitive<Double> accountChargeTotal();
+    IPrimitive<BigDecimal> accountEftAmountTotal();
+
+    IPrimitive<BigDecimal> accountChargeTotal();
 
     IPrimitive<BigDecimal> calulatedEftTotalAmount();
 

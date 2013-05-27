@@ -186,6 +186,40 @@ public class PadPercentsCalulationsTests {
     }
 
     @Test
+    public void testYardiRounding_50_50() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "50", 1000.01));
+        leasePadEntities.add(createModelFull("2", "rent", "50", 1000.01));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.50"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("500.00"), leasePadEntities.get(0)._processorInformation().chargeEftAmount().getValue());
+        assertEquals(new BigDecimal("0.50"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("500.01"), leasePadEntities.get(1)._processorInformation().chargeEftAmount().getValue());
+    }
+
+    @Test
+    public void testYardiRounding_3X_50_50() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "50", 1076.25));
+        leasePadEntities.add(createModelFull("2", "rent", "50", 1076.25));
+
+        leasePadEntities.add(createModelFull("1", "rinpark", "50", 76.87));
+        leasePadEntities.add(createModelFull("2", "rinpark", "50", 76.87));
+
+        leasePadEntities.add(createModelFull("1", "raircon", "50", 10.0));
+        leasePadEntities.add(createModelFull("2", "raircon", "50", 10.0));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.50"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("581.55"), leasePadEntities.get(0)._processorInformation().accountEftAmountTotal().getValue());
+        assertEquals(new BigDecimal("0.50"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("581.57"), leasePadEntities.get(1)._processorInformation().accountEftAmountTotal().getValue());
+    }
+
+    @Test
     public void testUninitializedChargeSplitCase1() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
         leasePadEntities.add(createModelFull("1", "rent", null, 1000));
