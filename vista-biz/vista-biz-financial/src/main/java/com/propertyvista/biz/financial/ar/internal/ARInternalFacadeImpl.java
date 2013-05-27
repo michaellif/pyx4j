@@ -36,13 +36,13 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -117,7 +117,7 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
+    public Collection<LeaseAgingBuckets> getAgingBuckets(BillingAccount billingAccount) {
         return ARArrearsManager.instance().getAgingBuckets(billingAccount);
     }
 

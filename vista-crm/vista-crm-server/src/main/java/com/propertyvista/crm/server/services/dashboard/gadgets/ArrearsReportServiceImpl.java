@@ -31,7 +31,6 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -51,7 +50,6 @@ import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDT
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
-import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -116,59 +114,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         result.setData(new Vector<LeaseArrearsSnapshotDTO>(rosterDTO));
         result.setTotalRows(roster.getTotalRows());
         result.hasMoreData(roster.hasMoreData());
-
-        callback.onSuccess(result);
-    }
-
-    @Override
-    public void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> buildingsFilter, LogicalDate asOf) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
-        ARFacade facade = ServerSideFactory.create(ARFacade.class);
-
-        Vector<Building> buildings = buildingsFilter.isEmpty() ? Persistence.secureQuery(EntityQueryCriteria.create(Building.class)) : buildingsFilter;
-
-        AgingBuckets proto = EntityFactory.create(AgingBuckets.class);
-
-        @SuppressWarnings("unchecked")
-        IPrimitive<BigDecimal>[] propertiesToAggregate = new IPrimitive[] {//@formatter:off
-                proto.bucketCurrent(),
-                proto.bucket30(),
-                proto.bucket60(),
-                proto.bucket90(),
-                proto.bucketOver90(),
-                proto.totalBalance(),
-                proto.arrearsAmount(),
-                proto.creditAmount()
-        };//@formatter:on
-
-        AgingBuckets totalBuckets = EntityFactory.create(AgingBuckets.class);
-
-        for (IPrimitive<BigDecimal> property : propertiesToAggregate) {
-            totalBuckets.setValue(property.getPath(), new BigDecimal("0.0"));
-        }
-
-        for (Building b : buildings) {
-
-            BuildingArrearsSnapshot snapshot = facade.getArrearsSnapshot(b, asOf);
-            if (snapshot == null) {
-                continue;
-            }
-            AgingBuckets snapshotBuckets = snapshot.totalAgingBuckets().detach();
-
-            for (IPrimitive<BigDecimal> property : propertiesToAggregate) {
-                BigDecimal value = (BigDecimal) totalBuckets.getValue(property.getPath());
-                value = value.add((BigDecimal) snapshotBuckets.getValue(property.getPath()));
-                totalBuckets.setValue(property.getPath(), value);
-            }
-        }
-
-        EntitySearchResult<AgingBuckets> result = new EntitySearchResult<AgingBuckets>();
-        Vector<AgingBuckets> agingBuckets = new Vector<AgingBuckets>();
-        agingBuckets.add(totalBuckets);
-        result.setData(agingBuckets);
-        result.hasMoreData(false);
-        result.setTotalRows(1);
 
         callback.onSuccess(result);
     }
@@ -245,9 +190,14 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
             for (Building b : buildings) {
-                ArrearsSnapshot snapshot = facade.getArrearsSnapshot(b, asOf);
+                ArrearsSnapshot<?> snapshot = facade.getArrearsSnapshot(b, asOf);
                 if (snapshot != null) {
-                    totalArrears = totalArrears.add(snapshot.totalAgingBuckets().totalBalance().getValue());
+                    for (AgingBuckets<?> buckets : snapshot.agingBuckets()) {
+                        if (buckets.arCode().isNull()) {
+                            totalArrears = totalArrears.add(buckets.totalBalance().getValue());
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -264,13 +214,9 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         LeaseArrearsSnapshotDTO snapshotDTO = dtoBinder.createDTO(snapshot);
 
         AgingBuckets selectedBuckets = null;
-        if (arrearsCategory == null) {
-            selectedBuckets = snapshot.totalAgingBuckets().duplicate();
-        } else {
-            for (AgingBuckets buckets : snapshot.agingBuckets()) {
-                if (buckets.arCode().getValue() == arrearsCategory) {
-                    selectedBuckets = buckets.duplicate();
-                }
+        for (AgingBuckets buckets : snapshot.agingBuckets()) {
+            if (buckets.arCode().getValue() == arrearsCategory) {
+                selectedBuckets = buckets.duplicate();
             }
         }
         if (selectedBuckets == null) {
@@ -285,42 +231,22 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
         final LeaseArrearsSnapshotDTO dtoProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshotDTO.class);
         final LeaseArrearsSnapshot dboProto = EntityFactory.getEntityPrototype(LeaseArrearsSnapshot.class);
 
-        PropertyMapper bucketMapper = null;
-        if (arrearsCategory == null) {
-            bucketMapper = new PropertyMapper() {
-                @Override
-                public Path getDboMemberPath(Path dtoMemberPath) {
-                    if (dtoMemberPath.toString().startsWith(dtoProto.selectedBuckets().getPath().toString())) {
-                        return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(),
-                                dboProto.totalAgingBuckets().getPath().toString()));
-                    } else {
-                        return null;
-                    }
+        PropertyMapper bucketMapper = new PropertyMapper() {
+            @Override
+            public Path getDboMemberPath(Path dtoMemberPath) {
+                if (dtoMemberPath.toString().startsWith(dtoProto.selectedBuckets().getPath().toString())) {
+                    return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(),
+                            dboProto.agingBuckets().$().getPath().toString()));
+                } else {
+                    return null;
                 }
+            }
 
-                @Override
-                public Serializable convertValue(Serializable value) {
-                    return value;
-                }
-            };
-        } else {
-            bucketMapper = new PropertyMapper() {
-                @Override
-                public Path getDboMemberPath(Path dtoMemberPath) {
-                    if (dtoMemberPath.toString().startsWith(dtoProto.selectedBuckets().getPath().toString())) {
-                        return new Path(dtoMemberPath.toString().replace(dtoProto.selectedBuckets().getPath().toString(),
-                                dboProto.agingBuckets().$().getPath().toString()));
-                    } else {
-                        return null;
-                    }
-                }
-
-                @Override
-                public Serializable convertValue(Serializable value) {
-                    return value;
-                }
-            };
-        }
+            @Override
+            public Serializable convertValue(Serializable value) {
+                return value;
+            }
+        };
 
         return new EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO>(LeaseArrearsSnapshot.class, LeaseArrearsSnapshotDTO.class,
                 makeMapper(dtoBinder), bucketMapper);

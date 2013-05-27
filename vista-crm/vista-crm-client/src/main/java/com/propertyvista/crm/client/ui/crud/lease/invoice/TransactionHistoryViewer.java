@@ -45,6 +45,7 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDTO> {
@@ -173,12 +174,12 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
         return lineItemsView;
     }
 
-    private Widget createArrears(IList<AgingBuckets> agingBuckets, AgingBuckets total) {
-        List<AgingBuckets> arrearsByCategory = new ArrayList<AgingBuckets>(agingBuckets);
+    private Widget createArrears(IList<LeaseAgingBuckets> agingBuckets, LeaseAgingBuckets total) {
+        List<LeaseAgingBuckets> arrearsByCategory = new ArrayList<LeaseAgingBuckets>(agingBuckets);
 
-        Collections.sort(arrearsByCategory, new Comparator<AgingBuckets>() {
+        Collections.sort(arrearsByCategory, new Comparator<LeaseAgingBuckets>() {
             @Override
-            public int compare(AgingBuckets arg0, AgingBuckets arg1) {
+            public int compare(LeaseAgingBuckets arg0, LeaseAgingBuckets arg1) {
                 return arg0.arCode().getValue().toString().compareTo(arg1.arCode().getValue().toString());
             }
         });
@@ -187,7 +188,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
         drawArrearsTableHeader(arrearsView, ++row);
 
-        for (AgingBuckets arrears : arrearsByCategory) {
+        for (LeaseAgingBuckets arrears : arrearsByCategory) {
             drawArrears(arrears, arrearsView, ++row);
         }
 
@@ -215,7 +216,7 @@ public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDT
 
     }
 
-    private void drawArrears(AgingBuckets bucket, FormFlexPanel panel, int row) {
+    private void drawArrears(LeaseAgingBuckets bucket, FormFlexPanel panel, int row) {
 
         if (bucket.isNull()) {
             return;

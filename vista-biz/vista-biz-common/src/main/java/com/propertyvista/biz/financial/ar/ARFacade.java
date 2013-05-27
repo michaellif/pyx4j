@@ -27,13 +27,13 @@ import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
@@ -66,7 +66,7 @@ public interface ARFacade {
 
     TransactionHistoryDTO getTransactionHistory(BillingAccount billingAccount);
 
-    Collection<AgingBuckets> getAgingBuckets(BillingAccount billingAccount);
+    Collection<LeaseAgingBuckets> getAgingBuckets(BillingAccount billingAccount);
 
     BigDecimal getCurrentBalance(BillingAccount billingAccount);
 

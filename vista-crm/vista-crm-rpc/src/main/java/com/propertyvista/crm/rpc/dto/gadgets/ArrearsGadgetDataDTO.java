@@ -18,12 +18,12 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 
 @Transient
 public interface ArrearsGadgetDataDTO extends IEntity {
 
-    AgingBuckets buckets();
+    LeaseAgingBuckets buckets();
 
     @Caption(name = "Outstanding This Month")
     IPrimitive<Integer> outstandingThisMonthCount();

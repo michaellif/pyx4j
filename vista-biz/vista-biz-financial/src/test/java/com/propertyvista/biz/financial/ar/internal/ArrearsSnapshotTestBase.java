@@ -38,9 +38,9 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
 
-    private ArrearsSnapshot actualArrearsSnapshot;
+    private ArrearsSnapshot<?> actualArrearsSnapshot;
 
-    private Map<String, AgingBuckets> prevExpectedAgingBuckets;
+    private Map<String, AgingBuckets<?>> prevExpectedAgingBuckets;
 
     private LogicalDate prevFromDate;
 
@@ -67,7 +67,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
     protected void assertArrearsSnapshotStart(String asOf) {
         actualArrearsSnapshot = ServerSideFactory.create(ARFacade.class).getArrearsSnapshot(billingAccount(), asDate(asOf));
         prevFromDate = actualArrearsSnapshot.fromDate().getValue();
-        prevExpectedAgingBuckets = new HashMap<String, AgingBuckets>();
+        prevExpectedAgingBuckets = new HashMap<String, AgingBuckets<?>>();
     }
 
     protected void assertArrearsSnapshotIsSameAsBefore(String from, String to) {
@@ -92,14 +92,14 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
         actualArrearsSnapshot = ServerSideFactory.create(ARFacade.class).getArrearsSnapshot(billingAccount(), asOf);
         assertEquals("got unexpected snapshot from other date", prevFromDate, actualArrearsSnapshot.fromDate().getValue());
 
-        for (AgingBuckets expected : prevExpectedAgingBuckets.values()) {
+        for (AgingBuckets<?> expected : prevExpectedAgingBuckets.values()) {
             if (expected.arCode().getValue() != null) {
                 assertArrearsCategory(expected.arCode().getValue(), expected.bucketCurrent().getValue().toString(), expected.bucket30().getValue().toString(),
                         expected.bucket60().getValue().toString(), expected.bucket90().getValue().toString(), expected.bucketOver90().getValue().toString());
             }
         }
 
-        AgingBuckets expectedTotal = prevExpectedAgingBuckets.get("TOTAL");
+        AgingBuckets<?> expectedTotal = prevExpectedAgingBuckets.get("TOTAL");
         assertArrearsTotal(expectedTotal.bucketCurrent().getValue().toString(), expectedTotal.bucket30().getValue().toString(), expectedTotal.bucket60()
                 .getValue().toString(), expectedTotal.bucket90().getValue().toString(), expectedTotal.bucketOver90().getValue().toString());
     }
@@ -107,7 +107,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
     protected void assertArrearsCategory(ARCode.Type debitType, String expectedCurrent, String expected30, String expected60, String expected90,
             String expectedOver90) {
 
-        for (AgingBuckets actualBuckets : actualArrearsSnapshot.agingBuckets()) {
+        for (AgingBuckets<?> actualBuckets : actualArrearsSnapshot.agingBuckets()) {
             if (actualBuckets.arCode().getValue() == debitType) {
                 assertAgingBuckets(expectedAgingBuckets(debitType, expectedCurrent, expected30, expected60, expected90, expectedOver90), actualBuckets);
                 return;
@@ -117,8 +117,7 @@ public abstract class ArrearsSnapshotTestBase extends LeaseFinancialTestBase {
     }
 
     protected void assertArrearsTotal(String expectedCurrent, String expected30, String expected60, String expected90, String expectedOver90) {
-        assertAgingBuckets(expectedAgingBuckets(null, expectedCurrent, expected30, expected60, expected90, expectedOver90),
-                actualArrearsSnapshot.totalAgingBuckets());
+        assertArrearsCategory(null, expectedCurrent, expected30, expected60, expected90, expectedOver90);
     }
 
     private AgingBuckets expectedAgingBuckets(ARCode.Type debitType, String expectedCurrent, String expected30, String expected60, String expected90,

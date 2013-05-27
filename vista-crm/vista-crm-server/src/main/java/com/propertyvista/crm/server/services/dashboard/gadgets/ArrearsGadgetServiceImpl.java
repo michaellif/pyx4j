@@ -35,6 +35,7 @@ import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService
 import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
@@ -65,7 +66,7 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         callback.onSuccess(delinquentLeasesCriteria(query, criteriaPreset));
     }
 
-    private void calculateArrearsSummary(AgingBuckets aggregatedBuckets, ArrearsGadgetQueryDataDTO query) {
+    private void calculateArrearsSummary(LeaseAgingBuckets aggregatedBuckets, ArrearsGadgetQueryDataDTO query) {
 
         aggregatedBuckets.bucketThisMonth().setValue(BigDecimal.ZERO);
         aggregatedBuckets.bucketCurrent().setValue(BigDecimal.ZERO);
@@ -84,15 +85,12 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
             if (snapshot == null) {
                 continue;
             } else {
-                AgingBuckets buckets = null;
-                if (query.category().isNull()) {
-                    buckets = snapshot.totalAgingBuckets();
-                } else {
-                    foundBuckets: for (AgingBuckets bucketsCandidate : snapshot.agingBuckets()) {
-                        if (bucketsCandidate.arCode().getValue() == query.category().getValue()) {
-                            buckets = bucketsCandidate;
-                            break foundBuckets;
-                        }
+                AgingBuckets<?> buckets = null;
+
+                foundBuckets: for (AgingBuckets<?> bucketsCandidate : snapshot.agingBuckets()) {
+                    if (bucketsCandidate.arCode().getValue() == query.category().getValue()) {
+                        buckets = bucketsCandidate;
+                        break foundBuckets;
                     }
                 }
                 if (buckets == null) {
@@ -125,9 +123,8 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
         if (!query.buildingsFilter().isEmpty()) {
             criteria.in(criteria.proto().building(), query.buildingsFilter());
         }
-        query.category().setValue(query.category().getValue());
-
-        criteria.add(PropertyCriterion.eq(criteria.proto().asOf(), query.asOf().getValue()));
+        criteria.eq(criteria.proto().arrears().arCode(), query.category().getValue());
+        criteria.eq(criteria.proto().asOf(), query.asOf().getValue());
 
         ArrearsGadgetDataDTO proto = EntityFactory.getEntityPrototype(ArrearsGadgetDataDTO.class);
         IObject<?> member = proto.getMember(new Path(criteriaPreset));

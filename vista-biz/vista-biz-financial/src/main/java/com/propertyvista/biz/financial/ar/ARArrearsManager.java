@@ -42,8 +42,10 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -144,14 +146,14 @@ public class ARArrearsManager {
         persistIfChanged(currentSnapshot, previousSnapshot);
     }
 
-    public final Collection<AgingBuckets> getAgingBuckets(BillingAccount account) {
+    public final Collection<LeaseAgingBuckets> getAgingBuckets(BillingAccount account) {
         List<InvoiceDebit> debits = ServerSideFactory.create(ARFacade.class).getNotCoveredDebitInvoiceLineItems(account);
-        Collection<AgingBuckets> buckets = calculateAgingBuckets(debits);
+        Collection<LeaseAgingBuckets> buckets = calculateAgingBuckets(debits);
         return buckets;
     }
 
-    protected Collection<AgingBuckets> calculateAgingBuckets(List<InvoiceDebit> debits) {
-        Map<ARCode.Type, AgingBuckets> agingBucketsMap = new EnumMap<ARCode.Type, AgingBuckets>(ARCode.Type.class);
+    protected Collection<LeaseAgingBuckets> calculateAgingBuckets(List<InvoiceDebit> debits) {
+        Map<ARCode.Type, LeaseAgingBuckets> agingBucketsMap = new EnumMap<ARCode.Type, LeaseAgingBuckets>(ARCode.Type.class);
 
         LogicalDate currentDate = new LogicalDate(SystemDateManager.getDate());
 
@@ -176,9 +178,9 @@ public class ARArrearsManager {
             ARCode.Type arrearsCategory = debit.arCode().type().getValue();
 
             if (!agingBucketsMap.containsKey(arrearsCategory)) {
-                agingBucketsMap.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(arrearsCategory));
+                agingBucketsMap.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(LeaseAgingBuckets.class, arrearsCategory));
             }
-            AgingBuckets agingBuckets = agingBucketsMap.get(arrearsCategory);
+            LeaseAgingBuckets agingBuckets = agingBucketsMap.get(arrearsCategory);
 
             if (debit.dueDate().getValue().compareTo(firstDayOfCurrentMonth) >= 0 & debit.dueDate().getValue().compareTo(lastDayOfCurrentMonth) <= 0) {
                 agingBuckets.bucketThisMonth().setValue(agingBuckets.bucketThisMonth().getValue().add(debit.outstandingDebit().getValue()));
@@ -200,7 +202,7 @@ public class ARArrearsManager {
 
         // TODO calculate prepayments
 
-        for (AgingBuckets agingBuckets : agingBucketsMap.values()) {
+        for (LeaseAgingBuckets agingBuckets : agingBucketsMap.values()) {
             BigDecimal arrearsAmount = agingBuckets.bucket30().getValue();
             arrearsAmount = arrearsAmount.add(agingBuckets.bucket60().getValue());
             arrearsAmount = arrearsAmount.add(agingBuckets.bucket90().getValue());
@@ -217,11 +219,14 @@ public class ARArrearsManager {
         LeaseArrearsSnapshot arrearsSnapshot = createZeroArrearsSnapshot(LeaseArrearsSnapshot.class);
 
         arrearsSnapshot.agingBuckets().addAll(getAgingBuckets(billingAccount));
-        arrearsSnapshot.totalAgingBuckets().set(//@formatter:off
-                ARArreasManagerUtils.addInPlace(
-                        ARArreasManagerUtils.createAgingBuckets(null),
-                        arrearsSnapshot.agingBuckets())
-        );//@formatter:on                                                                                                                                           // FIXME what the hell is going on with the following two lines???
+        LeaseAgingBuckets total = arrearsSnapshot.agingBuckets().$();
+        ARArreasManagerUtils.addInPlace(//@formatter:off
+                        ARArreasManagerUtils.initAgingBuckets(total, null),
+                        arrearsSnapshot.agingBuckets()
+        );//@formatter:on
+        arrearsSnapshot.agingBuckets().add(total);
+
+        // FIXME what the hell is going on with the following two lines???
         arrearsSnapshot.fromDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         arrearsSnapshot.fromDate().setValue(arrearsSnapshot.toDate().getValue());
         arrearsSnapshot.lmrToUnitRentDifference().setValue(lastMonthRentDeposit(billingAccount).subtract(unitRent(billingAccount)));
@@ -237,23 +242,25 @@ public class ARArrearsManager {
         // initialize accumulators - we accumulate aging buckets for each category separately in order to increase performance
 
         BuildingArrearsSnapshot arrearsSnapshotAcc = createZeroArrearsSnapshot(BuildingArrearsSnapshot.class);
-        EnumMap<ARCode.Type, AgingBuckets> agingBucketsAcc = new EnumMap<ARCode.Type, AgingBuckets>(ARCode.Type.class);
+        BuildingAgingBuckets total = arrearsSnapshotAcc.agingBuckets().get(0);
+        EnumMap<ARCode.Type, BuildingAgingBuckets> agingBucketsAcc = new EnumMap<ARCode.Type, BuildingAgingBuckets>(ARCode.Type.class);
         for (ARCode.Type arrearsCategory : ARCode.Type.values()) {
-            agingBucketsAcc.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(arrearsCategory));
+            agingBucketsAcc.put(arrearsCategory, ARArreasManagerUtils.createAgingBuckets(BuildingAgingBuckets.class, arrearsCategory));
         }
 
-        // accumulate
+        // accumulate        
         while (billingAccountsIter.hasNext()) {
-            ArrearsSnapshot arrearsSnapshot = takeArrearsSnapshot(billingAccountsIter.next());
-            for (AgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
-                ARArreasManagerUtils.addInPlace(agingBucketsAcc.get(agingBuckets.arCode().getValue()), agingBuckets);
+            LeaseArrearsSnapshot arrearsSnapshot = takeArrearsSnapshot(billingAccountsIter.next());
+            for (LeaseAgingBuckets agingBuckets : arrearsSnapshot.agingBuckets()) {
+                if (agingBuckets.arCode().isNull()) {
+                    ARArreasManagerUtils.addInPlace(total, agingBuckets);
+                } else {
+                    ARArreasManagerUtils.addInPlace(agingBucketsAcc.get(agingBuckets.arCode().getValue()), agingBuckets);
+                }
             }
-            ARArreasManagerUtils.addInPlace(arrearsSnapshotAcc.totalAgingBuckets(), arrearsSnapshot.totalAgingBuckets());
         }
-
         // put accumulated agingBuckets by category back to the general snapshot accumulator
         arrearsSnapshotAcc.agingBuckets().addAll(agingBucketsAcc.values());
-
         return arrearsSnapshotAcc;
     }
 
@@ -265,35 +272,48 @@ public class ARArrearsManager {
         return new BigDecimal("0.00");// TODO how to get last month rent deposit and taxes
     }
 
-    private static <ARREARS_SNAPSHOT extends ArrearsSnapshot> ARREARS_SNAPSHOT createZeroArrearsSnapshot(Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
+    private static <AGING_BUCKETS extends AgingBuckets<?>, ARREARS_SNAPSHOT extends ArrearsSnapshot<AGING_BUCKETS>> ARREARS_SNAPSHOT createZeroArrearsSnapshot(
+            Class<ARREARS_SNAPSHOT> arrearsSnapshotClass) {
         ARREARS_SNAPSHOT snapshot = EntityFactory.create(arrearsSnapshotClass);
-        snapshot.totalAgingBuckets().set(ARArreasManagerUtils.createAgingBuckets(null));
+        snapshot.agingBuckets().add(ARArreasManagerUtils.initAgingBuckets(snapshot.agingBuckets().$(), null));
         return snapshot;
     }
 
-    private static boolean areDifferent(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {
-        if (!EntityGraph.fullyEqualValues(currentSnapshot.totalAgingBuckets(), previousSnapshot.totalAgingBuckets())) {
-            return true;
-        }
+    private static boolean areDifferent(ArrearsSnapshot<?> currentSnapshot, ArrearsSnapshot<?> previousSnapshot) {
         if (currentSnapshot.agingBuckets().size() != previousSnapshot.agingBuckets().size()) {
             return true;
         }
 
-        Map<ARCode.Type, AgingBuckets> currentBuckets = new EnumMap<ARCode.Type, AgingBuckets>(ARCode.Type.class);
-        for (AgingBuckets buckets : currentSnapshot.agingBuckets()) {
-            currentBuckets.put(buckets.arCode().getValue(), buckets);
+        Map<ARCode.Type, AgingBuckets<?>> currentBuckets = new EnumMap<ARCode.Type, AgingBuckets<?>>(ARCode.Type.class);
+
+        AgingBuckets<?> curentTotalAgingBuckets = null;
+
+        for (AgingBuckets<?> buckets : currentSnapshot.agingBuckets()) {
+            if (buckets.arCode().isNull()) {
+                curentTotalAgingBuckets = buckets;
+            } else {
+                currentBuckets.put(buckets.arCode().getValue(), buckets);
+            }
         }
-        for (AgingBuckets previous : previousSnapshot.agingBuckets()) {
-            AgingBuckets current = currentBuckets.get(previous.arCode().getValue());
-            if (current == null || !EntityGraph.fullyEqualValues(current, previous)) {
-                return true;
+
+        // WARNING: in this comparison there's an assumption that total buckets (buckets that thave arType == null) are always present)
+        for (AgingBuckets<?> previous : previousSnapshot.agingBuckets()) {
+            if (previous.arCode().isNull()) {
+                if (!EntityGraph.fullyEqualValues(curentTotalAgingBuckets, previous)) {
+                    return true;
+                }
+            } else {
+                AgingBuckets<?> current = currentBuckets.get(previous.arCode().getValue());
+                if (current == null || !EntityGraph.fullyEqualValues(current, previous)) {
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    private static void persistIfChanged(ArrearsSnapshot currentSnapshot, ArrearsSnapshot previousSnapshot) {
+    private static void persistIfChanged(ArrearsSnapshot<?> currentSnapshot, ArrearsSnapshot<?> previousSnapshot) {
         if (previousSnapshot == null || areDifferent(currentSnapshot, previousSnapshot)) {
             boolean isSameDaySnapshot = false;
 

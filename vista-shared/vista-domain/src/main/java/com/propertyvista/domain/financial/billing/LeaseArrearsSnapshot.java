@@ -32,7 +32,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 
 @Table(prefix = "billing")
 @DiscriminatorValue("LeaseArrearsSnapshot")
-public interface LeaseArrearsSnapshot extends ArrearsSnapshot {
+public interface LeaseArrearsSnapshot extends ArrearsSnapshot<LeaseAgingBuckets> {
 
     @Owner
     @Detached

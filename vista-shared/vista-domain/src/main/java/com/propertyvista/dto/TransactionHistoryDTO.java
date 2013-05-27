@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 
 @Transient
 public interface TransactionHistoryDTO extends IEntity {
@@ -38,7 +38,7 @@ public interface TransactionHistoryDTO extends IEntity {
 
     IList<InvoiceLineItem> lineItems();
 
-    AgingBuckets totalAgingBuckets();
+    LeaseAgingBuckets totalAgingBuckets();
 
-    IList<AgingBuckets> agingBuckets();
+    IList<LeaseAgingBuckets> agingBuckets();
 }

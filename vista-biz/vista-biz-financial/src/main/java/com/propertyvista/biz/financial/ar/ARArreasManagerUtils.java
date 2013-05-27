@@ -23,7 +23,7 @@ import com.propertyvista.domain.financial.billing.AgingBuckets;
 
 public class ARArreasManagerUtils {
 
-    public static AgingBuckets addInPlace(AgingBuckets buckets1, AgingBuckets buckets2) {
+    public static AgingBuckets<?> addInPlace(AgingBuckets<?> buckets1, AgingBuckets<?> buckets2) {
         buckets1.bucketThisMonth().setValue(buckets1.bucketThisMonth().getValue().add(buckets2.bucketThisMonth().getValue()));
         buckets1.bucketCurrent().setValue(buckets1.bucketCurrent().getValue().add(buckets2.bucketCurrent().getValue()));
         buckets1.bucket30().setValue(buckets1.bucket30().getValue().add(buckets2.bucket30().getValue()));
@@ -38,16 +38,19 @@ public class ARArreasManagerUtils {
         return buckets1;
     }
 
-    public static AgingBuckets addInPlace(AgingBuckets accumulator, Collection<AgingBuckets> agingBucketsCollection) {
-        for (AgingBuckets typedBuckets : agingBucketsCollection) {
+    public static <E extends AgingBuckets<?>> E addInPlace(E accumulator, Collection<? extends AgingBuckets<?>> agingBucketsCollection) {
+        for (AgingBuckets<?> typedBuckets : agingBucketsCollection) {
             addInPlace(accumulator, typedBuckets);
         }
         return accumulator;
     }
 
-    public static AgingBuckets createAgingBuckets(ARCode.Type debitType) {
-        AgingBuckets agingBuckets = EntityFactory.create(AgingBuckets.class);
+    public static <E extends AgingBuckets<?>> E createAgingBuckets(Class<E> agingBucketsType, ARCode.Type debitType) {
+        E agingBuckets = EntityFactory.create(agingBucketsType);
+        return initAgingBuckets(agingBuckets, debitType);
+    }
 
+    public static <E extends AgingBuckets<?>> E initAgingBuckets(E agingBuckets, ARCode.Type debitType) {
         agingBuckets.arCode().setValue(debitType);
 
         BigDecimal zero = new BigDecimal("0.00");

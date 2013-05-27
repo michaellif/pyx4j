@@ -15,16 +15,33 @@ package com.propertyvista.domain.financial.billing;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Inheritance;
+import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.ARCode;
 
-public interface AgingBuckets extends IEntity {
+@AbstractEntity
+@Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
+public interface AgingBuckets<SNAPSHOT extends ArrearsSnapshot<?>> extends IEntity {
+
+    @Owner
+    @NotNull
+    @ReadOnly
+    @Detached
+    @JoinColumn
+    SNAPSHOT arrearsSnapshot();
 
     IPrimitive<ARCode.Type> arCode();
 

@@ -36,13 +36,13 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.ar.InvoiceDebitComparator;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiDebit;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -105,9 +105,10 @@ class ARYardiTransactionManager extends ARAbstractTransactionManager {
         th.currentBalanceAmount().setValue(calculateTotal(charges, credits, payments));
         th.issueDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
-        Collection<AgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
+        Collection<LeaseAgingBuckets> agingBucketsCollection = ServerSideFactory.create(ARFacade.class).getAgingBuckets(billingAccount);
         th.agingBuckets().addAll(agingBucketsCollection);
-        th.totalAgingBuckets().set(ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(null), agingBucketsCollection));
+        th.totalAgingBuckets().set(
+                ARArreasManagerUtils.addInPlace(ARArreasManagerUtils.createAgingBuckets(LeaseAgingBuckets.class, null), agingBucketsCollection));
         return th;
     }
 

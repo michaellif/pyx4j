@@ -26,7 +26,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 @Table(prefix = "billing")
 @DiscriminatorValue("BuildingArrearsSnapshot")
-public interface BuildingArrearsSnapshot extends ArrearsSnapshot {
+public interface BuildingArrearsSnapshot extends ArrearsSnapshot<BuildingAgingBuckets> {
 
     @Owner
     @MemberColumn(notNull = true)

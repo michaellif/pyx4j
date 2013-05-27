@@ -25,7 +25,6 @@ import com.pyx4j.rpc.shared.IService;
 import com.propertyvista.domain.dashboard.gadgets.arrears.ArrearsYOYComparisonDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.arrears.LeaseArrearsSnapshotDTO;
 import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public interface ArrearsReportService extends IService {
@@ -34,8 +33,6 @@ public interface ArrearsReportService extends IService {
 
     void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf,
             ARCode.Type arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize);
-
-    void summary(AsyncCallback<EntitySearchResult<AgingBuckets>> callback, Vector<Building> selectedBuildingsStubs, LogicalDate asOf);
 
     void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildings, int yearsAgo);
 }

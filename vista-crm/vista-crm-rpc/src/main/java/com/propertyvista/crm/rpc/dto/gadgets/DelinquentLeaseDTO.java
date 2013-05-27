@@ -20,8 +20,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.financial.ARCode;
-import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
@@ -55,13 +54,11 @@ public interface DelinquentLeaseDTO extends IEntity {
 
     IPrimitive<String> email();
 
-    AgingBuckets arrears();
+    LeaseAgingBuckets arrears();
 
     // This is used to bind criteria
     IPrimitive<LogicalDate> asOf();
 
     Building building();
-
-    IPrimitive<ARCode.Type> category();
 
 }

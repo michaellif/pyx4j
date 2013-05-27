@@ -23,18 +23,18 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
-import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseArrearsSnapshot, DelinquentLeaseDTO> implements DelinquentLeaseListService {
+public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<LeaseAgingBuckets, DelinquentLeaseDTO> implements DelinquentLeaseListService {
 
     public DelinquentLeaseListServiceImpl() {
-        super(LeaseArrearsSnapshot.class, DelinquentLeaseDTO.class);
+        super(LeaseAgingBuckets.class, DelinquentLeaseDTO.class);
     }
 
-    public EntityListCriteria<LeaseArrearsSnapshot> convertCriteria(EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
-        EntityListCriteria<LeaseArrearsSnapshot> dboCriteria = EntityListCriteria.create(LeaseArrearsSnapshot.class);
+    public EntityListCriteria<LeaseAgingBuckets> convertCriteria(EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
+        EntityListCriteria<LeaseAgingBuckets> dboCriteria = EntityListCriteria.create(LeaseAgingBuckets.class);
         enhanceListCriteria(dboCriteria, dtoCriteria);
 
         return dboCriteria;
@@ -42,26 +42,32 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected void bind() {
-        bind(dtoProto.leasePrimaryKey(), dboProto.billingAccount().lease().id());
-        bind(dtoProto.leaseId(), dboProto.billingAccount().lease().leaseId());
-        bind(dtoProto.buildingPropertyCode(), dboProto.billingAccount().lease().unit().building().propertyCode());
-        bind(dtoProto.unitNumber(), dboProto.billingAccount().lease().unit().info().number());
+        bind(dtoProto.leasePrimaryKey(), dboProto.arrearsSnapshot().billingAccount().lease().id());
+        bind(dtoProto.leaseId(), dboProto.arrearsSnapshot().billingAccount().lease().leaseId());
+        bind(dtoProto.buildingPropertyCode(), dboProto.arrearsSnapshot().billingAccount().lease().unit().building().propertyCode());
+        bind(dtoProto.unitNumber(), dboProto.arrearsSnapshot().billingAccount().lease().unit().info().number());
 
-        bind(dtoProto.participantId(), dboProto.billingAccount().lease()._applicant().participantId());
-        bind(dtoProto.primaryApplicantsFirstName(), dboProto.billingAccount().lease()._applicant().customer().person().name().firstName());
-        bind(dtoProto.primaryApplicantsLastName(), dboProto.billingAccount().lease()._applicant().customer().person().name().lastName());
-        bind(dtoProto.email(), dboProto.billingAccount().lease()._applicant().customer().person().email());
-        bind(dtoProto.mobilePhone(), dboProto.billingAccount().lease()._applicant().customer().person().mobilePhone());
-        bind(dtoProto.homePhone(), dboProto.billingAccount().lease()._applicant().customer().person().homePhone());
-        bind(dtoProto.workPhone(), dboProto.billingAccount().lease()._applicant().customer().person().workPhone());
+        bind(dtoProto.participantId(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().participantId());
+        bind(dtoProto.primaryApplicantsFirstName(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().firstName());
+        bind(dtoProto.primaryApplicantsLastName(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().lastName());
+        bind(dtoProto.email(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().email());
+        bind(dtoProto.mobilePhone(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone());
+        bind(dtoProto.homePhone(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone());
+        bind(dtoProto.workPhone(), dboProto.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone());
 
-        bind(dtoProto.arrears(), dboProto.totalAgingBuckets());
+        bind(dtoProto.arrears().arCode(), dboProto.arCode());
+        bind(dtoProto.arrears().bucketThisMonth(), dboProto.bucketThisMonth());
+        bind(dtoProto.arrears().bucket30(), dboProto.bucket30());
+        bind(dtoProto.arrears().bucket60(), dboProto.bucket60());
+        bind(dtoProto.arrears().bucket90(), dboProto.bucket90());
+        bind(dtoProto.arrears().bucketOver90(), dboProto.bucketOver90());
+        bind(dtoProto.arrears().arrearsAmount(), dboProto.arrearsAmount());
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<LeaseArrearsSnapshot> dbCriteria, EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
-        dbCriteria.ne(dbCriteria.proto().billingAccount().lease().status(), Lease.Status.Application);
-        dbCriteria.ne(dbCriteria.proto().billingAccount().lease().status(), Lease.Status.Closed);
+    protected void enhanceListCriteria(EntityListCriteria<LeaseAgingBuckets> dbCriteria, EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
+        dbCriteria.ne(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.Application);
+        dbCriteria.ne(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.Closed);
 
         if (dtoCriteria.getFilters() != null) {
             java.util.Iterator<Criterion> i = dtoCriteria.getFilters().iterator();
@@ -72,17 +78,13 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
                     PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
 
                     if (propertyCriterion.getPropertyPath().equals(dtoProto.asOf().getPath().toString())) {
-                        dbCriteria.le(dbCriteria.proto().fromDate(), propertyCriterion.getValue());
-                        dbCriteria.ge(dbCriteria.proto().toDate(), propertyCriterion.getValue());
+                        dbCriteria.le(dbCriteria.proto().arrearsSnapshot().fromDate(), propertyCriterion.getValue());
+                        dbCriteria.ge(dbCriteria.proto().arrearsSnapshot().toDate(), propertyCriterion.getValue());
                         i.remove();
                     } else if (propertyCriterion.getPropertyPath().equals(dtoProto.building().getPath().toString())) {
-                        dbCriteria.in(dbCriteria.proto().billingAccount().lease().unit().building(), (Vector<Building>) propertyCriterion.getValue());
+                        dbCriteria.in(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().unit().building(),
+                                (Vector<Building>) propertyCriterion.getValue());
                         i.remove();
-                    } else if (propertyCriterion.getPropertyPath().equals(dtoProto.category().getPath().toString())) {
-                        i.remove();
-                        if (propertyCriterion.getValue() == null) {
-
-                        }
                     }
                 }
             }
@@ -92,27 +94,29 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
     }
 
     @Override
-    protected void enhanceListRetrieved(LeaseArrearsSnapshot dbo, DelinquentLeaseDTO dto) {
+    protected void enhanceListRetrieved(LeaseAgingBuckets dbo, DelinquentLeaseDTO dto) {
         super.enhanceListRetrieved(dbo, dto);
 
-        Persistence.service().retrieve(dbo.billingAccount());
-        Persistence.service().retrieve(dbo.billingAccount().lease());
+        Persistence.service().retrieve(dbo.arrearsSnapshot());
+        Persistence.service().retrieve(dbo.arrearsSnapshot().billingAccount());
+        Persistence.service().retrieve(dbo.arrearsSnapshot().billingAccount().lease());
 
-        dto.leasePrimaryKey().setValue(dbo.billingAccount().lease().id().getValue());
-        dto.leaseId().setValue(dbo.billingAccount().lease().leaseId().getValue());
+        dto.leasePrimaryKey().setValue(dbo.arrearsSnapshot().billingAccount().lease().id().getValue());
+        dto.leaseId().setValue(dbo.arrearsSnapshot().billingAccount().lease().leaseId().getValue());
 
-        dto.unitNumber().setValue(dbo.billingAccount().lease().unit().info().number().getValue());
+        dto.unitNumber().setValue(dbo.arrearsSnapshot().billingAccount().lease().unit().info().number().getValue());
 
-        Persistence.service().retrieve(dbo.billingAccount().lease().unit().building());
-        dto.buildingPropertyCode().setValue(dbo.billingAccount().lease().unit().building().propertyCode().getValue());
+        Persistence.service().retrieve(dbo.arrearsSnapshot().billingAccount().lease().unit().building());
+        dto.buildingPropertyCode().setValue(dbo.arrearsSnapshot().billingAccount().lease().unit().building().propertyCode().getValue());
 
-        Persistence.service().retrieve(dbo.billingAccount().lease()._applicant());
-        dto.participantId().setValue(dbo.billingAccount().lease()._applicant().participantId().getValue());
-        dto.primaryApplicantsFirstName().setValue(dbo.billingAccount().lease()._applicant().customer().person().name().firstName().getValue());
-        dto.primaryApplicantsLastName().setValue(dbo.billingAccount().lease()._applicant().customer().person().name().lastName().getValue());
-        dto.email().setValue(dbo.billingAccount().lease()._applicant().customer().person().email().getValue());
-        dto.mobilePhone().setValue(dbo.billingAccount().lease()._applicant().customer().person().mobilePhone().getValue());
-        dto.homePhone().setValue(dbo.billingAccount().lease()._applicant().customer().person().homePhone().getValue());
-        dto.workPhone().setValue(dbo.billingAccount().lease()._applicant().customer().person().workPhone().getValue());
+        Persistence.service().retrieve(dbo.arrearsSnapshot().billingAccount().lease()._applicant());
+        dto.participantId().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().participantId().getValue());
+        dto.primaryApplicantsFirstName()
+                .setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().firstName().getValue());
+        dto.primaryApplicantsLastName().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().name().lastName().getValue());
+        dto.email().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().email().getValue());
+        dto.mobilePhone().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().mobilePhone().getValue());
+        dto.homePhone().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().homePhone().getValue());
+        dto.workPhone().setValue(dbo.arrearsSnapshot().billingAccount().lease()._applicant().customer().person().workPhone().getValue());
     }
 }

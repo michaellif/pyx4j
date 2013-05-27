@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
@@ -26,7 +27,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Table(prefix = "billing")
 @AbstractEntity
 @Inheritance(strategy = InheritanceStrategy.SINGLE_TABLE)
-public interface ArrearsSnapshot extends IEntity {
+public interface ArrearsSnapshot<BUCKETS extends AgingBuckets<?>> extends IEntity {
 
     /**
      * a date when this snapshot was taken
@@ -39,9 +40,7 @@ public interface ArrearsSnapshot extends IEntity {
     IPrimitive<LogicalDate> toDate();
 
     @Owned
-    AgingBuckets totalAgingBuckets();
-
-    @Owned
-    IList<AgingBuckets> agingBuckets();
+    @OrderBy(PrimaryKey.class)
+    IList<BUCKETS> agingBuckets();
 
 }
