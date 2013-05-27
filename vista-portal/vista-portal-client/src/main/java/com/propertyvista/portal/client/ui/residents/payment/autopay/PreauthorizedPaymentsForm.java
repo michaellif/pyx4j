@@ -21,14 +21,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -39,7 +35,6 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
@@ -102,30 +97,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             });
         }
 
-        @Override
-        public IFolderItemDecorator<PreauthorizedPaymentListDTO.ListItemDTO> createItemDecorator() {
-            return new VistaBoxFolderItemDecorator<PreauthorizedPaymentListDTO.ListItemDTO>() {
-                @Override
-                public void setComponent(final CEntityFolderItem<PreauthorizedPaymentListDTO.ListItemDTO> folderItem) {
-                    super.setComponent(folderItem);
-
-                    final PreauthorizedPaymentEditor editor = (PreauthorizedPaymentEditor) getContent();
-                    editor.addPropertyChangeHandler(new PropertyChangeHandler() {
-                        @Override
-                        public void onPropertyChange(PropertyChangeEvent event) {
-                            if (event.getPropertyName() == PropertyName.repopulated) {
-
-                                boolean isCurrentTenant = folderItem.getValue().tenant().customer().user().getPrimaryKey()
-                                        .equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
-
-                                folderItem.getItemActionsBar().setDefaultActionsState(isCurrentTenant, false, false);
-                            }
-                        }
-                    });
-                }
-            };
-        }
-
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentListDTO.ListItemDTO> {
 
             private final FormFlexPanel expirationWarning = new FormFlexPanel();
@@ -168,12 +139,16 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 return content;
             }
 
+            @SuppressWarnings("unchecked")
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
                 setEditable(getValue().expiring().isNull());
                 expirationWarning.setVisible(!getValue().expiring().isNull());
+
+                boolean isCurrentTenant = getValue().tenant().customer().user().getPrimaryKey().equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
+                ((CEntityFolderItem<PreauthorizedPaymentListDTO.ListItemDTO>) getParent()).setRemovable(isCurrentTenant);
             }
         }
     }
