@@ -22,7 +22,9 @@ BEGIN
         **/
         
         -- foreign keys
-        
+        ALTER TABLE billing_arrears_snapshot$aging_buckets DROP CONSTRAINT billing_arrears_snapshot$aging_buckets_owner_fk;
+        ALTER TABLE billing_arrears_snapshot$aging_buckets DROP CONSTRAINT billing_arrears_snapshot$aging_buckets_value_fk;
+        ALTER TABLE billing_arrears_snapshot DROP CONSTRAINT billing_arrears_snapshot_total_aging_buckets_fk;
         ALTER TABLE padcredit_policy_item DROP CONSTRAINT padcredit_policy_item_ar_code_fk;
         ALTER TABLE padcredit_policy_item DROP CONSTRAINT padcredit_policy_item_padpolicy_fk;
         ALTER TABLE paddebit_policy_item DROP CONSTRAINT paddebit_policy_item_ar_code_fk;
@@ -63,6 +65,14 @@ BEGIN
         ***
         ***     ======================================================================================================
         **/
+        
+        -- aging_buckets
+        
+        ALTER TABLE aging_buckets       ADD COLUMN arrears_snapshot BIGINT,
+                                        ADD COLUMN arrears_snapshot_discriminator VARCHAR(50),
+                                        ADD COLUMN id_discriminator VARCHAR(64);
+                                        
+                                        
         
         -- billing_billing_cycle
         
@@ -188,8 +198,49 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- aging_buckets
+        /*
+        EXECUTE 'UPDATE '||v_schema_name||'.aging_buckets AS a '
+                ||'SET  arrears_snapshot = ab.owner '
+                ||'FROM '||v_schema_name||'.billing_arrears_snapshot$aging_buckets ab '
+                ||'WHERE a.id = ab.value ';
         
+                
+        EXECUTE 'UPDATE '||v_schema_name||'.aging_buckets AS a '
+                ||'SET  arrears_snapshot = bas.id '
+                ||'FROM '||v_schema_name||'.billing_arrears_snapshot bas '
+                ||'WHERE a.id = bas.total_aging_buckets '
+                ||'AND a.arrears_snapshot IS NULL ';
         
+        */
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.aging_buckets a '
+                ||'SET id_discriminator = CASE WHEN bas.id_discriminator = ''LeaseArrearsSnapshot'' THEN ''LeaseAgingBuckets'' '
+                ||'                             WHEN bas.id_discriminator = ''BuildingArrearsSnapshot'' THEN ''BuildingAgingBuckets'' END, '
+                ||'arrears_snapshot_discriminator = CASE WHEN bas.id_discriminator = ''LeaseArrearsSnapshot'' THEN ''LeaseArrearsSnapshot'' '
+                ||'                             WHEN bas.id_discriminator = ''BuildingArrearsSnapshot'' THEN ''BuildingArrearsSnapshot'' END, ' 
+                ||'arrears_snapshot = bas.id '
+                ||'FROM (SELECT id,total_aging_buckets,id_discriminator FROM '||v_schema_name||'.billing_arrears_snapshot '
+                ||'     UNION '
+                ||'     SELECT  ab.owner,ab.value,bas.id_discriminator FROM '||v_schema_name||'.billing_arrears_snapshot bas '
+                ||'     JOIN    '||v_schema_name||'.billing_arrears_snapshot$aging_buckets ab ON (ab.owner = bas.id) ) bas '
+                ||'WHERE a.id =  bas.total_aging_buckets ';
+                
+      
+        /**
+        ***     ---------------------------------------------------------------------------------------------------------
+        ***     Very special case for starlight - they managed to get some aging_buckets not referenced 
+        ***     from neither billing_arrears_snapshot nor billing_arrears_snapshot$aging_buckets 
+        ***     ---------------------------------------------------------------------------------------------------------
+        **/
+        
+        IF v_schema_name = 'starlight' 
+        THEN
+                
+                DELETE FROM starlight.aging_buckets WHERE id_discriminator IS NULL;
+                
+        END IF;
+      
         
         /**
         ***     ==========================================================================================================
@@ -199,13 +250,19 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        -- billing_arrears_snapshot$aging_buckets
+        
+        DROP TABLE billing_arrears_snapshot$aging_buckets;
+        
+        
         -- billing_account
         
         ALTER TABLE billing_account DROP COLUMN id_discriminator;
         
         -- billing_arrears_snapshot
         
-        ALTER TABLE billing_arrears_snapshot DROP COLUMN billing_account_discriminator;
+        ALTER TABLE billing_arrears_snapshot    DROP COLUMN billing_account_discriminator,
+                                                DROP COLUMN total_aging_buckets;
         
         -- billing_bill
         
@@ -266,6 +323,7 @@ BEGIN
         
         -- foreign keys
         
+        ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_arrears_snapshot_fk FOREIGN KEY(arrears_snapshot) REFERENCES billing_arrears_snapshot(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilspolicy_item$buildings ADD CONSTRAINT ilspolicy_item$buildings_owner_fk FOREIGN KEY(owner) 
                 REFERENCES ilspolicy_item(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE ilspolicy_item$buildings ADD CONSTRAINT ilspolicy_item$buildings_value_fk FOREIGN KEY(value) 
@@ -288,6 +346,8 @@ BEGIN
 
         -- check constraints
         
+        ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_arrears_snapshot_discriminator_d_ck CHECK ((arrears_snapshot_discriminator) IN ('BuildingArrearsSnapshot', 'LeaseArrearsSnapshot'));
+        ALTER TABLE aging_buckets ADD CONSTRAINT aging_buckets_id_discriminator_ck CHECK ((id_discriminator) IN ('BuildingAgingBuckets', 'LeaseAgingBuckets'));
         ALTER TABLE billable_item ADD CONSTRAINT billable_item_extra_data_discriminator_d_ck 
                 CHECK ((extra_data_discriminator) IN ('Pet_ChargeItemExtraData', 'Vehicle_ChargeItemExtraData', 'YardiLeaseCharge'));
         ALTER TABLE ilspolicy_item ADD CONSTRAINT ilspolicy_item_provider_e_ck CHECK (provider= 'kijiji');
@@ -295,6 +355,11 @@ BEGIN
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 
                 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
 
+       
+       -- not null7431 |           0.00 |     0.00 |     0.00 |     0.00 |          0.00 |           0.00 |          0.00 |          0.00 |                   |                | BuildingArrearsSnapshot
+
+       
+       ALTER TABLE aging_buckets ALTER COLUMN id_discriminator SET NOT NULL;
        
         /**
         ***     ====================================================================================================

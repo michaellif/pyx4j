@@ -14,6 +14,7 @@ SET search_path = 'public';
 BEGIN TRANSACTION;
 
 -- Sequences to drop
+ DROP SEQUENCE billing_arrears_snapshot$aging_buckets_seq;      
  DROP SEQUENCE padcredit_policy_item_seq;
  DROP SEQUENCE paddebit_policy_item_seq;
  DROP SEQUENCE padpolicy_seq;
