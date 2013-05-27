@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -106,8 +107,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public List<PaymentRecord> reportPreauthorisedPayments(LogicalDate dueDate) {
-        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(dueDate);
+    public List<PaymentRecord> reportPreauthorisedPayments(LogicalDate dueDate, List<Building> selectedBuildings) {
+        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(dueDate, selectedBuildings);
     }
 
     @Override

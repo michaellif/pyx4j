@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public interface PaymentProcessFacade {
@@ -40,7 +41,7 @@ public interface PaymentProcessFacade {
 
     void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate padGenerationDate);
 
-    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate);
+    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate, List<Building> selectedBuildings);
 
     void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate);
 

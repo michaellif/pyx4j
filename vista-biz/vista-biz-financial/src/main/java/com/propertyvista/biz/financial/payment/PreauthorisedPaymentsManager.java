@@ -41,6 +41,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -60,23 +61,26 @@ class PreauthorisedPaymentsManager {
         String notice;
     }
 
-    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate runDate) {
+    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate runDate, List<Building> selectedBuildings) {
         List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        createPreauthorisedPayments(new ExecutionMonitor(), runDate, true, paymentRecords);
+        createPreauthorisedPayments(new ExecutionMonitor(), runDate, true, paymentRecords, selectedBuildings);
         return paymentRecords;
     }
 
     void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        createPreauthorisedPayments(executionMonitor, runDate, false, null);
+        createPreauthorisedPayments(executionMonitor, runDate, false, null, null);
     }
 
     private void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate, boolean reportOny,
-            List<PaymentRecord> resultingPaymentRecords) {
+            List<PaymentRecord> resultingPaymentRecords, List<Building> selectedBuildings) {
         ICursorIterator<BillingCycle> billingCycleIterator;
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetPadGenerationDate(), runDate);
             criteria.isNull(criteria.proto().actualPadGenerationDate());
+            if (selectedBuildings != null) {
+                criteria.in(criteria.proto().building(), selectedBuildings);
+            }
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
         try {

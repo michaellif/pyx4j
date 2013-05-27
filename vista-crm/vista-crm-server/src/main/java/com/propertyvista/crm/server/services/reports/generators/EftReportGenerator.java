@@ -15,6 +15,7 @@ package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -29,6 +30,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -51,8 +53,13 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
                 padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
             }
 
+            List<Building> selectedBuildings = null;
+            if (reportMetadata.filterByBuildings().getValue(false) && (!reportMetadata.selectedBuildings().isEmpty())) {
+                selectedBuildings = reportMetadata.selectedBuildings();
+            }
+
             for (LogicalDate padGenerationDate : padGenerationDays) {
-                paymentRecords.addAll(ServerSideFactory.create(PaymentProcessFacade.class).reportPreauthorisedPayments(padGenerationDate));
+                paymentRecords.addAll(ServerSideFactory.create(PaymentProcessFacade.class).reportPreauthorisedPayments(padGenerationDate, selectedBuildings));
             }
 
             for (PaymentRecord paymentRecord : paymentRecords) {
