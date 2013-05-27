@@ -13,6 +13,8 @@
  */
 package com.propertyvista.operations.server.upgrade;
 
+import java.util.concurrent.Callable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,10 +26,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.server.contexts.Lifecycle;
-import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class VistaUpgrade {
 
@@ -71,9 +72,17 @@ public class VistaUpgrade {
                 Lifecycle.startElevatedUserContext();
                 try {
                     procedure.runUpgradeStep(step);
-                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-                    pmc.schemaDataUpgradeSteps().setValue(step);
-                    Persistence.service().persist(pmc);
+
+                    TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+                        @Override
+                        public Void call() {
+                            Pmc pmcUpdate = Persistence.service().retrieve(Pmc.class, pmc.getPrimaryKey());
+                            pmcUpdate.schemaDataUpgradeSteps().setValue(step);
+                            Persistence.service().persist(pmcUpdate);
+                            return null;
+                        }
+                    });
+
                 } finally {
                     Lifecycle.endElevatedUserContext();
                 }

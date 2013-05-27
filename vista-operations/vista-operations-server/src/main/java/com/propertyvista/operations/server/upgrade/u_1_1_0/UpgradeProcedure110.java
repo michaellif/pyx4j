@@ -88,14 +88,17 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         }
         if (setDefaultCatalog) {
             final Pmc pmc = VistaDeployment.getCurrentPmc();
-            pmc.features().defaultProductCatalog().setValue(true);
-            TaskRunner.runInOperationsNamespace(new Callable<Void>() {
-                @Override
-                public Void call() {
-                    Persistence.service().persist(pmc.features());
-                    return null;
-                }
-            });
+            if (pmc.features().defaultProductCatalog().getValue(false)) {
+                pmc.features().defaultProductCatalog().setValue(true);
+                TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+                    @Override
+                    public Void call() {
+                        Persistence.service().persist(pmc.features());
+                        return null;
+                    }
+                });
+                log.info("defaultProductCatalog enabled for PMC {}", pmc.dnsName().getValue());
+            }
         }
     }
 
