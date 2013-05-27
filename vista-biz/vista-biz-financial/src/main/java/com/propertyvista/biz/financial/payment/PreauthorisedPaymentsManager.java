@@ -44,6 +44,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymen
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
+//TODO Preauthorised rename to Preauthorized
 class PreauthorisedPaymentsManager {
 
     private static final I18n i18n = I18n.get(PreauthorisedPaymentsManager.class);
