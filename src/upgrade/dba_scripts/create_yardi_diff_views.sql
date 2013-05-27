@@ -8,7 +8,7 @@
 ***     ======================================================================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.create_comparison_views(v_schema_name TEXT, v_batch_id TEXT) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.create_comparison_views(v_schema_name TEXT, v_batch_id TEXT, v_date DATE DEFAULT current_date ) RETURNS VOID AS
 $$
 BEGIN
 
@@ -27,14 +27,14 @@ BEGIN
                 ||'JOIN         '||v_schema_name||'.lease l ON (lp.lease = l.id) '
                 ||'JOIN         '||v_schema_name||'.apt_unit a ON (a.id = l.unit) '
                 ||'JOIN         '||v_schema_name||'.building b ON (b.id = a.building) '
-                ||'WHERE        pr.created_date >= ''2013-04-28'' )';
+                ||'WHERE        pr.created_date >= '||quote_literal(v_date)||' )';
                 
         EXECUTE 'ALTER VIEW _admin_.'||v_schema_name||'_transactions OWNER TO vista';       
                 
         -- Join view 
         
         EXECUTE 'CREATE OR REPLACE VIEW _admin_.'||v_schema_name||'_diff_join  AS '
-                ||'(SELECT      CASE WHEN a.client_id IS NULL THEN b.client_id ELSE a.client_id END AS client_id, '
+                ||'(SELECT      DISTINCT CASE WHEN a.client_id IS NULL THEN b.client_id ELSE a.client_id END AS client_id, '
                 ||'             c.property_code, '
                 ||'             a.amount AS yardi_amount, '
                 ||'             b.amount AS vista_amount, '
