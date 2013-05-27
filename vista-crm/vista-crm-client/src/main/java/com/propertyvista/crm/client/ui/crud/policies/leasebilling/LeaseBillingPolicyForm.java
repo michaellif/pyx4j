@@ -64,7 +64,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final static I18n i18n = I18n.get(LeaseBillingPolicyForm.class);
 
-    private SimplePanel baseFeeHolder;
+    private final SimplePanel baseFeeHolder = new SimplePanel();
 
     private SimplePanel maxFeeHolder;
 
@@ -115,7 +115,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 bindBaseFeeEditor(event.getValue(), false);
             }
         });
-        panel.setWidget(++row, 0, baseFeeHolder = new SimplePanel());
+        panel.setWidget(++row, 0, baseFeeHolder);
 
         row = -1;
         panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lateFee().maxTotalFeeType()), 10).build());

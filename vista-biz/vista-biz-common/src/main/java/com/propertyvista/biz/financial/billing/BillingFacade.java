@@ -17,7 +17,6 @@ import java.math.BigDecimal;
 
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
-import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -49,7 +48,5 @@ public interface BillingFacade {
     void updateLeaseAdjustmentTax(LeaseAdjustment adjustment);
 
     BigDecimal getMaxLeaseTermMonthlyTotal(LeaseTerm leaseTerm);
-
-    void onLeaseBillingPolicyChange(LeaseBillingPolicy oldPolicy, LeaseBillingPolicy newPolicy);
 
 }

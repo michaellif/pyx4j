@@ -15,10 +15,13 @@ package com.propertyvista.biz.financial.billingcycle;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -211,6 +214,62 @@ class BillingCycleManager {
         }
 
         return billingCycle;
+    }
+
+    void onLeaseBillingPolicyChange(LeaseBillingPolicy oldPolicy, LeaseBillingPolicy newPolicy) {
+        // get all affected buildings
+        List<Building> buildings = ServerSideFactory.create(PolicyFacade.class).getGovernedNodesOfType(newPolicy, Building.class);
+        if (buildings == null || buildings.size() == 0) {
+            return;
+        }
+
+        // update future BillingCycles if execution dates have changed
+        Map<BillingPeriod, LeaseBillingTypePolicyItem> policyMap = new HashMap<BillingPeriod, LeaseBillingTypePolicyItem>();
+        for (LeaseBillingTypePolicyItem item : newPolicy.availableBillingTypes()) {
+            policyMap.put(item.billingPeriod().getValue(), item);
+        }
+
+        for (LeaseBillingTypePolicyItem oldItem : oldPolicy.availableBillingTypes()) {
+            LeaseBillingTypePolicyItem newItem = policyMap.get(oldItem.billingPeriod().getValue());
+            if (// @formatter:off
+                oldItem.billExecutionDayOffset().getValue() == newItem.billExecutionDayOffset().getValue() &&
+                oldItem.padCalculationDayOffset().getValue() == newItem.padCalculationDayOffset().getValue() &&
+                oldItem.padExecutionDayOffset().getValue() == newItem.padExecutionDayOffset().getValue()
+                // @formatter:on
+            ) {
+                continue;
+            }
+            // iterate over future billing cycles
+            EntityQueryCriteria<BillingCycle> criteria = new EntityQueryCriteria<BillingCycle>(BillingCycle.class);
+            criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
+            criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), oldItem.billingPeriod()));
+            criteria.add(PropertyCriterion.gt(criteria.proto().targetBillExecutionDate(), SystemDateManager.getDate()));
+            for (BillingCycle billingCycle : Persistence.service().query(criteria)) {
+                // Only update cycle if all new dates are in the future
+                LogicalDate startDate = billingCycle.billingCycleStartDate().getValue();
+
+                LogicalDate billExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.billExecutionDayOffset().getValue(), startDate);
+                if (!billExecDate.after(SystemDateManager.getDate())) {
+                    continue;
+                }
+
+                LogicalDate padCalcDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padCalculationDayOffset().getValue(), startDate);
+                if (!padCalcDate.after(SystemDateManager.getDate())) {
+                    continue;
+                }
+
+                LogicalDate padExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padExecutionDayOffset().getValue(), startDate);
+                if (!padExecDate.after(SystemDateManager.getDate())) {
+                    continue;
+                }
+
+                billingCycle.targetBillExecutionDate().setValue(billExecDate);
+                billingCycle.targetPadGenerationDate().setValue(padCalcDate);
+                billingCycle.targetPadExecutionDate().setValue(padExecDate);
+
+                Persistence.service().persist(billingCycle);
+            }
+        }
     }
 
     private LogicalDate calculateBillingCycleStartDate(BillingType billingType, LogicalDate date) {

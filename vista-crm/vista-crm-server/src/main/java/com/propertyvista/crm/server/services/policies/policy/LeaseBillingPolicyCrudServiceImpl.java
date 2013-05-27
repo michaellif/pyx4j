@@ -18,7 +18,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
@@ -39,7 +39,7 @@ public class LeaseBillingPolicyCrudServiceImpl extends GenericPolicyCrudService<
 
         super.persist(dbo, in);
 
-        ServerSideFactory.create(BillingFacade.class).onLeaseBillingPolicyChange(oldPolicy, dbo);
+        ServerSideFactory.create(BillingCycleFacade.class).onLeaseBillingPolicyChange(oldPolicy, dbo);
     }
 
 }

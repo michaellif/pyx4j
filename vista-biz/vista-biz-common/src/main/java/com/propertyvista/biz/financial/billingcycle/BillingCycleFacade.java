@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.BillingType;
+import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface BillingCycleFacade {
@@ -30,4 +31,7 @@ public interface BillingCycleFacade {
     BillingCycle getSubsequentBillingCycle(BillingCycle billingCycle);
 
     BillingCycle getPriorBillingCycle(BillingCycle billingCycle);
+
+    void onLeaseBillingPolicyChange(LeaseBillingPolicy oldPolicy, LeaseBillingPolicy newPolicy);
+
 }
