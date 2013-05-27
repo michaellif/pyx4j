@@ -170,13 +170,18 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     }
 
     private void fillCoveredItemsDto(PreauthorizedPaymentDTO papDto) {
+        if (!papDto.expiring().isNull()) {
+            return; // do not fill-up expired paps!.. 
+        }
+
         Persistence.ensureRetrieve(papDto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(papDto.tenant().lease(), AttachLevel.Attached);
 
         Lease lease = papDto.tenant().lease();
 
         if (!isCoveredItemExist(papDto, lease.currentTerm().version().leaseProducts().serviceItem())) {
-            papDto.coveredItemsDTO().add(createCoveredItemDto(lease.currentTerm().version().leaseProducts().serviceItem(), lease));
+            papDto.coveredItemsDTO().add(
+                    createCoveredItemDto(lease.currentTerm().version().leaseProducts().serviceItem(), lease, papDto.getPrimaryKey() == null));
         }
 
         for (BillableItem billableItem : lease.currentTerm().version().leaseProducts().featureItems()) {
@@ -186,10 +191,9 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
                     && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
                     && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
             //@formatter:on
-                papDto.coveredItemsDTO().add(createCoveredItemDto(billableItem, lease));
+                papDto.coveredItemsDTO().add(createCoveredItemDto(billableItem, lease, papDto.getPrimaryKey() == null));
             }
         }
-
     }
 
     private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
@@ -201,7 +205,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         return false;
     }
 
-    private PreauthorizedPaymentCoveredItemDTO createCoveredItemDto(BillableItem billableItem, Lease lease) {
+    private PreauthorizedPaymentCoveredItemDTO createCoveredItemDto(BillableItem billableItem, Lease lease, boolean isNewPap) {
         PreauthorizedPaymentCoveredItemDTO item = EntityFactory.create(PreauthorizedPaymentCoveredItemDTO.class);
 
         // calculate already covered amount by other tenants/paps: 
@@ -219,7 +223,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         BigDecimal itemPrice = billableItem.agreedPrice().getValue();
 
-        item.amount().setValue(itemPrice.subtract(item.covered().getValue()));
+        item.amount().setValue(isNewPap ? itemPrice.subtract(item.covered().getValue()) : BigDecimal.ZERO);
         item.percent().setValue(item.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
 
         item.billableItem().set(billableItem);
