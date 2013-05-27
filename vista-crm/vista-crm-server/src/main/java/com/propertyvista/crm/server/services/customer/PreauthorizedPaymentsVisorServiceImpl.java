@@ -242,6 +242,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         // calculate already covered amount by other tenants/paps: 
         EntityQueryCriteria<PreauthorizedPaymentCoveredItem> criteria = new EntityQueryCriteria<PreauthorizedPaymentCoveredItem>(
                 PreauthorizedPaymentCoveredItem.class);
+        criteria.ne(criteria.proto().pap(), item.pap());
         criteria.eq(criteria.proto().pap().tenant().lease(), lease);
         criteria.eq(criteria.proto().billableItem().uid(), item.billableItem().uid());
         criteria.eq(criteria.proto().pap().isDeleted(), Boolean.FALSE);
