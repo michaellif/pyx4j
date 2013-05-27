@@ -48,6 +48,16 @@ public class TenantPadCreateReport {
                 reportModel.percentStored().setValue(reportModel._processorInformation().percent().getValue().doubleValue() * 100);
             }
 
+            StringBuilder amountStored = new StringBuilder();
+            for (PadFileModel charge : data._processorInformation().accountCharges()) {
+                if (amountStored.length() > 0) {
+                    amountStored.append(", ");
+                }
+                amountStored.append(charge.chargeCode().getValue()).append(":");
+                amountStored.append(charge._processorInformation().chargeEftAmount().getValue().toString());
+            }
+            reportModel.amountStored().setValue(amountStored.toString());
+
             entityFormatter.reportEntity(formatter, reportModel);
         }
     }

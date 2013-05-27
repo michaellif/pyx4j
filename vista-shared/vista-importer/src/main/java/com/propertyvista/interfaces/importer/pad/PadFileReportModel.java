@@ -26,6 +26,8 @@ public interface PadFileReportModel extends PadFileModel {
     @Format("#,##0.00")
     IPrimitive<Double> percentStored();
 
+    IPrimitive<String> amountStored();
+
     IPrimitive<Boolean> invalid();
 
     IPrimitive<PadProcessingStatus> status();

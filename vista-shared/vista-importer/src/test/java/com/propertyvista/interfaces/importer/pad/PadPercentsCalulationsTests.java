@@ -104,6 +104,12 @@ public class PadPercentsCalulationsTests {
         return model;
     }
 
+    private PadFileModel createModelFullNonRecurring(String account, String chargeCode, String percent, double estimatedCharge) {
+        PadFileModel model = createModelFull(account, chargeCode, percent, estimatedCharge);
+        model.recurringEFT().setValue(Boolean.FALSE);
+        return model;
+    }
+
     @Test
     public void testRent_30_60() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
@@ -254,4 +260,24 @@ public class PadPercentsCalulationsTests {
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(3)._processorInformation().status().getValue());
 
     }
+
+    // One of the accounts is Non Recurring
+    @Test
+    public void testUninitializedChargeSplitCase4A() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFullNonRecurring("1", "rent", null, 1000));
+        leasePadEntities.add(createModelFull("2", "rent", "100", 1000));
+        leasePadEntities.add(createModelFullNonRecurring("1", "park", null, 100));
+        leasePadEntities.add(createModelFull("2", "park", null, 100));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        Assert.assertEquals(PadProcessingStatus.notUsedForACH, leasePadEntities.get(0)._processorInformation().status().getValue());
+
+        assertEquals(new BigDecimal("1.0"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("1100.0"), leasePadEntities.get(1)._processorInformation().calulatedEftTotalAmount().getValue());
+
+        Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(3)._processorInformation().status().getValue());
+    }
+
 }

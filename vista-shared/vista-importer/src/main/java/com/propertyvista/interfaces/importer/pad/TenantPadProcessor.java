@@ -427,6 +427,9 @@ public class TenantPadProcessor {
             if (!padFileModel._processorInformation().status().isNull()) {
                 continue;
             }
+            if (!isPapApplicable(padFileModel)) {
+                continue;
+            }
             if (padFileModel.charge().isNull()) {
                 double estimatedCharge = Double.parseDouble(padFileModel.estimatedCharge().getValue());
 
