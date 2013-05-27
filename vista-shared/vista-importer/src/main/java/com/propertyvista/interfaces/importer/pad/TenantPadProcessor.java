@@ -534,7 +534,7 @@ public class TenantPadProcessor {
 
         // 1c moved to last account
         for (ChargeCodeRecords chargeCodeRecords : recordsByChargeCode.values()) {
-            if (chargeCodeRecords.estimatedCharge.compareTo(chargeCodeRecords.entitiesTotal) != 0) {
+            if (chargeCodeRecords.estimatedCharge.subtract(chargeCodeRecords.entitiesTotal).abs().compareTo(new BigDecimal("0.02")) <= 0) {
                 BigDecimal delta = chargeCodeRecords.estimatedCharge.subtract(chargeCodeRecords.entitiesTotal);
                 PadFileModel lastRecord = chargeCodeRecords.entities.get(chargeCodeRecords.entities.size() - 1);
                 lastRecord._processorInformation().chargeEftAmount().setValue(lastRecord._processorInformation().chargeEftAmount().getValue().add(delta));

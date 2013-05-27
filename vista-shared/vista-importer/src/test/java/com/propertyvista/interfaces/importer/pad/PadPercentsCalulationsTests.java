@@ -186,6 +186,17 @@ public class PadPercentsCalulationsTests {
     }
 
     @Test
+    public void testYardiImportSingel() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "33.28411622", 799.18));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.332841"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("266.00"), leasePadEntities.get(0)._processorInformation().chargeEftAmount().getValue());
+    }
+
+    @Test
     public void testYardiRounding_50_50() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
         leasePadEntities.add(createModelFull("1", "rent", "50", 1000.01));
