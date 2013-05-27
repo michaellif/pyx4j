@@ -20,9 +20,14 @@
  */
 package com.pyx4j.commons.css;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.core.client.GWT;
 
 public abstract class Property {
+
+    private static final Logger log = LoggerFactory.getLogger(Property.class);
 
     private final String name;
 
@@ -41,9 +46,13 @@ public abstract class Property {
     protected abstract String convertToString(Theme theme, Palette palette);
 
     protected String injectAlternativeHostForwarding(String value) {
-        int urlIdx = value.indexOf("url(");
-        if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {
-            value = value.substring(0, urlIdx) + " url(" + StyleManager.getAlternativeHostname() + GWT.getModuleName() + "/" + value.substring(urlIdx + 4);
+        try {
+            int urlIdx = value.indexOf("url(");
+            if ((urlIdx != -1) && (value.indexOf("url('data:image/") == -1) && (value.indexOf("url('http://") == -1)) {
+                value = value.substring(0, urlIdx) + " url(" + StyleManager.getAlternativeHostname() + GWT.getModuleName() + "/" + value.substring(urlIdx + 4);
+            }
+        } catch (Exception e) {
+            log.error("Failed to calculate alternative hostname for url", e);
         }
         return value;
     }
