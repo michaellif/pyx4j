@@ -37,6 +37,7 @@ SET search_path = '_admin_';
         
         ALTER TABLE pad_batch DROP CONSTRAINT pad_batch_processing_status_e_ck;
         ALTER TABLE pad_debit_record DROP CONSTRAINT pad_debit_record_processing_status_e_ck;
+        ALTER TABLE scheduler_run_data DROP CONSTRAINT scheduler_run_data_status_e_ck;
         
         
         /**
@@ -103,6 +104,9 @@ SET search_path = '_admin_';
                 CHECK ((processing_status) IN ('AcknowledgeProcesed', 'AcknowledgeReject', 'AcknowledgedReceived'));
         ALTER TABLE pad_debit_record ADD CONSTRAINT pad_debit_record_processing_status_e_ck 
                 CHECK ((processing_status) IN ('AcknowledgeProcesed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcesed', 'ReconciliationReceived'));
+        ALTER TABLE  scheduler_run_data ADD CONSTRAINT scheduler_run_data_status_e_ck 
+                CHECK (status IN ('Canceled','Erred','Failed','NeverRan','Processed','Running','Terminated'));
+
 
                 
         /**
