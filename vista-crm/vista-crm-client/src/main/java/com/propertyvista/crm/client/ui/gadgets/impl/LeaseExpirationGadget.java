@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
@@ -28,9 +29,11 @@ import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.LeaseExpirationSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeaseExpirationGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -76,6 +79,22 @@ public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpira
                         filterData.getCounterMember());
             }
         };
-        bindDetailsFactory(filter, new LeasesDetailsFactory(this, criteriaProvider));
+        bindDetailsFactory(filter, new LeasesDetailsFactory(this, criteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().leaseListerDetails();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+        }));
     }
 }

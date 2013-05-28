@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.LeasesDetailsFactory;
@@ -27,9 +28,11 @@ import com.propertyvista.crm.client.ui.gadgets.components.UnitDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.NoticesSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.dto.gadgets.NoticesGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.NoticesGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.NoticesGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.AptUnitDTO;
 import com.propertyvista.dto.LeaseDTO;
@@ -71,7 +74,23 @@ public class NoticesGadget extends CounterGadgetInstanceBase<NoticesGadgetDataDT
                         filterData.getCounterMember());
             }
         };
-        bindDetailsFactory(category, new LeasesDetailsFactory(this, criteriaProvider));
+        bindDetailsFactory(category, new LeasesDetailsFactory(this, criteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().leaseLeasterDetails();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+        }));
     }
 
     private void bindUnitDetailsFactory(IObject<?> category) {

@@ -26,7 +26,9 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractLister
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeasesDetailsFactory extends AbstractListerDetailsFactory<LeaseDTO, CounterGadgetFilter> {
@@ -61,14 +63,15 @@ public class LeasesDetailsFactory extends AbstractListerDetailsFactory<LeaseDTO,
             );//@formatter:on
     }
 
-    public LeasesDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterData, ICriteriaProvider<LeaseDTO, CounterGadgetFilter> criteriaProvider) {
+    public LeasesDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterData, ICriteriaProvider<LeaseDTO, CounterGadgetFilter> criteriaProvider,
+            Proxy<ListerUserSettings> listerSettingsProxy) {
         super(//@formatter:off
                 LeaseDTO.class,
                 DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<LeaseViewerCrudService>create(LeaseViewerCrudService.class),
                 filterData,
                 criteriaProvider,
-                null
+                listerSettingsProxy
         );//@formatter:on
 
     }
