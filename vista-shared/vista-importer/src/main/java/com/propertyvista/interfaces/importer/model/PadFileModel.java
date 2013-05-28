@@ -35,6 +35,9 @@ public interface PadFileModel extends IEntity {
     @XmlTransient
     PadProcessorInformation _processorInformation();
 
+    @ImportColumn(names = { "Ignore", "Import Ignore" })
+    IPrimitive<Boolean> ignore();
+
     @ImportColumn(names = { "Building", "Property", "Property Code" })
     IPrimitive<String> property();
 

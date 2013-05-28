@@ -119,10 +119,9 @@ public class TenantPadProcessor {
 
         for (Map.Entry<String, List<PadFileModel>> me : mappedByLease.entrySet()) {
             List<PadFileModel> leasePadEntities = me.getValue();
-            //if (validateLeasePads(leasePadEntities, counters)) {
-            //System.out.println(me.getKey());
-            calulateLeasePercents(leasePadEntities);
-            //}
+            if (validateLeasePads(leasePadEntities, counters)) {
+                calulateLeasePercents(leasePadEntities);
+            }
 
             for (PadFileModel padFileModel : leasePadEntities) {
                 if (padFileModel._processorInformation().status().isNull()) {
@@ -150,6 +149,11 @@ public class TenantPadProcessor {
     private Map<Lease, List<PadFileModel>> findLeases(List<PadFileModel> entities, TenantPadCounter counters) {
         Map<Lease, List<PadFileModel>> mappedByLease = new LinkedHashMap<Lease, List<PadFileModel>>();
         for (PadFileModel padFileModel : entities) {
+            if (padFileModel.ignore().getValue(false)) {
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredByRequest);
+                continue;
+            }
+
             if (!padFileModel.tenantId().isNull()) {
                 String tenantId = padFileModel.tenantId().getValue().trim();
                 EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
@@ -195,6 +199,10 @@ public class TenantPadProcessor {
     private Map<String, List<PadFileModel>> findLeasesOfflineTest(List<PadFileModel> entities, TenantPadCounter counters) {
         Map<String, List<PadFileModel>> mappedByLease = new LinkedHashMap<String, List<PadFileModel>>();
         for (PadFileModel padFileModel : entities) {
+            if (padFileModel.ignore().getValue(false)) {
+                padFileModel._processorInformation().status().setValue(PadProcessingStatus.ignoredByRequest);
+                continue;
+            }
             String leaseId;
             if (!padFileModel.leaseId().isNull()) {
                 leaseId = padFileModel.leaseId().getValue().trim();
@@ -296,6 +304,7 @@ public class TenantPadProcessor {
         for (PadFileModel padFileModel : leasePadEntities) {
             String message = validationMessagePadModel(padFileModel);
             if (message != null) {
+                System.err.println(message);
                 padFileModel._import().message().setValue(message);
                 padFileModel._import().invalid().setValue(Boolean.TRUE);
                 padFileModel._processorInformation().status().setValue(PadProcessingStatus.invalid);
@@ -341,12 +350,17 @@ public class TenantPadProcessor {
 //        if ((padFileModel.charge().isNull()) && (padFileModel.percent().isNull())) {
 //            return i18n.tr("Charge or percent is required");
 //        }
-        if ((!padFileModel.charge().isNull()) && (!padFileModel.percent().isNull())) {
-            return i18n.tr("Charge and percent not supported simultaneously");
+        // Charge will override percent
+//        if ((!padFileModel.charge().isNull()) && (!padFileModel.percent().isNull())) {
+//            return i18n.tr("Charge and percent not supported simultaneously");
+//        }
+
+        if ((!padFileModel.charge().isNull()) && (padFileModel.charge().getValue().startsWith("$"))) {
+            padFileModel.charge().setValue(padFileModel.charge().getValue().substring(1, padFileModel.charge().getValue().length()));
         }
 
         if (!padFileModel.charge().isNull() && (!isValidNumber(padFileModel.charge().getValue()))) {
-            return i18n.tr("Charge is not valid number");
+            return i18n.tr("Charge '" + padFileModel.charge().getValue() + "' is not valid number");
         }
 
         if ((!padFileModel.percent().isNull()) && (padFileModel.percent().getValue().endsWith("%"))) {
@@ -354,7 +368,7 @@ public class TenantPadProcessor {
         }
 
         if (!padFileModel.percent().isNull() && (!isValidNumber(padFileModel.percent().getValue()))) {
-            return i18n.tr("Percent is not valid number");
+            return i18n.tr("Percent '" + padFileModel.percent().getValue() + "' is not valid number");
         }
 
         if (!padFileModel.estimatedCharge().isNull() && (!isValidNumber(padFileModel.estimatedCharge().getValue()))) {

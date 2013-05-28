@@ -39,9 +39,9 @@ public class PadEFTPCalulations {
     private static final Logger log = LoggerFactory.getLogger(PadEFTPCalulations.class);
 
     public static void main(String[] args) {
-        new PadEFTPCalulations("gr041").run();
+        //new PadEFTPCalulations("gr041").run();
         new PadEFTPCalulations("gr0527").run();
-        new PadEFTPCalulations("ber0527").run();
+        //new PadEFTPCalulations("ber0527").run();
     }
 
     private final String fileNamePrefix;
@@ -67,8 +67,17 @@ public class PadEFTPCalulations {
     }
 
     void run() {
-        List<PadFileModel> models = new TenantPadParser.PadFileCSVReciver("").loadResourceFile(IOUtils.resourceFileName(fileNamePrefix + "_lease_charges.csv",
-                PadEFTPCalulations.class));
+        String inputFile = fileNamePrefix + "_lease_charges.csv";
+        // Test 
+        inputFile = "./" + fileNamePrefix + "_lease_charges.xlsx";
+
+        List<PadFileModel> models;
+        if (inputFile.startsWith(".")) {
+            models = new TenantPadParser.PadFileCSVReciver("").loadFile(inputFile);
+        } else {
+            models = new TenantPadParser.PadFileCSVReciver("").loadResourceFile(IOUtils.resourceFileName(inputFile, PadEFTPCalulations.class));
+        }
+
         new TenantPadProcessor().processOfflineTest(models);
 
         List<EFTModel> efts = EntityCSVReciver.create(EFTModel.class).loadResourceFile(

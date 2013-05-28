@@ -32,6 +32,8 @@ public interface PadProcessorInformation extends IEntity {
 
     public static enum PadProcessingStatus {
 
+        ignoredByRequest,
+
         invalid,
 
         anotherRecordInvalid,
