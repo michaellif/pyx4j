@@ -644,7 +644,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                 }
             }
 
-            getOkButton().setText(i18n.tr("Send"));
+            getOkButton().setTextLabel(i18n.tr("Send"));
 
             if (emailType.getOptions().size() == 1) {
                 emailType.setValue(emailType.getOptions().get(0), true);

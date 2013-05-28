@@ -32,7 +32,7 @@ public abstract class PaymentMethodPreauthorizationAgreementDialog extends OkCan
     public PaymentMethodPreauthorizationAgreementDialog(PaymentType paymentType) {
         super(i18n.tr("Please Confirm"));
         setBody(createBody(paymentType));
-        getOkButton().setText(i18n.tr("I Agree"));
+        getOkButton().setTextLabel(i18n.tr("I Agree"));
     }
 
     private IsWidget createBody(PaymentType type) {
