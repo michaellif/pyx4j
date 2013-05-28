@@ -196,10 +196,10 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         unbind(proto().lateFee().baseFee());
 
         if (comp != null) {
-            maxFeeHolder.setWidget(new DecoratorBuilder(inject(proto().lateFee().baseFee(), comp), 6).build());
+            maxFeeHolder.setWidget(new DecoratorBuilder(inject(proto().lateFee().maxTotalFee(), comp), 6).build());
 
             if (repopulatevalue) {
-                get(proto().lateFee().baseFee()).populate(getValue().lateFee().baseFee().getValue(BigDecimal.ZERO));
+                get(proto().lateFee().maxTotalFee()).populate(getValue().lateFee().maxTotalFee().getValue(BigDecimal.ZERO));
             }
 
             comp.setVisible(maxFeeType != MaxTotalFeeType.Unlimited);
