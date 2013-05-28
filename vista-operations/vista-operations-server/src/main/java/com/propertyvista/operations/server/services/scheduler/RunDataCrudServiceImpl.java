@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.domain.scheduler.RunDataStatus;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 
 public class RunDataCrudServiceImpl extends AbstractCrudServiceImpl<RunData> implements RunDataCrudService {
@@ -50,13 +51,13 @@ public class RunDataCrudServiceImpl extends AbstractCrudServiceImpl<RunData> imp
     }
 
     @Override
-    public void stopRun(AsyncCallback<VoidSerializable> callback, RunData runDataStub) {
+    public void cancelDataRun(AsyncCallback<VoidSerializable> callback, RunData runDataStub) {
         RunData runData = Persistence.service().retrieve(RunData.class, runDataStub.getPrimaryKey());
-
-        Persistence.ensureRetrieve(runData.execution(), AttachLevel.Attached);
-
-        // TODO: stop run here...
-
+        if (runData.status().getValue() == RunDataStatus.NeverRan) {
+            runData.status().setValue(RunDataStatus.Canceled);
+            Persistence.service().persist(runData);
+            Persistence.service().commit();
+        }
         callback.onSuccess(null);
     }
 }

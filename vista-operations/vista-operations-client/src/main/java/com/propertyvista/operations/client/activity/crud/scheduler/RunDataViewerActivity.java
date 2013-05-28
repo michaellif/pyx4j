@@ -33,11 +33,11 @@ public class RunDataViewerActivity extends AdminViewerActivity<RunData> implemen
     }
 
     @Override
-    public void stopRun() {
-        ((RunDataCrudService) getService()).stopRun(new DefaultAsyncCallback<VoidSerializable>() {
+    public void cancelDataRun() {
+        ((RunDataCrudService) getService()).cancelDataRun(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                // TODO Auto-generated method stub
+                refresh();
             }
         }, EntityFactory.createIdentityStub(RunData.class, getEntityId()));
     }

@@ -122,11 +122,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
         for (ResidentTransactions transaction : allTransactions) {
             importTransaction(transaction, executionMonitor);
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
         }
 
-        List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, propertyCodes);
-        for (ResidentTransactions leaseCharges : allLeaseCharges) {
-            importLeaseCharges(leaseCharges, executionMonitor);
+        if (!executionMonitor.isTerminationRequested()) {
+            List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, propertyCodes);
+            for (ResidentTransactions leaseCharges : allLeaseCharges) {
+                importLeaseCharges(leaseCharges, executionMonitor);
+                if (executionMonitor.isTerminationRequested()) {
+                    break;
+                }
+            }
         }
 
         log.info("Update completed.");
@@ -227,6 +235,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 executionMonitor.addFailedEvent("Building", propertyId, e);
             } catch (Throwable t) {
                 executionMonitor.addErredEvent("Building", propertyId, t);
+            }
+
+            if (executionMonitor.isTerminationRequested()) {
+                break;
             }
 
         }
@@ -364,6 +376,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 } else {
                     log.warn("Building", t);
                 }
+            }
+
+            if (executionMonitor.isTerminationRequested()) {
+                break;
             }
 
         }

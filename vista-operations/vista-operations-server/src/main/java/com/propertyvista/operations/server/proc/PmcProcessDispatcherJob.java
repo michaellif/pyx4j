@@ -135,15 +135,21 @@ public class PmcProcessDispatcherJob implements Job {
 
         run.runData().setAttachLevel(AttachLevel.Detached);
 
-        PmcProcess pmcProcess = startProcess(run);
+        try {
+            PmcProcessMonitor.onExecutionStart(run);
 
-        if (pmcProcess != null) {
-            try {
-                executeRun(run, pmcProcess);
-            } catch (Throwable e) {
-                log.error("job execution error", e);
-                run.status().setValue(RunStatus.Failed);
+            PmcProcess pmcProcess = startProcess(run);
+
+            if (pmcProcess != null) {
+                try {
+                    executeRun(run, pmcProcess);
+                } catch (Throwable e) {
+                    log.error("job execution error", e);
+                    run.status().setValue(RunStatus.Failed);
+                }
             }
+        } finally {
+            PmcProcessMonitor.onExecutionEnds(run);
         }
 
         if (run.status().getValue() != RunStatus.Sleeping) {
@@ -162,6 +168,7 @@ public class PmcProcessDispatcherJob implements Job {
         PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(run.trigger().triggerType().getValue());
         PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
                 .failed().getValue(), run.executionReport().erred().getValue());
+        PmcProcessMonitor.setContext(run, pmcProcess, context);
         try {
             if (!pmcProcess.start(context)) {
                 run.status().setValue(RunStatus.Sleeping);
@@ -236,8 +243,11 @@ public class PmcProcessDispatcherJob implements Job {
             criteria.add(PropertyCriterion.eq(criteria.proto().execution(), run));
             criteria.add(PropertyCriterion.eq(criteria.proto().status(), RunDataStatus.NeverRan));
             ICursorIterator<RunData> it = Persistence.service().query(null, criteria, AttachLevel.Attached);
-            while (it.hasNext()) {
+            while (it.hasNext() && (!PmcProcessMonitor.isPendingTermination(run))) {
                 RunData runData = it.next();
+                if (runData.status().equals(RunDataStatus.Canceled)) {
+                    continue;
+                }
                 runData.updated().setValue(new Date());
                 runData.started().setValue(new Date());
                 runData.status().setValue(RunDataStatus.Running);
@@ -261,6 +271,7 @@ public class PmcProcessDispatcherJob implements Job {
             try {
                 PmcProcessContext context = new PmcProcessContext(run.forDate().getValue(), run.executionReport().processed().getValue(), run.executionReport()
                         .failed().getValue(), run.executionReport().erred().getValue());
+                PmcProcessMonitor.setContext(run, pmcProcess, context);
                 pmcProcess.complete(context);
                 Persistence.service().retrieveMember(run.executionReport().details(), AttachLevel.Attached);
                 context.getExecutionMonitor().updateExecutionReport(run.executionReport());
@@ -304,6 +315,8 @@ public class PmcProcessDispatcherJob implements Job {
     private void executeOneRunData(ExecutorService executorService, final PmcProcess pmcProcess, final RunData runData, final Date forDate) {
         long startTimeNano = System.nanoTime();
         final PmcProcessContext context = new PmcProcessContext(forDate);
+
+        PmcProcessMonitor.setContext(runData.execution(), pmcProcess, context);
 
         Future<Boolean> futureResult = executorService.submit(new Callable<Boolean>() {
 
@@ -375,6 +388,8 @@ public class PmcProcessDispatcherJob implements Job {
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
             runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(executionException.getMessage()));
+        } else if (context.getExecutionMonitor().isTerminationRequested()) {
+            runData.status().setValue(RunDataStatus.Terminated);
         } else {
             runData.status().setValue(RunDataStatus.Processed);
         }

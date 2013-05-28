@@ -22,5 +22,5 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 
 public interface RunDataCrudService extends AbstractCrudService<RunData> {
 
-    void stopRun(AsyncCallback<VoidSerializable> callback, RunData runDataStub);
+    void cancelDataRun(AsyncCallback<VoidSerializable> callback, RunData runDataStub);
 }

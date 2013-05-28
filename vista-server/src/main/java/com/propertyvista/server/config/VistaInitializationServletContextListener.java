@@ -21,6 +21,7 @@ import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.operations.server.proc.PmcProcessMonitor;
 import com.propertyvista.sshd.InterfaceSSHDServer;
 
 public class VistaInitializationServletContextListener extends com.pyx4j.entity.server.servlet.InitializationServletContextListener {
@@ -42,6 +43,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
     public void contextDestroyed(ServletContextEvent sce) {
         try {
             InterfaceSSHDServer.shutdown();
+            PmcProcessMonitor.shutdown();
             SchedulerHelper.shutdown();
             DevSession.cleanup();
         } finally {

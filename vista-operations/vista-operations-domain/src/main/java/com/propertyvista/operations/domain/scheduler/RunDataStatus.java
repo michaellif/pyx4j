@@ -25,6 +25,8 @@ public enum RunDataStatus implements Serializable {
 
     Running,
 
+    Terminated,
+
     Processed,
 
     Erred,

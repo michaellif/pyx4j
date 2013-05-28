@@ -21,7 +21,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.scheduler.RunData;
-import com.propertyvista.operations.domain.scheduler.RunStatus;
+import com.propertyvista.operations.domain.scheduler.RunDataStatus;
 
 public class RunDataViewerViewImpl extends OperationsViewerViewImplBase<RunData> implements RunDataViewerView {
 
@@ -33,13 +33,13 @@ public class RunDataViewerViewImpl extends OperationsViewerViewImplBase<RunData>
         super(true);
 
         setForm(new RunDataForm(this));
-        stopRun = new Button(i18n.tr("Stop Run"), new Command() {
+        stopRun = new Button(i18n.tr("Cancel DataRun"), new Command() {
             @Override
             public void execute() {
-                MessageDialog.confirm(i18n.tr("Stop Run"), i18n.tr("Do you really want to stop the Run?"), new Command() {
+                MessageDialog.confirm(i18n.tr("Cancel DataRun"), i18n.tr("Do you really want to cancel the Run?"), new Command() {
                     @Override
                     public void execute() {
-                        ((RunViewerView.Presenter) getPresenter()).stopRun();
+                        ((RunDataViewerView.Presenter) getPresenter()).cancelDataRun();
                     }
                 });
             }
@@ -50,7 +50,6 @@ public class RunDataViewerViewImpl extends OperationsViewerViewImplBase<RunData>
     @Override
     public void populate(RunData value) {
         super.populate(value);
-
-        stopRun.setVisible(value.execution().status().getValue() == RunStatus.Running);
+        stopRun.setVisible(value.status().getValue() == RunDataStatus.NeverRan);
     }
 }

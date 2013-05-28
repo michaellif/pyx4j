@@ -45,6 +45,9 @@ public class TestPmcProcess implements PmcProcess {
             } catch (InterruptedException e) {
             }
             executionMonitor.addProcessedEvent("test");
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
 
         }
 

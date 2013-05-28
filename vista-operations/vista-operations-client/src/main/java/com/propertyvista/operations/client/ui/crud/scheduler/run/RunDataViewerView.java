@@ -21,6 +21,6 @@ public interface RunDataViewerView extends IViewer<RunData> {
 
     interface Presenter extends IViewer.Presenter {
 
-        void stopRun();
+        void cancelDataRun();
     }
 }

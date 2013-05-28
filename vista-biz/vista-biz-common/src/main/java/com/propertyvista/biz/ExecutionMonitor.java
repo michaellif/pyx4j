@@ -50,6 +50,8 @@ public class ExecutionMonitor {
 
     private String message;
 
+    private boolean terminationRequested = false;
+
     private boolean dirty = false;
 
     public ExecutionMonitor() {
@@ -102,6 +104,14 @@ public class ExecutionMonitor {
      */
     public void setExcludedSectionsFromTotals(String sectionName, boolean include) {
         excludedSectionsFromTotals.put(sectionName, include);
+    }
+
+    public void requestTermination() {
+        terminationRequested = true;
+    }
+
+    public boolean isTerminationRequested() {
+        return terminationRequested;
     }
 
     public void addEvent(String sectionName, CompletionType type, BigDecimal value, String message) {

@@ -23,6 +23,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.ExecutionStatusUpdateDTO;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
+import com.propertyvista.operations.server.proc.PmcProcessMonitor;
 
 public class RunCrudServiceImpl extends AbstractCrudServiceImpl<Run> implements RunCrudService {
 
@@ -46,10 +47,7 @@ public class RunCrudServiceImpl extends AbstractCrudServiceImpl<Run> implements 
 
     @Override
     public void stopRun(AsyncCallback<VoidSerializable> callback, Run runStub) {
-        Run run = Persistence.service().retrieve(Run.class, runStub.getPrimaryKey());
-
-        // TODO: stop run here... 
-
+        PmcProcessMonitor.requestExecutionTermination(runStub);
         callback.onSuccess(null);
     }
 }
