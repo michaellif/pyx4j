@@ -22,20 +22,22 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractLister
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public class MaintenanceRequestsDetailsFactory extends AbstractListerDetailsFactory<MaintenanceRequestDTO, CounterGadgetFilter> {
 
     public MaintenanceRequestsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
-            ICriteriaProvider<MaintenanceRequestDTO, CounterGadgetFilter> criteriaProvider) {
+            ICriteriaProvider<MaintenanceRequestDTO, CounterGadgetFilter> criteriaProvider, Proxy<ListerUserSettings> listerUserSettingsProxy) {
         super(//@formatter:off
                 MaintenanceRequestDTO.class,
                 Arrays.asList(MaintenanceRequestLister.createColumnDescriptors()),
                 GWT.<MaintenanceCrudService>create(MaintenanceCrudService.class),
                 filterDataProvider,
                 criteriaProvider,
-                null
+                listerUserSettingsProxy
         );//@formatter:on
     }
 }

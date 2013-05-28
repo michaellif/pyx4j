@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Transient;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 
 @DiscriminatorValue("LeadsAndRentalsGadgetMeta")
@@ -50,5 +51,11 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
         }
 )//@formatter:on
 public interface LeadsAndRentalsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
+
+    ListerUserSettings leadsListerDetails();
+
+    ListerUserSettings appointmentsListerDetails();
+
+    ListerUserSettings leasesFromLeadsListerSettings();
 
 }

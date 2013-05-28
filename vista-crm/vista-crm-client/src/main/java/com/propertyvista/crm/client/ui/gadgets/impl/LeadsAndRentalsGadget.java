@@ -19,6 +19,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.AppointmentsDetailsFactory;
@@ -27,9 +28,11 @@ import com.propertyvista.crm.client.ui.gadgets.components.LeasesFromLeadsDetails
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.LeadsAndRentalsSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.dto.gadgets.LeadsAndRentalsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lead.Appointment;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -61,7 +64,23 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
                         filterData.getCounterMember().toString());
             }
         };
-        bindDetailsFactory(proto().leads(), new LeadsDetailsFactory(this, leadsCriteriaProvider));
+        bindDetailsFactory(proto().leads(), new LeadsDetailsFactory(this, leadsCriteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().leadsListerDetails();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+        }));
 
         ICriteriaProvider<Appointment, CounterGadgetFilter> appointmentCriteriaProvider = new ICriteriaProvider<Appointment, CounterGadgetFilter>() {
             @Override
@@ -70,7 +89,23 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
                         filterData.getCounterMember().toString());
             }
         };
-        bindDetailsFactory(proto().appointmentsLabel(), new AppointmentsDetailsFactory(this, appointmentCriteriaProvider));
+        bindDetailsFactory(proto().appointmentsLabel(), new AppointmentsDetailsFactory(this, appointmentCriteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().appointmentsListerDetails();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+        }));
 
         ICriteriaProvider<Lead, CounterGadgetFilter> leaseFromLeadCriteriaProvider = new ICriteriaProvider<Lead, CounterGadgetFilter>() {
             @Override
@@ -79,6 +114,22 @@ public class LeadsAndRentalsGadget extends CounterGadgetInstanceBase<LeadsAndRen
                         filterData.getCounterMember().toString());
             }
         };
-        bindDetailsFactory(proto().rentalsLabel(), new LeasesFromLeadsDetailsFactory(this, leaseFromLeadCriteriaProvider));
+        bindDetailsFactory(proto().rentalsLabel(), new LeasesFromLeadsDetailsFactory(this, leaseFromLeadCriteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().leasesFromLeadsListerSettings();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+        }));
     }
 }

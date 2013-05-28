@@ -27,7 +27,9 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractLister
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, CounterGadgetFilter> {
@@ -50,14 +52,15 @@ public class LeadsDetailsFactory extends AbstractListerDetailsFactory<Lead, Coun
 
     }
 
-    public LeadsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<Lead, CounterGadgetFilter> criteriaProvider) {
+    public LeadsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<Lead, CounterGadgetFilter> criteriaProvider,
+            Proxy<ListerUserSettings> listerSettingsProxy) {
         super(//@formatter:off
                 Lead.class,
                 DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<LeadCrudService>create(LeadCrudService.class),
                 filterDataProvider,
                 criteriaProvider,
-                null
+                listerSettingsProxy
         );//@formatter:on
     }
 

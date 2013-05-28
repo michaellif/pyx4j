@@ -26,7 +26,9 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractLister
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
 public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<Appointment, CounterGadgetFilter> {
@@ -46,14 +48,14 @@ public class AppointmentsDetailsFactory extends AbstractListerDetailsFactory<App
     }
 
     public AppointmentsDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider,
-            ICriteriaProvider<Appointment, CounterGadgetFilter> criteriaProvider) {
+            ICriteriaProvider<Appointment, CounterGadgetFilter> criteriaProvider, Proxy<ListerUserSettings> appointmentsListerSettingsProxy) {
         super(//@formatter:off
                 Appointment.class,
                 DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<AppointmentCrudService>create(AppointmentCrudService.class),
                 filterDataProvider,
                 criteriaProvider,
-                null                
+                appointmentsListerSettingsProxy
         );//@formatter:on
     }
 }
