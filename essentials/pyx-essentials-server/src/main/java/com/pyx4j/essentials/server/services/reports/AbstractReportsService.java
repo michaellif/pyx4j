@@ -25,6 +25,10 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
@@ -79,8 +83,16 @@ public class AbstractReportsService implements IReportsService {
         @Override
         public void execute() {
             if (!cancelled) {
-                Serializable reportData = reportGenerator.generateReport(reportMetadata);
-                exported = ((ReportExporter) reportGenerator).export(reportData);
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        Serializable reportData = reportGenerator.generateReport(reportMetadata);
+                        exported = ((ReportExporter) reportGenerator).export(reportData);
+                        return null;
+                    }
+
+                });
                 new Downloadable(exported.data, exported.contentType).save(exported.fileName);
                 isReady = true;
             }
