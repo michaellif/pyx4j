@@ -222,9 +222,13 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         }
 
         BigDecimal itemPrice = billableItem.agreedPrice().getValue();
-
-        item.amount().setValue(isNewPap ? itemPrice.subtract(item.covered().getValue()) : BigDecimal.ZERO);
-        item.percent().setValue(item.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
+        if (itemPrice.compareTo(BigDecimal.ZERO) != 0) {
+            item.amount().setValue(isNewPap ? itemPrice.subtract(item.covered().getValue()) : BigDecimal.ZERO);
+            item.percent().setValue(item.amount().getValue().divide(itemPrice, 2, RoundingMode.FLOOR));
+        } else {
+            item.amount().setValue(BigDecimal.ZERO);
+            item.percent().setValue(BigDecimal.ONE);
+        }
 
         item.billableItem().set(billableItem);
 

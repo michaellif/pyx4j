@@ -82,7 +82,9 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
                 ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<BigDecimal> event) {
-                        get(proto().percent()).setValue(event.getValue().divide(getValue().billableItem().agreedPrice().getValue(), 2, RoundingMode.FLOOR));
+                        if (getValue().billableItem().agreedPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
+                            get(proto().percent()).setValue(event.getValue().divide(getValue().billableItem().agreedPrice().getValue(), 2, RoundingMode.FLOOR));
+                        }
                         onAmontValueChange();
                     }
                 });
