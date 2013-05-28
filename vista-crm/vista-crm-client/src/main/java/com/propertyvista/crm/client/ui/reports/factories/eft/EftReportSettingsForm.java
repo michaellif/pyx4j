@@ -20,7 +20,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetadata> {
 
@@ -50,6 +52,9 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().billingPeriod()).setVisible(event.getValue());
+                if (VistaFeatures.instance().yardiIntegration()) {
+                    get(proto().billingPeriod()).setValue(BillingPeriod.Monthly);
+                }
                 get(proto().billingCycleStartDate()).setVisible(event.getValue());
             }
         });
