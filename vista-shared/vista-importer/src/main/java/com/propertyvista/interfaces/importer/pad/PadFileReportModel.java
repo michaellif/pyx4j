@@ -23,10 +23,10 @@ import com.propertyvista.interfaces.importer.model.PadProcessorInformation.PadPr
 @Transient
 public interface PadFileReportModel extends PadFileModel {
 
+    IPrimitive<String> amountStored();
+
     @Format("#,##0.00")
     IPrimitive<Double> percentStored();
-
-    IPrimitive<String> amountStored();
 
     IPrimitive<Boolean> invalid();
 

@@ -349,6 +349,10 @@ public class TenantPadProcessor {
             return i18n.tr("Charge is not valid number");
         }
 
+        if ((!padFileModel.percent().isNull()) && (padFileModel.percent().getValue().endsWith("%"))) {
+            padFileModel.percent().setValue(padFileModel.percent().getValue().substring(0, padFileModel.percent().getValue().length() - 1));
+        }
+
         if (!padFileModel.percent().isNull() && (!isValidNumber(padFileModel.percent().getValue()))) {
             return i18n.tr("Percent is not valid number");
         }
@@ -507,7 +511,7 @@ public class TenantPadProcessor {
                     // 100% assumed
                     estimatedChargeSplit = estimatedCharge;
                 }
-                padFileModel._processorInformation().chargeEftAmount().setValue(estimatedChargeSplit.setScale(2, RoundingMode.DOWN));
+                padFileModel._processorInformation().chargeEftAmount().setValue(estimatedChargeSplit.setScale(2, RoundingMode.HALF_DOWN));
                 // Count each chargeCode once.
                 ChargeCodeRecords chargeCodeRecords = recordsByChargeCode.get(uniqueChargeCode(padFileModel));
                 if (chargeCodeRecords == null) {

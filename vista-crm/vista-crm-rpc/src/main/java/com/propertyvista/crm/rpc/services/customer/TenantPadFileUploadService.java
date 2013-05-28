@@ -24,6 +24,6 @@ import com.propertyvista.dto.DownloadableUploadResponseDTO;
 
 public interface TenantPadFileUploadService extends UploadService<IEntity, DownloadableUploadResponseDTO> {
 
-    public static final Collection<DownloadFormat> SUPPORTED_FORMATS = EnumSet.of(DownloadFormat.XLS, DownloadFormat.XLSX);
+    public static final Collection<DownloadFormat> SUPPORTED_FORMATS = EnumSet.of(DownloadFormat.XLS, DownloadFormat.XLSX, DownloadFormat.CSV);
 
 }

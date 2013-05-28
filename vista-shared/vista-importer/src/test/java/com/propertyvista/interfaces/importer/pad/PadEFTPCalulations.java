@@ -40,6 +40,8 @@ public class PadEFTPCalulations {
 
     public static void main(String[] args) {
         new PadEFTPCalulations("gr041").run();
+        new PadEFTPCalulations("gr0527").run();
+        new PadEFTPCalulations("ber0527").run();
     }
 
     private final String fileNamePrefix;
@@ -93,7 +95,19 @@ public class PadEFTPCalulations {
             reportModel.message().setValue(reportModel._import().message().getValue());
             reportModel.status().setValue(reportModel._processorInformation().status().getValue());
 
-            if (!reportModel._processorInformation().calulatedEftTotalAmount().isNull()) {
+            StringBuilder amountStored = new StringBuilder();
+            for (PadFileModel charge : data._processorInformation().accountCharges()) {
+                if (amountStored.length() > 0) {
+                    amountStored.append(", ");
+                }
+                amountStored.append(charge.chargeCode().getValue()).append(": ");
+                amountStored.append(charge._processorInformation().chargeEftAmount().getValue().toString());
+            }
+            reportModel.amountStored().setValue(amountStored.toString());
+
+            if (!reportModel._processorInformation().accountEftAmountTotal().isNull()) {
+                reportModel.calulatedEftAmount().setValue(reportModel._processorInformation().accountEftAmountTotal().getValue());
+            } else if (!reportModel._processorInformation().calulatedEftTotalAmount().isNull()) {
                 reportModel.calulatedEftAmount().setValue(reportModel._processorInformation().calulatedEftTotalAmount().getValue());
             }
             if (!reportModel._processorInformation().percent().isNull()) {
@@ -150,7 +164,7 @@ public class PadEFTPCalulations {
             }
         }
 
-        System.out.println(counter);
+        System.out.println(fileNamePrefix + " " + counter);
 
         createReport("", reportModels);
         createReport("_diff", reportModelDiff);

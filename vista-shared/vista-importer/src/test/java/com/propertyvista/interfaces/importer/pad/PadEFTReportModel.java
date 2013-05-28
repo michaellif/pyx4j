@@ -31,6 +31,8 @@ public interface PadEFTReportModel extends PadFileModel {
 
     IPrimitive<BigDecimal> eftAmountDelta();
 
+    IPrimitive<String> amountStored();
+
     @Format("#,##0.00")
     IPrimitive<Double> percentStored();
 

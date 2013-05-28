@@ -22,6 +22,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.essentials.server.csv.CSVLoad;
+import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.essentials.server.csv.XLSLoad;
 import com.pyx4j.gwt.shared.DownloadFormat;
@@ -38,6 +40,22 @@ public class TenantPadParser {
     private final List<PadFileModel> pads = new ArrayList<PadFileModel>();
 
     public List<PadFileModel> parsePads(byte[] data, DownloadFormat format) {
+        if (format == DownloadFormat.CSV) {
+            return parseCSVPads(data);
+        } else {
+            return parseExcelPads(data, format);
+        }
+    }
+
+    private List<PadFileModel> parseCSVPads(byte[] data) {
+        EntityCSVReciver<PadFileModel> receiver = new PadFileCSVReciver("");
+        CSVParser parser = new CSVParser();
+        parser.setAllowComments(false);
+        CSVLoad.loadFile(new ByteArrayInputStream(data), parser, receiver);
+        return receiver.getEntities();
+    }
+
+    private List<PadFileModel> parseExcelPads(byte[] data, DownloadFormat format) {
         if ((format != DownloadFormat.XLS) && (format != DownloadFormat.XLSX)) {
             throw new IllegalArgumentException();
         }

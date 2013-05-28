@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,10 @@ public class PadPercentsCalulationsTests {
     }
 
     static void print(PadFileModel m) {
-        log.info(SimpleMessageFormat.format("account:{0} {1}% status:{2}", m.accountNumber(), m._processorInformation().percent(), m._processorInformation()
-                .status()));
+        log.info(SimpleMessageFormat.format("account:{0} {1}% {2}$ status:{3}", m.accountNumber(), // 
+                m._processorInformation().percent(), //
+                m._processorInformation().chargeEftAmount(), //
+                m._processorInformation().status()));
     }
 
     private void assertEquals(BigDecimal expected, BigDecimal actual) {
@@ -82,6 +85,20 @@ public class PadPercentsCalulationsTests {
 
         assertEquals(new BigDecimal("0.333333"), leasePadEntities.get(0)._processorInformation().percent().getValue());
         assertEquals(new BigDecimal("0.666667"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+    }
+
+    private PadFileModel createModelFull(String account, String chargeCode, String percent, String estimatedCharge) {
+        PadFileModel model = EntityFactory.create(PadFileModel.class);
+        model.percent().setValue(percent);
+
+        model.bankId().setValue("1");
+        model.transitNumber().setValue("1");
+        model.accountNumber().setValue(account);
+
+        model.chargeCode().setValue(chargeCode);
+        model.estimatedCharge().setValue(estimatedCharge);
+
+        return model;
     }
 
     private PadFileModel createModelFull(String account, String chargeCode, String percent, double estimatedCharge) {
@@ -197,7 +214,23 @@ public class PadPercentsCalulationsTests {
     }
 
     @Test
-    public void testYardiRounding_50_50() {
+    public void testYardiRounding_3X_A() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "29.03225806", "1588.75"));
+        leasePadEntities.add(createModelFull("2", "rent", "37.09708891", "1588.75"));
+        leasePadEntities.add(createModelFull("3", "rent", "33.87065303", "1588.75"));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        print(leasePadEntities);
+
+        assertEquals(2, new BigDecimal("461.25"), leasePadEntities.get(0)._processorInformation().accountEftAmountTotal().getValue());
+        assertEquals(2, new BigDecimal("589.38"), leasePadEntities.get(1)._processorInformation().accountEftAmountTotal().getValue());
+        assertEquals(2, new BigDecimal("538.12"), leasePadEntities.get(2)._processorInformation().accountEftAmountTotal().getValue());
+    }
+
+    @Test
+    public void testYardiRounding_50_50_A() {
         List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
         leasePadEntities.add(createModelFull("1", "rent", "50", 1000.01));
         leasePadEntities.add(createModelFull("2", "rent", "50", 1000.01));
@@ -208,6 +241,25 @@ public class PadPercentsCalulationsTests {
         assertEquals(2, new BigDecimal("500.00"), leasePadEntities.get(0)._processorInformation().chargeEftAmount().getValue());
         assertEquals(new BigDecimal("0.50"), leasePadEntities.get(1)._processorInformation().percent().getValue());
         assertEquals(2, new BigDecimal("500.01"), leasePadEntities.get(1)._processorInformation().chargeEftAmount().getValue());
+    }
+
+    //TODO to fix in out model
+    @Test
+    @Ignore
+    public void testYardiRounding_50_50_B() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "50", 1208.55));
+        leasePadEntities.add(createModelFull("2", "rent", "50", 1208.55));
+
+        leasePadEntities.add(createModelFull("1", "park", "50", 57.51));
+        leasePadEntities.add(createModelFull("2", "park", "50", 57.51));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(new BigDecimal("0.50"), leasePadEntities.get(0)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("633.03"), leasePadEntities.get(0)._processorInformation().accountEftAmountTotal().getValue());
+        assertEquals(new BigDecimal("0.50"), leasePadEntities.get(1)._processorInformation().percent().getValue());
+        assertEquals(2, new BigDecimal("633.03"), leasePadEntities.get(1)._processorInformation().accountEftAmountTotal().getValue());
     }
 
     @Test
@@ -325,4 +377,22 @@ public class PadPercentsCalulationsTests {
         Assert.assertEquals(PadProcessingStatus.mergedWithAnotherRecord, leasePadEntities.get(3)._processorInformation().status().getValue());
     }
 
+    @Test
+    @Ignore
+    public void testUninitializedChargeSplitCase5A_2X_50_50() {
+        List<PadFileModel> leasePadEntities = new ArrayList<PadFileModel>();
+        leasePadEntities.add(createModelFull("1", "rent", "50", 1271.81));
+        leasePadEntities.add(createModelFull("2", "rent", "50", 1271.81));
+
+        leasePadEntities.add(createModelFull("1", "rinpark", null, 30));
+        leasePadEntities.add(createModelFull("2", "rinpark", null, 30));
+
+        leasePadEntities.add(createModelFull("1", "rinpark", null, 30));
+        leasePadEntities.add(createModelFull("2", "rinpark", null, 30));
+
+        TenantPadProcessor.calulateLeasePercents(leasePadEntities);
+
+        assertEquals(2, new BigDecimal("635.90"), leasePadEntities.get(0)._processorInformation().accountEftAmountTotal().getValue());
+        assertEquals(2, new BigDecimal("635.90"), leasePadEntities.get(1)._processorInformation().accountEftAmountTotal().getValue());
+    }
 }
