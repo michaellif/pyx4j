@@ -140,7 +140,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
+                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
                 } else {
                     log.info(messages.toString());
                 }
@@ -177,7 +177,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
+                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}", messages.toString(), propertyId, tenantId));
                 } else {
                     log.info(messages.toString());
                 }
@@ -249,7 +249,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
+                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
                 } else {
                     log.info(messages.toString());
                 }
@@ -288,7 +288,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
+                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, Date {2}", messages.toString(), propertyId, date));
                 } else {
                     log.info(messages.toString());
                 }
@@ -329,7 +329,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(messages.toString());
+                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}, Date {3}", messages.toString(), propertyId,
+                            tenantId, date));
                 } else {
                     log.info(messages.toString());
                 }
