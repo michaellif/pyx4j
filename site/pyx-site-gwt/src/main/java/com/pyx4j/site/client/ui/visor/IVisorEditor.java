@@ -25,10 +25,10 @@ import com.pyx4j.entity.shared.IEntity;
 public interface IVisorEditor<E extends IEntity> extends IVisorForm<E> {
 
     public interface Controller extends IVisor.Controller {
+
         void apply();
 
         void save();
-
     }
 
     public E getValue();
