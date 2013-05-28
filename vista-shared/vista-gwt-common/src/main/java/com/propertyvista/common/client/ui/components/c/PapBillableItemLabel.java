@@ -34,9 +34,9 @@ public class PapBillableItemLabel extends CEntityLabel<BillableItem> {
                     String res = "";
 
                     if (!value.description().isNull()) {
-                        res += value.description().getValue() + " ";
-                    } else if (!value.item().isNull() && !value.item().description().isNull()) {
-                        res += value.item().description().getValue() + " ";
+                        res += value.description().getValue();
+                    } else if (!value.item().isNull()) {
+                        res += value.item().code().getStringView();
                     }
 
                     return res;

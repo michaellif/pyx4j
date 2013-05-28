@@ -25,6 +25,7 @@ import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -35,6 +36,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.financial.offering.YardiChargeCode;
 import com.propertyvista.misc.VistaTODO;
 
+@ToStringFormat("{0}, {1}")
 public interface ARCode extends IEntity {
 
     @I18n
