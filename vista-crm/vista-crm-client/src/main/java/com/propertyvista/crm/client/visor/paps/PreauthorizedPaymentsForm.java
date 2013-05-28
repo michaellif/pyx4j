@@ -65,8 +65,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         main.getWidget(0, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
         main.getWidget(0, 0).setWidth("50em");
 
-        main.setH3(1, 0, 1, proto().preauthorizedPaymentsDTO().getMeta().getCaption());
-        main.setWidget(2, 0, inject(proto().preauthorizedPaymentsDTO(), new PreauthorizedPaymentFolder()));
+        main.setH3(1, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
+        main.setWidget(2, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
 
         return main;
     }

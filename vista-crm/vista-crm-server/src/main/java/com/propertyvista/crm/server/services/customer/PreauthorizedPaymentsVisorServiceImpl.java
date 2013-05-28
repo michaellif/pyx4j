@@ -85,7 +85,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     @Override
     public void save(AsyncCallback<VoidSerializable> callback, PreauthorizedPaymentsDTO dto) {
         List<PreauthorizedPayment> paps = new ArrayList<PreauthorizedPayment>();
-        for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPaymentsDTO()) {
+        for (PreauthorizedPaymentDTO papDTO : dto.preauthorizedPayments()) {
             updateCoveredItems(papDTO);
             paps.add(new PapConverter().createDBO(papDTO));
         }
@@ -156,7 +156,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         Persistence.ensureRetrieve(dto.tenant().lease(), AttachLevel.Attached);
 
         for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(dto.tenant())) {
-            dto.preauthorizedPaymentsDTO().add(createPreauthorizedPaymentDto(pap));
+            dto.preauthorizedPayments().add(createPreauthorizedPaymentDto(pap));
         }
     }
 

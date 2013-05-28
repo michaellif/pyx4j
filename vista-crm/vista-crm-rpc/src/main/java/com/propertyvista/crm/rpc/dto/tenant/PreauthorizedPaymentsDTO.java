@@ -44,7 +44,7 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
 
     TenantInfo tenantInfo();
 
-    IList<PreauthorizedPaymentDTO> preauthorizedPaymentsDTO();
+    IList<PreauthorizedPaymentDTO> preauthorizedPayments();
 
     IList<LeasePaymentMethod> availablePaymentMethods();
 }
