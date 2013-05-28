@@ -20,6 +20,9 @@
  */
 package com.pyx4j.essentials.server.csv;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -557,4 +560,25 @@ public class EntityCSVReciver<E extends IEntity> implements CSVReciver {
         return getEntities();
     }
 
+    public List<E> loadFile(String fileName) {
+        DownloadFormat format = DownloadFormat.valueByExtension(FilenameUtils.getExtension(fileName));
+        InputStream is;
+        try {
+            is = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            throw new Error(e);
+        }
+        switch (format) {
+        case CSV:
+            CSVLoad.loadFile(is, Charset.forName("Cp1252"), new CSVParser(), this);
+            break;
+        case XLSX:
+        case XLS:
+            XLSLoad.loadFile(is, format == DownloadFormat.XLSX, this);
+            break;
+        default:
+            throw new Error("Unsupported format " + format);
+        }
+        return getEntities();
+    }
 }
