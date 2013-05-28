@@ -34,7 +34,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
-    private static final int TOOLBAR_DEFAULT_HEIGHT = 35;
+    private static final double TOOLBAR_DEFAULT_HEIGHT = 2.8;
 
     private final VisorHolder visorHolder;
 
@@ -54,12 +54,12 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private final FlowPanel headerCaption;
 
-    private final int headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+    private final double headerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
-    private int footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
+    private double footerToolbarHeight = TOOLBAR_DEFAULT_HEIGHT;
 
     public AbstractPane() {
-        super(Unit.PX);
+        super(Unit.EM);
 
         headerCaption = new FlowPanel();
         captionLabel = new Label();

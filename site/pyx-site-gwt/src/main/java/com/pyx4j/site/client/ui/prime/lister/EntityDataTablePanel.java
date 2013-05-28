@@ -40,6 +40,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
+import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister.ItemSelectionHandler;
@@ -73,9 +74,21 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
     private DataTable.ItemSelectionHandler zoomInHandler;
 
     public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
+        this(clazz, null, allowZoomIn, allowAddNew, allowDelete);
+    }
+
+    public EntityDataTablePanel(Class<E> clazz) {
+        this(clazz, false, false, false);
+    }
+
+    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
+        this(clazz, allowZoomIn, allowAddNew, false);
+    }
+
+    public EntityDataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowZoomIn, boolean allowAddNew, boolean allowDelete) {
         this.clazz = clazz;
         setStyleName(DefaultPaneTheme.StyleName.Lister.name());
-        dataTablePanel = new DataTablePanel<E>(clazz);
+        dataTablePanel = new DataTablePanel<E>(clazz, criteriaForm);
 
         dataTablePanel.setFilterApplyCommand(new Command() {
             @Override
@@ -141,14 +154,6 @@ public class EntityDataTablePanel<E extends IEntity> extends VerticalPanel {
         setAllowAddNew(allowAddNew);
         setAllowDelete(allowDelete);
 
-    }
-
-    public EntityDataTablePanel(Class<E> clazz) {
-        this(clazz, false, false, false);
-    }
-
-    public EntityDataTablePanel(Class<E> clazz, boolean allowZoomIn, boolean allowAddNew) {
-        this(clazz, allowZoomIn, allowAddNew, false);
     }
 
     public boolean isAllowZoomIn() {

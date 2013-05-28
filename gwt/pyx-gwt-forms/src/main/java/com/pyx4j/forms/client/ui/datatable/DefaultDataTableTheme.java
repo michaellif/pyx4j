@@ -34,7 +34,9 @@ public class DefaultDataTableTheme extends Theme {
     public static enum StyleName implements IStyleName {
         DataTable, DataTableRow, DataTableHeader, DataTableActionsBar, DataTableActionsBarContent, DataTableToolBar, DataTablePageNavigBar, DataTableColumnSelector, DataTableColumnMenu,
 
-        DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem
+        DataTableFilter, DataTableFilterMain, DataTableFilterHeader, DataTableFilterFooter, DataTableFilterItem,
+
+        DataTableCriteria, DataTableCriteriaMain, DataTableCriteriaHeader, DataTableCriteriaFooter
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -168,7 +170,7 @@ public class DefaultDataTableTheme extends Theme {
         addStyle(style);
 
         style = new Style(" .", StyleName.DataTableFilterFooter);
-        style.addProperty("padding", "6px 0");
+        style.addProperty("padding", "4px 0 0");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableFilterMain);
@@ -177,6 +179,24 @@ public class DefaultDataTableTheme extends Theme {
 
         style = new Style(".", StyleName.DataTableFilterItem, " td");
         style.addProperty("padding", "2px 0px 2px 6px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableCriteria);
+        style.addProperty("background-color", ThemeColor.object1, 0.2);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableCriteriaHeader, ", ", " .", StyleName.DataTableCriteriaFooter);
+        style.addProperty("background-color", ThemeColor.object1, 0.4);
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(" .", StyleName.DataTableCriteriaFooter);
+        style.addProperty("padding", "6px 0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DataTableCriteriaMain);
+        style.addProperty("padding", "6px");
         addStyle(style);
 
     }

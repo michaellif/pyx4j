@@ -23,8 +23,6 @@ package com.pyx4j.forms.client.ui.datatable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,6 +33,8 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.datatable.DataTable.CheckSelectionHandler;
+import com.pyx4j.forms.client.ui.datatable.criteria.DataTableCriteriaPanel;
+import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterItem;
 import com.pyx4j.forms.client.ui.datatable.filter.DataTableFilterPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -64,40 +64,46 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     private Button filterButton;
 
     public DataTablePanel(Class<E> clazz) {
-        this(clazz, EntityFolderImages.INSTANCE);
+        this(clazz, null, EntityFolderImages.INSTANCE);
     }
 
-    public DataTablePanel(Class<E> clazz, WidgetsImages images) {
+    public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm) {
+        this(clazz, criteriaForm, EntityFolderImages.INSTANCE);
+    }
+
+    public DataTablePanel(Class<E> clazz, ICriteriaForm<E> criteriaForm, WidgetsImages images) {
         this.images = images;
         setWidth("100%");
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
-        dataTable = new DataTable<E>();
+        if (criteriaForm != null) {
+            DataTableCriteriaPanel<E> criteriaPanel = new DataTableCriteriaPanel<E>(this, criteriaForm);
+            add(criteriaPanel);
+        }
 
         topActionsBar = new DataTableActionsBar();
         add(topActionsBar);
 
-        filterButton = new Button(i18n.tr("Filter"));
-
         filterPanel = new DataTableFilterPanel<E>(this);
+        add(filterPanel);
+
+        dataTable = new DataTable<E>();
+        add(dataTable);
 
         bottomActionsBar = new DataTableActionsBar();
-
-        add(filterPanel);
-        add(dataTable);
         add(bottomActionsBar);
 
         dataTable.setWidth("100%");
         setCellWidth(dataTable, "100%");
 
-        topActionsBar.getToolbar().add(filterButton);
+        filterButton = new Button(i18n.tr("Filter"), new Command() {
 
-        filterButton.addClickHandler(new ClickHandler() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 filterPanel.setFilters(null);
             }
         });
+        topActionsBar.getToolbar().add(filterButton);
 
         setDataTableModel(new DataTableModel<E>(clazz));
     }

@@ -26,6 +26,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.datatable.criteria.ICriteriaForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.visor.IVisor;
@@ -51,12 +52,15 @@ public abstract class AbstractLister<E extends IEntity> extends EntityDataTableP
     }
 
     public AbstractLister(Class<E> clazz, boolean allowAddNew) {
-        super(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew);
-        this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
+        this(clazz, allowAddNew, false);
     }
 
     public AbstractLister(Class<E> clazz, boolean allowAddNew, boolean allowDelete) {
-        super(clazz, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew, allowDelete);
+        this(clazz, null, allowAddNew, allowDelete);
+    }
+
+    public AbstractLister(Class<E> clazz, ICriteriaForm<E> criteriaForm, boolean allowAddNew, boolean allowDelete) {
+        super(clazz, criteriaForm, AppPlaceEntityMapper.resolvePlaceClass(clazz) != null, allowAddNew, allowDelete);
         this.itemOpenPlaceClass = AppPlaceEntityMapper.resolvePlaceClass(clazz);
     }
 
