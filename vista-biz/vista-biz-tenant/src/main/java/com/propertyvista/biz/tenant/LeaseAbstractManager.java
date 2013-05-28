@@ -665,15 +665,16 @@ public abstract class LeaseAbstractManager {
 
     // Utils : --------------------------------------------------------------------------------------------------------
 
-    public BillableItem createBillableItem(Lease lease, ProductItem itemId, PolicyNode node) {
+    public BillableItem createBillableItem(Lease lease, ProductItem productItemId, PolicyNode node) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
-        ProductItem item = Persistence.secureRetrieve(ProductItem.class, itemId.getPrimaryKey());
-        assert item != null;
+        ProductItem productItem = Persistence.secureRetrieve(ProductItem.class, productItemId.getPrimaryKey());
+        assert productItem != null;
+        Persistence.ensureRetrieve(productItem.product(), AttachLevel.Attached);
 
         BillableItem newItem = EntityFactory.create(BillableItem.class);
-        newItem.item().set(item);
-        newItem.agreedPrice().setValue(item.price().getValue());
+        newItem.item().set(productItem);
+        newItem.agreedPrice().setValue(productItem.price().getValue());
 
         // avoid policed deposits for existing Leases:
         if (lease.status().getValue() != Lease.Status.ExistingLease) {

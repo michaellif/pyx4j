@@ -53,7 +53,7 @@ public class BillableItemFolder extends VistaBoxFolder<BillableItem> {
     @Override
     public IFolderItemDecorator<BillableItem> createItemDecorator() {
         BoxFolderItemDecorator<BillableItem> decor = (BoxFolderItemDecorator<BillableItem>) super.createItemDecorator();
-        decor.setExpended(false);
+        decor.setExpended(isEditable());
         return decor;
     }
 
