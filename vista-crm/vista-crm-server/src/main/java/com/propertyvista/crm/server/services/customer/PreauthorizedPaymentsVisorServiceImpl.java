@@ -138,6 +138,9 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
         if (ltp != null) {
             dto.tenantInfo().role().setValue(ltp.role().getValue());
         }
+
+        dto.nextScheduledPaymentDate().setValue(
+                ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(dto.tenant().lease()));
     }
 
     private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO papDto) {

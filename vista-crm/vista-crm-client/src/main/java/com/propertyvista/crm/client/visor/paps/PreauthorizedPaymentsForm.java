@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -57,16 +58,21 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     @Override
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
+        int row = -1;
 
-        main.setWidget(0, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
-        main.getWidget(0, 0).getElement().getStyle().setMargin(0.5, Unit.EM);
-        main.getWidget(0, 0).getElement().getStyle().setMarginLeft(1, Unit.EM);
-        main.getWidget(0, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        main.getWidget(0, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
-        main.getWidget(0, 0).setWidth("50em");
+        main.setWidget(++row, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
+        main.getWidget(row, 0).getElement().getStyle().setMargin(0.5, Unit.EM);
+        main.getWidget(row, 0).getElement().getStyle().setMarginLeft(1, Unit.EM);
+        main.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
+        main.getWidget(row, 0).setWidth("30em");
 
-        main.setH3(1, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
-        main.setWidget(2, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20).build());
+
+        main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return main;
     }
