@@ -48,7 +48,6 @@ public interface PreauthorizedPayment extends IEntity {
         BillableItem billableItem();
 
         @NotNull
-        @ReadOnly
         @ToString(index = 1)
         @Format("#,##0.00")
         @Editor(type = EditorType.money)
@@ -81,7 +80,6 @@ public interface PreauthorizedPayment extends IEntity {
     IPrimitive<LogicalDate> expiring();
 
     @NotNull
-    @ReadOnly
     @ToString(index = 0)
     LeasePaymentMethod paymentMethod();
 
