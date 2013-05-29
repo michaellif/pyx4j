@@ -79,7 +79,7 @@ public class TenantDashboardTheme extends Theme {
 //        addStyle(style);
 
         style = new Style(".", StyleName.TenantDashboardSection);
-        style.addProperty("height", "15em");
+        style.addProperty("height", "12em");
         style.addProperty("padding-left", "0.5em");
         style.addProperty("padding-right", "0.5em");
         addStyle(style);

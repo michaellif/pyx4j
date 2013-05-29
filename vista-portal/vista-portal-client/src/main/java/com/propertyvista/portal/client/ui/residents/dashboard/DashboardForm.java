@@ -101,10 +101,12 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         leftPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
         leftPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
         get(proto().general()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+        get(proto().general()).setHeight("");
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("RENT BALANCE"));
         leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new FinancialSummaryViewer()));
         get(proto().billSummary()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+        get(proto().billSummary()).setHeight("");
 
         // =============================================================================================
 
@@ -131,6 +133,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
             rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
             rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
             get(proto().maintanances()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+            get(proto().maintanances()).setHeight("");
         }
 
         if (false) {
@@ -143,6 +146,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
             rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
             rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
             get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+            get(proto().tenantInsuranceStatus()).setHeight("");
         }
         return container;
     }
