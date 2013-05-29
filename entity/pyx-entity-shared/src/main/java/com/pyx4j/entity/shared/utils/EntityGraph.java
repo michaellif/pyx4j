@@ -102,7 +102,7 @@ public class EntityGraph {
         }
     }
 
-    private static final boolean traceFullyEqual = true;
+    private static final boolean traceFullyEqual = false;
 
     /**
      * Ignore changes in values of Not owned Objects.
