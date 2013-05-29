@@ -72,6 +72,16 @@ public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<P
     }
 
     @Override
+    public void finish() {
+        if (!getView().getValue().coveredItems().isEmpty()) {
+            super.finish();
+        } else {
+            getView().reset();
+            AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+        }
+    }
+
+    @Override
     protected void onSaved(Key result) {
         getView().reset();
         AppSite.getPlaceController().goTo(new Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted(result));

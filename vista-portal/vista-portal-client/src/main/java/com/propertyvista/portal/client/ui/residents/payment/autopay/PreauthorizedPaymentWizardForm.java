@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -48,6 +49,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
@@ -226,7 +228,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         panel.setWidget(++row, 0, confirmationTotalHolder);
 
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7).labelWidth(25).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 25).build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
@@ -244,11 +246,11 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         } else if (event.getSelectedItem().equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
-            confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
             ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
                 @Override
                 public void onSuccess(PreauthorizedPayment result) {
                     ((CComponent<List<PreauthorizedPayment.PreauthorizedPaymentCoveredItem>, ?>) get(proto().coveredItems())).populate(result.coveredItems());
+                    confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
                 }
             }, getValue());
 
@@ -316,6 +318,18 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         panel.add(pm);
 
+        if (getValue().coveredItems().isEmpty()) {
+            panel.add(new HTML("<br/>"));
+            panel.add(new HTML("<br/>"));
+
+            panel.add(w = new HTML(i18n.tr("There are no payments set!")));
+            w.setStyleName(VistaTheme.StyleName.warningMessage.name());
+            w.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
+            get(proto().total()).setVisible(false);
+        }
+
+        panel.setWidth("100%");
         return panel;
     }
 
