@@ -125,6 +125,7 @@ select {
 	text-decoration:none;
 }
 #siteLogo {
+	height:93px;
 }
 #noLogo {
 	font-size:35px;

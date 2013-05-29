@@ -1657,7 +1657,7 @@ ul.footer_locations li {
 	overflow: hidden !important;
 }
 
-#gwt-debug-login, #gwt-debug-account, #gwt-debug-logout {
+.SiteViewAction .Anchor {
 	white-space: nowrap;
 }
 
