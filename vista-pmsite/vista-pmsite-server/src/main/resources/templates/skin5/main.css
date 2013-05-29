@@ -402,6 +402,8 @@ ul.footer_locations li {
     font-weight: normal;
 	color: #FFFFFF;
 	text-align: center;
+	position: relative;
+	top: -12px;
 }
 .caption2 {
 	height: 30px;

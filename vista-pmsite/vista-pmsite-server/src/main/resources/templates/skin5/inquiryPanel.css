@@ -30,6 +30,7 @@ select {
 
 .inquiryPanel .inputEntry input {
 	border: 1px solid #EC8E21;
+	color: #666666;
 }
 
 .inquiryPanel .inputEntry input[type="radio"]  {
@@ -52,6 +53,7 @@ select {
 	width:360px;
 	border: 1px solid #EC8E21;
 	box-shadow: inset 5px 5px 5px #7f7f7f;
+	color: #666666;
 }
 
 .inquiryPanel .inputEntry .apmntBox {
@@ -70,6 +72,7 @@ select {
 }
 .inquiryPanel input[type=submit] {
     border: none;
+    color: #D7AC3F;
 }
 .inquiryPanel input[type=submit]:hover {
 	color: #FA8D0C;

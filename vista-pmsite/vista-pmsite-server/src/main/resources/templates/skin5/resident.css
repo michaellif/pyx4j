@@ -229,6 +229,7 @@ h2 {
 	border-top: 4px solid #7F7F7F;
 	border-left: 3px solid #7F7F7F;
 	outline: 1px solid #ec8e21;
+	min-width: 8em;
 }
 
 
@@ -338,9 +339,59 @@ h2 {
 .PaymentEditorLegalTerms {
     height: auto !important;
     background-color: inherit !important;
+    padding: 0;
 }
 
 .PaymentEditorLegalTermsHeader {
     background-color: inherit !important;
     color: #000000 !important;
+}
+
+.Anchor.Anchor-disabled {
+    color: #D7AC3F !important;
+}
+
+.FooterToolbar .Toolbar {
+    margin-right: 10px;
+}
+
+.vista-pmsite-residentPage .Header {
+    border-top: 1px solid #484243;
+    margin-top: -30px;
+    padding-top: 30px;
+}
+
+.gwt-DatePicker {
+    border: 1px solid #B4AFB0 !important;
+}
+
+.DatePickerMonthSelector {
+    background-color: #B4AFB0 !important;
+}
+
+.DatePickerWeekendDayLabel {
+    color: #D7AC3F !important;
+}
+
+.DatePickerGrid .gwt-Label-selected {
+    background-color: #B4AFB0 !important;
+    border: 1px solid #D7AC3F !important;
+    color: white !important;
+}
+
+.DatePickerGrid .gwt-Label-heighlighted {
+    background-color: #D7AC3F !important;
+}
+
+.PaymentEditorLegalTerms .Anchor .gwt-HTML {
+    overflow: inherit !important;
+    color: #B4AFB0;
+}
+
+.PaymentEditorLegalTerms .Anchor .gwt-HTML > div {
+    background: none repeat scroll 0 0 #FAFAFA;
+}
+
+.TSPucrhaseViewMessageText {
+    color: #B4AFB0;
 }
