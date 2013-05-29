@@ -231,7 +231,7 @@ class PreauthorisedPaymentsManager {
                 }
                 {
                     OrCriterion or = criteria.or();
-                    or.right().ge(criteria.proto().effectiveFrom(), billingCycle.targetPadExecutionDate());
+                    or.right().le(criteria.proto().effectiveFrom(), billingCycle.targetPadExecutionDate());
                     or.left().isNull(criteria.proto().effectiveFrom());
                 }
 
