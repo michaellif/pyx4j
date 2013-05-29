@@ -119,22 +119,21 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s*,\\s*"));
         }
 
-        List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, propertyCodes);
+        List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyCodes);
         for (ResidentTransactions transaction : allTransactions) {
-            importTransaction(transaction, executionMonitor);
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
+
+            importTransaction(transaction, executionMonitor);
         }
 
-        if (!executionMonitor.isTerminationRequested()) {
-            List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, propertyCodes);
-            for (ResidentTransactions leaseCharges : allLeaseCharges) {
-                importLeaseCharges(leaseCharges, executionMonitor);
-                if (executionMonitor.isTerminationRequested()) {
-                    break;
-                }
+        List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyCodes);
+        for (ResidentTransactions leaseCharges : allLeaseCharges) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
             }
+            importLeaseCharges(leaseCharges, executionMonitor);
         }
 
         log.info("Update completed.");
@@ -318,16 +317,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return state;
     }
 
-    List<ResidentTransactions> getAllResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
-            throws YardiServiceException, RemoteException {
+    private List<ResidentTransactions> getAllResidentTransactions(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
+            List<String> propertyCodes) throws YardiServiceException, RemoteException {
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
             ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
             if (residentTransactions != null) {
                 transactions.add(residentTransactions);
             }
         }
-
         return transactions;
     }
 
@@ -387,8 +388,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     }
 
     // TODO - we may need to request yardi charges for one more cycle forward
-    List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, List<String> propertyCodes)
-            throws YardiServiceException, RemoteException {
+    private List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
+            List<String> propertyCodes) throws YardiServiceException, RemoteException {
         // Make sure YardiChargeCodes have been configured
         EntityQueryCriteria<ARCode> criteria = EntityQueryCriteria.create(ARCode.class);
         criteria.eq(criteria.proto().type(), ARCode.Type.Residential);
@@ -401,6 +402,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         List<ResidentTransactions> transactions = new ArrayList<ResidentTransactions>();
         for (String propertyCode : propertyCodes) {
+            if (executionMonitor.isTerminationRequested()) {
+                break;
+            }
             BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
             BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
             ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, nextCycle.billingCycleStartDate().getValue());
