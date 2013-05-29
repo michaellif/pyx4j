@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents.payment.autopay;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -58,8 +59,12 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
         content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total()), 10, 40).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelAlignment(Alignment.left)
-                .labelWidth(25).build());
+        content.setBR(++row, 0, 1);
+
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 25).build());
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
+        content.setHR(++row, 0, 1);
 
         return content;
     }

@@ -228,10 +228,12 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         panel.setWidget(++row, 0, confirmationTotalHolder);
 
         panel.setBR(++row, 0, 1);
+
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 25).build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
+
         panel.setWidget(++row, 0, createLegalTermsPanel());
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
