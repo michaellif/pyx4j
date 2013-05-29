@@ -23,6 +23,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.AndCriterion;
@@ -46,7 +47,6 @@ import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -192,16 +192,11 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void activate(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        // memorize entry LeaseStatus:
-        Status leaseStatus = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey()).status().getValue();
-
         ServerSideFactory.create(LeaseFacade.class).approve(leaseId, null, null);
 
-        // activate, actually, existing lease only:  
-        if (leaseStatus == Status.ExistingLease) {
+        // activate, actually, if it already run:
+        if (!Persistence.secureRetrieve(Lease.class, entityId).leaseFrom().getValue().after(new LogicalDate(SystemDateManager.getDate()))) {
             ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
-//        } else if (leaseStatus == Status.NewLease ) {
-//            ServerSideFactory.create(LeaseFacade.class).activate(leaseId);
         }
 
         Persistence.service().commit();
