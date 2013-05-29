@@ -74,6 +74,8 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
         if (isViewable()) {
             container.setH1(++row, 0, 1, i18n.tr("Miscellaneous"));
 
+            container.setBR(++row, 0, 1);
+
             Anchor resetPassword = new Anchor(i18n.tr("Reset Password"), new Command() {
                 @Override
                 public void execute() {
