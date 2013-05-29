@@ -76,6 +76,10 @@ public class Tester {
         }
     }
 
+    public void assertEquals(String message, String expected, LogicalDate actual) {
+        assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
+    }
+
     public void assertFalse(String message, boolean condition) {
         assertTrue(message, !condition);
     }

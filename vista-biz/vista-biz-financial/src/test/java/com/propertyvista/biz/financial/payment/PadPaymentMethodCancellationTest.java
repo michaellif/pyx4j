@@ -15,11 +15,13 @@ package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
 
+import org.junit.Assert;
 import org.junit.experimental.categories.Category;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.gwt.server.DateUtils;
@@ -48,6 +50,10 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         preloadData(config);
     }
 
+    public static void assertEquals(String message, String expected, LogicalDate actual) {
+        Assert.assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
+    }
+
     public void testMethrodsRemovalScenario() throws Exception {
         setSysDate("2011-03-10");
 
@@ -65,11 +71,9 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Need to investigate the diff with lease agreed price of 1000.00
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
 
-        assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-04-01")), ServerSideFactory.create(PaymentMethodFacade.class)
-                .getNextScheduledPreauthorizedPaymentDate(getLease()));
+        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
 
-        assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-03-29")), ServerSideFactory.create(PaymentMethodFacade.class)
-                .getPreauthorizedPaymentCutOffDate(getLease()));
+        assertEquals("CutOffDate", "2011-03-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
 
         // Add 100% PAP
         final PreauthorizedPayment preauthorizedPayment1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
@@ -77,8 +81,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
                 build());
 
         advanceSysDate("2011-03-29");
-        assertEquals(new LogicalDate(DateUtils.detectDateformat("2011-05-01")), ServerSideFactory.create(PaymentMethodFacade.class)
-                .getNextScheduledPreauthorizedPaymentDate(getLease()));
+        assertEquals("Next PAP", "2011-05-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
 
         // @formatter:off
         new PaymentRecordTester(getLease().billingAccount()).
@@ -131,5 +134,70 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Scheduled payment is Canceled
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Canceled);
 
+    }
+
+    public void testAgreementUpdate() throws Exception {
+        setSysDate("2010-12-19");
+
+        createLease("2011-01-01", "2012-03-10", new BigDecimal("1000.00"), null);
+
+        setBillingBatchProcess();
+        setLeaseBatchProcess();
+
+        // Do Not start payment
+        //setPaymentBatchProcess();
+
+        advanceSysDate("2010-12-20");
+
+        approveApplication(true);
+
+        // TODO - deposit of 930.30 added to total for test to pass through.
+        // Need to investigate the diff with lease agreed price of 1000.00
+        new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-01-01").totalDueAmount("2050.30");
+
+        assertEquals("", "2011-01-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
+
+        assertEquals("", "2010-12-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
+
+        // Add 100% PAP
+        PreauthorizedPayment pa1 = setPreauthorizedPayment(new PreauthorizedPaymentBuilder(). //
+                add(getLease().currentTerm().version().leaseProducts().serviceItem(), "1000.01"). // 1000.00 + 12%
+                build());
+
+        new PaymentAgreementTester(getLease().billingAccount()).count(1).lastRecordAmount("1000.01");
+
+        // Allow to update PA
+        pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.02"));
+        ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa1, pa1.tenant());
+
+        new PaymentAgreementTester(getLease().billingAccount()).count(1)//
+                .lastRecordAmount("1000.02");
+
+        // Move to CutOffDate
+        advanceSysDate("2010-12-29");
+
+        assertEquals("", "2010-12-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
+
+        // Record should not be updated, and new PA created
+        pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.03"));
+        PreauthorizedPayment pa2 = ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa1, pa1.tenant());
+
+        new PaymentAgreementTester(getLease().billingAccount()).count(2)//
+                .lastRecordAmount("1000.03");
+
+        Persistence.service().retrieve(pa1);
+        assertEquals("", "2010-12-29", pa1.expiring().getValue());
+
+        // Move to next period
+        advanceSysDate("2011-01-01");
+
+        // Record should be updated, and new PA NOT created
+        pa2.coveredItems().get(0).amount().setValue(new BigDecimal("1000.04"));
+        ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa2, pa2.tenant());
+
+        new PaymentAgreementTester(getLease().billingAccount()).count(2)//
+                .lastRecordAmount("1000.04");
+
+        // TODO Test PAP creation
     }
 }

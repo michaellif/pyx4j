@@ -224,9 +224,16 @@ class PreauthorisedPaymentsManager {
                 criteria.eq(criteria.proto().tenant(), leaseParticipant.leaseParticipant().cast());
                 criteria.eq(criteria.proto().isDeleted(), false);
 
-                OrCriterion or = criteria.or();
-                or.right().ge(criteria.proto().expiring(), billingCycle.targetPadGenerationDate());
-                or.left().isNull(criteria.proto().expiring());
+                {
+                    OrCriterion or = criteria.or();
+                    or.right().ge(criteria.proto().expiring(), billingCycle.targetPadGenerationDate());
+                    or.left().isNull(criteria.proto().expiring());
+                }
+                {
+                    OrCriterion or = criteria.or();
+                    or.right().ge(criteria.proto().effectiveFrom(), billingCycle.targetPadExecutionDate());
+                    or.left().isNull(criteria.proto().effectiveFrom());
+                }
 
                 criteria.asc(criteria.proto().id());
                 preauthorizedPayments = Persistence.service().query(criteria);

@@ -135,7 +135,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
-        if (!when.before(cycle.targetPadGenerationDate().getValue())) {
+        if (!when.before(cycle.targetPadExecutionDate().getValue())) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
         return cycle.targetPadGenerationDate().getValue();

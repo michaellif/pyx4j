@@ -48,14 +48,18 @@ class PreauthorizedPaymentAgreementMananger {
         preauthorizedPayment.tenant().set(tenantId);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
 
+        LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(
+                preauthorizedPayment.tenant().lease());
+
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
             PreauthorizedPayment origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
 
-            if (!EntityGraph.fullyEqualValues(origPreauthorizedPayment, preauthorizedPayment)) {
+            if (!EntityGraph.fullyEqual(origPreauthorizedPayment, preauthorizedPayment)) {
                 // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
                 LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
                         preauthorizedPayment.tenant().lease());
+
                 if (SystemDateManager.getDate().after(cutOffDate)) {
                     origPreauthorizedPayment.expiring().setValue(cutOffDate);
                     Persistence.service().merge(origPreauthorizedPayment);
@@ -75,18 +79,16 @@ class PreauthorizedPaymentAgreementMananger {
                         preauthorizedPayment = EntityGraph.businessDuplicate(preauthorizedPayment);
                     }
                 }
-                preauthorizedPayment.effectiveFrom().setValue(
-                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease()));
+                preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
 
             }
         } else {
-            preauthorizedPayment.effectiveFrom().setValue(
-                    ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease()));
+            preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
 
         }
 
         Persistence.service().merge(preauthorizedPayment);
-        return null;
+        return preauthorizedPayment;
     }
 
     //If Tenant removes PAP - payment will NOT be canceled.
