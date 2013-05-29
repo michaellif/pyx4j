@@ -92,6 +92,17 @@ public class DataDump {
         dumpAny(baseDirectory, type, ent, DataType.Entity);
     }
 
+    public static String toXmlString(IEntity ent) {
+        XMLStringWriter xml = new XMLStringWriter(Charset.forName("UTF-8"));
+        DumpXMLEntityWriter xmlWriter = new DumpXMLEntityWriter(xml);
+        xmlWriter.setEmitAttachLevel(true);
+        xmlWriter.setEmitLogTransient(false);
+        xmlWriter.setEmitXmlTransient(true);
+        xmlWriter.setEmitIdentityHashCode(true);
+        xmlWriter.write(ent);
+        return xml.toString();
+    }
+
     @SuppressWarnings("unchecked")
     private static void dumpAny(String baseDirectory, String type, Object item, DataType dataType) {
         if ((item == null) || (!ServerSideConfiguration.instance().isDevelopmentBehavior())) {
