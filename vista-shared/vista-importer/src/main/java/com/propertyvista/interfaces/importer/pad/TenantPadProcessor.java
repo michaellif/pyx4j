@@ -543,8 +543,15 @@ public class TenantPadProcessor {
                 }
             } else {
                 BigDecimal charge = DomainUtil.roundMoney(new BigDecimal(padFileModel.charge().getValue()));
-                padFileModel._processorInformation().chargeAmount().setValue(charge);
                 padFileModel._processorInformation().chargeEftAmount().setValue(charge);
+
+                if (padFileModel.estimatedCharge().isNull()) {
+                    padFileModel._processorInformation().chargeAmount().setValue(charge);
+                } else {
+                    BigDecimal chargeEst = DomainUtil.roundMoney(new BigDecimal(padFileModel.estimatedCharge().getValue()));
+                    padFileModel._processorInformation().chargeAmount().setValue(chargeEst);
+                }
+
                 estimatedChargeSplit = charge;
                 estimatedChargeTotal = estimatedChargeTotal.add(estimatedChargeSplit);
             }
