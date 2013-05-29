@@ -13,7 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.util.decorators;
 
+import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorComponent;
+
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Composite;
@@ -43,6 +47,8 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
         label = new Label();
         label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        label.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
         decoratorPanel.add(label);
 
         initWidget(decoratorPanel);
@@ -53,6 +59,7 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
     @Override
     public void setComponent(CCheckBox component) {
         this.component = component;
+        component.asWidget().addStyleName(WidgetDecoratorComponent.name());
         componentHolder.setWidget(component);
         label.setText(component.getTitle());
         label.addClickHandler(new ClickHandler() {
@@ -70,5 +77,4 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
     public void onSetDebugId(IDebugId parentDebugId) {
         // TODO Auto-generated method stub
     }
-
 }
