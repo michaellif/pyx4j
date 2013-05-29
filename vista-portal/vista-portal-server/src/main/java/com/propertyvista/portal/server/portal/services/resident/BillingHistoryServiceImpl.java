@@ -46,8 +46,7 @@ public class BillingHistoryServiceImpl implements BillingHistoryService {
             dto.referenceNo().setValue(bill.billSequenceNumber().getValue());
             dto.amount().setValue(bill.totalDueAmount().getValue());
             dto.dueDate().setValue(bill.dueDate().getValue());
-            //TODO 1
-            // dto.fromDate().setValue(bill.billingCycle().executionDate().getValue());
+            dto.fromDate().setValue(bill.executionDate().getValue());
 
             bills.add(dto);
         }
