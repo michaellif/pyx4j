@@ -169,7 +169,9 @@ public class EntityEqualsTest extends InitializerTestBase {
         assertTrue("Same data\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
 
         ent21.nameC1().setValue("C1.1x");
-        assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
+        assertFalse("Data should be different\n" + ent1.toString() + "\n!=\n" + ent2.toString(), EntityGraph.fullyEqualValues(ent1, ent2));
+
+        assertTrue("Owned Data should be same\n" + ent1.toString() + "\n==\n" + ent2.toString(), EntityGraph.fullyEqual(ent1, ent2));
     }
 
     public void testBusinessEqual() {

@@ -102,8 +102,12 @@ public class EntityGraph {
         }
     }
 
-    private static final boolean traceFullyEqual = false;
+    private static final boolean traceFullyEqual = true;
 
+    /**
+     * Ignore changes in values of Not owned Objects.
+     * e.g. compare only Owned members
+     */
     public static boolean fullyEqual(IEntity ent1, IEntity ent2) {
         if (!EqualsHelper.equals(ent1, ent2)) {
             if (traceFullyEqual) {
@@ -111,17 +115,30 @@ public class EntityGraph {
             }
             return false;
         }
-        return fullyEqualValues(ent1, ent2);
+        return fullyEqualValues(ent1, ent2, true, new HashSet<IEntity>(), new IObject<?>[0]);
     }
 
+    /**
+     * Include changes in values of Not owned Objects
+     */
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2) {
-        return fullyEqualValues(ent1, ent2, new IObject<?>[0]);
+        return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), new IObject<?>[0]);
     }
 
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
+        return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), ignoreValues);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean fullyEqualValues(IEntity ent1, IEntity ent2, boolean ownedValuesOnly, Set<IEntity> processed, IObject<?>... ignoreValues) {
         // Cast if required to concert instance
         ent1 = ent1.cast();
         ent2 = ent2.cast();
+
+        if ((ent1 == ent2) || (processed.contains(ent1))) {
+            return true;
+        }
+        processed.add(ent1);
 
         Set<Path> ignorePath = new HashSet<Path>();
         if (ignoreValues != null) {
@@ -143,28 +160,109 @@ public class EntityGraph {
                 continue;
             }
 
-            if (memberMeta.isEntity()) {
+            switch (memberMeta.getObjectClassType()) {
+            case Entity:
                 IEntity ent1Member = (IEntity) member1;
                 IEntity ent2Member = (IEntity) member2;
                 if (ent2Member.isNull() && ent2Member.isNull()) {
                     continue;
-                } else if (ent1Member.getMeta().isEmbedded()) {
-                    if (!fullyEqualValues(ent1Member, ent2Member)) {
+                } else if (memberMeta.isEmbedded()) {
+                    if (!fullyEqualValues(ent1Member, ent2Member, ownedValuesOnly, processed, new IObject<?>[0])) {
                         if (traceFullyEqual) {
                             log.info("--changes in member {}", memberName);
                         }
                         return false;
                     }
-                } else if (!fullyEqual(ent1Member, ent2Member)) {
+                } else if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
+                    if (!ent1Member.equals(ent2Member)) {
+                        if (traceFullyEqual) {
+                            log.info("--changes in member {}", memberName);
+                        }
+                        return false;
+                    }
+                } else if (!fullyEqualValues(ent1Member, ent2Member, ownedValuesOnly, processed, new IObject<?>[0])) {
                     if (traceFullyEqual) {
                         log.info("--changes in member {}", memberName);
                     }
                     return false;
                 }
-            } else if (!EqualsHelper.equals(member1, member2)) {
-                if (traceFullyEqual) {
-                    log.info("--changes in member {}", memberName);
+                break;
+            case EntityList:
+                if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
+                    if (!EqualsHelper.equals(member1, member2)) {
+                        if (traceFullyEqual) {
+                            log.info("--changes in member {}", memberName);
+                        }
+                        return false;
+                    }
+                } else {
+                    if (!fullyEqualValues((IList<IEntity>) member1, (IList<IEntity>) member2, ownedValuesOnly, processed)) {
+                        if (traceFullyEqual) {
+                            log.info("--changes in member {}", memberName);
+                        }
+                        return false;
+                    }
                 }
+                break;
+            case EntitySet:
+                if (ownedValuesOnly && !memberMeta.isOwnedRelationships()) {
+                    if (!EqualsHelper.equals(member1, member2)) {
+                        if (traceFullyEqual) {
+                            log.info("--changes in member {}", memberName);
+                        }
+                        return false;
+                    }
+                } else {
+                    if (!fullyEqualValues((ISet<IEntity>) member1, (ISet<IEntity>) member2, ownedValuesOnly, processed)) {
+                        if (traceFullyEqual) {
+                            log.info("--changes in member {}", memberName);
+                        }
+                        return false;
+                    }
+                }
+                break;
+            default:
+                if (!EqualsHelper.equals(member1, member2)) {
+                    if (traceFullyEqual) {
+                        log.info("--changes in member {}", memberName);
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static boolean fullyEqualValues(ISet<IEntity> set1, ISet<IEntity> set2, boolean ownedValuesOnly, Set<IEntity> processed) {
+        if (set1.size() != set2.size()) {
+            return false;
+        }
+        Iterator<IEntity> iter1 = set1.iterator();
+        List<IEntity> set2copy = new Vector<IEntity>(set2);
+        set1Loop: while (iter1.hasNext()) {
+            IEntity ent1 = iter1.next();
+            // Find first entity with the same data
+            Iterator<IEntity> iter2 = set2copy.iterator();
+            while (iter2.hasNext()) {
+                if (!fullyEqualValues(ent1, iter2.next(), ownedValuesOnly, processed, new IObject<?>[0])) {
+                    // Do not compare the same objects twice
+                    iter2.remove();
+                    continue set1Loop;
+                }
+            }
+            return true;
+        }
+        return true;
+    }
+
+    private static boolean fullyEqualValues(IList<IEntity> value1, IList<IEntity> value2, boolean ownedValuesOnly, Set<IEntity> processed) {
+        if (value1.size() != value2.size()) {
+            return false;
+        }
+        Iterator<IEntity> iter1 = value1.iterator();
+        Iterator<IEntity> iter2 = value2.iterator();
+        for (; iter1.hasNext() && iter2.hasNext();) {
+            if (!fullyEqualValues(iter1.next(), iter2.next(), ownedValuesOnly, processed, new IObject<?>[0])) {
                 return false;
             }
         }
