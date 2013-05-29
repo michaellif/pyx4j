@@ -19,7 +19,10 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -360,6 +363,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
 
+            private FormFlexPanel expirationWarning;
+
             public PreauthorizedPaymentViewer() {
                 super(PreauthorizedPayment.class);
             }
@@ -367,11 +372,26 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
+                int row = -1;
+                Widget expirationWarningLabel = new HTML(i18n.tr("This Preauthorized Payment is expired - needs to be replaced with new one!"));
+                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
+                expirationWarning = new FormFlexPanel();
+                expirationWarning.setWidget(0, 0, expirationWarningLabel);
+                expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
+                expirationWarning.setHR(1, 0, 1);
+                expirationWarning.setBR(2, 0, 1);
 
-                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().paymentMethod()), 40, 10).build());
-                content.setWidget(1, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+                content.setWidget(++row, 0, expirationWarning);
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod()), 40, 10).build());
+                content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                expirationWarning.setVisible(!getValue().expiring().isNull());
             }
         }
     }
