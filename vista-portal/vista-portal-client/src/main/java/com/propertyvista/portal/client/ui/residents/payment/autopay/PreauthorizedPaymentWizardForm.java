@@ -125,7 +125,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             public void onAmontValueChange() {
                 BigDecimal total = BigDecimal.ZERO;
                 for (PreauthorizedPaymentCoveredItemDTO item : getValue()) {
-                    total = (total.add(item.amount().getValue()));
+                    if (!item.amount().isNull()) {
+                        total = (total.add(item.amount().getValue()));
+                    }
                 }
                 PreauthorizedPaymentWizardForm.this.get(PreauthorizedPaymentWizardForm.this.proto().total()).setValue(total);
             }
