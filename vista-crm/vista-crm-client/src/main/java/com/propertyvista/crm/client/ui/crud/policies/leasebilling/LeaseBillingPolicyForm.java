@@ -64,7 +64,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     private final static I18n i18n = I18n.get(LeaseBillingPolicyForm.class);
 
-    private final SimplePanel baseFeeHolder = new SimplePanel();
+    private SimplePanel baseFeeHolder;
 
     private SimplePanel maxFeeHolder;
 
@@ -74,6 +74,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
     @Override
     protected List<FormFlexPanel> createCustomTabPanels() {
+        baseFeeHolder = new SimplePanel();
+        maxFeeHolder = new SimplePanel();
         if (VistaFeatures.instance().yardiIntegration()) {
             return Arrays.asList(//@formatter:off
                     createBillingPanel()
@@ -82,7 +84,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return Arrays.asList(//@formatter:off
                     createBillingPanel(),
                     createLateFeesPanel(),
-                   createNsfFeesPanel()
+                    createNsfFeesPanel()
             );//@formatter:on
         }
     }
@@ -125,7 +127,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 bindMaxFeeEditor(event.getValue(), false);
             }
         });
-        panel.setWidget(++row, 1, maxFeeHolder = new SimplePanel());
+        panel.setWidget(++row, 1, maxFeeHolder);
 
         panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
@@ -193,7 +195,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             break;
         }
 
-        unbind(proto().lateFee().baseFee());
+        unbind(proto().lateFee().maxTotalFee());
 
         if (comp != null) {
             maxFeeHolder.setWidget(new DecoratorBuilder(inject(proto().lateFee().maxTotalFee(), comp), 6).build());
