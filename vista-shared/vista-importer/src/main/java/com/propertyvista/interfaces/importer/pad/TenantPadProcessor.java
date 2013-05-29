@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.server.dev.DataDump;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -261,7 +262,8 @@ public class TenantPadProcessor {
             } catch (Throwable e) {
                 padFileModel._import().invalid().setValue(true);
                 padFileModel._import().message().setValue(e.getMessage());
-                log.error("pad save error", e);
+                log.debug("Error with PadFileModel {} ", DataDump.toXmlString(padFileModel));
+                log.error("tenant {} pad save error", padFileModel._processorInformation().tenant().participantId().getValue(), e);
                 counters.invalid++;
             }
         }
@@ -860,6 +862,8 @@ public class TenantPadProcessor {
             throw new Error("Charges not created for PAP");
         }
 
+        List<BillableItem> billableItemsProcesed = new ArrayList<BillableItem>();
+
         for (PadFileModel charge : padFileModel._processorInformation().accountCharges()) {
             boolean found = false;
 
@@ -877,6 +881,7 @@ public class TenantPadProcessor {
                     found = true;
 
                     billableItems.remove(billableItem);
+                    billableItemsProcesed.add(billableItem);
 
                     PreauthorizedPaymentCoveredItem padItem = EntityFactory.create(PreauthorizedPaymentCoveredItem.class);
                     padItem.billableItem().set(billableItem);
@@ -889,8 +894,9 @@ public class TenantPadProcessor {
             }
 
             if (!found) {
-                throw new Error("BillableItem " + charge.chargeCode().getValue() + " " + charge._processorInformation().chargeAmount().getValue()
-                        + "$ not found");
+                throw new Error("BillableItem '" + charge.chargeCode().getValue() + "' " + charge._processorInformation().chargeAmount().getValue()
+                        + "$ not found; already processed items " + formatBillableItems(billableItemsProcesed) + "; unprocessed "
+                        + formatBillableItems(billableItems));
             }
         }
 
@@ -908,12 +914,24 @@ public class TenantPadProcessor {
                 }
             }
             if (!found) {
-                throw new Error("service billableItem not found in PAP to apply credit" + charge.chargeCode().getValue() + " "
+                throw new Error("Service billableItem not found in PAP to apply credit '" + charge.chargeCode().getValue() + "' "
                         + charge._processorInformation().chargeEftAmount().getValue() + "$ not found");
             }
 
         }
 
         return pap;
+    }
+
+    private String formatBillableItems(List<BillableItem> billableItemsProcesed) {
+        StringBuilder b = new StringBuilder();
+        for (BillableItem billableItem : billableItemsProcesed) {
+            if (b.length() > 0) {
+                b.append(", ");
+            }
+            b.append("'").append(billableItem.extraData().duplicate(YardiLeaseChargeData.class).chargeCode().getValue()).append("' ");
+            b.append(billableItem.agreedPrice().getValue()).append("$ ");
+        }
+        return b.toString();
     }
 }
