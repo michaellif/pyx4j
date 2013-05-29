@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.RTCustomer;
 
@@ -34,6 +37,8 @@ import com.propertyvista.yardi.services.ARCodeAdapter;
 import com.propertyvista.yardi.services.YardiLeaseProcessor;
 
 public class LeaseMerger {
+
+    private final static Logger log = LoggerFactory.getLogger(LeaseMerger.class);
 
     private boolean isNew = false;
 
@@ -89,18 +94,26 @@ public class LeaseMerger {
         List<BillableItem> lookupList = new ArrayList<BillableItem>(lease.currentTerm().version().leaseProducts().featureItems());
         for (BillableItem item : items) {
             if (itemsEqual(item, lease.currentTerm().version().leaseProducts().serviceItem())) {
+                log.debug("      existing service: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
+                        .getValue());
                 continue;
             }
             BillableItem found = findBillableItem(item, lookupList);
             if (found != null) {
                 lookupList.remove(found);
+                log.debug("      existing feature: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
+                        .getValue());
                 continue;
             }
             // add new item
             if (isServiceItem(item)) {
                 lease.currentTerm().version().leaseProducts().serviceItem().set(item);
+                log.debug("      updating service: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
+                        .getValue());
             } else {
                 lease.currentTerm().version().leaseProducts().featureItems().add(item);
+                log.debug("      adding feature: {} - {}", item.extraData().<YardiLeaseChargeData> cast().chargeCode().getValue(), item.agreedPrice()
+                        .getValue());
             }
             modified = true;
         }

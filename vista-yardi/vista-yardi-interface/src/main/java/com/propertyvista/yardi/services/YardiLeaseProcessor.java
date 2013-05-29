@@ -176,7 +176,7 @@ public class YardiLeaseProcessor {
 
     public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
         // TODO YardiLeaseIntegrationAgent.updateBillabelItem(lease, billableItem);
-        log.info("      Updating billable item");
+        log.info("      Updating billable items");
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         List<BillableItem> newItems = new ArrayList<BillableItem>();
         for (Transactions tr : transactions) {

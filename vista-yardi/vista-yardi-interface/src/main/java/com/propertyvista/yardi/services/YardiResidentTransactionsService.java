@@ -209,6 +209,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             try {
                 final Building building = importProperty(property);
                 executionMonitor.addProcessedEvent("Building");
+                log.info("Processing building: {}", building.propertyCode());
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     log.info("  for {}", rtCustomer.getCustomerID());
                     try {
@@ -342,8 +343,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 // grab propertyCode from the first available ChargeDetail element
                 final String propertyCode = property.getRTCustomer().get(0).getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail()
                         .getPropertyPrimaryID();
+                log.info("Processing building: {}", propertyCode);
                 if (executionMonitor != null) {
-                    executionMonitor.addProcessedEvent("Building");
+                    executionMonitor.addProcessedEvent("Building", propertyCode);
                 }
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     String customerId = null;
@@ -351,8 +353,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
                         final Lease lease = new YardiLeaseProcessor().findLease(customerId, propertyCode);
                         if (lease == null) {
-                            throw new YardiServiceException("Lease not found");
+                            throw new YardiServiceException("Lease not found for customer: " + customerId);
                         }
+                        log.info("Processing lease: {}", customerId);
 
                         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                             @Override
