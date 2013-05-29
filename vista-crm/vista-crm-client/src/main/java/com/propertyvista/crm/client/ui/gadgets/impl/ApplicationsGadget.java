@@ -20,15 +20,18 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.crm.client.ui.gadgets.common.CounterGadgetInstanceBase;
 import com.propertyvista.crm.client.ui.gadgets.components.ApplicationsDetailsFactory;
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.forms.ApplicationsGadgetSummaryForm;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.dto.gadgets.ApplicationsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
@@ -61,6 +64,22 @@ public class ApplicationsGadget extends CounterGadgetInstanceBase<ApplicationsGa
                         filterData.getCounterMember());
             }
         };
-        bindDetailsFactory(member, new ApplicationsDetailsFactory(this, criteriaProvider));
+        bindDetailsFactory(member, new ApplicationsDetailsFactory(this, criteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().applicationsListerSettings();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+        }));
     }
 }

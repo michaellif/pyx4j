@@ -101,6 +101,23 @@ public class NoticesGadget extends CounterGadgetInstanceBase<NoticesGadgetDataDT
                         filterData.getCounterMember());
             }
         };
-        bindDetailsFactory(category, new UnitDetailsFactory(this, criteriaProvider));
+        bindDetailsFactory(category, new UnitDetailsFactory(this, criteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().unitsListerSettings();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+
+        }));
     }
 }

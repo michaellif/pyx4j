@@ -54,6 +54,9 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public interface LeaseExpirationGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
     @EmbeddedEntity
+    ListerUserSettings unitsListerDetails();
+
+    @EmbeddedEntity
     ListerUserSettings leaseListerDetails();
 
 }

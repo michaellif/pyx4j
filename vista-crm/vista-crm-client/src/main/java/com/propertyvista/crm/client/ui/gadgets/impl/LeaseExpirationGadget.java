@@ -60,7 +60,23 @@ public class LeaseExpirationGadget extends CounterGadgetInstanceBase<LeaseExpira
                         filterData.getCounterMember().toString());
             }
         };
-        bindDetailsFactory(proto().occupiedUnits(), new UnitDetailsFactory(this, unitCriteriaProvider));
+        bindDetailsFactory(proto().occupiedUnits(), new UnitDetailsFactory(this, unitCriteriaProvider, new Proxy<ListerUserSettings>() {
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().unitsListerDetails();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+
+        }));
 
         bindLeaseDetailsFactory(proto().numOfLeasesEndingThisMonth());
         bindLeaseDetailsFactory(proto().numOfLeasesEndingNextMonth());

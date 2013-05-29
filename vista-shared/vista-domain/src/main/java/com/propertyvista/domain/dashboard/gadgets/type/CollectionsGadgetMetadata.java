@@ -15,6 +15,7 @@ package com.propertyvista.domain.dashboard.gadgets.type;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Transient;
 
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
@@ -52,6 +53,10 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 )//@formatter:on
 public interface CollectionsGadgetMetadata extends CounterGadgetBaseMetadata, BuildingGadget {
 
+    @EmbeddedEntity
+    ListerUserSettings leasesListerDetails();
+
+    @EmbeddedEntity
     ListerUserSettings paymentListerDetails();
 
 }

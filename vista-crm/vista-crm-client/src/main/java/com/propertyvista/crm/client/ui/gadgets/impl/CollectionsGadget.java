@@ -75,7 +75,7 @@ public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadg
 
             @Override
             public ListerUserSettings get() {
-                return getMetadata().paymentListerDetails();
+                return getMetadata().leasesListerDetails();
             }
 
             @Override
@@ -98,6 +98,23 @@ public class CollectionsGadget extends CounterGadgetInstanceBase<CollectionsGadg
                         filterData.getCounterMember().toString());
             }
         };
-        bindDetailsFactory(member, new PaymentDetailsFactory(this, criteriaProvider));
+        bindDetailsFactory(member, new PaymentDetailsFactory(this, criteriaProvider, new Proxy<ListerUserSettings>() {
+
+            @Override
+            public ListerUserSettings get() {
+                return getMetadata().paymentListerDetails();
+            }
+
+            @Override
+            public void save() {
+                saveMetadata();
+            }
+
+            @Override
+            public boolean isModifiable() {
+                return ClientContext.getUserVisit().getPrincipalPrimaryKey().equals(getMetadata().ownerUser().getPrimaryKey());
+            }
+
+        }));
     }
 }

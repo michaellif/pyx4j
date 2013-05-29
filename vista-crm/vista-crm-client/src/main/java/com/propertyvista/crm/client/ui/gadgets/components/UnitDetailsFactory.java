@@ -27,7 +27,9 @@ import com.propertyvista.crm.client.ui.gadgets.components.details.AbstractLister
 import com.propertyvista.crm.client.ui.gadgets.components.details.CounterGadgetFilter;
 import com.propertyvista.crm.client.ui.gadgets.components.details.ICriteriaProvider;
 import com.propertyvista.crm.client.ui.gadgets.components.details.IFilterDataProvider;
+import com.propertyvista.crm.client.ui.gadgets.util.Proxy;
 import com.propertyvista.crm.rpc.services.unit.UnitCrudService;
+import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.dto.AptUnitDTO;
 
 public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO, CounterGadgetFilter> {
@@ -55,14 +57,15 @@ public class UnitDetailsFactory extends AbstractListerDetailsFactory<AptUnitDTO,
             );//@formatter:on
     }
 
-    public UnitDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<AptUnitDTO, CounterGadgetFilter> criteriaProvider) {
+    public UnitDetailsFactory(IFilterDataProvider<CounterGadgetFilter> filterDataProvider, ICriteriaProvider<AptUnitDTO, CounterGadgetFilter> criteriaProvider,
+            Proxy<ListerUserSettings> listerSettingsProxy) {
         super(//@formatter:off
                 AptUnitDTO.class,
                 DEFAULT_COLUMN_DESCRIPTORS,
                 GWT.<UnitCrudService> create(UnitCrudService.class),
                 filterDataProvider,
                 criteriaProvider,
-                null
+                listerSettingsProxy
         );//@formatter:on
     }
 
