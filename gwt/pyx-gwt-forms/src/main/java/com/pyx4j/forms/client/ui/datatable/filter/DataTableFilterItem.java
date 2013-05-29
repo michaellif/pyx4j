@@ -90,9 +90,9 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
     @com.pyx4j.i18n.annotations.I18n
     public static enum Operator {
 
-        is(Restriction.EQUAL, true),
+        is(Restriction.EQUAL),
 
-        isNot(Restriction.NOT_EQUAL, true),
+        isNot(Restriction.NOT_EQUAL),
 
         like(Restriction.RDB_LIKE),
 
@@ -143,7 +143,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
 
         public static Operator getOperator(Restriction restriction, IObject<?> member) {
             for (Operator op : Operator.values()) {
-                if (op.getCriterion() == restriction && op.isDate == DataTableFilterItem.isDate(member.getValueClass())) {
+                if (op.getCriterion() == restriction && getOperators(member).contains(op)) {
                     return op;
                 }
             }
@@ -275,7 +275,7 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
         }
     }
 
-    private Collection<Operator> getOperators(IObject<?> member) {
+    private static Collection<Operator> getOperators(IObject<?> member) {
         Collection<Operator> options;
         // correct operands list:
         Class<?> valueClass = member.getValueClass();
