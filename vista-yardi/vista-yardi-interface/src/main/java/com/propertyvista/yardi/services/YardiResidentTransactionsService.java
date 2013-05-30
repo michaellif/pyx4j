@@ -361,7 +361,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             @Override
                             public Void execute() throws YardiServiceException {
                                 // create/update billable items
-                                new YardiLeaseProcessor().updateLeaseProducts(rtCustomer.getRTServiceTransactions().getTransactions(), lease);
+                                new YardiLeaseProcessor().updateLeaseProducts(executionMonitor, rtCustomer.getRTServiceTransactions().getTransactions(), lease);
                                 return null;
                             }
                         });

@@ -29,6 +29,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
@@ -36,6 +37,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
@@ -174,10 +176,10 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
+    public Lease updateLeaseProducts(final ExecutionMonitor executionMonitor, List<Transactions> transactions, Lease leaseId) {
         // TODO YardiLeaseIntegrationAgent.updateBillabelItem(lease, billableItem);
-        log.info("      Updating billable items");
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
+        log.info("      Updating billable items for lease {} ", lease.getStringView());
         List<BillableItem> newItems = new ArrayList<BillableItem>();
         for (Transactions tr : transactions) {
             if (tr == null || tr.getCharge() == null) {
@@ -196,6 +198,11 @@ public class YardiLeaseProcessor {
                 }
             }
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            String msg = SimpleMessageFormat.format("PreauthorizedPayment PAP for lease {0}", leaseId.leaseId());
+            log.info(msg);
+            if (executionMonitor != null) {
+                executionMonitor.addFailedEvent("SuspendPreauthorizedPayment", msg);
+            }
             suspendPADPayments(lease);
         }
         return lease;
