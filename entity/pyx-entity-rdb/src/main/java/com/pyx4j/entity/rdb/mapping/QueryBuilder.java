@@ -362,9 +362,9 @@ public class QueryBuilder<T extends IEntity> {
             case RDB_LIKE:
                 if (bindHolder.bindValue != null) {
                     if (hasLikeValue(bindHolder.bindValue.toString())) {
-                        bindHolder.bindValue = bindHolder.bindValue.toString().replace('*', dialect.likeWildCards());
+                        bindHolder.bindValue = bindHolder.bindValue.toString().trim().replace('*', dialect.likeWildCards());
                     } else {
-                        bindHolder.bindValue = dialect.likeWildCards() + bindHolder.bindValue.toString() + dialect.likeWildCards();
+                        bindHolder.bindValue = dialect.likeWildCards() + bindHolder.bindValue.toString().trim() + dialect.likeWildCards();
                     }
                 }
                 sqlOperator = " " + dialect.likeOperator() + " ? ";
