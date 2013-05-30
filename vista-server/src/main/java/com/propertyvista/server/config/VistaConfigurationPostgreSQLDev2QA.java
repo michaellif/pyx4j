@@ -21,6 +21,11 @@ public class VistaConfigurationPostgreSQLDev2QA extends VistaConfigurationPostgr
     }
 
     @Override
+    public int dbPort() {
+        return 5432;
+    }
+
+    @Override
     public String dbName() {
         return "vista";
     }
