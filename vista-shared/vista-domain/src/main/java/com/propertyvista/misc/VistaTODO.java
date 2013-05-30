@@ -34,8 +34,8 @@ public class VistaTODO {
     public static boolean removedForProduction = true;
 
     public static boolean isMaintenanceRequestsEnabled() {
-        if (VistaFeatures.instance().yardiIntegration() && VistaFeatures.instance().yardiMaintenance()) {
-            return ApplicationMode.isDevelopment();
+        if (VistaFeatures.instance().yardiIntegration()) {
+            return VistaFeatures.instance().yardiMaintenance();
         } else {
             return true;
         }
