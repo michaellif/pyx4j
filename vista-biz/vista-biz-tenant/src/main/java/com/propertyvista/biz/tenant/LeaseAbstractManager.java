@@ -83,6 +83,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTerm.Type;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.shared.NotesParentId;
@@ -1032,8 +1033,10 @@ public abstract class LeaseAbstractManager {
     private void updateLeaseApplicantReference(Lease lease) {
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         for (LeaseTermTenant leaseTermTenant : lease.currentTerm().version().tenants()) {
-            lease._applicant().set(leaseTermTenant.leaseParticipant());
-            break;
+            if (leaseTermTenant.role().getValue() == Role.Applicant) {
+                lease._applicant().set(leaseTermTenant.leaseParticipant());
+                break;
+            }
         }
     }
 
