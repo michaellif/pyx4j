@@ -72,7 +72,7 @@ public class DelinquentLeasesDetailsFactory extends AbstractListerDetailsFactory
 
     @Override
     protected void onItemSelected(DelinquentLeaseDTO item) {
-        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(item.getPrimaryKey()));
+        AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.Lease().formViewerPlace(item.leasePrimaryKey().getValue()));
     }
 
 }
