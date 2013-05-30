@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
@@ -126,8 +125,7 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
     @Override
     protected EntityListCriteria<LeaseDTO> updateCriteria(EntityListCriteria<LeaseDTO> criteria) {
         // TODO : set all that stuff in Activity (like TenantListers) or CRUD service ?
-        criteria.add(PropertyCriterion.in(criteria.proto().status(),
-                EnumSet.of(Lease.Status.Active, Lease.Status.ExistingLease, Lease.Status.NewLease, Lease.Status.Approved)));
+        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.present()));
         return super.updateCriteria(criteria);
     }
 }

@@ -98,6 +98,10 @@ public interface Lease extends IEntity {
             return EnumSet.of(ExistingLease, NewLease, Application);
         }
 
+        public static EnumSet<Status> present() {
+            return EnumSet.of(ExistingLease, NewLease, Approved, Active, Completed);
+        }
+
         public static EnumSet<Status> active() {
             return EnumSet.of(Approved, Active);
         }
