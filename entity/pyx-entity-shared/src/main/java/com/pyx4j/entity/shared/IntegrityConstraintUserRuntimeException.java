@@ -36,6 +36,11 @@ public class IntegrityConstraintUserRuntimeException extends UserRuntimeExceptio
         this.entityPrototype = entityPrototype;
     }
 
+    public IntegrityConstraintUserRuntimeException(String message, IEntity entityPrototype, Throwable cause) {
+        super(message, cause);
+        this.entityPrototype = entityPrototype;
+    }
+
     public IEntity getEntityPrototype() {
         return entityPrototype;
     }

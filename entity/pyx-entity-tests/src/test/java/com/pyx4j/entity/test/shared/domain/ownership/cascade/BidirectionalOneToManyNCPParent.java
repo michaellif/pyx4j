@@ -35,4 +35,5 @@ public interface BidirectionalOneToManyNCPParent extends IEntity {
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
+
 }
