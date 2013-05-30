@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client.ui.crud.pmc;
 
 import java.io.Serializable;
+import java.util.EnumSet;
 import java.util.HashMap;
 
 import com.google.gwt.core.client.GWT;
@@ -28,6 +29,8 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
+import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcExportDownloadDTO;
 import com.propertyvista.operations.rpc.services.ExportDownloadService;
@@ -85,6 +88,20 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
         });
         download.setMenu(downloadMenu);
         addHeaderToolbarItem(download);
+
+        Button runButton = new Button("Run Process");
+        addHeaderToolbarItem(runButton);
+        ButtonMenuBar runMenu = runButton.createMenu();
+        for (final PmcProcessType pmcProcessType : EnumSet.allOf(PmcProcessType.class)) {
+            if (!pmcProcessType.hasOption(PmcProcessOptions.GlobalOnly)) {
+                runMenu.addItem(pmcProcessType.getDescription(), new Command() {
+                    @Override
+                    public void execute() {
+                        ((PmcViewerView.Presenter) getPresenter()).runProcess(pmcProcessType);
+                    }
+                });
+            }
+        }
 
         Button resetCache = new Button("Reset Cache", new Command() {
 

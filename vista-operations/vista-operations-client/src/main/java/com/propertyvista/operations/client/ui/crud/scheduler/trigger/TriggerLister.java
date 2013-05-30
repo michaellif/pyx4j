@@ -30,6 +30,7 @@ public class TriggerLister extends AbstractLister<TriggerDTO> {
         setColumnDescriptors(//@formatter:off
             new MemberColumnDescriptor.Builder(proto().triggerType()).build(),
             new MemberColumnDescriptor.Builder(proto().name()).build(),
+            new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()

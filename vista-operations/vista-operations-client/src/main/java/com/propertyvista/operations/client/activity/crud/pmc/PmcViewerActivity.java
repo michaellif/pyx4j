@@ -23,12 +23,16 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
@@ -98,8 +102,20 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
     }
 
     @Override
+    public void runProcess(PmcProcessType pmcProcessType) {
+        ((PmcCrudService) getService()).runPmcProcess(new DefaultAsyncCallback<Run>() {
+
+            @Override
+            public void onSuccess(Run result) {
+                AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.TriggerRun().formViewerPlace(result.getPrimaryKey()));
+            }
+        }, getEntityId(), null);
+    }
+
+    @Override
     public ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource() {
         return new ListerDataSource<PmcMerchantAccountDTO>(PmcMerchantAccountDTO.class,
                 GWT.<AbstractListService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
     }
+
 }

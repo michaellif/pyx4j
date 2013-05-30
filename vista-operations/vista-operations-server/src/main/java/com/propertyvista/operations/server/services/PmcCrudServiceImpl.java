@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.server.services;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -46,6 +47,7 @@ import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
+import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
@@ -197,6 +199,15 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         ServerSideFactory.create(AuditFacade.class).info("PMC {0} Cancelled by {1} ", pmc.namespace().getValue(), Context.getVisit().getUserVisit().getEmail());
 
         pmc = Persistence.service().retrieve(entityClass, entityId);
+        callback.onSuccess(null);
+    }
+
+    @Override
+    public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, Date executionDate) {
+        Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
+
+        //TODO
+
         callback.onSuccess(null);
     }
 }

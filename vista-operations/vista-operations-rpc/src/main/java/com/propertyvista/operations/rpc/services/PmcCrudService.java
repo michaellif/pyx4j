@@ -13,12 +13,15 @@
  */
 package com.propertyvista.operations.rpc.services;
 
+import java.util.Date;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.PmcDTO;
 
 public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
@@ -30,4 +33,6 @@ public interface PmcCrudService extends AbstractCrudService<PmcDTO> {
     public void suspend(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     public void cancelPmc(AsyncCallback<VoidSerializable> callback, Key entityId);
+
+    public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, Date executionDate);
 }
