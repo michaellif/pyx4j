@@ -51,8 +51,16 @@ public class LeaseLister extends AbstractLister<LeaseDTO> {
             new Builder(proto().type()).build(),
             
             new Builder(proto().unit().building().propertyCode()).build(),
+            new Builder(proto().unit().building().info().name(), false).columnTitle(i18n.tr("Building Name")).build(),
+            new Builder(proto().unit().building().info().address(), false).columnTitle(i18n.tr("Building Address")).searchable(false).build(),
+            new Builder(proto().unit().building().info().address().streetName(), false).columnTitle(i18n.tr("Building Street Name")).build(),
+            
             new Builder(proto().unit()).searchable(false).build(),
             new Builder(proto().unit().info().number()).columnTitle(proto().unit().getMeta().getCaption()).searchableOnly().build(),
+            
+            new Builder(proto()._applicant().customer().person().name()).columnTitle(i18n.tr("Primary Tenant Name")).searchable(false).build(),
+            new Builder(proto()._applicant().customer().person().name().firstName(), false).columnTitle(i18n.tr("Primary Tenant First Name")).build(),
+            new Builder(proto()._applicant().customer().person().name().lastName(), false).columnTitle(i18n.tr("Primary Tenant Last Name")).build(),
             
             new Builder(proto().status()).build(),
             new Builder(proto().completion()).build(),

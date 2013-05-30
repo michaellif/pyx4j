@@ -47,7 +47,17 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTraget retrieveTraget) {
-        enhanceRetrievedCommon(in, dto);
+        Persistence.service().retrieve(dto.unit().building());
+
+        if (!dto.currentTerm().isNull()) {
+            Persistence.service().retrieve(dto.currentTerm());
+            if (dto.currentTerm().version().isNull()) {
+                dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
+            }
+
+            Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
+            Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
+        }
 
         loadDetachedProducts(dto);
 
@@ -70,25 +80,8 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
 
     @Override
     protected void enhanceListRetrieved(Lease in, DTO dto) {
-        enhanceRetrievedCommon(in, dto);
-    }
-
-    private void enhanceRetrievedCommon(Lease in, DTO dto) {
-        // load detached entities:
-        Persistence.service().retrieve(dto.unit());
         Persistence.service().retrieve(dto.unit().building());
-
-        if (!dto.currentTerm().isNull()) {
-            Persistence.service().retrieve(dto.currentTerm());
-            if (dto.currentTerm().version().isNull()) {
-                dto.currentTerm().set(Persistence.secureRetrieveDraft(LeaseTerm.class, dto.currentTerm().getPrimaryKey()));
-            }
-
-            Persistence.service().retrieveMember(dto.currentTerm().version().tenants());
-            Persistence.service().retrieveMember(dto.currentTerm().version().guarantors());
-        }
-
-        Persistence.service().retrieve(dto.billingAccount());
+        Persistence.service().retrieve(dto._applicant());
     }
 
     @Override
