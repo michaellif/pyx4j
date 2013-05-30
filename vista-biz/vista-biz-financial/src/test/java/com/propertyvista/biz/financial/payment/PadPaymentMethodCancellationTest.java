@@ -31,8 +31,10 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
+import com.propertyvista.test.mock.schedule.SchedulerMock;
 
 @Category(RegressionTests.class)
 public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
@@ -169,6 +171,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Allow to update PA
         pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.02"));
         ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa1, pa1.tenant());
+        Persistence.service().commit();
 
         new PaymentAgreementTester(getLease().billingAccount()).count(1)//
                 .lastRecordAmount("1000.02");
@@ -181,6 +184,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Record should not be updated, and new PA created
         pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.03"));
         PreauthorizedPayment pa2 = ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa1, pa1.tenant());
+        Persistence.service().commit();
 
         new PaymentAgreementTester(getLease().billingAccount()).count(2)//
                 .lastRecordAmount("1000.03");
@@ -194,10 +198,28 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Record should be updated, and new PA NOT created
         pa2.coveredItems().get(0).amount().setValue(new BigDecimal("1000.04"));
         ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa2, pa2.tenant());
+        Persistence.service().commit();
 
         new PaymentAgreementTester(getLease().billingAccount()).count(2)//
                 .lastRecordAmount("1000.04");
 
-        // TODO Test PAP creation
+        // Test PAP creation
+
+        // Run PAP creation for past month
+        SchedulerMock.runProcess(PmcProcessType.paymentsIssue, "2010-12-29");
+
+        // Pap generated with amount we entered before CutOffDate
+        new PaymentRecordTester(getLease().billingAccount()).count(1).lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("1000.02");
+
+        // Now enable processes
+        setPaymentBatchProcess();
+        advanceSysDate("2011-01-02");
+        new PaymentRecordTester(getLease().billingAccount()).count(1).lastRecordStatus(PaymentStatus.Queued).lastRecordAmount("1000.02");
+
+        // Move to Next pap generation date
+        advanceSysDate("2011-01-29");
+
+        // Pap generated with new amount
+        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("1000.04");
     }
 }

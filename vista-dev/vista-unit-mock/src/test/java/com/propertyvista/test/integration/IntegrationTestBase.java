@@ -257,7 +257,7 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
             taskSchedule.add(new ScheduledTask(new Task() {
                 @Override
                 public void execute() throws Exception {
-                    SchedulerMock.runProcess(triggerType);
+                    SchedulerMock.runProcess(triggerType, SystemDateManager.getDate());
                 }
             }, entry));
         }

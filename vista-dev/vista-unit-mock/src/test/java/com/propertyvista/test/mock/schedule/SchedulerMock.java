@@ -19,10 +19,10 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
@@ -39,16 +39,19 @@ public class SchedulerMock {
     // Pass the Namespace of single PMC context to OperationsTriggerFacadeMock (example PadReceiveAcknowledgmentProcess)
     static final ThreadLocal<String> requestNamspaceLocal = new ThreadLocal<String>();
 
+    public static void runProcess(PmcProcessType processType, String forDateStr) {
+        runProcess(processType, DateUtils.detectDateformat(forDateStr));
+    }
+
     /**
      * We run the process only for single PMC in Mock
      */
-    public static void runProcess(PmcProcessType processType) {
+    public static void runProcess(PmcProcessType processType, Date forDate) {
         try {
             requestNamspaceLocal.set(NamespaceManager.getNamespace());
             Persistence.service().startTransaction(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess);
-            Date runDate = SystemDateManager.getDate();
 
-            final PmcProcessContext sharedContext = new PmcProcessContext(runDate);
+            final PmcProcessContext sharedContext = new PmcProcessContext(forDate);
             final PmcProcess pmcProcess = PmcProcessFactory.createPmcProcess(processType);
 
             boolean canStart = TaskRunner.runInOperationsNamespace(new Callable<Boolean>() {
@@ -61,9 +64,9 @@ public class SchedulerMock {
 
                 if (!processType.hasOption(PmcProcessOptions.GlobalOnly)) {
 
-                    PmcProcessContext pmcContext = new PmcProcessContext(runDate);
+                    PmcProcessContext pmcContext = new PmcProcessContext(forDate);
                     pmcProcess.executePmcJob(pmcContext);
-                    log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", runDate, pmcProcess.getClass().getSimpleName(),
+                    log.debug("PmcProcess: date={}, process={}, \n executionMonitor={}", forDate, pmcProcess.getClass().getSimpleName(),
                             pmcContext.getExecutionMonitor());
                 }
 

@@ -15,6 +15,7 @@ package com.propertyvista.test.mock.schedule;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.OperationsTriggerFacade;
@@ -32,7 +33,7 @@ public class OperationsTriggerFacadeMock implements OperationsTriggerFacade {
         NamespaceManager.runInTargetNamespace(namespace, new Callable<Void>() {
             @Override
             public Void call() {
-                SchedulerMock.runProcess(processType);
+                SchedulerMock.runProcess(processType, SystemDateManager.getDate());
                 return null;
             }
         });
