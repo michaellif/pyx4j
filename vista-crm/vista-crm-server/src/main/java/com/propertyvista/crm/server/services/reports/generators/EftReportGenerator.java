@@ -25,6 +25,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
+import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
+import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
@@ -36,8 +39,11 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class EftReportGenerator implements ReportGenerator, ReportExporter {
 
+    private static final I18n i18n = I18n.get(EftReportGenerator.class);
+
     @Override
-    public Serializable generateReport(ReportMetadata metadata) {
+    public Serializable generateReport(ReportMetadata metadata, ReportProgressStatusHolder reportProgressStatusHolder) {
+        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, 0, 100));
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
 
         if (reportMetadata.forthcomingEft().isBooleanTrue()) {
@@ -101,9 +107,10 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
     }
 
     @Override
-    public ExportedReport export(Serializable report) {
+    public ExportedReport export(Serializable report, ReportProgressStatusHolder reportProgressStatusHolder) {
         @SuppressWarnings("unchecked")
         Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) report;
+        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Exporting to Excel spreadsheet"), 2, 2, 0, paymentRecords.size()));
         return new EftReportExport().createReport(paymentRecords);
     }
 
