@@ -158,6 +158,9 @@ class ScheduledPaymentsManager {
                 if ((arDate == null) || (!isSameMonth(arDate, billingCycle.targetPadExecutionDate().getValue()))) {
                     executionMonitor.addErredEvent("accountsReceivable", "Unexpected Accounts Receivable Post date " + arDate + //
                             "; Property " + billingCycle.building().propertyCode().getValue());
+                } else {
+                    log.info("Property {} Accounts Receivable Post date {} is Ok", billingCycle.building().propertyCode().getValue(), arDate);
+                    executionMonitor.addProcessedEvent("accountsReceivable");
                 }
 
             }
