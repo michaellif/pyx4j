@@ -55,11 +55,8 @@ import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.i18n.shared.I18n;
 
 public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers, IValidatable {
-
-    private static final I18n i18n = I18n.get(FormFlexPanel.class);
 
     private final String title;
 
