@@ -17,6 +17,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PadSendProcess implements PmcProcess {
@@ -29,6 +30,11 @@ public class PadSendProcess implements PmcProcess {
             return false;
         }
         padFile = ServerSideFactory.create(PaymentProcessFacade.class).preparePadFile();
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

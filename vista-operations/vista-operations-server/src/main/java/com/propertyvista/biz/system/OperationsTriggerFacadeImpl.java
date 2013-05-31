@@ -13,11 +13,17 @@
  */
 package com.propertyvista.biz.system;
 
+import java.util.Date;
+
+import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
@@ -47,8 +53,54 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
             }
         }
 
-        JobUtils.runNow(trigger, SystemDateManager.getDate());
+        JobUtils.runNow(trigger, null, SystemDateManager.getDate());
 
+    }
+
+    @Override
+    public Run startProcess(Trigger triggerId, Pmc pmcId, LogicalDate executionDate) {
+        Trigger triggerStub = EntityFactory.createIdentityStub(Trigger.class, triggerId.getPrimaryKey());
+        {
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
+            criteria.eq(criteria.proto().trigger(), triggerStub);
+            criteria.eq(criteria.proto().status(), RunStatus.Running);
+            Run existingRun = Persistence.service().retrieve(criteria);
+            if (existingRun != null) {
+                throw new UserRuntimeException("The process is already running");
+            }
+        }
+        Date startDate = new Date();
+        JobUtils.runNow(triggerStub, pmcId, executionDate);
+        // Find running Run
+        long start = System.currentTimeMillis();
+        Run run = null;
+        do {
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
+            criteria.eq(criteria.proto().trigger(), triggerStub);
+            criteria.ge(criteria.proto().updated(), startDate);
+            run = Persistence.service().retrieve(criteria);
+            if (run != null) {
+                break;
+            }
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                throw new UserRuntimeException("Can't started process", e);
+            }
+        } while ((System.currentTimeMillis() - start) < 10 * Consts.SEC2MSEC);
+
+        if (run == null) {
+            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
+            criteria.eq(criteria.proto().trigger(), triggerStub);
+            criteria.ge(criteria.proto().updated(), startDate);
+            criteria.asc(criteria.proto().updated());
+            run = Persistence.service().retrieve(criteria);
+        }
+
+        if (run == null) {
+            throw new UserRuntimeException("Can't find started run");
+        }
+        return run;
     }
 
 }

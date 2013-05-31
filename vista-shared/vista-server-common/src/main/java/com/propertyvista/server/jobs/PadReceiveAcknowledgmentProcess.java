@@ -18,6 +18,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
 public class PadReceiveAcknowledgmentProcess implements PmcProcess {
@@ -29,6 +30,11 @@ public class PadReceiveAcknowledgmentProcess implements PmcProcess {
         } else {
             return ServerSideFactory.create(PaymentProcessFacade.class).receivePadAcknowledgementFile(context.getExecutionMonitor());
         }
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return false;
     }
 
     @Override

@@ -94,20 +94,25 @@ public class PmcProcessDispatcherJob implements Job {
             if (dataMap.containsKey(JobData.forDate.name())) {
                 scheduledFireTime = new Date(dataMap.getLong(JobData.forDate.name()));
             }
+            Long forPmcKey = null;
+            if (dataMap.containsKey(JobData.forPmc.name())) {
+                forPmcKey = dataMap.getLong(JobData.forPmc.name());
+            }
 
             log.info("starting {}", process.getStringView());
             Long operationsUserKey = null;
             if (dataMap.containsKey(JobData.startedBy.name())) {
                 operationsUserKey = dataMap.getLong(JobData.startedBy.name());
             }
-            startAndRun(process, scheduledFireTime, operationsUserKey);
+
+            startAndRun(process, forPmcKey, scheduledFireTime, operationsUserKey);
         } finally {
             Persistence.service().endTransaction();
             Lifecycle.endContext();
         }
     }
 
-    private void startAndRun(Trigger trigger, Date scheduledFireTime, Long operationsUserKey) {
+    private void startAndRun(Trigger trigger, Long forPmcKey, Date scheduledFireTime, Long operationsUserKey) {
         EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
@@ -141,6 +146,13 @@ public class PmcProcessDispatcherJob implements Job {
             PmcProcess pmcProcess = startProcess(run);
 
             if (pmcProcess != null) {
+
+                if (forPmcKey == null) {
+                    createPopulation(run, pmcProcess);
+                } else {
+                    createSinglePmcPopulation(run, pmcProcess, forPmcKey);
+                }
+
                 try {
                     executeRun(run, pmcProcess);
                 } catch (Throwable e) {
@@ -184,22 +196,23 @@ public class PmcProcessDispatcherJob implements Job {
             context.getExecutionMonitor().updateExecutionReport(run.executionReport());
             Persistence.service().persist(run.executionReport());
         }
-        createPopulation(run);
         return pmcProcess;
     }
 
-    private void createPopulation(Run run) {
+    private void createPopulation(Run run, PmcProcess pmcProcess) {
         EntityQueryCriteria<Pmc> allPmcCriteria = EntityQueryCriteria.create(Pmc.class);
         allPmcCriteria.add(PropertyCriterion.eq(allPmcCriteria.proto().status(), PmcStatus.Active));
 
         switch (run.trigger().populationType().getValue()) {
         case allPmc:
-            for (Key pmcKey : Persistence.service().queryKeys(allPmcCriteria)) {
-                RunData runData = EntityFactory.create(RunData.class);
-                runData.execution().set(run);
-                runData.status().setValue(RunDataStatus.NeverRan);
-                runData.pmc().setPrimaryKey(pmcKey);
-                Persistence.service().persist(runData);
+            for (Pmc pmc : Persistence.service().query(allPmcCriteria)) {
+                if (pmcProcess.allowExecution(pmc.features())) {
+                    RunData runData = EntityFactory.create(RunData.class);
+                    runData.execution().set(run);
+                    runData.status().setValue(RunDataStatus.NeverRan);
+                    runData.pmc().set(pmc);
+                    Persistence.service().persist(runData);
+                }
             }
             break;
         case except:
@@ -207,12 +220,12 @@ public class PmcProcessDispatcherJob implements Job {
             for (TriggerPmc triggerPmc : run.trigger().population()) {
                 except.add(triggerPmc.pmc().getPrimaryKey());
             }
-            for (Key pmcKey : Persistence.service().queryKeys(allPmcCriteria)) {
-                if (!except.contains(pmcKey)) {
+            for (Pmc pmc : Persistence.service().query(allPmcCriteria)) {
+                if (!except.contains(pmc.getPrimaryKey()) && pmcProcess.allowExecution(pmc.features())) {
                     RunData runData = EntityFactory.create(RunData.class);
                     runData.execution().set(run);
                     runData.status().setValue(RunDataStatus.NeverRan);
-                    runData.pmc().setPrimaryKey(pmcKey);
+                    runData.pmc().set(pmc);
                     Persistence.service().persist(runData);
                 }
             }
@@ -229,6 +242,15 @@ public class PmcProcessDispatcherJob implements Job {
         case none:
             break;
         }
+    }
+
+    private void createSinglePmcPopulation(Run run, PmcProcess pmcProcess, Long forPmcKey) {
+        Pmc pmc = Persistence.service().retrieve(Pmc.class, new Key(forPmcKey));
+        RunData runData = EntityFactory.create(RunData.class);
+        runData.execution().set(run);
+        runData.status().setValue(RunDataStatus.NeverRan);
+        runData.pmc().set(pmc);
+        Persistence.service().persist(runData);
     }
 
     private void executeRun(Run run, PmcProcess pmcProcess) {

@@ -15,11 +15,15 @@ package com.propertyvista.test.mock.schedule;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.OperationsTriggerFacade;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.domain.scheduler.Trigger;
 
 public class OperationsTriggerFacadeMock implements OperationsTriggerFacade {
 
@@ -37,5 +41,10 @@ public class OperationsTriggerFacadeMock implements OperationsTriggerFacade {
                 return null;
             }
         });
+    }
+
+    @Override
+    public Run startProcess(Trigger triggerId, Pmc pmc, LogicalDate executionDate) {
+        throw new Error("Not supported");
     }
 }

@@ -16,12 +16,18 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.system.EquifaxProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class EquifaxRetentionProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
         return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return false;
     }
 
     @Override

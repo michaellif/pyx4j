@@ -16,12 +16,18 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billing.BillingProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class FutureBillingCycleInitializationProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

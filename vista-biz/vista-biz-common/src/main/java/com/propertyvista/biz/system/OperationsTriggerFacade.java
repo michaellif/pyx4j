@@ -13,10 +13,17 @@
  */
 package com.propertyvista.biz.system;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.domain.scheduler.Trigger;
 
 public interface OperationsTriggerFacade {
 
     public void startProcess(PmcProcessType processType);
+
+    public Run startProcess(Trigger triggerId, Pmc pmcId, LogicalDate executionDate);
 
 }

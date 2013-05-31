@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.deposit.DepositFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class DepositRefundProcess implements PmcProcess {
@@ -34,6 +35,11 @@ public class DepositRefundProcess implements PmcProcess {
     public boolean start(PmcProcessContext context) {
         log.info("Deposit Refund batch job started");
         return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return !features.yardiIntegration().getValue(false);
     }
 
     @Override

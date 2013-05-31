@@ -13,10 +13,9 @@
  */
 package com.propertyvista.operations.rpc.services.scheduler;
 
-import java.util.Date;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -26,5 +25,5 @@ public interface TriggerCrudService extends AbstractCrudService<TriggerDTO> {
 
     public void runImmediately(AsyncCallback<Run> callback, TriggerDTO triggerStub);
 
-    public void runForDate(AsyncCallback<Run> callback, TriggerDTO triggerStub, Date executionDate);
+    public void runForDate(AsyncCallback<Run> callback, TriggerDTO triggerStub, LogicalDate executionDate);
 }

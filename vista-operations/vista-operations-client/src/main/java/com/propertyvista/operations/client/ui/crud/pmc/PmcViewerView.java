@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
@@ -32,7 +33,7 @@ public interface PmcViewerView extends IViewer<PmcDTO> {
 
         void cancelPmc();
 
-        void runProcess(PmcProcessType pmcProcessType);
+        void runProcess(PmcProcessType pmcProcessType, ScheduleDataDTO date);
 
         ListerDataSource<PmcMerchantAccountDTO> getOnboardingMerchantAccountsSource();
     }

@@ -13,23 +13,19 @@
  */
 package com.propertyvista.operations.server.services.scheduler;
 
-import java.util.Date;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Consts;
-import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.operations.domain.scheduler.Run;
-import com.propertyvista.operations.domain.scheduler.RunStatus;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
 import com.propertyvista.operations.rpc.TriggerDTO;
@@ -89,48 +85,12 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
 
     @Override
     public void runImmediately(AsyncCallback<Run> callback, TriggerDTO triggerStub) {
-        runForDate(callback, triggerStub, SystemDateManager.getDate());
+        runForDate(callback, triggerStub, new LogicalDate(SystemDateManager.getDate()));
     }
 
     @Override
-    public void runForDate(AsyncCallback<Run> callback, TriggerDTO triggerDTOStub, Date executionDate) {
-        Trigger triggerStub = EntityFactory.createIdentityStub(Trigger.class, triggerDTOStub.getPrimaryKey());
-        {
-            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-            criteria.eq(criteria.proto().trigger(), triggerStub);
-            criteria.eq(criteria.proto().status(), RunStatus.Running);
-            Run existingRun = Persistence.service().retrieve(criteria);
-            if (existingRun != null) {
-                throw new UserRuntimeException("The process is already running");
-            }
-        }
-        Date startDate = new Date();
-        JobUtils.runNow(triggerStub, executionDate);
-        // Find running Run
-        long start = System.currentTimeMillis();
-        Run run = null;
-        do {
-            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-            criteria.eq(criteria.proto().trigger(), triggerStub);
-            criteria.ge(criteria.proto().updated(), startDate);
-            criteria.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running);
-            run = Persistence.service().retrieve(criteria);
-            if (run != null) {
-                break;
-            }
-        } while ((System.currentTimeMillis() - start) < 10 * Consts.SEC2MSEC);
-
-        if (run == null) {
-            EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
-            criteria.eq(criteria.proto().trigger(), triggerStub);
-            criteria.ge(criteria.proto().updated(), startDate);
-            run = Persistence.service().retrieve(criteria);
-        }
-
-        if (run == null) {
-            throw new UserRuntimeException("Can't find started run");
-        }
-        Run runStub = run.createIdentityStub();
-        callback.onSuccess(runStub);
+    public void runForDate(AsyncCallback<Run> callback, TriggerDTO triggerDTOStub, LogicalDate executionDate) {
+        Run run = ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(triggerDTOStub, null, executionDate);
+        callback.onSuccess(run.<Run> createIdentityStub());
     }
 }

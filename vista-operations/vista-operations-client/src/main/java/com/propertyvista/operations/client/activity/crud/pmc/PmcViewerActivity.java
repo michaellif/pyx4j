@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.activity.crud.pmc;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.gwt.client.deferred.DeferredProcessDialog;
@@ -27,6 +28,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
@@ -102,14 +104,18 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
     }
 
     @Override
-    public void runProcess(PmcProcessType pmcProcessType) {
+    public void runProcess(PmcProcessType pmcProcessType, ScheduleDataDTO date) {
+        LogicalDate forDate = null;
+        if (date != null) {
+            forDate = date.date().getValue();
+        }
         ((PmcCrudService) getService()).runPmcProcess(new DefaultAsyncCallback<Run>() {
 
             @Override
             public void onSuccess(Run result) {
                 AppSite.getPlaceController().goTo(new OperationsSiteMap.Management.TriggerRun().formViewerPlace(result.getPrimaryKey()));
             }
-        }, getEntityId(), null);
+        }, getEntityId(), pmcProcessType, forDate);
     }
 
     @Override

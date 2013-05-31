@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.media.ApplicationDocumentFile;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.domain.ApplicationDocumentBlob;
 
 public class CleanupPmcProcess implements PmcProcess {
@@ -61,6 +62,11 @@ public class CleanupPmcProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         log.info("Cleanup PMC Job started");
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

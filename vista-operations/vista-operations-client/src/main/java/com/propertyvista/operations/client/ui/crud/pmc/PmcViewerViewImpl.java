@@ -21,6 +21,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -29,6 +30,7 @@ import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
+import com.propertyvista.operations.client.ui.crud.scheduler.trigger.RunForDateDialog;
 import com.propertyvista.operations.domain.scheduler.PmcProcessOptions;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.rpc.PmcDTO;
@@ -92,14 +94,35 @@ public class PmcViewerViewImpl extends OperationsViewerViewImplBase<PmcDTO> impl
         Button runButton = new Button("Run Process");
         addHeaderToolbarItem(runButton);
         ButtonMenuBar runMenu = runButton.createMenu();
+        runButton.setMenu(runMenu);
         for (final PmcProcessType pmcProcessType : EnumSet.allOf(PmcProcessType.class)) {
             if (!pmcProcessType.hasOption(PmcProcessOptions.GlobalOnly)) {
-                runMenu.addItem(pmcProcessType.getDescription(), new Command() {
-                    @Override
-                    public void execute() {
-                        ((PmcViewerView.Presenter) getPresenter()).runProcess(pmcProcessType);
-                    }
-                });
+
+                if (!pmcProcessType.hasOption(PmcProcessOptions.RunForDay)) {
+                    runMenu.addItem(pmcProcessType.getDescription(),
+                            new ConfirmCommand("Confirm", "Do you really want to run process '" + pmcProcessType.getDescription() + "' ?", new Command() {
+                                @Override
+                                public void execute() {
+                                    ((PmcViewerView.Presenter) getPresenter()).runProcess(pmcProcessType, null);
+                                }
+                            }));
+                } else {
+                    runMenu.addItem(pmcProcessType.getDescription(), new Command() {
+                        @Override
+                        public void execute() {
+
+                            new RunForDateDialog() {
+                                @Override
+                                public boolean onClickOk() {
+                                    ((PmcViewerView.Presenter) getPresenter()).runProcess(pmcProcessType, getValue());
+                                    return true;
+                                }
+                            }.show();
+
+                        }
+                    });
+                }
+                ;
             }
         }
 

@@ -35,6 +35,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
 import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
 
@@ -70,7 +71,7 @@ public class JobUtils {
         return job;
     }
 
-    public static void runNow(com.propertyvista.operations.domain.scheduler.Trigger trigger, Date executionDate) {
+    public static void runNow(com.propertyvista.operations.domain.scheduler.Trigger trigger, Pmc pmcId, Date executionDate) {
         if (!SchedulerHelper.isActive()) {
             throw new UserRuntimeException("Scheduler Is disabled in this configuration");
         }
@@ -83,6 +84,9 @@ public class JobUtils {
             tb.usingJobData(JobData.manualExecution.name(), Boolean.TRUE);
             if (Context.isUserLoggedIn()) {
                 tb.usingJobData(JobData.startedBy.name(), new Long(Context.getVisit().getUserVisit().getPrincipalPrimaryKey().asLong()));
+            }
+            if (pmcId != null) {
+                tb.usingJobData(JobData.forPmc.name(), new Long(pmcId.getPrimaryKey().asLong()));
             }
             if (executionDate != null) {
                 tb.usingJobData(JobData.forDate.name(), executionDate.getTime());

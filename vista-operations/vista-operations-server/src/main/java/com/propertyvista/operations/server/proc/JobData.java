@@ -19,6 +19,8 @@ public enum JobData {
 
     forDate,
 
+    forPmc,
+
     manualExecution,
 
     startedBy

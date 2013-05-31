@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class PaymentsIssueProcess implements PmcProcess {
 
@@ -26,8 +27,14 @@ public class PaymentsIssueProcess implements PmcProcess {
     }
 
     @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return true;
+    }
+
+    @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).createPmcPreauthorisedPayments(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
+        ServerSideFactory.create(PaymentProcessFacade.class).createPmcPreauthorisedPayments(context.getExecutionMonitor(),
+                new LogicalDate(context.getForDate()));
     }
 
     @Override

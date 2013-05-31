@@ -23,6 +23,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiImportProcess implements PmcProcess {
@@ -33,6 +34,11 @@ public class YardiImportProcess implements PmcProcess {
     public boolean start(PmcProcessContext context) {
         log.info("Yardi Import batch job started");
         return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return features.yardiIntegration().getValue(false);
     }
 
     @Override

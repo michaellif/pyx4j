@@ -19,6 +19,7 @@ import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 
@@ -32,6 +33,11 @@ public class TenantSureReportsProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         formater = ServerSideFactory.create(TenantSureProcessFacade.class).startReport();
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

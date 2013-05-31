@@ -16,6 +16,7 @@ package com.propertyvista.server.jobs.insurance;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.tenantsure.TenantSureHQUpdateFile;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
@@ -31,6 +32,11 @@ public class TenantSureHQUpdateProcess implements PmcProcess {
     public boolean start(PmcProcessContext context) {
         file = ServerSideFactory.create(TenantSureProcessFacade.class).receiveHQUpdatesFile();
         return (file != null);
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return true;
     }
 
     @Override

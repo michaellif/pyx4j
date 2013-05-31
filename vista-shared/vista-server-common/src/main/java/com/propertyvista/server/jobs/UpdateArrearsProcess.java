@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class UpdateArrearsProcess implements PmcProcess {
@@ -41,6 +42,11 @@ public class UpdateArrearsProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         log.info("Arrears Update job started");
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 import com.propertyvista.server.common.util.PaymentsSummaryHelper.PaymentsSummarySnapshotHook;
 
@@ -35,6 +36,11 @@ public class PaymentsSummarySnapshotProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         log.info("Payment Summary Snapshot process started");
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

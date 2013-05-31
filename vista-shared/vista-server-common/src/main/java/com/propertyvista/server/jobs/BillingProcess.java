@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.billing.BillingProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingProcess implements PmcProcess {
@@ -24,6 +25,11 @@ public class BillingProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return !features.yardiIntegration().getValue(false);
     }
 
     @Override

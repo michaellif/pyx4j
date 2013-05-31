@@ -13,6 +13,8 @@
  */
 package com.propertyvista.server.jobs;
 
+import com.propertyvista.domain.settings.PmcVistaFeatures;
+
 public interface PmcProcess {
 
     /**
@@ -24,6 +26,8 @@ public interface PmcProcess {
      * @return false if this job needs to sleep and rerun again when data is ready.
      */
     boolean start(PmcProcessContext context);
+
+    boolean allowExecution(PmcVistaFeatures features);
 
     /**
      * This is executed in each selected PMC context to to the work.

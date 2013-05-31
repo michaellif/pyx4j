@@ -17,6 +17,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 
 import com.propertyvista.biz.operations.business.VistaBusinessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class VistaBusinessStatsReportProcess implements PmcProcess {
 
@@ -25,6 +26,11 @@ public class VistaBusinessStatsReportProcess implements PmcProcess {
     @Override
     public boolean start(PmcProcessContext context) {
         formater = ServerSideFactory.create(VistaBusinessFacade.class).startStatsReport();
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

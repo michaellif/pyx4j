@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class TestPmcProcess implements PmcProcess {
 
@@ -30,6 +31,11 @@ public class TestPmcProcess implements PmcProcess {
         ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         executionMonitor.addErredEvent("test", "Test Start error message");
         executionMonitor.addFailedEvent("test", "Test Start failed message");
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 

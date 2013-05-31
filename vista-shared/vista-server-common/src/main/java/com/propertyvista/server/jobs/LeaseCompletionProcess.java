@@ -20,6 +20,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.LeaseProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class LeaseCompletionProcess implements PmcProcess {
 
@@ -29,6 +30,11 @@ public class LeaseCompletionProcess implements PmcProcess {
     public boolean start(PmcProcessContext context) {
         log.info("Complete Lease batch job started");
         return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return !features.yardiIntegration().getValue(false);
     }
 
     @Override

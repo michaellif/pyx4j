@@ -13,7 +13,6 @@
  */
 package com.propertyvista.operations.server.services;
 
-import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -21,6 +20,7 @@ import java.util.concurrent.Callable;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
@@ -36,6 +36,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.biz.system.UserManagementFacade;
@@ -47,7 +48,9 @@ import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
+import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
@@ -203,11 +206,19 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, Date executionDate) {
+    public void runPmcProcess(AsyncCallback<Run> callback, Key entityId, PmcProcessType processType, LogicalDate executionDate) {
+        Trigger trigger;
+        {
+            EntityQueryCriteria<Trigger> criteria = EntityQueryCriteria.create(Trigger.class);
+            criteria.eq(criteria.proto().triggerType(), processType);
+            trigger = Persistence.service().retrieve(criteria);
+            if (trigger == null) {
+                throw new UserRuntimeException("The Trigger " + processType + " not found");
+            }
+        }
         Pmc pmc = Persistence.service().retrieve(entityClass, entityId);
 
-        //TODO
-
-        callback.onSuccess(null);
+        Run run = ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(trigger, pmc, executionDate);
+        callback.onSuccess(run.<Run> createIdentityStub());
     }
 }

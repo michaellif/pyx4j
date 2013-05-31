@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.tenant.insurance.TenantSureProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.server.jobs.PmcProcess;
 import com.propertyvista.server.jobs.PmcProcessContext;
 
@@ -27,6 +28,11 @@ public class TenantSureCancellationProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
+        return true;
+    }
+
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
         return true;
     }
 
