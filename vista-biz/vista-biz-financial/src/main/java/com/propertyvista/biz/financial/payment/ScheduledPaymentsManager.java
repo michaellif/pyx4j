@@ -14,10 +14,14 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -31,8 +35,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -104,6 +110,53 @@ class ScheduledPaymentsManager {
 
         for (PaymentRecord paymentRecord : Persistence.service().query(criteria)) {
             ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+        }
+    }
+
+    void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        Map<String, LogicalDate> arDatesByPropertyCode = new HashMap<String, LogicalDate>();
+
+        ServerSideFactory.create(YardiARFacade.class);
+
+        ICursorIterator<BillingCycle> billingCycleIterator;
+        {//TODO->Closure
+            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            criteria.eq(criteria.proto().targetPadExecutionDate(), forDate);
+            billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        }
+        try {
+            while (billingCycleIterator.hasNext()) {
+
+                BillingCycle billingCycle = billingCycleIterator.next();
+                if (!PaymentUtils.isElectronicPaymentsSetup(billingCycle.building())) {
+                    continue;
+                }
+                Persistence.ensureRetrieve(billingCycle.building(), AttachLevel.Attached);
+
+                LogicalDate arDate = arDatesByPropertyCode.get(billingCycle.building().propertyCode().getValue());
+
+                if ((arDate == null) || (!isSameMonth(arDate, billingCycle.targetPadExecutionDate().getValue()))) {
+                    executionMonitor.addErredEvent("accountsReceivable", "Unexpected Accounts Receivable Post date " + arDate + //
+                            "; Property " + billingCycle.building().propertyCode().getValue());
+                }
+
+            }
+        } finally {
+            billingCycleIterator.close();
+        }
+
+    }
+
+    static boolean isSameMonth(LogicalDate d1, LogicalDate d2) {
+        if (d1 == null || d2 == null) {
+            return false;
+        } else {
+            Calendar c1 = Calendar.getInstance();
+            c1.setTime(d1);
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(d2);
+
+            return (c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR) && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH));
         }
     }
 }

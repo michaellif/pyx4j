@@ -77,6 +77,9 @@ public class PmcProcessFactory {
         case yardiImportProcess:
             return new YardiImportProcess();
 
+        case yardiARDateVerification:
+            return new YardiARDateVerificationProcess();
+
 // TenantSure:
         case tenantSureReports:
             return new TenantSureReportsProcess();

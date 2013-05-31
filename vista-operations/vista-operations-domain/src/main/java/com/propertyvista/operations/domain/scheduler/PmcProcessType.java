@@ -81,6 +81,8 @@ public enum PmcProcessType implements Serializable {
 
     equifaxRetention(PmcProcessOptions.GlobalOnly),
 
+    yardiARDateVerification(PmcProcessOptions.RunForDay),
+
     yardiImportProcess,
 
     tenantSureHQUpdate, //

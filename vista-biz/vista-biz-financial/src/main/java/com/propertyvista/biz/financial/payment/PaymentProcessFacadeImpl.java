@@ -121,4 +121,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
         new ScheduledPaymentsManager().processScheduledPayments(executionMonitor, paymentType);
     }
 
+    @Override
+    public void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        new ScheduledPaymentsManager().verifyYardiPaymentIntegration(executionMonitor, forDate);
+    }
 }

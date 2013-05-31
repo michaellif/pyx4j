@@ -59,6 +59,12 @@ class PaymentUtils {
         }
     }
 
+    public static boolean isElectronicPaymentsSetup(Building building) {
+        EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto()._buildings(), building));
+        return isElectronicPaymentsSetup(Persistence.service().retrieve(criteria));
+    }
+
     public static boolean isElectronicPaymentsSetup(BillingAccount billingAccountId) {
         EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
         criteria.add(PropertyCriterion.eq(criteria.proto()._buildings().$().units().$()._Leases().$().billingAccount(), billingAccountId));
