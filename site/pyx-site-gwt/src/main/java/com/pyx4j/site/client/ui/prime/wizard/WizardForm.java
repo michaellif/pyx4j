@@ -22,8 +22,12 @@ package com.pyx4j.site.client.ui.prime.wizard;
 
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
+import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
+import com.google.gwt.event.logical.shared.HasSelectionHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -41,7 +45,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.WizardPanel;
 
-public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
+public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> implements HasBeforeSelectionHandlers<Tab>, HasSelectionHandlers<Tab> {
 
     private static final I18n i18n = I18n.get(WizardForm.class);
 
@@ -182,5 +186,19 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
 
     public int getSelectedIndex() {
         return wizardPanel.getSelectedIndex();
+    }
+
+    public Tab getSelectedTab() {
+        return wizardPanel.getSelectedTab();
+    }
+
+    @Override
+    public HandlerRegistration addBeforeSelectionHandler(BeforeSelectionHandler<Tab> handler) {
+        return wizardPanel.addBeforeSelectionHandler(handler);
+    }
+
+    @Override
+    public HandlerRegistration addSelectionHandler(SelectionHandler<Tab> handler) {
+        return wizardPanel.addSelectionHandler(handler);
     }
 }
