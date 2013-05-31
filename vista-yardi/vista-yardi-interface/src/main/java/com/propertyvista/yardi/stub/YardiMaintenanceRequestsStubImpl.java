@@ -75,6 +75,12 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             log.info("GetPropertyConfigurations Result: {}", xml);
 
+            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+            String error = yardiErrorCheck(xml);
+            if (error != null) {
+                throw new YardiServiceException(error);
+            }
+
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -114,6 +120,12 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             String xml = response.getGetCustomValuesResult().getExtraElement().toString();
 
             log.info("GetCustomValues: {}", xml);
+            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+            String error = yardiErrorCheck(xml);
+            if (error != null) {
+                throw new YardiServiceException(error);
+            }
+
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -147,6 +159,13 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
 
             log.info("GetServiceRequests: {}", xml);
+
+            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+            String error = yardiErrorCheck(xml);
+            if (error != null) {
+                throw new YardiServiceException(error);
+            }
+
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -191,6 +210,12 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
             log.info("CreateOrEditServiceRequests: {}", responseXml);
 
+            // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+            String error = yardiErrorCheck(responseXml);
+            if (error != null) {
+                throw new YardiServiceException(error);
+            }
+
             if (Messages.isMessageResponse(responseXml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
                 if (messages.isError()) {
@@ -222,4 +247,38 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             return yc.maintenanceRequestsServiceURL().getValue();
         }
     }
+
+    private String yardiErrorCheck(String s) {
+        // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+        //   <ServiceRequests><ServiceRequest>
+        //     <ErrorMessages><Error>There are no work orders found for these input values.</Error></ErrorMessages>
+        //   </ServiceRequest></ServiceRequests>
+        // or
+        //   <ServiceRequests><ServiceRequest>
+        //     <ServiceRequestId>0</ServiceRequestId>
+        //     <PropertyCode>B1</PropertyCode>
+        //     <UnitCode>#100</UnitCode>
+        //     <ErrorMessages><Error>Could not find Property:B1.</Error></ErrorMessages>
+        //  </ServiceRequest>
+        // or
+        //  <ServiceRequests><ServiceRequest>
+        //     <PropertyCode>gibb0380</PropertyCode>
+        //     <UnitCode>0100</UnitCode>
+        //     <ErrorMessage>Interface 'Property Vista-Maintenance' is not Configured for property 'gibb0380'</ErrorMessage>
+        //  </ServiceRequest></ServiceRequests>
+        {
+            String regex = ".*<ErrorMessages><Error>(.*)</Error></ErrorMessages>.*";
+            if (s.matches(regex)) {
+                return s.replaceFirst(regex, "$1");
+            }
+        }
+        {
+            String regex = ".*<ErrorMessage>(.*)</ErrorMessage>.*";
+            if (s.matches(regex)) {
+                return s.replaceFirst(regex, "$1");
+            }
+        }
+        return null;
+    }
+
 }

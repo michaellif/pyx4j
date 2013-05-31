@@ -271,6 +271,12 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         //     <UnitCode>#100</UnitCode>
         //     <ErrorMessages><Error>Could not find Property:B1.</Error></ErrorMessages>
         //  </ServiceRequest>
+        // or
+        //  <ServiceRequests><ServiceRequest>
+        //     <PropertyCode>gibb0380</PropertyCode>
+        //     <UnitCode>0100</UnitCode>
+        //     <ErrorMessage>Interface 'Property Vista-Maintenance' is not Configured for property 'gibb0380'</ErrorMessage>
+        //  </ServiceRequest></ServiceRequests>
         if (request.getServiceRequestId() == null || request.getServiceRequestId() == 0) {
             return false;
         }
