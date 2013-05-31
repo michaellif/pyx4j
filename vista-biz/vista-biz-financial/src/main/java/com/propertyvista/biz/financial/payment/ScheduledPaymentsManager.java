@@ -14,8 +14,10 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.math.BigDecimal;
+import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -37,6 +39,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiARFacade;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -120,15 +123,19 @@ class ScheduledPaymentsManager {
         Map<String, LogicalDate> arDatesByPropertyCode = new HashMap<String, LogicalDate>();
         YardiARFacade yardiARFacade = ServerSideFactory.create(YardiARFacade.class);
 
+        List<YardiPropertyConfiguration> configs;
         try {
-            for (YardiPropertyConfiguration propertyConfiguration : yardiARFacade.getPropertyConfigurations()) {
-                LogicalDate accountsReceivableDate = new LogicalDate(DateUtils.detectDateformat(propertyConfiguration.accountsReceivable().getValue()
-                        .replace("/", "/01/")));
-                arDatesByPropertyCode.put(propertyConfiguration.propertyID().getValue(), accountsReceivableDate);
-            }
-        } catch (Exception e) {
-            //TODO vlads please handle
+            configs = yardiARFacade.getPropertyConfigurations();
+        } catch (RemoteException e) {
             throw new Error(e);
+        } catch (YardiServiceException e) {
+            throw new Error(e);
+        }
+
+        for (YardiPropertyConfiguration propertyConfiguration : configs) {
+            LogicalDate accountsReceivableDate = new LogicalDate(DateUtils.detectDateformat(propertyConfiguration.accountsReceivable().getValue()
+                    .replace("/", "/01/")));
+            arDatesByPropertyCode.put(propertyConfiguration.propertyID().getValue(), accountsReceivableDate);
         }
 
         ICursorIterator<BillingCycle> billingCycleIterator;
