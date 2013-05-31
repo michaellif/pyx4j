@@ -180,6 +180,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         advanceSysDate("2010-12-29");
 
         assertEquals("", "2010-12-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
+        assertEquals("", "2011-02-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
 
         // Record should not be updated, and new PA created
         pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.03"));
