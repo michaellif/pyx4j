@@ -132,7 +132,7 @@ public class EftReport extends Composite implements Report {
     @Override
     public void setData(Object data) {
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
-        builder.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
+        builder.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt; line-height:22pt\">");
         builder.appendEscaped(i18n.tr("EFT Report"));
         builder.appendHtmlConstant("</div>");
 
