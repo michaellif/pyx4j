@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
@@ -42,6 +41,8 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
     private final Button btnPrevious;
 
     private final Button btnNext;
+
+    private final Button btnCancel;
 
     public AbstractWizard(String caption) {
         super();
@@ -69,7 +70,7 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
         });
         addFooterToolbarItem(btnNext);
 
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
+        btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 getPresenter().cancel();
@@ -164,5 +165,21 @@ public abstract class AbstractWizard<E extends IEntity> extends AbstractPrimePan
     @Override
     public void onStepChange() {
         calculateButtonsState();
+    }
+
+    public Button getBtnPrevious() {
+        return btnPrevious;
+    }
+
+    public Button getBtnNext() {
+        return btnNext;
+    }
+
+    public Button getBtnCancel() {
+        return btnCancel;
+    }
+
+    public int getSelectedIndex() {
+        return form.getSelectedIndex();
     }
 }

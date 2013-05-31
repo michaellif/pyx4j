@@ -179,4 +179,8 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> {
         }
 
     }
+
+    public int getSelectedIndex() {
+        return wizardPanel.getSelectedIndex();
+    }
 }

@@ -30,7 +30,6 @@ import com.pyx4j.entity.shared.IVersionedEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.utils.VersionedEntityUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -42,6 +41,8 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
     protected final Button btnApply;
 
     protected final Button btnSave;
+
+    protected final Button btnCancel;
 
     protected EditMode mode;
 
@@ -64,7 +65,7 @@ public abstract class AbstractEditor<E extends IEntity> extends AbstractForm<E> 
         });
         addFooterToolbarItem(btnApply);
 
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
+        btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 getPresenter().cancel();
