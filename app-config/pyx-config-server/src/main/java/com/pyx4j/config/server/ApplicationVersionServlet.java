@@ -79,12 +79,23 @@ public class ApplicationVersionServlet extends HttpServlet {
             }
             buf.append("</table>");
         } else {
+
+            String format = request.getParameter("html");
+            if (format != null) {
+                buf.append("<html><body>");
+                buf.append("<pre style=\"white-space: nowrap\">");
+            }
+
             for (String param : params) {
                 try {
                     buf.append(getVersionInfo(ApplicationVersionType.valueOf(param)));
                 } catch (IllegalArgumentException e) {
                     buf.append(param);
                 }
+            }
+
+            if (format != null) {
+                buf.append("</pre></body></html>");
             }
         }
         return buf.toString();
