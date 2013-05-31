@@ -13,7 +13,8 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
@@ -32,15 +33,37 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
 
     @Override
     protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTraget retrieveTraget) {
-
         // tune up UI items in case of YardyInegration mode:
         if (VistaFeatures.instance().yardiIntegration()) {
-            Iterator<IdAssignmentItem> it = dto.items().iterator();
-            while (it.hasNext()) {
-                if (IdTarget.nonEditableWhenYardyIntergation().contains(it.next().target().getValue())) {
-                    it.remove(); // filter out these IDs!..
+            for (IdAssignmentItem item : entity.items()) {
+                // filter out these IDs!..
+                if (!IdTarget.nonEditableWhenYardyIntergation().contains(item.target().getValue())) {
+                    dto.editableItems().add(item);
+                }
+            }
+        } else {
+            dto.editableItems().addAll(entity.items());
+        }
+    }
+
+    @Override
+    protected void persist(IdAssignmentPolicy dbo, IdAssignmentPolicyDTO in) {
+        List<IdAssignmentItem> newItemsList = new ArrayList<IdAssignmentItem>();
+        newItemsList.addAll(in.editableItems());
+
+        // Append to list items removed for UI editing
+        if (VistaFeatures.instance().yardiIntegration()) {
+            for (IdAssignmentItem item : dbo.items()) {
+                // filter out these IDs!..
+                if (IdTarget.nonEditableWhenYardyIntergation().contains(item.target().getValue())) {
+                    newItemsList.add(item);
                 }
             }
         }
+
+        dbo.items().clear();
+        dbo.items().addAll(newItemsList);
+
+        super.persist(dbo, in);
     }
 }

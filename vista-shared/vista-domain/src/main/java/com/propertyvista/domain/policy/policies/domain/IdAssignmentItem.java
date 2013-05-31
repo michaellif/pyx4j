@@ -16,6 +16,7 @@ package com.propertyvista.domain.policy.policies.domain;
 import java.util.EnumSet;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -93,12 +94,14 @@ public interface IdAssignmentItem extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
+    @Indexed(uniqueConstraint = true, group = { "A,1" })
     IdAssignmentPolicy policy();
 
     @OrderColumn
     IPrimitive<Integer> orderInPolicy();
 
     @ReadOnly
+    @Indexed(uniqueConstraint = true, group = { "A,2" })
     IPrimitive<IdTarget> target();
 
     @NotNull
