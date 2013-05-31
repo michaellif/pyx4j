@@ -60,7 +60,10 @@ class PreauthorizedPaymentAgreementMananger {
                 LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
                         preauthorizedPayment.tenant().lease());
 
-                if (SystemDateManager.getDate().after(cutOffDate)) {
+                boolean cutOffAppy = !origPreauthorizedPayment.effectiveFrom().isNull()
+                        && origPreauthorizedPayment.effectiveFrom().getValue().before(nextPaymentDate);
+
+                if (cutOffAppy && SystemDateManager.getDate().after(cutOffDate)) {
                     origPreauthorizedPayment.expiring().setValue(cutOffDate);
                     Persistence.service().merge(origPreauthorizedPayment);
 

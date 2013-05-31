@@ -192,16 +192,30 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         Persistence.service().retrieve(pa1);
         assertEquals("", "2010-12-29", pa1.expiring().getValue());
 
-        // Move to next period
-        advanceSysDate("2011-01-01");
+        assertEquals("", "2011-02-01", pa2.effectiveFrom().getValue());
 
-        // Record should be updated, and new PA NOT created
+        // Update the same day again.
         pa2.coveredItems().get(0).amount().setValue(new BigDecimal("1000.04"));
-        ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa2, pa2.tenant());
+        PreauthorizedPayment pa2e = ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa2, pa2.tenant());
         Persistence.service().commit();
 
         new PaymentAgreementTester(getLease().billingAccount()).count(2)//
                 .lastRecordAmount("1000.04");
+
+        Persistence.service().retrieve(pa2);
+        assertNull("New record should not be created", pa2.expiring().getValue());
+        assertEquals("New record should not be created", pa2.getPrimaryKey(), pa2e.getPrimaryKey());
+
+        // Move to next period
+        advanceSysDate("2011-01-01");
+
+        // Record should be updated, and new PA NOT created
+        pa2.coveredItems().get(0).amount().setValue(new BigDecimal("1000.05"));
+        ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pa2, pa2.tenant());
+        Persistence.service().commit();
+
+        new PaymentAgreementTester(getLease().billingAccount()).count(2)//
+                .lastRecordAmount("1000.05");
 
         // Test PAP creation
 
@@ -220,6 +234,6 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         advanceSysDate("2011-01-29");
 
         // Pap generated with new amount
-        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("1000.04");
+        new PaymentRecordTester(getLease().billingAccount()).count(2).lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("1000.05");
     }
 }
