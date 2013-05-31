@@ -55,11 +55,14 @@ public class AbstractReportsService implements IReportsService {
 
         private volatile boolean isReady;
 
+        private final ReportProgressStatusHolder reportProgressStatusHolder;
+
         public ExportReportDeferredProcess(ReportGenerator reportGenerator, ReportMetadata reportMetadata) {
             this.reportGenerator = reportGenerator;
             this.reportMetadata = reportMetadata;
             this.exported = null;
             this.isReady = false;
+            this.reportProgressStatusHolder = new ReportProgressStatusHolder();
         }
 
         @Override
@@ -71,8 +74,12 @@ public class AbstractReportsService implements IReportsService {
                 return r;
             } else {
                 DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-                r.setProgress(0);
-                r.setProgressMaximum(100);
+                ReportProgressStatus status = reportProgressStatusHolder.get();
+                if (status != null) {
+                    r.setMessage(status.stage);
+                    r.setProgress(status.stageProgress);
+                    r.setProgressMaximum(status.stageProgressMax);
+                }
                 if (cancelled) {
                     r.setCanceled();
                 }
@@ -87,8 +94,8 @@ public class AbstractReportsService implements IReportsService {
 
                     @Override
                     public Void execute() {
-                        Serializable reportData = reportGenerator.generateReport(reportMetadata);
-                        exported = ((ReportExporter) reportGenerator).export(reportData);
+                        Serializable reportData = reportGenerator.generateReport(reportMetadata, reportProgressStatusHolder);
+                        exported = ((ReportExporter) reportGenerator).export(reportData, reportProgressStatusHolder);
                         return null;
                     }
 
@@ -115,7 +122,7 @@ public class AbstractReportsService implements IReportsService {
 
         ReportGenerator reportGenerator = reportGenerators.get(reportMetadata.getInstanceValueClass());
         if (reportGenerator != null) {
-            callback.onSuccess(reportGenerator.generateReport(reportMetadata));
+            callback.onSuccess(reportGenerator.generateReport(reportMetadata, new ReportProgressStatusHolder()));
         } else {
             throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
                     + "' was not found");

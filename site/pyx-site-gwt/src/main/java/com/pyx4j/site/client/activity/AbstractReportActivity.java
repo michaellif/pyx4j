@@ -135,7 +135,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
     @Override
     public void export(ReportMetadata settings) {
-        ReportDialog d = new ReportDialog("DB Summary", "Creating DB summary...");
+        ReportDialog d = new ReportDialog(i18n.tr("Exporting Report"), "");
         d.setDownloadServletPath(downloadServletPath);
         ReportRequest request = new ReportRequest();
         final String METADATA_KEY = "METADATA";

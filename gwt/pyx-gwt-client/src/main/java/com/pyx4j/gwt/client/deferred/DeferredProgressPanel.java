@@ -32,6 +32,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.ProgressBar;
 
 public class DeferredProgressPanel extends FlowPanel {
@@ -61,10 +62,13 @@ public class DeferredProgressPanel extends FlowPanel {
 
     DeferredProgressListener listener;
 
+    private Label messageBar;
+
     public DeferredProgressPanel(String width, String height, boolean executeByUserRequests, DeferredProgressListener listener) {
         service = GWT.create(DeferredProcessService.class);
         this.executeByUserRequests = executeByUserRequests;
         this.listener = listener;
+        this.add(messageBar = new Label());
         this.add(progressBar = new ProgressBar());
         progressBar.setWidth(width);
         progressBar.setHeight(height);
@@ -158,6 +162,7 @@ public class DeferredProgressPanel extends FlowPanel {
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else {
+                    messageBar.setText(result.getMessage() != null ? result.getMessage() : "");
                     progressBar.setMaxProgress(result.getProgressMaximum());
                     progressBar.setProgress(result.getProgress());
                     if (progressTimer != null) {

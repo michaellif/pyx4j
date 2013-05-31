@@ -39,5 +39,5 @@ public interface ReportExporter {
         }
     }
 
-    public ExportedReport export(Serializable report);
+    public ExportedReport export(Serializable report, ReportProgressStatusHolder holder);
 }
