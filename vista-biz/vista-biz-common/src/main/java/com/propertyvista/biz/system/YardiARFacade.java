@@ -14,10 +14,12 @@
 package com.propertyvista.biz.system;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface YardiARFacade {
@@ -32,4 +34,5 @@ public interface YardiARFacade {
 
     void postReceiptReversal(YardiReceiptReversal reversal) throws YardiServiceException, RemoteException;
 
+    List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException;
 }

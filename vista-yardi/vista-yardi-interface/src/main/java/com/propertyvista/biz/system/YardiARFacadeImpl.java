@@ -14,11 +14,13 @@
 package com.propertyvista.biz.system;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
@@ -54,6 +56,11 @@ public class YardiARFacadeImpl implements YardiARFacade {
     public void postReceiptReversal(YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration();
         YardiResidentTransactionsService.getInstance().postReceiptReversal(VistaDeployment.getPmcYardiCredential(), reversal);
+    }
+
+    @Override
+    public List<YardiPropertyConfiguration> getPropertyConfigurations() throws YardiServiceException, RemoteException {
+        return YardiResidentTransactionsService.getInstance().getPropertyConfigurations(VistaDeployment.getPmcYardiCredential());
     }
 
 }

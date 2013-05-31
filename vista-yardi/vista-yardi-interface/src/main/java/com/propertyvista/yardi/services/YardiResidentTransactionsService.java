@@ -39,6 +39,7 @@ import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
@@ -59,6 +60,7 @@ import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -114,7 +116,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         List<String> propertyCodes;
         if (yc.propertyCode().isNull()) {
-            propertyCodes = getPropertyCodes(stub, yc);
+            List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
+            propertyCodes = new ArrayList<String>();
+            for (YardiPropertyConfiguration yardiPropertyConfiguration : propertyConfigurations) {
+                propertyCodes.add(yardiPropertyConfiguration.propertyID().getValue());
+            }
         } else {
             propertyCodes = Arrays.asList(yc.propertyCode().getValue().split("\\s*,\\s*"));
         }
@@ -183,15 +189,24 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    public List<String> getPropertyCodes(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException, RemoteException {
-        List<String> propertyCodes = new ArrayList<String>();
+    public List<YardiPropertyConfiguration> getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
+        YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
+        return getPropertyConfigurations(stub, yc);
+    }
+
+    public List<YardiPropertyConfiguration> getPropertyConfigurations(YardiResidentTransactionsStub stub, PmcYardiCredential yc) throws YardiServiceException,
+            RemoteException {
+        List<YardiPropertyConfiguration> propertyConfigurations = new ArrayList<YardiPropertyConfiguration>();
         Properties properties = stub.getPropertyConfigurations(yc);
         for (com.propertyvista.yardi.bean.Property property : properties.getProperties()) {
             if (StringUtils.isNotEmpty(property.getCode())) {
-                propertyCodes.add(property.getCode());
+                YardiPropertyConfiguration configuration = EntityFactory.create(YardiPropertyConfiguration.class);
+                configuration.propertyID().setValue(property.getCode());
+                configuration.accountsReceivable().setValue(property.getAccountsReceivable());
+                propertyConfigurations.add(configuration);
             }
         }
-        return propertyCodes;
+        return propertyConfigurations;
     }
 
     private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {

@@ -33,6 +33,7 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiARFacade;
@@ -42,6 +43,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 
 class ScheduledPaymentsManager {
 
@@ -114,9 +116,20 @@ class ScheduledPaymentsManager {
     }
 
     void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate) {
-        Map<String, LogicalDate> arDatesByPropertyCode = new HashMap<String, LogicalDate>();
 
-        ServerSideFactory.create(YardiARFacade.class);
+        Map<String, LogicalDate> arDatesByPropertyCode = new HashMap<String, LogicalDate>();
+        YardiARFacade yardiARFacade = ServerSideFactory.create(YardiARFacade.class);
+
+        try {
+            for (YardiPropertyConfiguration propertyConfiguration : yardiARFacade.getPropertyConfigurations()) {
+                LogicalDate accountsReceivableDate = new LogicalDate(DateUtils.detectDateformat(propertyConfiguration.accountsReceivable().getValue()
+                        .replace("/", "/01/")));
+                arDatesByPropertyCode.put(propertyConfiguration.propertyID().getValue(), accountsReceivableDate);
+            }
+        } catch (Exception e) {
+            //TODO vlads please handle
+            throw new Error(e);
+        }
 
         ICursorIterator<BillingCycle> billingCycleIterator;
         {//TODO->Closure

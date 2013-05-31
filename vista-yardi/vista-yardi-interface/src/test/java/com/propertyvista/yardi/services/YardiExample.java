@@ -23,6 +23,7 @@ import com.yardi.entity.resident.ResidentTransactions;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
+import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.server.config.DevYardiCredentials;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
@@ -32,7 +33,7 @@ public class YardiExample {
 
     public static void main(String[] args) {
         ping();
-        getPropertyCodes();
+        getPropertyConfigurations();
         getResidentTransactions();
         getUnitInformation();
         getResidentsLeaseCharges();
@@ -47,10 +48,11 @@ public class YardiExample {
         }
     }
 
-    private static void getPropertyCodes() {
+    private static void getPropertyConfigurations() {
         try {
             YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
-            List<String> properties = YardiResidentTransactionsService.getInstance().getPropertyCodes(stub, DevYardiCredentials.getTestPmcYardiCredential());
+            List<YardiPropertyConfiguration> properties = YardiResidentTransactionsService.getInstance().getPropertyConfigurations(stub,
+                    DevYardiCredentials.getTestPmcYardiCredential());
             System.out.println(properties);
         } catch (Throwable e) {
             log.error("error", e);
