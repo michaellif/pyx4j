@@ -133,10 +133,15 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         super.setWidget(row, col, header);
     }
 
-    @Override
-    public void setWidget(int row, int column, Widget widget) {
+    public void setWidget(int row, int column, int span, Widget widget) {
         locateCComponents(widget);
         super.setWidget(row, column, widget);
+        getFlexCellFormatter().setColSpan(row, column, span);
+    }
+
+    @Override
+    public void setWidget(int row, int column, Widget widget) {
+        setWidget(row, column, 1, widget);
     }
 
     @Override
