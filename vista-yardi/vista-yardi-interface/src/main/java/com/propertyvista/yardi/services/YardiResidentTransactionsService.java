@@ -397,7 +397,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             }
 
-            if (executionMonitor.isTerminationRequested()) {
+            if ((executionMonitor != null) && (executionMonitor.isTerminationRequested())) {
                 break;
             }
 
