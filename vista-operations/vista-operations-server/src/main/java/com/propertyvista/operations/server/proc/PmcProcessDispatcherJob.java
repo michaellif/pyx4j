@@ -409,7 +409,7 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().persist(runData.executionReport());
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
-            runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(executionException.getMessage()));
+            runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExecutionMonitor.getErrorMessage(executionException)));
         } else if (context.getExecutionMonitor().isTerminationRequested()) {
             runData.status().setValue(RunDataStatus.Terminated);
         } else {

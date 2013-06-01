@@ -357,6 +357,20 @@ public class ExecutionMonitor {
         }
     }
 
+    public static String getErrorMessage(Throwable e) {
+        String message = e.getMessage();
+        if (message != null) {
+            String className = e.getClass().getName();
+            if (className.equals(message) || message.startsWith(className)) {
+                return message;
+            } else {
+                return e.getClass().getSimpleName() + ": " + message;
+            }
+        } else {
+            return e.toString();
+        }
+    }
+
     //TODO use @Length annotation adapter
     public static String truncErrorMessage(String errorMessage) {
         if ((errorMessage != null) && (errorMessage.length() > 4000)) {
