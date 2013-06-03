@@ -37,6 +37,6 @@ public class CrmAuditRecordsLister extends AbstractLister<AuditRecordDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().when().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().when(), true));
     }
 }

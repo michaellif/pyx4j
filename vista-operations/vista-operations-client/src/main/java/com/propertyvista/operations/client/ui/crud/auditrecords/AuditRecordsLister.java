@@ -39,6 +39,6 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().when().getPath().toString(), false), new Sort(proto().pmc().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().when(), true), new Sort(proto().pmc(), false));
     }
 }
