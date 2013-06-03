@@ -141,6 +141,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
         dto.nextScheduledPaymentDate().setValue(
                 ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(dto.tenant().lease()));
+        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(dto.tenant().lease()));
     }
 
     private void fillAvailablePaymentMethods(PreauthorizedPaymentsDTO papDto) {

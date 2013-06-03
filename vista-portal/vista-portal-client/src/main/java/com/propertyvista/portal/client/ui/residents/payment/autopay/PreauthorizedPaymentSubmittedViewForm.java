@@ -20,11 +20,13 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
@@ -34,6 +36,8 @@ import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentSubmittedViewForm.class);
+
+    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     public PreauthorizedPaymentSubmittedViewForm() {
         super(PreauthorizedPaymentDTO.class);
@@ -67,5 +71,17 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
         content.setHR(++row, 0, 1);
 
         return content;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
+        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
+        } else {
+            get(proto().nextScheduledPaymentDate()).setNote(null);
+        }
     }
 }

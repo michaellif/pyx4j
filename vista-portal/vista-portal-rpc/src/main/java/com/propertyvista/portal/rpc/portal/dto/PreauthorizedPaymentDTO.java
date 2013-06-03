@@ -44,4 +44,6 @@ public interface PreauthorizedPaymentDTO extends PaymentDataDTO, com.propertyvis
 
     @Caption(name = "Your next automated payment is scheduled for")
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
+
+    IPrimitive<LogicalDate> paymentCutOffDate();
 }

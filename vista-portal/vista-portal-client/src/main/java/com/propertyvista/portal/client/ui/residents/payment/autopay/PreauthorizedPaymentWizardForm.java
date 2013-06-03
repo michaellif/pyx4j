@@ -34,6 +34,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -44,6 +45,7 @@ import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -72,6 +74,8 @@ import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 public class PreauthorizedPaymentWizardForm extends VistaWizardForm<PreauthorizedPaymentDTO> {
 
     static final I18n i18n = I18n.get(PreauthorizedPaymentWizardForm.class);
+
+    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     private final VistaWizardStep detailsStep, paymentMethodStep, comfirmationStep;
 
@@ -291,6 +295,13 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                         true, populate);
             }
         });
+
+        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
+        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
+        } else {
+            get(proto().nextScheduledPaymentDate()).setNote(null);
+        }
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
