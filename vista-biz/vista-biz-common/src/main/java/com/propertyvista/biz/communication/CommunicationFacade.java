@@ -72,7 +72,7 @@ public interface CommunicationFacade {
 
     void sendPaymentReversalWithNsfNotification(List<String> targetEmail, YardiReceiptReversal paymentReversal);
 
-    void sendPapSuspentionNotification(List<String> targetEmail, Lease lease);
+    void sendPapSuspensionNotification(List<String> targetEmail, Lease lease);
 
     //void sendCustomerMessage(CustomerCustomMessageTemplate customMessageTemplate, Customer customer);
 

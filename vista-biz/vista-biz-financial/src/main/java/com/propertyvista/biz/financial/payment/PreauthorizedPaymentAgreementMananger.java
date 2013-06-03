@@ -131,9 +131,9 @@ class PreauthorizedPaymentAgreementMananger {
         Lease lease = Persistence.service().retrieve(Lease.class, preauthorizedPayment.tenant().lease().getPrimaryKey());
 
         try {
-            List<String> targetEmails = getEmailsForPapSuspentionNotification(lease);
+            List<String> targetEmails = getEmailsForPapSuspensionNotification(lease);
             if (!targetEmails.isEmpty()) {
-                ServerSideFactory.create(CommunicationFacade.class).sendPapSuspentionNotification(targetEmails, lease);
+                ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(targetEmails, lease);
             } else {
                 throw new Exception(
                         "Found no email addresses for PAP suspension notifications (Add building property contact with name 'PAP_SUSPENTION_NOTIFICATIONS'");
@@ -143,13 +143,13 @@ class PreauthorizedPaymentAgreementMananger {
         }
     }
 
-    private List<String> getEmailsForPapSuspentionNotification(Lease lease) {
+    private List<String> getEmailsForPapSuspensionNotification(Lease lease) {
         List<String> emails = new ArrayList<String>();
         Persistence.service().retrieve(lease.unit().building());
         Persistence.service().retrieve(lease.unit().building().contacts().propertyContacts());
 
         for (PropertyContact contact : lease.unit().building().contacts().propertyContacts()) {
-            if ("PAP_SUSPENTION_NOTIFICATIONS".equals(contact.name().getValue())) {
+            if ("PAP_SUSPENSION_NOTIFICATIONS".equals(contact.name().getValue()) | "PAP_SUSPENTION_NOTIFICATIONS".equals(contact.name().getValue())) {
                 emails.add(contact.email().getValue());
             }
         }

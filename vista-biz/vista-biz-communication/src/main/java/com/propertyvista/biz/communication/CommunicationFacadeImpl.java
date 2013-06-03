@@ -324,7 +324,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPapSuspentionNotification(List<String> targetEmails, Lease lease) {
+    public void sendPapSuspensionNotification(List<String> targetEmails, Lease lease) {
         if (disabled) {
             return;
         }

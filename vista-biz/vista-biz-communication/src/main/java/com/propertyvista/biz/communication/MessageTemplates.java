@@ -392,16 +392,16 @@ public class MessageTemplates {
 
         String emailBody = "";
         try {
-            emailBody = IOUtils.getTextResource("email/pap-suspention-notification.html");
+            emailBody = IOUtils.getTextResource("email/pap-suspension-notification.html");
         } catch (IOException e) {
-            throw new Error("Failed to load email template for nsf notifications", e);
+            throw new Error("Failed to load email template for pap suspension notifications", e);
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
         String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey()));
         emailBody = emailBody.replace("${leaseUrl}", leaseUrl);
         String leaseStringView = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey(), AttachLevel.ToStringMembers).getStringView();
-        email.setSubject(i18n.tr("PAP suspention alert for lease {0}", leaseStringView));
+        email.setSubject(i18n.tr("PAP suspension alert for lease {0}", leaseStringView));
         email.setHtmlBody(wrapAdminHtml(emailBody));
         return email;
     }
