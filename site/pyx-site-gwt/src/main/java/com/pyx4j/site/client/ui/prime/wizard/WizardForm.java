@@ -201,4 +201,8 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
     public HandlerRegistration addSelectionHandler(SelectionHandler<Tab> handler) {
         return wizardPanel.addSelectionHandler(handler);
     }
+
+    public void setStepsVisible(boolean visible) {
+        wizardPanel.getTabBar().setVisible(visible);
+    }
 }
