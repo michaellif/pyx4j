@@ -128,4 +128,8 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
         html.append("<body>" + printWidget.toString() + "</body>");
         return html.toString();
     }
+
+    public void setTabBarVisible(boolean visible) {
+        tabPanel.setTabBarVisible(visible);
+    }
 }

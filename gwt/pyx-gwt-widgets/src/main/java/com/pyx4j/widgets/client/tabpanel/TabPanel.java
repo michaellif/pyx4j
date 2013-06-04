@@ -66,12 +66,11 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     private Tab selectedTab;
 
-    public TabPanel() {
-        double barHeight = StyleManager.getTheme().getTabHeight();
-        Unit barUnit = Unit.EM;
+    private final LayoutPanel mainPanel;
 
-        LayoutPanel panel = new LayoutPanel();
-        initWidget(panel);
+    public TabPanel() {
+        mainPanel = new LayoutPanel();
+        initWidget(mainPanel);
 
         setStyleName(DefaultTabTheme.StyleName.TabPanel.name());
 
@@ -80,14 +79,9 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
         deckPanel = new DeckLayoutPanel();
         deckPanel.setStyleName(DefaultTabTheme.StyleName.TabDeckPanel.name());
 
-        panel.add(tabBar);
-        panel.setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
-        panel.setWidgetTopHeight(tabBar, 0, Unit.PX, barHeight, barUnit);
-
-        panel.add(deckPanel);
-        panel.setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
-        panel.setWidgetTopBottom(deckPanel, barHeight, barUnit, 0, Unit.PX);
-
+        mainPanel.add(tabBar);
+        mainPanel.add(deckPanel);
+        setTabBarVisible(true);
     }
 
     public void addTab(Tab tab) {
@@ -247,6 +241,26 @@ public class TabPanel extends ResizeComposite implements HasWidgets, ProvidesRes
 
     public TabBar getTabBar() {
         return tabBar;
+    }
+
+    public void setTabBarVisible(boolean visible) {
+
+        double barHeight = StyleManager.getTheme().getTabHeight();
+        tabBar.setVisible(visible);
+        if (visible) {
+            mainPanel.setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
+            mainPanel.setWidgetTopHeight(tabBar, 0, Unit.PX, barHeight, Unit.EM);
+
+            mainPanel.setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
+            mainPanel.setWidgetTopBottom(deckPanel, barHeight, Unit.EM, 0, Unit.PX);
+        } else {
+            mainPanel.setWidgetLeftRight(tabBar, 0, Unit.PX, 0, Unit.PX);
+            mainPanel.setWidgetTopHeight(tabBar, 0, Unit.PX, 0, Unit.PX);
+
+            mainPanel.setWidgetLeftRight(deckPanel, 0, Unit.PX, 0, Unit.PX);
+            mainPanel.setWidgetTopBottom(deckPanel, 0, Unit.PX, 0, Unit.PX);
+
+        }
     }
 
     @Override
