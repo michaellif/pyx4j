@@ -269,16 +269,30 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
         {
             String regex = ".*<ErrorMessages><Error>(.*)</Error></ErrorMessages>.*";
             if (s.matches(regex)) {
-                return s.replaceFirst(regex, "$1");
+                return filterErrorMessage(s.replaceFirst(regex, "$1"));
             }
         }
         {
             String regex = ".*<ErrorMessage>(.*)</ErrorMessage>.*";
             if (s.matches(regex)) {
-                return s.replaceFirst(regex, "$1");
+                return filterErrorMessage(s.replaceFirst(regex, "$1"));
             }
         }
         return null;
     }
 
+    private String filterErrorMessage(String message) {
+        if (message == null) {
+            return null;
+        } else if (message.contains("no work orders found")) {
+            log.warn(message);
+            return null;
+            // There are no service requests found for these input values. 
+        } else if (message.contains("no service requests found")) {
+            log.warn(message);
+            return null;
+        } else {
+            return message;
+        }
+    }
 }
