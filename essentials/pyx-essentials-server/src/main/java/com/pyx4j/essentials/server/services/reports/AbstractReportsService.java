@@ -111,17 +111,23 @@ public class AbstractReportsService implements IReportsService {
         }
     }
 
-    private final Map<Class<? extends ReportMetadata>, ReportGenerator> reportGenerators;
+    private final Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportGenerators;
 
-    public AbstractReportsService(Map<Class<? extends ReportMetadata>, ReportGenerator> reportGenerators) {
+    public AbstractReportsService(Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportGenerators) {
         this.reportGenerators = reportGenerators;
     }
 
     @Override
     public void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata) {
 
-        ReportGenerator reportGenerator = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGenerator != null) {
+        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
+        if (reportGeneratorClass != null) {
+            ReportGenerator reportGenerator;
+            try {
+                reportGenerator = reportGeneratorClass.newInstance();
+            } catch (Throwable e) {
+                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
+            }
             callback.onSuccess(reportGenerator.generateReport(reportMetadata, new ReportProgressStatusHolder()));
         } else {
             throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
@@ -132,8 +138,15 @@ public class AbstractReportsService implements IReportsService {
 
     @Override
     public void export(AsyncCallback<String> callback, ReportMetadata reportMetadata) {
-        ReportGenerator reportGenerator = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGenerator != null && reportGenerator instanceof ReportExporter) {
+        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
+        if (reportGeneratorClass != null) {
+            ReportGenerator reportGenerator = null;
+            try {
+                reportGenerator = reportGeneratorClass.newInstance();
+            } catch (Throwable e) {
+                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
+            }
+
             callback.onSuccess(DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata),
                     DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
         } else {
