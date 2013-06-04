@@ -20,6 +20,9 @@ import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
+import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
+import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -28,13 +31,24 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EftReportExport {
 
-    public ExportedReport createReport(List<PaymentRecord> paymentRecords) {
+    private static final I18n i18n = I18n.get(EftReportExport.class);
+
+    public ExportedReport createReport(List<PaymentRecord> paymentRecords, ReportProgressStatusHolder reportProgressStatusHolder) {
+        int numOfRecords = paymentRecords.size();
+        String stageName = i18n.tr("Preparing Excel Spreadsheet");
+        reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, 0, numOfRecords));
+
         ReportTableFormatter formatter = new ReportTableXLSXFormatter(true);
         EntityReportFormatter<EftReportExportModel> entityFormatter = new EntityReportFormatter<EftReportExportModel>(EftReportExportModel.class);
         entityFormatter.createHeader(formatter);
 
+        int counter = 0;
         for (PaymentRecord paymentRecord : paymentRecords) {
+            ++counter;
             entityFormatter.reportEntity(formatter, convertModel(paymentRecord));
+            if (counter % 50 == 0) {
+                reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, counter, numOfRecords));
+            }
         }
 
         return new ExportedReport("eft-report.xlsx", formatter.getContentType(), formatter.getBinaryData());

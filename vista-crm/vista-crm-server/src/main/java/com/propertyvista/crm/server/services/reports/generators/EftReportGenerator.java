@@ -110,8 +110,7 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
     public ExportedReport export(Serializable report, ReportProgressStatusHolder reportProgressStatusHolder) {
         @SuppressWarnings("unchecked")
         Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) report;
-        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Exporting to Excel spreadsheet"), 2, 2, 0, paymentRecords.size()));
-        return new EftReportExport().createReport(paymentRecords);
+        return new EftReportExport().createReport(paymentRecords, reportProgressStatusHolder);
     }
 
     private EntityQueryCriteria<PaymentRecord> makeCriteria(EftReportMetadata reportMetadata) {
