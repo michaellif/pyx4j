@@ -30,14 +30,14 @@ import com.propertyvista.domain.reports.EftReportMetadata;
 
 public class CrmReportsServiceImpl extends AbstractReportsService implements CrmReportsService {
 
-    private static final Map<Class<? extends ReportMetadata>, ReportGenerator> reportsGeneratorMap;
+    private static final Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportsGeneratorMap;
 
     static {
-        reportsGeneratorMap = new ConcurrentHashMap<Class<? extends ReportMetadata>, ReportGenerator>();
+        reportsGeneratorMap = new ConcurrentHashMap<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>>();
 
-        reportsGeneratorMap.put(AvailabilityReportMetadata.class, new AvailabilityReportsGenerator());
-        reportsGeneratorMap.put(CustomerCreditCheckReportMetadata.class, new CustomerCreditCheckReportGenerator());
-        reportsGeneratorMap.put(EftReportMetadata.class, new EftReportGenerator());
+        reportsGeneratorMap.put(AvailabilityReportMetadata.class, AvailabilityReportsGenerator.class);
+        reportsGeneratorMap.put(CustomerCreditCheckReportMetadata.class, CustomerCreditCheckReportGenerator.class);
+        reportsGeneratorMap.put(EftReportMetadata.class, EftReportGenerator.class);
     }
 
     public CrmReportsServiceImpl() {
