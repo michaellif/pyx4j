@@ -17,6 +17,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
+import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.dto.TenantDTO;
 
 public interface TenantViewerView extends IViewer<TenantDTO> {
@@ -24,6 +25,8 @@ public interface TenantViewerView extends IViewer<TenantDTO> {
     interface Presenter extends IViewer.Presenter {
 
         MaintenanceRequestVisorController getMaintenanceRequestVisorController();
+
+        PreauthorizedPaymentsVisorController getPreauthorizedPaymentsVisorController();
 
         void goToCreateScreening();
 

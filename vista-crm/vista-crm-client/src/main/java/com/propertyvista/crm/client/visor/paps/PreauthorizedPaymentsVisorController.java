@@ -35,7 +35,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
-public abstract class PreauthorizedPaymentsVisorController extends AbstractVisorController implements IVisorEditor.Controller {
+public class PreauthorizedPaymentsVisorController extends AbstractVisorController implements IVisorEditor.Controller {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsVisorController.class);
 
@@ -76,13 +76,15 @@ public abstract class PreauthorizedPaymentsVisorController extends AbstractVisor
     }
 
     /**
-     * Implement in caller to get editing result.
+     * Override in caller to get editing result.
      * 
      * @param pads
      *            - edited PADs
      * @return - allow/disable visor close
      */
-    public abstract boolean onClose(List<PreauthorizedPayment> pads);
+    public boolean onClose(List<PreauthorizedPayment> pads) {
+        return true;
+    }
 
     @Override
     public void apply() {

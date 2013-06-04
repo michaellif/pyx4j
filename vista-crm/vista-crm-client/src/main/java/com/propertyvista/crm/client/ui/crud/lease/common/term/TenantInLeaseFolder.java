@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -36,9 +35,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -53,8 +50,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
-import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
@@ -101,32 +96,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         BoxFolderItemDecorator<LeaseTermTenant> decor = (BoxFolderItemDecorator<LeaseTermTenant>) super.createItemDecorator();
         decor.setExpended(isEditable() || isPadEditable);
         return decor;
-    }
-
-    @Override
-    protected CEntityFolderItem<LeaseTermTenant> createItem(boolean first) {
-        final CEntityFolderItem<LeaseTermTenant> item = super.createItem(first);
-
-        if (isPadEditable) {
-            item.addAction(ActionType.Cust1, i18n.tr("Edit PAPs"), CrmImages.INSTANCE.editButton(), new Command() {
-                @Override
-                public void execute() {
-                    new PreauthorizedPaymentsVisorController(parentView, item.getValue().leaseParticipant().getPrimaryKey()) {
-                        @Override
-                        public boolean onClose(List<PreauthorizedPayment> pads) {
-                            for (CComponent<?, ?> comp : item.getComponents()) {
-                                if (comp instanceof TenantInLeaseEditor) {
-                                    ((TenantInLeaseEditor) comp).setPreauthorizedPayments(pads);
-                                }
-                            }
-                            return true;
-                        }
-                    }.show();
-                }
-            });
-        }
-
-        return item;
     }
 
     @Override

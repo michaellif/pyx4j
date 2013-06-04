@@ -28,6 +28,7 @@ import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
+import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -40,6 +41,8 @@ import com.propertyvista.dto.TenantDTO;
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
 
     private MaintenanceRequestVisorController maintenanceRequestVisorController;
+
+    private PreauthorizedPaymentsVisorController preauthorizedPaymentsVisorController;
 
     private Key currentTenantId;
 
@@ -57,6 +60,14 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
             maintenanceRequestVisorController = new MaintenanceRequestVisorController(getView(), currentBuildingId, currentTenantId);
         }
         return maintenanceRequestVisorController;
+    }
+
+    @Override
+    public PreauthorizedPaymentsVisorController getPreauthorizedPaymentsVisorController() {
+        if (preauthorizedPaymentsVisorController == null) {
+            preauthorizedPaymentsVisorController = new PreauthorizedPaymentsVisorController(getView(), currentTenantId);
+        }
+        return preauthorizedPaymentsVisorController;
     }
 
     @Override
