@@ -49,6 +49,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.DefaultCComponentsTheme.StyleDependent;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
@@ -66,7 +67,20 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     private static final I18n i18n = I18n.get(CComponent.class);
 
     public static enum NoteStyle {
-        Info, Warn
+
+        Info(DefaultCComponentsTheme.StyleDependent.info),
+
+        Warn(DefaultCComponentsTheme.StyleDependent.warning);
+
+        private NoteStyle(StyleDependent style) {
+            this.style = style;
+        }
+
+        DefaultCComponentsTheme.StyleDependent style;
+
+        public DefaultCComponentsTheme.StyleDependent getStyle() {
+            return style;
+        }
     }
 
     private String title;
