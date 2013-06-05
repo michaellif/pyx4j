@@ -41,6 +41,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -64,13 +65,15 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
     private Label noRequirementsLabel;
 
+    private final Tab autoPaymentsTab;
+
     public TenantForm(IForm<TenantDTO> view) {
         super(TenantDTO.class, view);
 
         selectTab(addTab(createDetailsTab(i18n.tr("Details"))));
         addTab(createContactsTab(i18n.tr("Emergency Contacts")));
         addTab(createPaymentMethodsTab(i18n.tr("Payment Methods")));
-        addTab(createPreauthorizedPaymentsTab(i18n.tr("Auto Payments")));
+        autoPaymentsTab = addTab(createPreauthorizedPaymentsTab(i18n.tr("Auto Payments")));
         addTab(createTenantInsuranceTab(i18n.tr("Insurance")));
     }
 
@@ -84,6 +87,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         } else {
             get(proto().nextScheduledPaymentDate()).setNote(null);
         }
+
+        setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
 
         updateTenantInsuranceTabControls();
     }

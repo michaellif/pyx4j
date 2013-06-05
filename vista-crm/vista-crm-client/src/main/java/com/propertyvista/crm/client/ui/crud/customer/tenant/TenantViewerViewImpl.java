@@ -45,15 +45,6 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         }));
 
-        addHeaderToolbarItem(new Button(i18n.tr("Preauthorized Payments"), new Command() {
-            @Override
-            public void execute() {
-                if (!isVisorShown()) {
-                    ((TenantViewerView.Presenter) getPresenter()).getPreauthorizedPaymentsVisorController().show();
-                }
-            }
-        }));
-
         passwordAction = new MenuItem(i18n.tr("Change Password"), new Command() {
             @Override
             public void execute() {

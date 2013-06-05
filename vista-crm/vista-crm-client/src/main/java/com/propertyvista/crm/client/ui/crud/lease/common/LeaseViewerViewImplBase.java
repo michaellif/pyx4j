@@ -13,6 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common;
 
+import java.util.List;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -23,7 +25,10 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseViewerViewImpl;
+import com.propertyvista.crm.client.visor.paps.PreauthorizedPaymentsVisorController;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerViewImplBase<DTO> implements LeaseViewerViewBase<DTO> {
@@ -32,14 +37,18 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final Button termsButton;
 
+    protected final Button papsButton;
+
+    protected final Button.ButtonMenuBar papsMenu;
+
     protected final MenuItem viewFutureTerm;
 
     public LeaseViewerViewImplBase() {
         super(true);
 
         termsButton = new Button(i18n.tr("Terms"));
-        Button.ButtonMenuBar viewsMenu = termsButton.createMenu();
-        termsButton.setMenu(viewsMenu);
+        Button.ButtonMenuBar termsMenu = termsButton.createMenu();
+        termsButton.setMenu(termsMenu);
         addHeaderToolbarItem(termsButton.asWidget());
 
         MenuItem viewCurrentTerm = new MenuItem(i18n.tr("Current"), new Command() {
@@ -48,7 +57,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().currentTerm());
             }
         });
-        viewsMenu.addItem(viewCurrentTerm);
+        termsMenu.addItem(viewCurrentTerm);
 
         viewFutureTerm = new MenuItem(i18n.tr("Future"), new Command() {
             @Override
@@ -56,7 +65,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 ((LeaseViewerViewBase.Presenter) getPresenter()).viewTerm(getForm().getValue().nextTerm());
             }
         });
-        viewsMenu.addItem(viewFutureTerm);
+        termsMenu.addItem(viewFutureTerm);
 
         MenuItem viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
             @Override
@@ -77,12 +86,18 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
                 }.show();
             }
         });
-        viewsMenu.addItem(viewHistoricTerms);
+        termsMenu.addItem(viewHistoricTerms);
+
+        papsButton = new Button(i18n.tr("Auto Payments"));
+        papsButton.setMenu(papsMenu = papsButton.createMenu());
+        addHeaderToolbarItem(papsButton.asWidget());
     }
 
     @Override
     public void reset() {
         viewFutureTerm.setVisible(false);
+
+        papsButton.setVisible(false);
 
         super.reset();
     }
@@ -92,5 +107,27 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         super.populate(value);
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
+
+        setupPapsMenu(value);
+    }
+
+    private void setupPapsMenu(DTO value) {
+        papsMenu.clearItems();
+        papsButton.setVisible(value.status().getValue().isCurrent());
+
+        for (final LeaseTermTenant tenant : value.currentTerm().version().tenants()) {
+            papsMenu.addItem(new MenuItem(tenant.getStringView(), new Command() {
+                @Override
+                public void execute() {
+                    new PreauthorizedPaymentsVisorController(LeaseViewerViewImplBase.this, tenant.leaseParticipant().getPrimaryKey()) {
+                        @Override
+                        public boolean onClose(List<PreauthorizedPayment> pads) {
+                            getPresenter().populate();
+                            return true;
+                        }
+                    }.show();
+                }
+            }));
+        }
     }
 }
