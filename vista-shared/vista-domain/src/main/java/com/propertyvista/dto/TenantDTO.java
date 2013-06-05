@@ -15,6 +15,7 @@ package com.propertyvista.dto;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.ExtendsDBO;
@@ -39,4 +40,10 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     IList<TenantInsuranceCertificateDTO> insuranceCertificates();
 
     IPrimitive<Boolean> isPotentialTenant();
+
+    IList<PreauthorizedPaymentDTO> preauthorizedPayments();
+
+    IPrimitive<LogicalDate> nextScheduledPaymentDate();
+
+    IPrimitive<LogicalDate> paymentCutOffDate();
 }

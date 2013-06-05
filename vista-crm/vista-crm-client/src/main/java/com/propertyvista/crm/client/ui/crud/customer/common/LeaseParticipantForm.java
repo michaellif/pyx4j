@@ -185,5 +185,4 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         return main;
     }
-
 }
