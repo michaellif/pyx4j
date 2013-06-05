@@ -29,6 +29,7 @@ import com.google.gwt.user.client.rpc.StatusCodeException;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
@@ -156,7 +157,7 @@ public class UnrecoverableErrorHandlerDialog extends DefaultUnrecoverableErrorHa
     }
 
     @Override
-    protected void showUserError(String text) {
+    protected void showUserError(String text, UserRuntimeException cause) {
         MessageDialog.show(i18n.tr("Error"), text, Type.Error, new ShowOnceDialogOptions());
     }
 

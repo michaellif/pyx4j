@@ -110,7 +110,7 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
         if (cause instanceof IsWarningException) {
             showWarning(cause.getMessage());
         } else if (cause instanceof UserRuntimeException) {
-            showUserError(cause.getMessage());
+            showUserError(cause.getMessage(), (UserRuntimeException) cause);
         } else if (isVersionMismatch(cause)) {
             showReloadApplication();
         } else if (cause instanceof StatusCodeException) {
@@ -152,7 +152,7 @@ public abstract class DefaultUnrecoverableErrorHandler implements UnrecoverableE
 
     protected abstract void showWarning(String text);
 
-    protected abstract void showUserError(String text);
+    protected abstract void showUserError(String text, UserRuntimeException cause);
 
     protected abstract void showThrottle();
 
