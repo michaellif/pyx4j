@@ -38,8 +38,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
-import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -221,12 +220,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
                 content.setWidget(++row, 0, expirationWarning);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
-                    @Override
-                    protected AppPlace getTargetPlace() {
-                        return null; // not intended to navigate - just edit mode!
-                    }
-
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, TenantForm.this.getValue()
