@@ -19,6 +19,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.StatusCodeException;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.commons.DefaultUnrecoverableErrorHandler;
 import com.pyx4j.gwt.commons.UncaughtHandler;
@@ -85,7 +86,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     }
 
     @Override
-    protected void showUserError(String text) {
+    protected void showUserError(String text, UserRuntimeException cause) {
         showMessage(text, UserMessageType.ERROR);
     }
 
