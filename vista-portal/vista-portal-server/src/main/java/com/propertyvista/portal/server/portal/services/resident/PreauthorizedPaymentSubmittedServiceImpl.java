@@ -68,7 +68,7 @@ public class PreauthorizedPaymentSubmittedServiceImpl extends EntityDtoBinder<Pr
         dto.leaseStatus().set(lease.status());
 
         dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(lease));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(dto.tenant().lease()));
+        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(lease));
 
         dto.total().setValue(BigDecimal.ZERO);
         for (PreauthorizedPaymentCoveredItem item : dto.coveredItems()) {
