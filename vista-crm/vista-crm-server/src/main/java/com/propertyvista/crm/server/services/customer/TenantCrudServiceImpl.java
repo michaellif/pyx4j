@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -100,7 +99,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             }
         }
 
-        if (VistaFeatures.instance().yardiIntegration() & (retrieveTraget == RetrieveTraget.View || retrieveTraget == RetrieveTraget.Edit)) {
+        if (VistaFeatures.instance().yardiIntegration()) {
             LeaseTerm leaseTerm = Persistence.service().retrieve(LeaseTerm.class, dto.leaseTermV().holder().getPrimaryKey());
             boolean isPotentialTenant = leaseTerm.status().getValue() != LeaseTerm.Status.Current & leaseTerm.status().getValue() != LeaseTerm.Status.Historic;
             dto.isPotentialTenant().setValue(isPotentialTenant);
@@ -173,11 +172,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             }
             Persistence.service().delete(deletedCertificate.getInstanceValueClass(), deletedCertificate.getPrimaryKey());
         }
-    }
-
-    @Override
-    public void getAssosiatedTenant(AsyncCallback<Tenant> callback, Key entityId) {
-        callback.onSuccess(Persistence.service().retrieve(Tenant.class, entityId));
     }
 
     private LeaseTermTenant retrieveTenant(LeaseTerm.LeaseTermV termV, Tenant leaseCustomer) {

@@ -33,13 +33,13 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 
     IPrimitive<Role> role();
 
+    IPrimitive<Boolean> isPotentialTenant();
+
     @Editor(type = Editor.EditorType.money)
     @Caption(description = "This is the minimum liability that was set by tenant insurance policy")
     IPrimitive<BigDecimal> minimumRequiredLiability();
 
     IList<TenantInsuranceCertificateDTO> insuranceCertificates();
-
-    IPrimitive<Boolean> isPotentialTenant();
 
     IList<PreauthorizedPaymentDTO> preauthorizedPayments();
 

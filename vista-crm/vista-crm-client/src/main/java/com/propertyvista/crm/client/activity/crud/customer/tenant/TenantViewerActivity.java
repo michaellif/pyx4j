@@ -29,6 +29,7 @@ import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.Customer;
@@ -69,14 +70,12 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
 
     @Override
     public void goToCreateMaintenanceRequest() {
-        ((TenantCrudService) getService()).getAssosiatedTenant(new DefaultAsyncCallback<Tenant>() {
+        GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class).createNewRequestForTenant(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
             @Override
-            public void onSuccess(Tenant result) {
-                MaintenanceRequestDTO maintenanceRequest = EntityFactory.create(MaintenanceRequestDTO.class);
-                maintenanceRequest.reporter().set(result);
-                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(maintenanceRequest));
+            public void onSuccess(MaintenanceRequestDTO result) {
+                AppSite.getPlaceController().goTo(new CrmSiteMap.Tenants.MaintenanceRequest().formNewItemPlace(result));
             }
-        }, getEntityId());
+        }, EntityFactory.createIdentityStub(Tenant.class, getEntityId()));
     }
 
     @Override

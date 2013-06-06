@@ -28,6 +28,7 @@ import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -40,11 +41,12 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
 
     private final Presenter<MaintenanceRequestDTO> lister;
 
-    private Key tenantId;
-
     public MaintenanceRequestVisorController(IPane parentView, Key buildingId) {
+        this(parentView, buildingId, null);
+    }
+
+    public MaintenanceRequestVisorController(IPane parentView, final Key buildingId, final Key tenantId) {
         super(parentView);
-        this.tenantId = null;
         visor = new MaintenanceRequestVisorView(this);
         lister = new ListerController<MaintenanceRequestDTO>(visor.getLister(), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
                 MaintenanceRequestDTO.class) {
@@ -62,6 +64,13 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
                             lister.editNew(openPlaceClass, result);
                         }
                     }, EntityFactory.createIdentityStub(Tenant.class, tenantId));
+                } else if (buildingId != null) {
+                    ((MaintenanceCrudService) getService()).createNewRequest(new DefaultAsyncCallback<MaintenanceRequestDTO>() {
+                        @Override
+                        public void onSuccess(MaintenanceRequestDTO result) {
+                            lister.editNew(openPlaceClass, result);
+                        }
+                    }, EntityFactory.createIdentityStub(Building.class, buildingId));
                 } else {
                     super.editNew(openPlaceClass);
                 }
@@ -69,12 +78,9 @@ public class MaintenanceRequestVisorController extends AbstractVisorController {
         };
 
         lister.setParent(buildingId);
-    }
-
-    public MaintenanceRequestVisorController(IPane parentView, Key buildingId, Key tenantId) {
-        this(parentView, buildingId);
-        this.tenantId = tenantId;
-        lister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).reporter().id(), tenantId));
+        if (tenantId != null) {
+            lister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(MaintenanceRequestDTO.class).reporter().id(), tenantId));
+        }
     }
 
     @Override
