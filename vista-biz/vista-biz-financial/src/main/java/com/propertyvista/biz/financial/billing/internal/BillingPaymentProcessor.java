@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import java.util.List;
 
+import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -22,14 +23,14 @@ import com.propertyvista.domain.financial.billing.InvoiceNSF;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
 
-public class BillingPaymentProcessor extends AbstractBillingProcessor {
+public class BillingPaymentProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
-    BillingPaymentProcessor(BillProducer billingManager) {
-        super(billingManager);
+    BillingPaymentProcessor(InternalBillProducer billProducer) {
+        super(billProducer);
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         attachPaymentRecords();
     }
 

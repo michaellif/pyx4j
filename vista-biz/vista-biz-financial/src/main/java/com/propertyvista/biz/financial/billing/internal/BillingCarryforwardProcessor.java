@@ -20,22 +20,23 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCharge;
 import com.propertyvista.domain.financial.billing.InvoiceCarryforwardCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 
-public class BillingCarryforwardProcessor extends AbstractBillingProcessor {
+public class BillingCarryforwardProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
     private static final I18n i18n = I18n.get(BillingCarryforwardProcessor.class);
 
-    BillingCarryforwardProcessor(BillProducer billingManager) {
-        super(billingManager);
+    BillingCarryforwardProcessor(InternalBillProducer billProducer) {
+        super(billProducer);
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         createInitialBalanceRecord();
     }
 

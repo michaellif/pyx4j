@@ -62,6 +62,29 @@ import com.propertyvista.dto.BillDTO;
 
 public class BillingUtils {
 
+    public static void prepareAccumulators(Bill bill) {
+        //Set accumulating fields to 0 value
+        bill.serviceCharge().setValue(new BigDecimal("0.00"));
+
+        bill.depositRefundAmount().setValue(new BigDecimal("0.00"));
+        bill.immediateAccountAdjustments().setValue(new BigDecimal("0.00"));
+        bill.nsfCharges().setValue(new BigDecimal("0.00"));
+        bill.withdrawalAmount().setValue(new BigDecimal("0.00"));
+        bill.paymentRejectedAmount().setValue(new BigDecimal("0.00"));
+        bill.paymentReceivedAmount().setValue(new BigDecimal("0.00"));
+
+        bill.recurringFeatureCharges().setValue(new BigDecimal("0.00"));
+        bill.oneTimeFeatureCharges().setValue(new BigDecimal("0.00"));
+        bill.pendingAccountAdjustments().setValue(new BigDecimal("0.00"));
+        bill.previousChargeRefunds().setValue(new BigDecimal("0.00"));
+        bill.latePaymentFees().setValue(new BigDecimal("0.00"));
+        bill.depositAmount().setValue(new BigDecimal("0.00"));
+        bill.productCreditAmount().setValue(new BigDecimal("0.00"));
+        bill.carryForwardCredit().setValue(new BigDecimal("0.00"));
+
+        bill.taxes().setValue(new BigDecimal("0.00"));
+    }
+
     public static boolean isService(Product.ProductV product) {
         return product.cast() instanceof Service.ServiceV;
     }
@@ -258,4 +281,5 @@ public class BillingUtils {
 
         return total;
     }
+
 }

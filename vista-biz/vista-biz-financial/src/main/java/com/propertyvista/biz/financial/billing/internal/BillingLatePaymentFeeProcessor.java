@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.ARCode.Type;
@@ -31,16 +32,16 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 
-public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor {
+public class BillingLatePaymentFeeProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
     private static final I18n i18n = I18n.get(BillingLatePaymentFeeProcessor.class);
 
-    BillingLatePaymentFeeProcessor(BillProducer billingManager) {
-        super(billingManager);
+    BillingLatePaymentFeeProcessor(InternalBillProducer billProducer) {
+        super(billProducer);
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         createLatePaymentFeeItem();
     }
 

@@ -22,6 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.financial.TaxUtils;
+import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.DateRange;
@@ -36,16 +37,16 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
-public class BillingProductChargeProcessor extends AbstractBillingProcessor {
+public class BillingProductChargeProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
     private static final I18n i18n = I18n.get(BillingProductChargeProcessor.class);
 
-    BillingProductChargeProcessor(BillProducer billingManager) {
-        super(billingManager);
+    BillingProductChargeProcessor(InternalBillProducer billProducer) {
+        super(billProducer);
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         // TODO: Misha/Stas review please: do not calculate charges for null-duration billing period: 
         if (!getBillProducer().getNextPeriodBill().billingPeriodStartDate().isNull()) {
             createCharges();

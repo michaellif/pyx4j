@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.propertyvista.biz.financial.InvoiceLineItemFactory;
+import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.DateRange;
@@ -27,14 +28,14 @@ import com.propertyvista.domain.financial.billing.InvoiceAccountCredit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 
-public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor {
+public class BillingLeaseAdjustmentProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
-    BillingLeaseAdjustmentProcessor(BillProducer billingManager) {
-        super(billingManager);
+    BillingLeaseAdjustmentProcessor(InternalBillProducer billProducer) {
+        super(billProducer);
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         createPendingLeaseAdjustments();
         attachImmediateLeaseAdjustments();
     }

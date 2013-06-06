@@ -61,6 +61,14 @@ public class BillDateUtils {
         return new DateRange(fromDate, toDate);
     }
 
+    public static final DateRange getOverlappingRange(DateRange range1, DateRange range2, DateRange range3) {
+        return getOverlappingRange(getOverlappingRange(range1, range2), range3);
+    }
+
+    public static final DateRange getOverlappingRange(DateRange range1, DateRange range2, DateRange range3, DateRange range4) {
+        return getOverlappingRange(getOverlappingRange(range1, range2), getOverlappingRange(range3, range4));
+    }
+
     public static LogicalDate calculateBillingCycleDateByOffset(int offset, LogicalDate billingCycleStartDate) {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(billingCycleStartDate);
@@ -183,4 +191,5 @@ public class BillDateUtils {
         }
         return "";
     }
+
 }

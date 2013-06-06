@@ -21,9 +21,9 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade.ProductTerm;
@@ -38,16 +38,14 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 
-public class BillingDepositProcessor extends AbstractBillingProcessor {
+public class BillingDepositProcessor extends AbstractBillingProcessor<InternalBillProducer> {
 
-    private static final I18n i18n = I18n.get(BillingDepositProcessor.class);
-
-    BillingDepositProcessor(BillProducer billingManager) {
-        super(billingManager);
+    BillingDepositProcessor(InternalBillProducer billProducer) {
+        super(billProducer);
     }
 
     @Override
-    protected void execute() {
+    public void execute() {
         // TODO: Misha/Stas review please: do not calculate charges for null-duration billing period: 
         if (!getBillProducer().getNextPeriodBill().billingPeriodStartDate().isNull()) {
             createInvoiceDeposits();

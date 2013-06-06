@@ -88,7 +88,7 @@ public class ServiceBillPreviewTest extends LeaseFinancialTestBase {
         LogicalDate date = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, date);
         // @formatter:off
-        new BillTester(BillProducer.produceProductBillPreview(cycle, lease)).
+        new BillTester(InternalBillProducer.produceProductBillPreview(cycle, lease)).
         billSequenceNumber(0).
         billType(Bill.BillType.First).
         billingCyclePeriodStartDate("01-May-2011").
@@ -107,7 +107,7 @@ public class ServiceBillPreviewTest extends LeaseFinancialTestBase {
 
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         // @formatter:off
-        new BillTester(BillProducer.produceProductBillPreview(nextCycle, lease)).
+        new BillTester(InternalBillProducer.produceProductBillPreview(nextCycle, lease)).
         billSequenceNumber(0).
         billType(Bill.BillType.First).
         billingCyclePeriodStartDate("01-Jun-2011").

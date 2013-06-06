@@ -83,7 +83,7 @@ public class BillingManager {
 
     Bill runBilling(Lease lease, BillingCycle billingCycle, boolean preview) {
         if (validateBillingRunPreconditions(billingCycle, lease, preview)) {
-            BillProducer producer = new BillProducer(billingCycle, lease, preview);
+            InternalBillProducer producer = new InternalBillProducer(billingCycle, lease, preview);
             return producer.produceBill();
         } else {
             throw new BillingException(i18n.tr("Bill Run Precondition Validation failed"));
