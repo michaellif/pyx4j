@@ -186,7 +186,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                 switch (type) {
                 case file:
                     get(proto().file()).setVisible(true);
-                    if (!getValue().file().blobKey().isNull()) {
+                    if (!getValue().file().blobKey().isNull() & getValue().getPrimaryKey() != null) {
                         thumbnail.setVisible(true);
                         thumbnail.setUrl(GWT.getModuleBaseURL() + DeploymentConsts.mediaImagesServletMapping + getValue().getPrimaryKey().toString() + "/"
                                 + ThumbnailSize.small.name() + "." + ImageConsts.THUMBNAIL_TYPE);
