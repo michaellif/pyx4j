@@ -152,8 +152,8 @@ public class LeaseFacadeYardiImpl implements LeaseFacade {
     }
 
     @Override
-    public void moveOut(Lease leaseId) {
-        new LeaseYardiManager().moveOut(leaseId);
+    public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
+        new LeaseYardiManager().moveOut(leaseId, actualMoveOut);
     }
 
     @Override

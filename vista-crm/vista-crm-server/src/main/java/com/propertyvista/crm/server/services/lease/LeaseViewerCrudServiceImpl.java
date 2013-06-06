@@ -136,7 +136,7 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     public void moveOut(AsyncCallback<VoidSerializable> callback, Key entityId) {
         Lease leaseId = EntityFactory.createIdentityStub(Lease.class, entityId);
 
-        ServerSideFactory.create(LeaseFacade.class).moveOut(leaseId);
+        ServerSideFactory.create(LeaseFacade.class).moveOut(leaseId, new LogicalDate(SystemDateManager.getDate()));
 
         // complete actually, if it already finished:
         if (Persistence.secureRetrieve(Lease.class, entityId).leaseTo().getValue().after(new LogicalDate(SystemDateManager.getDate()))) {

@@ -152,8 +152,8 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
-    public void moveOut(Lease leaseId) {
-        new LeaseInternalManager().moveOut(leaseId);
+    public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
+        new LeaseInternalManager().moveOut(leaseId, actualMoveOut);
     }
 
     @Override

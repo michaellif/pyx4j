@@ -16,9 +16,11 @@ package com.propertyvista.biz.tenant.yardi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.LeaseAbstractManager;
+import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -51,4 +53,17 @@ public class LeaseYardiManager extends LeaseAbstractManager {
         // N/A - internal impl only
     }
 
+    @Override
+    public void approve(Lease leaseId, Employee decidedBy, String decisionReason) {
+        super.approve(leaseId, decidedBy, decisionReason);
+        // activate, newly created leases:
+        activate(leaseId);
+    }
+
+    @Override
+    public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
+        super.moveOut(leaseId, actualMoveOut);
+        // complete former leases:
+        complete(leaseId);
+    }
 }

@@ -546,7 +546,7 @@ public class LeaseLifecycleSimulator {
         @Override
         public void exec() {
             lease = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
-            ServerSideFactory.create(LeaseFacade.class).moveOut(lease);
+            ServerSideFactory.create(LeaseFacade.class).moveOut(lease, new LogicalDate(SystemDateManager.getDate()));
         }
     }
 

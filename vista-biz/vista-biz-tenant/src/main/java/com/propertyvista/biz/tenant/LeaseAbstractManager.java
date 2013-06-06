@@ -536,7 +536,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDay, LogicalDate leaseEndDate) {
+    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
@@ -544,7 +544,7 @@ public abstract class LeaseAbstractManager {
 
         lease.completion().setValue(completionType);
         lease.moveOutSubmissionDate().setValue(eventDate);
-        lease.expectedMoveOut().setValue(moveOutDay);
+        lease.expectedMoveOut().setValue(expectedMoveOut);
 
         switch (completionType) {
         case Eviction:
@@ -610,7 +610,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    public void moveOut(Lease leaseId) {
+    public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
@@ -622,7 +622,7 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException(SimpleMessageFormat.format("Lease " + leaseId.getPrimaryKey() + " has no completion event"));
         }
 
-        lease.actualMoveOut().setValue(new LogicalDate(SystemDateManager.getDate()));
+        lease.actualMoveOut().setValue(actualMoveOut);
 
         updateLeaseDates(lease);
 

@@ -88,13 +88,13 @@ public interface LeaseFacade {
 
     // Start notice/evict, cancel/terminate/etc...
 
-    void createCompletionEvent(Lease leaseId, Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate moveOutDate, LogicalDate leaseEndDate);
+    void createCompletionEvent(Lease leaseId, Lease.CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate);
 
     void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason);
 
     void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason);
 
-    void moveOut(Lease leaseId);
+    void moveOut(Lease leaseId, LogicalDate actualMoveOut);
 
     // Utils/internals:
 
