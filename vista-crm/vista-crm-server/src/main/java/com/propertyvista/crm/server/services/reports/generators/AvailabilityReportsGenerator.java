@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.services.reports.ReportCriteriaBuilder;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
-import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
+import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
@@ -37,7 +37,7 @@ import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 public class AvailabilityReportsGenerator implements ReportGenerator {
 
     @Override
-    public Serializable generateReport(ReportMetadata reportMetadata, ReportProgressStatusHolder reportProgressStatusHolder) {
+    public Serializable generateReport(ReportMetadata reportMetadata) {
         AvailabilityReportMetadata meta = (AvailabilityReportMetadata) reportMetadata;
         if (meta.asOf().isNull()) {
             meta.asOf().setValue(new LogicalDate());
@@ -107,6 +107,12 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
         criteria.ne(criteria.proto().vacancyStatus(), null);
 
         return criteria;
+    }
+
+    @Override
+    public ReportProgressStatus getProgressStatus() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

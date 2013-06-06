@@ -24,7 +24,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
-import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.i18n.shared.I18n;
@@ -37,12 +36,18 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-public class EftReportGenerator implements ReportGenerator, ReportExporter {
+public class EftReportGenerator implements ReportExporter {
 
     private static final I18n i18n = I18n.get(EftReportGenerator.class);
 
+    private final ReportProgressStatusHolder reportProgressStatusHolder;
+
+    public EftReportGenerator() {
+        reportProgressStatusHolder = new ReportProgressStatusHolder();
+    }
+
     @Override
-    public Serializable generateReport(ReportMetadata metadata, ReportProgressStatusHolder reportProgressStatusHolder) {
+    public Serializable generateReport(ReportMetadata metadata) {
         reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, 0, 100));
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
 
@@ -85,6 +90,11 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
 
     }
 
+    @Override
+    public synchronized ReportProgressStatus getProgressStatus() {
+        return reportProgressStatusHolder.get();
+    }
+
     private void enahancePaymentRecord(PaymentRecord paymentRecord) {
         Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
 
@@ -107,7 +117,7 @@ public class EftReportGenerator implements ReportGenerator, ReportExporter {
     }
 
     @Override
-    public ExportedReport export(Serializable report, ReportProgressStatusHolder reportProgressStatusHolder) {
+    public ExportedReport export(Serializable report) {
         @SuppressWarnings("unchecked")
         Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) report;
         return new EftReportExport().createReport(paymentRecords, reportProgressStatusHolder);
