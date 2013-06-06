@@ -26,6 +26,8 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public interface ReportGenerator {
 
-    Serializable generateReport(ReportMetadata reportMetadata, ReportProgressStatusHolder progressStatusHolder);
+    ReportProgressStatus getProgressStatus();
+
+    Serializable generateReport(ReportMetadata reportMetadata);
 
 }

@@ -22,7 +22,7 @@ package com.pyx4j.essentials.server.services.reports;
 
 import java.io.Serializable;
 
-public interface ReportExporter {
+public interface ReportExporter extends ReportGenerator {
 
     public static class ExportedReport {
 
@@ -39,5 +39,5 @@ public interface ReportExporter {
         }
     }
 
-    public ExportedReport export(Serializable report, ReportProgressStatusHolder holder);
+    public ExportedReport export(Serializable report);
 }
