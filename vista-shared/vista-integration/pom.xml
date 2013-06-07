@@ -22,6 +22,7 @@
             <groupId>com.propertyvista</groupId>
             <artifactId>vista-portal-server</artifactId>
             <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -36,6 +37,46 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-unit-mock</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-preloader</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-tenant</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-yardi-interface</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-yardi-interface</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
         </dependency>
 
     </dependencies>
