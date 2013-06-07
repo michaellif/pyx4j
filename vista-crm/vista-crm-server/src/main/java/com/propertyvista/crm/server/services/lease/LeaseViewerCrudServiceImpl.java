@@ -249,9 +249,9 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         try {
             ServerSideFactory.create(YardiARFacade.class).updateLease(lease);
         } catch (RemoteException e) {
-            throw new UserRuntimeException(i18n.tr("Yardi connection problem"));
+            throw new UserRuntimeException(i18n.tr("Yardi connection problem"), e);
         } catch (YardiServiceException e) {
-            throw new UserRuntimeException(i18n.tr("Error updating lease form Yardi"));
+            throw new UserRuntimeException(i18n.tr("Error updating lease form Yardi"), e);
         }
 
         Persistence.service().commit();
