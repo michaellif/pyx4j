@@ -36,6 +36,7 @@ import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
+@Ignore
 public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     @Override
@@ -90,8 +91,6 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     }
 
-    // @Test
-    @Ignore
     public void testFormerResidentInitialImport() throws Exception {
         setSysDate("2010-11-01");
 
@@ -119,8 +118,6 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     }
 
-    //@Test
-    @Ignore
     public void testTenantBecomesFormerResident() throws Exception {
         setSysDate("2010-11-01");
         // Import all 
