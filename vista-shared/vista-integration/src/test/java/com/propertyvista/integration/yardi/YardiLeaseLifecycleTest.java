@@ -16,7 +16,6 @@ package com.propertyvista.integration.yardi;
 import java.math.BigDecimal;
 
 import org.junit.Ignore;
-import org.junit.Test;
 
 import com.yardi.entity.mits.Customerinfo;
 
@@ -91,7 +90,7 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     }
 
-    @Test
+    // @Test
     @Ignore
     public void testFormerResidentInitialImport() throws Exception {
         setSysDate("2010-11-01");
@@ -120,7 +119,7 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     }
 
-    @Test
+    //@Test
     @Ignore
     public void testTenantBecomesFormerResident() throws Exception {
         setSysDate("2010-11-01");
