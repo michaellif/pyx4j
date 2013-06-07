@@ -14,13 +14,17 @@
 package com.propertyvista.operations.rpc;
 
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.property.asset.building.Building;
 
 @Transient
 public interface PmcMerchantAccountDTO extends PmcMerchantAccountIndex {
 
     MerchantAccount merchantAccount();
+
+    IList<Building> assignedBuildings();
 
 }

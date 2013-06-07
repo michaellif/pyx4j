@@ -13,19 +13,27 @@
  */
 package com.propertyvista.operations.server.services;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
+import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -48,6 +56,24 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
             @Override
             public Void call() {
                 dto.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, entity.merchantAccountKey().getValue()));
+                EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
+                criteria.eq(criteria.proto().merchantAccount(), dto.merchantAccount());
+                List<BuildingMerchantAccount> buildingMerchantAccounts = Persistence.service().query(criteria);
+                List<Building> assignedBuildings = new ArrayList<Building>();
+                for (BuildingMerchantAccount buildingMerchantAccount : buildingMerchantAccounts) {
+                    Building b = EntityFactory.create(Building.class);
+                    b.propertyCode().setValue(
+                            Persistence.service().retrieve(Building.class, buildingMerchantAccount.building().getPrimaryKey(), AttachLevel.Attached)
+                                    .propertyCode().getValue());
+                    assignedBuildings.add(b);
+                }
+                Collections.sort(assignedBuildings, new Comparator<Building>() {
+                    @Override
+                    public int compare(Building o1, Building o2) {
+                        return o1.propertyCode().compareTo(o2.propertyCode());
+                    }
+                });
+                dto.assignedBuildings().addAll(assignedBuildings);
                 return null;
             }
         });

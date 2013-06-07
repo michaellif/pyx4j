@@ -13,17 +13,24 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
@@ -31,6 +38,30 @@ import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccountDTO> {
 
     private static final I18n i18n = I18n.get(MerchantAccountForm.class);
+
+    public static class AssignedBuildingsFolder extends VistaTableFolder<Building> {
+
+        private static List<EntityFolderColumnDescriptor> COLUMNS;
+        static {
+            Building proto = EntityFactory.getEntityPrototype(Building.class);
+            COLUMNS = Arrays.asList(//@formatter:off
+                    new EntityFolderColumnDescriptor(proto.propertyCode(), "10em")
+            );//@formatter:on
+        }
+
+        public AssignedBuildingsFolder() {
+            super(Building.class);
+            setViewable(true);
+            setAddable(false);
+            setEditable(false);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return COLUMNS;
+        }
+
+    }
 
     public MerchantAccountForm(IForm<PmcMerchantAccountDTO> view) {
         super(PmcMerchantAccountDTO.class, view);
@@ -50,6 +81,8 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().chargeDescription()), 30).build());
 
+        content.setH2(++row, 0, 1, i18n.tr("Assigned Buildings"));
+        content.setWidget(++row, 0, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));
         selectTab(addTab(content));
     }
 
