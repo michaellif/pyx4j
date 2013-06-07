@@ -151,20 +151,23 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         Persistence.service().retrieve(lease.unit().building());
         String propertyCode = lease.unit().building().propertyCode().getValue();
         ResidentTransactions transaction = stub.getResidentTransactionsForTenant(yc, propertyCode, lease.leaseId().getValue());
-        if (transaction != null) {
-            for (Property property : transaction.getProperty()) {
-                for (RTCustomer rtCustomer : property.getRTCustomer()) {
-                    importLease(propertyCode, rtCustomer);
+        if (transaction != null && !transaction.getProperty().isEmpty()) {
+            Property property = transaction.getProperty().iterator().next();
+            if (!property.getRTCustomer().isEmpty()) {
+                importLease(propertyCode, property.getRTCustomer().iterator().next());
+
+                Persistence.service().retrieve(lease);
+                if (lease.status().getValue().isActive()) {
+                    // import lease charges
+                    LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+                    BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
+                    BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
+                    ResidentTransactions leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle
+                            .billingCycleStartDate().getValue());
+                    importLeaseCharges(leaseCharges, null);
                 }
             }
         }
-        // import lease charges
-        LogicalDate now = new LogicalDate(SystemDateManager.getDate());
-        BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
-        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
-        ResidentTransactions leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate()
-                .getValue());
-        importLeaseCharges(leaseCharges, null);
     }
 
     public void postReceiptReversal(PmcYardiCredential yc, YardiReceiptReversal reversal) throws YardiServiceException, RemoteException {
@@ -292,14 +295,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private LeaseFinancialStats importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
         final LeaseFinancialStats state = new LeaseFinancialStats();
+
         log.info("      Importing lease");
         if (YardiLeaseProcessor.isSkipped(rtCustomer)) {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
             // TODO skipping monitor message
             return state;
         }
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
 
+        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
                 // update lease
@@ -318,18 +322,20 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             Persistence.service().persist(charge);
                             state.addCharge(charge.amount().getValue());
                         }
+
                         if (tr.getPayment() != null) {
                             log.info("          Updating payment");
                             YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
                             Persistence.service().persist(payment);
                             state.addPayment(payment.amount().getValue());
-
                         }
                     }
                 }
+
                 return null;
             }
         });
+
         return state;
     }
 

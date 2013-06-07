@@ -50,6 +50,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.yardi.mapper.TenantMapper;
@@ -82,36 +83,44 @@ public class YardiLeaseProcessor {
 
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        boolean modified = false;
+
+        boolean toPersist = false;
+        boolean toFinalize = false;
+
         if (new LeaseMerger().isLeaseDatesChanged(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
-            modified = true;
+            toPersist = true;
         }
 
-        if (new LeaseMerger().isTermChanged(yardiLease, lease.currentTerm())) {
-            lease.currentTerm().set(new LeaseMerger().mergeTerm(yardiLease, lease.currentTerm()));
-            modified = true;
+        if (new LeaseMerger().isTermDatesChanged(yardiLease, lease.currentTerm())) {
+            lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
+            toFinalize = true;
         }
 
         if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {
             new LeaseMerger().mergePaymentType(rtCustomer, lease);
-            modified = true;
+            toPersist = true;
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         if (new TenantMerger().checkChanges(yardiCustomers, lease.currentTerm().version().tenants())) {
             lease.currentTerm().set(new TenantMerger().updateTenants(yardiCustomers, lease.currentTerm()));
-            modified = true;
+            toFinalize = true;
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         if (new TenantMerger().changedNames(yardiCustomers, lease.currentTerm().version().tenants())) {
             new TenantMerger().updateTenantNames(rtCustomer, lease);
-            modified = true;
         }
 
-        if (modified) {
-            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+        if (toFinalize) {
+            lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+        } else if (toPersist) {
+            lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        }
+
+        if (isPastLease(rtCustomer)) {
+            lease = completeLease(lease, CompletionType.Termination, yardiLease);
         }
 
         return lease;
@@ -142,24 +151,17 @@ public class YardiLeaseProcessor {
         lease.currentTerm().termFrom().setValue(guessFromDate(yardiLease));
 
         if (yardiLease.getLeaseToDate() != null) {
-            lease.currentTerm().termTo().setValue(new LogicalDate(yardiLease.getLeaseToDate()));
+            lease.currentTerm().termTo().setValue(getLogicalDate(yardiLease.getLeaseToDate()));
         } else {
             lease.currentTerm().type().setValue(LeaseTerm.Type.Periodic);
         }
 
         if (yardiLease.getExpectedMoveInDate() != null) {
-            lease.expectedMoveIn().setValue(new LogicalDate(yardiLease.getExpectedMoveInDate()));
+            lease.expectedMoveIn().setValue(getLogicalDate(yardiLease.getExpectedMoveInDate()));
         }
         if (yardiLease.getActualMoveIn() != null) {
-            lease.actualMoveIn().setValue(new LogicalDate(yardiLease.getActualMoveIn()));
+            lease.actualMoveIn().setValue(getLogicalDate(yardiLease.getActualMoveIn()));
         }
-
-//        if (yardiLease.getExpectedMoveOutDate() != null) {
-//            lease.expectedMoveOut().setValue(new LogicalDate(yardiLease.getExpectedMoveOutDate()));
-//        }
-//        if (yardiLease.getActualMoveOut() != null) {
-//            lease.actualMoveOut().setValue(new LogicalDate(yardiLease.getActualMoveOut()));
-//        }
 
         // misc.
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
@@ -171,6 +173,12 @@ public class YardiLeaseProcessor {
 
         lease = leaseFacade.persist(lease);
         leaseFacade.activate(lease);
+        Persistence.service().retrieve(lease);
+
+        // when lease imported first time but as past one:
+        if (isPastLease(rtCustomer)) {
+            lease = completeLease(lease, CompletionType.Termination, yardiLease);
+        }
 
         return lease;
     }
@@ -188,7 +196,7 @@ public class YardiLeaseProcessor {
         }
         if (new LeaseMerger().mergeBillableItems(newItems, lease)) {
             // terminate unmatched features - set expiration date at the end of billing cycle
-            LogicalDate now = new LogicalDate(SystemDateManager.getDate());
+            LogicalDate now = getLogicalDate(SystemDateManager.getDate());
             BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
             LeaseMerger merger = new LeaseMerger();
             for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
@@ -212,7 +220,21 @@ public class YardiLeaseProcessor {
     //
     public static boolean isSkipped(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return !info.equals(Customerinfo.CURRENT_RESIDENT);
+        // @formatter:off
+        // list eligible for processing types here:
+        return !info.equals(Customerinfo.CURRENT_RESIDENT) &&
+               !info.equals(Customerinfo.FORMER_RESIDENT);
+        // @formatter:on
+    }
+
+    public static boolean isPastLease(RTCustomer rtCustomer) {
+        Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
+        return info.equals(Customerinfo.FORMER_RESIDENT);
+    }
+
+    public static boolean isFutureLease(RTCustomer rtCustomer) {
+        Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
+        return info.equals(Customerinfo.FUTURE_RESIDENT);
     }
 
     /**
@@ -222,11 +244,11 @@ public class YardiLeaseProcessor {
         LogicalDate date;
 
         if (yardiLease.getLeaseFromDate() != null) {
-            date = new LogicalDate(yardiLease.getLeaseFromDate());
+            date = getLogicalDate(yardiLease.getLeaseFromDate());
         } else if (yardiLease.getActualMoveIn() != null) {
-            date = new LogicalDate(yardiLease.getActualMoveIn());
+            date = getLogicalDate(yardiLease.getActualMoveIn());
         } else if (yardiLease.getLeaseSignDate() != null) {
-            date = new LogicalDate(yardiLease.getLeaseSignDate());
+            date = getLogicalDate(yardiLease.getLeaseSignDate());
         } else {
             throw new IllegalArgumentException("Can't deduct leaseFrom date!!!");
         }
@@ -273,13 +295,21 @@ public class YardiLeaseProcessor {
         return billableItem;
     }
 
-    private LogicalDate getLogicalDate(Date date) {
+    private static LogicalDate getLogicalDate(Date date) {
         return date == null ? null : new LogicalDate(date);
     }
 
-    private String getLeaseChargeDescription(ChargeDetail detail) {
+    private static String getLeaseChargeDescription(ChargeDetail detail) {
         ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, detail.getChargeCode());
         return arCode == null ? detail.getDescription() : arCode.name().getValue();
     }
 
+    private Lease completeLease(Lease lease, CompletionType completionType, YardiLease yardiLease) {
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, completionType, getLogicalDate(SystemDateManager.getDate()),
+                getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
+        ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
+
+        Persistence.service().retrieve(lease);
+        return lease;
+    }
 }

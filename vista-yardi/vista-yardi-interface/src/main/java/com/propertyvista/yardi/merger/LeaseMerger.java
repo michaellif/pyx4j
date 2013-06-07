@@ -46,24 +46,19 @@ public class LeaseMerger {
         isNew = false;
 
         compare(existing.actualMoveIn(), imported.getActualMoveIn());
-        compare(existing.actualMoveOut(), imported.getActualMoveOut());
         compare(existing.expectedMoveIn(), imported.getExpectedMoveInDate());
-        // TODO expected move out is automatically calculated for our leases, what to do with one we get from yardi?
-        //        compare(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
 
         return isNew;
     }
 
     public Lease mergeLeaseDates(YardiLease imported, Lease existing) {
         existing.actualMoveIn().setValue(getImportedDate(imported.getActualMoveIn()));
-        existing.actualMoveOut().setValue(getImportedDate(imported.getActualMoveOut()));
         existing.expectedMoveIn().setValue(getImportedDate(imported.getExpectedMoveInDate()));
-        // TODO expected move out is automatically calculated for our leases, what to do with one we get from yardi?
-//        existing.expectedMoveOut().setValue(getImportedDate(imported.getExpectedMoveOutDate()));
+
         return existing;
     }
 
-    public boolean isTermChanged(YardiLease imported, LeaseTerm existing) {
+    public boolean isTermDatesChanged(YardiLease imported, LeaseTerm existing) {
         isNew = false;
 
         compare(existing.termFrom(), YardiLeaseProcessor.guessFromDateNoThrow(imported));
@@ -72,9 +67,10 @@ public class LeaseMerger {
         return isNew;
     }
 
-    public LeaseTerm mergeTerm(YardiLease imported, LeaseTerm existing) {
+    public LeaseTerm mergeTermDates(YardiLease imported, LeaseTerm existing) {
         existing.termFrom().setValue(YardiLeaseProcessor.guessFromDate(imported));
         existing.termTo().setValue(getImportedDate(imported.getLeaseToDate()));
+
         return existing;
     }
 
