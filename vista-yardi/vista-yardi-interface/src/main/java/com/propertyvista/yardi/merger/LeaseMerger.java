@@ -42,7 +42,7 @@ public class LeaseMerger {
 
     private boolean isNew = false;
 
-    public boolean isLeaseChanged(YardiLease imported, Lease existing) {
+    public boolean isLeaseDatesChanged(YardiLease imported, Lease existing) {
         isNew = false;
 
         compare(existing.actualMoveIn(), imported.getActualMoveIn());
@@ -54,7 +54,7 @@ public class LeaseMerger {
         return isNew;
     }
 
-    public Lease mergeLease(YardiLease imported, Lease existing) {
+    public Lease mergeLeaseDates(YardiLease imported, Lease existing) {
         existing.actualMoveIn().setValue(getImportedDate(imported.getActualMoveIn()));
         existing.actualMoveOut().setValue(getImportedDate(imported.getActualMoveOut()));
         existing.expectedMoveIn().setValue(getImportedDate(imported.getExpectedMoveInDate()));

@@ -83,8 +83,8 @@ public class YardiLeaseProcessor {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         boolean modified = false;
-        if (new LeaseMerger().isLeaseChanged(yardiLease, lease)) {
-            lease = new LeaseMerger().mergeLease(yardiLease, lease);
+        if (new LeaseMerger().isLeaseDatesChanged(yardiLease, lease)) {
+            lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
             modified = true;
         }
 
