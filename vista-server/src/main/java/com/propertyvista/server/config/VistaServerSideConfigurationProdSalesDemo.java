@@ -65,6 +65,11 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
+    public String getDefaultBaseURLvistaOnboarding() {
+        return "http://start.propertyvista.biz/";
+    }
+
+    @Override
     public int interfaceSSHDPort() {
         return 0;
     }
