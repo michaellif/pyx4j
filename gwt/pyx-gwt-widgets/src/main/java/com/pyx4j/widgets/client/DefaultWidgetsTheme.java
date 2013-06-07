@@ -244,6 +244,17 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.RadioGroupItem);
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("line-height", "1.5em");
+        style.addProperty("padding", "0 10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.RadioGroupItem, " input");
+        style.addProperty("margin", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.RadioGroupItem, " label");
+        style.addProperty("padding-left", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.pushed);

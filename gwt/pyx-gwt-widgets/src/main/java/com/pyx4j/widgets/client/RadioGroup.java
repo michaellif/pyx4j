@@ -95,6 +95,7 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
 
         for (final E option : options) {
             OptionRadioButton button = new OptionRadioButton(groupName, format(option));
+            button.setStyleName(DefaultWidgetsTheme.StyleName.RadioGroupItem.name());
             buttons.put(option, button);
             button.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 
@@ -115,9 +116,6 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
                 ((VerticalPanel) panel).setCellHeight(button, "100%");
                 ((VerticalPanel) panel).setCellWidth(button, "100%");
             }
-        }
-        for (RadioButton button : buttons.values()) {
-            button.setStyleName(DefaultWidgetsTheme.StyleName.RadioGroupItem.name());
         }
     }
 
