@@ -1,3 +1,5 @@
+# @version $Revision$ ($Author$) $Date$
+
 ========= Install Eclipse ==========
 
 1. Get: Eclipse SDK
