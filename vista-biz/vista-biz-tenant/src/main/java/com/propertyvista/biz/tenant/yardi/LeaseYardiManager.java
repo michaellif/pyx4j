@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.LeaseAbstractManager;
@@ -72,5 +74,22 @@ public class LeaseYardiManager extends LeaseAbstractManager {
         super.moveOut(leaseId, actualMoveOut);
         // complete former leases:
         complete(leaseId);
+    }
+
+    @Override
+    public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Completed) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+
+        lease.actualMoveOut().setValue(null);
+        lease.status().setValue(Status.Active);
+
+        Persistence.secureSave(lease);
+
+        super.cancelCompletionEvent(leaseId, decidedBy, decisionReason);
     }
 }

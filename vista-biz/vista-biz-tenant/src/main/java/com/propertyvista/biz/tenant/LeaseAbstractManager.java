@@ -601,7 +601,7 @@ public abstract class LeaseAbstractManager {
 
         Persistence.secureSave(lease);
 
-        Persistence.secureSave(creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, decidedBy.user()));
+        Persistence.secureSave(creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, (decidedBy != null ? decidedBy.user() : null)));
 
         try {
             ServerSideFactory.create(OccupancyFacade.class).cancelMoveOut(lease.unit().getPrimaryKey());
