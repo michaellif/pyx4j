@@ -170,7 +170,6 @@ public class YardiLeaseProcessor {
         }
 
         lease = leaseFacade.persist(lease);
-        leaseFacade.approve(lease, null, null);
         leaseFacade.activate(lease);
 
         return lease;
