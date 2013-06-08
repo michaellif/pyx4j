@@ -37,7 +37,7 @@ import com.propertyvista.operations.rpc.services.SimulationService;
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
     @Override
-    public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         SimulationDTO result = EntityFactory.create(SimulationDTO.class);
         result.setPrimaryKey(entityId);
 

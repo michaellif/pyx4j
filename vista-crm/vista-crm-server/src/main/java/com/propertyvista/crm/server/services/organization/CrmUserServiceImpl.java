@@ -50,7 +50,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget RetrieveTarget) {
         Persistence.service().retrieve(dto.portfolios());
         Persistence.service().retrieve(dto.employees());
 
@@ -65,9 +65,9 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    public void retrieve(AsyncCallback<EmployeeDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<EmployeeDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         // Enforce access only to current user
-        super.retrieve(callback, CrmAppContext.getCurrentUserEmployee().getPrimaryKey(), retrieveTraget);
+        super.retrieve(callback, CrmAppContext.getCurrentUserEmployee().getPrimaryKey(), RetrieveTarget);
     }
 
     @Override

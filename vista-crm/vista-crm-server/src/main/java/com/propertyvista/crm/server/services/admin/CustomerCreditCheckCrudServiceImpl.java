@@ -39,7 +39,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
 
     @Override
     protected void enhanceRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto,
-            com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+            RetrieveTarget RetrieveTarget) {
         Persistence.service().retrieveMember(dto.screening());
         Persistence.service().retrieveMember(dto.screening().screene());
 
@@ -60,7 +60,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
     @Override
     protected void enhanceListRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto) {
         super.enhanceListRetrieved(entity, dto);
-        enhanceRetrieved(entity, dto, RetrieveTraget.View);
+        enhanceRetrieved(entity, dto, RetrieveTarget.View);
     }
 
 }

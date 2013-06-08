@@ -60,6 +60,6 @@ public class MerchantAccountEditorActivity extends AbstractEditorActivity<PmcMer
                 ent.merchantAccount().invalid().setValue(Boolean.FALSE);
                 callback.onSuccess(ent);
             }
-        }, getParentId(), AbstractCrudService.RetrieveTraget.View);
+        }, getParentId(), AbstractCrudService.RetrieveTarget.View);
     }
 }

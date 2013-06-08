@@ -33,7 +33,7 @@ import com.propertyvista.operations.rpc.services.Vista2PmcService;
 public class Vista2PmcServiceImpl implements Vista2PmcService {
 
     @Override
-    public void retrieve(AsyncCallback<VistaSystemDefaultsDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<VistaSystemDefaultsDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget RetrieveTarget) {
         VistaSystemDefaultsDTO dto = EntityFactory.create(VistaSystemDefaultsDTO.class);
 
         dto.paymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));

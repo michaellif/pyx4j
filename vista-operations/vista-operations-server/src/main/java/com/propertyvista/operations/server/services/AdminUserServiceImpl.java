@@ -54,14 +54,14 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
     }
 
     @Override
-    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget RetrieveTarget) {
         if (!entity.behaviors().isEmpty()) {
             dto.role().setValue(entity.behaviors().iterator().next());
         }
     }
 
     @Override
-    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTraget retrieveTraget) {
+    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget RetrieveTarget) {
         Persistence.service().retrieve(entity.user());
     }
 

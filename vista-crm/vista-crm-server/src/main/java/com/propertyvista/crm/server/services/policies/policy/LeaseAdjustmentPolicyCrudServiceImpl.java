@@ -28,8 +28,8 @@ public class LeaseAdjustmentPolicyCrudServiceImpl extends GenericPolicyCrudServi
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseAdjustmentPolicy in, LeaseAdjustmentPolicyDTO dto, RetrieveTraget retrieveTraget) {
-        super.enhanceRetrieved(in, dto, retrieveTraget);
+    protected void enhanceRetrieved(LeaseAdjustmentPolicy in, LeaseAdjustmentPolicyDTO dto, RetrieveTarget RetrieveTarget) {
+        super.enhanceRetrieved(in, dto, RetrieveTarget);
         Persistence.service().retrieveMember(in.policyItems());
         dto.policyItems().set(in.policyItems());
     }

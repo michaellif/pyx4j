@@ -65,7 +65,7 @@ public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    public void retrieve(AsyncCallback<LoginAttemptDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<LoginAttemptDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         throw new Error("retrieve is not implemented");
     }
 

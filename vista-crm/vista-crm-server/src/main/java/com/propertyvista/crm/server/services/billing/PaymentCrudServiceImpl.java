@@ -62,8 +62,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTraget retrieveTraget) {
-        super.enhanceRetrieved(entity, dto, retrieveTraget);
+    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTarget RetrieveTarget) {
+        super.enhanceRetrieved(entity, dto, RetrieveTarget);
         enhanceListRetrieved(entity, dto);
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.billingAccount()));
@@ -169,7 +169,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     public void schedulePayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
         ServerSideFactory.create(PaymentFacade.class).schedulePayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
         Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
+        retrieve(callback, entityId, RetrieveTarget.View);
     }
 
     @Override
@@ -180,28 +180,28 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
             throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
         }
         Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
+        retrieve(callback, entityId, RetrieveTarget.View);
     }
 
     @Override
     public void clearPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
         ServerSideFactory.create(PaymentFacade.class).clear(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
         Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
+        retrieve(callback, entityId, RetrieveTarget.View);
     }
 
     @Override
     public void rejectPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId, boolean applyNSF) {
         ServerSideFactory.create(PaymentFacade.class).reject(EntityFactory.createIdentityStub(PaymentRecord.class, entityId), applyNSF);
         Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
+        retrieve(callback, entityId, RetrieveTarget.View);
     }
 
     @Override
     public void cancelPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
         ServerSideFactory.create(PaymentFacade.class).cancel(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
         Persistence.service().commit();
-        retrieve(callback, entityId, RetrieveTraget.View);
+        retrieve(callback, entityId, RetrieveTarget.View);
     }
 
     // internals:

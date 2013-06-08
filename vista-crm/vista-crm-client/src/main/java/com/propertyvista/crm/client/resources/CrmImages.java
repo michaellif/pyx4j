@@ -202,10 +202,10 @@ public interface CrmImages extends VistaImages {
     @Source("Company_normal.png")
     ImageResource companyNormal();
 
-    EditIconButtonImages editButton();
-
     @Source("Notice_warning.png")
     ImageResource noticeWarning();
+
+    EditIconButtonImages editButton();
 
     public interface EditIconButtonImages extends IconButtonImages {
         @Override

@@ -53,7 +53,7 @@ public class MaintenanceCrudServiceImpl extends AdminServiceImpl implements Main
     }
 
     @Override
-    public void retrieve(AsyncCallback<VistaSystemMaintenanceState> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<VistaSystemMaintenanceState> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         VistaSystemMaintenanceState state = (VistaSystemMaintenanceState) SystemMaintenance.getSystemMaintenanceInfo();
         state.setPrimaryKey(entityId);
         callback.onSuccess(state);

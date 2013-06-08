@@ -49,7 +49,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTarget RetrieveTarget) {
         //TODO: calculate value here:
         dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.building().getPrimaryKey()).propertyCode());
 
@@ -75,7 +75,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         retrieveServicePrices(dto);
 
         // check unit catalog/lease readiness:
-        if (retrieveTraget == RetrieveTraget.View) {
+        if (RetrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
             criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.services()));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));

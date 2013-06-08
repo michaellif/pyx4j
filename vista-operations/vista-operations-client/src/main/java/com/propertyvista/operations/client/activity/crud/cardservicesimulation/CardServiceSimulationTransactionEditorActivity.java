@@ -49,6 +49,6 @@ public class CardServiceSimulationTransactionEditorActivity extends AbstractEdit
                 callback.onSuccess(tx);
 
             }
-        }, getParentId(), AbstractCrudService.RetrieveTraget.View);
+        }, getParentId(), AbstractCrudService.RetrieveTarget.View);
     }
 }

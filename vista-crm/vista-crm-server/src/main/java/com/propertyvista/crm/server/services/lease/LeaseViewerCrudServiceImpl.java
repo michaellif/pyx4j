@@ -94,8 +94,8 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, LeaseDTO dto, RetrieveTraget retrieveTraget) {
-        super.enhanceRetrieved(in, dto, retrieveTraget);
+    protected void enhanceRetrieved(Lease in, LeaseDTO dto, RetrieveTarget RetrieveTarget) {
+        super.enhanceRetrieved(in, dto, RetrieveTarget);
 
         if (!dto.billingAccount().isNull()) {
             dto.transactionHistory().set(ServerSideFactory.create(ARFacade.class).getTransactionHistory(dto.billingAccount()));

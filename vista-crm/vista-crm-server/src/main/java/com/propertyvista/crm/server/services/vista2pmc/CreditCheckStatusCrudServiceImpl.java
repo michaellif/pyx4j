@@ -37,7 +37,7 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
 
         final CreditCheckStatusDTO status = EntityFactory.create(CreditCheckStatusDTO.class);
         final Pmc pmc = VistaDeployment.getCurrentPmc();

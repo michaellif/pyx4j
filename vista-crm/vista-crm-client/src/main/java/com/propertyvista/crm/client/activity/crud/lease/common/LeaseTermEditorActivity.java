@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
@@ -91,7 +91,7 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
                         break;
                     }
                 }
-            }, entityID, RetrieveTraget.View);
+            }, entityID, RetrieveTarget.View);
         } else {
             super.goToViewer(entityID);
         }

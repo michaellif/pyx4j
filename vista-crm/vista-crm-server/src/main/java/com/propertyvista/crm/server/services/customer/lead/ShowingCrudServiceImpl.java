@@ -41,7 +41,7 @@ public class ShowingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Showing, 
     }
 
     @Override
-    protected void enhanceRetrieved(Showing entity, ShowingDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Showing entity, ShowingDTO dto, RetrieveTarget RetrieveTarget) {
         enhanceListRetrieved(entity, dto);
         retrieveUnitFilterCriteria(dto);
     }

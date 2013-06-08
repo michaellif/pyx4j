@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
@@ -104,7 +104,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
                     newUnit.building().set(result.duplicate(Building.class));
                     getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
                 }
-            }, parentBuildingPk, RetrieveTraget.View);
+            }, parentBuildingPk, RetrieveTarget.View);
         }
     }
 }

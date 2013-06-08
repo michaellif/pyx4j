@@ -64,7 +64,7 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
             public void onSuccess(MaintenanceRequestDTO result) {
                 view.populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.Edit);
+        }, entityId, AbstractCrudService.RetrieveTarget.Edit);
     }
 
     protected final void securityAwareStart(AcceptsOneWidget panel, EventBus eventBus) {

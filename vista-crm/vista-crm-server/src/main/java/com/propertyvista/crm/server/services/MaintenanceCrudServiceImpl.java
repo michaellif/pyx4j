@@ -49,7 +49,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget RetrieveTarget) {
         enhanceAll(dto);
     }
 
@@ -74,9 +74,9 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         ServerSideFactory.create(MaintenanceFacade.class).beforeItemRequest();
-        super.retrieve(callback, entityId, retrieveTraget);
+        super.retrieve(callback, entityId, RetrieveTarget);
     }
 
     @Override

@@ -33,7 +33,7 @@ import com.propertyvista.domain.financial.billing.InvoiceDebit;
 public class InvoiceDebitCrudServiceImpl implements InvoiceDebitCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<InvoiceDebitDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<InvoiceDebitDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         InvoiceDebit debitDbo = Persistence.secureRetrieve(InvoiceDebit.class, entityId);
 
         EntityQueryCriteria<DebitCreditLink> debitCreditLinksCriteria = EntityQueryCriteria.create(DebitCreditLink.class);

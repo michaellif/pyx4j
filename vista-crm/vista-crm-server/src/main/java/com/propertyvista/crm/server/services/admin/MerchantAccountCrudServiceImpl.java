@@ -52,7 +52,7 @@ public class MerchantAccountCrudServiceImpl extends AbstractCrudServiceImpl<Merc
     }
 
     @Override
-    protected void enhanceRetrieved(MerchantAccount entity, MerchantAccount dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(MerchantAccount entity, MerchantAccount dto, RetrieveTarget RetrieveTarget) {
         setCalulatedFileds(entity, dto);
     }
 

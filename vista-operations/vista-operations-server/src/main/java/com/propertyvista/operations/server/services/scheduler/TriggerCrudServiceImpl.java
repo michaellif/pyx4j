@@ -63,7 +63,7 @@ public class TriggerCrudServiceImpl extends AbstractCrudServiceDtoImpl<Trigger, 
     }
 
     @Override
-    protected void enhanceRetrieved(Trigger entity, TriggerDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Trigger entity, TriggerDTO dto, RetrieveTarget RetrieveTarget) {
         if (entity != null) {
             JobUtils.getScheduleDetails(dto);
         }

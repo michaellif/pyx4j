@@ -35,7 +35,7 @@ import com.propertyvista.portal.server.portal.TenantAppContext;
 public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<ResidentDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         CustomerUser currentUser = TenantAppContext.getCurrentUser();
         // find associated tenant entry
         EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);

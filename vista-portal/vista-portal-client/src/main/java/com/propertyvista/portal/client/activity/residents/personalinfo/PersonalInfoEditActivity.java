@@ -54,7 +54,7 @@ public class PersonalInfoEditActivity extends SecurityAwareActivity implements P
                 view.populate(result);
             }
 
-        }, null, AbstractCrudService.RetrieveTraget.Edit);
+        }, null, AbstractCrudService.RetrieveTarget.Edit);
     }
 
     @Override

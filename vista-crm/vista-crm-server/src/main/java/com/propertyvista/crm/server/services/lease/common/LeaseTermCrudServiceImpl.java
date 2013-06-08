@@ -103,8 +103,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTraget retrieveTraget) {
-        super.enhanceRetrieved(in, dto, retrieveTraget);
+    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTarget RetrieveTarget) {
+        super.enhanceRetrieved(in, dto, RetrieveTarget);
 
         Persistence.service().retrieve(dto.lease());
 
@@ -130,7 +130,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.ensureRetrieve(dto.lease().unit().building(), AttachLevel.ToStringMembers);
             dto.building().set(dto.lease().unit().building());
 
-            if (retrieveTraget == RetrieveTraget.Edit) {
+            if (RetrieveTarget == RetrieveTarget.Edit) {
                 // fill runtime editor data:
                 fillServiceEligibilityData(dto);
                 fillserviceItems(dto);

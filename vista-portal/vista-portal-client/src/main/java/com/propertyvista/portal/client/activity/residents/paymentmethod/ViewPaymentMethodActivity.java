@@ -58,7 +58,7 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
             public void onSuccess(LeasePaymentMethod result) {
                 view.populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.View);
+        }, entityId, AbstractCrudService.RetrieveTarget.View);
     }
 
     @Override

@@ -108,7 +108,7 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
     }
 
     @Override
-    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(SiteDescriptor in, SiteDescriptorDTO dto, RetrieveTarget RetrieveTarget) {
         // load transient data:
         EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
         criteria.asc(criteria.proto().displayOrder().getPath().toString());

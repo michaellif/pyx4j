@@ -83,7 +83,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
     }
 
     @Override
-    protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(OnboardingUserCredential entity, OnboardingUserDTO dto, RetrieveTarget RetrieveTarget) {
         if (!entity.pmc().isNull()) {
             dto.onboardingAccountId().setValue(entity.pmc().onboardingAccountId().getValue());
             if (entity.pmc().status().getValue() != PmcStatus.Created) {
@@ -110,7 +110,7 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
     }
 
     @Override
-    protected void retrievedSingle(OnboardingUserCredential entity, RetrieveTraget retrieveTraget) {
+    protected void retrievedSingle(OnboardingUserCredential entity, RetrieveTarget RetrieveTarget) {
         Persistence.service().retrieve(entity.user());
     }
 

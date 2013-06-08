@@ -32,7 +32,7 @@ public class FeatureCrudServiceImpl extends AbstractCrudServiceImpl<Feature> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Feature entity, Feature dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Feature entity, Feature dto, RetrieveTarget RetrieveTarget) {
         // Load detached data:
 
         /*

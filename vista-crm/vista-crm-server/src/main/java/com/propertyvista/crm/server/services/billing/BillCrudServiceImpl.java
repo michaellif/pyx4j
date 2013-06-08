@@ -44,7 +44,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity, BillDataDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Bill entity, BillDataDTO dto, RetrieveTarget RetrieveTarget) {
         // load detached entities:
         Persistence.service().retrieve(dto.bill().lineItems());
         Persistence.service().retrieve(dto.bill().billingAccount());
@@ -62,7 +62,7 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
     public void confirm(AsyncCallback<BillDataDTO> callback, Key entityId) {
         ServerSideFactory.create(BillingFacade.class).confirmBill(EntityFactory.createIdentityStub(Bill.class, entityId));
         Persistence.service().commit();
-        super.retrieve(callback, entityId, RetrieveTraget.View);
+        super.retrieve(callback, entityId, RetrieveTarget.View);
     }
 
     @Override
@@ -80,6 +80,6 @@ public class BillCrudServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDa
     public void reject(AsyncCallback<BillDataDTO> callback, Key entityId, String reason) {
         ServerSideFactory.create(BillingFacade.class).rejectBill(EntityFactory.createIdentityStub(Bill.class, entityId), reason);
         Persistence.service().commit();
-        super.retrieve(callback, entityId, RetrieveTraget.View);
+        super.retrieve(callback, entityId, RetrieveTarget.View);
     }
 }

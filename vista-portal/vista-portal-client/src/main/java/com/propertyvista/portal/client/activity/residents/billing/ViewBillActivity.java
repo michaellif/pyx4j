@@ -57,7 +57,7 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
             public void onSuccess(BillDTO result) {
                 view.populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.View);
+        }, entityId, AbstractCrudService.RetrieveTarget.View);
     }
 
     @Override

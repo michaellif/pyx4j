@@ -41,7 +41,7 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
     }
 
     @Override
-    public void retrieve(AsyncCallback<BillDTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<BillDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
         if (entityId == null) {
             // find current bill key instead:
             LeaseTermTenant tenant = TenantAppContext.getCurrentUserTenantInLease();
@@ -50,11 +50,11 @@ public class ViewBillServiceImpl extends AbstractCrudServiceDtoImpl<Bill, BillDT
 
             entityId = ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(tenant.leaseTermV().holder().lease()).getPrimaryKey();
         }
-        super.retrieve(callback, entityId, retrieveTraget);
+        super.retrieve(callback, entityId, RetrieveTarget);
     }
 
     @Override
-    protected void enhanceRetrieved(Bill entity, BillDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(Bill entity, BillDTO dto, RetrieveTarget RetrieveTarget) {
         // load detached entities:
         Persistence.service().retrieve(dto.lineItems());
         Persistence.service().retrieve(dto.billingAccount());

@@ -90,7 +90,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
 //                    newUnit.building().set(result.duplicate(Building.class));
 //                    getPresenter().editNew(getItemOpenPlaceClass(), newUnit);
 //                }
-//            }, parentBuildingPk, RetrieveTraget.View);
+//            }, parentBuildingPk, RetrieveTarget.View);
 //        }
     }
 }

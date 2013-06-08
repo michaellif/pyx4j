@@ -58,7 +58,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
             public void onSuccess(LeasePaymentMethod result) {
                 view.populate(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.Edit);
+        }, entityId, AbstractCrudService.RetrieveTarget.Edit);
     }
 
     protected final void securityAwareStart(AcceptsOneWidget panel, EventBus eventBus) {

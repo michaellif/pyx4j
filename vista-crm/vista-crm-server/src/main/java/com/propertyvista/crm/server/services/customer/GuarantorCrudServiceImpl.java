@@ -28,10 +28,10 @@ public class GuarantorCrudServiceImpl extends LeaseParticipantCrudServiceBaseImp
     }
 
     @Override
-    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
-        super.enhanceRetrieved(entity, dto, retrieveTraget);
+    protected void enhanceRetrieved(Guarantor entity, GuarantorDTO dto, RetrieveTarget RetrieveTarget) {
+        super.enhanceRetrieved(entity, dto, RetrieveTarget);
 
-        if (retrieveTraget == RetrieveTraget.Edit) {
+        if (RetrieveTarget == RetrieveTarget.Edit) {
             RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
                     RestrictionsPolicy.class);
             if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {

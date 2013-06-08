@@ -38,7 +38,7 @@ public class CrmRoleCrudServiceImpl extends AbstractCrudServiceImpl<CrmRole> imp
     }
 
     @Override
-    protected void enhanceRetrieved(CrmRole entity, CrmRole dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(CrmRole entity, CrmRole dto, RetrieveTarget RetrieveTarget) {
         dto.permissions().clear();
         dto.permissions().addAll(VistaCrmBehaviorDTOCoverter.toDTO(entity.behaviors()));
     }

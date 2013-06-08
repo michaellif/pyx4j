@@ -32,7 +32,7 @@ public class CustomerScreeningCrudServiceImpl extends AbstractVersionedCrudServi
     }
 
     @Override
-    protected void enhanceRetrieved(CustomerScreening entity, CustomerScreening dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(CustomerScreening entity, CustomerScreening dto, RetrieveTarget RetrieveTarget) {
         // load detached entities:        
         Persistence.service().retrieve(dto.documents());
         Persistence.service().retrieve(dto.version().incomes());

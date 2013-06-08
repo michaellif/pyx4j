@@ -81,7 +81,7 @@ public class PmcMerchantAccountCrudServiceImpl extends AbstractCrudServiceDtoImp
     }
 
     @Override
-    protected void enhanceRetrieved(PmcMerchantAccountIndex entity, PmcMerchantAccountDTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(PmcMerchantAccountIndex entity, PmcMerchantAccountDTO dto, RetrieveTarget RetrieveTarget) {
         retriveMerchantAccountFromPmc(entity, dto);
     }
 

@@ -41,7 +41,7 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class PmcPaymentMethodsCrudServiceImpl implements PmcPaymentMethodsCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<PmcPaymentMethodsDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<PmcPaymentMethodsDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
 
         final Pmc pmc = VistaDeployment.getCurrentPmc();
 

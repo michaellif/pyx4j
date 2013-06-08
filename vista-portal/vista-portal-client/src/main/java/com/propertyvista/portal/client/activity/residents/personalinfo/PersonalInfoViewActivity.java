@@ -53,7 +53,7 @@ public class PersonalInfoViewActivity extends SecurityAwareActivity implements P
             public void onSuccess(ResidentDTO result) {
                 view.populate(result);
             }
-        }, null, AbstractCrudService.RetrieveTraget.View);
+        }, null, AbstractCrudService.RetrieveTarget.View);
     }
 
     @Override
