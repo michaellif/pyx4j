@@ -38,10 +38,10 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     }
 
     @Override
-    protected E retrieve(Key entityId, RetrieveTraget retrieveTraget) {
+    protected E retrieve(Key entityId, RetrieveTarget retrieveTraget) {
         Key primaryKey;
         // Force draft for edit
-        if (retrieveTraget == RetrieveTraget.Edit) {
+        if (retrieveTraget == RetrieveTarget.Edit) {
             primaryKey = entityId.asDraftKey();
         } else {
             primaryKey = entityId;
@@ -56,7 +56,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
     }
 
     @Override
-    public void retrieve(final AsyncCallback<E> callback, final Key entityId, final RetrieveTraget retrieveTraget) {
+    public void retrieve(final AsyncCallback<E> callback, final Key entityId, final RetrieveTarget retrieveTraget) {
         super.retrieve(new AsyncCallback<E>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -66,7 +66,7 @@ public abstract class AbstractVersionedCrudServiceImpl<E extends IVersionedEntit
             @Override
             public void onSuccess(E result) {
                 // If draft do not exists, we return clone of the data from current version
-                if ((retrieveTraget == RetrieveTraget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
+                if ((retrieveTraget == RetrieveTarget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
                     result.version().set(EntityGraph.businessDuplicate(result.version()));
                     VersionedEntityUtils.setAsDraft(result.version());
                     result.setPrimaryKey(entityId.asDraftKey());

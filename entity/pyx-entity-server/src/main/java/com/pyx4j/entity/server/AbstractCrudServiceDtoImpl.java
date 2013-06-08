@@ -44,7 +44,7 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
      * 
      * retrieveTraget when called for save operations
      */
-    protected void retrievedSingle(E entity, RetrieveTraget retrieveTraget) {
+    protected void retrievedSingle(E entity, RetrieveTarget retrieveTraget) {
     }
 
     /**
@@ -54,10 +54,10 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
      * @param retrieveTraget
      *            TODO
      */
-    protected void enhanceRetrieved(E entity, DTO dto, RetrieveTraget retrieveTraget) {
+    protected void enhanceRetrieved(E entity, DTO dto, RetrieveTarget retrieveTraget) {
     }
 
-    protected E retrieve(Key entityId, RetrieveTraget retrieveTraget) {
+    protected E retrieve(Key entityId, RetrieveTarget retrieveTraget) {
         E entity = Persistence.secureRetrieve(entityClass, entityId);
         if (entity == null) {
             throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(entityClass).getCaption()));
@@ -78,7 +78,7 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     @Override
-    public void retrieve(AsyncCallback<DTO> callback, Key entityId, RetrieveTraget retrieveTraget) {
+    public void retrieve(AsyncCallback<DTO> callback, Key entityId, RetrieveTarget retrieveTraget) {
         E entity = retrieve(entityId, retrieveTraget);
         if (entity != null) {
             retrievedSingle(entity, retrieveTraget);

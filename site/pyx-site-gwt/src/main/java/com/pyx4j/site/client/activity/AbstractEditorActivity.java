@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTraget;
+import com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -169,7 +169,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityId, AbstractCrudService.RetrieveTraget.Edit);
+            }, entityId, AbstractCrudService.RetrieveTarget.Edit);
         }
     }
 
@@ -181,7 +181,7 @@ public abstract class AbstractEditorActivity<E extends IEntity> extends Abstract
                 public void onSuccess(E result) {
                     onPopulateSuccess(result);
                 }
-            }, entityId, RetrieveTraget.Edit);
+            }, entityId, RetrieveTarget.Edit);
         }
     }
 

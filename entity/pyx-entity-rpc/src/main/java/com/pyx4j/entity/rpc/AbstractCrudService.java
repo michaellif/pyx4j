@@ -28,7 +28,7 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 public interface AbstractCrudService<E extends IEntity> extends AbstractListService<E> {
 
-    public static enum RetrieveTraget {
+    public static enum RetrieveTarget {
 
         View,
 
@@ -36,7 +36,7 @@ public interface AbstractCrudService<E extends IEntity> extends AbstractListServ
 
     }
 
-    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTraget retrieveTraget);
+    public void retrieve(AsyncCallback<E> callback, Key entityId, RetrieveTarget retrieveTarget);
 
     public void create(AsyncCallback<Key> callback, E editableEntity);
 

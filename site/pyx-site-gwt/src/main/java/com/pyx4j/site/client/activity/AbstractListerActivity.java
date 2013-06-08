@@ -43,6 +43,8 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
 
     private List<Criterion> externalFilters;
 
+    private boolean populateOnStart = true;
+
     public AbstractListerActivity(Place place, ILister<E> view, AbstractListService<E> service, Class<E> entityClass) {
         super(view, service, entityClass);
 
@@ -76,7 +78,9 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
         getView().discard();
         getView().getLister().setExternalFilters(externalFilters);
         getView().setPresenter(this);
-        populate();
+        if (populateOnStart) {
+            populate();
+        }
         containerWidget.setWidget(getView());
     }
 
@@ -93,5 +97,13 @@ public abstract class AbstractListerActivity<E extends IEntity> extends ListerCo
 
     @Override
     public void onCancel() {
+    }
+
+    public void setPopulateOnStart(boolean populateOnStart) {
+        this.populateOnStart = populateOnStart;
+    }
+
+    public boolean isPopulateOnStart() {
+        return populateOnStart;
     }
 }

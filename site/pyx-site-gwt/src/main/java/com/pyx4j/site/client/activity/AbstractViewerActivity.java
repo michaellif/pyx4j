@@ -116,7 +116,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
             public void onSuccess(E result) {
                 onPopulateSuccess(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.View);
+        }, entityId, AbstractCrudService.RetrieveTarget.View);
     }
 
     @Override
@@ -126,7 +126,7 @@ public abstract class AbstractViewerActivity<E extends IEntity> extends Abstract
             public void onSuccess(E result) {
                 onPopulateSuccess(result);
             }
-        }, entityId, AbstractCrudService.RetrieveTraget.View);
+        }, entityId, AbstractCrudService.RetrieveTarget.View);
     }
 
     protected void onPopulateSuccess(E result) {
