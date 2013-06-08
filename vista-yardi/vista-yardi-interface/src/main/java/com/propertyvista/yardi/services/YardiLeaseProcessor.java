@@ -63,6 +63,7 @@ public class YardiLeaseProcessor {
     public Lease findLease(String customerId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().leaseId(), customerId);
+        // currently propertyCode parameter isn't used?..
         return Persistence.service().retrieve(criteria);
     }
 
@@ -126,8 +127,8 @@ public class YardiLeaseProcessor {
         leaseFacade.activate(lease);
         Persistence.service().retrieve(lease);
 
-        // when lease imported first time but as past one:
-        if (isPastLease(rtCustomer)) {
+        // when lease imported first time but already a past one:
+        if (isFormerLease(rtCustomer)) {
             lease = completeLease(lease, CompletionType.Termination, yardiLease);
         }
 
@@ -177,7 +178,7 @@ public class YardiLeaseProcessor {
         }
 
         if (lease.status().getValue().isActive()) {
-            if (isPastLease(rtCustomer)) { // active -> past transition:
+            if (isFormerLease(rtCustomer)) { // active -> past transition:
                 lease = completeLease(lease, CompletionType.Termination, yardiLease);
             }
         } else { // past -> active transition (cancel Move Out in Yardi!):
@@ -224,12 +225,13 @@ public class YardiLeaseProcessor {
     //
     // Some public utils:
     //
-    public static boolean isSkipped(RTCustomer rtCustomer) {
+    public static boolean isEligibleForProcessing(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
         // @formatter:off
         // list eligible for processing types here:
-        return !info.equals(Customerinfo.CURRENT_RESIDENT) &&
-               !info.equals(Customerinfo.FORMER_RESIDENT);
+        return info.equals(Customerinfo.CURRENT_RESIDENT) ||
+               info.equals(Customerinfo.FORMER_RESIDENT)  ||
+               info.equals(Customerinfo.FUTURE_RESIDENT);
         // @formatter:on
     }
 
@@ -238,7 +240,7 @@ public class YardiLeaseProcessor {
         return info.equals(Customerinfo.CURRENT_RESIDENT);
     }
 
-    public static boolean isPastLease(RTCustomer rtCustomer) {
+    public static boolean isFormerLease(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
         return info.equals(Customerinfo.FORMER_RESIDENT);
     }

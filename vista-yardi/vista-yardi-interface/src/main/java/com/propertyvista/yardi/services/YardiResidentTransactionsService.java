@@ -297,44 +297,44 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         final LeaseFinancialStats state = new LeaseFinancialStats();
 
         log.info("      Importing lease");
-        if (YardiLeaseProcessor.isSkipped(rtCustomer)) {
+        if (YardiLeaseProcessor.isEligibleForProcessing(rtCustomer)) {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
+                @Override
+                public Void execute() throws YardiServiceException {
+                    // update lease
+                    new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
+
+                    // update charges and payments
+                    final BillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
+                    new YardiChargeProcessor().removeOldCharges(account);
+                    new YardiPaymentProcessor().removeOldPayments(account);
+
+                    for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
+                        if (tr != null) {
+                            if (tr.getCharge() != null) {
+                                log.info("          Updating charge");
+                                InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
+                                Persistence.service().persist(charge);
+                                state.addCharge(charge.amount().getValue());
+                            }
+
+                            if (tr.getPayment() != null) {
+                                log.info("          Updating payment");
+                                YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
+                                Persistence.service().persist(payment);
+                                state.addPayment(payment.amount().getValue());
+                            }
+                        }
+                    }
+
+                    return null;
+                }
+            });
+        } else {
             log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
             // TODO skipping monitor message
             return state;
         }
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
-            @Override
-            public Void execute() throws YardiServiceException {
-                // update lease
-                new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
-
-                // update charges and payments
-                final BillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);
-                new YardiChargeProcessor().removeOldCharges(account);
-                new YardiPaymentProcessor().removeOldPayments(account);
-
-                for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
-                    if (tr != null) {
-                        if (tr.getCharge() != null) {
-                            log.info("          Updating charge");
-                            InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
-                            Persistence.service().persist(charge);
-                            state.addCharge(charge.amount().getValue());
-                        }
-
-                        if (tr.getPayment() != null) {
-                            log.info("          Updating payment");
-                            YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
-                            Persistence.service().persist(payment);
-                            state.addPayment(payment.amount().getValue());
-                        }
-                    }
-                }
-
-                return null;
-            }
-        });
 
         return state;
     }
