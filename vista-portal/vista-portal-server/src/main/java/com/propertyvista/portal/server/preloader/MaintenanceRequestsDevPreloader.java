@@ -58,7 +58,10 @@ public class MaintenanceRequestsDevPreloader extends BaseVistaDevDataPreloader {
     }
 
     private void makeMaintenanceRequest(List<MaintenanceRequestCategory> issueClassifications, Lease lease, Date when) {
-        Persistence.service().retrieveMember(lease.leaseParticipants());
+        if (issueClassifications.isEmpty()) {
+        	return;
+        }
+    	Persistence.service().retrieveMember(lease.leaseParticipants());
         MaintenanceRequest maintenanceRequest = ServerSideFactory.create(MaintenanceFacade.class).createNewRequest(lease.unit().building());
         maintenanceRequest.reporter().set(lease.leaseParticipants().iterator().next().<Tenant> cast());
         maintenanceRequest.unit().set(lease.unit());
