@@ -362,7 +362,12 @@ public class LeaseLifecycleSimulator {
             Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
             LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
-
+            if (billingRunDay.before(lease.currentTerm().termFrom().getValue())) {        		
+        		Calendar cal = GregorianCalendar.getInstance();
+        		cal.setTime(billingRunDay);
+        		cal.add(Calendar.MONTH, 1);
+        		billingRunDay = new LogicalDate(cal.getTime());        		
+        	}
             queueEvent(billingRunDay, new RunBillingRecurrent(lease));
 
 //            new RunBillingRecurrent(lease).exec();
@@ -478,8 +483,12 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
+        	if (now().before(lease.currentTerm().termFrom().getValue())) {
+        		return;
+        	}
             numOfBills--;
             if (numOfBills != 0) {
+            	
                 if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
@@ -490,7 +499,6 @@ public class LeaseLifecycleSimulator {
 
                     LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate()
                             .getValue();
-
                     if (now().equals(billingRunDay) & (now().compareTo(lease.leaseTo().getValue()) < 0)
                             & (now().compareTo(lease.expectedMoveOut().getValue()) < 0)) {
                         BillingFacade billing = ServerSideFactory.create(BillingFacade.class);
