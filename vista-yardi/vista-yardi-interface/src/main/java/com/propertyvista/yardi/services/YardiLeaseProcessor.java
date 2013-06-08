@@ -115,6 +115,10 @@ public class YardiLeaseProcessor {
             lease.actualMoveIn().setValue(getLogicalDate(yardiLease.getActualMoveIn()));
         }
 
+        if (yardiLease.getExpectedMoveOutDate() != null) {
+            lease.expectedMoveOut().setValue(getLogicalDate(yardiLease.getExpectedMoveOutDate()));
+        }
+
         // misc.
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
 

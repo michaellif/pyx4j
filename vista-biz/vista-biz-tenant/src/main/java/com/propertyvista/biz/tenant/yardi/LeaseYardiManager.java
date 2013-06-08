@@ -87,9 +87,22 @@ public class LeaseYardiManager extends LeaseAbstractManager {
 
         lease.actualMoveOut().setValue(null);
         lease.status().setValue(Status.Active);
-
         Persistence.secureSave(lease);
 
+        LogicalDate expectedMoveOut = lease.expectedMoveOut().getValue();
+
         super.cancelCompletionEvent(leaseId, decidedBy, decisionReason);
+
+        lease.expectedMoveOut().setValue(expectedMoveOut);
+        Persistence.secureSave(lease);
+    }
+
+    @Override
+    public void updateLeaseDates(Lease lease) {
+        LogicalDate expectedMoveOut = lease.expectedMoveOut().getValue();
+
+        super.updateLeaseDates(lease);
+
+        lease.expectedMoveOut().setValue(expectedMoveOut);
     }
 }

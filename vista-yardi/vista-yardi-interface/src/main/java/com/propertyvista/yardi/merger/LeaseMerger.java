@@ -45,15 +45,19 @@ public class LeaseMerger {
     public boolean isLeaseDatesChanged(YardiLease imported, Lease existing) {
         isNew = false;
 
-        compare(existing.actualMoveIn(), imported.getActualMoveIn());
         compare(existing.expectedMoveIn(), imported.getExpectedMoveInDate());
+        compare(existing.actualMoveIn(), imported.getActualMoveIn());
+
+        compare(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
 
         return isNew;
     }
 
     public Lease mergeLeaseDates(YardiLease imported, Lease existing) {
-        existing.actualMoveIn().setValue(getImportedDate(imported.getActualMoveIn()));
         existing.expectedMoveIn().setValue(getImportedDate(imported.getExpectedMoveInDate()));
+        existing.actualMoveIn().setValue(getImportedDate(imported.getActualMoveIn()));
+
+        existing.expectedMoveOut().setValue(getImportedDate(imported.getExpectedMoveOutDate()));
 
         return existing;
     }
