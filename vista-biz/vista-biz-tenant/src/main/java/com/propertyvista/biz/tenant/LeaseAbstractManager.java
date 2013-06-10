@@ -214,7 +214,7 @@ public abstract class LeaseAbstractManager {
             break;
         }
 
-        Persistence.secureSave(leaseTerm);
+        Persistence.service().merge(leaseTerm);
 
         return leaseTerm;
     }
@@ -262,7 +262,7 @@ public abstract class LeaseAbstractManager {
 
         lease.leaseApplication().status().setValue(LeaseApplication.Status.OnlineApplication);
         lease.status().setValue(Lease.Status.Application);
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
     }
 
     void recordApplicationData(LeaseTerm leaseTerm) {
@@ -315,7 +315,7 @@ public abstract class LeaseAbstractManager {
 
         recordApplicationData(lease.currentTerm());
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
 
@@ -338,7 +338,7 @@ public abstract class LeaseAbstractManager {
         lease.leaseApplication().decisionReason().setValue(decisionReason);
         lease.leaseApplication().decisionDate().setValue(new LogicalDate(SystemDateManager.getDate()));
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
         ServerSideFactory.create(OccupancyFacade.class).unreserve(lease.unit().getPrimaryKey());
     }
@@ -428,7 +428,7 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Status.Active);
         lease.activationDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
         ensureLeaseUniqness(lease);
 
@@ -480,7 +480,7 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Status.Completed);
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
     }
 
     public void close(Lease leaseId) {
@@ -488,7 +488,7 @@ public abstract class LeaseAbstractManager {
 
         lease.status().setValue(Status.Closed);
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
     }
 
     public LeaseTerm createOffer(Lease leaseId, Type type) {
@@ -530,7 +530,7 @@ public abstract class LeaseAbstractManager {
             persist(lease.nextTerm());
 
             // save lease:
-            Persistence.secureSave(lease);
+            Persistence.service().merge(lease);
         } else {
             throw new IllegalArgumentException(i18n.tr("Invalid LeaseTerm supplied"));
         }
@@ -562,7 +562,7 @@ public abstract class LeaseAbstractManager {
 
         updateLeaseDates(lease);
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
         try {
             ServerSideFactory.create(OccupancyFacade.class).moveOut(lease.unit().getPrimaryKey(), lease.expectedMoveOut().getValue(), lease);
@@ -599,9 +599,10 @@ public abstract class LeaseAbstractManager {
 
         updateLeaseDates(lease);
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
-        Persistence.secureSave(creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, (decidedBy != null ? decidedBy.user() : null)));
+        Persistence.service().merge(
+                creteLeaseNote(leaseId, "Cancel " + completionType.toString(), decisionReason, (decidedBy != null ? decidedBy.user() : null)));
 
         try {
             ServerSideFactory.create(OccupancyFacade.class).cancelMoveOut(lease.unit().getPrimaryKey());
@@ -626,7 +627,7 @@ public abstract class LeaseAbstractManager {
 
         updateLeaseDates(lease);
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
         AptUnitOccupancySegment segment = ServerSideFactory.create(OccupancyFacade.class).getOccupancySegment(lease.unit(), lease.actualMoveOut().getValue());
         // if unit is not reserved/leased for new application/lease yet - correct the move out date:
@@ -645,7 +646,7 @@ public abstract class LeaseAbstractManager {
         Status status = lease.status().getValue();
         lease.status().setValue(Status.Cancelled);
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
 
         switch (status) {
         case ExistingLease:
@@ -661,7 +662,7 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
 
-        Persistence.secureSave(creteLeaseNote(leaseId, "Cancel Lease", decisionReason, decidedBy.user()));
+        Persistence.service().merge(creteLeaseNote(leaseId, "Cancel Lease", decisionReason, decidedBy.user()));
     }
 
     // Utils : --------------------------------------------------------------------------------------------------------
@@ -845,7 +846,7 @@ public abstract class LeaseAbstractManager {
             LeaseTerm term = lease.currentTerm().detach();
 
             lease.currentTerm().set(null);
-            Persistence.secureSave(lease);
+            Persistence.service().merge(lease);
             lease.currentTerm().set(term);
 
             lease.currentTerm().lease().set(lease);
@@ -866,7 +867,7 @@ public abstract class LeaseAbstractManager {
             lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.Any);
         }
 
-        Persistence.secureSave(lease);
+        Persistence.service().merge(lease);
         Persistence.service().merge(lease.billingAccount());
 
         // update reservation if necessary:
