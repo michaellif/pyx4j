@@ -132,7 +132,6 @@ public class CrmTheme extends VistaTheme {
         initLegalTermsContentViewerStyles();
 
         initReportsStyles();
-        initReportRelatedStyles();
         initGadgetStyles();
     }
 
@@ -453,6 +452,19 @@ public class CrmTheme extends VistaTheme {
         Style style = new Style("." + AbstractReport.Styles.SettingsFormPanel.name());
         style.addProperty("background-color", ThemeColor.object1, 0.3);
         addStyle(style);
+
+        style = new Style("." + AbstractReport.Styles.ReportView.name(), " .FooterToolbar");
+        style.addProperty("height", "2em");
+        addStyle(style);
+
+        style = new Style("." + AbstractReport.Styles.ReportProgressControlPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
+        style.addProperty("display", "none");
+        addStyle(style);
     }
 
     private void initKeywordBoxStyles() {
@@ -617,12 +629,6 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("height", "20em");
         style.addProperty("padding-left", "1em");
         style.addProperty("padding-right", "1em");
-        addStyle(style);
-    }
-
-    private void initReportRelatedStyles() {
-        Style style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
-        style.addProperty("display", "none");
         addStyle(style);
     }
 

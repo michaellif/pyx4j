@@ -21,7 +21,9 @@ import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
@@ -42,7 +44,10 @@ public class EftReportGenerator implements ReportExporter {
 
     private final ReportProgressStatusHolder reportProgressStatusHolder;
 
+    private volatile boolean aborted;
+
     public EftReportGenerator() {
+        aborted = false;
         reportProgressStatusHolder = new ReportProgressStatusHolder();
     }
 
@@ -74,16 +79,37 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             for (PaymentRecord paymentRecord : paymentRecords) {
-                enahancePaymentRecord(paymentRecord);
+                enhancePaymentRecord(paymentRecord);
             }
 
             return paymentRecords;
         } else {
-
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
-            Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(Persistence.service().query(criteria));
-            for (PaymentRecord paymentRecord : paymentRecords) {
-                enahancePaymentRecord(paymentRecord);
+            int count = Persistence.service().count(criteria);
+            int progress = 0;
+
+            ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(count);
+
+            while (paymentRecordsIter.hasNext() & !aborted) {
+                if (progress % 10 == 0) {
+                    reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
+                }
+                PaymentRecord paymentRecord = paymentRecordsIter.next();
+                enhancePaymentRecord(paymentRecord);
+                paymentRecords.add(paymentRecord);
+            }
+
+            if (true) {
+                int dummyMax = 1000;
+                for (int i = 0; i < dummyMax; ++i) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                    }
+                    reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, i, dummyMax));
+
+                }
             }
             return paymentRecords;
         }
@@ -93,27 +119,6 @@ public class EftReportGenerator implements ReportExporter {
     @Override
     public synchronized ReportProgressStatus getProgressStatus() {
         return reportProgressStatusHolder.get();
-    }
-
-    private void enahancePaymentRecord(PaymentRecord paymentRecord) {
-        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
-
-        Lease lease = Persistence.service().retrieve(Lease.class, paymentRecord.preauthorizedPayment().tenant().lease().getPrimaryKey());
-        Persistence.service().retrieve(lease.unit());
-        Persistence.service().retrieve(lease.unit().building());
-
-        paymentRecord.preauthorizedPayment().tenant().lease().set(null); // set to null to disable the 'detached' state
-        paymentRecord.preauthorizedPayment().tenant().lease().setPrimaryKey(lease.getPrimaryKey());
-        paymentRecord.preauthorizedPayment().tenant().lease().leaseId().setValue(lease.leaseId().getValue());
-        paymentRecord.preauthorizedPayment().tenant().lease().setValuePopulated();
-
-        paymentRecord.preauthorizedPayment().tenant().lease().unit().set(null);
-        paymentRecord.preauthorizedPayment().tenant().lease().unit().setPrimaryKey(lease.unit().getPrimaryKey());
-        paymentRecord.preauthorizedPayment().tenant().lease().unit().info().number().setValue(lease.unit().info().number().getValue());
-
-        paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
-        paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
-        paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
     }
 
     @Override
@@ -154,6 +159,27 @@ public class EftReportGenerator implements ReportExporter {
         }
 
         return criteria;
+    }
+
+    private void enhancePaymentRecord(PaymentRecord paymentRecord) {
+        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
+
+        Lease lease = Persistence.service().retrieve(Lease.class, paymentRecord.preauthorizedPayment().tenant().lease().getPrimaryKey());
+        Persistence.service().retrieve(lease.unit());
+        Persistence.service().retrieve(lease.unit().building());
+
+        paymentRecord.preauthorizedPayment().tenant().lease().set(null); // set to null to disable the 'detached' state
+        paymentRecord.preauthorizedPayment().tenant().lease().setPrimaryKey(lease.getPrimaryKey());
+        paymentRecord.preauthorizedPayment().tenant().lease().leaseId().setValue(lease.leaseId().getValue());
+        paymentRecord.preauthorizedPayment().tenant().lease().setValuePopulated();
+
+        paymentRecord.preauthorizedPayment().tenant().lease().unit().set(null);
+        paymentRecord.preauthorizedPayment().tenant().lease().unit().setPrimaryKey(lease.unit().getPrimaryKey());
+        paymentRecord.preauthorizedPayment().tenant().lease().unit().info().number().setValue(lease.unit().info().number().getValue());
+
+        paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
+        paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
+        paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
     }
 
 }
