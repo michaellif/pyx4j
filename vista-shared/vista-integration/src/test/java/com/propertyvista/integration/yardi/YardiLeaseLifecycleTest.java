@@ -88,7 +88,48 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     }
 
-    public void testFormerResidentInitialImport() throws Exception {
+    public void testInitialImport_CurrentResident() throws Exception {
+        setSysDate("2010-11-01");
+
+        // Import all 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        // Verify Lease is imported
+        Lease lease;
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease imported", lease);
+        assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
+    }
+
+    public void testInitialImport_FutureResident() throws Exception {
+        setSysDate("2010-11-01");
+
+        // Make default tenant in yardi as FUTURE
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.FUTURE_RESIDENT);
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        // Initial Import 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        // Verify Lease is imported
+        Lease lease;
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease imported", lease);
+        assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
+    }
+
+    public void testInitialImport_FormerResident() throws Exception {
         setSysDate("2010-11-01");
 
         // Make default tenant in yardi as FORMER
@@ -98,38 +139,34 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
-        // Import all 
+        // Initial Import 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
-        // Verify Lease is imported
         Lease lease;
+        // Verify Lease is imported
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
             lease = Persistence.service().retrieve(criteria);
         }
-
         assertNotNull("Lease imported", lease);
-
         assertEquals("Lease Status", Lease.Status.Completed, lease.status().getValue());
-
     }
 
-    public void testTenantBecomesFormerResident() throws Exception {
+    public void testTransition_Current2Former() throws Exception {
         setSysDate("2010-11-01");
-        // Import all 
+
+        // Initial Import 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
-        // Verify Lease is imported
         Lease lease;
+        // Verify Lease is imported
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
             lease = Persistence.service().retrieve(criteria);
         }
-
         assertNotNull("Lease imported", lease);
-
         assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
 
         // Make tenant in Yardi as FORMER
@@ -144,13 +181,103 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
         // Update all 
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
+        // Verify Lease is updated
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
             lease = Persistence.service().retrieve(criteria);
         }
-        assertNotNull("Lease still exists", lease);
+        assertNotNull("Lease updated", lease);
+        assertEquals("Lease Status", Lease.Status.Completed, lease.status().getValue());
+    }
 
+    public void testTransition_Former2Current() throws Exception {
+        setSysDate("2010-11-01");
+
+        // Make default tenant in yardi as FORMER
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.FORMER_RESIDENT);
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        // Initial Import 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        Lease lease;
+        // Verify Lease is imported
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease imported", lease);
+        assertEquals("Lease Status", Lease.Status.Completed, lease.status().getValue());
+
+        // Make tenant in Yardi as CURRENT (cancel Yardi Move Out)
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.CURRENT_RESIDENT);
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        setSysDate("2010-12-01");
+
+        // Update all 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        // Verify Lease is updated
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease updated", lease);
+        assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
+    }
+
+    public void testTransition_Future2Former() throws Exception {
+        setSysDate("2010-11-01");
+
+        // Make default tenant in yardi as FUTURE
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.FUTURE_RESIDENT);
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        // Initial Import 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        Lease lease;
+        // Verify Lease is imported
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease imported", lease);
+        assertEquals("Lease Status", Lease.Status.Active, lease.status().getValue());
+
+        // Make tenant in Yardi as FORMER
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.FORMER_RESIDENT);
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        setSysDate("2010-12-01");
+
+        // Update all 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+
+        // Verify Lease is updated
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease updated", lease);
         assertEquals("Lease Status", Lease.Status.Completed, lease.status().getValue());
     }
 }
