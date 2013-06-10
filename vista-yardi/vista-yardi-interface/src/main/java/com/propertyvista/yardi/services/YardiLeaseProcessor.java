@@ -186,7 +186,7 @@ public class YardiLeaseProcessor {
                 lease = completeLease(lease, CompletionType.Termination, yardiLease);
             }
         } else { // past -> active transition (cancel Move Out in Yardi!):
-            if (isCurrentLease(rtCustomer)) {
+            if (isCurrentLease(rtCustomer) || isFutureLease(rtCustomer)) {
                 lease = cancelLeaseCompletion(lease, yardiLease);
             }
         }
