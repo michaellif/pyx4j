@@ -36,6 +36,8 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
+import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.AbstractPane;
@@ -51,7 +53,7 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     public enum Styles {
 
-        SettingsFormPanel, ReportPanel;
+        ReportView, SettingsFormPanel, ReportPanel, ReportProgressControlPanel;
     }
 
     private static class ReportPrintPalette extends Palette {
@@ -123,6 +125,12 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     private Button exportButton;
 
+    private final FlowPanel reportProgressControlPanel;
+
+    private Button abortReportGenerationButton;
+
+    private final SimplePanel reportProgressHolderPanel;
+
     public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
@@ -130,6 +138,7 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         this.presenter = null;
 
         viewPanel = new FlowPanel();
+        viewPanel.setStyleName(Styles.ReportView.name());
         viewPanel.setWidth("100%");
         viewPanel.setHeight("100%");
 
@@ -157,6 +166,15 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
         };
         viewPanel.add(reportSettingsFormControlBar);
+
+        reportProgressControlPanel = new FlowPanel();
+        reportProgressControlPanel.setStyleName(AbstractReport.Styles.ReportProgressControlPanel.name());
+        reportProgressHolderPanel = new SimplePanel();
+        reportProgressControlPanel.add(reportProgressHolderPanel);
+        reportProgressControlPanel.add(abortReportGenerationButton = new Button(i18n.tr("Abort")));
+        reportProgressControlPanel.setVisible(false);
+
+        viewPanel.add(reportProgressControlPanel);
 
         reportPanel = new ScrollPanel();
         reportPanel.setSize("100%", "100%");
@@ -228,14 +246,34 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
             exportButton.setVisible(reportSettings instanceof ExportableReport);
         }
+
         resetCaption();
     }
 
     @Override
     public void setReportData(Object data) {
+        settingsForm.setEnabled(true);
+        reportSettingsFormControlBar.setEnabled(true);
+        reportPanel.setVisible(true);
+
+        reportProgressHolderPanel.setWidget(null);
+        reportProgressControlPanel.setVisible(false);
+
         if (report != null) {
             report.setData(data);
         }
+    }
+
+    @Override
+    public void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener) {
+        settingsForm.setEnabled(false);
+        reportSettingsFormControlBar.setEnabled(false);
+        reportPanel.setVisible(false);
+
+        DeferredProgressPanel progressPanel = new DeferredProgressPanel("600px", "30px", false, deferredProgressListener);
+        progressPanel.startProgress(deferredProgressCorelationId);
+        reportProgressHolderPanel.setWidget(progressPanel);
+        reportProgressControlPanel.setVisible(true);
     }
 
     @Override
@@ -287,6 +325,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         }
         settingsFormPanel.setWidget(settingsForm);
         settingsForm.populate(reportSettings);
+        settingsForm.setEnabled(true);
+        reportSettingsFormControlBar.setEnabled(true);
     }
 
     private void onSaveSettingsAsClicked() {

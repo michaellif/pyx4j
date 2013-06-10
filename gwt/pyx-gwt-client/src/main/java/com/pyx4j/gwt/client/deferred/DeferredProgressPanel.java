@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -65,6 +66,7 @@ public class DeferredProgressPanel extends FlowPanel {
     private Label messageBar;
 
     public DeferredProgressPanel(String width, String height, boolean executeByUserRequests, DeferredProgressListener listener) {
+        this.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         service = GWT.create(DeferredProcessService.class);
         this.executeByUserRequests = executeByUserRequests;
         this.listener = listener;
@@ -72,6 +74,8 @@ public class DeferredProgressPanel extends FlowPanel {
         this.add(progressBar = new ProgressBar());
         progressBar.setWidth(width);
         progressBar.setHeight(height);
+        progressBar.getElement().getStyle().setProperty("marginLeft", "auto");
+        progressBar.getElement().getStyle().setProperty("marginRight", "auto");
     }
 
     public void startProgress(final String deferredCorrelationId) {
