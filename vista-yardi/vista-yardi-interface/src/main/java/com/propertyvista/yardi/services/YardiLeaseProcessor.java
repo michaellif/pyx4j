@@ -322,7 +322,7 @@ public class YardiLeaseProcessor {
     }
 
     private Lease completeLease(Lease lease, CompletionType completionType, YardiLease yardiLease) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, completionType, getLogicalDate(SystemDateManager.getDate()),
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, completionType, new LogicalDate(SystemDateManager.getDate()),
                 getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
         ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
 

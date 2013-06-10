@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -26,6 +27,7 @@ import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
 
 public class LeaseYardiManager extends LeaseAbstractManager {
@@ -70,28 +72,18 @@ public class LeaseYardiManager extends LeaseAbstractManager {
     }
 
     @Override
-    public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
-        super.moveOut(leaseId, actualMoveOut);
-        // complete former leases:
-        complete(leaseId);
-    }
-
-    @Override
-    public void complete(Lease leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
-
-        // Verify the status
-        if (lease.status().getValue() != Lease.Status.Active) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+    public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate) {
+        if (eventDate == null) {
+            eventDate = new LogicalDate(SystemDateManager.getDate());
         }
-        // if renewed and not moving out:
-        if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
-            throw new IllegalStateException("Lease has next term ready");
+        if (expectedMoveOut == null) {
+            expectedMoveOut = new LogicalDate(SystemDateManager.getDate());
+        }
+        if (leaseEndDate == null) {
+            leaseEndDate = new LogicalDate(SystemDateManager.getDate());
         }
 
-        lease.status().setValue(Status.Completed);
-
-        Persistence.service().merge(lease);
+        super.createCompletionEvent(leaseId, completionType, eventDate, expectedMoveOut, leaseEndDate);
     }
 
     @Override
@@ -113,6 +105,35 @@ public class LeaseYardiManager extends LeaseAbstractManager {
         Persistence.service().retrieve(lease);
 
         lease.expectedMoveOut().setValue(expectedMoveOut);
+        Persistence.service().merge(lease);
+    }
+
+    @Override
+    public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
+        if (actualMoveOut == null) {
+            actualMoveOut = new LogicalDate(SystemDateManager.getDate());
+        }
+
+        super.moveOut(leaseId, actualMoveOut);
+        // complete former leases:
+        complete(leaseId);
+    }
+
+    @Override
+    public void complete(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+        // if renewed and not moving out:
+        if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
+            throw new IllegalStateException("Lease has next term ready");
+        }
+
+        lease.status().setValue(Status.Completed);
+
         Persistence.service().merge(lease);
     }
 
