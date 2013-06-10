@@ -23,6 +23,8 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
@@ -72,4 +74,8 @@ public interface Employee extends Person {
 
     @Detached
     Employee manager();
+
+    @Owned
+    @OrderBy(PrimaryKey.class)
+    IList<Notification> notification();
 }
