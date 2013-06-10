@@ -33,7 +33,7 @@ public class OccupancyFacadeAvailableForRentOnlyImpl implements OccupancyFacade 
     public AptUnitOccupancySegment getOccupancySegment(AptUnit unitStub, LogicalDate date) {
         AptUnit unit = retrieveUnit(unitStub);
         AptUnitOccupancySegment s = EntityFactory.create(AptUnitOccupancySegment.class);
-        if (!unit._availableForRent().isNull() & date.compareTo(unit._availableForRent().getValue()) > 0) {
+        if (!unit._availableForRent().isNull() && date.compareTo(unit._availableForRent().getValue()) > 0) {
             s.status().setValue(Status.available);
             s.dateFrom().setValue(unit._availableForRent().getValue());
             s.dateTo().setValue(OccupancyFacade.MAX_DATE);

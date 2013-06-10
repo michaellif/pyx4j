@@ -309,20 +309,22 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     new YardiChargeProcessor().removeOldCharges(account);
                     new YardiPaymentProcessor().removeOldPayments(account);
 
-                    for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
-                        if (tr != null) {
-                            if (tr.getCharge() != null) {
-                                log.info("          Updating charge");
-                                InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
-                                Persistence.service().persist(charge);
-                                state.addCharge(charge.amount().getValue());
-                            }
+                    if (rtCustomer.getRTServiceTransactions() != null) {
+                        for (final Transactions tr : rtCustomer.getRTServiceTransactions().getTransactions()) {
+                            if (tr != null) {
+                                if (tr.getCharge() != null) {
+                                    log.info("          Updating charge");
+                                    InvoiceLineItem charge = YardiARIntegrationAgent.createCharge(account, tr.getCharge().getDetail());
+                                    Persistence.service().persist(charge);
+                                    state.addCharge(charge.amount().getValue());
+                                }
 
-                            if (tr.getPayment() != null) {
-                                log.info("          Updating payment");
-                                YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
-                                Persistence.service().persist(payment);
-                                state.addPayment(payment.amount().getValue());
+                                if (tr.getPayment() != null) {
+                                    log.info("          Updating payment");
+                                    YardiPayment payment = YardiARIntegrationAgent.createPayment(account, tr.getPayment());
+                                    Persistence.service().persist(payment);
+                                    state.addPayment(payment.amount().getValue());
+                                }
                             }
                         }
                     }

@@ -77,6 +77,24 @@ public class LeaseYardiManager extends LeaseAbstractManager {
     }
 
     @Override
+    public void complete(Lease leaseId) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+
+        // Verify the status
+        if (lease.status().getValue() != Lease.Status.Active) {
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        }
+        // if renewed and not moving out:
+        if (!lease.nextTerm().isNull() && lease.completion().isNull()) {
+            throw new IllegalStateException("Lease has next term ready");
+        }
+
+        lease.status().setValue(Status.Completed);
+
+        Persistence.secureSave(lease);
+    }
+
+    @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 

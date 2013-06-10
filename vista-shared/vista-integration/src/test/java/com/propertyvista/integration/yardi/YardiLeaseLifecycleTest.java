@@ -15,8 +15,6 @@ package com.propertyvista.integration.yardi;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.yardi.entity.mits.Customerinfo;
 
 import com.pyx4j.entity.server.Persistence;
@@ -36,7 +34,6 @@ import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
-@Ignore
 public class YardiLeaseLifecycleTest extends YardiTestBase {
 
     @Override
@@ -143,6 +140,9 @@ public class YardiLeaseLifecycleTest extends YardiTestBase {
         }
 
         setSysDate("2010-12-01");
+
+        // Update all 
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
 
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
