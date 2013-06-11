@@ -16,6 +16,7 @@ package com.propertyvista.portal.server.preloader;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ARPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ApplicationDocumentationPolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayChangePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.BackgroundCheckPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DatesPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.DepositPolicyPreloader;
@@ -46,6 +47,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new DatesPolicyPreloader());
         add(new TenantInsurancePolicyPreloader());
         add(new PaymentMethodSelectionPolicyPreloader());
+        add(new AutoPayChangePolicyPreloader());
 
         if (!VistaTODO.Equifax_Short_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
