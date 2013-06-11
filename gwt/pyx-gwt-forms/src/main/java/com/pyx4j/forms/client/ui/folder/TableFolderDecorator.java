@@ -112,8 +112,6 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
             String descr = column.getObject().getMeta().getDescription();
             if ((descr != null) && !descr.trim().equals("")) {
                 Image info = new Image(ImageFactory.getImages().formTooltipInfo());
-
-                info.getElement().getStyle().setMarginLeft(6, Unit.PX);
                 headerLabelPanel.add(info);
                 headerLabelPanel.setCellVerticalAlignment(info, HorizontalPanel.ALIGN_MIDDLE);
                 headerLabelPanel.setCellHorizontalAlignment(info, HorizontalPanel.ALIGN_CENTER);
