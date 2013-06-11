@@ -41,6 +41,7 @@ public interface PaymentProcessFacade {
 
     void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate padGenerationDate);
 
+    //TODO move to PaymentReportFacade
     List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate, List<Building> selectedBuildings);
 
     void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate);
