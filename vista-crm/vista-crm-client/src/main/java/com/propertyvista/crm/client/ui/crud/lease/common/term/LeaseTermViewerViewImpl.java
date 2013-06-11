@@ -73,11 +73,13 @@ public class LeaseTermViewerViewImpl extends CrmViewerViewImplBase<LeaseTermDTO>
     public void populate(LeaseTermDTO value) {
         super.populate(value);
 
-        setEditingVisible(!value.lease().status().getValue().isFormer() && value.status().getValue() != Status.AcceptedOffer);
-        // correct finalization visibility for draft lease/applications
-        setFinalizationVisible(isFinalizationVisible() && !value.lease().status().getValue().isDraft());
-
-        offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
-                && value.lease().nextTerm().isNull());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            setEditingVisible(false);
+        } else {
+            setEditingVisible(!value.lease().status().getValue().isFormer() && value.status().getValue() != Status.AcceptedOffer);
+            setFinalizationVisible(isFinalizationVisible() && !value.lease().status().getValue().isDraft());
+            offerAcceptButton.setVisible(value.status().getValue() == Status.Offer && !((IVersionedEntity<?>) value).version().versionNumber().isNull()
+                    && value.lease().nextTerm().isNull());
+        }
     }
 }
