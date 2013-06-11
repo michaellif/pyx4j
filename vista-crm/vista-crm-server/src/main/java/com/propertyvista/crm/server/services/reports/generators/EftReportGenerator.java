@@ -100,7 +100,7 @@ public class EftReportGenerator implements ReportExporter {
                 paymentRecords.add(paymentRecord);
             }
 
-            if (true) {
+            if (false) {
                 int dummyMax = 1000;
                 for (int i = 0; i < dummyMax; ++i) {
                     if (aborted) {
