@@ -31,6 +31,7 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.server.common.security.VistaContext;
@@ -62,6 +63,11 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
         // TODO put auditing configuration here
         dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
+
+        for (Notification item : dto.notifications()) {
+            Persistence.service().retrieve(item.buildings());
+            Persistence.service().retrieve(item.portfolios());
+        }
     }
 
     @Override

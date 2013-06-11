@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.organisation.employee;
+package com.propertyvista.crm.client.ui.crud.organisation.common;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,14 +43,14 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     private final static I18n i18n = I18n.get(PortfolioFolder.class);
 
-    public PortfolioFolder(boolean isModifyable) {
-        super(Portfolio.class, isModifyable);
+    public PortfolioFolder(boolean modifiable) {
+        super(Portfolio.class, modifiable);
     }
 
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
-        return java.util.Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "15em"),
-                new EntityFolderColumnDescriptor(proto().description(), "20em"));
+        return java.util.Arrays.asList(new EntityFolderColumnDescriptor(proto().name(), "20em"),
+                new EntityFolderColumnDescriptor(proto().description(), "30em"));
     }
 
     @Override
@@ -60,6 +60,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                 @Override
                 protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
                     CComponent<?, ?> comp = null;
+
                     if (proto().name() == column.getObject()) {
                         comp = inject(column.getObject(), new CLabel<String>());
                         comp.setNavigationCommand(new Command() {
@@ -73,6 +74,7 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
                     } else {
                         comp = super.createCell(column);
                     }
+
                     return comp;
                 }
             };
@@ -127,7 +129,5 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
             }
             return true;
         }
-
     }
-
 }

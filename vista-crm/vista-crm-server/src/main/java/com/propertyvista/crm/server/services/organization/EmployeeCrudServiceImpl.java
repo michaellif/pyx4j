@@ -28,7 +28,6 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
@@ -36,6 +35,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.CrmUser;
@@ -43,6 +43,7 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -77,6 +78,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
         }
 
+        for (Notification item : dto.notifications()) {
+            Persistence.service().retrieve(item.buildings());
+            Persistence.service().retrieve(item.portfolios());
+        }
     }
 
     @Override

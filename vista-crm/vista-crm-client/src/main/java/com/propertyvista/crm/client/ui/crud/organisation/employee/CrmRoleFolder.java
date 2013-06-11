@@ -100,6 +100,5 @@ public class CrmRoleFolder extends VistaTableFolder<CrmRole> {
         protected AbstractListService<CrmRole> getSelectService() {
             return GWT.<AbstractListService<CrmRole>> create(SelectCrmRoleListService.class);
         }
-
     }
 }

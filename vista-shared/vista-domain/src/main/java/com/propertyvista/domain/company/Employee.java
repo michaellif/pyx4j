@@ -77,5 +77,5 @@ public interface Employee extends Person {
 
     @Owned
     @OrderBy(PrimaryKey.class)
-    IList<Notification> notification();
+    IList<Notification> notifications();
 }
