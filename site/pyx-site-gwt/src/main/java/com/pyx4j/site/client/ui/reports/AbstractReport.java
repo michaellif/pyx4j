@@ -131,6 +131,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     private final SimplePanel reportProgressHolderPanel;
 
+    private DeferredProgressPanel progressPanel;
+
     public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
@@ -171,7 +173,14 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         reportProgressControlPanel.setStyleName(AbstractReport.Styles.ReportProgressControlPanel.name());
         reportProgressHolderPanel = new SimplePanel();
         reportProgressControlPanel.add(reportProgressHolderPanel);
-        reportProgressControlPanel.add(abortReportGenerationButton = new Button(i18n.tr("Abort")));
+
+        reportProgressControlPanel.add(abortReportGenerationButton = new Button(i18n.tr("Abort"), new Command() {
+            @Override
+            public void execute() {
+                progressPanel.cancelProgress();
+                unlockReport();
+            }
+        }));
         reportProgressControlPanel.setVisible(false);
 
         viewPanel.add(reportProgressControlPanel);
@@ -252,12 +261,7 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     @Override
     public void setReportData(Object data) {
-        settingsForm.setEnabled(true);
-        reportSettingsFormControlBar.setEnabled(true);
-        reportPanel.setVisible(true);
-
-        reportProgressHolderPanel.setWidget(null);
-        reportProgressControlPanel.setVisible(false);
+        unlockReport();
 
         if (report != null) {
             report.setData(data);
@@ -269,8 +273,7 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         settingsForm.setEnabled(false);
         reportSettingsFormControlBar.setEnabled(false);
         reportPanel.setVisible(false);
-
-        DeferredProgressPanel progressPanel = new DeferredProgressPanel("600px", "30px", false, deferredProgressListener);
+        progressPanel = new DeferredProgressPanel("600px", "30px", false, deferredProgressListener);
         progressPanel.startProgress(deferredProgressCorelationId);
         reportProgressHolderPanel.setWidget(progressPanel);
         reportProgressControlPanel.setVisible(true);
@@ -365,6 +368,16 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
             setCaption(SimpleMessageFormat.format("{0} - {1}", reportSettings.getEntityMeta().getCaption(), settingsId == null ? i18n.tr("Untitled")
                     : settingsId));
         }
+    }
+
+    private void unlockReport() {
+        settingsForm.setEnabled(true);
+        reportSettingsFormControlBar.setEnabled(true);
+        reportPanel.setVisible(true);
+
+        reportProgressHolderPanel.setWidget(null);
+        reportProgressControlPanel.setVisible(false);
+        progressPanel = null;
     }
 
 }

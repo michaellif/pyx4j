@@ -102,6 +102,7 @@ public class AbstractReportsService implements IReportsService {
 
         @Override
         public void cancel() {
+            reportGenerator.abort();
             cancelled = true;
         }
 
@@ -169,7 +170,8 @@ public class AbstractReportsService implements IReportsService {
 
         @Override
         public void cancel() {
-            this.cancelled = true;
+            reportGenerator.abort();
+            cancelled = true;
         }
 
     }

@@ -30,4 +30,6 @@ public interface ReportGenerator {
 
     Serializable generateReport(ReportMetadata reportMetadata);
 
+    void abort();
+
 }
