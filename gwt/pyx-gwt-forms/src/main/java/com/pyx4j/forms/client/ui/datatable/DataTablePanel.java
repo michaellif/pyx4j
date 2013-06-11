@@ -53,6 +53,8 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     private final DataTableActionsBar bottomActionsBar;
 
+    private DataTableCriteriaPanel<E> criteriaPanel;
+
     private final DataTableFilterPanel<E> filterPanel;
 
     private WidgetsImages images;
@@ -77,7 +79,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
         entityPrototype = EntityFactory.getEntityPrototype(clazz);
 
         if (criteriaForm != null) {
-            DataTableCriteriaPanel<E> criteriaPanel = new DataTableCriteriaPanel<E>(this, criteriaForm);
+            criteriaPanel = new DataTableCriteriaPanel<E>(this, criteriaForm);
             add(criteriaPanel);
         }
 
@@ -156,6 +158,7 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setFilterApplyCommand(Command filterActionCommand) {
         filterPanel.setFilterApplyCommand(filterActionCommand);
+        criteriaPanel.setFilterApplyCommand(filterActionCommand);
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {
@@ -255,11 +258,19 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
     }
 
     public List<Criterion> getFilters() {
-        return filterPanel.getFilters();
+        ArrayList<Criterion> filters = new ArrayList<Criterion>();
+        filters.addAll(filterPanel.getFilters());
+        if (criteriaPanel != null && criteriaPanel.getFilters() != null) {
+            filters.addAll(criteriaPanel.getFilters());
+        }
+        return filters;
     }
 
     public void setFilters(List<Criterion> filters) {
         filterPanel.setFilters(filters);
+        if (criteriaPanel != null) {
+            criteriaPanel.setFilters(filters);
+        }
     }
 
     public void resetFilters() {

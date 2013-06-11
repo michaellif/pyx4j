@@ -56,8 +56,6 @@ public class DataTableCriteriaPanel<E extends IEntity> extends DockPanel {
 
     private Command filterActionCommand;
 
-    private List<Criterion> filters;
-
     public DataTableCriteriaPanel(DataTablePanel<E> dataTablePanel, final ICriteriaForm<E> form) {
         this.dataTablePanel = dataTablePanel;
         this.form = form;
@@ -143,20 +141,23 @@ public class DataTableCriteriaPanel<E extends IEntity> extends DockPanel {
     }
 
     public List<Criterion> getFilters() {
-        return filters;
+        return form.getFilters();
+    }
+
+    public void setFilters(List<Criterion> filters) {
+        form.setFilters(filters);
     }
 
     protected void search() {
-        filters = form.getFilters();
         if (filterActionCommand != null) {
             filterActionCommand.execute();
         }
     }
 
     public void resetCriteria() {
-        this.filters = null;
         form.resetCriteria();
         setVisible(false);
         dataTablePanel.getFilterButton().setEnabled(true);
     }
+
 }

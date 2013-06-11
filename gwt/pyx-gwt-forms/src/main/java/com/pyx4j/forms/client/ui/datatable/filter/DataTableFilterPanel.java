@@ -63,8 +63,6 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
 
     private Command filterActionCommand;
 
-    private List<Criterion> filters;
-
     public DataTableFilterPanel(DataTablePanel<E> dataTablePanel) {
         this.dataTablePanel = dataTablePanel;
 
@@ -179,11 +177,10 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     }
 
     public List<Criterion> getFilters() {
-        return filters;
+        return grid.getFilters();
     }
 
     public void setFilters(List<Criterion> filters) {
-        this.filters = filters;
         grid.setFilters(filters);
         setVisible(true);
         dataTablePanel.getFilterButton().setEnabled(false);
@@ -193,14 +190,12 @@ public class DataTableFilterPanel<E extends IEntity> extends DockPanel {
     }
 
     protected void apply() {
-        filters = grid.getFilters();
         if (filterActionCommand != null) {
             filterActionCommand.execute();
         }
     }
 
     public void resetFilters() {
-        this.filters = null;
         grid.clear();
         setVisible(false);
         dataTablePanel.getFilterButton().setEnabled(true);

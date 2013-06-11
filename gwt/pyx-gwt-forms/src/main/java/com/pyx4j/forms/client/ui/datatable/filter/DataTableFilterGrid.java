@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 
 public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
@@ -78,7 +79,11 @@ public class DataTableFilterGrid<E extends IEntity> extends FlowPanel {
         clear();
         if (filters != null) {
             for (Criterion item : filters) {
-                addFilter(new DataTableFilterItem<E>(this, item));
+                if (item instanceof PropertyCriterion) {
+                    addFilter(new DataTableFilterItem<E>(this, (PropertyCriterion) item));
+                } else {
+                    throw new Error("Incorrect Filter Criterion Type!");
+                }
             }
         }
     }

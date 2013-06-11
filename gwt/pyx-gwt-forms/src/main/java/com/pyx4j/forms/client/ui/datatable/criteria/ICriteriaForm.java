@@ -30,6 +30,8 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 
 public interface ICriteriaForm<E extends IEntity> extends IsWidget, HasVisibility {
 
+    void setFilters(List<Criterion> filters);
+
     List<Criterion> getFilters();
 
     void resetCriteria();
