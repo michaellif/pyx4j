@@ -46,6 +46,7 @@ import com.propertyvista.domain.financial.tax.Tax;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.policy.policies.ARPolicy;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
+import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
 import com.propertyvista.domain.policy.policies.BackgroundCheckPolicy;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.DepositPolicy;
@@ -168,6 +169,8 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(ProductTaxPolicy.class, CrmSiteMap.Administration.Policies.ProductTax.class, defaultImage);
         AppPlaceEntityMapper.register(ARPolicy.class, CrmSiteMap.Administration.Policies.AR.class, defaultImage);
         AppPlaceEntityMapper.register(TenantInsurancePolicy.class, CrmSiteMap.Administration.Policies.TenantInsurance.class, defaultImage);
+        AppPlaceEntityMapper.register(AutoPayChangePolicy.class, CrmSiteMap.Administration.Policies.AutoPayChange.class, defaultImage);
+
         AppPlaceEntityMapper.register(InvoiceDebit.class, CrmSiteMap.Tenants.Lease.InvoiceDebit.class, defaultImage);
         AppPlaceEntityMapper.register(InvoiceCredit.class, CrmSiteMap.Tenants.Lease.InvoiceCredit.class, defaultImage);
 

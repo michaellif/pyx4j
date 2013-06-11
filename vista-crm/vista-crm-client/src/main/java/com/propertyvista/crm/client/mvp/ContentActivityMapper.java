@@ -161,6 +161,9 @@ import com.propertyvista.crm.client.activity.policies.applicationdocumentation.A
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayChangePolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayChangePolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayChangePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyViewerActivity;
@@ -1108,7 +1111,20 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new PaymentTypeSelectionPolicyViewerActivity(crudPlace);
                             break;
                         }
-// - Security
+
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.AutoPayChange) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new AutoPayChangePolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new AutoPayChangePolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new AutoPayChangePolicyViewerActivity(crudPlace);
+                            break;
+                        }
+// - Security          
                     } else if (crudPlace instanceof CrmSiteMap.Account.LoginAttemptsLog) {
                         switch (crudPlace.getType()) {
                         case lister:

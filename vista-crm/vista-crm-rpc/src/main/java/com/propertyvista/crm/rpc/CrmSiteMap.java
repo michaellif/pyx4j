@@ -474,6 +474,9 @@ public class CrmSiteMap implements SiteMap {
 
             public static class TenantInsurance extends CrmCrudAppPlace {
             }
+
+            public static class AutoPayChange extends CrmCrudAppPlace {
+            }
         }
     }
 

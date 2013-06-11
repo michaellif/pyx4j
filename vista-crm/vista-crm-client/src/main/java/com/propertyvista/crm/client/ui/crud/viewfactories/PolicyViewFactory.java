@@ -26,6 +26,12 @@ import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyListerView;
 import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.ar.ARPolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyViewerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyEditorView;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyListerView;
@@ -219,7 +225,15 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(PaymentTypeSelectionPolicyEditorView.class, new PaymentTypeSelectionPolicyEditorViewImpl());
             } else if (PaymentTypeSelectionPolicyViewerView.class.equals(type)) {
                 map.put(PaymentTypeSelectionPolicyViewerView.class, new PaymentTypeSelectionPolicyViewerViewImpl());
+
+            } else if (AutoPayChangePolicyListerView.class.equals(type)) {
+                map.put(type, new AutoPayChangePolicyListerViewImpl());
+            } else if (AutoPayChangePolicyViewerView.class.equals(type)) {
+                map.put(type, new AutoPayChangePolicyViewerViewImpl());
+            } else if (AutoPayChangePolicyEditorView.class.equals(type)) {
+                map.put(type, new AutoPayChangePolicyEditorViewImpl());
             }
+
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);
