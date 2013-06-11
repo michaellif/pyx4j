@@ -65,6 +65,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
 import com.propertyvista.dto.LeaseTermDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
@@ -133,6 +134,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate, ?>) inject(proto().effectiveDate()), 9).build());
         main.setWidget(row, 1, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate, ?>) inject(proto().expirationDate()), 9).build());
 
+        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 51).build());
+        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+
         main.setWidget(++row, 0, extraDataPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
@@ -172,7 +176,17 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         super.onValueSet(populate);
 
         // tweak UI for ProductItem:
-        if (!getValue().item().isEmpty()) {
+        if (VistaFeatures.instance().yardiIntegration()) {
+
+            get(proto().item()).setVisible(false);
+            get(proto().effectiveDate()).setVisible(false);
+            get(proto().expirationDate()).setVisible(false);
+
+            get(proto().agreedPrice()).setEditable(true);
+            adjustmentPanel.setVisible((isEditable() || !getValue().adjustments().isEmpty()));
+            depositPanel.setVisible((isEditable() || !getValue().deposits().isEmpty()));
+
+        } else if (!getValue().item().isEmpty()) {
             if (ARCode.Type.services().contains(getValue().item().code().type().getValue())) {
                 // hide effective dates:
                 get(proto().effectiveDate()).setVisible(false);
@@ -219,9 +233,12 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 adjustmentPanel.setVisible(true);
                 depositPanel.setVisible(true);
             }
+
         } else {// tweak UI for empty ProductItem:
             adjustmentPanel.setVisible(false);
         }
+
+        get(proto().description()).setVisible(VistaFeatures.instance().yardiIntegration() && (isEditable() || !getValue().description().isNull()));
     }
 
     @Override
