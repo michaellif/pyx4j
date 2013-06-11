@@ -158,7 +158,9 @@ public class DataTablePanel<E extends IEntity> extends VerticalPanel {
 
     public void setFilterApplyCommand(Command filterActionCommand) {
         filterPanel.setFilterApplyCommand(filterActionCommand);
-        criteriaPanel.setFilterApplyCommand(filterActionCommand);
+        if (criteriaPanel != null) {
+            criteriaPanel.setFilterApplyCommand(filterActionCommand);
+        }
     }
 
     public void setFirstActionHandler(Command firstActionCommand) {
