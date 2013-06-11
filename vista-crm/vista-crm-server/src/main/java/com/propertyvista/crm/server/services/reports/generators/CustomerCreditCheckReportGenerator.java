@@ -29,6 +29,12 @@ import com.propertyvista.domain.tenant.CustomerCreditCheck;
 
 public class CustomerCreditCheckReportGenerator implements ReportGenerator {
 
+    private volatile boolean aborted;
+
+    public CustomerCreditCheckReportGenerator() {
+        this.aborted = false;
+    }
+
     @Override
     public Serializable generateReport(ReportMetadata reportMetadata) {
         // TODO Auto-generated method stub
@@ -56,6 +62,11 @@ public class CustomerCreditCheckReportGenerator implements ReportGenerator {
         return null;
     }
 
+    @Override
+    public void abort() {
+        this.aborted = true;
+    }
+
     private EntityQueryCriteria<CustomerCreditCheck> createCreditCheckCriteria(CustomerCreditCheckReportMetadata metadata) {
         EntityQueryCriteria<CustomerCreditCheck> criteria = EntityQueryCriteria.create(CustomerCreditCheck.class);
 
@@ -73,4 +84,5 @@ public class CustomerCreditCheckReportGenerator implements ReportGenerator {
         }
         return criteria;
     }
+
 }

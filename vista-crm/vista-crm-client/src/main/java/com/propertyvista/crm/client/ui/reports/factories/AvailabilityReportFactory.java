@@ -160,6 +160,7 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
 
             @Override
             public void setData(Object data) {
+                reportPanel.clear();
                 AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
                 SafeHtmlBuilder bb = new SafeHtmlBuilder();
                 bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");

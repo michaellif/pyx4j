@@ -36,6 +36,12 @@ import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
 public class AvailabilityReportsGenerator implements ReportGenerator {
 
+    private volatile boolean aborted;
+
+    public AvailabilityReportsGenerator() {
+        this.aborted = false;
+    }
+
     @Override
     public Serializable generateReport(ReportMetadata reportMetadata) {
         AvailabilityReportMetadata meta = (AvailabilityReportMetadata) reportMetadata;
@@ -51,6 +57,17 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
         reportData.asOf = meta.asOf().getValue();
 
         return reportData;
+    }
+
+    @Override
+    public void abort() {
+        this.aborted = true;
+    }
+
+    @Override
+    public ReportProgressStatus getProgressStatus() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private void clearUnrequiredData(List<UnitAvailabilityStatus> statuses) {
@@ -107,12 +124,6 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
         criteria.ne(criteria.proto().vacancyStatus(), null);
 
         return criteria;
-    }
-
-    @Override
-    public ReportProgressStatus getProgressStatus() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

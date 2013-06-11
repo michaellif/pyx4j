@@ -100,9 +100,12 @@ public class EftReportGenerator implements ReportExporter {
                 paymentRecords.add(paymentRecord);
             }
 
-            if (false) {
+            if (true) {
                 int dummyMax = 1000;
                 for (int i = 0; i < dummyMax; ++i) {
+                    if (aborted) {
+                        break;
+                    }
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
@@ -114,6 +117,11 @@ public class EftReportGenerator implements ReportExporter {
             return paymentRecords;
         }
 
+    }
+
+    @Override
+    public void abort() {
+        this.aborted = true;
     }
 
     @Override
