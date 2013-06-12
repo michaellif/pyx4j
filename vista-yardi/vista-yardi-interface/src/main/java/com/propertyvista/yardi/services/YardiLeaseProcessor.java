@@ -60,6 +60,16 @@ import com.propertyvista.yardi.merger.TenantMerger;
 public class YardiLeaseProcessor {
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
+    final ExecutionMonitor executionMonitor;
+
+    public YardiLeaseProcessor() {
+        this(null);
+    }
+
+    public YardiLeaseProcessor(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+    }
+
     public Lease findLease(String customerId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().leaseId(), customerId);
@@ -194,7 +204,7 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    public Lease updateLeaseProducts(final ExecutionMonitor executionMonitor, List<Transactions> transactions, Lease leaseId) {
+    public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
         // TODO YardiLeaseIntegrationAgent.updateBillabelItem(lease, billableItem);
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         log.info("      Updating billable items for lease {} ", lease.getStringView());
@@ -216,11 +226,6 @@ public class YardiLeaseProcessor {
                 }
             }
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            String msg = SimpleMessageFormat.format("PreauthorizedPayment PAP for lease {0}", leaseId.leaseId());
-            log.info(msg);
-            if (executionMonitor != null) {
-                executionMonitor.addFailedEvent("SuspendPreauthorizedPayment", msg);
-            }
             suspendPADPayments(lease);
         }
         return lease;
@@ -293,6 +298,11 @@ public class YardiLeaseProcessor {
         criteria.in(criteria.proto().tenant().lease(), lease);
         for (PreauthorizedPayment pap : Persistence.service().query(criteria)) {
             ServerSideFactory.create(PaymentMethodFacade.class).suspendPreauthorizedPayment(pap);
+        }
+        String msg = SimpleMessageFormat.format("PreauthorizedPayment PAP for lease {0}", lease.leaseId());
+        log.info(msg);
+        if (executionMonitor != null) {
+            executionMonitor.addFailedEvent("SuspendPreauthorizedPayment", msg);
         }
     }
 
