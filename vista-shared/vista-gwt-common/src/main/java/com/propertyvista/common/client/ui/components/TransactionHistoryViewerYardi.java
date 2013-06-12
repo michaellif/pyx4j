@@ -34,8 +34,8 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
-import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiCredit;
+import com.propertyvista.domain.financial.yardi.YardiDebit;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -46,6 +46,8 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
     private final NumberFormat chargeFormat;
 
     private final NumberFormat paymentFormat;
+
+    private final int COLUMNS_NUMBER = 4;
 
     public TransactionHistoryViewerYardi(String chargeFormat, String paymentFormat) {
         this.chargeFormat = NumberFormat.getFormat(chargeFormat);
@@ -81,16 +83,16 @@ public class TransactionHistoryViewerYardi extends CEntityViewer<TransactionHist
 
             int[] row = { -1 };
 
-            contentPanel.setH1(++row[0], 0, 3, i18n.tr("Outstanding Charges"));
+            contentPanel.setH1(++row[0], 0, COLUMNS_NUMBER, i18n.tr("Outstanding Charges"));
             renderLineItems(row, contentPanel, outstangingCharges, chargeFormat, i18n.tr("Due Date"));
 
             if (!accountCredits.isEmpty()) {
-                contentPanel.setH1(++row[0], 0, 3, i18n.tr("Account Credits"));
+                contentPanel.setH1(++row[0], 0, COLUMNS_NUMBER, i18n.tr("Account Credits"));
                 renderLineItems(row, contentPanel, accountCredits, paymentFormat, null);
             }
 
             if (!unappliedPayments.isEmpty()) {
-                contentPanel.setH1(++row[0], 0, 3, i18n.tr("Unapplied Payments"));
+                contentPanel.setH1(++row[0], 0, COLUMNS_NUMBER, i18n.tr("Unapplied Payments"));
                 renderLineItems(row, contentPanel, unappliedPayments, paymentFormat, null);
             }
         }
