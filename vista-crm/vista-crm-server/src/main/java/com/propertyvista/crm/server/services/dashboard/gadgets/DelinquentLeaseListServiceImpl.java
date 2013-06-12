@@ -66,8 +66,7 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
 
     @Override
     protected void enhanceListCriteria(EntityListCriteria<LeaseAgingBuckets> dbCriteria, EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
-        dbCriteria.ne(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.Application);
-        dbCriteria.ne(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.Closed);
+        dbCriteria.in(dbCriteria.proto().arrearsSnapshot().billingAccount().lease().status(), Lease.Status.active());
 
         if (dtoCriteria.getFilters() != null) {
             java.util.Iterator<Criterion> i = dtoCriteria.getFilters().iterator();
