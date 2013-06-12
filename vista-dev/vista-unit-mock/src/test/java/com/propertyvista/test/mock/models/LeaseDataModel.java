@@ -145,20 +145,18 @@ public class LeaseDataModel extends MockDataModel<Lease> {
      */
     public PreauthorizedPayment createPreauthorizedPayment(Lease lease, List<PreauthorizedPaymentCoveredItem> items) {
         Persistence.service().retrieveMember(lease.leaseParticipants());
-        while (lease.leaseParticipants().iterator().hasNext()) {
-            Tenant tenant = lease.leaseParticipants().iterator().next().cast();
+        // Get first tenant
+        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
+        List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods(tenant.customer());
 
-            List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods(tenant.customer());
-
-            for (LeasePaymentMethod paymentMethod : profileMethods) {
-                if (paymentMethod.type().getValue() == PaymentType.Echeck) {
-                    PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
-                    pap.paymentMethod().set(paymentMethod);
-                    pap.coveredItems().addAll(items);
-                    pap.comments().setValue("Preauthorized Payment");
-                    ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
-                    return pap;
-                }
+        for (LeasePaymentMethod paymentMethod : profileMethods) {
+            if (paymentMethod.type().getValue() == PaymentType.Echeck) {
+                PreauthorizedPayment pap = EntityFactory.create(PreauthorizedPayment.class);
+                pap.paymentMethod().set(paymentMethod);
+                pap.coveredItems().addAll(items);
+                pap.comments().setValue("Preauthorized Payment");
+                ServerSideFactory.create(PaymentMethodFacade.class).persistPreauthorizedPayment(pap, tenant);
+                return pap;
             }
         }
         return null;

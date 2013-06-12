@@ -17,10 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -33,7 +30,6 @@ import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.MockManager;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
@@ -64,28 +60,9 @@ public class YardiTestBase extends IntegrationTestBase {
 
     @Override
     protected void preloadData() {
-        preloadData(new MockConfig());
-    }
-
-    @Override
-    protected void preloadData(final MockConfig config) {
-
+        MockConfig config = new MockConfig();
         config.yardiIntegration = true;
-
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<MockManager, RuntimeException>() {
-
-            @Override
-            public MockManager execute() {
-
-                MockManager mockManager = new MockManager(config);
-                for (Class<? extends MockDataModel<?>> modelType : getMockModelTypes()) {
-                    mockManager.addModel(modelType);
-                }
-
-                return mockManager;
-            }
-        });
-
+        preloadData(config);
     }
 
     @Override

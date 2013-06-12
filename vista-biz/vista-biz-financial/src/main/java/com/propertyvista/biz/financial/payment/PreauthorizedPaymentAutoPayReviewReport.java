@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
@@ -74,6 +75,10 @@ class PreauthorizedPaymentAutoPayReviewReport {
         return records;
     }
 
+    AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccountId) {
+        return createBillingAccountReview(Persistence.service().retrieve(BillingAccount.class, billingAccountId.getPrimaryKey()));
+    }
+
     private AutoPayReviewDTO createBillingAccountReview(BillingAccount billingAccount) {
         AutoPayReviewDTO review = EntityFactory.create(AutoPayReviewDTO.class);
 
@@ -89,8 +94,9 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         review.paymentDue().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(billingAccount.lease()));
 
-        //TODO get Policy
-        AutoPayChangePolicy.ChangeRule changeRule = AutoPayChangePolicy.ChangeRule.keepPercentage;
+        AutoPayChangePolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(),
+                AutoPayChangePolicy.class);
+        AutoPayChangePolicy.ChangeRule changeRule = policy.rule().getValue();
 
         List<PreauthorizedPayment> preauthorizedPayments = getPreauthorizedPayments(billingAccount);
         for (PreauthorizedPayment preauthorizedPayment : preauthorizedPayments) {

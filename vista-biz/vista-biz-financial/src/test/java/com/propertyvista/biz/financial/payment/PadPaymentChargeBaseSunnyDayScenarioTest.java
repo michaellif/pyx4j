@@ -25,6 +25,8 @@ import com.propertyvista.biz.financial.billing.BillTester;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.test.integration.PaymentRecordTester;
+import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
 @Category(RegressionTests.class)

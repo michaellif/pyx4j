@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.payment;
+package com.propertyvista.test.integration;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.test.integration.Tester;
 
 public class PaymentRecordTester extends Tester {
 

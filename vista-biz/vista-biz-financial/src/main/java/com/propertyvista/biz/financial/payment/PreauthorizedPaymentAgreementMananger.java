@@ -135,8 +135,9 @@ class PreauthorizedPaymentAgreementMananger {
             if (!targetEmails.isEmpty()) {
                 ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(targetEmails, lease);
             } else {
-                throw new Exception(
-                        "Found no email addresses for PAP suspension notifications (Add building property contact with name 'PAP_SUSPENTION_NOTIFICATIONS'");
+                log.warn(
+                        "Found no email addresses for PAP of {} suspension notifications (Add building property contact with name 'PAP_SUSPENTION_NOTIFICATIONS'",
+                        lease.leaseId().getStringView());
             }
         } catch (Throwable e) {
             log.error("failed to send email", e);

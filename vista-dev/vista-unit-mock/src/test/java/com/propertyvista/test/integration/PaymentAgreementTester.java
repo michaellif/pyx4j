@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.payment;
+package com.propertyvista.test.integration;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,13 +23,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
-import com.propertyvista.test.integration.Tester;
 
 public class PaymentAgreementTester extends Tester {
 
     private final BillingAccount billingAccount;
 
-    private final List<PreauthorizedPayment> paymentRecords;
+    private final List<PreauthorizedPayment> papRecords;
 
     public PaymentAgreementTester(BillingAccount billingAccount) {
         super();
@@ -37,16 +36,27 @@ public class PaymentAgreementTester extends Tester {
         EntityQueryCriteria<PreauthorizedPayment> criteria = new EntityQueryCriteria<PreauthorizedPayment>(PreauthorizedPayment.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().tenant().lease().billingAccount(), billingAccount));
         criteria.asc(criteria.proto().id());
-        paymentRecords = Persistence.service().query(criteria);
+        papRecords = Persistence.service().query(criteria);
     }
 
     public PaymentAgreementTester count(int size) {
-        assertEquals("Records count", size, paymentRecords.size());
+        assertEquals("Records count", size, papRecords.size());
+        return this;
+    }
+
+    public PaymentAgreementTester activeCount(int size) {
+        int count = 0;
+        for (PreauthorizedPayment pap : papRecords) {
+            if (pap.expiring().isNull()) {
+                count++;
+            }
+        }
+        assertEquals("Active Records count", size, count);
         return this;
     }
 
     public PreauthorizedPayment lastRecord() {
-        return paymentRecords.get(paymentRecords.size() - 1);
+        return papRecords.get(papRecords.size() - 1);
     }
 
     public PaymentAgreementTester lastRecordAmount(String amount) {

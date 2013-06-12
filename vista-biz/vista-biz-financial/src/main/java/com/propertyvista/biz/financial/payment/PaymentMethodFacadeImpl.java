@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -39,6 +40,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
@@ -144,5 +146,10 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
         new PreauthorizedPaymentAgreementMananger().suspendPreauthorizedPayment(preauthorizedPaymentId);
+    }
+
+    @Override
+    public AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccount) {
+        return new PreauthorizedPaymentAutoPayReviewReport().getSuspendedPreauthorizedPaymentReview(billingAccount);
     }
 }

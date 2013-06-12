@@ -38,6 +38,7 @@ import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
 import com.propertyvista.payment.pad.mock.ScheduledResponseAckMerchant;
 import com.propertyvista.payment.pad.mock.ScheduledResponseAckTransaction;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.test.integration.PaymentRecordTester;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockEventBus;

@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.biz.financial.payment;
+package com.propertyvista.test.integration;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

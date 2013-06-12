@@ -32,6 +32,9 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
+import com.propertyvista.test.integration.PaymentAgreementTester;
+import com.propertyvista.test.integration.PaymentRecordTester;
+import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
@@ -56,7 +59,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         Assert.assertEquals(message, new LogicalDate(DateUtils.detectDateformat(expected)), actual);
     }
 
-    public void testMethrodsRemovalScenario() throws Exception {
+    public void testMethodsRemoval() throws Exception {
         setSysDate("2011-03-10");
 
         createLease("2011-04-01", "2012-03-10", new BigDecimal("1000.00"), null);

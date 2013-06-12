@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -28,6 +29,7 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public interface PaymentMethodFacade {
 
@@ -60,6 +62,8 @@ public interface PaymentMethodFacade {
     void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 
     void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
+
+    AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccountId);
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 

@@ -46,7 +46,7 @@ public abstract class MockDataModel<E extends IEntity> {
         return mockManager.getDataModel(modelClass);
     }
 
-    protected void addItem(E item) {
+    public void addItem(E item) {
         items.add(item);
     }
 
