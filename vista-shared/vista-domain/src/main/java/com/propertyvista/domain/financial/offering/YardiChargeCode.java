@@ -41,5 +41,4 @@ public interface YardiChargeCode extends IEntity {
     @NotNull
     @ToString
     IPrimitive<String> yardiChargeCode();
-
 }

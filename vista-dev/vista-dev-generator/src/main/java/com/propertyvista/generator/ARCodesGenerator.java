@@ -19,6 +19,8 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.financial.ARCode;
+import com.propertyvista.domain.financial.offering.YardiChargeCode;
+import com.propertyvista.shared.config.VistaFeatures;
 
 //TODO move to Proper place
 public class ARCodesGenerator {
@@ -64,13 +66,21 @@ public class ARCodesGenerator {
 
         createARCode("Carry Forward Credit", ARCode.Type.CarryForwardCredit, 0, true);
         createARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, true);
+
+        // create Yardi rrent code if necessary:
+        if (VistaFeatures.instance().yardiIntegration()) {
+            ARCode code = createARCode("Yardi Residential Rent", ARCode.Type.Residential, 0, false);
+            YardiChargeCode yardiCode = EntityFactory.create(YardiChargeCode.class);
+            yardiCode.yardiChargeCode().setValue("rrent");
+            code.yardiChargeCodes().add(yardiCode);
+        }
     }
 
     public List<ARCode> getARCodes() {
         return codes;
     }
 
-    private void createARCode(String name, ARCode.Type type, int glCode, boolean reserved) {
+    private ARCode createARCode(String name, ARCode.Type type, int glCode, boolean reserved) {
         ARCode code = EntityFactory.create(ARCode.class);
 
         code.name().setValue(name);
@@ -79,5 +89,6 @@ public class ARCodesGenerator {
         code.reserved().setValue(reserved);
 
         codes.add(code);
+        return code;
     }
 }
