@@ -21,9 +21,11 @@ import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
+import com.propertyvista.crm.server.services.reports.generators.AutoPayChangesReportGenerator;
 import com.propertyvista.crm.server.services.reports.generators.AvailabilityReportsGenerator;
 import com.propertyvista.crm.server.services.reports.generators.CustomerCreditCheckReportGenerator;
 import com.propertyvista.crm.server.services.reports.generators.EftReportGenerator;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
@@ -38,6 +40,7 @@ public class CrmReportsServiceImpl extends AbstractReportsService implements Crm
         reportsGeneratorMap.put(AvailabilityReportMetadata.class, AvailabilityReportsGenerator.class);
         reportsGeneratorMap.put(CustomerCreditCheckReportMetadata.class, CustomerCreditCheckReportGenerator.class);
         reportsGeneratorMap.put(EftReportMetadata.class, EftReportGenerator.class);
+        reportsGeneratorMap.put(AutoPayChangesReportMetadata.class, AutoPayChangesReportGenerator.class);
     }
 
     public CrmReportsServiceImpl() {

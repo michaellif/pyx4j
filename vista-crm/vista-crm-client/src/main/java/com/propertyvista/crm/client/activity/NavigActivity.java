@@ -41,6 +41,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
@@ -207,7 +208,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AvailabilityReportMetadata.class)));
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(CustomerCreditCheckReportMetadata.class)));
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(EftReportMetadata.class)));
-//        folder.addNavigItem(new CrmSiteMap.Report.CustomerCreditCheck().formListerPlace()); // TODO this one is just temporary until the real report is ready
+        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AutoPayChangesReportMetadata.class)));//        
         return folder;
     }
 }
