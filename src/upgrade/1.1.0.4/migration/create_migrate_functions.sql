@@ -45,6 +45,20 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- auto_pay_change_policy
+        
+        CREATE TABLE auto_pay_change_policy
+        (
+                id                      BIGINT                          NOT NULL,
+                node_discriminator      VARCHAR(50),
+                node                    BIGINT,
+                updated                 TIMESTAMP,
+                rule                    VARCHAR(50),
+                        CONSTRAINT auto_pay_change_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE auto_pay_change_policy OWNER TO vista;
+        
 	-- notification
 
         CREATE TABLE notification
@@ -116,6 +130,17 @@ BEGIN
         
         
         
+        -- Delete data
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.buildingcontacts$property_contacts '
+                ||'WHERE value IN (     SELECT  id FROM '||v_schema_name||'.property_contact '
+                ||'                     WHERE   description IN (''PAP_SUSPENTION_NOTIFICATIONS'',''NSF_NOTIFICATIONS'')) ';
+                
+                
+        EXECUTE 'DELETE FROM '||v_schema_name||'.property_contact '
+                ||'WHERE description IN (''PAP_SUSPENTION_NOTIFICATIONS'',''NSF_NOTIFICATIONS'') ';
+        
+        
         /**
         ***     ==========================================================================================================
         ***
@@ -145,6 +170,9 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE auto_pay_change_policy ADD CONSTRAINT auto_pay_change_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
+        ALTER TABLE auto_pay_change_policy ADD CONSTRAINT auto_pay_change_policy_rule_e_ck CHECK ((rule) IN ('keepPercentage', 'keepUnchanged'));
         ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck CHECK ((tp) IN ('Nsf', 'PreauthorizedPaymentSuspension'));
         
        
@@ -160,7 +188,7 @@ BEGIN
         CREATE INDEX notification$buildings_owner_idx ON notification$buildings USING btree (owner);
         CREATE INDEX notification$portfolios_owner_idx ON notification$portfolios USING btree (owner);
         CREATE INDEX notification_employee_idx ON notification USING btree (employee);
-        CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
+        -- CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
 
         
         
