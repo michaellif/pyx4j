@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -104,7 +105,38 @@ class PreauthorizedPaymentAutoPayReviewReport {
             review.pap().add(createPreauthorizedPaymentPreview(billingAccount, changeRule, preauthorizedPayment));
         }
 
+        calulateLeaseTotals(review);
+
         return review;
+    }
+
+    private void calulateLeaseTotals(AutoPayReviewDTO review) {
+        for (AutoPayReviewPreauthorizedPaymentDTO pap : review.pap()) {
+            for (AutoPayReviewChargeDTO chargeReview : pap.items()) {
+                nvlAdd(review.totalSuspended().totalPrice(), chargeReview.suspended().totalPrice());
+                nvlAdd(review.totalSuspended().payment(), chargeReview.suspended().payment());
+
+                nvlAdd(review.totalSuggested().totalPrice(), chargeReview.suspended().totalPrice());
+                nvlAdd(review.totalSuggested().payment(), chargeReview.suspended().payment());
+            }
+        }
+
+        if (!review.totalSuspended().totalPrice().isNull()) {
+            calulatePercent(review.totalSuspended());
+        }
+        if (!review.totalSuggested().totalPrice().isNull()) {
+            calulatePercent(review.totalSuggested());
+        }
+    }
+
+    private void nvlAdd(IPrimitive<BigDecimal> total, IPrimitive<BigDecimal> value) {
+        if (value.isNull()) {
+            return;
+        } else if (total.isNull()) {
+            total.setValue(value.getValue());
+        } else {
+            total.setValue(total.getValue().add(value.getValue()));
+        }
     }
 
     //TODO proper implementation that will use adjustments
