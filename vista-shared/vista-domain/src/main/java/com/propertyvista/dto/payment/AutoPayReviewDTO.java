@@ -41,4 +41,8 @@ public interface AutoPayReviewDTO extends IEntity {
     IList<AutoPayReviewPreauthorizedPaymentDTO> pap();
 
     IPrimitive<LogicalDate> paymentDue();
+
+    AutoPayReviewChargeDetailDTO totalSuspended();
+
+    AutoPayReviewChargeDetailDTO totalSuggested();
 }
