@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant.lease.extradata;
 
 import com.pyx4j.entity.annotations.DiscriminatorValue;
+import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
@@ -21,5 +22,6 @@ import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
 @DiscriminatorValue("YardiLeaseCharge")
 public interface YardiLeaseChargeData extends BillableItemExtraData {
 
+    @ToString
     IPrimitive<String> chargeCode();
 }

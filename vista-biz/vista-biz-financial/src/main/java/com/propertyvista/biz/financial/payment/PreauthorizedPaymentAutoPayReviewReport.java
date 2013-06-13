@@ -39,6 +39,7 @@ import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDetailDTO;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class PreauthorizedPaymentAutoPayReviewReport {
 
@@ -134,6 +135,8 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
             chargeReview.suggested().set(calulateSuggestedChargeDetail(billingAccount, changeRule, allBillableItem, coveredItem));
 
+            chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
+
             papReview.items().add(chargeReview);
         }
 
@@ -144,10 +147,21 @@ class PreauthorizedPaymentAutoPayReviewReport {
             chargeReview.suggested().billableItem().set(billableItem.createIdentityStub());
             chargeReview.suggested().totalPrice().setValue(getActualPrice(billableItem));
 
+            chargeReview.leaseCharge().setValue(getLeaseChargeDescription(billableItem));
+
             papReview.items().add(chargeReview);
         }
 
         return papReview;
+    }
+
+    private String getLeaseChargeDescription(BillableItem billableItem) {
+        String description = "";
+        if (VistaFeatures.instance().yardiIntegration()) {
+            description = billableItem.extraData().getStringView() + " ";
+        }
+        description += billableItem.description().getValue();
+        return description;
     }
 
     private void calulatePercent(AutoPayReviewChargeDetailDTO suspended) {
