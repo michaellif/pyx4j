@@ -108,7 +108,7 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendHtmlConstant("<th rowspan='1' colspan='3'>");
                 builder.appendEscaped(i18n.tr("Auto Pay Suspended"));
                 builder.appendHtmlConstant("</th>");
-                builder.appendHtmlConstant("<th rowspan='1' colspan='3'>");
+                builder.appendHtmlConstant("<th rowspan='1' colspan='4'>");
                 builder.appendEscaped(i18n.tr("Auto Pay Suggested"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='2'>");
@@ -127,6 +127,9 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='1'>");
                 builder.appendEscaped(i18n.tr("Total Price"));
+                builder.appendHtmlConstant("</th>");
+                builder.appendHtmlConstant("<th rowspan='1'>");
+                builder.appendEscaped(i18n.tr("% Change"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='1'>");
                 builder.appendEscaped(i18n.tr("Payment"));
@@ -172,6 +175,9 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                                     + charge.suspended().percent().getStringView() + "</td>");
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
                                     + charge.suggested().totalPrice().getStringView() + "</td>");
+                            String percentChange = SafeHtmlUtils.htmlEscape(charge.suggested().percentChange().isNull() ? i18n.tr("New") : charge.suggested()
+                                    .billableItem().isNull() ? i18n.tr("Removed") : charge.suggested().percentChange().getStringView());
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>" + percentChange + "</td>");
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
                                     + charge.suggested().payment().getStringView() + "</td>");
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
@@ -201,6 +207,8 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                             + reviewCase.totalSuspended().percent().getStringView() + "</td>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
                             + reviewCase.totalSuggested().totalPrice().getStringView() + "</td>"); // totalPrice
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
+                            + "</td>"); // percent change
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
                             + reviewCase.totalSuggested().payment().getStringView() + "</td>"); // payment
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
