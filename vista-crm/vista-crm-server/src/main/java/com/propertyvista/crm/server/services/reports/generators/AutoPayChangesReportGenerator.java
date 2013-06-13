@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
+import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
@@ -34,10 +35,15 @@ import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExporter {
 
+    private final ReportProgressStatusHolder reportProgressStatusHolder;
+
+    public AutoPayChangesReportGenerator() {
+        reportProgressStatusHolder = new ReportProgressStatusHolder();
+    }
+
     @Override
     public ReportProgressStatus getProgressStatus() {
-        // TODO Auto-generated method stub
-        return null;
+        return reportProgressStatusHolder.get();
     }
 
     @Override
@@ -71,8 +77,9 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
 
     @Override
     public ExportedReport export(Serializable report) {
-        // TODO Auto-generated method stub
-        return null;
+        @SuppressWarnings("unchecked")
+        Vector<AutoPayReviewDTO> records = (Vector<AutoPayReviewDTO>) report;
+        return new AutoPayChangesReportExport().createReport(records, reportProgressStatusHolder);
     }
 
 }

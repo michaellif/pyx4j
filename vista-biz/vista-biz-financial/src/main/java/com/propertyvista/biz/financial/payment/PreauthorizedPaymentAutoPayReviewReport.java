@@ -54,9 +54,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
                 criteria.in(criteria.proto().lease().unit().building(), selectedBuildings);
             }
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
-
-            // TODO make it actually do its job
-            //criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
+            criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
 
             criteria.asc(criteria.proto().lease().unit().building().propertyCode());
             criteria.asc(criteria.proto().lease().leaseId());
@@ -169,6 +167,15 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
 
+            if (!chargeReview.suggested().totalPrice().isNull()) {
+                chargeReview
+                        .suggested()
+                        .percentChange()
+                        .setValue( //
+                                chargeReview.suggested().totalPrice().getValue()
+                                        .divide(chargeReview.suspended().totalPrice().getValue(), 2, RoundingMode.FLOOR).subtract(BigDecimal.ONE));
+            }
+
             papReview.items().add(chargeReview);
         }
 
@@ -192,7 +199,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         if (VistaFeatures.instance().yardiIntegration()) {
             description = billableItem.extraData().getStringView() + " ";
         }
-        description += billableItem.description().getValue();
+        description += billableItem.description().getStringView();
         return description;
     }
 
