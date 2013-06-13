@@ -39,6 +39,7 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -164,36 +165,16 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.autosize = autosize;
     }
 
-    protected RichTextString createRichTextString(String text) {
-        if (xlsx) {
-            return new XSSFRichTextString(text);
-        } else {
-            return new HSSFRichTextString(text);
-        }
+    public Sheet getCurentSheet() {
+        return curentSheet;
     }
 
-    @Override
-    public void header(String text) {
-        if (!CommonsStringUtils.isStringSet(text)) {
-            this.cellIdx++;
-            return;
-        }
-        if (this.curentRow == null) {
-            newRow();
-        }
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
-        cell.setCellStyle(this.cellStyleColumnHeading);
-        cell.setCellValue(createRichTextString(text));
+    public short getRowIdx() {
+        return rowIdx;
     }
 
-    public void header2Cell(String text) {
-        if (!CommonsStringUtils.isStringSet(text)) {
-            this.cellIdx++;
-            return;
-        }
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
-        cell.setCellStyle(this.cellStyleColumnHeading2);
-        cell.setCellValue(createRichTextString(text));
+    public short getCellIdx() {
+        return cellIdx;
     }
 
     public void newSheet(String sheetName) {
@@ -234,6 +215,46 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.cellIdx += count;
     }
 
+    public Cell createCell() {
+        return this.curentRow.createCell(this.cellIdx++);
+    }
+
+    public void mergeCells(int rowspan, int colspan) {
+        this.curentSheet.addMergedRegion(new CellRangeAddress(this.rowCount - 1, this.rowCount - 2 + rowspan, this.cellIdx - 1, this.cellIdx - 2 + colspan));
+    }
+
+    @Override
+    public void header(String text) {
+        if (!CommonsStringUtils.isStringSet(text)) {
+            this.cellIdx++;
+            return;
+        }
+        if (this.curentRow == null) {
+            newRow();
+        }
+        Cell cell = createCell();
+        cell.setCellStyle(this.cellStyleColumnHeading);
+        cell.setCellValue(createRichTextString(text));
+    }
+
+    public void header2Cell(String text) {
+        if (!CommonsStringUtils.isStringSet(text)) {
+            this.cellIdx++;
+            return;
+        }
+        Cell cell = createCell();
+        cell.setCellStyle(this.cellStyleColumnHeading2);
+        cell.setCellValue(createRichTextString(text));
+    }
+
+    protected RichTextString createRichTextString(String text) {
+        if (xlsx) {
+            return new XSSFRichTextString(text);
+        } else {
+            return new HSSFRichTextString(text);
+        }
+    }
+
     @Override
     public void cell(Object value) {
         if (value == null) {
@@ -262,28 +283,30 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
             this.cellIdx++;
             return;
         }
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDefault);
         cell.setCellType(Cell.CELL_TYPE_STRING);
         cell.setCellValue(createRichTextString(value));
     }
 
     public void cell(BigDecimal value) {
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDollar);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellValue(value.doubleValue());
+        if (value != null) {
+            cell.setCellValue(value.doubleValue());
+        }
     }
 
     public void cell(double value) {
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDouble);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellValue(value);
     }
 
     public void cell(long value) {
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellStyle(this.cellStyleInteger);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellValue(value);
@@ -304,13 +327,13 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     public void cell(java.sql.Date value) {
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDate);
         cell.setCellValue(value);
     }
 
     public void cell(Date value) {
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDateTime);
         cell.setCellValue(value);
     }
@@ -323,7 +346,7 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     }
 
     public void cellCurrency(double value) {
-        Cell cell = this.curentRow.createCell(this.cellIdx++);
+        Cell cell = createCell();
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.cellStyleDollar);
         cell.setCellValue(value);
