@@ -56,13 +56,16 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
                         get(proto().buildings()).setVisible(event.getValue());
-                        if (!event.getValue()) {
-                            get(proto().buildings()).getValue().clear();
-                        }
                     }
                 });
                 panel.setWidget(++row, 0, inject(proto().buildings(), new SelectedBuildingsFolder()));
                 return panel;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+                get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
             }
         };
         form.initContent();
