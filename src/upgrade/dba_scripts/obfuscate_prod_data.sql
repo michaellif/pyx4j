@@ -116,3 +116,5 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
+SELECT * FROM _dba_.obfuscate_prod_data();
+
