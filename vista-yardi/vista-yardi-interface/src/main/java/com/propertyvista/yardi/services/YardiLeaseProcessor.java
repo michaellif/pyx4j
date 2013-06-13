@@ -55,6 +55,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.yardi.mapper.TenantMapper;
 import com.propertyvista.yardi.merger.LeaseMerger;
+import com.propertyvista.yardi.merger.LeaseMerger.LeaseChargesMergeStatus;
 import com.propertyvista.yardi.merger.TenantMerger;
 
 public class YardiLeaseProcessor {
@@ -205,7 +206,6 @@ public class YardiLeaseProcessor {
     }
 
     public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
-        // TODO YardiLeaseIntegrationAgent.updateBillabelItem(lease, billableItem);
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         log.info("      Updating billable items for lease {} ", lease.getStringView());
         List<BillableItem> newItems = new ArrayList<BillableItem>();
@@ -215,19 +215,43 @@ public class YardiLeaseProcessor {
             }
             newItems.add(createBillableItem(tr.getCharge().getDetail()));
         }
-        if (new LeaseMerger().mergeBillableItems(newItems, lease)) {
+        LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease);
+        if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
             // terminate unmatched features - set expiration date at the end of billing cycle
             LogicalDate now = getLogicalDate(SystemDateManager.getDate());
             BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
             LeaseMerger merger = new LeaseMerger();
             for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-                if (merger.findBillableItem(item, newItems) == null) {
+                if (!LeaseChargesMergeStatus.NoChange.equals(merger.findBillableItem(item, newItems))) {
                     item.expirationDate().set(currCycle.billingCycleEndDate());
                 }
             }
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            // suspend PAP if total amount has changed
+            if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
+                suspendPADPayments(lease);
+            }
+        }
+        return lease;
+    }
+
+    public Lease expireLeaseProducts(Lease leaseId) {
+        Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
+        // set service charge to zero
+        if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()) < 0) {
+            log.info("      Expiring billable items for lease {} ", lease.getStringView());
+
+            lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
+            // expire features
+            LogicalDate now = getLogicalDate(SystemDateManager.getDate());
+            BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
+            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
+                item.expirationDate().set(currCycle.billingCycleEndDate());
+            }
+            ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             suspendPADPayments(lease);
         }
+
         return lease;
     }
 
