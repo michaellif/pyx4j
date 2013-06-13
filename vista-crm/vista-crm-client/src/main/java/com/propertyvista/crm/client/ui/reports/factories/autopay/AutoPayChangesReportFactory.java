@@ -15,7 +15,9 @@ package com.propertyvista.crm.client.ui.reports.factories.autopay;
 
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -25,10 +27,15 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
+import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
+import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChangesReportMetadata> {
 
@@ -60,10 +67,10 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
 
             @Override
             public void setData(Object data) {
-                Vector<AutoPayReviewDTO> autoPayReviews = (Vector<AutoPayReviewDTO>) data;
 
+                // header
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant("<table style=\"width: 100%; white-space: nowrap; border-collapse: separate; border-spacing: 1px;\" border='1'>");
+                builder.appendHtmlConstant("<table style=\"width: 100%; white-space: nowrap; border-collapse: separate; border-spacing: 0px;\" border='1'>");
                 builder.appendHtmlConstant("<tr>");
                 builder.appendHtmlConstant("<th rowspan='2'>");
                 builder.appendEscaped(i18n.tr("Case"));
@@ -114,8 +121,86 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("</tr>");
 
+                // rows
+                Vector<AutoPayReviewDTO> autoPayReviews = (Vector<AutoPayReviewDTO>) data;
+                for (AutoPayReviewDTO reviewCase : autoPayReviews) {
+                    int numOfCaseRows = caseRows(reviewCase);
+                    boolean isFirstLine = true;
+                    builder.appendHtmlConstant("<tr>");
+                    builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "'>" + "CASE BLA BLA BLA" + "</td>");
+                    builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows - 1) + "'>" + SafeHtmlUtils.htmlEscape(reviewCase.building().getValue())
+                            + "</td>");
+                    builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows - 1) + "'>" + SafeHtmlUtils.htmlEscape(reviewCase.unit().getValue()) + "</td>"); // TODO escape property code
+
+                    String leaseUrl = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false,
+                            new CrmSiteMap.Tenants.Lease().formViewerPlace(reviewCase.lease().getPrimaryKey()));
+                    builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows - 1) + "'><a href='" + leaseUrl + "'>"
+                            + SafeHtmlUtils.htmlEscape(reviewCase.leaseId().getValue()) + "</a></td>"); // TODO escape property code
+                    for (AutoPayReviewPreauthorizedPaymentDTO reviewPap : reviewCase.pap()) {
+                        int numOfTenantRows = reviewPap.items().size();
+                        if (!isFirstLine) {
+                            builder.appendHtmlConstant("<tr>");
+                        }
+                        builder.appendHtmlConstant("<td rowspan='" + numOfTenantRows + "'>" + SafeHtmlUtils.htmlEscape(reviewPap.tenantName().getValue())
+                                + "</td>");
+                        boolean isFirstCharge = true;
+                        for (AutoPayReviewChargeDTO charge : reviewPap.items()) {
+                            if (!isFirstCharge) {
+                                builder.appendHtmlConstant("<tr>");
+                            } else {
+                                isFirstCharge = false;
+                            }
+                            builder.appendHtmlConstant("<td>" + "CHARGE_CODE" + "</td>");
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                    + charge.suspended().totalPrice().getStringView() + "</td>");
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                    + charge.suspended().payment().getStringView() + "</td>");
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                    + charge.suspended().percent().getStringView() + "</td>");
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                    + charge.suggested().totalPrice().getStringView() + "</td>");
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                    + charge.suggested().payment().getStringView() + "</td>");
+                            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                    + charge.suggested().percent().getStringView() + "</td>");
+                            if (isFirstLine) {
+                                builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "' class='" + CommonReportStyles.RCellNumber.name() + "'>"
+                                        + reviewCase.paymentDue().getStringView() + "</td>");
+                            }
+                            builder.appendHtmlConstant("</tr>");
+
+                            if (isFirstLine) {
+                                isFirstLine = false;
+                            }
+                        }
+
+                    }
+
+                    // add summary for lease
+                    builder.appendHtmlConstant("<tr>");
+                    builder.appendHtmlConstant("<th colspan='5' style='text-align:right;' class='" + CommonReportStyles.RRowTotal.name() + "'>"
+                            + i18n.tr("Total for lease:") + "</th>");
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'></td>"); // totalPrice
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'></td>"); // payment 
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'></td>"); // %
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'></td>"); // totalPrice
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'></td>"); // payment
+                    builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'></td>"); // %                    
+                    builder.appendHtmlConstant("</tr>");
+                }
+
                 builder.appendHtmlConstant("</table>");
                 reportHtml.setHTML(builder.toSafeHtml());
+
+            }
+
+            private int caseRows(AutoPayReviewDTO reviewCase) {
+                int rows = 0;
+                for (AutoPayReviewPreauthorizedPaymentDTO pap : reviewCase.pap()) {
+                    rows += pap.items().size();
+                }
+                rows += 1; // for summary line
+                return rows;
             }
 
         };

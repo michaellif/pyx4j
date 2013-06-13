@@ -27,7 +27,9 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
+import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExporter {
 
@@ -43,7 +45,17 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(selectedBuildings));
 
-        return suspenedPreauthorizedPayments;
+        if (true) {// THIS IS FOR TESTIG UI
+            Vector<AutoPayReviewDTO> fake = new Vector<AutoPayReviewDTO>();
+            for (AutoPayReviewDTO dto : suspenedPreauthorizedPayments) {
+                fake.add(dto);
+                dto.pap().get(0).items().add(dto.pap().get(0).items().get(0).duplicate(AutoPayReviewChargeDTO.class)); // add another charge
+                dto.pap().add(dto.pap().get(0).duplicate(AutoPayReviewPreauthorizedPaymentDTO.class)); // add 'another' tenant 
+            }
+            return fake;
+        } else {
+            return suspenedPreauthorizedPayments;
+        }
     }
 
     @Override

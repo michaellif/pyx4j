@@ -46,7 +46,7 @@ public interface AutoPayReviewChargeDetailDTO extends IEntity {
     IPrimitive<BigDecimal> payment();
 
     @Caption(name = "% of Total")
-    @Format("#,##00")
+    @Format("#.##%")
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> percent();
 

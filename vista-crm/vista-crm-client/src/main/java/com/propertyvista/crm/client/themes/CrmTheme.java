@@ -46,6 +46,7 @@ import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
+import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
@@ -465,6 +466,17 @@ public class CrmTheme extends VistaTheme {
         style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
         style.addProperty("display", "none");
         addStyle(style);
+
+        style = new Style("." + CommonReportStyles.RCellNumber.name());
+        style.addProperty("text-align", "right");
+        style.addProperty("font-face", "monospace");
+        addStyle(style);
+
+        style = new Style("." + CommonReportStyles.RRowTotal.name());
+        style.addProperty("background-color", ThemeColor.foreground, 0.5);
+        style.addProperty("font-face", "monospace");
+        addStyle(style);
+
     }
 
     private void initKeywordBoxStyles() {
