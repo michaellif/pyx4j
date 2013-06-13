@@ -17,8 +17,10 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
@@ -27,9 +29,8 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.domain.property.asset.building.Building;
-import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
-import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 
 public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExporter {
 
@@ -41,21 +42,26 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
 
     @Override
     public Serializable generateReport(ReportMetadata reportMetadata) {
-        List<Building> selectedBuildings = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
+        AutoPayChangesReportMetadata autoPayChangesReportMetadata = (AutoPayChangesReportMetadata) reportMetadata;
+        // query buildings to enforce portfolio:        
+        List<Building> selectedBuildings = null;
+
+        if (!autoPayChangesReportMetadata.buildings().isEmpty()) {
+            Vector<Key> buildingKeys = new Vector<Key>(autoPayChangesReportMetadata.buildings().size());
+            for (Building b : autoPayChangesReportMetadata.buildings()) {
+                buildingKeys.add(b.getPrimaryKey());
+            }
+            EntityQueryCriteria<Building> buildingsCriteria = EntityQueryCriteria.create(Building.class);
+            buildingsCriteria.in(buildingsCriteria.proto().id(), buildingKeys);
+            selectedBuildings = Persistence.secureQuery(buildingsCriteria, AttachLevel.IdOnly);
+        } else {
+            selectedBuildings = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
+        }
+
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(selectedBuildings));
 
-        if (true) {// THIS IS FOR TESTIG UI
-            Vector<AutoPayReviewDTO> fake = new Vector<AutoPayReviewDTO>();
-            for (AutoPayReviewDTO dto : suspenedPreauthorizedPayments) {
-                fake.add(dto);
-                dto.pap().get(0).items().add(dto.pap().get(0).items().get(0).duplicate(AutoPayReviewChargeDTO.class)); // add another charge
-                dto.pap().add(dto.pap().get(0).duplicate(AutoPayReviewPreauthorizedPaymentDTO.class)); // add 'another' tenant 
-            }
-            return fake;
-        } else {
-            return suspenedPreauthorizedPayments;
-        }
+        return suspenedPreauthorizedPayments;
     }
 
     @Override

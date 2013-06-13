@@ -16,6 +16,7 @@ package com.propertyvista.domain.reports;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
@@ -24,6 +25,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 @Transient
 @Caption(name = "AutoPay Changes Report")
 public interface AutoPayChangesReportMetadata extends ReportMetadata, ExportableReport {
+
+    IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> buildings();
 }

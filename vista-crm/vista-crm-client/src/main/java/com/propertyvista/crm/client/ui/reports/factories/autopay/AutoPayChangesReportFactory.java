@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.reports.factories.autopay;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.ui.HTML;
@@ -31,6 +33,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.factories.eft.SelectedBuildingsFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
@@ -47,6 +50,18 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
             @Override
             public IsWidget createContent() {
                 FormFlexPanel panel = new FormFlexPanel();
+                int row = -1;
+                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
+                get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                        get(proto().buildings()).setVisible(event.getValue());
+                        if (!event.getValue()) {
+                            get(proto().buildings()).getValue().clear();
+                        }
+                    }
+                });
+                panel.setWidget(++row, 0, inject(proto().buildings(), new SelectedBuildingsFolder()));
                 return panel;
             }
         };
