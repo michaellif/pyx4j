@@ -16,14 +16,15 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -109,13 +110,23 @@ class PreauthorizedPaymentAutoPayReviewReport {
     }
 
     private void calulateLeaseTotals(AutoPayReviewDTO review) {
+        // Count each item once in totals
+        Set<BillableItem> countedSuspended = new HashSet<BillableItem>();
+        Set<BillableItem> countedSuggested = new HashSet<BillableItem>();
+
         for (AutoPayReviewPreauthorizedPaymentDTO pap : review.pap()) {
             for (AutoPayReviewChargeDTO chargeReview : pap.items()) {
-                nvlAdd(review.totalSuspended().totalPrice(), chargeReview.suspended().totalPrice());
-                nvlAdd(review.totalSuspended().payment(), chargeReview.suspended().payment());
+                if (!chargeReview.suspended().billableItem().isNull() && !countedSuspended.contains(chargeReview.suspended().billableItem())) {
+                    countedSuspended.add(chargeReview.suspended().billableItem());
+                    DomainUtil.nvlAddBigDecimal(review.totalSuspended().totalPrice(), chargeReview.suspended().totalPrice());
+                }
+                DomainUtil.nvlAddBigDecimal(review.totalSuspended().payment(), chargeReview.suspended().payment());
 
-                nvlAdd(review.totalSuggested().totalPrice(), chargeReview.suspended().totalPrice());
-                nvlAdd(review.totalSuggested().payment(), chargeReview.suspended().payment());
+                if (!chargeReview.suggested().billableItem().isNull() && !countedSuggested.contains(chargeReview.suggested().billableItem())) {
+                    countedSuggested.add(chargeReview.suggested().billableItem());
+                    DomainUtil.nvlAddBigDecimal(review.totalSuggested().totalPrice(), chargeReview.suggested().totalPrice());
+                }
+                DomainUtil.nvlAddBigDecimal(review.totalSuggested().payment(), chargeReview.suggested().payment());
             }
         }
 
@@ -124,16 +135,6 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
         if (!review.totalSuggested().totalPrice().isNull()) {
             calulatePercent(review.totalSuggested());
-        }
-    }
-
-    private void nvlAdd(IPrimitive<BigDecimal> total, IPrimitive<BigDecimal> value) {
-        if (value.isNull()) {
-            return;
-        } else if (total.isNull()) {
-            total.setValue(value.getValue());
-        } else {
-            total.setValue(total.getValue().add(value.getValue()));
         }
     }
 
@@ -203,11 +204,11 @@ class PreauthorizedPaymentAutoPayReviewReport {
         return description;
     }
 
-    private void calulatePercent(AutoPayReviewChargeDetailDTO suspended) {
-        if (suspended.totalPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
-            suspended.percent().setValue(suspended.payment().getValue().divide(suspended.totalPrice().getValue(), 2, RoundingMode.FLOOR));
+    private void calulatePercent(AutoPayReviewChargeDetailDTO chargeDetail) {
+        if (chargeDetail.totalPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
+            chargeDetail.percent().setValue(chargeDetail.payment().getValue().divide(chargeDetail.totalPrice().getValue(), 2, RoundingMode.FLOOR));
         } else {
-            suspended.percent().setValue(BigDecimal.ZERO);
+            chargeDetail.percent().setValue(BigDecimal.ZERO);
         }
     }
 
@@ -251,7 +252,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
             if (originalPaymentAmount.compareTo(BigDecimal.ZERO) == 0) {
                 return BigDecimal.ZERO;
             } else {
-                return DomainUtil.roundMoney(originalPaymentAmount.multiply(newPrice).divide(originalPrice));
+                return DomainUtil.roundMoney(originalPaymentAmount.multiply(newPrice).divide(originalPrice, RoundingMode.HALF_UP));
             }
         default:
             throw new IllegalArgumentException();

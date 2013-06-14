@@ -162,6 +162,24 @@ public class DomainUtil {
         }
     }
 
+    public static void nvlAddBigDecimal(IPrimitive<BigDecimal> total, IPrimitive<BigDecimal> value) {
+        if (value.isNull()) {
+            return;
+        } else if (total.isNull()) {
+            total.setValue(value.getValue());
+        } else {
+            total.setValue(total.getValue().add(value.getValue()));
+        }
+    }
+
+    public static void nvlAddLong(IPrimitive<Long> target, IPrimitive<Long> value) {
+        if (target.isNull()) {
+            target.setValue(value.getValue());
+        } else if (!value.isNull()) {
+            target.setValue(target.getValue() + value.getValue());
+        }
+    }
+
     /**
      * Create min max Pair from Two pairs of the same type
      */
