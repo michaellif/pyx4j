@@ -14,30 +14,29 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2013-05-23
+ * Created on 2013-05-29
  * @author ArtyomB
  * @version $Id$
  */
 package com.pyx4j.essentials.server.services.reports;
 
-import java.io.Serializable;
+public final class ReportProgressStatus {
 
-public interface ReportExporter extends ReportGenerator {
+    public final String stage;
 
-    public static class ExportedReport {
+    public final int stageNum;
 
-        public final byte[] data;
+    public final int stagesCount;
 
-        public final String fileName;
+    public final int stageProgress;
 
-        public final String contentType;
+    public final int stageProgressMax;
 
-        public ExportedReport(String fileName, String contentType, byte[] data) {
-            this.data = data;
-            this.fileName = fileName;
-            this.contentType = contentType;
-        }
+    public ReportProgressStatus(String stage, int stageNum, int stagesCount, int stageProgress, int stageProgressMax) {
+        this.stage = stage;
+        this.stageNum = stageNum;
+        this.stagesCount = stagesCount;
+        this.stageProgress = stageProgress;
+        this.stageProgressMax = stageProgressMax;
     }
-
-    public ExportedReport export(Serializable report);
 }

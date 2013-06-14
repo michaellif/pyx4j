@@ -33,8 +33,16 @@ public interface IReportsService extends IService {
     /** prepares and returns a report for the provided report metadata */
     void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata);
 
+    void generateReportAsync(AsyncCallback<String> callback, ReportMetadata reportMetadata);
+
+    void getReport(AsyncCallback<Serializable> callback);
+
     void export(AsyncCallback<String> callback, ReportMetadata reportMetadata);
 
-    void cancelExport(AsyncCallback<VoidSerializable> callback, String downloadUrl);
+    /**
+     * as far as I understand this is called in case report is ready for download, but user pressed cancel (i.e. it's not the same thing as DeferredPorcess
+     * cancellation while it in progress)
+     */
+    void cancelExportedReport(AsyncCallback<VoidSerializable> callback, String downloadUrl);
 
 }

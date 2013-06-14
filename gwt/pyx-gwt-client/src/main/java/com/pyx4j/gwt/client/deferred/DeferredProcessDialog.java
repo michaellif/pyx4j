@@ -23,7 +23,6 @@ package com.pyx4j.gwt.client.deferred;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.HTML;
@@ -64,8 +63,10 @@ public class DeferredProcessDialog extends SimplePanel implements CloseOption, C
         messagePenel.add(message1 = new HTML(initialMessage));
         messagePenel.add(message2 = new HTML(""));
 
-        deferredProgressPanel = new DeferredProgressPanel("70px", "20px", executeByUserRequests, this);
-        deferredProgressPanel.getElement().getStyle().setPaddingLeft(25, Style.Unit.PX);
+        deferredProgressPanel = new DeferredProgressPanel("100px", "40px", executeByUserRequests, this);
+        deferredProgressPanel.getElement().getStyle().setProperty("marginLeft", "auto");
+        deferredProgressPanel.getElement().getStyle().setProperty("marginRight", "auto");
+        deferredProgressPanel.setSize("100%", "100%");
         deferredProgressPanel.setVisible(false);
         messagePenel.add(deferredProgressPanel);
 

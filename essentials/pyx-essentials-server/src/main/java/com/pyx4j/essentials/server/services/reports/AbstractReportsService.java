@@ -36,10 +36,77 @@ import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 public class AbstractReportsService implements IReportsService {
+
+    private static final String REPORT_SESSION_STORAGE_KEY = "REPORT_SESSION_STORAGE_KEY";
+
+    public final class GenerateReportDeferredProcess implements IDeferredProcess {
+
+        private static final long serialVersionUID = 8173598149198655557L;
+
+        private volatile boolean cancelled;
+
+        private volatile boolean isReady;
+
+        private final ReportGenerator reportGenerator;
+
+        private final ReportMetadata reportMetadata;
+
+        public GenerateReportDeferredProcess(ReportGenerator reportGenerator, ReportMetadata reportMetadata) {
+            this.cancelled = false;
+            this.isReady = false;
+            this.reportGenerator = reportGenerator;
+            this.reportMetadata = reportMetadata;
+        }
+
+        @Override
+        public DeferredProcessProgressResponse status() {
+            if (isReady) {
+                DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
+                r.setCompleted();
+                return r;
+            } else {
+                DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
+                ReportProgressStatus status = reportGenerator.getProgressStatus();
+                if (status != null) {
+                    r.setMessage(status.stage);
+                    r.setProgress(status.stageProgress);
+                    r.setProgressMaximum(status.stageProgressMax);
+                }
+                if (cancelled) {
+                    r.setCanceled();
+                }
+                return r;
+            }
+        }
+
+        @Override
+        public void execute() {
+            final Serializable[] reportData = new Serializable[1];
+            if (!cancelled) {
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() {
+                        reportData[0] = reportGenerator.generateReport(reportMetadata);
+                        return null;
+                    }
+                });
+                Context.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData[0]);
+                isReady = true;
+            }
+        }
+
+        @Override
+        public void cancel() {
+            reportGenerator.abort();
+            cancelled = true;
+        }
+
+    }
 
     public final class ExportReportDeferredProcess implements IDeferredProcess {
 
@@ -71,8 +138,12 @@ public class AbstractReportsService implements IReportsService {
                 return r;
             } else {
                 DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
-                r.setProgress(0);
-                r.setProgressMaximum(100);
+                ReportProgressStatus status = reportGenerator.getProgressStatus();
+                if (status != null) {
+                    r.setMessage(status.stage);
+                    r.setProgress(status.stageProgress);
+                    r.setProgressMaximum(status.stageProgressMax);
+                }
                 if (cancelled) {
                     r.setCanceled();
                 }
@@ -84,7 +155,6 @@ public class AbstractReportsService implements IReportsService {
         public void execute() {
             if (!cancelled) {
                 new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
-
                     @Override
                     public Void execute() {
                         Serializable reportData = reportGenerator.generateReport(reportMetadata);
@@ -100,21 +170,29 @@ public class AbstractReportsService implements IReportsService {
 
         @Override
         public void cancel() {
-            this.cancelled = true;
+            reportGenerator.abort();
+            cancelled = true;
         }
+
     }
 
-    private final Map<Class<? extends ReportMetadata>, ReportGenerator> reportGenerators;
+    private final Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportGenerators;
 
-    public AbstractReportsService(Map<Class<? extends ReportMetadata>, ReportGenerator> reportGenerators) {
+    public AbstractReportsService(Map<Class<? extends ReportMetadata>, Class<? extends ReportGenerator>> reportGenerators) {
         this.reportGenerators = reportGenerators;
     }
 
     @Override
     public void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata) {
 
-        ReportGenerator reportGenerator = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGenerator != null) {
+        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
+        if (reportGeneratorClass != null) {
+            ReportGenerator reportGenerator;
+            try {
+                reportGenerator = reportGeneratorClass.newInstance();
+            } catch (Throwable e) {
+                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
+            }
             callback.onSuccess(reportGenerator.generateReport(reportMetadata));
         } else {
             throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
@@ -124,9 +202,41 @@ public class AbstractReportsService implements IReportsService {
     }
 
     @Override
+    public void generateReportAsync(AsyncCallback<String> callback, ReportMetadata reportMetadata) {
+        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
+        if (reportGeneratorClass != null) {
+            ReportGenerator reportGenerator;
+            try {
+                reportGenerator = reportGeneratorClass.newInstance();
+            } catch (Throwable e) {
+                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
+            }
+            callback.onSuccess(DeferredProcessRegistry.fork(new GenerateReportDeferredProcess(reportGenerator, reportMetadata),
+                    DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
+        } else {
+            throw new Error("report generation failed: report generator for report type '" + reportMetadata.getInstanceValueClass().getName()
+                    + "' was not found");
+        }
+
+    }
+
+    @Override
+    public void getReport(AsyncCallback<Serializable> callback) {
+        Serializable report = Context.getVisit().getAttribute(REPORT_SESSION_STORAGE_KEY);
+        Context.getVisit().removeAttribute(REPORT_SESSION_STORAGE_KEY);
+        callback.onSuccess(report);
+    }
+
+    @Override
     public void export(AsyncCallback<String> callback, ReportMetadata reportMetadata) {
-        ReportGenerator reportGenerator = reportGenerators.get(reportMetadata.getInstanceValueClass());
-        if (reportGenerator != null && reportGenerator instanceof ReportExporter) {
+        Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
+        if (reportGeneratorClass != null) {
+            ReportGenerator reportGenerator = null;
+            try {
+                reportGenerator = reportGeneratorClass.newInstance();
+            } catch (Throwable e) {
+                throw new Error("report generation failed: failed to instantiate report generator class '" + reportGeneratorClass.getName() + "'", e);
+            }
             callback.onSuccess(DeferredProcessRegistry.fork(new ExportReportDeferredProcess(reportGenerator, reportMetadata),
                     DeferredProcessRegistry.THREAD_POOL_DOWNLOADS));
         } else {
@@ -136,11 +246,12 @@ public class AbstractReportsService implements IReportsService {
     }
 
     @Override
-    public void cancelExport(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
+    public void cancelExportedReport(AsyncCallback<VoidSerializable> callback, String downloadUrl) {
         String fileName = Downloadable.getDownloadableFileName(downloadUrl);
         if (fileName != null) {
             Downloadable.cancel(fileName);
         }
         callback.onSuccess(null);
     }
+
 }

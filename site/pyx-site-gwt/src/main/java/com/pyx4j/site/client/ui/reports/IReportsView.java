@@ -20,6 +20,7 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
@@ -44,6 +45,8 @@ public interface IReportsView extends IPane {
     void setPresenter(Presenter presenter);
 
     <E extends ReportMetadata> void setReportSettings(E reportSettings, String settingsId);
+
+    void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener);
 
     void setReportData(Object data);
 

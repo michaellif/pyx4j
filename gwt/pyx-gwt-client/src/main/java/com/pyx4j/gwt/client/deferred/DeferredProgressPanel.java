@@ -24,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -32,6 +33,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessService;
+import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.ProgressBar;
 
 public class DeferredProgressPanel extends FlowPanel {
@@ -61,13 +63,19 @@ public class DeferredProgressPanel extends FlowPanel {
 
     DeferredProgressListener listener;
 
+    private Label messageBar;
+
     public DeferredProgressPanel(String width, String height, boolean executeByUserRequests, DeferredProgressListener listener) {
+        this.getElement().getStyle().setTextAlign(TextAlign.CENTER);
         service = GWT.create(DeferredProcessService.class);
         this.executeByUserRequests = executeByUserRequests;
         this.listener = listener;
+        this.add(messageBar = new Label());
         this.add(progressBar = new ProgressBar());
         progressBar.setWidth(width);
         progressBar.setHeight(height);
+        progressBar.getElement().getStyle().setProperty("marginLeft", "auto");
+        progressBar.getElement().getStyle().setProperty("marginRight", "auto");
     }
 
     public void startProgress(final String deferredCorrelationId) {
@@ -158,6 +166,7 @@ public class DeferredProgressPanel extends FlowPanel {
                     deferredCorrelationId = null;
                     progressTimer = null;
                 } else {
+                    messageBar.setText(result.getMessage() != null ? result.getMessage() : "");
                     progressBar.setMaxProgress(result.getProgressMaximum());
                     progressBar.setProgress(result.getProgress());
                     if (progressTimer != null) {

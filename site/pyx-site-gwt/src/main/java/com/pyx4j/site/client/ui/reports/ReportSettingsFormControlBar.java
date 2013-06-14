@@ -82,6 +82,11 @@ public abstract class ReportSettingsFormControlBar extends Composite {
         modeToggle.setVisible(false);
     }
 
+    public void setEnabled(boolean isEnabled) {
+        modeToggle.setEnabled(isEnabled);
+        apply.setEnabled(isEnabled);
+    }
+
     public abstract void onApply();
 
     public abstract void onSettingsModeToggled(boolean isAdvanced);
