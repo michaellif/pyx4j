@@ -108,19 +108,19 @@ enable-auto-props = yes
 # Makefile = svn:eol-style=native
 # * = svn:needs-lock=*
 # *.* = svn:needs-lock=*
-*.c = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.cpp = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.cc = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.m = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.mm = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.h = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.c = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.cpp = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.cc = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.m = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.mm = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.h = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.dsp = svn:eol-style=CRLF
 *.dsw = svn:eol-style=CRLF
-*.sh = svn:mime-type=text/x-script.sh;svn:executable;svn:eol-style=LF;svn:keywords=Date Author Id Revision
-*.initd = svn:mime-type=text/x-script.sh;svn:executable;svn:eol-style=LF;svn:keywords=Date Author Id Revision
-*.cmd = svn:mime-type=text/plain;svn:eol-style=CRLF;svn:keywords=Date Author Id Revision
-*.bat = svn:mime-type=text/plain;svn:eol-style=CRLF;svn:keywords=Date Author Id Revision
-Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.sh = svn:mime-type=text/x-script.sh;svn:executable;svn:eol-style=LF;svn:keywords=Author Date Id Revision
+*.initd = svn:mime-type=text/x-script.sh;svn:executable;svn:eol-style=LF;svn:keywords=Author Date Id Revision
+*.cmd = svn:mime-type=text/plain;svn:eol-style=CRLF;svn:keywords=Author Date Id Revision
+*.bat = svn:mime-type=text/plain;svn:eol-style=CRLF;svn:keywords=Author Date Id Revision
+Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 .classpath = svn:mime-type=text/xml;svn:eol-style=native
 .project = svn:mime-type=text/xml;svn:eol-style=native
 *.prefs = svn:mime-type=text/plain;svn:eol-style=native
@@ -143,35 +143,35 @@ Makefile = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Autho
 *.zip = svn:mime-type=application/zip
 *.swf = svn:mime-type=application/x-shockwave-flash
 *.flv = svn:mime-type=video/x-flv
-*.txt = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.php = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.po = svn:mime-type=text/x-gettext-translation;;charset=utf-8;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.txt = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.php = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.po = svn:mime-type=text/x-gettext-translation;;charset=utf-8;svn:eol-style=native;svn:keywords=Author Date Id Revision
 .htaccess = svn:mime-type=text/plain;svn:eol-style=native
-*.apt = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.fml = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.csv = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.ora = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.version = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.xml = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.apt = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.fml = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.csv = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.ora = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.version = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.xml = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
 *.launch = svn:mime-type=text/xml;svn:eol-style=native
-*.ent = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.dtd = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.xsd = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.xsl = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.wsdl = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.htm = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.html = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.xhtml = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.css = svn:mime-type=text/css;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.jfig = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.js = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.gs = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.jsp = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.jspf = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.java = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.properties = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.conf = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.cfg = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.tld = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
-*.sql = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Date Author Id Revision
+*.ent = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.dtd = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.xsd = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.xsl = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.wsdl = svn:mime-type=text/xml;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.htm = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.html = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.xhtml = svn:mime-type=text/html;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.css = svn:mime-type=text/css;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.jfig = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.js = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.gs = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.jsp = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.jspf = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.java = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.properties = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.conf = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.cfg = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.tld = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
+*.sql = svn:mime-type=text/plain;svn:eol-style=native;svn:keywords=Author Date Id Revision
 
