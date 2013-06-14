@@ -70,7 +70,18 @@
     background: none repeat scroll 0 0 transparent;
     border: medium none;
     height: 19px;
-    text-align: inherit;
+    padding: 0;
+}
+
+.EditorPanel .Button:hover {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    height: 19px;
+    padding: 0;
+}
+
+.EditorPanel .TextBox {
+    min-width: 90px;
 }
 
 .Anchor-disabled:hover {
@@ -165,7 +176,7 @@
 }
 
 .WidgetDecoratorComponentHolder {
-	overflow: visible;
+	overflow: visible !important;
 	min-width: 5em !important;
 }
 
@@ -1756,8 +1767,4 @@ ul.footer_locations li {
 
 .WizardPanel {
     min-height: 25em;
-}
-
-.ViewerPanel .gwt-HTML {
-    max-height: inherit !important;
 }
