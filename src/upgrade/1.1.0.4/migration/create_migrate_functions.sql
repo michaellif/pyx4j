@@ -1,7 +1,7 @@
 /**
 ***     ======================================================================================================================
 ***
-***             @version $Revision: 12889 $ ($Author: akinareevski $) $Date: 2013-05-27 19:39:59 -0400 (Mon, 27 May 2013) $
+***             @version $Revision: $ ($Author: $) $Date: $
 ***
 ***             VISTA-2778 version 1.1.0.4 PMC migration function
 ***

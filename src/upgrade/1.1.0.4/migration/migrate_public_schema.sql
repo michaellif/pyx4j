@@ -1,7 +1,7 @@
 /**
 ***     ===========================================================================================================
 ***     
-***     @version $Revision: 12882 $ ($Author: akinareevski $) $Date: 2013-05-27 17:25:01 -0400 (Mon, 27 May 2013) $
+***     @version $Revision: $ ($Author: $) $Date: $
 ***
 ***     Migration script for public schema - generated with by _dba_.generate_sql_sequences function
 ***
