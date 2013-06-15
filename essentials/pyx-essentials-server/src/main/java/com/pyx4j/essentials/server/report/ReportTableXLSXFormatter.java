@@ -63,9 +63,9 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
 
     private Row curentRow = null;
 
-    private short rowIdx = 0;
+    private int rowIdx = 0;
 
-    private short cellIdx = 0;
+    private int cellIdx = 0;
 
     protected final CellStyle cellStyleColumnHeading;
 
@@ -165,16 +165,28 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.autosize = autosize;
     }
 
+    public Workbook getWorkbook() {
+        return workbook;
+    }
+
     public Sheet getCurentSheet() {
         return curentSheet;
     }
 
-    public short getRowIdx() {
-        return rowIdx;
+    public int getCurentRowIdx() {
+        return rowIdx - 1;
     }
 
-    public short getCellIdx() {
-        return cellIdx;
+    public Row getCurentRow() {
+        return this.curentRow;
+    }
+
+    public int getCurentCellIdx() {
+        return cellIdx - 1;
+    }
+
+    public Cell getCurentCell() {
+        return this.curentRow.getCell(getCurentCellIdx());
     }
 
     public void newSheet(String sheetName) {
