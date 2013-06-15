@@ -41,6 +41,6 @@ public class TriggerLister extends AbstractLister<TriggerDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().name(), false));
     }
 }
