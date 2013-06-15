@@ -236,7 +236,9 @@ public class AutoPayChangesReportExport {
 
     private void calulatePercent(AutoPayReviewChargeDetailDTO chargeDetail) {
         if (chargeDetail.totalPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
-            chargeDetail.percent().setValue(chargeDetail.payment().getValue().divide(chargeDetail.totalPrice().getValue(), 2, RoundingMode.FLOOR));
+            if (!chargeDetail.payment().isNull()) {
+                chargeDetail.percent().setValue(chargeDetail.payment().getValue().divide(chargeDetail.totalPrice().getValue(), 2, RoundingMode.FLOOR));
+            }
         } else {
             chargeDetail.percent().setValue(BigDecimal.ZERO);
         }
