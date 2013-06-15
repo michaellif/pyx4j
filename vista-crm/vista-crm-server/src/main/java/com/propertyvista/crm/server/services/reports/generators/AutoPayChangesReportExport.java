@@ -137,10 +137,10 @@ public class AutoPayChangesReportExport {
 
                 formatter.cell(charge.suggested().totalPrice().getValue());
 
-                if (charge.suggested().percentChange().isNull()) {
-                    formatter.cell("New");
-                } else if (charge.suggested().billableItem().isNull()) {
+                if (charge.suggested().billableItem().isNull()) {
                     formatter.cell("Removed item");
+                } else if (charge.suggested().percentChange().isNull()) {
+                    formatter.cell("New");
                 } else {
                     formatter.cell(prc(charge.suggested().percentChange().getValue()));
                 }

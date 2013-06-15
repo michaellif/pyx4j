@@ -175,8 +175,8 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                                     + charge.suspended().percent().getStringView() + "</td>");
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
                                     + charge.suggested().totalPrice().getStringView() + "</td>");
-                            String percentChange = SafeHtmlUtils.htmlEscape(charge.suggested().percentChange().isNull() ? i18n.tr("New") : charge.suggested()
-                                    .billableItem().isNull() ? i18n.tr("Removed") : charge.suggested().percentChange().getStringView());
+                            String percentChange = SafeHtmlUtils.htmlEscape(charge.suggested().billableItem().isNull() ? i18n.tr("Removed") : charge
+                                    .suggested().percentChange().isNull() ? i18n.tr("New") : charge.suggested().percentChange().getStringView());
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>" + percentChange + "</td>");
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
                                     + charge.suggested().payment().getStringView() + "</td>");

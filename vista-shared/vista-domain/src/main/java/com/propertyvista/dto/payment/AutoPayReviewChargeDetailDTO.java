@@ -35,7 +35,7 @@ public interface AutoPayReviewChargeDetailDTO extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> totalPrice();
 
-    //Special values for "New"  if percentChange().isNull() and "Removed item"  if  billableItem().isNull()
+    //Special values for  "Removed item"  if  billableItem().isNull() and  "New"  if percentChange().isNull()
     @Caption(name = "% Change")
     @Format("#,##00")
     @Editor(type = EditorType.percentage)

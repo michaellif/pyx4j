@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -101,7 +102,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         List<PreauthorizedPayment> preauthorizedPayments = getPreauthorizedPayments(billingAccount);
         for (PreauthorizedPayment preauthorizedPayment : preauthorizedPayments) {
-            review.pap().add(createPreauthorizedPaymentPreview(billingAccount, changeRule, preauthorizedPayment));
+            review.pap().add(createPreauthorizedPaymentPreview(billingAccount, changeRule, review.paymentDue().getValue(), preauthorizedPayment));
         }
 
         calulateLeaseTotals(review);
@@ -144,7 +145,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
     }
 
     private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(BillingAccount billingAccount, AutoPayChangePolicy.ChangeRule changeRule,
-            PreauthorizedPayment preauthorizedPayment) {
+            LogicalDate preauthorizedPaymentDate, PreauthorizedPayment preauthorizedPayment) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
 
         papReview.pap().set(preauthorizedPayment.createIdentityStub());
@@ -164,7 +165,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
             chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
             calulatePercent(chargeReview.suspended());
 
-            chargeReview.suggested().set(calulateSuggestedChargeDetail(billingAccount, changeRule, allBillableItem, coveredItem));
+            chargeReview.suggested().set(calulateSuggestedChargeDetail(billingAccount, changeRule, preauthorizedPaymentDate, allBillableItem, coveredItem));
 
             chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
 
@@ -182,14 +183,16 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         // Add newly added items
         for (BillableItem billableItem : allBillableItem) {
-            AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
+            if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+                AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
 
-            chargeReview.suggested().billableItem().set(billableItem.createIdentityStub());
-            chargeReview.suggested().totalPrice().setValue(getActualPrice(billableItem));
+                chargeReview.suggested().billableItem().set(billableItem.createIdentityStub());
+                chargeReview.suggested().totalPrice().setValue(getActualPrice(billableItem));
 
-            chargeReview.leaseCharge().setValue(getLeaseChargeDescription(billableItem));
+                chargeReview.leaseCharge().setValue(getLeaseChargeDescription(billableItem));
 
-            papReview.items().add(chargeReview);
+                papReview.items().add(chargeReview);
+            }
         }
 
         return papReview;
@@ -212,21 +215,31 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
     }
 
-    public BillableItem extractSameBillableItem(BillableItem item, List<BillableItem> allBillableItem) {
+    boolean isBillableItemPapable(BillableItem billableItem, LogicalDate preauthorizedPaymentDate) {
+        return (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(preauthorizedPaymentDate));
+    }
+
+    public BillableItem extractSameBillableItem(BillableItem item, LogicalDate preauthorizedPaymentDate, List<BillableItem> allBillableItem) {
         for (BillableItem billableItem : allBillableItem) {
             if (billableItem.uid().equals(item.uid())) {
                 allBillableItem.remove(billableItem);
-                return billableItem;
+
+                if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+                    return billableItem;
+                } else {
+                    // Just return matching item from the list (test case two parkings with the same code)
+                    return null;
+                }
             }
         }
         return null;
     }
 
     private AutoPayReviewChargeDetailDTO calulateSuggestedChargeDetail(BillingAccount billingAccount, AutoPayChangePolicy.ChangeRule changeRule,
-            List<BillableItem> allBillableItem, PreauthorizedPaymentCoveredItem coveredItem) {
+            LogicalDate preauthorizedPaymentDate, List<BillableItem> allBillableItem, PreauthorizedPaymentCoveredItem coveredItem) {
         AutoPayReviewChargeDetailDTO suggestedChargeDetail = EntityFactory.create(AutoPayReviewChargeDetailDTO.class);
 
-        BillableItem sameBillableItem = extractSameBillableItem(coveredItem.billableItem(), allBillableItem);
+        BillableItem sameBillableItem = extractSameBillableItem(coveredItem.billableItem(), preauthorizedPaymentDate, allBillableItem);
         if (sameBillableItem == null) {
             // Removed item
         } else {
