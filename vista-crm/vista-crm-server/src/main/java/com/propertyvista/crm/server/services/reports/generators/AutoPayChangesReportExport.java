@@ -18,8 +18,14 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
@@ -38,12 +44,22 @@ public class AutoPayChangesReportExport {
 
     private static final I18n i18n = I18n.get(EftReportExport.class);
 
+    private Font redBoldFont;
+
     public ExportedReport createReport(List<AutoPayReviewDTO> reviewRecords, ReportProgressStatusHolder reportProgressStatusHolder) {
         int numOfRecords = reviewRecords.size();
         String stageName = i18n.tr("Preparing Excel Spreadsheet");
         reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, 0, numOfRecords));
 
         ReportTableXLSXFormatter formatter = new ReportTableXLSXFormatter(true);
+        formatter.setAutosize(true);
+
+        redBoldFont = formatter.getWorkbook().createFont();
+        redBoldFont.setFontHeightInPoints((short) 10);
+        redBoldFont.setFontName("Arial");
+        redBoldFont.setBoldweight(Font.BOLDWEIGHT_BOLD);
+        redBoldFont.setColor(IndexedColors.RED.getIndex());
+
         createHeader(formatter);
 
         Map<String, AutoPayReviewDTO> buildingsTotals = new HashMap<String, AutoPayReviewDTO>();
@@ -104,6 +120,7 @@ public class AutoPayChangesReportExport {
         formatter.header(i18n.tr("Total Price"));
         formatter.header(i18n.tr("% Change"));
         formatter.header(i18n.tr("Payment"));
+        setCurentCellRed(formatter);
         formatter.header(i18n.tr("% of Total"));
         formatter.newRow();
     }
@@ -146,6 +163,10 @@ public class AutoPayChangesReportExport {
                 }
 
                 formatter.cell(charge.suggested().payment().getValue());
+                if (!charge.suggested().payment().isNull()) {
+                    setCurentCellRed(formatter);
+                }
+
                 formatter.cell(prc(charge.suggested().percent().getValue()));
 
                 if (isFirstCharge) {
@@ -167,11 +188,29 @@ public class AutoPayChangesReportExport {
         formatter.cell(prc(reviewCase.totalSuspended().percent().getValue()));
 
         formatter.cell(reviewCase.totalSuggested().totalPrice().getValue());
-        formatter.cellEmpty();
+        formatter.createCell();
         formatter.cell(reviewCase.totalSuggested().payment().getValue());
         formatter.cell(prc(reviewCase.totalSuggested().percent().getValue()));
+
+        Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
+        while (ci.hasNext()) {
+            Cell cell = ci.next();
+            CellStyle style = formatter.getWorkbook().createCellStyle();
+            style.cloneStyleFrom(cell.getCellStyle());
+            style.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            cell.setCellStyle(style);
+        }
+
         formatter.newRow();
 
+    }
+
+    private void setCurentCellRed(ReportTableXLSXFormatter formatter) {
+        CellStyle style = formatter.getWorkbook().createCellStyle();
+        style.cloneStyleFrom(formatter.getCurentCell().getCellStyle());
+        style.setFont(redBoldFont);
+        formatter.getCurentCell().setCellStyle(style);
     }
 
     private void addBuildingTotals(Map<String, AutoPayReviewDTO> buildingsTotals, AutoPayReviewDTO leaseReview) {
@@ -205,7 +244,7 @@ public class AutoPayChangesReportExport {
 
     private void reportBuildingTotals(ReportTableXLSXFormatter formatter, AutoPayReviewDTO totals) {
         formatter.header(i18n.tr("Total for Building {0}:", totals.building()));
-        formatter.mergeCells(1, 4);
+        formatter.mergeCells(1, 5);
         formatter.cellEmpty(4);
 
         formatter.cell(totals.totalSuspended().totalPrice().getValue());
@@ -213,9 +252,19 @@ public class AutoPayChangesReportExport {
         formatter.cell(prc(totals.totalSuspended().percent().getValue()));
 
         formatter.cell(totals.totalSuggested().totalPrice().getValue());
-        formatter.cellEmpty();
+        formatter.createCell();
         formatter.cell(totals.totalSuggested().payment().getValue());
         formatter.cell(prc(totals.totalSuggested().percent().getValue()));
+
+        Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
+        while (ci.hasNext()) {
+            Cell cell = ci.next();
+            CellStyle style = formatter.getWorkbook().createCellStyle();
+            style.cloneStyleFrom(cell.getCellStyle());
+            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
+            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
+            cell.setCellStyle(style);
+        }
 
         formatter.newRow();
 
