@@ -18,6 +18,8 @@ import java.util.List;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -67,7 +69,11 @@ public interface PaymentMethodFacade {
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 
+    BillingCycle getNextScheduledPreauthorizedPaymentBillingCycle(Lease lease);
+
     LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease);
 
     LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
+
+    List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
 }

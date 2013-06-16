@@ -24,7 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
-public interface VistaBusinessStatsPmcData extends IEntity {
+public interface VistaBusinessStatsPmcModel extends IEntity {
 
     @Caption(name = "PMC Name")
     IPrimitive<String> name();

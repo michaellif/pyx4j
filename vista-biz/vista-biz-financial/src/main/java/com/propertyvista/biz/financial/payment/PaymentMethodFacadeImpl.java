@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -122,13 +123,19 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease) {
+    public BillingCycle getNextScheduledPreauthorizedPaymentBillingCycle(Lease lease) {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         if (!when.before(cycle.targetPadGenerationDate().getValue())) {
             cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
         }
+        return cycle;
+    }
+
+    @Override
+    public LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease) {
+        BillingCycle cycle = getNextScheduledPreauthorizedPaymentBillingCycle(lease);
         return cycle.targetPadExecutionDate().getValue();
     }
 
@@ -151,5 +158,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     @Override
     public AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccount) {
         return new PreauthorizedPaymentAutoPayReviewReport().getSuspendedPreauthorizedPaymentReview(billingAccount);
+    }
+
+    @Override
+    public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

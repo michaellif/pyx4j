@@ -152,7 +152,6 @@ class PreauthorisedPaymentsManager {
 
     private List<PaymentRecord> createBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount,
             ExecutionMonitor executionMonitor, boolean reportOny) {
-        List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
         // Validate that PAD was not created for this account
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
@@ -163,8 +162,21 @@ class PreauthorisedPaymentsManager {
             }
         }
 
+        List<PaymentRecord> paymentRecords = calulatePreauthorizedPayment(billingCycle, billingAccount);
+        for (PaymentRecord paymentRecord : paymentRecords) {
+            if (!reportOny) {
+                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+                ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
+            }
+            executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
+        }
+        return paymentRecords;
+    }
+
+    public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccount) {
         List<PreauthorizedAmount> records = calulatePapAmounts(billingCycle, billingAccount);
 
+        List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
         for (PreauthorizedAmount record : records) {
 
             PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
@@ -177,15 +189,7 @@ class PreauthorisedPaymentsManager {
             paymentRecord.billingAccount().set(billingAccount);
             paymentRecord.targetDate().setValue(billingCycle.targetPadExecutionDate().getValue());
             createNoticeMessage(paymentRecord, record.notice);
-
-            if (!reportOny) {
-                ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
-                ServerSideFactory.create(PaymentFacade.class).schedulePayment(paymentRecord);
-            }
-
             paymentRecords.add(paymentRecord);
-
-            executionMonitor.addProcessedEvent(paymentRecord.paymentMethod().type().getStringView(), paymentRecord.amount().getValue());
         }
 
         return paymentRecords;

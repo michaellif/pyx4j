@@ -27,6 +27,8 @@ public enum PmcProcessType implements Serializable {
 
     vistaBusinessReport,
 
+    vistaCaleonReport,
+
     billing(PmcProcessOptions.RunForDay),
 
     depositRefund,

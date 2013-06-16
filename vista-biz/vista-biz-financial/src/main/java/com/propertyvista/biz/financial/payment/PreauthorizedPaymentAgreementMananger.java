@@ -42,7 +42,7 @@ import com.propertyvista.server.domain.security.CrmUserCredential;
 
 class PreauthorizedPaymentAgreementMananger {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PreauthorisedPaymentsManager.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(PreauthorizedPaymentAgreementMananger.class);
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
         preauthorizedPayment.tenant().set(tenantId);

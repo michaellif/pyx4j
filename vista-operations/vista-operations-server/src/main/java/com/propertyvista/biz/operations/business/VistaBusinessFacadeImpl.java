@@ -25,12 +25,27 @@ public class VistaBusinessFacadeImpl implements VistaBusinessFacade {
     }
 
     @Override
-    public void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formater) {
-        VistaBusinessStatsReport.processStatsReportsPmc(executionMonitor, formater);
+    public void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter) {
+        VistaBusinessStatsReport.processStatsReportsPmc(executionMonitor, formatter);
     }
 
     @Override
-    public void completeStatsReport(ReportTableFormatter formater) {
-        VistaBusinessStatsReport.completeStatsReport(formater);
+    public void completeStatsReport(ReportTableFormatter formatter) {
+        VistaBusinessStatsReport.completeStatsReport(formatter);
+    }
+
+    @Override
+    public ReportTableFormatter startCaledonReport() {
+        return CaledonReport.startStatsReport();
+    }
+
+    @Override
+    public void processCaledonReportPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter) {
+        CaledonReport.processStatsReportsPmc(executionMonitor, formatter);
+    }
+
+    @Override
+    public void completeCaledonReport(ReportTableFormatter formatter) {
+        CaledonReport.completeStatsReport(formatter);
     }
 }

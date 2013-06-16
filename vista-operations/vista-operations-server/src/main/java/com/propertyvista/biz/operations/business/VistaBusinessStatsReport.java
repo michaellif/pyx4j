@@ -112,15 +112,15 @@ class VistaBusinessStatsReport {
 
         formatter.newRow();
         // Header for PMC data
-        EntityReportFormatter<VistaBusinessStatsPmcData> er = new EntityReportFormatter<VistaBusinessStatsPmcData>(VistaBusinessStatsPmcData.class);
+        EntityReportFormatter<VistaBusinessStatsPmcModel> er = new EntityReportFormatter<VistaBusinessStatsPmcModel>(VistaBusinessStatsPmcModel.class);
         er.createHeader(formatter);
 
         return formatter;
     }
 
     static void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter) {
-        EntityReportFormatter<VistaBusinessStatsPmcData> er = new EntityReportFormatter<VistaBusinessStatsPmcData>(VistaBusinessStatsPmcData.class);
-        VistaBusinessStatsPmcData data = EntityFactory.create(VistaBusinessStatsPmcData.class);
+        EntityReportFormatter<VistaBusinessStatsPmcModel> er = new EntityReportFormatter<VistaBusinessStatsPmcModel>(VistaBusinessStatsPmcModel.class);
+        VistaBusinessStatsPmcModel data = EntityFactory.create(VistaBusinessStatsPmcModel.class);
 
         Date reportSince = DateUtils.addDays(new Date(), -7);
 

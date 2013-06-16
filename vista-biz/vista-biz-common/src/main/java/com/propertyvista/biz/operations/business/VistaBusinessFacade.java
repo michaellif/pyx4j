@@ -21,7 +21,13 @@ public interface VistaBusinessFacade {
 
     ReportTableFormatter startStatsReport();
 
-    void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formater);
+    void processStatsReportsPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter);
 
-    void completeStatsReport(ReportTableFormatter formater);
+    void completeStatsReport(ReportTableFormatter formatter);
+
+    ReportTableFormatter startCaledonReport();
+
+    void processCaledonReportPmc(ExecutionMonitor executionMonitor, ReportTableFormatter formatter);
+
+    void completeCaledonReport(ReportTableFormatter formatter);
 }
