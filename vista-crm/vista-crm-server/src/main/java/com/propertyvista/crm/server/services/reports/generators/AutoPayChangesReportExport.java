@@ -102,10 +102,10 @@ public class AutoPayChangesReportExport {
         formatter.header(i18n.tr("Charge Code"));
         formatter.mergeCells(2, 1);
 
-        formatter.header(i18n.tr("Auto Pay Suspended"));
+        formatter.header(i18n.tr("Auto Pay - Suspended"));
         formatter.mergeCells(1, 3);
         formatter.cellEmpty(2);
-        formatter.header(i18n.tr("Auto Pay Suggested"));
+        formatter.header(i18n.tr("Auto Pay - Suggested"));
         formatter.mergeCells(1, 4);
         formatter.cellEmpty(3);
         formatter.header(i18n.tr("Payment Due"));
@@ -155,7 +155,7 @@ public class AutoPayChangesReportExport {
                 formatter.cell(charge.suggested().totalPrice().getValue());
 
                 if (charge.suggested().billableItem().isNull()) {
-                    formatter.cell("Removed item");
+                    formatter.cell("Removed");
                 } else if (charge.suggested().percentChange().isNull()) {
                     formatter.cell("New");
                 } else {
@@ -191,6 +191,7 @@ public class AutoPayChangesReportExport {
         formatter.createCell();
         formatter.cell(reviewCase.totalSuggested().payment().getValue());
         formatter.cell(prc(reviewCase.totalSuggested().percent().getValue()));
+        formatter.createCell();
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
         while (ci.hasNext()) {
@@ -257,6 +258,7 @@ public class AutoPayChangesReportExport {
         formatter.createCell();
         formatter.cell(totals.totalSuggested().payment().getValue());
         formatter.cell(prc(totals.totalSuggested().percent().getValue()));
+        formatter.createCell();
 
         Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
         while (ci.hasNext()) {

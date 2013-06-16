@@ -106,10 +106,10 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendEscaped(i18n.tr("Charge Code"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='1' colspan='3'>");
-                builder.appendEscaped(i18n.tr("Auto Pay Suspended"));
+                builder.appendEscaped(i18n.tr("Auto Pay - Suspended"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='1' colspan='4'>");
-                builder.appendEscaped(i18n.tr("Auto Pay Suggested"));
+                builder.appendEscaped(i18n.tr("Auto Pay - Suggested"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='2'>");
                 builder.appendEscaped(i18n.tr("Payment Due"));
