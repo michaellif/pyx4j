@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import com.pyx4j.commons.EnglishGrammar;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -171,7 +172,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         MaintenanceRequestCategoryChoice mrCategory = null;
         for (int i = 0; i < levels; i++) {
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
-            String choiceLabel = meta.categoryLevels().get(levels - 1 - i).name().getValue();
+            String choiceLabel = EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue());
             if (i == 0) {
                 categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
                 mrCategory = choice;
