@@ -35,10 +35,7 @@ SET search_path = '_admin_';
         
         -- check constraints
         
-        ALTER TABLE pad_batch DROP CONSTRAINT pad_batch_processing_status_e_ck;
-        ALTER TABLE pad_debit_record DROP CONSTRAINT pad_debit_record_processing_status_e_ck;
-        ALTER TABLE scheduler_run_data DROP CONSTRAINT scheduler_run_data_status_e_ck;
-        
+         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
         
         /**
         ***     ======================================================================================================
@@ -59,13 +56,7 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
-        -- admin_pmc_payment_method
         
-        ALTER TABLE admin_pmc_payment_method ADD COLUMN updated TIMESTAMP;
-        
-        -- admin_pmc_yardi_credential
-        
-        ALTER TABLE admin_pmc_yardi_credential ALTER COLUMN property_code TYPE VARCHAR(2048);
        
        
         /**
@@ -100,12 +91,15 @@ SET search_path = '_admin_';
         
         -- check constraints
         
-        ALTER TABLE pad_batch ADD CONSTRAINT pad_batch_processing_status_e_ck 
-                CHECK ((processing_status) IN ('AcknowledgeProcesed', 'AcknowledgeReject', 'AcknowledgedReceived'));
-        ALTER TABLE pad_debit_record ADD CONSTRAINT pad_debit_record_processing_status_e_ck 
-                CHECK ((processing_status) IN ('AcknowledgeProcesed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcesed', 'ReconciliationReceived'));
-        ALTER TABLE  scheduler_run_data ADD CONSTRAINT scheduler_run_data_status_e_ck 
-                CHECK (status IN ('Canceled','Erred','Failed','NeverRan','Processed','Running','Terminated'));
+        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+                CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 
+                'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 
+                'paymentsIssue', 'paymentsPadProcesAcknowledgment', 'paymentsPadProcesReconciliation', 'paymentsPadReceiveAcknowledgment', 
+                'paymentsPadReceiveReconciliation', 'paymentsPadSend', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 
+                'paymentsTenantSure', 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 
+                'tenantSureTransactionReports', 'test', 'updateArrears', 'updatePaymentsSummary', 'vistaBusinessReport', 
+                'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
+
 
 
                 
