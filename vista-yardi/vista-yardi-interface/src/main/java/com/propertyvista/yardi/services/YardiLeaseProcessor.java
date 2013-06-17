@@ -217,15 +217,7 @@ public class YardiLeaseProcessor {
         }
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease);
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
-            // terminate unmatched features - set expiration date at the end of billing cycle
-            LogicalDate now = getLogicalDate(SystemDateManager.getDate());
-            BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
-            LeaseMerger merger = new LeaseMerger();
-            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-                if (!LeaseChargesMergeStatus.NoChange.equals(merger.findBillableItem(item, newItems))) {
-                    item.expirationDate().set(currCycle.billingCycleEndDate());
-                }
-            }
+            // finalize term
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             // suspend PAP if total amount has changed
             if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
