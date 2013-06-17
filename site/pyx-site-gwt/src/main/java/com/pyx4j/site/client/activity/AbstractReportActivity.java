@@ -158,8 +158,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
                     @Override
                     public void onDeferredError(DeferredProcessProgressResponse result) {
-                        // TODO Auto-generated method stub
-
+                        view.setError(result.getMessage());
                     }
                 });
             }

@@ -50,6 +50,8 @@ public interface IReportsView extends IPane {
 
     void setReportData(Object data);
 
+    void setError(String errorMessage);
+
     void onReportSettingsSaveSucceed(String reportSettingsId);
 
     void onReportSettingsSaveFailed(String reason);

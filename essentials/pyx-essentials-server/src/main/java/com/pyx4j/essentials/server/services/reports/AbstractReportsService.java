@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.ConnectionTarget;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -35,6 +36,7 @@ import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedRepor
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.gwt.server.deferred.IDeferredProcess;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.reports.IReportsService;
@@ -43,6 +45,8 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 public class AbstractReportsService implements IReportsService {
 
     private static final String REPORT_SESSION_STORAGE_KEY = "REPORT_SESSION_STORAGE_KEY";
+
+    private static final I18n i18n = I18n.get(AbstractReportsService.class);
 
     public final class GenerateReportDeferredProcess implements IDeferredProcess {
 
@@ -55,6 +59,8 @@ public class AbstractReportsService implements IReportsService {
         private final ReportGenerator reportGenerator;
 
         private final ReportMetadata reportMetadata;
+
+        private volatile Throwable error;
 
         public GenerateReportDeferredProcess(ReportGenerator reportGenerator, ReportMetadata reportMetadata) {
             this.cancelled = false;
@@ -72,7 +78,13 @@ public class AbstractReportsService implements IReportsService {
             } else {
                 DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
                 ReportProgressStatus status = reportGenerator.getProgressStatus();
-                if (status != null) {
+                if (error != null) {
+                    if (error instanceof UserRuntimeException) {
+                        r.setErrorStatusMessage(error.getMessage());
+                    } else {
+                        r.setErrorStatusMessage(i18n.tr("A server side error occured during report generation."));
+                    }
+                } else if (status != null) {
                     r.setMessage(status.stage);
                     r.setProgress(status.stageProgress);
                     r.setProgressMaximum(status.stageProgressMax);
@@ -88,15 +100,20 @@ public class AbstractReportsService implements IReportsService {
         public void execute() {
             final Serializable[] reportData = new Serializable[1];
             if (!cancelled) {
-                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
-                    @Override
-                    public Void execute() {
-                        reportData[0] = reportGenerator.generateReport(reportMetadata);
-                        return null;
-                    }
-                });
-                Context.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData[0]);
-                isReady = true;
+                try {
+                    new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing)
+                            .execute(new Executable<Void, RuntimeException>() {
+                                @Override
+                                public Void execute() {
+                                    reportData[0] = reportGenerator.generateReport(reportMetadata);
+                                    return null;
+                                }
+                            });
+                    Context.getVisit().setAttribute(REPORT_SESSION_STORAGE_KEY, reportData[0]);
+                    isReady = true;
+                } catch (Throwable error) {
+                    this.error = error;
+                }
             }
         }
 
@@ -122,6 +139,8 @@ public class AbstractReportsService implements IReportsService {
 
         private volatile boolean isReady;
 
+        private volatile Throwable error;
+
         public ExportReportDeferredProcess(ReportGenerator reportGenerator, ReportMetadata reportMetadata) {
             this.reportGenerator = reportGenerator;
             this.reportMetadata = reportMetadata;
@@ -140,9 +159,17 @@ public class AbstractReportsService implements IReportsService {
                 DeferredProcessProgressResponse r = new DeferredProcessProgressResponse();
                 ReportProgressStatus status = reportGenerator.getProgressStatus();
                 if (status != null) {
-                    r.setMessage(status.stage);
-                    r.setProgress(status.stageProgress);
-                    r.setProgressMaximum(status.stageProgressMax);
+                    if (error != null) {
+                        if (error instanceof UserRuntimeException) {
+                            r.setErrorStatusMessage(error.getMessage());
+                        } else {
+                            r.setErrorStatusMessage(i18n.tr("A server side error occured during report generation."));
+                        }
+                    } else if (status != null) {
+                        r.setMessage(status.stage);
+                        r.setProgress(status.stageProgress);
+                        r.setProgressMaximum(status.stageProgressMax);
+                    }
                 }
                 if (cancelled) {
                     r.setCanceled();

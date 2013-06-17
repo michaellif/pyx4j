@@ -25,6 +25,7 @@ import java.util.Map;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -53,7 +54,7 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     public enum Styles {
 
-        ReportView, SettingsFormPanel, ReportPanel, ReportProgressControlPanel;
+        ReportView, SettingsFormPanel, ReportPanel, ReportProgressControlPanel, ReportProgressErrorPanel;
     }
 
     private static class ReportPrintPalette extends Palette {
@@ -133,6 +134,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     private DeferredProgressPanel progressPanel;
 
+    private final FlowPanel errorPanel;
+
     public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
@@ -178,12 +181,16 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
             @Override
             public void execute() {
                 progressPanel.cancelProgress();
-                unlockReport();
+                unlockReportSettings();
             }
         }));
         reportProgressControlPanel.setVisible(false);
-
         viewPanel.add(reportProgressControlPanel);
+
+        errorPanel = new FlowPanel();
+        errorPanel.setStyleName(AbstractReport.Styles.ReportProgressErrorPanel.name());
+        errorPanel.setVisible(false);
+        viewPanel.add(errorPanel);
 
         reportPanel = new ScrollPanel();
         reportPanel.setSize("100%", "100%");
@@ -257,14 +264,28 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         }
 
         resetCaption();
+        errorPanel.setVisible(false);
     }
 
     @Override
     public void setReportData(Object data) {
-        unlockReport();
+        unlockReportSettings();
+        errorPanel.setVisible(false);
 
         if (report != null) {
             report.setData(data);
+        }
+    }
+
+    @Override
+    public void setError(String errorMessage) {
+        unlockReportSettings();
+        errorPanel.clear();
+        if (errorMessage != null) {
+            errorPanel.setVisible(true);
+            errorPanel.add(new Label(errorMessage));
+        } else {
+            errorPanel.setVisible(false);
         }
     }
 
@@ -273,6 +294,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         settingsForm.setEnabled(false);
         reportSettingsFormControlBar.setEnabled(false);
         reportPanel.setVisible(false);
+        errorPanel.setVisible(false);
+
         progressPanel = new DeferredProgressPanel("600px", "30px", false, deferredProgressListener);
         progressPanel.startProgress(deferredProgressCorelationId);
         reportProgressHolderPanel.setWidget(progressPanel);
@@ -370,7 +393,7 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         }
     }
 
-    private void unlockReport() {
+    private void unlockReportSettings() {
         settingsForm.setEnabled(true);
         reportSettingsFormControlBar.setEnabled(true);
         reportPanel.setVisible(true);
