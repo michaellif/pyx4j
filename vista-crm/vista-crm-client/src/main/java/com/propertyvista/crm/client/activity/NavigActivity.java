@@ -45,7 +45,6 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
@@ -115,9 +114,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
             if (!VistaFeatures.instance().yardiIntegration()) {
                 folder.addNavigItem(new CrmSiteMap.Tenants.Guarantor());
             }
-            if (VistaTODO.isMaintenanceRequestsEnabled()) {
-                folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
-            }
+            folder.addNavigItem(new CrmSiteMap.Tenants.MaintenanceRequest());
             if (!VistaFeatures.instance().yardiIntegration()) {
                 folder.addNavigItem(new CrmSiteMap.Tenants.FormerTenant());
                 folder.addNavigItem(new CrmSiteMap.Tenants.FormerGuarantor());

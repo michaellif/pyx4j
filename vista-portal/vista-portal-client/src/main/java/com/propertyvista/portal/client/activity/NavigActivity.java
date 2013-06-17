@@ -77,15 +77,10 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
         } else {
             items.add(new Residents.Financial.FinancialSummary());
         }
-
-        if (VistaTODO.isMaintenanceRequestsEnabled()) {
-            items.add(new Residents.Maintenance());
-        }
-
+        items.add(new Residents.Maintenance());
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
             items.add(new Residents.CommunicationCenter());
         }
-
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
                 VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
 
@@ -95,13 +90,10 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
 
             items.add(new Residents.PaymentMethods());
         }
-
         items.add(new Residents.ViewPersonalInformation());
-
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             items.add(new Residents.TenantInsurance());
         }
-
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
             items.add(new PortalSiteMap.LeaseContextSelection());
         }

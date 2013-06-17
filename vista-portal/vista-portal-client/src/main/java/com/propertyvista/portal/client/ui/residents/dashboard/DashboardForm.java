@@ -43,7 +43,6 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.client.resources.PortalImages;
 import com.propertyvista.portal.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.client.ui.components.CurrentBalanceFormat;
@@ -129,12 +128,10 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
             }
         });
 
-        if (VistaTODO.isMaintenanceRequestsEnabled()) {
-            rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
-            rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
-            get(proto().maintanances()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-            get(proto().maintanances()).setHeight("");
-        }
+        rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
+        rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
+        get(proto().maintanances()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+        get(proto().maintanances()).setHeight("");
 
         if (false) {
             Anchor newReservations = new Anchor(i18n.tr("Order Service"));

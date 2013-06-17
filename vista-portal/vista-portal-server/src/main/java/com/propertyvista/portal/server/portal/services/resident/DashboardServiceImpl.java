@@ -29,7 +29,6 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -55,20 +54,18 @@ public class DashboardServiceImpl implements DashboardService {
 
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
 
-        if (VistaTODO.isMaintenanceRequestsEnabled()) {
-            final List<MaintenanceRequestDTO> mrList = new ArrayList<MaintenanceRequestDTO>();
-            new MaintenanceServiceImpl().listOpenIssues(new AsyncCallback<Vector<MaintenanceRequestDTO>>() {
-                @Override
-                public void onSuccess(Vector<MaintenanceRequestDTO> arg0) {
-                    mrList.addAll(arg0);
-                }
+        final List<MaintenanceRequestDTO> mrList = new ArrayList<MaintenanceRequestDTO>();
+        new MaintenanceServiceImpl().listOpenIssues(new AsyncCallback<Vector<MaintenanceRequestDTO>>() {
+            @Override
+            public void onSuccess(Vector<MaintenanceRequestDTO> arg0) {
+                mrList.addAll(arg0);
+            }
 
-                @Override
-                public void onFailure(Throwable arg0) {
-                }
-            });
-            dashboard.maintanances().addAll(mrList);
-        }
+            @Override
+            public void onFailure(Throwable arg0) {
+            }
+        });
+        dashboard.maintanances().addAll(mrList);
 
         // TODO review this: (i think tenant insurance status can be used for other countries as well but the problem is with TenantSure
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {

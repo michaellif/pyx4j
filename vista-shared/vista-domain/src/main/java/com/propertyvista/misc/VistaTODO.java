@@ -15,8 +15,6 @@ package com.propertyvista.misc;
 
 import com.pyx4j.config.shared.ApplicationMode;
 
-import com.propertyvista.shared.config.VistaFeatures;
-
 public class VistaTODO {
 
     /** enables wizards in CRM that set up credit check (equifax) and online payments */
@@ -32,14 +30,6 @@ public class VistaTODO {
      * TODO: Do not forget to turn it on/off during/after production release !!!
      */
     public static boolean removedForProduction = true;
-
-    public static boolean isMaintenanceRequestsEnabled() {
-        if (VistaFeatures.instance().yardiIntegration()) {
-            return VistaFeatures.instance().yardiMaintenance();
-        } else {
-            return true;
-        }
-    }
 
     /**
      * TODO: Do not forget to turn it on/off during/after production release !!!
