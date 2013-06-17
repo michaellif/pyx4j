@@ -30,10 +30,12 @@ import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.RefferenceDataPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayChangePolicyPreloader;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
@@ -42,7 +44,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -53,6 +55,9 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
             break;
         case 2:
             createInternalMaintenancePreloadInNotExists();
+            break;
+        case 3:
+            runAutoPayChangePolicyGeneration();
             break;
         default:
             throw new IllegalArgumentException();
@@ -114,6 +119,19 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         for (AptUnit unit : Persistence.service().query(criteria)) {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit);
         }
+    }
+
+    private void runAutoPayChangePolicyGeneration() {
+        log.info("Creating AutoPayChangePolicy and setting its scope to 'Organization'");
+        AutoPayChangePolicyPreloader policyPreloader = new AutoPayChangePolicyPreloader();
+        OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        if (organizationNode == null) {
+            throw new UserRuntimeException("Organizational Policy Was not found");
+        }
+        policyPreloader.setTopNode(organizationNode);
+        String policyCreationLog = policyPreloader.create();
+        log.info("Finished policy creation: " + policyCreationLog);
+
     }
 
     private void createInternalMaintenancePreloadInNotExists() {
