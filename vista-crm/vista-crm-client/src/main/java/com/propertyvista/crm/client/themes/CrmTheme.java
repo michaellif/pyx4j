@@ -463,6 +463,13 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("width", "100%");
         addStyle(style);
 
+        style = new Style("." + AbstractReport.Styles.ReportProgressErrorPanel.name());
+        style.addProperty("text-align", "center");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("color", "red");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
         style = new Style("." + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name());
         style.addProperty("display", "none");
         addStyle(style);
