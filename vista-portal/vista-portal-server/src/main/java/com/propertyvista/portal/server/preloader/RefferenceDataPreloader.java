@@ -50,10 +50,14 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
     @Override
     public String create() {
         createNamed(PhoneProvider.class, "Rogers", "Bell", "Telus", "Fido", "Mobilicity", "Primus", "Télébec", "Virgin Mobile", "Wind Mobile");
+        createInternalMaintenancePreload();
+        return null;
+    }
+
+    public void createInternalMaintenancePreload() {
         createMaintenanceCategories();
         createMaintenancePriorities();
         createMaintenanceStatuses();
-        return null;
     }
 
     private void createMaintenanceCategories() {

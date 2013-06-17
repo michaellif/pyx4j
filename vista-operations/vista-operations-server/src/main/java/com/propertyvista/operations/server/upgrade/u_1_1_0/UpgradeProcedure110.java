@@ -28,10 +28,12 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
+import com.propertyvista.portal.server.preloader.RefferenceDataPreloader;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
@@ -40,7 +42,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -48,6 +50,9 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         switch (upgradeStep) {
         case 1:
             runDefaultProductCatalogGeneration();
+            break;
+        case 2:
+            createInternalMaintenancePreloadInNotExists();
             break;
         default:
             throw new IllegalArgumentException();
@@ -108,6 +113,13 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
         for (AptUnit unit : Persistence.service().query(criteria)) {
             ServerSideFactory.create(DefaultProductCatalogFacade.class).addUnit(building, unit);
+        }
+    }
+
+    private void createInternalMaintenancePreloadInNotExists() {
+        EntityQueryCriteria<MaintenanceRequestCategory> criteria = new EntityQueryCriteria<MaintenanceRequestCategory>(MaintenanceRequestCategory.class);
+        if (Persistence.service().count(criteria) == 0) {
+            new RefferenceDataPreloader().createInternalMaintenancePreload();
         }
     }
 
