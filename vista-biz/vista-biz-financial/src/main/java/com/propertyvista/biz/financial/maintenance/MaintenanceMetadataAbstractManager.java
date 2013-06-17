@@ -33,6 +33,8 @@ public abstract class MaintenanceMetadataAbstractManager {
         CacheService.remove(cacheKey);
     }
 
+    protected abstract String getRoot();
+
     protected abstract String[] getLevels();
 
     public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
@@ -66,14 +68,14 @@ public abstract class MaintenanceMetadataAbstractManager {
             // retrieve categories
             if (meta.rootCategory().isNull()) {
                 EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
-                crit.add(PropertyCriterion.eq(crit.proto().name(), "ROOT"));
+                crit.add(PropertyCriterion.eq(crit.proto().name(), getRoot()));
                 meta.rootCategory().set(Persistence.service().retrieve(crit));
                 retrieveSubCategoriesRecursive(meta.rootCategory());
 
                 if (meta.rootCategory().isNull()) {
                     // create root
                     MaintenanceRequestCategory root = EntityFactory.create(MaintenanceRequestCategory.class);
-                    root.name().setValue("ROOT");
+                    root.name().setValue(getRoot());
                     meta.rootCategory().set(root);
                     Persistence.service().persist(root);
                 }

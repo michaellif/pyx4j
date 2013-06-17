@@ -232,7 +232,7 @@ public class YardiImportTest extends YardiTestBase {
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
 
-        {
+        { // item will be removed from next term
             // @formatter:off
             LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "parkB").remove();
             // @formatter:on
@@ -284,15 +284,15 @@ public class YardiImportTest extends YardiTestBase {
         new BillableItemTester(lease.currentTerm().version().leaseProducts().serviceItem()).
         agreedPrice("1250.00");
 
-        assertEquals(3, lease.currentTerm().version().leaseProducts().featureItems().size());
+        assertEquals(2, lease.currentTerm().version().leaseProducts().featureItems().size());
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rlock").
         effectiveDate("01-Jun-2012").
-        expirationDate("31-May-2013"). // end of current cycle
-        description("Parking B").
-        agreedPrice("60.00");  
+        expirationDate("31-Jul-2014").
+        description("Locker A").
+        agreedPrice("150.00");  
         // @formatter:on
 
         // @formatter:off
@@ -302,15 +302,6 @@ public class YardiImportTest extends YardiTestBase {
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
         agreedPrice("50.00");  
-        // @formatter:on
-
-        // @formatter:off
-        new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(2)).
-        uid("rlock").
-        effectiveDate("01-Jun-2012").
-        expirationDate("31-Jul-2014").
-        description("Locker A").
-        agreedPrice("150.00");  
         // @formatter:on
     }
 

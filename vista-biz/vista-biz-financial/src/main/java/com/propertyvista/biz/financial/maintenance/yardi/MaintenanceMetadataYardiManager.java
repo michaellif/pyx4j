@@ -47,4 +47,9 @@ public class MaintenanceMetadataYardiManager extends MaintenanceMetadataAbstract
     protected String[] getLevels() {
         return new String[] { "Category", "SubCategory" };
     }
+
+    @Override
+    protected String getRoot() {
+        return "ROOT_YARDI";
+    }
 }

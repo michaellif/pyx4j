@@ -29,4 +29,9 @@ public class MaintenanceMetadataInternalManager extends MaintenanceMetadataAbstr
     protected String[] getLevels() {
         return new String[] { "IssueElement", "IssueRepairSubject", "IssueSubjectDetails", "IssueClassification" };
     }
+
+    @Override
+    protected String getRoot() {
+        return "ROOT";
+    }
 }
