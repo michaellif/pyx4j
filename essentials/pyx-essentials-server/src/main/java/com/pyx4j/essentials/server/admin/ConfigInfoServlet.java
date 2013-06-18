@@ -80,6 +80,8 @@ public class ConfigInfoServlet extends HttpServlet {
 
         b.append("PersistenceConfiguration :\n  ").append(conf.getPersistenceConfiguration().toString().replaceAll("\n", "\n  ")).append("\n");
 
+        b.append("MailService              :\n  ").append(conf.getMailServiceConfigConfiguration().toString().replaceAll("\n", "\n  ")).append("\n");
+
         b.append(applicationConfigurationText());
         b.append("\n");
         b.append("\n");
