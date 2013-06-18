@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.yardi.entity.mits.Customerinfo;
+import com.yardi.entity.mits.Unitleasestatusinfo;
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.ChargeDetail;
@@ -142,9 +143,11 @@ public class YardiLeaseProcessor {
         leaseFacade.activate(lease);
         Persistence.service().retrieve(lease);
 
-        // when lease imported first time but already a past one:
+        if (isOnNotice(rtCustomer)) {
+            lease = markLeaseOnNotice(lease, yardiLease);
+        }
         if (isFormerLease(rtCustomer)) {
-            lease = completeLease(lease, CompletionType.Termination, yardiLease);
+            lease = completeLease(lease, yardiLease);
         }
 
         return lease;
@@ -193,8 +196,13 @@ public class YardiLeaseProcessor {
         }
 
         if (lease.status().getValue().isActive()) {
+            if (isOnNotice(rtCustomer)) {
+                lease = markLeaseOnNotice(lease, yardiLease);
+            } else if (CompletionType.Notice.equals(lease.completion().getValue())) {
+                lease = cancelMarkLeaseOnNotice(lease, yardiLease);
+            }
             if (isFormerLease(rtCustomer)) { // active -> past transition:
-                lease = completeLease(lease, CompletionType.Termination, yardiLease);
+                lease = completeLease(lease, yardiLease);
             }
         } else { // past -> active transition (cancel Move Out in Yardi!):
             if (isCurrentLease(rtCustomer) || isFutureLease(rtCustomer)) {
@@ -262,17 +270,22 @@ public class YardiLeaseProcessor {
 
     public static boolean isCurrentLease(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return info.equals(Customerinfo.CURRENT_RESIDENT);
+        return Customerinfo.CURRENT_RESIDENT.equals(info);
     }
 
     public static boolean isFormerLease(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return info.equals(Customerinfo.FORMER_RESIDENT);
+        return Customerinfo.FORMER_RESIDENT.equals(info);
     }
 
     public static boolean isFutureLease(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
-        return info.equals(Customerinfo.FUTURE_RESIDENT);
+        return Customerinfo.FUTURE_RESIDENT.equals(info);
+    }
+
+    private boolean isOnNotice(RTCustomer rtCustomer) {
+        Unitleasestatusinfo info = rtCustomer.getRTUnit().getUnit().getInformation().get(0).getUnitLeasedStatus();
+        return (Unitleasestatusinfo.ON_NOTICE.equals(info) || Unitleasestatusinfo.LEASED_ON_NOTICE.equals(info));
     }
 
     /**
@@ -347,9 +360,27 @@ public class YardiLeaseProcessor {
         return arCode == null ? detail.getDescription() : arCode.name().getValue();
     }
 
-    private Lease completeLease(Lease lease, CompletionType completionType, YardiLease yardiLease) {
-        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, completionType, new LogicalDate(SystemDateManager.getDate()),
-                getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
+    private Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
+        ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, new LogicalDate(SystemDateManager.getDate()),
+                getLogicalDate(yardiLease.getExpectedMoveOutDate()), null);
+
+        Persistence.service().retrieve(lease);
+        return lease;
+    }
+
+    private Lease cancelMarkLeaseOnNotice(Lease lease, YardiLease yardiLease) {
+        ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi notice rollback!");
+
+        Persistence.service().retrieve(lease);
+        return lease;
+    }
+
+    private Lease completeLease(Lease lease, YardiLease yardiLease) {
+        if (lease.completion().isNull()) {
+            ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, new LogicalDate(SystemDateManager.getDate()),
+                    getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
+        }
+
         ServerSideFactory.create(LeaseFacade.class).moveOut(lease, getLogicalDate(yardiLease.getActualMoveOut()));
 
         Persistence.service().retrieve(lease);

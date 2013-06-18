@@ -90,14 +90,11 @@ public class LeaseYardiManager extends LeaseAbstractManager {
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
         Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
 
-        // Verify the status
-        if (lease.status().getValue() != Lease.Status.Completed) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
+        if (lease.status().getValue() == Lease.Status.Completed) {
+            lease.actualMoveOut().setValue(null);
+            lease.status().setValue(Status.Active);
+            Persistence.service().merge(lease);
         }
-
-        lease.actualMoveOut().setValue(null);
-        lease.status().setValue(Status.Active);
-        Persistence.service().merge(lease);
 
         LogicalDate expectedMoveOut = lease.expectedMoveOut().getValue();
 
