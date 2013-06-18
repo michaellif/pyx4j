@@ -8,8 +8,10 @@
 ***     ======================================================================================================================
 **/
 
-CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_1104(v_schema_name TEXT) RETURNS VOID AS
+CREATE OR REPLACE FUNCTION _dba_.migrate_pmc_1105(v_schema_name TEXT) RETURNS VOID AS
 $$
+DECLARE
+        v_billable_item         BIGINT;
 BEGIN
         EXECUTE 'SET search_path = '||v_schema_name;
         
@@ -139,6 +141,33 @@ BEGIN
                 
         EXECUTE 'DELETE FROM '||v_schema_name||'.property_contact '
                 ||'WHERE description IN (''PAP_SUSPENTION_NOTIFICATIONS'',''NSF_NOTIFICATIONS'') ';
+                
+                
+        /**
+        ***     ============================================================================================
+        ***             Delete billable_item with expiration_date = '2013-06-30' and current lease
+        ***             Applicable only to yardi-enabled pmc
+        ***     ============================================================================================
+        **/
+        
+        IF EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
+                        ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
+        THEN
+                FOR v_billable_item IN 
+                EXECUTE 'SELECT  b.id '
+                        ||'FROM    '||v_schema_name||'.billable_item b '
+                        ||'JOIN    '||v_schema_name||'.lease_term_vlease_products$feature_items ltf ON (b.id = ltf.value) '
+                        ||'JOIN    '||v_schema_name||'.lease_term_v ltv ON (ltv.id = ltf.owner) '
+                        ||'WHERE   b.expiration_date = ''2013-06-30'' '
+                        ||'AND     ltv.to_date IS NULL '
+                LOOP
+                        EXECUTE 'DELETE FROM '||v_schema_name||'.lease_term_vlease_products$feature_items '
+                                ||'WHERE value = '||v_billable_item;
+                                
+                        EXECUTE 'DELETE FROM '||v_schema_name||'.billable_item WHERE id = '||v_billable_item;
+                END LOOP;
+        END IF;
+        
         
         
         /**
@@ -188,14 +217,14 @@ BEGIN
         CREATE INDEX notification$buildings_owner_idx ON notification$buildings USING btree (owner);
         CREATE INDEX notification$portfolios_owner_idx ON notification$portfolios USING btree (owner);
         CREATE INDEX notification_employee_idx ON notification USING btree (employee);
-        -- CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
+        CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
 
         
         
         -- Finishing touch
         
         UPDATE  _admin_.admin_pmc
-        SET     schema_version = '1.1.0.4',
+        SET     schema_version = '1.1.0.5',
                 schema_data_upgrade_steps = NULL
         WHERE   namespace = v_schema_name;          
         
