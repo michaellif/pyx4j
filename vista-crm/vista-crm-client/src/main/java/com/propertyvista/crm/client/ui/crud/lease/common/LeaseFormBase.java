@@ -95,6 +95,14 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         get(proto().unit()).setNote(getValue().unitMoveOutNote().getValue());
 
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().terminationLeaseTo()).setVisible(false);
+            get(proto().moveOutSubmissionDate()).setVisible(false);
+
+            get(proto().approvalDate()).setVisible(false);
+            get(proto().creationDate()).setVisible(false);
+        }
+
         featuresHeader.setVisible(!getValue().currentTerm().version().leaseProducts().featureItems().isEmpty());
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
