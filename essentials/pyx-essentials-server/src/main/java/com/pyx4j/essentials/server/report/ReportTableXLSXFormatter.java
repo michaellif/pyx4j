@@ -341,13 +341,17 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
     public void cell(java.sql.Date value) {
         Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDate);
-        cell.setCellValue(value);
+        if (value != null) {
+            cell.setCellValue(value);
+        }
     }
 
     public void cell(Date value) {
         Cell cell = createCell();
         cell.setCellStyle(this.cellStyleDateTime);
-        cell.setCellValue(value);
+        if (value != null) {
+            cell.setCellValue(value);
+        }
     }
 
     public void cell(double value, int fractionDigits) {
