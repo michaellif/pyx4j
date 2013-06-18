@@ -260,6 +260,10 @@ public class Lifecycle {
         inheritUserContext((InheritableUserContext) visit.getAttribute("inheritableUserContext"));
     }
 
+    public static Visit getVisitFromSession(HttpSession session) {
+        return (Visit) session.getAttribute(Context.SESSION_VISIT);
+    }
+
     public static void endSession() {
         endSession(Context.getSession());
     }
