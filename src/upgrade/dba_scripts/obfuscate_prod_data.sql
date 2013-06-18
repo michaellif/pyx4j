@@ -91,6 +91,10 @@ DECLARE
         v_schema_name   VARCHAR(64);
 BEGIN
         
+        UPDATE  _admin_.admin_pmc_merchant_account_index
+        SET     merchant_terminal_id = LPAD(id::text,8,'X')
+        WHERE   merchant_terminal_id IS NOT NULL; 
+        
         UPDATE  _admin_.pad_batch
         SET     account_number = LPAD(id::text,12,'0');
         
@@ -106,8 +110,12 @@ BEGIN
                 EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '
                         ||'SET account_no_number = regexp_replace(account_no_obfuscated_number,''X'',''0'',''g'') ';
                         
-                EXECUTE 'UPDATE '||v_schema_name||'.merchant_account '
-                        ||'SET account_number = LPAD(id::text,12,''0'') ';
+                EXECUTE 'UPDATE '||v_schema_name||'.merchant_account m '
+                        ||'SET  account_number = LPAD(m.id::text,12,''0''),'
+                        ||'     merchant_terminal_id = a.merchant_terminal_id '
+                        ||'FROM _admin_.admin_pmc_merchant_account_index a '
+                        ||'WHERE m.id = a.merchant_account_key ';
+                          
                         
         END LOOP;
                 

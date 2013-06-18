@@ -3,7 +3,7 @@
 # Requires entry in .pgpass file for user vista
 
 SQLDIR='/home/akinareevski/tmp/import';
-DBNAME='vista_trunk';
+DBNAME='vista_branch';
 
 psql -U vista -h localhost -d $DBNAME -c 'ALTER SCHEMA _admin_ RENAME TO new_admin';
 psql -U vista -h localhost -d $DBNAME -c 'ALTER SCHEMA _expiring_ RENAME TO new_expiring';
