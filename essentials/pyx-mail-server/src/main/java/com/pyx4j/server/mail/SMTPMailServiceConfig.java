@@ -108,4 +108,19 @@ public class SMTPMailServiceConfig implements IMailServiceConfigConfiguration {
         this.user = c.getValue("user", this.user);
         this.password = c.getValue("password", this.password);
     }
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("configurationClass                                : ").append(this.getClass().getName()).append("\n");
+        b.append("host                                              : ").append(this.host).append("\n");
+        b.append("port                                              : ").append(this.port).append("\n");
+        b.append("starttls                                          : ").append(this.starttls).append("\n");
+        b.append("user                                              : ").append(this.user).append("\n");
+        b.append("allowSendToEmailSufix                             : ").append(this.allowSendToEmailSufix).append("\n");
+        b.append("blockedMailForwardTo                              : ").append(this.blockedMailForwardTo).append("\n");
+        b.append("forwardAllTo                                      : ").append(this.forwardAllTo).append("\n");
+
+        return b.toString();
+    }
 }
