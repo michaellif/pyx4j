@@ -587,6 +587,18 @@ public abstract class SharedEntityHandler extends ObjectHandler<Map<String, Seri
             if (typeAttr != null) {
                 thisValue.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, typeAttr);
             }
+        } else if (level == AttachLevel.IdOnly) {
+            Key key = this.getPrimaryKey();
+            Map<String, Serializable> thisValue = ensureValue(false);
+            IEntity typeAttr = (IEntity) thisValue.get(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR);
+            thisValue.clear();
+            if (key != null) {
+                thisValue.put(IEntity.PRIMARY_KEY, key);
+            }
+            thisValue.put(DETACHED_ATTR, level);
+            if (typeAttr != null) {
+                thisValue.put(SharedEntityHandler.CONCRETE_TYPE_DATA_ATTR, typeAttr);
+            }
         } else {
             ensureValue(false).put(DETACHED_ATTR, level);
         }
