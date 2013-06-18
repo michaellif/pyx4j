@@ -347,7 +347,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
         private HandlerRegistration navigationCommandHandlerRegistration;
 
-        private final Link viewerHolder;
+        private final SimplePanel viewerLabelHolder;
+
+        private final Link viewerLinkHolder;
 
         private final SimplePanel actionButtonHolder;
 
@@ -358,11 +360,16 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
-            viewerHolder = new Link();
-            viewerHolder.setWidth("100%");
-            viewerHolder.getElement().getStyle().setProperty("display", "table-cell");
-            viewerHolder.setWidget(viewer);
-            add(viewerHolder);
+            viewerLabelHolder = new SimplePanel();
+            viewerLabelHolder.setWidth("100%");
+            viewerLabelHolder.getElement().getStyle().setProperty("display", "table-cell");
+            viewerLabelHolder.setWidget(viewer);
+            add(viewerLabelHolder);
+
+            viewerLinkHolder = new Link();
+            viewerLinkHolder.setWidth("100%");
+            viewerLinkHolder.getElement().getStyle().setProperty("display", "table-cell");
+            add(viewerLinkHolder);
 
             actionButtonHolder = new SimplePanel();
             actionButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
@@ -390,9 +397,13 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                     }
                 }, ClickEvent.getType());
 
-                viewerHolder.setEnabled(true);
+                viewerLabelHolder.setVisible(false);
+                viewerLinkHolder.setWidget(viewer);
+                viewerLinkHolder.setVisible(true);
             } else {
-                viewerHolder.setEnabled(false);
+                viewerLinkHolder.setVisible(false);
+                viewerLabelHolder.setWidget(viewer);
+                viewerLabelHolder.setVisible(true);
             }
         }
 
@@ -412,18 +423,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 super(DOM.createAnchor());
                 AnchorElement.as(getElement()).setHref(DEFAULT_HREF);
                 setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
-                setEnabled(false);
             }
-
-            public void setEnabled(boolean enabled) {
-                DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
-                if (enabled) {
-                    removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
-                } else {
-                    addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
-                }
-            }
-
         }
 
     }

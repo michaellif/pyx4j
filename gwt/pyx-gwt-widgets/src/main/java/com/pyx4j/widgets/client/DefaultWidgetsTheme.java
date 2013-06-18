@@ -78,20 +78,7 @@ public class DefaultWidgetsTheme extends Theme {
     private void initAnchorStyle() {
         Style style = new Style(".", StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("cursor", "pointer");
-        style.addProperty("text-decoration", "underline");
         addStyle(style);
-
-        style = new Style(".", StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled);
-        style.addProperty("cursor", "default");
-        style.addProperty("text-decoration", "none");
-        addStyle(style);
-
-        style = new Style(".", StyleName.Anchor, "-", DefaultWidgetsTheme.StyleDependent.disabled, ":hover");
-        style.addProperty("cursor", "default");
-        style.addProperty("text-decoration", "none");
-        addStyle(style);
-
     }
 
     protected void initTextBoxStyle() {
