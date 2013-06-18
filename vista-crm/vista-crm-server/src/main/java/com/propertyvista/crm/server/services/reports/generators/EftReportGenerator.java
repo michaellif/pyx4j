@@ -165,6 +165,10 @@ public class EftReportGenerator implements ReportExporter {
                 criteria.isNull(criteria.proto().billingAccount().lease().unit().building());
             }
         }
+        if (reportMetadata.filterByExpectedMoveOutDate().isBooleanTrue()) {
+            criteria.ge(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.minimum());
+            criteria.le(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.maximum());
+        }
 
         return criteria;
     }
@@ -179,6 +183,7 @@ public class EftReportGenerator implements ReportExporter {
         paymentRecord.preauthorizedPayment().tenant().lease().set(null); // set to null to disable the 'detached' state
         paymentRecord.preauthorizedPayment().tenant().lease().setPrimaryKey(lease.getPrimaryKey());
         paymentRecord.preauthorizedPayment().tenant().lease().leaseId().setValue(lease.leaseId().getValue());
+        paymentRecord.preauthorizedPayment().tenant().lease().expectedMoveOut().setValue(lease.expectedMoveOut().getValue());
         paymentRecord.preauthorizedPayment().tenant().lease().setValuePopulated();
 
         paymentRecord.preauthorizedPayment().tenant().lease().unit().set(null);

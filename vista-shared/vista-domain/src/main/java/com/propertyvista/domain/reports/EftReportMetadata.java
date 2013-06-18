@@ -49,4 +49,12 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
     IPrimitive<PaymentRecord.PaymentStatus> paymentStatus();
 
     IPrimitive<Boolean> forthcomingEft();
+
+    IPrimitive<Boolean> filterByExpectedMoveOutDate();
+
+    @NotNull
+    IPrimitive<LogicalDate> minimum();
+
+    @NotNull
+    IPrimitive<LogicalDate> maximum();
 }

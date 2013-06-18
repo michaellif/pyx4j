@@ -104,6 +104,7 @@ public class EftReport extends Composite implements Report {
                 new ColumnDescriptorAnchorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build()) {
                     @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Lease().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().getPath())).getPrimaryKey()); }
                 },
+                new ColumnDescriptorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().expectedMoveOut()).build()),
                 new ColumnDescriptorAnchorTableColumnFormatter(new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().building().propertyCode()).columnTitle("Building").build()) {
                     @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Building().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().building().getPath())).getPrimaryKey()); }                    
                 },
