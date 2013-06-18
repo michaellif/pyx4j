@@ -89,16 +89,16 @@ public class BillingUtils {
         return product.cast() instanceof Service.ServiceV;
     }
 
-    public static boolean isFeature(Product.ProductV product) {
+    public static boolean isFeature(Product.ProductV<?> product) {
         return product.cast() instanceof Feature.FeatureV;
     }
 
-    public static boolean isRecurringFeature(Product.ProductV product) {
+    public static boolean isRecurringFeature(Product.ProductV<?> product) {
         boolean isFeature = isFeature(product);
         return isFeature && ((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
     }
 
-    public static boolean isOneTimeFeature(Product.ProductV product) {
+    public static boolean isOneTimeFeature(Product.ProductV<?> product) {
         boolean isFeature = isFeature(product);
         return isFeature && !((Feature.FeatureV) product.cast()).recurring().isBooleanTrue();
     }

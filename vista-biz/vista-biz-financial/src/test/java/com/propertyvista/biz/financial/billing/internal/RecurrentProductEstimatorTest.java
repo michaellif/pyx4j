@@ -22,7 +22,6 @@ package com.propertyvista.biz.financial.billing.internal;
 
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.experimental.categories.Category;
 
 import com.propertyvista.biz.financial.LeaseFinancialTestBase;
@@ -36,7 +35,6 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment.Type;
 import com.propertyvista.test.integration.IntegrationTestBase.RegressionTests;
 
-@Ignore
 @Category(RegressionTests.class)
 public class RecurrentProductEstimatorTest extends LeaseFinancialTestBase {
 
@@ -62,31 +60,74 @@ public class RecurrentProductEstimatorTest extends LeaseFinancialTestBase {
         BillableItem locker1 = addLargeLocker();
         addFeatureAdjustment(locker1.uid().getValue(), "-0.2", Type.percentage);
 
+        addBooking("01-Apr-2011");
+
         {
             BillingCycle billingCycle = BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "23-Mar-2011");
             List<InvoiceProductCharge> charges = new LeaseProductsPriceEstimator(billingCycle, retrieveLease()).calculateCharges();
-            assertEquals(0, charges.size());
+            assertEquals("Number of charges", 0, charges.size());
         }
 
         {
             BillingCycle billingCycle = BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "01-Apr-2011");
             List<InvoiceProductCharge> charges = new LeaseProductsPriceEstimator(billingCycle, retrieveLease()).calculateCharges();
+            assertEquals("Number of charges", 3, charges.size());
 
             // @formatter:off
             new InvoiceProductChargeTester(charges.get(0)).
-            amount("905.30");
+            amount("905.30").
+            taxTotal("108.64");
             // @formatter:on
 
             // @formatter:off
             new InvoiceProductChargeTester(charges.get(1)).
-            amount("905.30");
+            amount("70.00").
+            taxTotal("8.40");
             // @formatter:on
+
+            // @formatter:off
+            new InvoiceProductChargeTester(charges.get(2)).
+            amount("48.00").
+            taxTotal("5.76");
+            // @formatter:on
+
+        }
+
+        {
+            BillingCycle billingCycle = BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "01-May-2011");
+            List<InvoiceProductCharge> charges = new LeaseProductsPriceEstimator(billingCycle, retrieveLease()).calculateCharges();
+            assertEquals("Number of charges", 4, charges.size());
+
+            // @formatter:off
+            new InvoiceProductChargeTester(charges.get(0)).
+            amount("905.30").
+            taxTotal("108.64");
+            // @formatter:on
+
+            // @formatter:off
+            new InvoiceProductChargeTester(charges.get(1)).
+            amount("70.00").
+            taxTotal("8.40");
+            // @formatter:on
+
+            // @formatter:off
+            new InvoiceProductChargeTester(charges.get(2)).
+            amount("70.00").
+            taxTotal("8.40");
+            // @formatter:on
+
+            // @formatter:off
+            new InvoiceProductChargeTester(charges.get(3)).
+            amount("48.00").
+            taxTotal("5.76");
+            // @formatter:on
+
         }
 
         {
             BillingCycle billingCycle = BillingCycleTester.ensureBillingCycle(getBuilding(), BillingPeriod.Monthly, "01-Aug-2011");
             List<InvoiceProductCharge> charges = new LeaseProductsPriceEstimator(billingCycle, retrieveLease()).calculateCharges();
-            assertEquals(0, charges.size());
+            assertEquals("Number of charges", 0, charges.size());
         }
 
     }

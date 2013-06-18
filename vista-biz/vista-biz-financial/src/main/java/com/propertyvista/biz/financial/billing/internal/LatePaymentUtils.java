@@ -17,10 +17,10 @@ import java.math.BigDecimal;
 
 import com.pyx4j.config.server.ServerSideFactory;
 
-import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.LeaseBillingPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.util.DomainUtil;
 
 public class LatePaymentUtils {
 
@@ -64,6 +64,6 @@ public class LatePaymentUtils {
             break;
         }
 
-        return MoneyUtils.round(fee);
+        return DomainUtil.roundMoney(fee);
     }
 }

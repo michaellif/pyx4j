@@ -20,7 +20,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.financial.TaxUtils;
 import com.propertyvista.biz.financial.billing.AbstractBillingProcessor;
 import com.propertyvista.biz.financial.billing.BillDateUtils;
@@ -35,6 +34,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.InvoiceProductCredit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
+import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.portal.rpc.shared.BillingException;
 
 public class BillingProductChargeProcessor extends AbstractBillingProcessor<InternalBillProducer> {
@@ -253,7 +253,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
         BigDecimal amount = null;
 
         if (BillableItemAdjustment.Type.percentage.equals(billableItemAdjustment.type().getValue())) {
-            amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue());
+            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue()));
         } else if (BillableItemAdjustment.Type.monetary.equals(billableItemAdjustment.type().getValue())) {
             amount = billableItemAdjustment.value().getValue();
         }
@@ -273,7 +273,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
         }
 
         BigDecimal proration = ProrationUtils.prorate(overlap.getFromDate(), overlap.getToDate(), bill.billingCycle());
-        adjustment.amount().setValue(MoneyUtils.round(amount.multiply(proration)));
+        adjustment.amount().setValue(DomainUtil.roundMoney(amount.multiply(proration)));
         adjustment.description().setValue(billableItemAdjustment.billableItem().item().code().getStringView() + " " + i18n.tr("Adjustment"));
         adjustment.billableItemAdjustment().set(billableItemAdjustment);
 
@@ -300,7 +300,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
         }
 
         BigDecimal proration = ProrationUtils.prorate(charge.fromDate().getValue(), charge.toDate().getValue(), cycle);
-        return MoneyUtils.round(charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration));
+        return DomainUtil.roundMoney(charge.chargeSubLineItem().billableItem().agreedPrice().getValue().multiply(proration));
     }
 
     private void addCharge(InvoiceProductCharge charge) {

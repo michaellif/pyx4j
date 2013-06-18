@@ -39,6 +39,7 @@ import com.propertyvista.domain.policy.policies.domain.LeaseAdjustmentPolicyItem
 import com.propertyvista.domain.policy.policies.domain.ProductTaxPolicyItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.util.DomainUtil;
 
 public class TaxUtils {
 
@@ -93,10 +94,10 @@ public class TaxUtils {
             }
             if (tax.compound().isBooleanTrue()) {
                 amountPerTax = amountPerTax.add(taxCombinedAmount);
-                taxCombinedAmount = taxCombinedAmount.add(MoneyUtils.round(amountPerTax.multiply(tax.rate().getValue())));
+                taxCombinedAmount = taxCombinedAmount.add(DomainUtil.roundMoney(amountPerTax.multiply(tax.rate().getValue())));
                 break;
             } else {
-                taxCombinedAmount = taxCombinedAmount.add(MoneyUtils.round(amountPerTax.multiply(tax.rate().getValue())));
+                taxCombinedAmount = taxCombinedAmount.add(DomainUtil.roundMoney(amountPerTax.multiply(tax.rate().getValue())));
             }
         }
 
@@ -144,7 +145,7 @@ public class TaxUtils {
                 if (!tax.compound().isBooleanTrue()) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
-                    chargeTax.amount().setValue(MoneyUtils.round(baseAmount.multiply(tax.rate().getValue())));
+                    chargeTax.amount().setValue(DomainUtil.roundMoney(baseAmount.multiply(tax.rate().getValue())));
                     chargeTaxes.add(chargeTax);
                     interimAmount = interimAmount.add(chargeTax.amount().getValue());
                 }
@@ -153,7 +154,7 @@ public class TaxUtils {
                 if (tax.compound().isBooleanTrue()) {
                     InvoiceChargeTax chargeTax = EntityFactory.create(InvoiceChargeTax.class);
                     chargeTax.tax().set(tax);
-                    chargeTax.amount().setValue(MoneyUtils.round(interimAmount.multiply(tax.rate().getValue())));
+                    chargeTax.amount().setValue(DomainUtil.roundMoney(interimAmount.multiply(tax.rate().getValue())));
                     chargeTaxes.add(chargeTax);
                     interimAmount = interimAmount.add(chargeTax.amount().getValue());
                 }

@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.biz.financial.MoneyUtils;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -54,6 +53,7 @@ import com.propertyvista.domain.tenant.lease.DepositLifecycle;
 import com.propertyvista.domain.tenant.lease.DepositLifecycle.DepositStatus;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
+import com.propertyvista.domain.util.DomainUtil;
 
 public class DepositFacadeImpl implements DepositFacade {
     private static final I18n i18n = I18n.get(DepositFacadeImpl.class);
@@ -203,7 +203,7 @@ public class DepositFacadeImpl implements DepositFacade {
                 adjustment.date().setValue(new LogicalDate(SystemDateManager.getDate()));
                 adjustment.interestRate().set(policyItem.annualInterestRate());
                 adjustment.amount().setValue(
-                        MoneyUtils.round(deposit.lifecycle().currentAmount().getValue()
+                        DomainUtil.roundMoney(deposit.lifecycle().currentAmount().getValue()
                                 .multiply(policyItem.annualInterestRate().getValue().divide(new BigDecimal(12)))));
 
                 deposit.lifecycle().interestAdjustments().add(adjustment);
@@ -319,7 +319,7 @@ public class DepositFacadeImpl implements DepositFacade {
             deposit.amount().setValue(policyItem.value().getValue());
             break;
         case Percentage:
-            deposit.amount().setValue(MoneyUtils.round(policyItem.value().getValue().multiply(billableItem.agreedPrice().getValue())));
+            deposit.amount().setValue(DomainUtil.roundMoney(policyItem.value().getValue().multiply(billableItem.agreedPrice().getValue())));
             break;
         default:
             throw new Error("Unsupported ValueType");

@@ -33,7 +33,7 @@ public class InvoiceProductChargeTester extends Tester {
     }
 
     public InvoiceProductChargeTester taxTotal(String value) {
-        assertEquals("Tax Total", new BigDecimal(value), invoiceProductCharge.taxTotal());
+        assertEquals("Tax Total", new BigDecimal(value), invoiceProductCharge.taxTotal().getValue());
         return this;
     }
 }

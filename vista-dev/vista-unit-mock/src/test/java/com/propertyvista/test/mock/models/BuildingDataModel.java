@@ -155,6 +155,7 @@ public class BuildingDataModel extends MockDataModel<Building> {
         feature.catalog().set(building.productCatalog());
 
         feature.type().setValue(type);
+
         feature.version().name().setValue("Regular " + type.name());
         feature.version().description().setValue("Feature - " + type.name());
 

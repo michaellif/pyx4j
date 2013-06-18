@@ -29,6 +29,7 @@ import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemAdjustment;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.util.DomainUtil;
 
 public class LeaseProductsPriceEstimator {
 
@@ -72,6 +73,7 @@ public class LeaseProductsPriceEstimator {
         // Add recurrent features to charges
         for (BillableItem feature : lease.currentTerm().version().leaseProducts().featureItems()) {
 
+            Persistence.service().retrieve(feature.item().product());
             //Skip one time feature
             if (BillingUtils.isOneTimeFeature(feature.item().product())) {
                 continue;
@@ -164,7 +166,7 @@ public class LeaseProductsPriceEstimator {
         BigDecimal amount = null;
 
         if (BillableItemAdjustment.Type.percentage.equals(billableItemAdjustment.type().getValue())) {
-            amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue());
+            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue()));
         } else if (BillableItemAdjustment.Type.monetary.equals(billableItemAdjustment.type().getValue())) {
             amount = billableItemAdjustment.value().getValue();
         }
