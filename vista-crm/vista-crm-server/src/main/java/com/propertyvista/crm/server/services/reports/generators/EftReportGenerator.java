@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
+import com.propertyvista.biz.financial.payment.PaymentReportFacade.PreauthorizedPaymentsReportsParams;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -75,7 +76,11 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
-                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(padGenerationDate, selectedBuildings));
+                PreauthorizedPaymentsReportsParams params = reportMetadata.filterByExpectedMoveOutDate().isBooleanTrue() ? new PreauthorizedPaymentsReportsParams(
+                        padGenerationDate, selectedBuildings, reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue())
+                        : new PreauthorizedPaymentsReportsParams(padGenerationDate, selectedBuildings);
+
+                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(params));
             }
 
             for (PaymentRecord paymentRecord : paymentRecords) {

@@ -23,8 +23,37 @@ import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public interface PaymentReportFacade {
 
+    public static final class PreauthorizedPaymentsReportsParams {
+
+        public final LogicalDate padGenerationDate;
+
+        public final List<Building> selectedBuildings;
+
+        public final boolean hasExpectedMoveOutFilter;
+
+        private LogicalDate minExpectedMoveOut;
+
+        private LogicalDate maxExpectedMoveOut;
+
+        public PreauthorizedPaymentsReportsParams(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
+            this.padGenerationDate = padGenerationDate;
+            this.selectedBuildings = selectedBuildings;
+            this.hasExpectedMoveOutFilter = false;
+        }
+
+        public PreauthorizedPaymentsReportsParams(LogicalDate padGenerationDate, List<Building> selectedBuildings, LogicalDate minExpectedMoveOut,
+                LogicalDate maxExpectedMoveOut) {
+            this.padGenerationDate = padGenerationDate;
+            this.selectedBuildings = selectedBuildings;
+            this.hasExpectedMoveOutFilter = true;
+            this.minExpectedMoveOut = minExpectedMoveOut;
+            this.maxExpectedMoveOut = maxExpectedMoveOut;
+        }
+
+    }
+
     List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(List<Building> selectedBuildings);
 
-    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate, List<Building> selectedBuildings);
+    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportsParams params);
 
 }
