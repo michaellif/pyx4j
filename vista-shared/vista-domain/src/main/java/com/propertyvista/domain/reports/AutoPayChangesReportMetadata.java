@@ -13,8 +13,10 @@
  */
 package com.propertyvista.domain.reports;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
@@ -29,4 +31,12 @@ public interface AutoPayChangesReportMetadata extends ReportMetadata, Exportable
     IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> buildings();
+
+    IPrimitive<Boolean> filterByExpectedMoveOut();
+
+    @NotNull
+    IPrimitive<LogicalDate> minimum();
+
+    @NotNull
+    IPrimitive<LogicalDate> maximum();
 }

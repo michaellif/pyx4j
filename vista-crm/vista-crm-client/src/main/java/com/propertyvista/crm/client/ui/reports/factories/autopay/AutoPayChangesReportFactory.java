@@ -59,6 +59,17 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                     }
                 });
                 panel.setWidget(++row, 0, inject(proto().buildings(), new SelectedBuildingsFolder()));
+
+                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
+                get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<Boolean> event) {
+                        get(proto().minimum()).setVisible(event.getValue() == true);
+                        get(proto().maximum()).setVisible(event.getValue() == true);
+                    }
+                });
+                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimum())).build());
+                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maximum())).build());
                 return panel;
             }
 
@@ -66,6 +77,8 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
                 get(proto().buildings()).setVisible(getValue().filterByBuildings().isBooleanTrue());
+                get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
+                get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
             }
         };
         form.initContent();
@@ -98,6 +111,9 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='2'>");
                 builder.appendEscaped(i18n.tr("Lease ID"));
+                builder.appendHtmlConstant("</th>");
+                builder.appendHtmlConstant("<th rowspan='2'>");
+                builder.appendEscaped(i18n.tr("Expected Move Out"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("<th rowspan='2'>");
                 builder.appendEscaped(i18n.tr("Tenant Name"));
@@ -151,7 +167,11 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                     String leaseUrl = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false,
                             new CrmSiteMap.Tenants.Lease().formViewerPlace(reviewCase.lease().getPrimaryKey()));
                     builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "'><a href='" + leaseUrl + "'>"
-                            + SafeHtmlUtils.htmlEscape(reviewCase.leaseId().getValue()) + "</a></td>"); // TODO escape property code
+                            + SafeHtmlUtils.htmlEscape(reviewCase.leaseId().getValue()) + "</a></td>");
+
+                    // TODO expected fill move out column with a value
+                    builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "'>" + SafeHtmlUtils.htmlEscape("TBD") + "</td>");
+
                     for (AutoPayReviewPreauthorizedPaymentDTO reviewPap : reviewCase.pap()) {
                         int numOfTenantRows = reviewPap.items().size();
                         if (!isFirstLine) {

@@ -67,9 +67,6 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(selectedBuildings));
 
-//        if (true) {
-//            throw new Error("THIS IS A TEST ERROR. GO HOME, REPORT, YOU'RE DRUNK");
-//        }
         return suspenedPreauthorizedPayments;
     }
 
