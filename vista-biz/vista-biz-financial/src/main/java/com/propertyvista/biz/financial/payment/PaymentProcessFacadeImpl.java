@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.util.List;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -28,7 +26,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -104,11 +101,6 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     @Override
     public void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
         new PreauthorisedPaymentsManager().createPreauthorisedPayments(executionMonitor, runDate);
-    }
-
-    @Override
-    public List<PaymentRecord> reportPreauthorisedPayments(LogicalDate dueDate, List<Building> selectedBuildings) {
-        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(dueDate, selectedBuildings);
     }
 
     @Override

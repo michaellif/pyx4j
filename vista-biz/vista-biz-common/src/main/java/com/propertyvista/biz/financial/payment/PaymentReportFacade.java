@@ -15,11 +15,16 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public interface PaymentReportFacade {
 
     List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(List<Building> selectedBuildings);
+
+    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate, List<Building> selectedBuildings);
 
 }

@@ -31,7 +31,7 @@ import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -75,7 +75,7 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
-                paymentRecords.addAll(ServerSideFactory.create(PaymentProcessFacade.class).reportPreauthorisedPayments(padGenerationDate, selectedBuildings));
+                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(padGenerationDate, selectedBuildings));
             }
 
             for (PaymentRecord paymentRecord : paymentRecords) {

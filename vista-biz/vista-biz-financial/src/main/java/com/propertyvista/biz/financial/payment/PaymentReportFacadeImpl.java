@@ -15,6 +15,9 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.pyx4j.commons.LogicalDate;
+
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
@@ -23,6 +26,11 @@ public class PaymentReportFacadeImpl implements PaymentReportFacade {
     @Override
     public List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(List<Building> selectedBuildings) {
         return new PreauthorizedPaymentAutoPayReviewReport().reportSuspendedPreauthorizedPayments(selectedBuildings);
+    }
+
+    @Override
+    public List<PaymentRecord> reportPreauthorisedPayments(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
+        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(padGenerationDate, selectedBuildings);
     }
 
 }
