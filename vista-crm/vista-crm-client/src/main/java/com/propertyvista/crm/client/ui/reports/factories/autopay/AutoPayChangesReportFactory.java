@@ -169,8 +169,7 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                     builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "'><a href='" + leaseUrl + "'>"
                             + SafeHtmlUtils.htmlEscape(reviewCase.leaseId().getValue()) + "</a></td>");
 
-                    // TODO expected fill move out column with a value
-                    builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "'>" + SafeHtmlUtils.htmlEscape("TBD") + "</td>");
+                    builder.appendHtmlConstant("<td rowspan='" + numOfCaseRows + "'>" + reviewCase.lease().expectedMoveOut().getStringView() + "</td>");
 
                     for (AutoPayReviewPreauthorizedPaymentDTO reviewPap : reviewCase.pap()) {
                         int numOfTenantRows = reviewPap.items().size();

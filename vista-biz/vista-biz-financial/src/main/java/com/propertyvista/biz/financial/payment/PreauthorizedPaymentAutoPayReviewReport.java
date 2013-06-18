@@ -91,7 +91,14 @@ class PreauthorizedPaymentAutoPayReviewReport {
         review.building().setValue(billingAccount.lease().unit().building().propertyCode().getValue());
 
         review.leaseId().setValue(billingAccount.lease().leaseId().getValue());
-        review.lease().set(billingAccount.lease().createIdentityStub());
+        review.lease().set(billingAccount.lease().duplicate());
+        // Clear unused values
+        review.lease().billingAccount().setValueDetached();
+        review.lease().currentTerm().setValueDetached();
+        review.lease().previousTerm().setValueDetached();
+        review.lease().nextTerm().setValueDetached();
+        review.lease().unit().setValueDetached();
+
         review.unit().setValue(billingAccount.lease().unit().info().number().getValue());
 
         review.paymentDue().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(billingAccount.lease()));

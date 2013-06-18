@@ -23,6 +23,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 @Transient
 public interface EftReportExportModel extends IEntity {
@@ -34,6 +35,14 @@ public interface EftReportExportModel extends IEntity {
     IPrimitive<String> unit();
 
     IPrimitive<String> leaseId();
+
+    IPrimitive<Lease.Status> leaseStatus();
+
+    IPrimitive<LogicalDate> leaseFrom();
+
+    IPrimitive<LogicalDate> leaseTo();
+
+    IPrimitive<LogicalDate> expectedMoveOut();
 
     IPrimitive<String> tenantId();
 

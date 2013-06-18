@@ -34,7 +34,7 @@ public interface AutoPayReviewDTO extends IEntity {
     //TBD
     IPrimitive<String> leaseId();
 
-    // Make a link to this lease 
+    // Make a link to this lease, And contains Lease dates values, Owned objects are not preserved 
     @Detached
     Lease lease();
 

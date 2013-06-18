@@ -62,6 +62,12 @@ public class EftReportExport {
         model.building().setValue(paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().getValue());
         model.unit().setValue(paymentRecord.preauthorizedPayment().tenant().lease().unit().info().number().getValue());
         model.leaseId().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseId().getValue());
+
+        model.leaseStatus().setValue(paymentRecord.preauthorizedPayment().tenant().lease().status().getValue());
+        model.leaseFrom().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseFrom().getValue());
+        model.leaseTo().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseTo().getValue());
+        model.expectedMoveOut().setValue(paymentRecord.preauthorizedPayment().tenant().lease().expectedMoveOut().getValue());
+
         model.tenantId().setValue(paymentRecord.preauthorizedPayment().tenant().participantId().getValue());
 
         model.amount().setValue(paymentRecord.amount().getValue());

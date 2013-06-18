@@ -185,11 +185,12 @@ public class EftReportGenerator implements ReportExporter {
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
-        paymentRecord.preauthorizedPayment().tenant().lease().set(null); // set to null to disable the 'detached' state
-        paymentRecord.preauthorizedPayment().tenant().lease().setPrimaryKey(lease.getPrimaryKey());
-        paymentRecord.preauthorizedPayment().tenant().lease().leaseId().setValue(lease.leaseId().getValue());
-        paymentRecord.preauthorizedPayment().tenant().lease().expectedMoveOut().setValue(lease.expectedMoveOut().getValue());
-        paymentRecord.preauthorizedPayment().tenant().lease().setValuePopulated();
+        paymentRecord.preauthorizedPayment().tenant().lease().set(lease.duplicate());
+        // Clear unused values
+        paymentRecord.preauthorizedPayment().tenant().lease().billingAccount().setValueDetached();
+        paymentRecord.preauthorizedPayment().tenant().lease().currentTerm().setValueDetached();
+        paymentRecord.preauthorizedPayment().tenant().lease().previousTerm().setValueDetached();
+        paymentRecord.preauthorizedPayment().tenant().lease().nextTerm().setValueDetached();
 
         paymentRecord.preauthorizedPayment().tenant().lease().unit().set(null);
         paymentRecord.preauthorizedPayment().tenant().lease().unit().setPrimaryKey(lease.unit().getPrimaryKey());

@@ -97,6 +97,16 @@ public class AutoPayChangesReportExport {
         formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Lease ID"));
         formatter.mergeCells(2, 1);
+
+        formatter.header(i18n.tr("Lease Status"));
+        formatter.mergeCells(2, 1);
+        formatter.header(i18n.tr("Lease From"));
+        formatter.mergeCells(2, 1);
+        formatter.header(i18n.tr("Lease To"));
+        formatter.mergeCells(2, 1);
+        formatter.header(i18n.tr("Expected Move Out"));
+        formatter.mergeCells(2, 1);
+
         formatter.header(i18n.tr("Tenant Name"));
         formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Charge Code"));
@@ -129,6 +139,10 @@ public class AutoPayChangesReportExport {
         formatter.cell(reviewCase.building().getValue());
         formatter.cell(reviewCase.unit().getValue());
         formatter.cell(reviewCase.leaseId().getValue());
+        formatter.cell(reviewCase.lease().status().getValue());
+        formatter.cell(reviewCase.lease().leaseFrom().getValue());
+        formatter.cell(reviewCase.lease().leaseTo().getValue());
+        formatter.cell(reviewCase.lease().expectedMoveOut().getValue());
 
         boolean isFirstLine = true;
 
@@ -143,7 +157,7 @@ public class AutoPayChangesReportExport {
             boolean isFirstCharge = true;
             for (AutoPayReviewChargeDTO charge : reviewPap.items()) {
                 if (!isFirstCharge) {
-                    formatter.cellEmpty(4);
+                    formatter.cellEmpty(7);
                 }
 
                 formatter.cell(charge.leaseCharge().getValue());
