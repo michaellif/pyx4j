@@ -253,7 +253,7 @@ public class BillingProductChargeProcessor extends AbstractBillingProcessor<Inte
         BigDecimal amount = null;
 
         if (BillableItemAdjustment.Type.percentage.equals(billableItemAdjustment.type().getValue())) {
-            amount = DomainUtil.roundMoney(billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue()));
+            amount = billableItemAdjustment.billableItem().agreedPrice().getValue().multiply(billableItemAdjustment.value().getValue());
         } else if (BillableItemAdjustment.Type.monetary.equals(billableItemAdjustment.type().getValue())) {
             amount = billableItemAdjustment.value().getValue();
         }
