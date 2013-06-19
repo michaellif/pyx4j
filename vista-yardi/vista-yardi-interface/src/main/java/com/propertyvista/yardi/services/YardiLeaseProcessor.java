@@ -40,13 +40,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
-import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -237,17 +235,14 @@ public class YardiLeaseProcessor {
 
     public Lease expireLeaseProducts(Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
-        // set service charge to zero
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()) < 0) {
-            log.info("      Expiring billable items for lease {} ", lease.getStringView());
+            log.info("      Terminating billable items for lease {} ", lease.getStringView());
 
+            // set service charge to zero
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
-            // expire features
-            LogicalDate now = getLogicalDate(SystemDateManager.getDate());
-            BillingCycle currCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, now);
-            for (BillableItem item : lease.currentTerm().version().leaseProducts().featureItems()) {
-                item.expirationDate().set(currCycle.billingCycleEndDate());
-            }
+            // remove features
+            lease.currentTerm().version().leaseProducts().featureItems().clear();
+            // finalize
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
             suspendPADPayments(lease);
         }
