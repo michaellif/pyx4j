@@ -20,8 +20,11 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -41,7 +44,8 @@ import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.gwt.client.deferred.DeferredProgressPanel;
 import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.AbstractPane;
+import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.HasAdvancedSettings;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
@@ -50,11 +54,18 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReport extends AbstractPane implements IReportsView {
+public abstract class AbstractReport extends AbstractPrimePane implements IReportsView {
 
     public enum Styles {
 
         ReportView, SettingsFormPanel, ReportPanel, ReportProgressControlPanel, ReportProgressErrorPanel;
+
+    }
+
+    private enum MementoKeys {
+
+        ReportMetadata, HasData
+
     }
 
     private static class ReportPrintPalette extends Palette {
@@ -136,6 +147,8 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
 
     private final FlowPanel errorPanel;
 
+    private boolean hasData;
+
     public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
         setSize("100%", "100%");
         this.reportFactoryMap = reportFactoryMap;
@@ -197,7 +210,12 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         reportPanel.setStylePrimaryName(Styles.ReportPanel.name());
         viewPanel.add(reportPanel);
 
-        addHeaderToolbarItem(new Button(i18n.tr("Refresh")));
+        addHeaderToolbarItem(new Button(i18n.tr("Refresh"), new Command() {
+            @Override
+            public void execute() {
+                presenter.refresh(settingsForm.getValue());
+            }
+        }));
 
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
             @Override
@@ -246,15 +264,16 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
     @Override
     public void setReportSettings(ReportMetadata reportSettings, String settingsId) {
         hideVisor();
+
         this.settingsId = settingsId;
         this.settingsForm = null;
         this.settingsFormPanel.setWidget(null);
+        this.reportSettingsFormControlBar.setEnabled(false);
+        this.reportPanel.setWidget(null);
 
-        if (reportSettings == null) {
-            reportPanel.setWidget(null);
-        } else {
-
+        if (reportSettings != null) {
             populateSettingsForm(reportSettings);
+            reportSettingsFormControlBar.setEnabled(true);
 
             ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
             report = factory.getReport();
@@ -272,8 +291,11 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         unlockReportSettings();
         errorPanel.setVisible(false);
 
-        if (report != null) {
+        if (report != null & data != null) {
             report.setData(data);
+            hasData = true;
+        } else {
+            hasData = false;
         }
     }
 
@@ -328,6 +350,34 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
         printableHtml.append("</html>");
 
         Print.preview(printableHtml.toString());
+    }
+
+    @Override
+    public void storeState(Place place) {
+        getMemento().setCurrentPlace(place);
+        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMetadata.name(), settingsForm.getValue());
+        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HasData.name(), hasData);
+    }
+
+    @Override
+    public void restoreState() {
+        if (getMemento().mayRestore()) {
+            ReportMetadata reportMetadata = (ReportMetadata) getMemento().getObject(
+                    ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMetadata.name());
+            setReportSettings(reportMetadata, null); // TODO deal with report metadata Id
+            boolean hadData = Boolean.TRUE.equals(getMemento().getObject(
+                    ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasData.name()));
+            if (hadData) {
+                presenter.apply(reportMetadata);
+            }
+        } else {
+            setReportSettings(((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
+        }
+    }
+
+    @Override
+    public List<Class<? extends ReportMetadata>> getSupportedReportMetadata() {
+        return new ArrayList<Class<? extends ReportMetadata>>(reportFactoryMap.keySet());
     }
 
     private void setSettingsMode(boolean isAdvanced) {
@@ -394,7 +444,9 @@ public abstract class AbstractReport extends AbstractPane implements IReportsVie
     }
 
     private void unlockReportSettings() {
-        settingsForm.setEnabled(true);
+        if (settingsForm != null) {
+            settingsForm.setEnabled(true);
+        }
         reportSettingsFormControlBar.setEnabled(true);
         reportPanel.setVisible(true);
 
