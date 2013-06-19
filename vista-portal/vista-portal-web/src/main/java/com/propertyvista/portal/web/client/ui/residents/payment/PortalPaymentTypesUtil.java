@@ -1,0 +1,80 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on 2013-02-12
+ * @author vlads
+ * @version $Id$
+ */
+package com.propertyvista.portal.web.client.ui.residents.payment;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.EnumSet;
+
+import com.pyx4j.security.shared.SecurityController;
+
+import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+
+public class PortalPaymentTypesUtil {
+
+    public static Collection<PaymentType> avalableInProfile() {
+        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>();
+
+        for (VistaCustomerPaymentTypeBehavior behavior : VistaCustomerPaymentTypeBehavior.values()) {
+            if (SecurityController.checkBehavior(behavior)) {
+                switch (behavior) {
+                case CreditCardPaymentsAllowed:
+                    allowedTypes.add(PaymentType.CreditCard);
+                    break;
+                case EcheckPaymentsAllowed:
+                    allowedTypes.add(PaymentType.Echeck);
+                    break;
+                case InteracPaymentsAllowed:
+                    break;
+                case EFTPaymentsAllowed:
+                    break;
+                }
+            }
+        }
+        return allowedTypes;
+
+    }
+
+    public static Collection<PaymentType> getAllowedPaymentTypes() {
+        // set allowed for the lease payments types selection:
+        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>();
+
+        for (VistaCustomerPaymentTypeBehavior behavior : VistaCustomerPaymentTypeBehavior.values()) {
+            if (SecurityController.checkBehavior(behavior)) {
+                switch (behavior) {
+                case CreditCardPaymentsAllowed:
+                    allowedTypes.add(PaymentType.CreditCard);
+                    break;
+                case EcheckPaymentsAllowed:
+                    allowedTypes.add(PaymentType.Echeck);
+                    break;
+                case InteracPaymentsAllowed:
+                    allowedTypes.add(PaymentType.Interac);
+                    break;
+                case EFTPaymentsAllowed:
+                    allowedTypes.add(PaymentType.EFT);
+                    break;
+                }
+            }
+        }
+        return allowedTypes;
+    }
+
+    public static boolean isPreauthorizedPaumentAllowed() {
+        Collection<PaymentType> available = getAllowedPaymentTypes();
+        available.retainAll(EnumSet.of(PaymentType.Echeck, PaymentType.CreditCard));
+        return !available.isEmpty();
+    }
+}
