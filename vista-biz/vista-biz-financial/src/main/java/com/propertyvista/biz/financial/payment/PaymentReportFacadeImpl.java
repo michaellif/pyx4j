@@ -16,19 +16,18 @@ package com.propertyvista.biz.financial.payment;
 import java.util.List;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public class PaymentReportFacadeImpl implements PaymentReportFacade {
 
     @Override
-    public List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(List<Building> selectedBuildings) {
-        return new PreauthorizedPaymentAutoPayReviewReport().reportSuspendedPreauthorizedPayments(selectedBuildings);
+    public List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
+        return new PreauthorizedPaymentAutoPayReviewReport().reportSuspendedPreauthorizedPayments(reportCriteria);
     }
 
     @Override
-    public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportsParams params) {
-        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(params.padGenerationDate, params.selectedBuildings);
+    public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
+        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(reportCriteria);
     }
 
 }

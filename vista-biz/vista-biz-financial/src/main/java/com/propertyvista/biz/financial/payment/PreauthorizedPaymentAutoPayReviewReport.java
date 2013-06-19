@@ -33,7 +33,6 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -46,17 +45,22 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 class PreauthorizedPaymentAutoPayReviewReport {
 
-    List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(List<Building> selectedBuildings) {
+    List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
         List<AutoPayReviewDTO> records = new ArrayList<AutoPayReviewDTO>();
 
         ICursorIterator<BillingAccount> billingAccountIterator;
         { //TODO->Closure
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-            if (selectedBuildings != null) {
-                criteria.in(criteria.proto().lease().unit().building(), selectedBuildings);
+            if (reportCriteria.selectedBuildings != null) {
+                criteria.in(criteria.proto().lease().unit().building(), reportCriteria.selectedBuildings);
             }
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
+
+            if (reportCriteria.hasExpectedMoveOutFilter) {
+                criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.minExpectedMoveOut);
+                criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.maxExpectedMoveOut);
+            }
 
             criteria.asc(criteria.proto().lease().unit().building().propertyCode());
             criteria.asc(criteria.proto().lease().leaseId());

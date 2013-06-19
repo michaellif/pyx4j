@@ -29,6 +29,7 @@ import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
+import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
@@ -64,8 +65,17 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
             selectedBuildings = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
         }
 
+        PreauthorizedPaymentsReportCriteria reportCriteria;
+
+        if (autoPayChangesReportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
+            reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings, autoPayChangesReportMetadata.minimum().getValue(),
+                    autoPayChangesReportMetadata.maximum().getValue());
+        } else {
+            reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);
+        }
+
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
-                .reportSuspendedPreauthorizedPayments(selectedBuildings));
+                .reportSuspendedPreauthorizedPayments(reportCriteria));
 
         return suspenedPreauthorizedPayments;
     }

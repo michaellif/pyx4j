@@ -71,8 +71,8 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
         });
         panel.setWidget(++row, 1, inject(proto().selectedBuildings(), new SelectedBuildingsFolder()));
 
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByExpectedMoveOutDate())).build());
-        get(proto().filterByExpectedMoveOutDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
+        get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().minimum()).setVisible(event.getValue());
@@ -93,7 +93,7 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
 
         get(proto().selectedBuildings()).setVisible((getValue().filterByBuildings().isBooleanTrue()));
 
-        get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOutDate().isBooleanTrue());
-        get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOutDate().isBooleanTrue());
+        get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
+        get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
     }
 }

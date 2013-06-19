@@ -15,45 +15,13 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
-import com.pyx4j.commons.LogicalDate;
-
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
 
 public interface PaymentReportFacade {
 
-    public static final class PreauthorizedPaymentsReportsParams {
+    List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria);
 
-        public final LogicalDate padGenerationDate;
-
-        public final List<Building> selectedBuildings;
-
-        public final boolean hasExpectedMoveOutFilter;
-
-        private LogicalDate minExpectedMoveOut;
-
-        private LogicalDate maxExpectedMoveOut;
-
-        public PreauthorizedPaymentsReportsParams(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
-            this.padGenerationDate = padGenerationDate;
-            this.selectedBuildings = selectedBuildings;
-            this.hasExpectedMoveOutFilter = false;
-        }
-
-        public PreauthorizedPaymentsReportsParams(LogicalDate padGenerationDate, List<Building> selectedBuildings, LogicalDate minExpectedMoveOut,
-                LogicalDate maxExpectedMoveOut) {
-            this.padGenerationDate = padGenerationDate;
-            this.selectedBuildings = selectedBuildings;
-            this.hasExpectedMoveOutFilter = true;
-            this.minExpectedMoveOut = minExpectedMoveOut;
-            this.maxExpectedMoveOut = maxExpectedMoveOut;
-        }
-
-    }
-
-    List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(List<Building> selectedBuildings);
-
-    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportsParams params);
+    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria params);
 
 }

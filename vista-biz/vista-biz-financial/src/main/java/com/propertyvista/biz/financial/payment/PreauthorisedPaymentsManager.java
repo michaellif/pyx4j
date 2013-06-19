@@ -41,7 +41,6 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -61,9 +60,9 @@ class PreauthorisedPaymentsManager {
         String notice;
     }
 
-    List<PaymentRecord> reportPreauthorisedPayments(LogicalDate runDate, List<Building> selectedBuildings) {
+    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
         List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        createPreauthorisedPayments(new ExecutionMonitor(), runDate, true, paymentRecords, selectedBuildings);
+        createPreauthorisedPayments(new ExecutionMonitor(), reportCriteria.padGenerationDate, true, paymentRecords, reportCriteria);
         return paymentRecords;
     }
 
@@ -72,20 +71,20 @@ class PreauthorisedPaymentsManager {
     }
 
     private void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate, boolean reportOny,
-            List<PaymentRecord> resultingPaymentRecords, List<Building> selectedBuildings) {
+            List<PaymentRecord> resultingPaymentRecords, PreauthorizedPaymentsReportCriteria reportCriteria) {
         ICursorIterator<BillingCycle> billingCycleIterator;
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetPadGenerationDate(), runDate);
             criteria.isNull(criteria.proto().actualPadGenerationDate());
-            if (selectedBuildings != null) {
-                criteria.in(criteria.proto().building(), selectedBuildings);
+            if ((reportCriteria != null) && (reportCriteria.selectedBuildings != null)) {
+                criteria.in(criteria.proto().building(), reportCriteria.selectedBuildings);
             }
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
         try {
             while (billingCycleIterator.hasNext()) {
-                createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor, reportOny, resultingPaymentRecords);
+                createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor, reportOny, resultingPaymentRecords, reportCriteria);
             }
         } finally {
             billingCycleIterator.close();
@@ -112,7 +111,7 @@ class PreauthorisedPaymentsManager {
     }
 
     private void createBillingCyclePreauthorisedPayments(final BillingCycle billingCycle, final ExecutionMonitor executionMonitor, final boolean reportOny,
-            final List<PaymentRecord> resultingPaymentRecords) {
+            final List<PaymentRecord> resultingPaymentRecords, final PreauthorizedPaymentsReportCriteria reportCriteria) {
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
@@ -125,6 +124,12 @@ class PreauthorisedPaymentsManager {
                     criteria.eq(criteria.proto().lease().unit().building(), billingCycle.building());
                     criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
                     criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+
+                    if ((reportCriteria != null) && (reportCriteria.hasExpectedMoveOutFilter)) {
+                        criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.minExpectedMoveOut);
+                        criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.maxExpectedMoveOut);
+                    }
+
                     criteria.asc(criteria.proto().lease().leaseId());
                     billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
                 }

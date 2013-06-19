@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
-import com.propertyvista.biz.financial.payment.PaymentReportFacade.PreauthorizedPaymentsReportsParams;
+import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -76,9 +76,9 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
-                PreauthorizedPaymentsReportsParams params = reportMetadata.filterByExpectedMoveOutDate().isBooleanTrue() ? new PreauthorizedPaymentsReportsParams(
+                PreauthorizedPaymentsReportCriteria params = reportMetadata.filterByExpectedMoveOut().isBooleanTrue() ? new PreauthorizedPaymentsReportCriteria(
                         padGenerationDate, selectedBuildings, reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue())
-                        : new PreauthorizedPaymentsReportsParams(padGenerationDate, selectedBuildings);
+                        : new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
 
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(params));
             }
@@ -170,7 +170,7 @@ public class EftReportGenerator implements ReportExporter {
                 criteria.isNull(criteria.proto().billingAccount().lease().unit().building());
             }
         }
-        if (reportMetadata.filterByExpectedMoveOutDate().isBooleanTrue()) {
+        if (reportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
             criteria.ge(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.minimum());
             criteria.le(criteria.proto().billingAccount().lease().expectedMoveOut(), reportMetadata.maximum());
         }

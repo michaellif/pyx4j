@@ -50,7 +50,7 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
 
     IPrimitive<Boolean> forthcomingEft();
 
-    IPrimitive<Boolean> filterByExpectedMoveOutDate();
+    IPrimitive<Boolean> filterByExpectedMoveOut();
 
     @NotNull
     IPrimitive<LogicalDate> minimum();
