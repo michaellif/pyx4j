@@ -180,7 +180,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
                                 public void onSuccess(Serializable result) {
                                     CachedReportData cachedReportData = new CachedReportData();
                                     cachedReportData.data = result;
-                                    cachedReportData.reportMetadata = reportMetadata;
+                                    cachedReportData.reportMetadata = reportMetadata.duplicate();
                                     reportDataCache.put(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()), cachedReportData);
                                     view.setReportData(result);
                                 }
