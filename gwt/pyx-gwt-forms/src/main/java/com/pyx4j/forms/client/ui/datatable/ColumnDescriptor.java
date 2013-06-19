@@ -237,6 +237,12 @@ public class ColumnDescriptor {
             return this;
         }
 
+        public Builder displayOnly() {
+            sortable(false);
+            searchable(false);
+            return this;
+        }
+
         public Builder width(String width) {
             this.width = width;
             return this;
