@@ -20,13 +20,15 @@
  */
 package com.pyx4j.site.rpc;
 
-import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
 public class ReportsAppPlace extends AppPlace {
+
+    private final static String REPORT_TYPE_ARG_NAME = "type";
 
     private final ReportMetadata metadata;
 
@@ -36,15 +38,22 @@ public class ReportsAppPlace extends AppPlace {
 
     public ReportsAppPlace(ReportMetadata metadata) {
         this.metadata = metadata;
+        if (metadata != null) {
+            this.queryArg(REPORT_TYPE_ARG_NAME, GWTJava5Helper.getSimpleName(metadata.getInstanceValueClass()));
+        }
     }
 
     public ReportMetadata getReportMetadata() {
         return metadata;
     }
 
+    public String getReportMetadataName() {
+        return this.getFirstArg(REPORT_TYPE_ARG_NAME);
+    }
+
     @Override
     public boolean equals(Object other) {
-        return super.equals(other) && (other instanceof ReportsAppPlace) && EntityGraph.fullyEqual(this.metadata, ((ReportsAppPlace) other).metadata);
+        return super.equals(other);
     }
 
 }

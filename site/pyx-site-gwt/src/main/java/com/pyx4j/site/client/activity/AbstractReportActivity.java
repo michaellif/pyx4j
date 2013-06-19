@@ -23,6 +23,7 @@ package com.pyx4j.site.client.activity;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -32,9 +33,11 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
@@ -91,6 +94,15 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
     }
 
+    private static class CachedReportData {
+
+        ReportMetadata reportMetadata;
+
+        Object data;
+    }
+
+    private static final Map<String, CachedReportData> reportDataCache = new HashMap<String, AbstractReportActivity.CachedReportData>();
+
     protected final IReportsView view;
 
     private final IReportsService reportsService;
@@ -111,9 +123,21 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
             IReportsView view, ReportsAppPlace place, String dowloadServletPath) {
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
+
         this.view = view;
-        this.view.setPresenter(this);
+        if (place.getReportMetadata() == null) {
+            for (Class<? extends ReportMetadata> reportMetadataClass : view.getSupportedReportMetadata()) {
+                if (GWTJava5Helper.getSimpleName(reportMetadataClass).equals(place.getReportMetadataName())) {
+                    place = new ReportsAppPlace(EntityFactory.create(reportMetadataClass));
+                    break;
+                }
+            }
+            if (place.getReportMetadata() == null) {
+                throw new Error("Report '" + place.getReportMetadataName() + "' is not supported!");
+            }
+        }
         this.place = place;
+        this.view.setPresenter(this);
         this.downloadServletPath = dowloadServletPath;
         this.deferredProccessService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
     }
@@ -126,44 +150,57 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     }
 
     @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        panel.setWidget(view);
-        view.setReportSettings(retrieveReportSettings(place), null);
+    public AppPlace getPlace() {
+        return place;
     }
 
     @Override
-    public void apply(ReportMetadata settings) {
-        reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
-            @Override
-            public void onSuccess(String deferredProcessId) {
-                view.startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
+        view.getMemento().setCurrentPlace(getPlace());
+        view.restoreState();
+    }
 
-                    @Override
-                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
-                        reportsService.getReport(new DefaultAsyncCallback<Serializable>() {
+    @Override
+    public void apply(final ReportMetadata reportMetadata) {
+        CachedReportData cachedData = reportDataCache.get(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()));
+        if (cachedData != null && EntityGraph.fullyEqualValues(reportMetadata, cachedData.reportMetadata)) {
+            view.setReportData(cachedData.data);
+        } else {
+            reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
+                @Override
+                public void onSuccess(String deferredProcessId) {
+                    view.startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
 
-                            @Override
-                            public void onSuccess(Serializable result) {
-                                view.setReportData(result);
-                            }
+                        @Override
+                        public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                            reportsService.getReport(new DefaultAsyncCallback<Serializable>() {
 
-                        });
-                    }
+                                @Override
+                                public void onSuccess(Serializable result) {
+                                    CachedReportData cachedReportData = new CachedReportData();
+                                    cachedReportData.data = result;
+                                    cachedReportData.reportMetadata = reportMetadata.duplicate();
+                                    reportDataCache.put(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()), cachedReportData);
+                                    view.setReportData(result);
+                                }
 
-                    @Override
-                    public void onDeferredProgress(DeferredProcessProgressResponse result) {
-                        // TODO Auto-generated method stub
+                            });
+                        }
 
-                    }
+                        @Override
+                        public void onDeferredProgress(DeferredProcessProgressResponse result) {
+                            // TODO Auto-generated method stub
+                        }
 
-                    @Override
-                    public void onDeferredError(DeferredProcessProgressResponse result) {
-                        // TODO Auto-generated method stub
-
-                    }
-                });
-            }
-        }, settings);
+                        @Override
+                        public void onDeferredError(DeferredProcessProgressResponse result) {
+                            view.setError(result.getMessage());
+                        }
+                    });
+                }
+            }, reportMetadata);
+        }
     }
 
     @Override
@@ -188,6 +225,14 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
             }
 
         }, request);
+    }
+
+    @Override
+    public void refresh(ReportMetadata reportMetadata) {
+        if (reportMetadata != null) {
+            reportDataCache.remove(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()));
+        }
+        apply(reportMetadata);
     }
 
     @Override
@@ -253,6 +298,12 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        view.storeState(getPlace());
+    }
+
     protected ReportMetadata retrieveReportSettings(AppPlace place) {
         if (place instanceof ReportsAppPlace) {
             return ((ReportsAppPlace) place).getReportMetadata();
@@ -267,6 +318,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
     @Override
     public void refresh() {
+
     }
 
 }

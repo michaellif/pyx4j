@@ -20,13 +20,17 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
+import java.util.List;
+
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
-import com.pyx4j.site.client.ui.IPane;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public interface IReportsView extends IPane {
+public interface IReportsView extends IPrimePane {
 
-    public interface Presenter extends IPane.Presenter {
+    public interface Presenter extends IPrimePane.Presenter {
+
+        void refresh(ReportMetadata settings);
 
         void export(ReportMetadata settings);
 
@@ -50,8 +54,11 @@ public interface IReportsView extends IPane {
 
     void setReportData(Object data);
 
+    void setError(String errorMessage);
+
     void onReportSettingsSaveSucceed(String reportSettingsId);
 
     void onReportSettingsSaveFailed(String reason);
 
+    List<Class<? extends ReportMetadata>> getSupportedReportMetadata();
 }
