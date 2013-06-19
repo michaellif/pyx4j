@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module rename-to="portalWeb">
+    <inherits name='com.propertyvista.portal.web.PortalWeb'/>
+    <inherits name='com.propertyvista.common.VistaLocaleAll'/>
+    
+    <replace-with class="com.pyx4j.config.shared.ApplicationMode.ProductionMode">
+        <when-type-is class="com.pyx4j.config.shared.ApplicationMode.Mode"/>
+    </replace-with>
+    <replace-with class="com.propertyvista.common.client.config.demo.VistaDemoConfigurationDemo">
+         <when-type-is class="com.propertyvista.shared.config.VistaDemo.VistaDemoConfiguration"/>
+    </replace-with>
+    <set-configuration-property name="pyx.ElideServiceNamesFromRPC" value="obfuscated" />
+</module>
