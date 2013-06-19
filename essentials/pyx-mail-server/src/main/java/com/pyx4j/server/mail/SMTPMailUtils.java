@@ -75,19 +75,17 @@ class SMTPMailUtils {
         return addreses;
     }
 
-    static boolean filterDestinations(String emailFilter, String email) {
+    static boolean allowDestinations(String emailFilter, String email) {
         StringTokenizer st = new StringTokenizer(emailFilter, ";");
         if (st.hasMoreElements()) {
             while (st.hasMoreElements()) {
                 if (email.endsWith(st.nextToken().trim())) {
-                    return false;
+                    return true;
                 }
             }
             return false;
-        } else if (email.endsWith(emailFilter)) {
-            return true;
         } else {
-            return false;
+            return email.endsWith(emailFilter);
         }
     }
 
@@ -97,7 +95,7 @@ class SMTPMailUtils {
         }
         List<InternetAddress> r = new Vector<InternetAddress>();
         for (InternetAddress a : list) {
-            if (!filterDestinations(emailFilter, a.getAddress())) {
+            if (allowDestinations(emailFilter, a.getAddress())) {
                 r.add(a);
             }
         }
