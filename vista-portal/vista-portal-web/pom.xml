@@ -54,10 +54,10 @@
     </dependencies>
 
     <properties>
-        <gwtModule>portal</gwtModule>
+        <gwtModule>portalWeb</gwtModule>
         <gwtModuleCompile>vista.${gwtModule}${appGWTModuleSufix}</gwtModuleCompile>
         <warFolder>${basedir}/../../vista-server/src/main/webapp</warFolder>
-        <gwtDestinationWarFolder>${warFolder}/portal</gwtDestinationWarFolder>
+        <gwtDestinationWarFolder>${warFolder}/portalWeb</gwtDestinationWarFolder>
     </properties>
 
     <profiles>
