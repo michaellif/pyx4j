@@ -18,17 +18,23 @@
     <description>Mail Delivery Server Side Implementations</description>
 
     <dependencies>
-        
+
 		<dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
         </dependency>
-        
+
         <dependency>
         	<groupId>com.pyx4j</groupId>
             <artifactId>pyx-config-server</artifactId>
             <version>${project.version}</version>
 		</dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <optional>true</optional>
+        </dependency>
 
     </dependencies>
 
