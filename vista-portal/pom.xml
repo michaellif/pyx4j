@@ -21,6 +21,7 @@
         <module>vista-portal-domain</module>
         <module>vista-portal-rpc</module>
         <module>vista-portal-client</module>
+        <module>vista-portal-web</module>
         <module>vista-portal-ptapp</module>
         <!-- for Alpha -->
         <!--module>vista-portal-corp</module-->
