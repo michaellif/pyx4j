@@ -30,14 +30,13 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.domain.property.PropertyContact.PropertyContactType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -89,7 +88,7 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().merge(request);
 
         if (isNewRequest) {
-            sendAdminNote(request, true);
+            ServerSideFactory.create(NotificationFacade.class).maintenanceRequest(request, true);
             sendReporterNote(request, true);
         }
     }
@@ -148,22 +147,6 @@ public abstract class MaintenanceAbstractManager {
             }
         }
         return null;
-    }
-
-    protected void sendAdminNote(MaintenanceRequest request, boolean isNewRequest) {
-        Persistence.ensureRetrieve(request.building().contacts().propertyContacts(), AttachLevel.Attached);
-        for (PropertyContact cont : request.building().contacts().propertyContacts()) {
-            if (PropertyContactType.superintendent.equals(cont.type().getValue())) {
-                String sendTo = cont.email().getValue();
-                String userName = cont.name().getValue();
-                try {
-                    ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(sendTo, userName, request, isNewRequest, true);
-                } catch (Exception e) {
-                    log.warn("Email communication failed: {}", e);
-                }
-                return;
-            }
-        }
     }
 
     protected void sendReporterNote(MaintenanceRequest request, boolean isNewRequest) {

@@ -385,8 +385,7 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createPapSuspentionNotificationEmail(Lease lease) {
-
+    public static MailMessage createPapSuspentionNotificationEmail(Lease leaseId) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
@@ -398,9 +397,9 @@ public class MessageTemplates {
         }
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
-        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(lease.getPrimaryKey()));
+        String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(leaseId.getPrimaryKey()));
         emailBody = emailBody.replace("${leaseUrl}", leaseUrl);
-        String leaseStringView = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey(), AttachLevel.ToStringMembers).getStringView();
+        String leaseStringView = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey(), AttachLevel.ToStringMembers).getStringView();
         email.setSubject(i18n.tr("PAP suspension alert for lease {0}", leaseStringView));
         email.setHtmlBody(wrapAdminHtml(emailBody));
         return email;

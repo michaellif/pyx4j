@@ -24,6 +24,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
 import com.propertyvista.biz.system.YardiMaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -65,7 +66,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         postRequest(request);
 
         if (isNewRequest) {
-            sendAdminNote(request, true);
+            ServerSideFactory.create(NotificationFacade.class).maintenanceRequest(request, true);
             sendReporterNote(request, true);
         }
     }

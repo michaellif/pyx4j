@@ -13,14 +13,11 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
@@ -28,17 +25,12 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
-import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
-import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.property.PropertyContact;
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 
 class PreauthorizedPaymentAgreementMananger {
 
@@ -127,63 +119,7 @@ class PreauthorizedPaymentAgreementMananger {
         preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
         Persistence.service().merge(preauthorizedPayment);
 
-        Lease lease = Persistence.service().retrieve(Lease.class, preauthorizedPayment.tenant().lease().getPrimaryKey());
-
-        try {
-            List<String> targetEmails = getEmailsForPapSuspensionNotification(lease);
-            if (!targetEmails.isEmpty()) {
-                ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(targetEmails, lease);
-            } else {
-                log.warn(
-                        "Found no email addresses for PAP of {} suspension notifications (Add building property contact with name 'PAP_SUSPENTION_NOTIFICATIONS'",
-                        lease.leaseId().getStringView());
-            }
-        } catch (Throwable e) {
-            log.error("failed to send email", e);
-        }
+        ServerSideFactory.create(NotificationFacade.class).papSuspension(preauthorizedPayment.tenant().lease());
     }
 
-    private List<String> getEmailsForPapSuspensionNotification(Lease lease) {
-        List<String> emails = new ArrayList<String>();
-        Persistence.service().retrieve(lease.unit().building());
-        Persistence.service().retrieve(lease.unit().building().contacts().propertyContacts());
-
-        for (PropertyContact contact : lease.unit().building().contacts().propertyContacts()) {
-            if ("PAP_SUSPENSION_NOTIFICATIONS".equals(contact.name().getValue()) | "PAP_SUSPENTION_NOTIFICATIONS".equals(contact.name().getValue())) {
-                emails.add(contact.email().getValue());
-            }
-        }
-
-        if (!emails.isEmpty()) {
-            SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-            if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-                String forwardToEmail = mailConfig.getForwardAllTo();
-                int s = emails.size();
-                emails.clear();
-                for (int i = 0; i < s; ++i) {
-                    emails.add(forwardToEmail);
-                }
-            }
-            return emails;
-        } else {
-            return getPmcAccountOwnerEmails();
-        }
-
-    }
-
-    private List<String> getPmcAccountOwnerEmails() {
-        List<String> accountOwnerEmails = new ArrayList<String>();
-
-        EntityQueryCriteria<CrmUserCredential> criteria = EntityQueryCriteria.create(CrmUserCredential.class);
-        criteria.eq(criteria.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner);
-        List<CrmUserCredential> accountOwnerCredentials = Persistence.service().query(criteria);
-        for (CrmUserCredential accountOwnerCredential : accountOwnerCredentials) {
-            Persistence.service().retrieve(accountOwnerCredential.user());
-            if (!accountOwnerCredential.user().email().isNull()) {
-                accountOwnerEmails.add(accountOwnerCredential.user().email().getValue());
-            }
-        }
-
-        return accountOwnerEmails;
-    }
 }

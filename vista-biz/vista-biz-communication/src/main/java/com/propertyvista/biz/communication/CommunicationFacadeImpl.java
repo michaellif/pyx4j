@@ -13,7 +13,6 @@
  */
 package com.propertyvista.biz.communication;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -324,17 +323,12 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPapSuspensionNotification(List<String> targetEmails, Lease lease) {
+    public void sendPapSuspensionNotification(List<String> targetEmails, Lease leaseId) {
         if (disabled) {
             return;
         }
-        final MailMessage m = MessageTemplates.createPapSuspentionNotificationEmail(lease);
+        final MailMessage m = MessageTemplates.createPapSuspentionNotificationEmail(leaseId);
         m.setTo(targetEmails);
-        m.setBcc(Arrays.asList("support@propertyvista.com"));
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
     }
 
     @Override

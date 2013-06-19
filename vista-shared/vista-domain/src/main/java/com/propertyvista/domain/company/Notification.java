@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
+import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.property.asset.building.Building;
@@ -35,9 +36,12 @@ public interface Notification extends IEntity {
     @I18n
     public static enum NotificationType implements Serializable {
 
-        Nsf,
+        @Translate("Electronic Payment Rejected (NSF)")
+        ElectronicPaymentRejectedNsf,
 
-        PreauthorizedPaymentSuspension;
+        PreauthorizedPaymentSuspension,
+
+        MaintenanceRequest;
 
         @Override
         public String toString() {
