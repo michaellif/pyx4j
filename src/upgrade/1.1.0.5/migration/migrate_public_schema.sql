@@ -1,7 +1,7 @@
 /**
 ***     ===========================================================================================================
 ***     
-***     @version $Revision: $ ($Author: $) $Date: $
+***     @version $Revision$ ($Author$) $Date$
 ***
 ***     Migration script for public schema - generated with by _dba_.generate_sql_sequences function
 ***

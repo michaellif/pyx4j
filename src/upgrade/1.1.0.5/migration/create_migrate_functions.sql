@@ -1,7 +1,7 @@
 /**
 ***     ======================================================================================================================
 ***
-***             @version $Revision: $ ($Author: $) $Date: $
+***             @version $Revision$ ($Author$) $Date$
 ***
 ***             version 1.1.0.5 PMC migration function
 ***
@@ -216,7 +216,7 @@ BEGIN
         ALTER TABLE auto_pay_change_policy ADD CONSTRAINT auto_pay_change_policy_node_discriminator_d_ck 
                 CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
         ALTER TABLE auto_pay_change_policy ADD CONSTRAINT auto_pay_change_policy_rule_e_ck CHECK ((rule) IN ('keepPercentage', 'keepUnchanged'));
-        ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck CHECK ((tp) IN ('Nsf', 'PreauthorizedPaymentSuspension'));
+        ALTER TABLE notification ADD CONSTRAINT notification_tp_e_ck CHECK ((tp) IN ('ElectronicPaymentRejectedNsf','MaintenanceRequest','PreauthorizedPaymentSuspension'));
         
        
         /**
