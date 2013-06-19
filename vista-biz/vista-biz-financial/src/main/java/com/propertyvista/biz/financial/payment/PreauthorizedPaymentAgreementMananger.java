@@ -16,7 +16,6 @@ package com.propertyvista.biz.financial.payment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 
 import com.pyx4j.commons.CommonsStringUtils;
@@ -28,6 +27,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -124,8 +124,7 @@ class PreauthorizedPaymentAgreementMananger {
         PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
         Persistence.service().retrieve(preauthorizedPayment.tenant());
         LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(preauthorizedPayment.tenant().lease());
-        DateUtils.addDays(cutOffDate, -1);
-        preauthorizedPayment.expiring().setValue(cutOffDate);
+        preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
         Persistence.service().merge(preauthorizedPayment);
 
         Lease lease = Persistence.service().retrieve(Lease.class, preauthorizedPayment.tenant().lease().getPrimaryKey());
