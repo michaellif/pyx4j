@@ -153,6 +153,18 @@ BEGIN
         IF EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
                         ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
         THEN
+                
+                /**
+                ***     Set expiring to '2013-06-29' for preauthorized_payment
+                ***     that are referenced from preauthorized_payment_covered_item
+                **/
+                
+                EXECUTE 'UPDATE '||v_schema_name||'.preauthorized_payment  '
+                        ||'SET  expiring = ''2013-06-29'' '
+                        ||'WHERE expiring = ''2013-06-30'' ';
+                        
+                
+                                          
                 FOR v_billable_item IN 
                 EXECUTE 'SELECT  b.id '
                         ||'FROM    '||v_schema_name||'.billable_item b '
@@ -160,7 +172,9 @@ BEGIN
                         ||'JOIN    '||v_schema_name||'.lease_term_v ltv ON (ltv.id = ltf.owner) '
                         ||'WHERE   b.expiration_date = ''2013-06-30'' '
                         ||'AND     ltv.to_date IS NULL '
-                LOOP
+                        ||'AND     ltv.version_number > 2 '
+                LOOP                     
+                       
                         EXECUTE 'DELETE FROM '||v_schema_name||'.lease_term_vlease_products$feature_items '
                                 ||'WHERE value = '||v_billable_item;
                                 
