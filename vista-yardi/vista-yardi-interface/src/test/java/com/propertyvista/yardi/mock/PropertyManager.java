@@ -38,6 +38,8 @@ import com.yardi.entity.resident.RTUnit;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.pyx4j.config.server.SystemDateManager;
+
 public class PropertyManager {
 
     private final String propertyId;
@@ -126,8 +128,12 @@ public class PropertyManager {
 
         for (String chargeId : charges.keySet()) {
             Transactions t = new Transactions();
-            st.getTransactions().add(t);
-            t.setCharge((Charge) SerializationUtils.clone(charges.get(chargeId)));
+            Charge charge = charges.get(chargeId);
+            // Don't add expired products
+            if (charge.getDetail().getServiceToDate() == null || charge.getDetail().getServiceToDate().after(SystemDateManager.getDate())) {
+                t.setCharge((Charge) SerializationUtils.clone(charge));
+                st.getTransactions().add(t);
+            }
         }
 
         return rtCustomer;
@@ -320,6 +326,7 @@ public class PropertyManager {
             Property<?> property = updater.getPropertyMap().get(name);
             updateProperty(charge.getDetail(), property);
         }
+        charge.getDetail();
     }
 
     public void removeLeaseCharge(LeaseChargeUpdater updater) {
