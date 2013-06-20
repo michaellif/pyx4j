@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2012 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,12 +14,16 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Apr 24, 2013
- * @author Mykola
+ * Created on Apr 14, 2010
+ * @author vlads
  * @version $Id$
  */
-package com.pyx4j.site.client;
+package com.pyx4j.site.client.ui.layout.responsive;
 
-public enum PageOrientation {
-    Vertical, Horizontal;
+import com.google.gwt.event.shared.EventHandler;
+
+public interface LayoutChangeRerquestHandler extends EventHandler {
+
+    public void onLayoutChangeRerquest(LayoutChangeRerquestEvent event);
+
 }

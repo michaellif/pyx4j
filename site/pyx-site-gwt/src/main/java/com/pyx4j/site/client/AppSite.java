@@ -192,10 +192,6 @@ public abstract class AppSite implements EntryPoint {
         return instance().userAgentDetection;
     }
 
-    public static PageOrientation initialPageOrientation() {
-        return instance().userAgentDetection.isMobile() ? PageOrientation.Vertical : PageOrientation.Horizontal;
-    }
-
     public abstract void onSiteLoad();
 
     @Override
