@@ -109,7 +109,7 @@ BEGIN
         
         EXECUTE 'INSERT INTO '||v_schema_name||'.notification (id,employee,tp) '
                 ||'(SELECT      nextval(''public.notification_seq'') AS id, a.id AS employee,'
-                ||'             ''Nsf'' AS tp '
+                ||'             ''ElectronicPaymentRejectedNsf'' AS tp '
                 ||'FROM         (SELECT DISTINCT e.id FROM '||v_schema_name||'.employee e '
                 ||'             JOIN '||v_schema_name||'.property_contact pc ON (e.email = pc.email) '
                 ||'             WHERE pc.description = ''NSF_NOTIFICATIONS'') AS a )';
@@ -154,10 +154,7 @@ BEGIN
                         ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
         THEN
                 
-                /**
-                ***     Set expiring to '2013-06-29' for preauthorized_payment
-                ***     that are referenced from preauthorized_payment_covered_item
-                **/
+                /**     Set expiring to '2013-06-29' for preauthorized_payment  **/
                 
                 EXECUTE 'UPDATE '||v_schema_name||'.preauthorized_payment  '
                         ||'SET  expiring = ''2013-06-29'' '
