@@ -70,7 +70,7 @@ public class LeaseMerger {
     public boolean isTermDatesChanged(YardiLease imported, LeaseTerm existing) {
         isNew = false;
 
-        compare(existing.termFrom(), YardiLeaseProcessor.guessFromDateNoThrow(imported));
+        compare(existing.termFrom(), YardiLeaseProcessor.guessFromDate(imported));
         compare(existing.termTo(), imported.getLeaseToDate());
 
         return isNew;

@@ -293,23 +293,13 @@ public class YardiLeaseProcessor {
             date = getLogicalDate(yardiLease.getLeaseFromDate());
         } else if (yardiLease.getActualMoveIn() != null) {
             date = getLogicalDate(yardiLease.getActualMoveIn());
+        } else if (yardiLease.getExpectedMoveInDate() != null) {
+            date = getLogicalDate(yardiLease.getExpectedMoveInDate());
         } else if (yardiLease.getLeaseSignDate() != null) {
             date = getLogicalDate(yardiLease.getLeaseSignDate());
         } else {
-            throw new IllegalArgumentException("Can't deduct leaseFrom date!!!");
-        }
-
-        return date;
-    }
-
-    public static LogicalDate guessFromDateNoThrow(YardiLease yardiLease) {
-        LogicalDate date;
-
-        try {
-            date = guessFromDate(yardiLease);
-        } catch (IllegalArgumentException e) {
-            log.error("Error", e);
-            date = null;
+            date = new LogicalDate(SystemDateManager.getDate());
+            log.info("Warning", "Empty Yardi 'Lease From' date - substitute with current date!");
         }
 
         return date;
