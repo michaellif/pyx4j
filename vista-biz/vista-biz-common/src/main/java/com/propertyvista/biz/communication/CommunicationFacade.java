@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
 
-import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
@@ -70,7 +70,7 @@ public interface CommunicationFacade {
 
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
-    void sendPaymentReversalWithNsfNotification(List<String> targetEmail, YardiReceiptReversal paymentReversal);
+    void sendPaymentReversalWithNsfNotification(List<String> targetEmail, PaymentRecord paymentRecord);
 
     void sendPapSuspensionNotification(List<String> targetEmail, Lease leaseId);
 

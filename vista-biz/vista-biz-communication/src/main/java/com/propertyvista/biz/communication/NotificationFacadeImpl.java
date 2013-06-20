@@ -16,6 +16,9 @@ package com.propertyvista.biz.communication;
 import java.util.List;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
@@ -27,20 +30,26 @@ public class NotificationFacadeImpl implements NotificationFacade {
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        // TODO Auto-generated method stub
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
+        Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
+        if (!employees.isEmpty()) {
+            ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(NotificationsUtils.toEmails(employees), paymentRecord);
+        }
     }
 
     @Override
     public void papSuspension(Lease leaseId) {
-        List<Employee> employees = NotificationsManager.getNotificationTraget(leaseId, Notification.NotificationType.PreauthorizedPaymentSuspension);
-        if (employees.isEmpty()) {
-            ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(NotificationsManager.toEmails(employees), leaseId);
+        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.PreauthorizedPaymentSuspension);
+        if (!employees.isEmpty()) {
+            ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(NotificationsUtils.toEmails(employees), leaseId);
         }
     }
 
     @Override
     public void maintenanceRequest(MaintenanceRequest request, boolean isNewRequest) {
-        for (Employee employee : NotificationsManager.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
+        for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
             ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(employee.email().getValue(), employee.name().getStringView(),
                     request, isNewRequest, true);
         }

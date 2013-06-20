@@ -25,6 +25,7 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARArrearsManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -84,6 +85,7 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
         ARInternalPaymentManager.instance().rejectPayment(paymentRecord, applyNSF);
+        ServerSideFactory.create(NotificationFacade.class).rejectPayment(paymentRecord, applyNSF);
     }
 
     @Override

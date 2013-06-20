@@ -28,7 +28,7 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.communication.EmailTemplateType;
-import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
@@ -248,7 +248,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             return;
         }
 
-        final MailMessage m = MessageTemplates.createNewPmcEmail(user, pmc);
+        MailMessage m = MessageTemplates.createNewPmcEmail(user, pmc);
 
         m.setTo(user.email().getValue());
 
@@ -267,7 +267,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             return;
         }
 
-        final MailMessage m = MessageTemplates.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
+        MailMessage m = MessageTemplates.createTenantSurePaymentNotProcessedEmail(gracePeriodEndDate, cancellationDate);
 
         m.setTo(tenantEmail);
 
@@ -283,7 +283,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             return;
         }
 
-        final MailMessage m = MessageTemplates.createTenantSurePaymentsResumedEmail();
+        MailMessage m = MessageTemplates.createTenantSurePaymentsResumedEmail();
 
         m.setTo(tenantEmail);
 
@@ -299,7 +299,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             return;
         }
 
-        final MailMessage m = MessageTemplates.createOnlinePaymentSetupCompletedEmail(userName);
+        MailMessage m = MessageTemplates.createOnlinePaymentSetupCompletedEmail(userName);
 
         m.setTo(userEmail);
 
@@ -309,17 +309,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendPaymentReversalWithNsfNotification(List<String> targetEmails, YardiReceiptReversal paymentReversal) {
+    public void sendPaymentReversalWithNsfNotification(List<String> targetEmails, PaymentRecord paymentRecord) {
         if (disabled) {
             return;
         }
-        final MailMessage m = MessageTemplates.createNsfNotificationEmail(paymentReversal);
-
+        MailMessage m = MessageTemplates.createNsfNotificationEmail(paymentRecord);
         m.setTo(targetEmails);
-
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
+        Mail.send(m);
     }
 
     @Override
@@ -327,16 +323,18 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (disabled) {
             return;
         }
-        final MailMessage m = MessageTemplates.createPapSuspentionNotificationEmail(leaseId);
+        MailMessage m = MessageTemplates.createPapSuspentionNotificationEmail(leaseId);
         m.setTo(targetEmails);
+        Mail.send(m);
     }
 
     @Override
     public void sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
-        if (!disabled) {
-            MailMessage m = MessageTemplates.createMaintenanceRequestEmail(userName, request, isNewRequest, toAdmin);
-            m.setTo(sendTo);
-            Mail.send(m);
+        if (disabled) {
+            return;
         }
+        MailMessage m = MessageTemplates.createMaintenanceRequestEmail(userName, request, isNewRequest, toAdmin);
+        m.setTo(sendTo);
+        Mail.send(m);
     }
 }

@@ -29,10 +29,8 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
@@ -42,11 +40,9 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.asset.BuildingFacade;
-import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.system.YardiServiceException;
@@ -57,14 +53,11 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
-import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
@@ -185,19 +178,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
 
         stub.importResidentTransactions(yc, reversalTransactions);
-
-        if (reversal.applyNSF().isBooleanTrue()) {
-            try {
-                List<String> targetEmails = getEmailsForNsfNotification(reversal);
-                if (!targetEmails.isEmpty()) {
-                    ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(targetEmails, reversal);
-                } else {
-                    throw new Exception(i18n.tr("Found no email addresses for NSF notifications (Add building property contact with name 'NSF_NOTIFICATIONS'"));
-                }
-            } catch (Throwable e) {
-                log.error("failed to send email", e);
-            }
-        }
     }
 
     public List<YardiPropertyConfiguration> getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
@@ -516,53 +496,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         public BigDecimal getPayments() {
             return paymentsAmount;
         }
-    }
-
-    private List<String> getEmailsForNsfNotification(YardiReceiptReversal receiptReversal) throws Exception {
-        List<String> emails = new ArrayList<String>();
-
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, receiptReversal.billingAccount().getPrimaryKey());
-        Persistence.service().retrieve(billingAccount.lease());
-        Persistence.service().retrieve(billingAccount.lease().unit().building());
-        Persistence.service().retrieve(billingAccount.lease().unit().building().contacts().propertyContacts());
-
-        for (PropertyContact contact : billingAccount.lease().unit().building().contacts().propertyContacts()) {
-            if ("NSF_NOTIFICATIONS".equals(contact.name().getValue())) {
-                emails.add(contact.email().getValue());
-            }
-        }
-
-        if (!emails.isEmpty()) {
-            SMTPMailServiceConfig mailConfig = (SMTPMailServiceConfig) ServerSideConfiguration.instance().getMailServiceConfigConfiguration();
-            if (CommonsStringUtils.isStringSet(mailConfig.getForwardAllTo())) {
-                String forwardToEmail = mailConfig.getForwardAllTo();
-                int s = emails.size();
-                emails.clear();
-                for (int i = 0; i < s; ++i) {
-                    emails.add(forwardToEmail);
-                }
-            }
-            return emails;
-        } else {
-            return getPmcAccountOwnerEmails();
-        }
-    }
-
-    private List<String> getPmcAccountOwnerEmails() {
-        List<String> accountOwnerEmails = new ArrayList<String>();
-
-        EntityQueryCriteria<CrmUserCredential> criteria = EntityQueryCriteria.create(CrmUserCredential.class);
-        criteria.eq(criteria.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner);
-        List<CrmUserCredential> accountOwnerCredentials = Persistence.service().query(criteria);
-        for (CrmUserCredential accountOwnerCredential : accountOwnerCredentials) {
-            Persistence.service().retrieve(accountOwnerCredential.user());
-            if (!accountOwnerCredential.user().email().isNull()) {
-                accountOwnerEmails.add(accountOwnerCredential.user().email().getValue());
-            }
-        }
-
-        return accountOwnerEmails;
-
     }
 
     private List<Lease> getActiveLeases(String propertyCode) {

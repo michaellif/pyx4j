@@ -34,7 +34,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -51,7 +50,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.pmc.Pmc;
@@ -65,10 +64,8 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -320,43 +317,35 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createNsfNotificationEmail(YardiReceiptReversal paymentReversal) {
+    public static MailMessage createNsfNotificationEmail(PaymentRecord paymentRecord) {
         MailMessage email = new MailMessage();
         email.setSender(getSender());
 
         String crmUrl = VistaDeployment.getBaseApplicationURL(VistaDeployment.getCurrentPmc(), VistaApplication.crm, true);
-        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, paymentReversal.billingAccount().getPrimaryKey());
+        BillingAccount billingAccount = Persistence.service().retrieve(BillingAccount.class, paymentRecord.billingAccount().getPrimaryKey());
 
         Persistence.service().retrieve(billingAccount.lease());
         String leaseId = billingAccount.lease().leaseId().getValue();
         String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(billingAccount.lease().getPrimaryKey()));
 
-        String tenantName = paymentReversal.paymentRecord().paymentMethod().customer().person().name().getStringView();
-        String tenantId = "TENANT-ID-NOT-FOUND";
-        String tenantUrl = "javascript:void(0);";
+        String tenantName = paymentRecord.paymentMethod().customer().person().name().getStringView();
+        Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant(), AttachLevel.Attached);
 
-        Persistence.service().retrieveMember(billingAccount.lease().leaseParticipants());
-        for (LeaseParticipant<?> t : billingAccount.lease().leaseParticipants()) {
-            if (EntityGraph.fullyEqual(t.customer(), paymentReversal.paymentRecord().paymentMethod().customer())) {
-                Tenant tenant = t.cast();
-                tenantUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Tenant().formViewerPlace(tenant.getPrimaryKey()));
-                tenantId = tenant.participantId().getValue();
-                break;
-            }
-        }
+        String tenantUrl = AppPlaceInfo.absoluteUrl(crmUrl, true,
+                new CrmSiteMap.Tenants.Tenant().formViewerPlace(paymentRecord.leaseTermParticipant().leaseParticipant().getPrimaryKey()));
+        String tenantId = paymentRecord.leaseTermParticipant().leaseParticipant().participantId().getStringView();
 
         String unitId = billingAccount.lease().unit().info().number().getValue();
         Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers);
         String buildingId = billingAccount.lease().unit().building().getStringView();
 
-        String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true,
-                new CrmSiteMap.Finance.Payment().formViewerPlace(paymentReversal.paymentRecord().getPrimaryKey()));
-        String paymentId = paymentReversal.paymentRecord().getPrimaryKey().toString();
-        String paymentAmount = i18n.tr("${0,number,#,##0.00}", paymentReversal.paymentRecord().amount().getValue());
+        String paymentRecordUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Finance.Payment().formViewerPlace(paymentRecord.getPrimaryKey()));
+        String paymentId = paymentRecord.getPrimaryKey().toString();
+        String paymentAmount = i18n.tr("${0,number,#,##0.00}", paymentRecord.amount().getValue());
 
         String rejectionReason = i18n.tr("UNKNOWN");
-        if (CommonsStringUtils.isStringSet(paymentReversal.paymentRecord().transactionErrorMessage().getValue())) {
-            rejectionReason = paymentReversal.paymentRecord().transactionErrorMessage().getValue();
+        if (CommonsStringUtils.isStringSet(paymentRecord.transactionErrorMessage().getValue())) {
+            rejectionReason = paymentRecord.transactionErrorMessage().getValue();
         }
 
         email.setSubject(i18n.tr("NSF Alert for Building {0}, Unit {1}, Lease {2}, Tenant {3} {4}", buildingId, unitId, leaseId, tenantId, tenantName));

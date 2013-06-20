@@ -25,7 +25,7 @@ import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 
-class NotificationsManager {
+class NotificationsUtils {
 
     static List<String> toEmails(List<Employee> employees) {
         List<String> emails = new ArrayList<String>();
