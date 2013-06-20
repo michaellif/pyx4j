@@ -168,7 +168,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public Lease load(Lease leaseId, boolean editingTerm) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease == null) {
             throw new IllegalArgumentException("lease " + leaseId.getPrimaryKey() + " was not found");
         }
@@ -463,7 +463,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public void complete(Lease leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
         if (lease.status().getValue() != Lease.Status.Active) {
@@ -484,7 +484,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public void close(Lease leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         lease.status().setValue(Status.Closed);
 
@@ -520,7 +520,7 @@ public abstract class LeaseAbstractManager {
 
     public void acceptOffer(Lease leaseId, LeaseTerm leaseTermId) {
         Lease lease = load(leaseId, false);
-        LeaseTerm leaseTerm = Persistence.secureRetrieve(LeaseTerm.class, leaseTermId.getPrimaryKey());
+        LeaseTerm leaseTerm = Persistence.service().retrieve(LeaseTerm.class, leaseTermId.getPrimaryKey());
 
         Persistence.service().retrieveMember(lease.leaseTerms());
         if (leaseTerm.status().getValue() == LeaseTerm.Status.Offer && lease.leaseTerms().contains(leaseTermId)) {
@@ -537,7 +537,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public void createCompletionEvent(Lease leaseId, CompletionType completionType, LogicalDate eventDate, LogicalDate expectedMoveOut, LogicalDate leaseEndDate) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
@@ -572,7 +572,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
         if (lease.status().getValue() != Status.Active) {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
@@ -612,7 +612,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public void moveOut(Lease leaseId, LogicalDate actualMoveOut) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
         if (!lease.status().getValue().isOperative()) {
@@ -641,7 +641,7 @@ public abstract class LeaseAbstractManager {
     }
 
     public void cancelLease(Lease leaseId, Employee decidedBy, String decisionReason) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         Status status = lease.status().getValue();
         lease.status().setValue(Status.Cancelled);
@@ -670,7 +670,7 @@ public abstract class LeaseAbstractManager {
     public BillableItem createBillableItem(Lease lease, ProductItem productItemId, PolicyNode node) {
         Persistence.ensureRetrieve(lease, AttachLevel.Attached);
 
-        ProductItem productItem = Persistence.secureRetrieve(ProductItem.class, productItemId.getPrimaryKey());
+        ProductItem productItem = Persistence.service().retrieve(ProductItem.class, productItemId.getPrimaryKey());
         assert productItem != null;
         Persistence.ensureRetrieve(productItem.product(), AttachLevel.Attached);
 
@@ -722,7 +722,7 @@ public abstract class LeaseAbstractManager {
         }
 
         if (VersionedEntityUtils.equalsIgnoreVersion(lease.currentTerm(), leaseTerm)) {
-            AptUnit unit = Persistence.secureRetrieve(AptUnit.class, unitId.getPrimaryKey());
+            AptUnit unit = Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey());
             Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
 
             lease.unit().set(unit);
@@ -762,7 +762,7 @@ public abstract class LeaseAbstractManager {
         assert !lease.unit().building().isNull();
         Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
 
-        ProductItem serviceItem = Persistence.secureRetrieve(ProductItem.class, serviceId.getPrimaryKey());
+        ProductItem serviceItem = Persistence.service().retrieve(ProductItem.class, serviceId.getPrimaryKey());
         assert serviceItem != null;
         Persistence.ensureRetrieve(serviceItem.element(), AttachLevel.Attached);
 
@@ -833,7 +833,7 @@ public abstract class LeaseAbstractManager {
             if (lease.getPrimaryKey() == null) {
                 doReserve = !lease.unit().isNull();
             } else {
-                previousLeaseEdition = Persistence.secureRetrieve(Lease.class, lease.getPrimaryKey());
+                previousLeaseEdition = Persistence.service().retrieve(Lease.class, lease.getPrimaryKey());
                 if (!EqualsHelper.equals(previousLeaseEdition.unit().getPrimaryKey(), lease.unit().getPrimaryKey())) {
                     doUnreserve = previousLeaseEdition.unit().getPrimaryKey() != null;
                     doReserve = lease.unit().getPrimaryKey() != null;

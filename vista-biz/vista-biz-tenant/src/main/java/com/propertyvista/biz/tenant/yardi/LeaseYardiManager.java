@@ -88,7 +88,7 @@ public class LeaseYardiManager extends LeaseAbstractManager {
 
     @Override
     public void cancelCompletionEvent(Lease leaseId, Employee decidedBy, String decisionReason) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         if (lease.status().getValue() == Lease.Status.Completed) {
             lease.actualMoveOut().setValue(null);
@@ -118,7 +118,7 @@ public class LeaseYardiManager extends LeaseAbstractManager {
 
     @Override
     public void complete(Lease leaseId) {
-        Lease lease = Persistence.secureRetrieve(Lease.class, leaseId.getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
 
         // Verify the status
         if (lease.status().getValue() != Lease.Status.Active) {
