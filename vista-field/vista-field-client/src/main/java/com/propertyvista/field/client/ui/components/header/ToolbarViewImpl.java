@@ -74,6 +74,7 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
     private void doLayout(LayoutType layoutType) {
         switch (layoutType) {
         case phonePortrait:
+        case phoneLandscape:
             menuImage.setVisible(true);
             break;
 
