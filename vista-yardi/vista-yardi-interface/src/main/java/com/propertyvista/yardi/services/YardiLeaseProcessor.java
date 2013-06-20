@@ -78,12 +78,12 @@ public class YardiLeaseProcessor {
     }
 
     public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
-        Lease existingLease = findLease(rtCustomer.getCustomerID(), propertyCode);
+        Lease existingLease = findLease(getLeaseId(rtCustomer), propertyCode);
         if (existingLease != null) {
-            log.info("      Updating lease {}", rtCustomer.getCustomerID());
+            log.info("      Updating lease {}", getLeaseId(rtCustomer));
             return updateLease(rtCustomer, existingLease);
         } else {
-            log.info("      Creating new lease {}", rtCustomer.getCustomerID());
+            log.info("      Creating new lease {}", getLeaseId(rtCustomer));
             return createLease(rtCustomer, propertyCode);
         }
     }
@@ -100,7 +100,7 @@ public class YardiLeaseProcessor {
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
 
         Lease lease = leaseFacade.create(Lease.Status.ExistingLease);
-        lease.leaseId().setValue(rtCustomer.getCustomerID());
+        lease.leaseId().setValue(getLeaseId(rtCustomer));
         lease.type().setValue(ARCode.Type.Residential);
 
         // unit:
@@ -263,6 +263,10 @@ public class YardiLeaseProcessor {
         // @formatter:on
     }
 
+    public static String getLeaseId(RTCustomer rtCustomer) {
+        return rtCustomer.getCustomerID();
+    }
+
     public static boolean isCurrentLease(RTCustomer rtCustomer) {
         Customerinfo info = rtCustomer.getCustomers().getCustomer().get(0).getType();
         return Customerinfo.CURRENT_RESIDENT.equals(info);
@@ -345,7 +349,7 @@ public class YardiLeaseProcessor {
         return arCode == null ? detail.getDescription() : arCode.name().getValue();
     }
 
-    private Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
+    private static Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, new LogicalDate(SystemDateManager.getDate()),
                 getLogicalDate(yardiLease.getExpectedMoveOutDate()), null);
 
@@ -353,14 +357,24 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    private Lease cancelMarkLeaseOnNotice(Lease lease, YardiLease yardiLease) {
+    private static Lease cancelMarkLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi notice rollback!");
 
         Persistence.service().retrieve(lease);
         return lease;
     }
 
-    private Lease completeLease(Lease lease, YardiLease yardiLease) {
+    public static void completeLease(Lease lease) {
+        YardiLease yardiLease = new YardiLease();
+        yardiLease.setExpectedMoveOutDate(SystemDateManager.getDate());
+        yardiLease.setActualMoveOut(SystemDateManager.getDate());
+
+        Persistence.ensureRetrieve(lease, AttachLevel.Attached);
+
+        completeLease(lease, yardiLease);
+    }
+
+    private static Lease completeLease(Lease lease, YardiLease yardiLease) {
         if (lease.completion().isNull()) {
             ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Termination, new LogicalDate(SystemDateManager.getDate()),
                     getLogicalDate(yardiLease.getExpectedMoveOutDate()), getLogicalDate(yardiLease.getActualMoveOut()));
@@ -372,7 +386,7 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    private Lease cancelLeaseCompletion(Lease lease, YardiLease yardiLease) {
+    private static Lease cancelLeaseCompletion(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).cancelCompletionEvent(lease, null, "Yardi move out rollback!");
 
         Persistence.service().retrieve(lease);

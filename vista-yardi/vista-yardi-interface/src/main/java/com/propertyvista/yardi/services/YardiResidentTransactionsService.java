@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.axis2.AxisFault;
@@ -213,16 +214,24 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             try {
-                final Building building = importProperty(property);
+                Building building = importProperty(property);
                 executionMonitor.addProcessedEvent("Building");
-                log.info("Processing building: {}", building.propertyCode());
+
+                String propertyCode = building.propertyCode().getValue();
+                log.info("Processing building: {}", propertyCode);
+
+                List<Lease> activeLeases = getActiveLeases(propertyCode);
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
                     log.info("  for {}", rtCustomer.getCustomerID());
+
+                    removeLease(activeLeases, rtCustomer);
+
                     try {
-                        importUnit(building.propertyCode().getValue(), rtCustomer);
+                        importUnit(propertyCode, rtCustomer);
                         executionMonitor.addProcessedEvent("Unit");
+
                         try {
-                            LeaseFinancialStats stats = importLease(building.propertyCode().getValue(), rtCustomer);
+                            LeaseFinancialStats stats = importLease(propertyCode, rtCustomer);
                             executionMonitor.addProcessedEvent("Charges", stats.getCharges());
                             executionMonitor.addProcessedEvent("Payments", stats.getPayments());
                             executionMonitor.addProcessedEvent("Lease");
@@ -231,12 +240,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         } catch (Throwable t) {
                             executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
                         }
+
                     } catch (YardiServiceException e) {
                         executionMonitor.addFailedEvent("Unit", e);
                     } catch (Throwable t) {
                         executionMonitor.addErredEvent("Unit", t);
                     }
                 }
+
+                closeLeases(activeLeases);
+
             } catch (YardiServiceException e) {
                 executionMonitor.addFailedEvent("Building", propertyId, e);
             } catch (Throwable t) {
@@ -246,8 +259,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-
         }
+
         log.info("Import complete.");
     }
 
@@ -263,6 +276,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 return building;
             }
         });
+
         return building;
     }
 
@@ -270,7 +284,6 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         log.info("  Updating unit #" + rtCustomer.getRTUnit().getUnitID());
 
         AptUnit unit = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
-
             @Override
             public AptUnit execute() throws YardiServiceException {
                 AptUnit unit = new YardiBuildingProcessor().updateUnit(propertyCode, rtCustomer.getRTUnit());
@@ -278,6 +291,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 return unit;
             }
         });
+
         return unit;
     }
 
@@ -503,5 +517,22 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
         criteria.in(criteria.proto().status(), Lease.Status.active());
         return Persistence.service().query(criteria);
+    }
+
+    private boolean removeLease(List<Lease> leases, RTCustomer rtCustomer) {
+        Iterator<Lease> it = leases.iterator();
+        while (it.hasNext()) {
+            if (it.next().leaseId().getValue().compareTo(YardiLeaseProcessor.getLeaseId(rtCustomer)) == 0) {
+                it.remove();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void closeLeases(List<Lease> leases) {
+        for (Lease lease : leases) {
+            YardiLeaseProcessor.completeLease(lease);
+        }
     }
 }
