@@ -828,7 +828,7 @@ public class TableModel {
         try {
             QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
             sql = "SELECT " + (qb.addDistinct() ? "DISTINCT" : "") + " m1.*" + qb.getColumnsSQL() + " FROM " + qb.getSQL(getFullTableName());
-            //log.info("query {}", sql);
+            log.info("query {}", sql);
             int offset = 0;
             boolean addLimit = false;
             if (criteria instanceof EntityListCriteria) {

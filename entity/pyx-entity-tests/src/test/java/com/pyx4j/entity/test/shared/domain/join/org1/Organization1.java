@@ -14,43 +14,26 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 23, 2009
+ * Created on Feb 6, 2010
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.test.shared.domain.join.org1;
 
-import com.pyx4j.entity.annotations.Detached;
-import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 @Table(prefix = "test")
-public interface Department extends IEntity {
+public interface Organization1 extends IEntity {
 
     IPrimitive<String> testId();
 
-    @Indexed
     IPrimitive<String> name();
 
-    @Indexed
-    // TODO fix stack overflow
-    @Detached(level = AttachLevel.Detached)
-    ISet<Employee> employees();
+    @Owned
+    ISet<Department1> departments();
 
-    @Owner
-    @ReadOnly
-    @Indexed
-    @MemberColumn(name = "org")
-    Organization organization();
-
-    @Transient
-    IPrimitive<String> transientStuff();
 }

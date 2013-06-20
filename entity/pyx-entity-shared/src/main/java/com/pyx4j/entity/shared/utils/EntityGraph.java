@@ -297,11 +297,17 @@ public class EntityGraph {
         EntityMeta em = ent1.getEntityMeta();
         for (String memberName : em.getMemberNames()) {
             MemberMeta memberMeta = em.getMemberMeta(memberName);
+            IObject<?> member1 = ent1.getMember(memberName);
+            IObject<?> member2 = ent2.getMember(memberName);
+            if ((member1.getAttachLevel() == AttachLevel.Detached) || (member2.getAttachLevel() == AttachLevel.Detached)) {
+                continue;
+            }
+
             Path p;
             switch (memberMeta.getObjectClassType()) {
             case Entity:
-                IEntity ent1Member = (IEntity) ent1.getMember(memberName);
-                IEntity ent2Member = (IEntity) ent2.getMember(memberName);
+                IEntity ent1Member = (IEntity) member1;
+                IEntity ent2Member = (IEntity) member2;
                 if (ent2Member.isNull() && ent2Member.isNull()) {
                     continue;
                 } else if (ent1Member.getMeta().isEmbedded()) {
@@ -310,19 +316,19 @@ public class EntityGraph {
                     }
                 } else if (!memberMeta.isOwnedRelationships()) {
                     if (!(processed.contains(ent1)) && (!ent1Member.equals(ent2Member))) {
-                        return ent1.getMember(memberName).getPath();
+                        return ent1Member.getPath();
                     }
                 } else if ((p = getChangedDataPath(ent1Member, ent2Member, processed)) != null) {
                     return p;
                 }
                 break;
             case EntitySet:
-                if ((p = getChangedDataPath((ISet<IEntity>) ent1.getMember(memberName), (ISet<IEntity>) ent2.getMember(memberName), processed)) != null) {
+                if ((p = getChangedDataPath((ISet<IEntity>) member1, (ISet<IEntity>) member2, processed)) != null) {
                     return p;
                 }
                 break;
             case EntityList:
-                if ((p = getChangedDataPath((IList<IEntity>) ent1.getMember(memberName), (IList<IEntity>) ent2.getMember(memberName), processed)) != null) {
+                if ((p = getChangedDataPath((IList<IEntity>) member1, (IList<IEntity>) member2, processed)) != null) {
                     return p;
                 }
                 break;
@@ -331,7 +337,7 @@ public class EntityGraph {
                     if ((ent1.getPrimaryKey() != null) && !EqualsHelper.classEquals(ent1.getPrimaryKey(), ent2.getPrimaryKey())) {
                         return ent1.getMember(memberName).getPath();
                     }
-                } else if (!EqualsHelper.equals(ent1.getMember(memberName), ent2.getMember(memberName))) {
+                } else if (!EqualsHelper.equals(member1, member2)) {
                     return ent1.getMember(memberName).getPath();
                 }
             }

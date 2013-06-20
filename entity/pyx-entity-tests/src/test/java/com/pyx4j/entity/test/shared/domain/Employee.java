@@ -24,12 +24,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -41,10 +46,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Table(prefix = "test")
 public interface Employee extends IEntity {
 
-    public static int DECLARED_MEMBERS = 17;
+    public static int DECLARED_MEMBERS = 18;
 
     public static String[] MEMBERS_ORDER = new String[] { "firstName", "from", "reliable", "holidays", "rating", "flagByte", "flagShort", "flagDouble",
-            "salary", "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "homeAddress", "workAddress" };
+            "salary", "employmentStatus", "accessStatus", "tasks", "tasksSorted", "department", "manager", "employees", "homeAddress", "workAddress" };
 
     @I18n
     public static enum EmploymentStatus {
@@ -96,9 +101,18 @@ public interface Employee extends IEntity {
 
     Department department();
 
+    interface ManagerColumnId extends ColumnId {
+    }
+
     @Indexed
     @Caption(description = "Boss")
+    @JoinColumn(ManagerColumnId.class)
     Employee manager();
+
+    @JoinTable(value = Employee.class, mappedBy = ManagerColumnId.class)
+    // TODO fix stack overflow
+    @Detached(level = AttachLevel.Detached)
+    ISet<Employee> employees();
 
     @Owned
     @Caption(name = "Mail address")

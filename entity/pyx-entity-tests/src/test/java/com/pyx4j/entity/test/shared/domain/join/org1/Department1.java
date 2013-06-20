@@ -18,22 +18,24 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.test.shared.domain.join.org1;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
+import com.pyx4j.entity.test.shared.domain.join.org1.Employee1.Department1ColumnId;
 
 @Table(prefix = "test")
-public interface Department extends IEntity {
+public interface Department1 extends IEntity {
 
     IPrimitive<String> testId();
 
@@ -41,16 +43,16 @@ public interface Department extends IEntity {
     IPrimitive<String> name();
 
     @Indexed
+    @JoinTable(value = Employee1.class, mappedBy = Department1ColumnId.class)
     // TODO fix stack overflow
     @Detached(level = AttachLevel.Detached)
-    ISet<Employee> employees();
+    ISet<Employee1> employees();
 
     @Owner
     @ReadOnly
     @Indexed
     @MemberColumn(name = "org")
-    Organization organization();
+    @JoinColumn
+    Organization1 organization();
 
-    @Transient
-    IPrimitive<String> transientStuff();
 }

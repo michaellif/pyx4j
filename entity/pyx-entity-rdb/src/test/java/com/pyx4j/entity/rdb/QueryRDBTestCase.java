@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -33,8 +34,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.server.DatastoreTestBase;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.City;
+import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.join.org1.Department1;
+import com.pyx4j.entity.test.shared.domain.join.org1.Employee1;
+import com.pyx4j.entity.test.shared.domain.join.org1.Organization1;
 import com.pyx4j.entity.test.shared.domain.sort.SortBy;
 import com.pyx4j.entity.test.shared.domain.sort.SortSortable;
 import com.pyx4j.geo.GeoBox;
@@ -160,9 +165,331 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
                 }
             }
 
-            List<Employee> empsRetrived = srv.query(criteria);
-            Assert.assertEquals("result set size", 2, empsRetrived.size());
+            List<Employee> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
         }
+    }
+
+    public void testCriterionOrWithJoin0() {
+        String setId = uniqueString();
+        Department department1 = EntityFactory.create(Department.class);
+        department1.testId().setValue(setId);
+        String dep1name = "D1 " + uniqueString();
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Employee emp11 = EntityFactory.create(Employee.class);
+        String emp1Name = "E1.1 " + uniqueString();
+        emp11.firstName().setValue(emp1Name);
+        emp11.workAddress().streetName().setValue(setId);
+        emp11.department().set(department1);
+        srv.persist(emp11);
+
+        department1.employees().setAttachLevel(AttachLevel.Attached);
+        department1.employees().add(emp11);
+        srv.persist(department1);
+
+        Department department2 = EntityFactory.create(Department.class);
+        department2.testId().setValue(setId);
+        String dep2name = "D2 " + uniqueString();
+        department2.name().setValue(dep2name);
+        srv.persist(department2);
+
+        Employee emp21 = EntityFactory.create(Employee.class);
+        String emp21Name = "E2.1 " + uniqueString();
+        emp21.firstName().setValue(emp21Name);
+        emp21.workAddress().streetName().setValue(setId);
+        emp21.department().set(department2);
+        srv.persist(emp21);
+
+        Employee emp22 = EntityFactory.create(Employee.class);
+        String emp22Name = "E2.2 " + uniqueString();
+        emp22.firstName().setValue(emp22Name);
+        emp22.workAddress().streetName().setValue(setId);
+        emp22.manager().set(emp21);
+        srv.persist(emp22);
+
+        //Test direct query
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().manager().firstName(), emp21Name);
+            or.right().eq(criteria.proto().department().name(), dep1name);
+
+            List<Employee> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+            Assert.assertTrue(retrived.contains(emp22));
+        }
+
+        // Back reference query
+        {
+            EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
+            criteria.eq(criteria.proto().workAddress().streetName(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().firstName(), emp22Name);
+            or.right().eq(criteria.proto().department().name(), dep1name);
+
+            List<Employee> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+            Assert.assertTrue(retrived.contains(emp21));
+        }
+
+        {
+            EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().firstName(), emp1Name);
+            or.right().eq(criteria.proto().name(), dep2name);
+
+            List<Department> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(department1));
+            Assert.assertTrue(retrived.contains(department2));
+        }
+    }
+
+    public void testCriterionOrWithJoin01() {
+        String setId = uniqueString();
+        Department department1 = EntityFactory.create(Department.class);
+        department1.testId().setValue(setId);
+        String dep1name = "D1 " + uniqueString();
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Employee emp11 = EntityFactory.create(Employee.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.firstName().setValue(emp11Name);
+        emp11.workAddress().streetName().setValue(setId);
+        emp11.department().set(department1);
+        srv.persist(emp11);
+
+        department1.employees().setAttachLevel(AttachLevel.Attached);
+        department1.employees().add(emp11);
+        srv.persist(department1);
+
+        Department department2 = EntityFactory.create(Department.class);
+        department2.testId().setValue(setId);
+        String dep2name = "D2 " + uniqueString();
+        department2.name().setValue(dep2name);
+        srv.persist(department2);
+
+        Employee emp21 = EntityFactory.create(Employee.class);
+        String emp21Name = "E2.1 " + uniqueString();
+        emp21.firstName().setValue(emp21Name);
+        emp21.workAddress().streetName().setValue(setId);
+        emp21.department().set(department2);
+        srv.persist(emp21);
+
+        Employee emp22 = EntityFactory.create(Employee.class);
+        String emp22Name = "E2.2 " + uniqueString();
+        emp22.firstName().setValue(emp22Name);
+        emp22.workAddress().streetName().setValue(setId);
+        emp22.manager().set(emp21);
+        emp22.department().set(department2);
+        srv.persist(emp22);
+
+        department2.employees().setAttachLevel(AttachLevel.Attached);
+        department2.employees().add(emp21);
+        department2.employees().add(emp22);
+        srv.persist(department2);
+
+        // See if it retrieve Department where there are Employee without manager  (LEFT JOIN  created)
+        {
+            EntityQueryCriteria<Department> criteria = EntityQueryCriteria.create(Department.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().department().name(), dep1name);
+            or.right().eq(criteria.proto().employees().$().manager().firstName(), emp21Name);
+
+            List<Department> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(department1));
+            Assert.assertTrue(retrived.contains(department2));
+        }
+
+    }
+
+    public void testCriterionOrWithJoin1() {
+        String setId = uniqueString();
+
+        Department1 department1 = EntityFactory.create(Department1.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(setId);
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Employee1 emp11 = EntityFactory.create(Employee1.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.testId().setValue(setId);
+        emp11.name().setValue(emp11Name);
+        emp11.department().set(department1);
+        srv.persist(emp11);
+
+        Department1 department2 = EntityFactory.create(Department1.class);
+        String dep2name = "D2 " + uniqueString();
+        department2.testId().setValue(setId);
+        department2.name().setValue(dep2name);
+        srv.persist(department2);
+
+        Employee1 emp21 = EntityFactory.create(Employee1.class);
+        String emp21Name = "E2.1 " + uniqueString();
+        emp21.name().setValue(emp21Name);
+        emp21.testId().setValue(setId);
+        emp21.department().set(department2);
+        srv.persist(emp21);
+
+        // This Employee is not in department
+        Employee1 emp22 = EntityFactory.create(Employee1.class);
+        String emp22Name = "E2.2 " + uniqueString();
+        emp22.name().setValue(emp22Name);
+        emp22.testId().setValue(setId);
+        emp22.manager().set(emp21);
+        srv.persist(emp22);
+
+        Department1 department3 = EntityFactory.create(Department1.class);
+        String dep3name = "D3 " + uniqueString();
+        department3.testId().setValue(setId);
+        department3.name().setValue(dep3name);
+        srv.persist(department3);
+
+        //Test direct query, See if it retrieve emp22 without department
+        {
+            EntityQueryCriteria<Employee1> criteria = EntityQueryCriteria.create(Employee1.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().manager().name(), emp21Name);
+            or.right().eq(criteria.proto().department().name(), dep1name);
+
+            List<Employee1> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+            Assert.assertTrue(retrived.contains(emp22));
+        }
+
+        // Back reference query
+        {
+            EntityQueryCriteria<Employee1> criteria = EntityQueryCriteria.create(Employee1.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().name(), emp22Name);
+            or.right().eq(criteria.proto().department().name(), dep1name);
+
+            List<Employee1> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+            Assert.assertTrue(retrived.contains(emp21));
+        }
+
+        //  See if it retrieve department without Employee
+        {
+            EntityQueryCriteria<Department1> criteria = EntityQueryCriteria.create(Department1.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().name(), emp11Name);
+            or.right().eq(criteria.proto().name(), dep3name);
+
+            List<Department1> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(department1));
+            Assert.assertTrue(retrived.contains(department3));
+        }
+    }
+
+    public void testCriterionOrWithJoin11() {
+        String setId = uniqueString();
+
+        Organization1 organization1 = EntityFactory.create(Organization1.class);
+        organization1.testId().setValue(setId);
+        organization1.name().setValue("O1");
+        srv.persist(organization1);
+
+        Department1 department1 = EntityFactory.create(Department1.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(setId);
+        department1.name().setValue(dep1name);
+        department1.organization().set(organization1);
+        srv.persist(department1);
+
+        Employee1 emp11 = EntityFactory.create(Employee1.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.testId().setValue(setId);
+        emp11.name().setValue(emp11Name);
+        emp11.department().set(department1);
+        srv.persist(emp11);
+
+        Organization1 organization2 = EntityFactory.create(Organization1.class);
+        organization2.testId().setValue(setId);
+        organization2.name().setValue("O2");
+        srv.persist(organization2);
+
+        Department1 department2 = EntityFactory.create(Department1.class);
+        String dep2name = "D2 " + uniqueString();
+        department2.testId().setValue(setId);
+        department2.name().setValue(dep2name);
+        department2.organization().set(organization2);
+        srv.persist(department2);
+
+        Employee1 emp21 = EntityFactory.create(Employee1.class);
+        String emp21Name = "E2.1 " + uniqueString();
+        emp21.name().setValue(emp21Name);
+        emp21.testId().setValue(setId);
+        emp21.department().set(department2);
+        srv.persist(emp21);
+
+        Employee1 emp22 = EntityFactory.create(Employee1.class);
+        String emp22Name = "E2.2 " + uniqueString();
+        emp22.name().setValue(emp22Name);
+        emp22.testId().setValue(setId);
+        emp22.manager().set(emp21);
+        emp22.department().set(department2);
+        srv.persist(emp22);
+
+        Department1 department3 = EntityFactory.create(Department1.class);
+        String dep3name = "D3 " + uniqueString();
+        department3.testId().setValue(setId);
+        department3.name().setValue(dep3name);
+        srv.persist(department3);
+
+        // See if it retrieve Department where there are Employee without manager  (LEFT JOIN  created)
+        {
+            EntityQueryCriteria<Department1> criteria = EntityQueryCriteria.create(Department1.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().department().name(), dep1name);
+            or.right().eq(criteria.proto().employees().$().manager().name(), emp21Name);
+
+            List<Department1> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(department1));
+            Assert.assertTrue(retrived.contains(department2));
+        }
+
+        // The same as above only query root is different
+        {
+            EntityQueryCriteria<Organization1> criteria = EntityQueryCriteria.create(Organization1.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().departments().$().employees().$().department().name(), dep1name);
+            or.right().eq(criteria.proto().departments().$().employees().$().manager().name(), emp21Name);
+
+            List<Organization1> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(organization1));
+            Assert.assertTrue(retrived.contains(organization2));
+        }
+
     }
 
     public void testCriterionAnd() {

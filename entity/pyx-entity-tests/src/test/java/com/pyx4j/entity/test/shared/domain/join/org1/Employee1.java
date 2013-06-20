@@ -18,39 +18,44 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.entity.test.shared.domain;
+package com.pyx4j.entity.test.shared.domain.join.org1;
 
+import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
-import com.pyx4j.entity.annotations.MemberColumn;
-import com.pyx4j.entity.annotations.Owner;
-import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Table;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
 @Table(prefix = "test")
-public interface Department extends IEntity {
+public interface Employee1 extends IEntity {
 
     IPrimitive<String> testId();
 
     @Indexed
     IPrimitive<String> name();
 
+    interface Department1ColumnId extends ColumnId {
+    }
+
+    @JoinColumn(Department1ColumnId.class)
+    Department1 department();
+
+    interface Manager1ColumnId extends ColumnId {
+    }
+
     @Indexed
-    // TODO fix stack overflow
+    @Caption(description = "Boss")
+    @JoinColumn(Manager1ColumnId.class)
+    Employee1 manager();
+
+    @JoinTable(value = Employee1.class, mappedBy = Manager1ColumnId.class)
     @Detached(level = AttachLevel.Detached)
-    ISet<Employee> employees();
+    ISet<Employee1> employees();
 
-    @Owner
-    @ReadOnly
-    @Indexed
-    @MemberColumn(name = "org")
-    Organization organization();
-
-    @Transient
-    IPrimitive<String> transientStuff();
 }
