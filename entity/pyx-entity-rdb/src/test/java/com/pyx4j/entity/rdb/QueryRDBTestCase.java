@@ -40,6 +40,9 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.join.org1.Department1;
 import com.pyx4j.entity.test.shared.domain.join.org1.Employee1;
 import com.pyx4j.entity.test.shared.domain.join.org1.Organization1;
+import com.pyx4j.entity.test.shared.domain.join.org2.Department2;
+import com.pyx4j.entity.test.shared.domain.join.org2.Employee2;
+import com.pyx4j.entity.test.shared.domain.join.org2.Organization2;
 import com.pyx4j.entity.test.shared.domain.sort.SortBy;
 import com.pyx4j.entity.test.shared.domain.sort.SortSortable;
 import com.pyx4j.geo.GeoBox;
@@ -485,6 +488,94 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             or.right().eq(criteria.proto().departments().$().employees().$().manager().name(), emp21Name);
 
             List<Organization1> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(organization1));
+            Assert.assertTrue(retrived.contains(organization2));
+        }
+
+    }
+
+    //TODO
+    public void X_testCriterionOrWithJoin21() {
+        String setId = uniqueString();
+
+        Department2 department1 = EntityFactory.create(Department2.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(setId);
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Organization2 organization1 = EntityFactory.create(Organization2.class);
+        organization1.testId().setValue(setId);
+        organization1.name().setValue("O1");
+        organization1.departments().add(department1);
+        srv.persist(organization1);
+
+        Employee2 emp11 = EntityFactory.create(Employee2.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.testId().setValue(setId);
+        emp11.name().setValue(emp11Name);
+        emp11.department().set(department1);
+        srv.persist(emp11);
+
+        Department2 department2 = EntityFactory.create(Department2.class);
+        String dep2name = "D2 " + uniqueString();
+        department2.testId().setValue(setId);
+        department2.name().setValue(dep2name);
+        srv.persist(department2);
+
+        Organization2 organization2 = EntityFactory.create(Organization2.class);
+        organization2.testId().setValue(setId);
+        organization2.name().setValue("O2");
+        organization2.departments().add(department2);
+        srv.persist(organization2);
+
+        Employee2 emp21 = EntityFactory.create(Employee2.class);
+        String emp21Name = "E2.1 " + uniqueString();
+        emp21.name().setValue(emp21Name);
+        emp21.testId().setValue(setId);
+        emp21.department().set(department2);
+        srv.persist(emp21);
+
+        Employee2 emp22 = EntityFactory.create(Employee2.class);
+        String emp22Name = "E2.2 " + uniqueString();
+        emp22.name().setValue(emp22Name);
+        emp22.testId().setValue(setId);
+        emp22.manager().set(emp21);
+        emp22.department().set(department2);
+        srv.persist(emp22);
+
+        Department2 department3 = EntityFactory.create(Department2.class);
+        String dep3name = "D3 " + uniqueString();
+        department3.testId().setValue(setId);
+        department3.name().setValue(dep3name);
+        srv.persist(department3);
+
+        // See if it retrieve Department where there are Employee without manager  (LEFT JOIN  created)
+        {
+            EntityQueryCriteria<Department2> criteria = EntityQueryCriteria.create(Department2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().employees().$().department().name(), dep1name);
+            or.right().eq(criteria.proto().employees().$().manager().name(), emp21Name);
+
+            List<Department2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 2, retrived.size());
+            Assert.assertTrue(retrived.contains(department1));
+            Assert.assertTrue(retrived.contains(department2));
+        }
+
+        // The same as above only query root is different
+        {
+            EntityQueryCriteria<Organization2> criteria = EntityQueryCriteria.create(Organization2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().departments().$().employees().$().department().name(), dep1name);
+            or.right().eq(criteria.proto().departments().$().employees().$().manager().name(), emp21Name);
+
+            List<Organization2> retrived = srv.query(criteria);
             Assert.assertEquals("result set size", 2, retrived.size());
             Assert.assertTrue(retrived.contains(organization1));
             Assert.assertTrue(retrived.contains(organization2));
