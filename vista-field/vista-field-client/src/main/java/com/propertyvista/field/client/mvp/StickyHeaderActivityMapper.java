@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 19, 2011
- * @author vadims
+ * Created on Jun 19, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.field.client.mvp;
@@ -17,16 +17,16 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.field.client.activity.header.HeaderActivity;
+import com.propertyvista.field.client.activity.header.ToolbarActivity;
 
-public class HeaderActivityMapper implements ActivityMapper {
+public class StickyHeaderActivityMapper implements ActivityMapper {
 
-    public HeaderActivityMapper() {
+    public StickyHeaderActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return new HeaderActivity(place);
+        return new ToolbarActivity(place);
     }
 
 }

@@ -15,13 +15,8 @@ package com.propertyvista.field.client.ui.components.header;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.site.client.PageOrientation;
-
 public interface ToolbarView extends IsWidget {
 
     void showNavigationDetails(boolean isVisible);
 
-    void setContextMenuVisibility();
-
-    void setPageOrientation(PageOrientation orientation);
 }

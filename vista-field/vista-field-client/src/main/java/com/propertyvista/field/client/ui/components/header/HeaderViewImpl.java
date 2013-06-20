@@ -13,8 +13,22 @@
  */
 package com.propertyvista.field.client.ui.components.header;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface SearchToolbarView extends IsWidget {
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.field.client.theme.FieldTheme;
+
+public class HeaderViewImpl extends SimplePanel implements HeaderView {
+
+    public HeaderViewImpl() {
+
+        setStyleName(FieldTheme.StyleName.PageHeader.name());
+
+        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
+        logoImage.addStyleName(FieldTheme.StyleName.VistaLogo.name());
+        setWidget(logoImage);
+
+    }
 
 }

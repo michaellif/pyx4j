@@ -13,10 +13,8 @@
  */
 package com.propertyvista.field.client.ui.crud.building;
 
-import com.pyx4j.site.client.ui.prime.lister.ILister;
+import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.dto.BuildingDTO;
-
-public interface BuildingListerView extends ILister<BuildingDTO> {
+public interface BuildingListerView extends IsWidget {
 
 }

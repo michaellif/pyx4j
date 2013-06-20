@@ -13,14 +13,16 @@
  */
 package com.propertyvista.field.client.ui.crud.building;
 
-import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.dto.BuildingDTO;
-
-public class BuildingListerViewImpl extends ListerViewImplBase<BuildingDTO> implements BuildingListerView {
+public class BuildingListerViewImpl extends SimplePanel implements BuildingListerView {
 
     public BuildingListerViewImpl() {
-        setLister(new BuildingLister());
-    }
 
+        String html = "BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>BuildingLister<br>";
+
+        setWidget(new HTML(html));
+
+    }
 }

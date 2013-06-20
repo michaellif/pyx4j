@@ -7,15 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 15, 2011
- * @author michaellif
+ * Created on Apr 19, 2011
+ * @author vadims
  * @version $Id$
  */
-package com.propertyvista.field.client.event;
+package com.propertyvista.field.client.mvp;
 
-import com.google.gwt.event.shared.EventHandler;
+import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
+import com.google.gwt.place.shared.Place;
 
-public interface ChangeHeaderHandler extends EventHandler {
+import com.propertyvista.field.client.activity.menu.MenuActivity;
 
-    void onChangeHeader(ChangeHeaderEvent event);
+public class MenuActivityMapper implements ActivityMapper {
+
+    public MenuActivityMapper() {
+    }
+
+    @Override
+    public Activity getActivity(Place place) {
+        return new MenuActivity(place);
+    }
+
 }

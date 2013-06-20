@@ -11,17 +11,10 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.rpc;
+package com.propertyvista.field.client.ui.components.menu;
 
-public interface HeaderMode {
+import com.google.gwt.user.client.ui.IsWidget;
 
-    public interface Toolbar {
-    }
-
-    public interface SearchToolbar {
-    }
-
-    public interface AlertToolbar {
-    }
+public interface MenuView extends IsWidget {
 
 }

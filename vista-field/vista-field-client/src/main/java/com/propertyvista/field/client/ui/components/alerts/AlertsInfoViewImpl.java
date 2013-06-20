@@ -19,10 +19,6 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.field.client.event.ChangeLayoutEvent;
-import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.resources.FieldImages;
 
 public class AlertsInfoViewImpl extends FlowPanel implements AlertsInfoView {
@@ -72,7 +68,7 @@ public class AlertsInfoViewImpl extends FlowPanel implements AlertsInfoView {
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.ShiftAlerts));
+
             }
         });
 

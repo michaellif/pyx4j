@@ -17,28 +17,16 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.field.client.activity.alerts.AlertDetailsActivity;
-import com.propertyvista.field.client.activity.crud.building.BuildingListerActivity;
-import com.propertyvista.field.client.activity.search.SearchResultsActivity;
-import com.propertyvista.field.rpc.FieldSiteMap;
+import com.propertyvista.field.client.activity.footer.FooterActivity;
 
-public class ListerActivityMapper implements ActivityMapper {
+public class FooterActivityMapper implements ActivityMapper {
 
-    public ListerActivityMapper() {
+    public FooterActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-
-        if (place instanceof FieldSiteMap.Properties.Building) {
-            return new BuildingListerActivity(place);
-        } else if (place instanceof FieldSiteMap.Search) {
-            return new SearchResultsActivity();
-        } else if (place instanceof FieldSiteMap.AlertViewer) {
-            return new AlertDetailsActivity();
-        }
-
-        return null;
+        return new FooterActivity(place);
     }
 
 }

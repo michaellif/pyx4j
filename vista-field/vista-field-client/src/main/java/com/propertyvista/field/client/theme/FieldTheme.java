@@ -21,8 +21,7 @@ import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
-import com.pyx4j.site.client.ui.layout.MobileLayoutPanelTheme;
-import com.pyx4j.site.client.ui.layout.MobileScreenLayoutPanelTheme;
+import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -32,14 +31,19 @@ import com.pyx4j.widgets.client.tabpanel.DefaultTabTheme;
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.DraggerMixin;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
-import com.propertyvista.common.client.theme.SiteViewTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaTheme;
 
 public class FieldTheme extends VistaTheme {
 
     public static enum StyleName implements IStyleName {
-        SearchPanel, SearchField, LoginInputField, LoginViewPanel, VistaLogo, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter, LoginOrLineSeparator, LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar, MenuScreenItem, AlertsScreenContent, AlertsInfo, SortPanel, SearchResults, Dialog, DialogCaption, DialogResizer, DialogContent, AlertView;
+        LoginInputField, LoginViewPanel, VistaLogo, LoginViewSectionHeader, LoginViewSectionContent, LoginViewSectionFooter,
+
+        LoginCaption, LoginCaptionText, LoginCaptionTextEmph, LoginButton, LoginButtonHolder, AppSelectionButton, Toolbar,
+
+        AlertsScreenContent, AlertsInfo, SortPanel, Dialog, DialogCaption, DialogResizer, DialogContent, AlertView,
+
+        PageHeader, PageFooter;
     }
 
     public FieldTheme() {
@@ -75,15 +79,12 @@ public class FieldTheme extends VistaTheme {
         addTheme(new DefaultCComponentsTheme());
 
         addTheme(new DefaultTabTheme());
+        addTheme(new DefaultPaneTheme());
 
-        addTheme(new SiteViewTheme());
         addTheme(new DraggerMixin());
 
         addTheme(new BillingTheme());
         addTheme(new TransactionHistoryViewerTheme());
-
-        addTheme(new MobileLayoutPanelTheme());
-        addTheme(new MobileScreenLayoutPanelTheme());
 
         //Overridden themes
         addTheme(new FieldDefaultPaneTheme());
@@ -126,14 +127,6 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("vertical-align", "top");
         addStyle(style);
 
-        style = new Style(".", StyleName.LoginOrLineSeparator);
-        style.addProperty("position", "absolute");
-        style.addProperty("top", "0%");
-        style.addProperty("bottom", "0%");
-        style.addProperty("left", "100%");
-        style.addProperty("right", "100%");
-        style.addProperty("border-color", "green !important");
-
         style = new Style(".", StyleName.LoginCaption);
         style.addProperty("margin-top", "25px");
         style.addProperty("margin-bottom", "25px");
@@ -167,10 +160,6 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("height", "50px");
         addStyle(style);
 
-        style = new Style(".", StyleName.MenuScreenItem);
-        style.addProperty("color", "white");
-        addStyle(style);
-
         style = new Style(".", StyleName.AlertsScreenContent);
         style.addProperty("margin-left", "15%");
         addStyle(style);
@@ -184,26 +173,10 @@ public class FieldTheme extends VistaTheme {
         style.addProperty("background-color", "yellow");
         addStyle(style);
 
-        style = new Style(".", StyleName.SearchResults);
-        style.addProperty("margin-top", "10px");
-        style.addProperty("margin-bottom", "auto");
-        style.addProperty("background-color", "#C0C0C0");
+        style = new Style(".", StyleName.PageHeader);
+        style.addProperty("width", "100%");
         addStyle(style);
 
-        style = new Style(".", StyleName.SearchPanel);
-        style.addProperty("position", "relative");
-        style.addProperty("width", "100%");
-        style.addProperty("vertical-align", "middle");
-        style.addProperty("height", "100%");
-        addStyle(style);
-
-        style = new Style(".", StyleName.SearchField);
-        style.addProperty("position", "relative");
-        style.addProperty("width", "100%");
-        style.addProperty("vertical-align", "bottom");
-        style.addProperty("margin-top", "17px");
-        style.addProperty("height", "auto");
-        addStyle(style);
     }
 
 }

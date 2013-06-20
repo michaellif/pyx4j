@@ -19,16 +19,12 @@ import java.util.List;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.safehtml.client.SafeHtmlTemplates;
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.login.AbstractLoginViewImpl;
 import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.field.client.theme.FieldTheme;
-import com.propertyvista.field.client.ui.components.LoginViewLayoutPanel;
 
 public class LoginViewImpl extends AbstractLoginViewImpl implements LoginView {
 
@@ -41,14 +37,8 @@ public class LoginViewImpl extends AbstractLoginViewImpl implements LoginView {
     @Override
     protected void createContent() {
         int row = -1;
-        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
 
-        logoImage.addStyleName(FieldTheme.StyleName.VistaLogo.name());
-        LoginViewLayoutPanel viewPanel = new LoginViewLayoutPanel();
-        viewPanel.getHeader().add(logoImage);
-        viewPanel.getContent().add(form);
-
-        setWidget(++row, 0, viewPanel);
+        setWidget(++row, 0, form);
     }
 
     @Override

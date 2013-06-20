@@ -19,10 +19,6 @@ import com.pyx4j.site.rpc.annotations.PlaceProperties;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
 
-import com.propertyvista.field.rpc.HeaderMode.AlertToolbar;
-import com.propertyvista.field.rpc.HeaderMode.SearchToolbar;
-import com.propertyvista.field.rpc.HeaderMode.Toolbar;
-
 public class FieldSiteMap implements SiteMap {
 
     public static class Login extends AppPlace implements PublicPlace {
@@ -51,7 +47,7 @@ public class FieldSiteMap implements SiteMap {
     public static class Properties extends AppPlace {
 
         @PlaceProperties(navigLabel = "Buildings")
-        public static class Building extends CrudAppPlace implements Toolbar {
+        public static class Building extends CrudAppPlace {
         }
 
         @PlaceProperties(navigLabel = "Units")
@@ -110,10 +106,10 @@ public class FieldSiteMap implements SiteMap {
     public static class ApplicationSelection extends AppPlace {
     }
 
-    public static class Search extends AppPlace implements SearchToolbar {
+    public static class Search extends AppPlace {
     }
 
-    public static class AlertViewer extends AppPlace implements AlertToolbar {
+    public static class AlertViewer extends AppPlace {
     }
 
 }

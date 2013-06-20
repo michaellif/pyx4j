@@ -13,22 +13,15 @@
  */
 package com.propertyvista.field.client.activity.alerts;
 
-import java.util.Arrays;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.field.client.event.AlertsAction;
-import com.propertyvista.field.client.event.ChangeAlertsEvent;
-import com.propertyvista.field.client.event.ChangeAlertsHandler;
 import com.propertyvista.field.client.ui.components.alerts.AlertsInfoView;
 import com.propertyvista.field.client.ui.components.alerts.AlertsScreenView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
-public class AlertsActivity extends AbstractActivity implements ChangeAlertsHandler {
+public class AlertsActivity extends AbstractActivity {
 
     private static class SingletonHolder {
         public static final AlertsActivity INSTANCE = new AlertsActivity();
@@ -49,25 +42,6 @@ public class AlertsActivity extends AbstractActivity implements ChangeAlertsHand
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-    }
-
-    @Override
-    public void onChangeAlerts(ChangeAlertsEvent event) {
-        switch (event.getAction()) {
-        case CheckAlerts:
-            // TODO add logic to fetch alerts
-            String[] alerts = { "Alert #1", "Alert #2", "Alert #3", "Alert #4" };
-            alertsScreen.setAlerts(Arrays.asList(alerts));
-            alertsInfo.setUnread(alerts.length);
-            AppSite.getEventBus().fireEvent(new ChangeAlertsEvent(AlertsAction.ShowAlerts));
-            break;
-        case AlertRead:
-            alertsInfo.decreaseUnread();
-            break;
-        default:
-            break;
-        }
-
     }
 
 }

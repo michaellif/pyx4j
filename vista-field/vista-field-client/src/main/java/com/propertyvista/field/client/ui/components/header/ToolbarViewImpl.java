@@ -15,17 +15,20 @@ package com.propertyvista.field.client.ui.components.header;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.PageOrientation;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.field.client.event.ChangeLayoutEvent;
-import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.event.ListerNavigateEvent;
 import com.propertyvista.field.client.event.NavigateAction;
 import com.propertyvista.field.client.resources.FieldImages;
@@ -42,11 +45,11 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
     private Image contextMenuImage;
 
-    private PageOrientation pageOrientation;
+    private Image menuImage;
 
     public ToolbarViewImpl() {
         setSize("100%", "100%");
-        pageOrientation = AppSite.initialPageOrientation();
+        getElement().getStyle().setBackgroundColor("#bca");
 
         mainToolbar = createMainToolbar();
         navigDetailsToolbar = createNavigDetailsToolbar();
@@ -55,7 +58,29 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
         add(navigDetailsToolbar);
 
         showNavigationDetails(false);
-        setContextMenuVisibility();
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+            menuImage.setVisible(true);
+            break;
+
+        default:
+            menuImage.setVisible(false);
+            break;
+        }
     }
 
     private HorizontalPanel createMainToolbar() {
@@ -73,12 +98,12 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
         final SortDropDownPanel sortPanel = new SortDropDownPanel();
 
-        final Image menuImage = new Image(FieldImages.INSTANCE.menu());
+        menuImage = new Image(FieldImages.INSTANCE.menu());
         menuImage.addClickHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.ShiftMenu));
+                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
             }
         });
 
@@ -173,19 +198,8 @@ public class ToolbarViewImpl extends VerticalPanel implements ToolbarView {
 
     @Override
     public void showNavigationDetails(boolean isVisible) {
-        boolean isNavigVisible = isVisible && (PageOrientation.Vertical == pageOrientation);
-
-        navigDetailsToolbar.setVisible(isNavigVisible);
-        mainToolbar.setVisible(!isNavigVisible);
+        navigDetailsToolbar.setVisible(isVisible);
+        mainToolbar.setVisible(!isVisible);
     }
 
-    @Override
-    public void setContextMenuVisibility() {
-        contextMenuImage.setVisible(PageOrientation.Horizontal == pageOrientation);
-    }
-
-    @Override
-    public void setPageOrientation(PageOrientation pageOrientation) {
-        this.pageOrientation = pageOrientation;
-    }
 }

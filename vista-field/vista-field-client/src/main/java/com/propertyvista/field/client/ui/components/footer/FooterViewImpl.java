@@ -11,12 +11,24 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.field.client.ui.components.header;
+package com.propertyvista.field.client.ui.components.footer;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
-public interface AlertToolbarView extends IsWidget {
+import com.propertyvista.field.client.theme.FieldTheme;
 
-    void setAlert(String alert);
+public class FooterViewImpl extends SimplePanel implements FooterView {
+
+    public FooterViewImpl() {
+
+        setStyleName(FieldTheme.StyleName.PageFooter.name());
+
+        getElement().getStyle().setBackgroundColor("#bca");
+        setHeight("50px");
+
+        setWidget(new Label("Footer"));
+
+    }
 
 }

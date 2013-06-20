@@ -17,15 +17,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.forms.client.ui.CTextArea;
 
-import com.propertyvista.field.client.theme.FieldTheme;
-
 public class SearchResultsViewImpl extends FlowPanel implements SearchResultsView {
 
     private final CTextArea searchPanel;
 
     public SearchResultsViewImpl() {
         setSize("100%", "100%");
-        setStyleName(FieldTheme.StyleName.SearchResults.name());
 
         searchPanel = new CTextArea();
         searchPanel.setHeight("100%");

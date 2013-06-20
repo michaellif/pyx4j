@@ -24,10 +24,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.field.client.event.AlertsAction;
-import com.propertyvista.field.client.event.ChangeAlertsEvent;
-import com.propertyvista.field.client.event.ChangeLayoutEvent;
-import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
@@ -65,8 +61,6 @@ public class AlertsScreenViewImpl extends SimplePanel implements AlertsScreenVie
                 AppPlace nextPlace = new FieldSiteMap.AlertViewer();
                 nextPlace.placeArg("alert", label.getText());
                 AppSite.getPlaceController().goTo(nextPlace);
-                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.SetListerLayoutAndShiftAlerts));
-                AppSite.getEventBus().fireEvent(new ChangeAlertsEvent(AlertsAction.AlertRead));
 
                 removeLabel(label);
             }

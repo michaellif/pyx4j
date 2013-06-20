@@ -14,8 +14,6 @@
 package com.propertyvista.field.client.activity.crud.building;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.shared.EventBus;
-import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -38,7 +36,6 @@ import com.propertyvista.dto.ParkingDTO;
 import com.propertyvista.dto.RoofDTO;
 import com.propertyvista.field.client.activity.ListerControllerFactory;
 import com.propertyvista.field.client.activity.crud.FieldViewerActivity;
-import com.propertyvista.field.client.event.ListerNavigateEvent;
 import com.propertyvista.field.client.ui.crud.building.BuildingViewerView;
 import com.propertyvista.field.client.ui.viewfactories.BuildingViewFactory;
 import com.propertyvista.field.rpc.dto.billing.BillingCycleDTO;
@@ -162,12 +159,6 @@ public class BuildingViewerActivity extends FieldViewerActivity<BuildingDTO> imp
         billingCycleLister.clearPreDefinedFilters();
         billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
         billingCycleLister.populate();
-    }
-
-    @Override
-    public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        super.start(panel, eventBus);
-        eventBus.addHandler(ListerNavigateEvent.getType(), new BuildingListerNavigateHandler());
     }
 
 //    @Override

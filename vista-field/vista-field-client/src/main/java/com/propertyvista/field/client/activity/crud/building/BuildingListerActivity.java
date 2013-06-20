@@ -13,35 +13,25 @@
  */
 package com.propertyvista.field.client.activity.crud.building;
 
-import com.google.gwt.core.client.GWT;
+import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.security.shared.SecurityController;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
-
-import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.field.client.ui.crud.building.BuildingListerView;
 import com.propertyvista.field.client.ui.viewfactories.BuildingViewFactory;
-import com.propertyvista.field.rpc.services.building.BuildingCrudService;
 
-public class BuildingListerActivity extends AbstractListerActivity<BuildingDTO> {
+public class BuildingListerActivity extends AbstractActivity {
 
-    @SuppressWarnings("unchecked")
+    private final BuildingListerView view;
+
     public BuildingListerActivity(Place place) {
-        super(place, BuildingViewFactory.instance(BuildingListerView.class), (AbstractCrudService<BuildingDTO>) GWT.create(BuildingCrudService.class),
-                BuildingDTO.class);
+        view = BuildingViewFactory.instance(BuildingListerView.class);
     }
 
     @Override
-    public boolean canCreateNewItem() {
-        return SecurityController.checkBehavior(VistaCrmBehavior.PropertyManagement);
-    }
-
-    @Override
-    public void onStop() {
-        getView().storeState(getView().getMemento().getCurrentPlace());
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        panel.setWidget(view);
     }
 
 }

@@ -14,5 +14,5 @@
 package com.propertyvista.field.client.event;
 
 public enum LayoutAction {
-    ShowApplication, SetListerLayout, SetListerLayoutAndShiftAlerts, DiscardListerLayoutAndShiftAlerts, ShiftMenu, ShiftAlerts;
+    ShowApplication, SetListerLayout, ShiftMenu;
 }

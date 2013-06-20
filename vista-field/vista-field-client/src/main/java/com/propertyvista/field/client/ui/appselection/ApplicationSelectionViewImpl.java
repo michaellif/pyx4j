@@ -21,10 +21,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.field.client.event.AlertsAction;
-import com.propertyvista.field.client.event.ChangeAlertsEvent;
-import com.propertyvista.field.client.event.ChangeLayoutEvent;
-import com.propertyvista.field.client.event.LayoutAction;
 import com.propertyvista.field.client.theme.FieldTheme;
 import com.propertyvista.field.rpc.FieldSiteMap;
 
@@ -43,8 +39,6 @@ public class ApplicationSelectionViewImpl extends VerticalPanel implements Appli
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(new FieldSiteMap.Properties.Building());
-                AppSite.getEventBus().fireEvent(new ChangeAlertsEvent(AlertsAction.CheckAlerts));
-                AppSite.getEventBus().fireEvent(new ChangeLayoutEvent(LayoutAction.ShowApplication));
             }
         });
 

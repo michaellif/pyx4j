@@ -26,14 +26,14 @@ import com.propertyvista.field.client.ui.components.alerts.AlertsInfoView;
 import com.propertyvista.field.client.ui.components.alerts.AlertsInfoViewImpl;
 import com.propertyvista.field.client.ui.components.alerts.AlertsScreenView;
 import com.propertyvista.field.client.ui.components.alerts.AlertsScreenViewImpl;
-import com.propertyvista.field.client.ui.components.header.AlertToolbarView;
-import com.propertyvista.field.client.ui.components.header.AlertToolbarViewImpl;
-import com.propertyvista.field.client.ui.components.header.SearchToolbarView;
-import com.propertyvista.field.client.ui.components.header.SearchToolbarViewImpl;
+import com.propertyvista.field.client.ui.components.footer.FooterView;
+import com.propertyvista.field.client.ui.components.footer.FooterViewImpl;
+import com.propertyvista.field.client.ui.components.header.HeaderView;
+import com.propertyvista.field.client.ui.components.header.HeaderViewImpl;
 import com.propertyvista.field.client.ui.components.header.ToolbarView;
 import com.propertyvista.field.client.ui.components.header.ToolbarViewImpl;
-import com.propertyvista.field.client.ui.components.menu.MenuScreenView;
-import com.propertyvista.field.client.ui.components.menu.MenuScreenViewImpl;
+import com.propertyvista.field.client.ui.components.menu.MenuView;
+import com.propertyvista.field.client.ui.components.menu.MenuViewImpl;
 import com.propertyvista.field.client.ui.components.search.SearchResultsView;
 import com.propertyvista.field.client.ui.components.search.SearchResultsViewImpl;
 
@@ -47,18 +47,18 @@ public class FieldViewFactory extends ViewFactoryBase {
                 map.put(type, new ApplicationSelectionViewImpl());
             } else if (ToolbarView.class.equals(type)) {
                 map.put(type, new ToolbarViewImpl());
-            } else if (SearchToolbarView.class.equals(type)) {
-                map.put(type, new SearchToolbarViewImpl());
+            } else if (HeaderView.class.equals(type)) {
+                map.put(type, new HeaderViewImpl());
+            } else if (FooterView.class.equals(type)) {
+                map.put(type, new FooterViewImpl());
             } else if (SearchResultsView.class.equals(type)) {
                 map.put(type, new SearchResultsViewImpl());
-            } else if (MenuScreenView.class.equals(type)) {
-                map.put(type, new MenuScreenViewImpl());
+            } else if (MenuView.class.equals(type)) {
+                map.put(type, new MenuViewImpl());
             } else if (AlertsScreenView.class.equals(type)) {
                 map.put(type, new AlertsScreenViewImpl());
             } else if (AlertsInfoView.class.equals(type)) {
                 map.put(type, new AlertsInfoViewImpl());
-            } else if (AlertToolbarView.class.equals(type)) {
-                map.put(type, new AlertToolbarViewImpl());
             } else if (AlertDetailsView.class.equals(type)) {
                 map.put(type, new AlertDetailsViewImpl());
             }
