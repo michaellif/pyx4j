@@ -19,6 +19,7 @@ import java.util.List;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
@@ -45,6 +46,12 @@ class NotificationsUtils {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
         criteria.eq(criteria.proto().notifications().$().type(), notificationType);
         criteria.eq(criteria.proto().notifications().$().buildings(), buildingId);
+
+        if (false) {
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().notifications().$().buildings(), buildingId);
+            or.right().eq(criteria.proto().notifications().$().portfolios().$().buildings(), buildingId);
+        }
         return Persistence.service().query(criteria);
     }
 }
