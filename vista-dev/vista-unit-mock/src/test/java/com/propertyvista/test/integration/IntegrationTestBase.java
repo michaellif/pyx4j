@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Executable;
@@ -44,6 +45,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
+import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
@@ -51,6 +53,7 @@ import com.propertyvista.test.integration.IntegrationTestBase.TaskScheduler.Sche
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockManager;
+import com.propertyvista.test.mock.NotificationFacadeMock;
 import com.propertyvista.test.mock.schedule.SchedulerMock;
 
 public abstract class IntegrationTestBase extends VistaDBTestBase {
@@ -81,6 +84,8 @@ public abstract class IntegrationTestBase extends VistaDBTestBase {
         setSysDate("01-Jan-2000");
 
         scheduler = new TaskScheduler();
+
+        ServerSideFactory.register(NotificationFacade.class, NotificationFacadeMock.class);
     }
 
     @Override
