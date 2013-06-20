@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
@@ -35,7 +36,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.AppSite;
@@ -46,7 +46,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     public enum LayoutType {
 
-        phonePortrait(0, 320), phoneLandscape(321, 480), tabletPortrait(481, 768), tabletLandscape(769, 1024), monitor(1024, Integer.MAX_VALUE);
+        phonePortrait(0, 320), phoneLandscape(321, 480), tabletPortrait(481, 768), tabletLandscape(769, 1024), monitor(1025, Integer.MAX_VALUE);
 
         private int minWidth;
 
@@ -78,11 +78,11 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final StickyHeaderHolder stickyHeaderHolder;
 
-    private final SimplePanel inlineMenuHolder;
+    private final InlineMenuHolder inlineMenuHolder;
 
-    private final SimplePanel sideMenuHolder;
+    private final SideMenuHolder sideMenuHolder;
 
-    private final ScrollPanel contentScroll;
+    private final ScrollPanel mainScroll;
 
     private boolean sideMenuVisible = false;
 
@@ -98,38 +98,43 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         pageLayout = new Layout(getElement());
 
-        FlowPanel contentHolder = new FlowPanel();
-        contentScroll = new ScrollPanel(contentHolder);
+        FlowPanel mainHolder = new FlowPanel();
+        mainScroll = new ScrollPanel(mainHolder);
 
-        sideMenuHolder = new SimplePanel();
-
-        inlineMenuHolder = new SimplePanel();
+        sideMenuHolder = new SideMenuHolder();
 
         getStickyHeaderDisplay().getElement().getStyle().setZIndex(10);
-        stickyHeaderHolder = new StickyHeaderHolder(getStickyHeaderDisplay());
+        stickyHeaderHolder = new StickyHeaderHolder();
+        stickyHeaderHolder.setWidget(getStickyHeaderDisplay());
 
-        contentScroll.addScrollHandler(new ScrollHandler() {
+        FlowPanel contentHolder = new FlowPanel();
+        contentHolder.getElement().getStyle().setPosition(Position.RELATIVE);
+
+        inlineMenuHolder = new InlineMenuHolder(stickyHeaderHolder);
+        contentHolder.add(inlineMenuHolder);
+        contentHolder.add(getContentDisplay());
+
+        mainScroll.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                stickyHeaderHolder.onPositionChange(getHeaderDisplay().getAbsoluteTop() + getHeaderDisplay().getOffsetHeight(), getHeaderDisplay()
-                        .getOffsetWidth());
+                stickyHeaderHolder.onPositionChange();
+                inlineMenuHolder.onPositionChange();
 
             }
         });
 
-        contentHolder.add(getHeaderDisplay());
-        contentHolder.add(stickyHeaderHolder);
-        contentHolder.add(inlineMenuHolder);
-        contentHolder.add(getContentDisplay());
-        contentHolder.add(getFooterDisplay());
+        mainHolder.add(getHeaderDisplay());
+        mainHolder.add(stickyHeaderHolder);
+        mainHolder.add(contentHolder);
+        mainHolder.add(getFooterDisplay());
 
         // ============ Content Layer ============
         {
-            Layer layer = pageLayout.attachChild(contentScroll.asWidget().getElement(), contentScroll);
-            contentScroll.setLayoutData(layer);
+            Layer layer = pageLayout.attachChild(mainScroll.asWidget().getElement(), mainScroll);
+            mainScroll.setLayoutData(layer);
 
-            getChildren().add(contentScroll);
-            adopt(contentScroll);
+            getChildren().add(mainScroll);
+            adopt(mainScroll);
         }
 
         // ============ Side Menu Layer ============
@@ -145,7 +150,6 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
 
-        forceLayout();
     }
 
     public DisplayPanel getHeaderDisplay() {
@@ -179,6 +183,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         switch (layoutType) {
         case phonePortrait:
+        case phoneLandscape:
             sideMenuHolder.setWidget(getMenuDisplay());
             break;
         default:
@@ -188,14 +193,14 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
-        Layer contentLayer = (Layer) contentScroll.getLayoutData();
+        Layer mainLayer = (Layer) mainScroll.getLayoutData();
 
         if (sideMenuVisible) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
-            contentLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
+            mainLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
         } else {
             menuLayer.setLeftWidth(-75.0, Unit.PCT, 75.0, Unit.PCT);
-            contentLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
+            mainLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
         }
 
     }
@@ -219,11 +224,20 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
                 ((RequiresResize) child).onResize();
             }
         }
-        stickyHeaderHolder.onPositionChange(getHeaderDisplay().getAbsoluteTop() + getHeaderDisplay().getOffsetHeight(), getHeaderDisplay().getOffsetWidth());
+        stickyHeaderHolder.onPositionChange();
+        inlineMenuHolder.onPositionChange();
+
+    }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        forceLayout();
     }
 
     private boolean isSideMenuEnabled() {
-        return LayoutType.phonePortrait == LayoutType.getLayoutType(Window.getClientWidth());
+        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
     private void setSideMenuVisible(boolean visible) {

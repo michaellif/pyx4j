@@ -23,25 +23,42 @@ package com.pyx4j.site.client.ui.layout.responsive;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
-public class StickyHeaderHolder extends SimplePanel {
+public class InlineMenuHolder extends SimplePanel {
 
-    public StickyHeaderHolder() {
+    private final StickyHeaderHolder stickyHeaderHolder;
+
+    public InlineMenuHolder(StickyHeaderHolder stickyHeaderHolder) {
+        this.stickyHeaderHolder = stickyHeaderHolder;
     }
 
     public void onPositionChange() {
         if (getWidget() != null && isAttached()) {
-            if (getAbsoluteTop() >= 0) {
+            int offset = stickyHeaderHolder.getOffsetHeight();
+            if (getAbsoluteTop() >= offset) {
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
-                getWidget().getElement().getStyle().setProperty("width", "auto");
-                getElement().getStyle().setProperty("height", "auto");
+                getElement().getStyle().setPosition(Position.ABSOLUTE);
+                getElement().getStyle().setTop(0, Unit.PX);
+                getElement().getStyle().setProperty("width", "auto");
             } else {
-                getWidget().getElement().getStyle().setTop(0, Unit.PX);
+                getWidget().getElement().getStyle().setTop(offset, Unit.PX);
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
-                getWidget().getElement().getStyle().setWidth(getOffsetWidth(), Unit.PX);
-                //keeps space for fixed child
-                getElement().getStyle().setHeight(getWidget().getOffsetHeight(), Unit.PX);
+                getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);
             }
         }
     }
+
+    @Override
+    protected void onLoad() {
+        super.onLoad();
+        onPositionChange();
+    }
+
+    @Override
+    public void setWidget(Widget w) {
+        super.setWidget(w);
+        onPositionChange();
+    }
+
 }
