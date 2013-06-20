@@ -202,8 +202,7 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + "'>"
                                     + charge.suggested().percent().getStringView() + "</td>");
                             if (isFirstLine) {
-                                builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows + 1) + "' class='" + CommonReportStyles.RCellNumber.name() + "'>"
-                                        + reviewCase.paymentDue().getStringView() + "</td>");
+                                builder.appendHtmlConstant("<td rowspan='" + (numOfCaseRows + 1) + "'>" + reviewCase.paymentDue().getStringView() + "</td>");
                             }
                             builder.appendHtmlConstant("</tr>");
 
@@ -216,7 +215,7 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
 
                     // add summary for lease
                     builder.appendHtmlConstant("<tr>");
-                    builder.appendHtmlConstant("<th colspan='5' style='text-align:right;' class='" + CommonReportStyles.RRowTotal.name() + "'>"
+                    builder.appendHtmlConstant("<th colspan='6' style='text-align:right;' class='" + CommonReportStyles.RRowTotal.name() + "'>"
                             + i18n.tr("Total for lease:") + "</th>");
                     builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>"
                             + reviewCase.totalSuspended().totalPrice().getStringView() + "</td>");
