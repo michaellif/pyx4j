@@ -24,6 +24,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
@@ -64,7 +74,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     private enum MementoKeys {
 
-        ReportMetadata, HasData
+        ReportMetadata, HasData, HorizontalScrollPosition, VerticalScrollPosition
 
     }
 
@@ -162,6 +172,13 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
         settingsFormPanel = new SimplePanel();
         settingsFormPanel.setStylePrimaryName(Styles.SettingsFormPanel.name());
+        settingsFormPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
+        settingsFormPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        settingsFormPanel.getElement().getStyle().setLeft(0, Unit.PX);
+        settingsFormPanel.getElement().getStyle().setTop(0, Unit.PX);
+        settingsFormPanel.getElement().getStyle().setRight(0, Unit.PX);
+        settingsFormPanel.getElement().getStyle().setHeight(15, Unit.EM);
+
         viewPanel.add(settingsFormPanel);
 
         reportSettingsFormControlBar = new ReportSettingsFormControlBar() {
@@ -183,10 +200,21 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
             }
 
         };
+        reportSettingsFormControlBar.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        reportSettingsFormControlBar.getElement().getStyle().setLeft(0, Unit.PX);
+        reportSettingsFormControlBar.getElement().getStyle().setTop(15, Unit.EM);
+        reportSettingsFormControlBar.getElement().getStyle().setRight(0, Unit.PX);
+        reportSettingsFormControlBar.getElement().getStyle().setHeight(3, Unit.EM);
         viewPanel.add(reportSettingsFormControlBar);
 
         reportProgressControlPanel = new FlowPanel();
         reportProgressControlPanel.setStyleName(AbstractReport.Styles.ReportProgressControlPanel.name());
+        reportProgressControlPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        reportProgressControlPanel.getElement().getStyle().setLeft(0, Unit.PX);
+        reportProgressControlPanel.getElement().getStyle().setTop(18, Unit.EM);
+        reportProgressControlPanel.getElement().getStyle().setRight(0, Unit.PX);
+        reportProgressControlPanel.getElement().getStyle().setHeight(10, Unit.EM);
+
         reportProgressHolderPanel = new SimplePanel();
         reportProgressControlPanel.add(reportProgressHolderPanel);
 
@@ -202,12 +230,31 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
         errorPanel = new FlowPanel();
         errorPanel.setStyleName(AbstractReport.Styles.ReportProgressErrorPanel.name());
+        errorPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        errorPanel.getElement().getStyle().setLeft(0, Unit.PX);
+        errorPanel.getElement().getStyle().setTop(18, Unit.EM);
+        errorPanel.getElement().getStyle().setRight(0, Unit.PX);
+        errorPanel.getElement().getStyle().setHeight(10, Unit.EM);
         errorPanel.setVisible(false);
         viewPanel.add(errorPanel);
 
         reportPanel = new ScrollPanel();
-        reportPanel.setSize("100%", "100%");
+        reportPanel.addScrollHandler(new ScrollHandler() {
+            @Override
+            public void onScroll(ScrollEvent event) {
+                getMemento().setCurrentPlace(presenter.getPlace());
+                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name(),
+                        reportPanel.getHorizontalScrollPosition());
+                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name(),
+                        reportPanel.getVerticalScrollPosition());
+            }
+        });
         reportPanel.setStylePrimaryName(Styles.ReportPanel.name());
+        reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        reportPanel.getElement().getStyle().setLeft(0, Unit.PX);
+        reportPanel.getElement().getStyle().setTop(18, Unit.EM);
+        reportPanel.getElement().getStyle().setRight(0, Unit.PX);
+        reportPanel.getElement().getStyle().setBottom(0, Unit.PX);
         viewPanel.add(reportPanel);
 
         addHeaderToolbarItem(new Button(i18n.tr("Refresh"), new Command() {
@@ -253,7 +300,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         }));
 
         resetCaption();
-        setContentPane(new ScrollPanel(viewPanel));
+        setContentPane(viewPanel);
     }
 
     @Override
@@ -277,6 +324,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
             ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
             report = factory.getReport();
+            report.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             reportPanel.setWidget(report);
 
             exportButton.setVisible(reportSettings instanceof ExportableReport);
@@ -357,6 +405,11 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         getMemento().setCurrentPlace(place);
         getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMetadata.name(), settingsForm.getValue());
         getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HasData.name(), hasData);
+        // TODO see reportPanel initialzation and ScollEventHandler
+        //getMemento().putInteger(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name(),
+        //                reportPanel.getHorizontalScrollPosition());
+        //getMemento().putInteger(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name(),
+        //        reportPanel.getVerticalScrollPosition());
     }
 
     @Override
@@ -369,6 +422,21 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
                     ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasData.name()));
             if (hadData) {
                 presenter.apply(reportMetadata);
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        Integer horizontalScrollPosition = getMemento().getInteger(
+                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name());
+                        if (horizontalScrollPosition != null) {
+                            reportPanel.setHorizontalScrollPosition(horizontalScrollPosition);
+                        }
+                        Integer verticalScrollPosition = getMemento().getInteger(
+                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name());
+                        if (verticalScrollPosition != null) {
+                            reportPanel.setVerticalScrollPosition(verticalScrollPosition);
+                        }
+                    }
+                });
             }
         } else {
             setReportSettings(((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
@@ -400,6 +468,12 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
             reportSettingsFormControlBar.disableModeToggle();
         }
         settingsFormPanel.setWidget(settingsForm);
+        settingsForm.addValueChangeHandler(new ValueChangeHandler<ReportMetadata>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<ReportMetadata> event) {
+                hasData = false;
+            }
+        });
         settingsForm.populate(reportSettings);
         settingsForm.setEnabled(true);
         reportSettingsFormControlBar.setEnabled(true);
