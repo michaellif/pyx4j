@@ -45,6 +45,10 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         MockEventBus.addHandler(LeaseChargeUpdateEvent.class, this);
     }
 
+    public void cleanup() {
+        propertyManagers.clear();
+    }
+
     public ResidentTransactions getAllResidentTransactions(String propertyId) {
         if (!propertyManagers.containsKey(propertyId)) {
             throw new Error(propertyId + " not found");

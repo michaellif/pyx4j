@@ -54,8 +54,13 @@ public class YardiTestBase extends IntegrationTestBase {
         ServerSideFactory.register(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
 
         //Init YardiMockServer
-        YardiMockServer.instance();
+        YardiMockServer.instance().cleanup();
         super.setUp();
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
     }
 
     @Override
