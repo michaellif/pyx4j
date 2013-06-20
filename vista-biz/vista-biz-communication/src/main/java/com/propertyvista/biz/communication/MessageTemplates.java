@@ -328,12 +328,13 @@ public class MessageTemplates {
         String leaseId = billingAccount.lease().leaseId().getValue();
         String leaseUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.Lease().formViewerPlace(billingAccount.lease().getPrimaryKey()));
 
-        String tenantName = paymentRecord.paymentMethod().customer().person().name().getStringView();
         Persistence.ensureRetrieve(paymentRecord.leaseTermParticipant(), AttachLevel.Attached);
 
         String tenantUrl = AppPlaceInfo.absoluteUrl(crmUrl, true,
                 new CrmSiteMap.Tenants.Tenant().formViewerPlace(paymentRecord.leaseTermParticipant().leaseParticipant().getPrimaryKey()));
         String tenantId = paymentRecord.leaseTermParticipant().leaseParticipant().participantId().getStringView();
+
+        String tenantName = paymentRecord.leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
 
         String unitId = billingAccount.lease().unit().info().number().getValue();
         Persistence.service().retrieve(billingAccount.lease().unit().building(), AttachLevel.ToStringMembers);

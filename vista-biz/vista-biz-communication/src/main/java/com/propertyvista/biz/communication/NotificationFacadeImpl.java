@@ -30,12 +30,15 @@ public class NotificationFacadeImpl implements NotificationFacade {
 
     @Override
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) {
-        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
-        Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
-        List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
-        if (!employees.isEmpty()) {
-            ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(NotificationsUtils.toEmails(employees), paymentRecord);
+        if (applyNSF) {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.eq(criteria.proto().billingAccount(), paymentRecord.billingAccount());
+            Lease leaseId = Persistence.service().retrieve(criteria, AttachLevel.IdOnly);
+            List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.ElectronicPaymentRejectedNsf);
+            if (!employees.isEmpty()) {
+                ServerSideFactory.create(CommunicationFacade.class).sendPaymentReversalWithNsfNotification(NotificationsUtils.toEmails(employees),
+                        paymentRecord);
+            }
         }
     }
 

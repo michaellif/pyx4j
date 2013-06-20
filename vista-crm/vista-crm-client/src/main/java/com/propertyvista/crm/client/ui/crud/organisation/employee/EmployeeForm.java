@@ -218,7 +218,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
                 int row = -1;
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 25).build());
 
                 content.setH3(++row, 0, 1, proto().buildings().getMeta().getCaption());
                 content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable())));
