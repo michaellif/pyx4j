@@ -18,9 +18,11 @@ import java.util.Date;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.CascadeType;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
@@ -30,10 +32,12 @@ import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.person.Person;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.CrmUser;
 
 @ToStringFormat("{0}, {1}")
@@ -66,8 +70,13 @@ public interface Employee extends Person {
     @Timestamp
     IPrimitive<Date> updated();
 
-    @Detached
+    @Detached(level = AttachLevel.Detached)
     IList<Portfolio> portfolios();
+
+    @JoinTable(value = EmployeeBuildingAccess.class, cascade = CascadeType.ALL)
+    @OrderBy(PrimaryKey.class)
+    @Detached(level = AttachLevel.Detached)
+    IList<Building> buildingAccess();
 
     @Detached
     IList<Employee> employees();
@@ -77,5 +86,6 @@ public interface Employee extends Person {
 
     @Owned
     @OrderBy(PrimaryKey.class)
+    @Detached(level = AttachLevel.Detached)
     IList<Notification> notifications();
 }

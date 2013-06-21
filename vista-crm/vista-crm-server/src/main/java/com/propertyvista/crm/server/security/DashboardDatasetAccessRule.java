@@ -24,6 +24,8 @@ import com.propertyvista.server.common.security.VistaContext;
 
 public class DashboardDatasetAccessRule implements DatasetAccessRule<DashboardMetadata> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<DashboardMetadata> criteria) {//@formatter:off
         if (!SecurityController.checkAnyBehavior(VistaCrmBehavior.DashboardManager)) {

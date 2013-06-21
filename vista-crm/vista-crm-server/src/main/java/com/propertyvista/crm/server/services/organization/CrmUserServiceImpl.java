@@ -22,6 +22,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
@@ -52,11 +53,16 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
     @Override
     protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget RetrieveTarget) {
-        Persistence.service().retrieve(dto.portfolios());
+        Persistence.service().retrieveMember(entity.portfolios());
+        dto.portfolios().set(entity.portfolios());
+
+        Persistence.service().retrieveMember(entity.buildingAccess());
+        dto.buildingAccess().set(entity.buildingAccess());
+
         Persistence.service().retrieve(dto.employees());
 
         CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
-        dto.accessAllBuildings().set(crs.accessAllBuildings());
+        dto.restrictAccessToSelectedBuildingsOrPortfolio().setValue(!crs.accessAllBuildings().getValue(false));
         dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
         dto.roles().addAll(crs.roles());
         dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
@@ -64,9 +70,11 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         // TODO put auditing configuration here
         dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
 
+        Persistence.service().retrieveMember(entity.notifications());
+        dto.notifications().set(entity.notifications());
         for (Notification item : dto.notifications()) {
-            Persistence.service().retrieve(item.buildings());
-            Persistence.service().retrieve(item.portfolios());
+            Persistence.service().retrieve(item.buildings(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.portfolios(), AttachLevel.ToStringMembers);
         }
     }
 

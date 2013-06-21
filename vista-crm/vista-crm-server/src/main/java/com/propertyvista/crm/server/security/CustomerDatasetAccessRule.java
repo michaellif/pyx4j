@@ -22,6 +22,8 @@ import com.propertyvista.domain.tenant.Customer;
 
 public class CustomerDatasetAccessRule implements DatasetAccessRule<Customer> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<Customer> criteria) {
 

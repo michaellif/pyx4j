@@ -31,10 +31,10 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
-import com.propertyvista.crm.server.security.BuildingDatasetAccessBuilder;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.server.common.security.CrmUserBuildingDatasetAccessBuilder;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -97,7 +97,7 @@ public class CrmAuthenticationServiceImpl extends VistaAuthenticationServicesImp
     protected Set<Behavior> getBehaviors(CrmUserCredential userCredential) {
         Set<Behavior> behaviors = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(userCredential);
         if (!userCredential.accessAllBuildings().isBooleanTrue()) {
-            BuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
+            CrmUserBuildingDatasetAccessBuilder.updateAccessList(userCredential.user());
         }
         return behaviors;
     }

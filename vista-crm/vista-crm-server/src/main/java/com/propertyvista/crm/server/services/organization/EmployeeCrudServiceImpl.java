@@ -21,6 +21,7 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -63,14 +64,19 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     @Override
     protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget RetrieveTarget) {
         // Load detached data:
-        Persistence.service().retrieve(dto.portfolios());
+        Persistence.service().retrieveMember(entity.portfolios());
+        dto.portfolios().set(entity.portfolios());
+
+        Persistence.service().retrieveMember(entity.buildingAccess());
+        dto.buildingAccess().set(entity.buildingAccess());
+
         Persistence.service().retrieve(dto.employees());
 
         //TODO proper Role
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (entity.user().getPrimaryKey() != null)) {
             CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
             dto.enabled().set(crs.enabled());
-            dto.accessAllBuildings().set(crs.accessAllBuildings());
+            dto.restrictAccessToSelectedBuildingsOrPortfolio().setValue(!crs.accessAllBuildings().getValue(false));
             dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             dto.roles().addAll(crs.roles());
             dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
@@ -78,9 +84,11 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             dto.userAuditingConfiguration().set(EntityFactory.create(UserAuditingConfigurationDTO.class));
         }
 
+        Persistence.service().retrieveMember(entity.notifications());
+        dto.notifications().set(entity.notifications());
         for (Notification item : dto.notifications()) {
-            Persistence.service().retrieve(item.buildings());
-            Persistence.service().retrieve(item.portfolios());
+            Persistence.service().retrieve(item.buildings(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.portfolios(), AttachLevel.ToStringMembers);
         }
     }
 
@@ -88,6 +96,25 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     protected void persist(Employee dbo, EmployeeDTO in) {
         if (dbo.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
+        }
+
+        // Merge the accessToBuilding to buildingAccess
+        {
+//            if (!dbo.id().isNull()) {
+//                Persistence.service().retrieveMember(dbo.buildingAccess());
+//            }
+//            List<Building> haveAccessToBuilding = new ArrayList<Building>();
+//            for (EmployeeBuildingAccess ba : dbo.buildingAccess()) {
+//                haveAccessToBuilding.add(ba.building());
+//            }
+//            for (Building building : in._buildingAccess()) {
+//                if (!haveAccessToBuilding.contains(building)) {
+//                    haveAccessToBuilding.add(building);
+//                    EmployeeBuildingAccess ba = EntityFactory.create(EmployeeBuildingAccess.class);
+//                    ba.building().set(building);
+//                    dbo.buildingAccess().add(ba);
+//                }
+//            }
         }
 
         super.persist(dbo, in);
@@ -131,7 +158,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.enabled().set(in.enabled());
             credential.roles().clear();
             credential.roles().addAll(in.roles());
-            credential.accessAllBuildings().set(in.accessAllBuildings());
+            credential.accessAllBuildings().setValue(!in.restrictAccessToSelectedBuildingsOrPortfolio().getValue(false));
             credential.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
             ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
             Persistence.service().persist(credential);

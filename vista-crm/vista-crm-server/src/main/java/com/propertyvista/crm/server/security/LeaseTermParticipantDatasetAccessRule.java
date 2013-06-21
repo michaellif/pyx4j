@@ -21,6 +21,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
 public class LeaseTermParticipantDatasetAccessRule implements DatasetAccessRule<LeaseTermParticipant<?>> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<LeaseTermParticipant<?>> criteria) {
         criteria.eq(criteria.proto().leaseParticipant().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());

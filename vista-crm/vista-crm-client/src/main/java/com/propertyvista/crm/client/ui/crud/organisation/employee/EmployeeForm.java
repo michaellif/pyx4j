@@ -94,7 +94,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         boolean permitPortfoliosEditing = isManager & !isSelfEditor;
 
-        get(proto().accessAllBuildings()).setViewable(!permitPortfoliosEditing);
+        get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).setViewable(!permitPortfoliosEditing);
+        get(proto().buildingAccess()).setViewable(!permitPortfoliosEditing);
+        get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
+
         get(proto().portfolios()).setViewable(!permitPortfoliosEditing);
         get(proto().portfolios()).setEditable(permitPortfoliosEditing);
 
@@ -153,8 +156,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         content.setH1(++row, 0, 1, i18n.tr("Roles"));
         content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));
 
+        content.setH1(++row, 0, 1, i18n.tr("Buildings Access"));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsOrPortfolio()), 5).labelWidth(30).build());
+        content.setWidget(++row, 0, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
+
         content.setH1(++row, 0, 1, i18n.tr("Portfolios"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accessAllBuildings()), 5).build());
         content.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
 
         content.setH1(++row, 0, 1, i18n.tr("Subordinates"));

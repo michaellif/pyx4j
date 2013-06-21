@@ -11,8 +11,9 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.field.server.security;
+package com.propertyvista.server.common.security;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,7 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CrmUserBuildings;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class BuildingDatasetAccessBuilder {
+public class CrmUserBuildingDatasetAccessBuilder {
 
     public static void updateAccessList(CrmUser user) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
@@ -41,7 +42,8 @@ public class BuildingDatasetAccessBuilder {
         if (employee == null) {
             throw new Error("Employee not found for CrmUser " + user.getPrimaryKey());
         }
-        Persistence.service().retrieve(employee.portfolios());
+        Persistence.service().retrieveMember(employee.portfolios());
+        Persistence.service().retrieveMember(employee.buildingAccess());
 
         //TODO move this code to more generic update function
         EntityQueryCriteria<CrmUserBuildings> userBuildingCriteria = EntityQueryCriteria.create(CrmUserBuildings.class);
@@ -56,17 +58,26 @@ public class BuildingDatasetAccessBuilder {
         TaskRunner.runAutonomousTransation(new Callable<Void>() {
             @Override
             public Void call() {
+
+                List<Building> haveAccessToBuilding = new ArrayList<Building>();
+                for (Building b : employee.buildingAccess()) {
+                    haveAccessToBuilding.add(b);
+                }
                 for (Portfolio portfolio : employee.portfolios()) {
                     for (Building b : portfolio.buildings()) {
-                        if (userBuildingMap.containsKey(b)) {
-                            unConfirmed.remove(b);
-                        } else {
-                            CrmUserBuildings ub = EntityFactory.create(CrmUserBuildings.class);
-                            ub.building().set(b);
-                            ub.user().set(employee.user());
-                            Persistence.service().persist(ub);
-                            userBuildingMap.put(ub.building(), ub);
-                        }
+                        haveAccessToBuilding.add(b);
+                    }
+                }
+
+                for (Building b : haveAccessToBuilding) {
+                    if (userBuildingMap.containsKey(b)) {
+                        unConfirmed.remove(b);
+                    } else {
+                        CrmUserBuildings ub = EntityFactory.create(CrmUserBuildings.class);
+                        ub.building().set(b);
+                        ub.user().set(employee.user());
+                        Persistence.service().persist(ub);
+                        userBuildingMap.put(ub.building(), ub);
                     }
                 }
                 for (Building b : unConfirmed) {

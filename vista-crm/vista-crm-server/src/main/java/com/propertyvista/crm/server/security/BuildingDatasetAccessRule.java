@@ -22,6 +22,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingDatasetAccessRule implements DatasetAccessRule<Building> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<Building> criteria) {
         criteria.add(PropertyCriterion.eq(criteria.proto().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));

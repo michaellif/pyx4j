@@ -22,6 +22,8 @@ import com.propertyvista.domain.tenant.lease.Lease;
 
 public class LeaseDatasetAccessRule implements DatasetAccessRule<Lease> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<Lease> criteria) {
         criteria.add(PropertyCriterion.eq(criteria.proto().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));

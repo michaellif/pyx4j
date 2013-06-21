@@ -29,7 +29,6 @@ import com.propertyvista.domain.property.asset.Parking;
 import com.propertyvista.domain.property.asset.Roof;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
-import com.propertyvista.domain.security.VistaDataAccessBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.field.rpc.services.FieldAuthenticationService;
 import com.propertyvista.field.rpc.services.breadcrumbs.BreadcrumbsService;
@@ -96,11 +95,5 @@ public class VistaFieldAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(Concession.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(ConcessionCrudService.class));
 
-        // Data Access
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingDatasetAccessRule(), Building.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), AptUnit.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), LockerArea.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), Parking.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), Roof.class);
     }
 }
