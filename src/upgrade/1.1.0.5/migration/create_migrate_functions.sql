@@ -61,6 +61,18 @@ BEGIN
         
         ALTER TABLE auto_pay_change_policy OWNER TO vista;
         
+        --  employee_building_access
+        
+        CREATE TABLE  employee_building_access
+        (
+                id                      BIGINT                          NOT NULL,
+                employee                BIGINT                          NOT NULL,
+                building                BIGINT                          NOT NULL,
+                        CONSTRAINT employee_building_access_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE  employee_building_access OWNER TO vista;
+                
 	-- notification
 
         CREATE TABLE notification
@@ -189,6 +201,9 @@ BEGIN
         ***     ==========================================================================================================
         **/
         
+        -- portal_preferences
+        
+        -- DROP TABLE portal_preferences;
         
                  
         /**
@@ -201,6 +216,10 @@ BEGIN
         
         -- foreign key
         
+        ALTER TABLE employee_building_access ADD CONSTRAINT employee_building_access_building_fk FOREIGN KEY(building) 
+                REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE employee_building_access ADD CONSTRAINT employee_building_access_employee_fk FOREIGN KEY(employee) 
+                REFERENCES employee(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE notification$buildings ADD CONSTRAINT notification$buildings_owner_fk FOREIGN KEY(owner) REFERENCES notification(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE notification$buildings ADD CONSTRAINT notification$buildings_value_fk FOREIGN KEY(value) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE notification$portfolios ADD CONSTRAINT notification$portfolios_owner_fk FOREIGN KEY(owner) REFERENCES notification(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -224,7 +243,7 @@ BEGIN
         ***     ====================================================================================================
         **/
         
-        
+        CREATE INDEX employee_building_access_employee_idx ON employee_building_access USING btree (employee);
         CREATE INDEX notification$buildings_owner_idx ON notification$buildings USING btree (owner);
         CREATE INDEX notification$portfolios_owner_idx ON notification$portfolios USING btree (owner);
         CREATE INDEX notification_employee_idx ON notification USING btree (employee);
