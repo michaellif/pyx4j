@@ -41,6 +41,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
 
@@ -89,6 +90,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     private LayoutType layoutType;
 
     public ResponsiveLayoutPanel() {
+
         setElement(Document.get().createDivElement());
 
         displays = new HashMap<Display, DisplayPanel>();
@@ -99,6 +101,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         pageLayout = new Layout(getElement());
 
         FlowPanel mainHolder = new FlowPanel();
+        mainHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
+        mainHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+
         mainScroll = new ScrollPanel(mainHolder);
 
         sideMenuHolder = new SideMenuHolder();
