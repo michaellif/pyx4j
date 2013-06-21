@@ -32,7 +32,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.financial.offering.ProductItem;
 
-@ToStringFormat("{0}, agreed price: ${1}")
+@ToStringFormat("{0,choice,null#{2}|!null#{0}}, agreed price: ${1}")
 public interface BillableItem extends IEntity {
 
     @GeneratedValue(type = GeneratedValue.GenerationType.randomUUID)
@@ -66,6 +66,7 @@ public interface BillableItem extends IEntity {
     @Caption(description = "Empty value assumes Lease end date")
     IPrimitive<LogicalDate> expirationDate();
 
+    @ToString(index = 2)
     IPrimitive<String> description();
 
     IPrimitive<Boolean> finalized();

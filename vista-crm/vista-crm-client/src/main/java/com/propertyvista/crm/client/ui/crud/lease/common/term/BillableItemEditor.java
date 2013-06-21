@@ -49,6 +49,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
+import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.financial.ARCode;
@@ -64,6 +65,7 @@ import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 import com.propertyvista.domain.tenant.lease.extradata.Vehicle;
+import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.dto.LeaseTermDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -263,26 +265,32 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             extraDataPanel.setWidget(null);
         }
 
-        if (getValue() != null && ARCode.Type.features().contains(getValue().item().code().type().getValue())) {
+        if (value != null) {
             @SuppressWarnings("rawtypes")
             CEntityForm editor = null;
             BillableItemExtraData extraData = value.extraData();
 
-            switch (getValue().item().code().type().getValue()) {
-            case Parking:
-                editor = new VehicleDataEditor();
-                if (extraData.getInstanceValueClass() != Vehicle.class) {
-                    extraData.set(EntityFactory.create(Vehicle.class));
+            if (extraData.getInstanceValueClass() == YardiLeaseChargeData.class) {
+                editor = new YardiDataEditor();
+            } else {
+                if (ARCode.Type.features().contains(value.item().code().type().getValue())) {
+                    switch (value.item().code().type().getValue()) {
+                    case Parking:
+                        editor = new VehicleDataEditor();
+                        if (extraData.getInstanceValueClass() != Vehicle.class) {
+                            extraData.set(EntityFactory.create(Vehicle.class));
+                        }
+                        break;
+                    case Pet:
+                        editor = new PetDataEditor();
+                        if (extraData.getInstanceValueClass() != Pet.class) {
+                            extraData.set(EntityFactory.create(Pet.class));
+                        }
+                        break;
+                    default:
+                        // ok - there is no extra-data for other types!.. 
+                    }
                 }
-                break;
-            case Pet:
-                editor = new PetDataEditor();
-                if (extraData.getInstanceValueClass() != Pet.class) {
-                    extraData.set(EntityFactory.create(Pet.class));
-                }
-                break;
-            default:
-                // ok - there is no extra-data for other types!.. 
             }
 
             if (editor != null) {
