@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityViolationException;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
@@ -85,13 +86,16 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
     }
 
     @Override
-    public void save(AsyncCallback<Key> callback, EmployeeDTO dto) {
+    protected void persist(Employee entity, EmployeeDTO dto) {
         assertSamePortfolios(dto);
-
         // Enforce access only to current user
         dto.setPrimaryKey(CrmAppContext.getCurrentUserEmployee().getPrimaryKey());
         dto.user().setPrimaryKey(VistaContext.getCurrentUserPrimaryKey());
-        super.save(callback, dto);
+
+        super.persist(entity, dto);
+
+        // Update name lable in UI
+        Context.getVisit().getUserVisit().setName(entity.name().getStringView());
     }
 
     @Override
@@ -117,7 +121,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
         Collection<Key> serverSidePortfolios = new HashSet<Key>();
         Employee serverSideEmployee = Persistence.service().retrieve(Employee.class, dto.getPrimaryKey());
-        Persistence.service().retrieve(serverSideEmployee.portfolios());
+        Persistence.service().retrieveMember(serverSideEmployee.portfolios());
         for (Portfolio portfolio : serverSideEmployee.portfolios()) {
             serverSidePortfolios.add(portfolio.getPrimaryKey());
         }

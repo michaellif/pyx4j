@@ -98,25 +98,6 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
-        // Merge the accessToBuilding to buildingAccess
-        {
-//            if (!dbo.id().isNull()) {
-//                Persistence.service().retrieveMember(dbo.buildingAccess());
-//            }
-//            List<Building> haveAccessToBuilding = new ArrayList<Building>();
-//            for (EmployeeBuildingAccess ba : dbo.buildingAccess()) {
-//                haveAccessToBuilding.add(ba.building());
-//            }
-//            for (Building building : in._buildingAccess()) {
-//                if (!haveAccessToBuilding.contains(building)) {
-//                    haveAccessToBuilding.add(building);
-//                    EmployeeBuildingAccess ba = EntityFactory.create(EmployeeBuildingAccess.class);
-//                    ba.building().set(building);
-//                    dbo.buildingAccess().add(ba);
-//                }
-//            }
-        }
-
         super.persist(dbo, in);
 
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {
