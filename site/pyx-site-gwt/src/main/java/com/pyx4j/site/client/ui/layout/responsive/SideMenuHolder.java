@@ -34,7 +34,9 @@ public class SideMenuHolder extends SimplePanel {
         super.setWidget(w);
         getWidget().getElement().getStyle().setPosition(Position.STATIC);
         getWidget().getElement().getStyle().setProperty("width", "auto");
-        getElement().getStyle().setProperty("height", "auto");
+        getWidget().getElement().getStyle().setProperty("height", "100%");
+        getElement().getStyle().setProperty("height", "100%");
+        getElement().getStyle().setProperty("width", "100%");
     }
 
 }

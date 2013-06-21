@@ -28,7 +28,7 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
 
     public static enum ChangeType {
 
-        toggleSideMenu;
+        toggleSideMenu, resizeComponents;
     }
 
     private final ChangeType[] types;

@@ -185,10 +185,12 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case phonePortrait:
         case phoneLandscape:
             sideMenuHolder.setWidget(getMenuDisplay());
+            getHeaderDisplay().setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
             inlineMenuHolder.setWidget(getMenuDisplay());
+            getHeaderDisplay().setVisible(true);
             break;
         }
 
@@ -227,6 +229,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         stickyHeaderHolder.onPositionChange();
         inlineMenuHolder.onPositionChange();
 
+        getContentDisplay().getElement().getStyle().setMarginLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
     }
 
     @Override
@@ -255,6 +258,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
                 if (isSideMenuEnabled()) {
                     setSideMenuVisible(!sideMenuVisible);
                 }
+                break;
+            case resizeComponents:
+                resizeComponents();
                 break;
             default:
                 break;
