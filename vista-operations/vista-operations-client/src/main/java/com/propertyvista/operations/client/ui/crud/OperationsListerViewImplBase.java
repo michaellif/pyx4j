@@ -14,10 +14,18 @@
 package com.propertyvista.operations.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
 
 public class OperationsListerViewImplBase<E extends IEntity> extends ListerViewImplBase<E> {
 
     public OperationsListerViewImplBase() {
+    }
+
+    @Override
+    public void setPresenter(ILister.Presenter<E> presenter) {
+        super.setPresenter(presenter);
+        setCaption(presenter != null && presenter.getPlace() != null ? AppSite.getHistoryMapper().getPlaceInfo(presenter.getPlace()).getCaption() : "");
     }
 }
