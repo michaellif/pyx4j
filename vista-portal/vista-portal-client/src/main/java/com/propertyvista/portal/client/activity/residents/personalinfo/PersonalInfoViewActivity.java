@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoVie
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.EditPersonalInformation;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.ProfileEditor;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 
 public class PersonalInfoViewActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
@@ -63,7 +63,7 @@ public class PersonalInfoViewActivity extends SecurityAwareActivity implements P
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new EditPersonalInformation());
+        AppSite.getPlaceController().goTo(new ProfileEditor());
     }
 
     @Override

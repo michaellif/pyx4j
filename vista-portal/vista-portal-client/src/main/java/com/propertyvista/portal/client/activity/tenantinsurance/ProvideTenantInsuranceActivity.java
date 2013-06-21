@@ -51,7 +51,7 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
                     view.populate(status);
                     panel.setWidget(view);
                 } else {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance());
                 }
             }
         });
@@ -59,12 +59,12 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
 
     @Override
     public void onPurchaseTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.TenantSurePurchase());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.TenantSurePurchase());
     }
 
     @Override
     public void onUpdateInsuranceByOtherProvider() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.Other.UploadCertificate());
     }
 
 }

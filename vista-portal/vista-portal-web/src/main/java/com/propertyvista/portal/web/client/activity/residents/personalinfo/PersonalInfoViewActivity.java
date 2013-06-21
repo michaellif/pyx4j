@@ -25,11 +25,11 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.EditPersonalInformation;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.ProfileEditor;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.personalinfo.PersonalInfoView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PersonalInfoViewActivity extends SecurityAwareActivity implements PersonalInfoView.Presenter {
 
@@ -38,7 +38,7 @@ public class PersonalInfoViewActivity extends SecurityAwareActivity implements P
     PersonalInfoCrudService srv;
 
     public PersonalInfoViewActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PersonalInfoView.class);
+        this.view = PortalWebViewFactory.instance(PersonalInfoView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PersonalInfoCrudService.class);
     }
@@ -63,7 +63,7 @@ public class PersonalInfoViewActivity extends SecurityAwareActivity implements P
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new EditPersonalInformation());
+        AppSite.getPlaceController().goTo(new ProfileEditor());
     }
 
     @Override

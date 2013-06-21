@@ -28,7 +28,7 @@ import com.propertyvista.dto.BillDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.ViewBillView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
 
 public class ViewBillActivity extends SecurityAwareActivity implements ViewBillView.Presenter {

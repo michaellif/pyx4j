@@ -56,13 +56,13 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
 
     @Override
     public void viewPaymentMethod(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment) {
-        AppPlace place = new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod();
+        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
 
     @Override
     public void addPreauthorizedPayment() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override

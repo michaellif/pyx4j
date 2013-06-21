@@ -86,7 +86,7 @@ public class ViewMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.EditMaintenanceRequest().formPlace(id));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.EditMaintenanceRequest().formPlace(id));
     }
 
     @Override

@@ -124,7 +124,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         newTicket.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewMaintenanceRequest());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.NewMaintenanceRequest());
             }
         });
 

@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.maintenance.ViewMaintenanceRequestView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class ViewMaintenanceRequestActivity extends SecurityAwareActivity implements ViewMaintenanceRequestView.Presenter {
 
@@ -45,7 +45,7 @@ public class ViewMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     public ViewMaintenanceRequestActivity(AppPlace place) {
         srv = GWT.create(MaintenanceService.class);
-        this.view = ResidentsViewFactory.instance(ViewMaintenanceRequestView.class);
+        this.view = PortalWebViewFactory.instance(ViewMaintenanceRequestView.class);
         this.view.setPresenter(this);
 
         entityId = place.getItemId();
@@ -86,7 +86,7 @@ public class ViewMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.EditMaintenanceRequest().formPlace(id));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.EditMaintenanceRequest().formPlace(id));
     }
 
     @Override

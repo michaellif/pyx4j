@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodWizardView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 

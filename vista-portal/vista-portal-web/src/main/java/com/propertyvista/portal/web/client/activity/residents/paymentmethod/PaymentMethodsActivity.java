@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
 
@@ -37,7 +37,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     private final PaymentMethodCrudService srv;
 
     public PaymentMethodsActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PaymentMethodsView.class);
+        this.view = PortalWebViewFactory.instance(PaymentMethodsView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PaymentMethodCrudService.class);
     }
@@ -57,12 +57,12 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void addPaymentMethod() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.NewPaymentMethod());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
     }
 
     @Override
     public void viewPaymentMethod(LeasePaymentMethod paymentMethod) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
     }
 
     @Override

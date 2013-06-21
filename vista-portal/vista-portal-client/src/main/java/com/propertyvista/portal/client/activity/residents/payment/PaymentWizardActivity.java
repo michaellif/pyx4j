@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 
 public class PaymentWizardActivity extends AbstractWizardActivity<PaymentRecordDTO> implements PaymentWizardView.Persenter {

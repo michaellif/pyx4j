@@ -27,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementView.Presenter {
 
@@ -36,7 +36,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
     private final TenantSureManagementService service;
 
     public TenantSureManagementActivity() {
-        view = ResidentsViewFactory.instance(TenantSureManagementView.class);
+        view = PortalWebViewFactory.instance(TenantSureManagementView.class);
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 
@@ -49,7 +49,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
 
     @Override
     public void updateCreditCardDetails() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management.UpdateCreditCard());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management.UpdateCreditCard());
     }
 
     @Override
@@ -114,12 +114,12 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
 
     @Override
     public void viewFaq() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Faq());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Faq());
     }
 
     @Override
     public void viewAboutTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.About());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.About());
     }
 
     private void populateStatus() {

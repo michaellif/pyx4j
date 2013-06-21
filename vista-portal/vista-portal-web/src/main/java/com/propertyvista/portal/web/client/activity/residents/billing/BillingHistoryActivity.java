@@ -32,7 +32,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillingHistoryView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class BillingHistoryActivity extends SecurityAwareActivity implements BillingHistoryView.Presenter {
 
@@ -41,7 +41,7 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
     private final BillingHistoryService srv;
 
     public BillingHistoryActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(BillingHistoryView.class);
+        this.view = PortalWebViewFactory.instance(BillingHistoryView.class);
         this.view.setPresenter(this);
         srv = GWT.create(BillingHistoryService.class);
     }
@@ -63,7 +63,7 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
 
     @Override
     public void view(BillDataDTO item) {
-        AppPlace place = new PortalSiteMap.Residents.Financial.BillingHistory.ViewBill();
+        AppPlace place = new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill();
         AppSite.getPlaceController().goTo(place.formPlace(item.getPrimaryKey()));
     }
 

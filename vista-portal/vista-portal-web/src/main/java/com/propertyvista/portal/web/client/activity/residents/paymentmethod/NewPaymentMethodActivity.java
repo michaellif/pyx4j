@@ -48,13 +48,13 @@ public class NewPaymentMethodActivity extends EditPaymentMethodActivity {
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods());
             }
         }, paymentmethod);
     }
 
     @Override
     public void cancel() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods());
     }
 }

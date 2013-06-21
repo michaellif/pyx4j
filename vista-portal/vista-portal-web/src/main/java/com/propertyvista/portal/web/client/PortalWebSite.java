@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -39,7 +39,6 @@ import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.Message;
 import com.propertyvista.common.client.site.VistaSite;
-import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
@@ -47,7 +46,8 @@ import com.propertyvista.portal.rpc.portal.services.PortalPolicyRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.PortalSiteServices;
 import com.propertyvista.portal.rpc.portal.services.SiteThemeServices;
 import com.propertyvista.portal.rpc.shared.services.PolicyRetrieveService;
-import com.propertyvista.portal.web.client.themes.PortalTheme;
+import com.propertyvista.portal.web.client.themes.PortalWebPalette;
+import com.propertyvista.portal.web.client.themes.PortalWebTheme;
 import com.propertyvista.portal.web.client.ui.PortalRootPane;
 
 public class PortalWebSite extends VistaSite {
@@ -69,7 +69,7 @@ public class PortalWebSite extends VistaSite {
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
 
-        RootPanel.get().add(new PortalRootPane());
+        RootLayoutPanel.get().add(new PortalRootPane());
 
         hideLoadingIndicator();
 
@@ -98,7 +98,7 @@ public class PortalWebSite extends VistaSite {
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
                 if (!descriptor.useCustomHtml().isBooleanTrue()) {
-                    StyleManager.installTheme(new PortalTheme(descriptor.skin().getValue()), new VistaPalette(descriptor.palette()));
+                    StyleManager.installTheme(new PortalWebTheme(descriptor.skin().getValue()), new PortalWebPalette());
                 }
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());

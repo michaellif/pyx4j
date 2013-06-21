@@ -57,12 +57,12 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
 
     @Override
     public void addPaymentMethod() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.NewPaymentMethod());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
     }
 
     @Override
     public void viewPaymentMethod(LeasePaymentMethod paymentMethod) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod().formPlace(paymentMethod.id().getValue()));
     }
 
     @Override

@@ -29,7 +29,7 @@ import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialSum
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
 /**

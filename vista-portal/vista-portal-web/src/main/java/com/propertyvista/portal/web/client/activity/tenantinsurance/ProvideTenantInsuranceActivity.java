@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceServ
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProvideTenantInsuranceActivity extends AbstractActivity implements ProvideTenantInsuranceView.Presenter {
@@ -36,7 +36,7 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
     private final TenantInsuranceService service;
 
     public ProvideTenantInsuranceActivity() {
-        view = ResidentsViewFactory.instance(ProvideTenantInsuranceView.class);
+        view = PortalWebViewFactory.instance(ProvideTenantInsuranceView.class);
         service = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
     }
 
@@ -51,7 +51,7 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
                     view.populate(status);
                     panel.setWidget(view);
                 } else {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance());
                 }
             }
         });
@@ -59,12 +59,12 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
 
     @Override
     public void onPurchaseTenantSure() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.TenantSurePurchase());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.TenantSurePurchase());
     }
 
     @Override
     public void onUpdateInsuranceByOtherProvider() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.Other.UploadCertificate());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.Other.UploadCertificate());
     }
 
 }

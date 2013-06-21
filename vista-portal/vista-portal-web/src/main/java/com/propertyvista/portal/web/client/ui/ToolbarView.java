@@ -15,17 +15,19 @@ package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface TopRightActionsView extends IsWidget {
+public interface ToolbarView extends IsWidget {
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(ToolbarPresenter presenter);
 
-    interface Presenter {
+    interface ToolbarPresenter {
 
         void logout();
 
         void login();
 
         void showAccount();
+
+        void showProfile();
 
     }
 

@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTena
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 // TODO maybe this dispatching should be done on navig activity level: i.e. put the place that corresponds to current status in the navig bar 
 public class TenantInsuranceActivity extends AbstractActivity {
@@ -46,18 +46,18 @@ public class TenantInsuranceActivity extends AbstractActivity {
             @Override
             public void onSuccess(TenantInsuranceStatusDTO status) {
                 if (status instanceof NoInsuranceTenantInsuranceStatusDTO) {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.ProvideTenantInsurance());
                 } else {
                     if (status.isOwner().isBooleanTrue()) {
                         if (status instanceof TenantSureTenantInsuranceStatusShortDTO) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management());
                         } else if (status instanceof OtherProviderTenantInsuranceStatusDTO) {
-                            AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.ProvideTenantInsurance());
+                            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.ProvideTenantInsurance());
                         } else {
                             throw new Error("got unknown insurance status");
                         }
                     } else {
-                        TenantInsuranceCoveredByOtherTenantView view = ResidentsViewFactory.instance(TenantInsuranceCoveredByOtherTenantView.class);
+                        TenantInsuranceCoveredByOtherTenantView view = PortalWebViewFactory.instance(TenantInsuranceCoveredByOtherTenantView.class);
                         view.populate(status);
                         panel.setWidget(view);
                     }

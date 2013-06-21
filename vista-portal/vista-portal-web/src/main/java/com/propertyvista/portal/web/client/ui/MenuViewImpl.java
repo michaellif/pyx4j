@@ -22,47 +22,46 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.css.IStyleDependent;
-import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 
-public class NavigViewImpl extends SimplePanel implements NavigView {
+import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-    public static String DEFAULT_STYLE_PREFIX = "MainMenu";
+public class MenuViewImpl extends SimplePanel implements MenuView {
 
-    public static enum StyleSuffix implements IStyleName {
-        Holder, Tab, Label
-    }
-
-    public static enum StyleDependent implements IStyleDependent {
-        hover, active
-    }
-
-    private NavigPresenter presenter;
+    private MenuPresenter presenter;
 
     private final NavigTabList tabsHolder;
 
-    private final VerticalPanel menuContainer;
-
-    public NavigViewImpl() {
-        setStyleName(DEFAULT_STYLE_PREFIX);
+    public MenuViewImpl() {
+        setStyleName(PortalWebRootPaneTheme.StyleName.MainMenu.name());
         setSize("100%", "100%");
-        menuContainer = new VerticalPanel();
-        menuContainer.setSize("100%", "100%");
         tabsHolder = new NavigTabList();
-        menuContainer.add(tabsHolder);
-        setWidget(menuContainer);
+        setWidget(tabsHolder);
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
     }
 
     @Override
-    public void setPresenter(NavigPresenter presenter) {
+    public void setPresenter(MenuPresenter presenter) {
         this.presenter = presenter;
     }
 
@@ -70,13 +69,32 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
     public void setNavig(List<AppPlace> items) {
         tabsHolder.clear();
         for (AppPlace item : items) {
-            NavigTab navigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
+            NavigTab navigTab = new NavigTab(item);
             tabsHolder.add(navigTab);
 
-            AppPlace currentPlace = (AppPlace) presenter.getWhere();
+            AppPlace currentPlace = presenter.getWhere();
             if (item.equals(currentPlace)) {
                 navigTab.select();
             }
+        }
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+            getElement().getStyle().setBackgroundColor("#abc");
+            setWidth("auto");
+            break;
+        case tabletPortrait:
+        case tabletLandscape:
+            getElement().getStyle().setBackgroundColor("#caa");
+            setWidth("50px");
+            break;
+        default:
+            getElement().getStyle().setBackgroundColor("#caa");
+            setWidth("200px");
+            break;
         }
     }
 
@@ -85,8 +103,8 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
         public NavigTabList() {
             setElement(DOM.createElement("ul"));
-            tabs = new LinkedList<NavigViewImpl.NavigTab>();
-            setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.Holder.name());
+            tabs = new LinkedList<MenuViewImpl.NavigTab>();
+            setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuHolder.name());
             setActive(true);
 
         }
@@ -138,23 +156,19 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
         private final AppPlace place;
 
-        NavigTab(AppPlace appPlace, String styleName) {
+        NavigTab(AppPlace appPlace) {
             super();
-            if (styleName == null) {
-                styleName = DEFAULT_STYLE_PREFIX;
-            }
 
             this.place = appPlace;
             selected = false;
 
             setElement(DOM.createElement("li"));
-            setStyleName(styleName + StyleSuffix.Tab.name());
+            setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuTab.name());
 
-            getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
             sinkEvents(Event.ONCLICK);
 
             label = new Label(AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel());
-            label.setStyleName(styleName + StyleSuffix.Label.name());
+            label.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuLabel.name());
             add(label);
 
             addDomHandler(new ClickHandler() {
@@ -169,11 +183,11 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
         public void deselect() {
             selected = false;
-            removeStyleName(StyleDependent.active.name());
+            removeStyleName(PortalWebRootPaneTheme.StyleDependent.active.name());
         }
 
         public void select() {
-            addStyleName(StyleDependent.active.name());
+            addStyleName(PortalWebRootPaneTheme.StyleDependent.active.name());
             selected = true;
         }
 

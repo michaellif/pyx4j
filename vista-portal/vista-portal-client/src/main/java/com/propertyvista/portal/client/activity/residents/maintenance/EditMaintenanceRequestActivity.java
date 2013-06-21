@@ -80,7 +80,7 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
         srv.create(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance());
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance());
             }
         }, entity);
     }

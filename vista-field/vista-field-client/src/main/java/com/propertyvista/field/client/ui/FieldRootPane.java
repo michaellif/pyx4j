@@ -14,7 +14,6 @@
 package com.propertyvista.field.client.ui;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
@@ -25,14 +24,13 @@ import com.propertyvista.field.client.mvp.HeaderActivityMapper;
 import com.propertyvista.field.client.mvp.MenuActivityMapper;
 import com.propertyvista.field.client.mvp.StickyHeaderActivityMapper;
 
-public class FieldRootPane extends RootPane<ResponsiveLayoutPanel> implements IsWidget {
+public class FieldRootPane extends RootPane<ResponsiveLayoutPanel> {
 
     public FieldRootPane() {
         super(new ResponsiveLayoutPanel());
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new StickyHeaderActivityMapper(), asWidget().getStickyHeaderDisplay());
-        bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());

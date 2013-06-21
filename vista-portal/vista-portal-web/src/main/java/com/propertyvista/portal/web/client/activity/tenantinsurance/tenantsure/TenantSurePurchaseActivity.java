@@ -37,7 +37,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantSurePurchaseActivity extends AbstractActivity implements TenantSurePurchaseView.Presenter {
 
@@ -48,7 +48,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     private final TenantSurePurchaseService service;
 
     public TenantSurePurchaseActivity() {
-        view = ResidentsViewFactory.instance(TenantSurePurchaseView.class);
+        view = PortalWebViewFactory.instance(TenantSurePurchaseView.class);
         service = GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class);
     }
 
@@ -73,7 +73,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
                     view.setTenantSureOnMaintenance(((TenantSureOnMaintenanceException) caught).getMessage());
                     panel.setWidget(view);
                 } else if (caught instanceof TenantSureAlreadyPurchasedException) {
-                    AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management());
+                    AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management());
                 } else if (caught instanceof UserRuntimeException) {
                     view.reportError(caught.getMessage());
                 } else {
@@ -170,7 +170,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
     @Override
     public void onPaymentProcessingSuccessAccepted() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance());
     }
 
 }

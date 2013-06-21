@@ -25,12 +25,12 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.dashboard.DashboardView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class DashboardActivity extends SecurityAwareActivity implements DashboardView.Presenter {
 
@@ -39,7 +39,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     private final DashboardService srv;
 
     public DashboardActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(DashboardView.class);
+        this.view = PortalWebViewFactory.instance(DashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
     }
@@ -59,7 +59,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillingHistory.ViewBill());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
     }
 
     @Override

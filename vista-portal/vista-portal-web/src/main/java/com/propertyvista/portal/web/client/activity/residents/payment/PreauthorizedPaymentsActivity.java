@@ -27,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PreauthorizedPaymentsActivity extends SecurityAwareActivity implements PreauthorizedPaymentsView.Presenter {
 
@@ -36,7 +36,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
     private final PreauthorizedPaymentListService srv;
 
     public PreauthorizedPaymentsActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PreauthorizedPaymentsView.class);
+        this.view = PortalWebViewFactory.instance(PreauthorizedPaymentsView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PreauthorizedPaymentListService.class);
     }
@@ -56,13 +56,13 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
 
     @Override
     public void viewPaymentMethod(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment) {
-        AppPlace place = new PortalSiteMap.Residents.PaymentMethods.ViewPaymentMethod();
+        AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
 
     @Override
     public void addPreauthorizedPayment() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override

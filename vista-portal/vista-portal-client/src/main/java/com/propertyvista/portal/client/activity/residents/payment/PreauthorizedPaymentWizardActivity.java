@@ -30,7 +30,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 

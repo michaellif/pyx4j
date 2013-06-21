@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-05
- * @author ArtyomB
+ * Created on Jun 19, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.activity;
@@ -18,31 +18,20 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
-
-import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.ui.residents.usermessage.UserMessageView;
+import com.propertyvista.portal.web.client.ui.HeaderView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class UserMessageActivity extends AbstractActivity implements UserMessageView.Presenter {
+public class HeaderActivity extends AbstractActivity {
 
-    private final UserMessageView view;
+    private final HeaderView view;
 
-    public UserMessageActivity(Place place) {
-        view = PortalWebViewFactory.instance(UserMessageView.class);
+    public HeaderActivity(Place place) {
+        view = PortalWebViewFactory.instance(HeaderView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
-        view.populate(PortalWebSite.instance().getUserMessage());
         panel.setWidget(view);
-
-    }
-
-    @Override
-    public void acceptMessage() {
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
     }
 
 }

@@ -29,7 +29,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.ViewPaymentMethodView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class ViewPaymentMethodActivity extends SecurityAwareActivity implements ViewPaymentMethodView.Presenter {
 
@@ -40,7 +40,7 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
     private final Key entityId;
 
     public ViewPaymentMethodActivity(AppPlace place) {
-        this.view = ResidentsViewFactory.instance(ViewPaymentMethodView.class);
+        this.view = PortalWebViewFactory.instance(ViewPaymentMethodView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PaymentMethodCrudService.class);
 
@@ -63,7 +63,7 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
 
     @Override
     public void edit(Key id) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.PaymentMethods.EditPaymentMethod().formPlace(id));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.EditPaymentMethod().formPlace(id));
     }
 
     @Override

@@ -62,7 +62,7 @@ public class PaymentSubmittedActivity extends SecurityAwareActivity implements P
 
     @Override
     public void goToAutoPay() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
     @Override

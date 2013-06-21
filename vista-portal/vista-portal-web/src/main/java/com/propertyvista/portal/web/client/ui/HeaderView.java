@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,16 +7,14 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 1, 2013
+ * @author Mykola
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface CaptionView extends IsWidget {
-
-    public void setCaption(String caption);
+public interface HeaderView extends IsWidget {
 
 }

@@ -22,7 +22,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class VistaTermsActivity extends AbstractActivity {
 
@@ -32,7 +32,7 @@ public class VistaTermsActivity extends AbstractActivity {
 
     public VistaTermsActivity() {
         service = GWT.<PortalVistaTermsService> create(PortalVistaTermsService.class);
-        view = ResidentsViewFactory.instance(TermsView.class);
+        view = PortalWebViewFactory.instance(TermsView.class);
     }
 
     @Override

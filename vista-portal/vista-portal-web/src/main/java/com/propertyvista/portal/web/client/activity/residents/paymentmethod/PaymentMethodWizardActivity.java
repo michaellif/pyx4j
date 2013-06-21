@@ -23,16 +23,16 @@ import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.PaymentMethods;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodWizardView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Persenter {
 
     public PaymentMethodWizardActivity(AppPlace place) {
-        super(place, ResidentsViewFactory.instance(PaymentMethodWizardView.class), GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class),
+        super(place, PortalWebViewFactory.instance(PaymentMethodWizardView.class), GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class),
                 PaymentMethodDTO.class);
     }
 

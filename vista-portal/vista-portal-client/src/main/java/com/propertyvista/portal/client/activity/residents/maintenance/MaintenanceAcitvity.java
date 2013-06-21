@@ -67,12 +67,12 @@ public class MaintenanceAcitvity extends SecurityAwareActivity implements Mainte
 
     @Override
     public void createNewRequest() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.NewMaintenanceRequest());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.NewMaintenanceRequest());
     }
 
     @Override
     public void viewRequest(MaintenanceRequestDTO requests) {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Maintenance.ViewMaintenanceRequest().formPlace(requests.id().getValue()));
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(requests.id().getValue()));
     }
 
     @Override

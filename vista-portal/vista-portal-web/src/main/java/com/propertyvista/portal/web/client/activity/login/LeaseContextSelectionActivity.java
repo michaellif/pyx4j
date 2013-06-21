@@ -30,7 +30,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 import com.propertyvista.portal.web.client.ui.LeaseContextSelectionView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class LeaseContextSelectionActivity extends AbstractActivity implements LeaseContextSelectionView.Presenter {
 
@@ -40,7 +40,7 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     public LeaseContextSelectionActivity() {
         this.service = GWT.<LeaseContextSelectionService> create(LeaseContextSelectionService.class);
-        this.view = ResidentsViewFactory.instance(LeaseContextSelectionView.class);
+        this.view = PortalWebViewFactory.instance(LeaseContextSelectionView.class);
         this.view.setPresenter(this);
     }
 

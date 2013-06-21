@@ -31,7 +31,7 @@ import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenterService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.communicationcenter.CommunicationCenterView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class CommunicationCenterActivity extends SecurityAwareActivity implements CommunicationCenterView.Presenter {
 
@@ -42,7 +42,7 @@ public class CommunicationCenterActivity extends SecurityAwareActivity implement
     private final CommunicationCenterService srv;
 
     public CommunicationCenterActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(CommunicationCenterView.class);
+        this.view = PortalWebViewFactory.instance(CommunicationCenterView.class);
         this.view.setPresenter(this);
         srv = GWT.create(CommunicationCenterService.class);
     }

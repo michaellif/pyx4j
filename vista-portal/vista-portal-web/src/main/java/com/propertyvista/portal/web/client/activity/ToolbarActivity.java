@@ -26,15 +26,15 @@ import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.web.client.ui.TopRightActionsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.ToolbarView;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class TopRightActionsActivity extends AbstractActivity implements TopRightActionsView.Presenter {
+public class ToolbarActivity extends AbstractActivity implements ToolbarView.ToolbarPresenter {
 
-    private final TopRightActionsView view;
+    private final ToolbarView view;
 
-    public TopRightActionsActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(TopRightActionsView.class);
+    public ToolbarActivity(Place place) {
+        this.view = PortalWebViewFactory.instance(ToolbarView.class);
         assert (view != null);
         view.setPresenter(this);
     }
@@ -79,6 +79,11 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showAccount() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.ViewPersonalInformation());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Account());
+    }
+
+    @Override
+    public void showProfile() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ProfileViewer());
     }
 }

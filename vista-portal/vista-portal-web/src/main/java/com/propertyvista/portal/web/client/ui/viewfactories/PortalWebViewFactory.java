@@ -23,14 +23,16 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
-import com.propertyvista.portal.web.client.ui.CaptionView;
-import com.propertyvista.portal.web.client.ui.CaptionViewImpl;
+import com.propertyvista.portal.web.client.ui.FooterView;
+import com.propertyvista.portal.web.client.ui.FooterViewImpl;
+import com.propertyvista.portal.web.client.ui.HeaderView;
+import com.propertyvista.portal.web.client.ui.HeaderViewImpl;
 import com.propertyvista.portal.web.client.ui.LeaseContextSelectionView;
 import com.propertyvista.portal.web.client.ui.LeaseContextSelectionViewImpl;
-import com.propertyvista.portal.web.client.ui.NavigView;
-import com.propertyvista.portal.web.client.ui.NavigViewImpl;
-import com.propertyvista.portal.web.client.ui.TopRightActionsView;
-import com.propertyvista.portal.web.client.ui.TopRightActionsViewImpl;
+import com.propertyvista.portal.web.client.ui.MenuView;
+import com.propertyvista.portal.web.client.ui.MenuViewImpl;
+import com.propertyvista.portal.web.client.ui.ToolbarView;
+import com.propertyvista.portal.web.client.ui.ToolbarViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillingHistoryView;
@@ -94,7 +96,7 @@ import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.Te
 import com.propertyvista.portal.web.client.ui.residents.usermessage.UserMessageView;
 import com.propertyvista.portal.web.client.ui.residents.usermessage.UserMessageViewImpl;
 
-public class ResidentsViewFactory extends ViewFactoryBase {
+public class PortalWebViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
@@ -149,12 +151,14 @@ public class ResidentsViewFactory extends ViewFactoryBase {
             } else if (CommunicationCenterView.class.equals(type)) {
                 map.put(type, new CommunicationCenterViewImpl());
 
-            } else if (NavigView.class.equals(type)) {
-                map.put(type, new NavigViewImpl());
-            } else if (TopRightActionsView.class.equals(type)) {
-                map.put(type, new TopRightActionsViewImpl());
-            } else if (CaptionView.class.equals(type)) {
-                map.put(type, new CaptionViewImpl());
+            } else if (HeaderView.class.equals(type)) {
+                map.put(type, new HeaderViewImpl());
+            } else if (FooterView.class.equals(type)) {
+                map.put(type, new FooterViewImpl());
+            } else if (MenuView.class.equals(type)) {
+                map.put(type, new MenuViewImpl());
+            } else if (ToolbarView.class.equals(type)) {
+                map.put(type, new ToolbarViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {
                 map.put(type, new PasswordResetRequestViewImpl());
             } else if (PasswordResetView.class.equals(type)) {

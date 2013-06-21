@@ -19,13 +19,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface NavigView extends IsWidget {
+public interface MenuView extends IsWidget {
 
-    public void setPresenter(NavigPresenter presenter);
+    public void setPresenter(MenuPresenter presenter);
 
     public void setNavig(List<AppPlace> items);
 
-    public interface NavigPresenter {
+    public interface MenuPresenter {
         public void navigTo(AppPlace place);
 
         public AppPlace getWhere();

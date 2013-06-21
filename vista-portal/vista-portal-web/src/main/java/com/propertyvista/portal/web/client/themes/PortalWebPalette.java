@@ -1,0 +1,30 @@
+/*
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ *
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * you entered into with Property Vista Software Inc.
+ *
+ * This notice and attribution to Property Vista Software Inc. may not be removed.
+ *
+ * Created on Jun 21, 2013
+ * @author michaellif
+ * @version $Id$
+ */
+package com.propertyvista.portal.web.client.themes;
+
+import com.pyx4j.commons.css.Palette;
+import com.pyx4j.commons.css.ThemeColor;
+
+public class PortalWebPalette extends Palette {
+
+    public PortalWebPalette() {
+        putThemeColor(ThemeColor.object1, "#315EAF");
+        putThemeColor(ThemeColor.object2, "B26C1F");
+        putThemeColor(ThemeColor.contrast1, "red");
+        putThemeColor(ThemeColor.contrast2, "orange");
+        putThemeColor(ThemeColor.background, "#efefef");
+        putThemeColor(ThemeColor.foreground, "#4f565a");
+    }
+
+}

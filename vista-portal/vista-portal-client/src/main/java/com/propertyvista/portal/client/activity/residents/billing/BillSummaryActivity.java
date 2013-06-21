@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 
 public class BillSummaryActivity extends SecurityAwareActivity implements BillSummaryView.Presenter {
@@ -59,7 +59,7 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillingHistory.ViewBill());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
     }
 
     @Override

@@ -13,25 +13,25 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.common.client.theme.SiteViewTheme;
+import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class TopRightActionsViewImpl extends FlowPanel implements TopRightActionsView {
+public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
-    private static final I18n i18n = I18n.get(TopRightActionsViewImpl.class);
+    private static final I18n i18n = I18n.get(ToolbarViewImpl.class);
 
-    private Presenter presenter;
+    private ToolbarPresenter presenter;
 
     private final Anchor greetings;
 
@@ -39,13 +39,14 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
 
     private final Anchor login;
 
-    public TopRightActionsViewImpl() {
-        setStyleName(SiteViewTheme.StyleName.SiteViewAction.name());
-        setSize("100%", "100%");
+    public ToolbarViewImpl() {
+        setStyleName(PortalWebRootPaneTheme.StyleName.MainToolbar.name());
 
-        HorizontalPanel container = new HorizontalPanel();
-        container.getElement().getStyle().setFloat(Style.Float.RIGHT);
-        container.setSize("30%", "100%");
+        SimplePanel toolbarHolder = new SimplePanel();
+        toolbarHolder.setStyleName(PortalWebRootPaneTheme.StyleName.MainToolbarActions.name());
+        Toolbar toolbar = new Toolbar();
+        toolbarHolder.setWidget(toolbar);
+        add(toolbarHolder);
 
         greetings = new Anchor(null);
         greetings.addClickHandler(new ClickHandler() {
@@ -85,14 +86,14 @@ public class TopRightActionsViewImpl extends FlowPanel implements TopRightAction
         login.setHTML(i18n.tr("Log In"));
         login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
 
-        container.add(greetings);
-        container.add(login);
-        container.add(logout);
-        add(container);
+        toolbar.add(greetings);
+        toolbar.add(login);
+        toolbar.add(logout);
+
     }
 
     @Override
-    public void setPresenter(final Presenter presenter) {
+    public void setPresenter(final ToolbarPresenter presenter) {
         this.presenter = presenter;
     }
 

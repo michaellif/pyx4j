@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.web.client.ui.residents.registration.TenantRegistrationView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantRegistrationActivity extends AbstractActivity implements TenantRegistrationView.Presenter {
 
@@ -44,7 +44,7 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
     private final TenantRegistrationView view;
 
     public TenantRegistrationActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(TenantRegistrationView.class);
+        this.view = PortalWebViewFactory.instance(TenantRegistrationView.class);
         withPlace(place);
 
     }

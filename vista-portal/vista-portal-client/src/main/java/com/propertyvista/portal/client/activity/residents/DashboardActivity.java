@@ -28,7 +28,7 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.Financial;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 
@@ -59,7 +59,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
 
     @Override
     public void viewCurrentBill() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.BillingHistory.ViewBill());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory.ViewBill());
     }
 
     @Override

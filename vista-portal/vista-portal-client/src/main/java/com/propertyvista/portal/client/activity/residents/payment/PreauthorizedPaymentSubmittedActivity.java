@@ -68,6 +68,6 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
 
     @Override
     public void back() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.Financial.PreauthorizedPayments());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
     }
 }

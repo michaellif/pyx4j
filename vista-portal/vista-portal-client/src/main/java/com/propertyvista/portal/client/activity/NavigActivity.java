@@ -33,7 +33,7 @@ import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.NavigPresenter {
@@ -69,30 +69,30 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     private List<AppPlace> createNavigationItems() {
         List<AppPlace> items = new ArrayList<AppPlace>();
 
-        items.add(new Residents());
+        items.add(new Resident());
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            items.add(new Residents.Financial.BillSummary());
-            items.add(new Residents.Financial.BillingHistory());
+            items.add(new Resident.Financial.BillSummary());
+            items.add(new Resident.Financial.BillingHistory());
         } else {
-            items.add(new Residents.Financial.FinancialSummary());
+            items.add(new Resident.Financial.FinancialSummary());
         }
-        items.add(new Residents.Maintenance());
+        items.add(new Resident.Maintenance());
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            items.add(new Residents.CommunicationCenter());
+            items.add(new Resident.CommunicationCenter());
         }
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
                 VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
 
             if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
-                items.add(new Residents.Financial.PreauthorizedPayments());
+                items.add(new Resident.Financial.PreauthorizedPayments());
             }
 
-            items.add(new Residents.PaymentMethods());
+            items.add(new Resident.PaymentMethods());
         }
-        items.add(new Residents.ViewPersonalInformation());
+        items.add(new Resident.ProfileViewer());
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            items.add(new Residents.TenantInsurance());
+            items.add(new Resident.TenantInsurance());
         }
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
             items.add(new PortalSiteMap.LeaseContextSelection());

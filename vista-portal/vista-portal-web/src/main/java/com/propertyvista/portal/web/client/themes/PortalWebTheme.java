@@ -13,16 +13,17 @@
  */
 package com.propertyvista.portal.web.client.themes;
 
-import java.util.List;
-
-import com.pyx4j.commons.css.Selector;
+import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.Style;
+import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
 import com.pyx4j.widgets.client.dialog.DefaultDialogTheme;
@@ -31,26 +32,28 @@ import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
-import com.propertyvista.portal.web.client.ui.PortalRootPane;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 
-public class PortalTheme extends VistaTheme {
+public class PortalWebTheme extends Theme {
 
     private final Skin skin;
 
-    public PortalTheme(Skin skin) {
+    public PortalWebTheme(Skin skin) {
         this.skin = skin;
         initStyles();
-
     }
 
     protected void initStyles() {
-        super.initGeneralStyles();
+        initGeneralStyles();
+        initBodyStyles();
+
+        addTheme(new PortalWebRootPaneTheme());
+
+        addTheme(new ResponsiveLayoutTheme());
 
         addTheme(new HorizontalAlignCenterMixin());
 
@@ -159,51 +162,75 @@ public class PortalTheme extends VistaTheme {
         addTheme(new TenantInsuranceTheme());
         addTheme(new TenantSureTheme());
 
-        initCellListStyle();
-        initCheckBoxStyle();
-        initHyperlinkStyle();
-        initGroupBoxStyle();
-        initSiteViewStyles();
-        initSuggestBoxStyle();
-        initMessageStyles();
-
         initTenantInsuranceStyles(); // TODO move this to a theme class
     }
 
-    protected void initSiteViewStyles() {
-        String prefix = PortalRootPane.DEFAULT_STYLE_PREFIX;
-
-        int minWidth = 960;
-        int maxWidth = 960;
-        int leftColumnWidth = 0;
-        int rightColumnWidth = 0;
-
-        Style style = new Style(Selector.valueOf(prefix));
-        style.addProperty("width", "95%");
-        style.addProperty("min-width", minWidth + "px");
-        style.addProperty("max-width", maxWidth + "px");
-        style.addProperty("margin", "0 auto");
+    protected void initGeneralStyles() {
+        Style style = new Style("html");
         addStyle(style);
 
-        style = new Style(Selector.valueOf(prefix, PortalRootPane.StyleSuffix.Display));
+        style = new Style("td");
+        style.addProperty("padding", "0px");
         addStyle(style);
 
-        String gwtButton = (".gwt-Button");
-        List<Style> styles = getStyles(gwtButton);
-        if (styles != null && styles.size() > 0) {
-            for (Style st : styles) {
-                if (st.getSelector().equals(gwtButton)) {
-                    st.addProperty("border-radius", "5px");
-                    st.addProperty("-moz-border-radius", "5px");
-                    st.addProperty("background-color", ThemeColor.object1, 0.5);
-                    st.addProperty("border", "1px solid");
-                    st.addProperty("border-color", "black");
-                    st.addProperty("min-width", "100px");
-                    break;
-                }
-            }
+        style = new Style("p");
+        style.addProperty("margin", "0.3em");
+        addStyle(style);
 
-        }
+        style = new Style("h1");
+        style.addProperty("font-size", "2em");
+        style.addProperty("line-height", "2.5em");
+        style.addProperty("padding-bottom", "0.5px");
+        style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("h2");
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("padding-bottom", "0.5px");
+        style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("h3");
+        style.addProperty("font-size", "1.17em");
+        style.addProperty("padding-bottom", "0.5px");
+        style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("h4, blockquote");
+        style.addProperty("font-size", "1.12em");
+        style.addProperty("padding-bottom", "0.3px");
+        style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("h5");
+        style.addProperty("font-size", "1.08em");
+        style.addProperty("padding-bottom", "0.2px");
+        style.addProperty("margin", "0");
+        addStyle(style);
+        style = new Style("h6");
+        style.addProperty("font-size", ".75em");
+        style.addProperty("padding-bottom", "0.2px");
+        style.addProperty("margin", "0");
+        addStyle(style);
+
+        style = new Style("h1, h2, h3, h4, h5, h6, b, strong");
+        style.addProperty("font-weight", "bolder");
+        addStyle(style);
+
+        style = new Style("blockquote, ul, fieldset, form, ol, dl, dir, menu");
+        style.addProperty("margin", "0");
+        addStyle(style);
+
+        style = new Style("blockquote");
+        style.addProperty("margin-left", "40px");
+        style.addProperty("margin-right", "40px");
+        addStyle(style);
+    }
+
+    protected void initBodyStyles() {
+        Style style = new Style("body");
+        style.addProperty("background-color", "white");
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("margin", "0");
+        style.addProperty("border", "none");
+        style.addProperty("font", "12px/14px Arial, Helvetica, sans-serif");
+        addStyle(style);
 
     }
 
@@ -307,6 +334,11 @@ public class PortalTheme extends VistaTheme {
             addStyle(style);
         }
 
+    }
+
+    @Override
+    public ThemeId getId() {
+        return new ClassBasedThemeId(getClass());
     }
 
 }

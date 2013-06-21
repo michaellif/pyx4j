@@ -79,6 +79,6 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void showAccount() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.ViewPersonalInformation());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ProfileViewer());
     }
 }

@@ -7,28 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Feb 1, 2011
- * @author Misha
+ * Created on Apr 19, 2011
+ * @author vadims
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.activity.AppActivityMapper;
+import com.propertyvista.portal.web.client.activity.FooterActivity;
 
-import com.propertyvista.portal.web.client.activity.CaptionActivity;
+public class FooterActivityMapper implements ActivityMapper {
 
-public class CaptionActivityMapper implements AppActivityMapper {
-
-    public CaptionActivityMapper() {
+    public FooterActivityMapper() {
     }
 
     @Override
-    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
-        callback.onSuccess(new CaptionActivity(place));
-
+    public Activity getActivity(Place place) {
+        return new FooterActivity(place);
     }
+
 }

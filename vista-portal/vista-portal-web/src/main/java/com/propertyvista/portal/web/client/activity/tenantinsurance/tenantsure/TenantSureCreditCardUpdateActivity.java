@@ -31,7 +31,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagemen
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity implements TenantSureCreditCardUpdateView.Presenter {
 
@@ -40,7 +40,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     private final TenantSureManagementService service;
 
     public TenantSureCreditCardUpdateActivity() {
-        view = ResidentsViewFactory.instance(TenantSureCreditCardUpdateView.class);
+        view = PortalWebViewFactory.instance(TenantSureCreditCardUpdateView.class);
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 
@@ -96,6 +96,6 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
 
     @Override
     public void onCCUpdateSuccessAcknowledged() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Residents.TenantInsurance.TenantSure.Management());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.TenantInsurance.TenantSure.Management());
     }
 }

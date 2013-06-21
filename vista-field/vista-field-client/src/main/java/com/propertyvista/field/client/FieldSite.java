@@ -16,7 +16,6 @@ package com.propertyvista.field.client;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
@@ -50,8 +49,6 @@ public class FieldSite extends VistaSite {
         hideLoadingIndicator();
 
         getHistoryHandler().register(getPlaceController(), getEventBus(), AppPlace.NOWHERE);
-
-        RootPanel.get().add(RootLayoutPanel.get());
 
         RootLayoutPanel.get().add(new FieldRootPane());
 

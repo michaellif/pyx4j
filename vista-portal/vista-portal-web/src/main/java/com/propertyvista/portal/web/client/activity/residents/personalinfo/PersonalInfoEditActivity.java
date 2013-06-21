@@ -25,11 +25,11 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Residents.ViewPersonalInformation;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.ProfileViewer;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.personalinfo.PersonalInfoEdit;
-import com.propertyvista.portal.web.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PersonalInfoEditActivity extends SecurityAwareActivity implements PersonalInfoEdit.Presenter {
 
@@ -38,7 +38,7 @@ public class PersonalInfoEditActivity extends SecurityAwareActivity implements P
     PersonalInfoCrudService srv;
 
     public PersonalInfoEditActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PersonalInfoEdit.class);
+        this.view = PortalWebViewFactory.instance(PersonalInfoEdit.class);
         this.view.setPresenter(this);
         srv = GWT.create(PersonalInfoCrudService.class);
     }
@@ -62,7 +62,7 @@ public class PersonalInfoEditActivity extends SecurityAwareActivity implements P
         srv.save(new DefaultAsyncCallback<Key>() {
             @Override
             public void onSuccess(Key result) {
-                AppSite.getPlaceController().goTo(new ViewPersonalInformation());
+                AppSite.getPlaceController().goTo(new ProfileViewer());
             }
         }, info);
     }
