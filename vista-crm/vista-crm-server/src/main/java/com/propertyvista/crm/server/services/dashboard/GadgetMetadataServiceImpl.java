@@ -33,6 +33,7 @@ import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.crm.server.util.CrmAppContext;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
@@ -50,6 +51,10 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
             UnitAvailabilityGadgetMetadata.class,
             UnitTurnoverAnalysisGadgetMetadata.class,
             UnitAvailabilitySummaryGadgetMetadata.class
+    );//@formatter:on
+
+    public static final List<Class<?>> DEPRECATED_GADGETS_BLACKLIST = Arrays.<Class<?>> asList(//@formatter:off
+            ArrearsStatusGadgetMetadata.class
     );//@formatter:on
 
     @Override
@@ -117,6 +122,9 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
 
     private static boolean isVistaFeaturesCompatible(Class<? extends GadgetMetadata> gadgetMetadataClass) {
         if (VistaFeatures.instance().yardiIntegration() && YARDI_INTEGRATION_GADGETS_BLACKLIST.contains(gadgetMetadataClass)) {
+            return false;
+        }
+        if (DEPRECATED_GADGETS_BLACKLIST.contains(gadgetMetadataClass)) {
             return false;
         }
         return true;

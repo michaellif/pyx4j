@@ -24,7 +24,6 @@ import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.DashboardType;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
 import com.propertyvista.domain.dashboard.gadgets.type.ApplicationsGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
@@ -71,8 +70,7 @@ public class DashboardGenerator {
                 i18n.tr("Arrears"),
                 i18n.tr("Contains various arrears gadgets"),                
                 ArrearsSummaryGadgetMetadata.class,
-                ArrearsYOYAnalysisChartGadgetMetadata.class,
-                ArrearsStatusGadgetMetadata.class
+                ArrearsYOYAnalysisChartGadgetMetadata.class                
         );//@formatter:on    
     }
 
