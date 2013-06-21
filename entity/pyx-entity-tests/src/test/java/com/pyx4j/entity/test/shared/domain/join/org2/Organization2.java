@@ -20,7 +20,6 @@
  */
 package com.pyx4j.entity.test.shared.domain.join.org2;
 
-import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -33,7 +32,6 @@ public interface Organization2 extends IEntity {
 
     IPrimitive<String> name();
 
-    @Owned
     ISet<Department2> departments();
 
 }

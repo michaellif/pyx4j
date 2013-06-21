@@ -20,14 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain;
 
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -41,8 +39,6 @@ public interface Department extends IEntity {
     IPrimitive<String> name();
 
     @Indexed
-    // TODO fix stack overflow
-    @Detached(level = AttachLevel.Detached)
     ISet<Employee> employees();
 
     @Owner

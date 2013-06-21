@@ -25,7 +25,6 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -188,7 +187,6 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         emp11.department().set(department1);
         srv.persist(emp11);
 
-        department1.employees().setAttachLevel(AttachLevel.Attached);
         department1.employees().add(emp11);
         srv.persist(department1);
 
@@ -272,7 +270,6 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         emp11.department().set(department1);
         srv.persist(emp11);
 
-        department1.employees().setAttachLevel(AttachLevel.Attached);
         department1.employees().add(emp11);
         srv.persist(department1);
 
@@ -297,7 +294,6 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
         emp22.department().set(department2);
         srv.persist(emp22);
 
-        department2.employees().setAttachLevel(AttachLevel.Attached);
         department2.employees().add(emp21);
         department2.employees().add(emp22);
         srv.persist(department2);
@@ -495,8 +491,7 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
 
     }
 
-    //TODO
-    public void X_testCriterionOrWithJoin21() {
+    public void testCriterionOrWithJoin21() {
         String setId = uniqueString();
 
         Department2 department1 = EntityFactory.create(Department2.class);

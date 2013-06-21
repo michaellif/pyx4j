@@ -25,7 +25,6 @@ import java.util.Iterator;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.test.shared.domain.Address;
 import com.pyx4j.entity.test.shared.domain.Country;
@@ -192,7 +191,6 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         Employee employee1 = EntityFactory.create(Employee.class);
         employee1.firstName().setValue("Firstname1");
         srv.persist(employee1);
-        department.employees().setAttachLevel(AttachLevel.Attached);
         department.employees().add(employee1);
 
         Employee employee2 = EntityFactory.create(Employee.class);
@@ -208,7 +206,6 @@ public abstract class EntityPersistenceTestCase extends DatastoreTestBase {
         Assert.assertTrue("contains(emp2)", department.employees().contains(employee2));
 
         Department departmentR = srv.retrieve(Department.class, department.getPrimaryKey());
-        srv.retrieveMember(departmentR.employees());
         //System.out.println(((IFullDebug) departmentR).debugString());
 
         Assert.assertEquals("Retr. department.name", deptName, departmentR.name().getValue());

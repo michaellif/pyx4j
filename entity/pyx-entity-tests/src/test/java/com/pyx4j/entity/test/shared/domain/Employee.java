@@ -99,6 +99,8 @@ public interface Employee extends IEntity {
     @Owned
     IList<Task> tasksSorted();
 
+    // TODO fix stack overflow
+    @Detached(level = AttachLevel.IdOnly)
     Department department();
 
     interface ManagerColumnId extends ColumnId {
