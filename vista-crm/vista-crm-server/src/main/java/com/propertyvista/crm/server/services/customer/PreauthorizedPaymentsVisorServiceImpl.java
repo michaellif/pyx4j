@@ -193,7 +193,7 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
             //@formatter:off
                 if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
                     && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
-                    && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
+                  /*&& !isCoveredItemExist(papDto, billableItem)*/) {                                                                                                 // absent
             //@formatter:on
                 papDto.coveredItemsDTO().add(createCoveredItemDto(billableItem, lease, papDto.getPrimaryKey() == null));
             }

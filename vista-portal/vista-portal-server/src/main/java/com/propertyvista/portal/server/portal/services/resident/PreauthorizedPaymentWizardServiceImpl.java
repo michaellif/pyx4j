@@ -23,7 +23,9 @@ import org.apache.commons.lang.Validate;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -153,7 +155,11 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
-            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())) {
+            //@formatter:off
+            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
+                && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
+              /*&& !isCoveredItemExist(papDto, billableItem)*/) {                                                                                                 // absent
+            //@formatter:on
                 item = createCoveredItemDTO(billableItem);
                 dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
                 dto.coveredItemsDTO().add(item);
