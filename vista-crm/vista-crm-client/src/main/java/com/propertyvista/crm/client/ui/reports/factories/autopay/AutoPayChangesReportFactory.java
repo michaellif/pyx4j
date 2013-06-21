@@ -51,6 +51,7 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
             public IsWidget createContent() {
                 FormFlexPanel panel = new FormFlexPanel();
                 int row = -1;
+                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leasesOnNoticeOnly())).build());
                 panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
                 get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override

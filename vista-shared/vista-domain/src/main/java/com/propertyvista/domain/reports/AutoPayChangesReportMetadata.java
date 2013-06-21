@@ -28,6 +28,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 @Caption(name = "AutoPay Changes Report")
 public interface AutoPayChangesReportMetadata extends ReportMetadata, ExportableReport {
 
+    IPrimitive<Boolean> leasesOnNoticeOnly();
+
     IPrimitive<Boolean> filterByBuildings();
 
     IList<Building> buildings();

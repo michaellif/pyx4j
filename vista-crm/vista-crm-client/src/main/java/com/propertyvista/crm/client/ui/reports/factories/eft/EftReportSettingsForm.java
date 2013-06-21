@@ -34,6 +34,7 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leasesOnNoticeOnly())).componentWidth(10).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forthcomingEft())).componentWidth(10).build());
         get(proto().forthcomingEft()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

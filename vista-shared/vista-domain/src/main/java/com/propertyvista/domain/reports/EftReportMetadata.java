@@ -30,6 +30,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 @Caption(name = "EFT Report")
 public interface EftReportMetadata extends ReportMetadata, ExportableReport {
 
+    IPrimitive<Boolean> leasesOnNoticeOnly();
+
     IPrimitive<Boolean> onlyWithNotice();
 
     @Caption(name = "Filter by Billing Cycle")
