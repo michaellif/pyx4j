@@ -14,13 +14,18 @@
 package com.propertyvista.crm.client.ui.crud.customer.tenant;
 
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.OkDialog;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> implements TenantViewerView {
@@ -69,6 +74,13 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
             }
         });
         addAction(maintenanceAction);
+
+        addAction(new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
+            @Override
+            public void execute() {
+                ((TenantViewerView.Presenter) getPresenter()).getPortalRegistrationInformation();
+            }
+        }));
     }
 
     @Override
@@ -104,5 +116,43 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         if (VistaFeatures.instance().yardiIntegration()) {
             setActionVisible(maintenanceAction, !value.isPotentialTenant().isBooleanTrue());
         }
+    }
+
+    @Override
+    public void displayPortalRegistrationInformation(TenantPortalAccessInformationDTO info) {
+        new PortalRegistrationInformationDialog(info).show();
+    }
+
+    private static final class PortalRegistrationInformationDialog extends OkDialog {
+
+        public PortalRegistrationInformationDialog(TenantPortalAccessInformationDTO info) {
+            super(i18n.tr("Portal Registration Information"));
+            CEntityDecoratableForm<TenantPortalAccessInformationDTO> portalRegistrationInfoForm = new CEntityDecoratableForm<TenantPortalAccessInformationDTO>(
+                    TenantPortalAccessInformationDTO.class) {
+                @Override
+                public IsWidget createContent() {
+                    FormFlexPanel panel = new FormFlexPanel();
+                    int row = -1;
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address())).build());
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cityZip())).build());
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit())).build());
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().middleName())).build());
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
+                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().portalRegistrationToken())).build());
+                    return panel;
+                }
+            };
+            portalRegistrationInfoForm.initContent();
+            portalRegistrationInfoForm.setViewable(true);
+            portalRegistrationInfoForm.populate(info);
+            setBody(portalRegistrationInfoForm);
+        }
+
+        @Override
+        public boolean onClickOk() {
+            return true;
+        }
+
     }
 }

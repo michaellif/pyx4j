@@ -16,6 +16,7 @@ package com.propertyvista.crm.server.services.customer;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.server.download.Downloadable;
@@ -28,6 +29,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
 public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredProcess {
 
@@ -90,22 +92,35 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
 
     }
 
-    private void formatTenant(ReportTableFormatter formatter, Tenant tenant) {
-        formatter.cell(getAddress(tenant.lease().unit().building()));
-        formatter.cell(getCityZip(tenant.lease().unit().building()));
-        formatter.cell(tenant.lease().unit().info().number().getValue());
-        formatter.cell(tenant.customer().person().name().firstName().getStringView());
+    public static TenantPortalAccessInformationDTO convert(Tenant tenant) {
+        TenantPortalAccessInformationDTO dto = EntityFactory.create(TenantPortalAccessInformationDTO.class);
+        dto.address().setValue(getAddress(tenant.lease().unit().building()));
+        dto.cityZip().setValue(getCityZip(tenant.lease().unit().building()));
+        dto.unit().setValue(tenant.lease().unit().info().number().getValue());
+        dto.firstName().setValue(tenant.customer().person().name().firstName().getStringView());
         if (!tenant.customer().person().name().middleName().isNull()) {
-            formatter.cell(tenant.customer().person().name().middleName().getStringView());
+            dto.middleName().setValue(tenant.customer().person().name().middleName().getStringView());
         } else {
-            formatter.cell("");
+            dto.middleName().setValue("");
         }
-        formatter.cell(tenant.customer().person().name().lastName().getStringView());
-        formatter.cell(tenant.customer().portalRegistrationToken().getValue());
+        dto.lastName().setValue(tenant.customer().person().name().lastName().getStringView());
+        dto.portalRegistrationToken().setValue(tenant.customer().portalRegistrationToken().getValue());
+        return dto;
+    }
+
+    private void formatTenant(ReportTableFormatter formatter, Tenant tenant) {
+        TenantPortalAccessInformationDTO dto = convert(tenant);
+        formatter.cell(dto.address().getValue());
+        formatter.cell(dto.cityZip().getValue());
+        formatter.cell(dto.unit().getValue());
+        formatter.cell(dto.firstName().getValue());
+        formatter.cell(dto.middleName().getValue());
+        formatter.cell(dto.lastName().getValue());
+        formatter.cell(dto.portalRegistrationToken().getValue());
         formatter.newRow();
     }
 
-    private String getAddress(Building building) {
+    private static String getAddress(Building building) {
         String address = "";
         address += building.info().address().streetNumber() != null ? building.info().address().streetNumber().getValue() + " " : "";
         address += building.info().address().streetName() != null ? building.info().address().streetName().getValue() + " " : "";
@@ -113,7 +128,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
         return address;
     }
 
-    private String getCityZip(Building building) {
+    private static String getCityZip(Building building) {
         String cityZip = "";
         cityZip += building.info().address().city() != null ? building.info().address().city().getValue() + ", " : "";
         cityZip += building.info().address().province() != null ? building.info().address().province().name().getValue() + " " : "";

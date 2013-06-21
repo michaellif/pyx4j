@@ -18,6 +18,7 @@ import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
 public interface TenantViewerView extends IViewer<TenantDTO> {
 
@@ -30,5 +31,9 @@ public interface TenantViewerView extends IViewer<TenantDTO> {
         void goToCreateMaintenanceRequest();
 
         void goToChangePassword(Key tenantPrincipalPk, String tenantName);
+
+        void getPortalRegistrationInformation();
     }
+
+    public void displayPortalRegistrationInformation(TenantPortalAccessInformationDTO info);
 }

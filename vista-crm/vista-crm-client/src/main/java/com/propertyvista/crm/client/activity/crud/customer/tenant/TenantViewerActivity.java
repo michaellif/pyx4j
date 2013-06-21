@@ -37,6 +37,7 @@ import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
 public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implements TenantViewerView.Presenter {
 
@@ -101,5 +102,15 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     @Override
     public boolean canEdit() {
         return SecurityController.checkBehavior(VistaCrmBehavior.Tenants);
+    }
+
+    @Override
+    public void getPortalRegistrationInformation() {
+        ((TenantCrudService) getService()).getPortalAccessInformation(new DefaultAsyncCallback<TenantPortalAccessInformationDTO>() {
+            @Override
+            public void onSuccess(TenantPortalAccessInformationDTO result) {
+                ((TenantViewerView) getView()).displayPortalRegistrationInformation(result);
+            }
+        }, EntityFactory.createIdentityStub(Tenant.class, getEntityId()));
     }
 }

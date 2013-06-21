@@ -57,6 +57,7 @@ import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantInsuranceCertificateDTO;
+import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -202,6 +203,15 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         fillCoveredItemsDto(papDto);
 
         callback.onSuccess(papDto);
+    }
+
+    @Override
+    public void getPortalAccessInformation(AsyncCallback<TenantPortalAccessInformationDTO> callback, Tenant tenantId) {
+        Tenant tenant = Persistence.secureRetrieve(Tenant.class, tenantId.getPrimaryKey());
+        Persistence.service().retrieveMember(tenant.lease());
+        Persistence.service().retrieveMember(tenant.lease().unit().building());
+        TenantPortalAccessInformationDTO dto = ExportTenantsPortalSecretsDeferredProcess.convert(tenant);
+        callback.onSuccess(dto);
     }
 
     private void fillPreauthorizedPayments(TenantDTO dto) {

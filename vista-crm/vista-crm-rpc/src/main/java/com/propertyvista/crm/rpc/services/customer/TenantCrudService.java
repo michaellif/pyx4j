@@ -18,8 +18,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
+import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
 public interface TenantCrudService extends LeaseParticipantCrudServiceBase<TenantDTO> {
 
     void createPreauthorizedPayment(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId);
+
+    void getPortalAccessInformation(AsyncCallback<TenantPortalAccessInformationDTO> callback, Tenant tenantId);
+
 }
