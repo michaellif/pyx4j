@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.axis2.AxisFault;
 import org.apache.commons.lang.StringUtils;
@@ -203,10 +205,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
     private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
-        log.info("Import started...");
+        log.info("ResidentTransactions: Import started...");
 
         List<Property> properties = getProperties(transaction);
-
+        Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
             String propertyId = null;
             if ((property.getPropertyID() != null) && (property.getPropertyID().size() > 0)) {
@@ -222,11 +224,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                 List<Lease> activeLeases = getActiveLeases(propertyCode);
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
-                    log.info("  for {}", rtCustomer.getCustomerID());
+                    String leaseId = rtCustomer.getCustomerID();
+                    log.info("  for {}", leaseId);
 
-                    removeLease(activeLeases, rtCustomer);
+                    removeLease(activeLeases, leaseId);
 
                     try {
+
                         importUnit(propertyCode, rtCustomer);
                         executionMonitor.addProcessedEvent("Unit");
 
@@ -248,7 +252,9 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     }
                 }
 
-                closeLeases(activeLeases);
+                if (activeLeases.size() > 0) {
+                    notProcessedLeases.put(propertyCode, activeLeases);
+                }
 
             } catch (YardiServiceException e) {
                 executionMonitor.addFailedEvent("Building", propertyId, e);
@@ -261,7 +267,16 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
         }
 
-        log.info("Import complete.");
+        log.info("ResidentTransactions: Import complete.");
+
+        if (notProcessedLeases.size() > 0 && !executionMonitor.isTerminationRequested() && executionMonitor.getErred() == 0) {
+            log.info("ResidentTransactions: closing leases started.");
+            // handle all non-processed leases
+            for (String propertyCode : notProcessedLeases.keySet()) {
+                closeLeases(notProcessedLeases.get(propertyCode));
+            }
+            log.info("ResidentTransactions: closing leases complete.");
+        }
     }
 
     private Building importProperty(final Property property) throws YardiServiceException {
@@ -363,6 +378,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
         List<Property> properties = getProperties(leaseCharges);
+        Map<String, List<Lease>> notProcessedLeases = new HashMap<String, List<Lease>>();
         for (final Property property : properties) {
             String propertyCode = null;
             try {
@@ -378,26 +394,28 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 executionMonitor.addProcessedEvent("Building", propertyCode);
                 // retrieve active leases and keep track on those that have not been found in the response
                 List<Lease> activeLeases = getActiveLeases(propertyCode);
+                // process lease charges
                 for (final RTCustomer rtCustomer : property.getRTCustomer()) {
+                    if (rtCustomer.getRTServiceTransactions().getTransactions().size() == 0) {
+                        continue;
+                    }
+
+                    String leaseId = null;
                     try {
-                        Lease lease = importLeaseCharges(propertyCode, rtCustomer, executionMonitor);
-                        if (lease != null) {
-                            activeLeases.remove(lease);
+                        leaseId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
+                        if (leaseId != null) {
+                            removeLease(activeLeases, leaseId);
+                            importLeaseCharges(propertyCode, rtCustomer, executionMonitor);
                         }
                     } catch (Throwable t) {
-                        // try to get customer id
-                        String customerId = "undefined";
-                        if (rtCustomer.getRTServiceTransactions().getTransactions().size() > 0) {
-                            customerId = rtCustomer.getRTServiceTransactions().getTransactions().get(0).getCharge().getDetail().getCustomerID();
-                        }
-                        String msg = SimpleMessageFormat.format("Lease for customer {0}", customerId);
+                        String msg = SimpleMessageFormat.format("Lease {0}", leaseId == null ? "undefined" : leaseId);
                         executionMonitor.addErredEvent("Lease", msg, t);
                         log.warn(msg, t);
                     }
                 }
-                // handle all non-processed leases
-                for (Lease lease : activeLeases) {
-                    terminateLeaseCharges(lease, executionMonitor);
+
+                if (activeLeases.size() > 0) {
+                    notProcessedLeases.put(propertyCode, activeLeases);
                 }
             } catch (Throwable t) {
                 String msg = SimpleMessageFormat.format("Property {0}", propertyCode);
@@ -411,6 +429,23 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
         }
         log.info("LeaseCharges: import complete.");
+
+        if (notProcessedLeases.size() > 0 && !executionMonitor.isTerminationRequested() && executionMonitor.getErred() == 0) {
+            log.info("LeaseCharges: terminating not-received charges started.");
+            // handle all non-processed leases
+            for (String propertyCode : notProcessedLeases.keySet()) {
+                for (Lease leaseId : notProcessedLeases.get(propertyCode)) {
+                    try {
+                        terminateLeaseCharges(leaseId, executionMonitor);
+                    } catch (Throwable t) {
+                        String msg = SimpleMessageFormat.format("Lease {0}", leaseId);
+                        executionMonitor.addErredEvent("Lease", msg, t);
+                        log.warn(msg, t);
+                    }
+                }
+            }
+            log.info("LeaseCharges: terminating not-received charges complete.");
+        }
     }
 
     private Lease importLeaseCharges(final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
@@ -519,10 +554,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return Persistence.service().query(criteria);
     }
 
-    private boolean removeLease(List<Lease> leases, RTCustomer rtCustomer) {
+    private boolean removeLease(List<Lease> leases, String leaseId) {
+        if (leaseId == null) {
+            return false;
+        }
         Iterator<Lease> it = leases.iterator();
         while (it.hasNext()) {
-            if (it.next().leaseId().getValue().compareTo(YardiLeaseProcessor.getLeaseId(rtCustomer)) == 0) {
+            if (leaseId.equals(it.next().leaseId().getValue())) {
                 it.remove();
                 return true;
             }
