@@ -604,12 +604,18 @@ public class MessageTemplates {
                     .replace("${unit}", request.unit().getStringView())
                     .replace("${priority}", request.priority().getStringView())
             ;// @formatter:on
-            if (!toAdmin) {
-                String url = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH;
-                body = body.replace("${residentsUrl}", url);
+            String mrUrl = null;
+            if (toAdmin) {
+                String crmUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
+                mrUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.MaintenanceRequest().formViewerPlace(request.getPrimaryKey()));
+            } else {
+                String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
+                mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
+                        new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(request.getPrimaryKey()));
             }
+            body = body.replace("${mrUrl}", mrUrl);
             // TODO i18n body
-            template.content().setValue(body);
+            template.content().setValue(wrapAdminHtml(body));
             return template;
         } catch (IOException e) {
             throw new UserRuntimeException("Could not generate email template");
