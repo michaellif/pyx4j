@@ -29,6 +29,8 @@ public class MenuViewImpl extends FlowPanel implements MenuView {
 
     public MenuViewImpl() {
 
+        setSize("100%", "100%");
+
         Label home = createLabel("Home");
         Label profile = createLabel("Profile");
         Label settings = createLabel("Settings");
@@ -60,7 +62,11 @@ public class MenuViewImpl extends FlowPanel implements MenuView {
             getElement().getStyle().setBackgroundColor("#abc");
             setWidth("auto");
             break;
-
+        case tabletPortrait:
+        case tabletLandscape:
+            getElement().getStyle().setBackgroundColor("#caa");
+            setWidth("50px");
+            break;
         default:
             getElement().getStyle().setBackgroundColor("#caa");
             setWidth("200px");

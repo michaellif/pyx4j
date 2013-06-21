@@ -18,6 +18,10 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+
 import com.propertyvista.field.client.ui.components.menu.MenuView;
 import com.propertyvista.field.client.ui.viewfactories.FieldViewFactory;
 
@@ -32,6 +36,7 @@ public class MenuActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
     }
 
 }

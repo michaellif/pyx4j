@@ -13,12 +13,20 @@
  */
 package com.propertyvista.field.client.ui.components.footer;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.field.client.theme.FieldTheme;
 
 public class FooterViewImpl extends SimplePanel implements FooterView {
+
+    private final Label label;
 
     public FooterViewImpl() {
 
@@ -27,8 +35,24 @@ public class FooterViewImpl extends SimplePanel implements FooterView {
         getElement().getStyle().setBackgroundColor("#bca");
         setHeight("50px");
 
-        setWidget(new Label("Footer"));
+        label = new Label();
 
+        setWidget(label);
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        label.setText(layoutType.toString());
     }
 
 }
