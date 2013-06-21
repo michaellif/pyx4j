@@ -44,14 +44,13 @@ class NotificationsUtils {
 
     static List<Employee> getNotificationTraget(Building buildingId, Notification.NotificationType notificationType) {
         EntityQueryCriteria<Employee> criteria = EntityQueryCriteria.create(Employee.class);
-        criteria.eq(criteria.proto().notifications().$().type(), notificationType);
-        criteria.eq(criteria.proto().notifications().$().buildings(), buildingId);
 
-        if (false) {
-            OrCriterion or = criteria.or();
-            or.left().eq(criteria.proto().notifications().$().buildings(), buildingId);
-            or.right().eq(criteria.proto().notifications().$().portfolios().$().buildings(), buildingId);
-        }
+        OrCriterion or = criteria.or();
+        or.left().eq(criteria.proto().notifications().$().buildings(), buildingId);
+        or.left().eq(criteria.proto().notifications().$().type(), notificationType);
+        or.right().eq(criteria.proto().notifications().$().portfolios().$().buildings(), buildingId);
+        or.right().eq(criteria.proto().notifications().$().type(), notificationType);
+
         return Persistence.service().query(criteria);
     }
 }
