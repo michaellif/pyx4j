@@ -14,10 +14,8 @@ use threads;
 my ($sourcedir,$dbname) = @ARGV;
 my @filelist;
 my $filepattern = 'vista_[a-z0-9_]+\.full.sql';
-my $num_threads;
-my $max_threads = 4;
-my @threadlist;
-my @ReturnData;
+my $max_threads = 16;
+
 
 sub load_data
 {
@@ -62,28 +60,19 @@ closedir $dh;
 
 foreach my $file (@filelist)
 {
-        $file = $sourcedir.$file;
-        print "Loading file $file\n";
-        my $thread = threads->create(\&load_data, $file);      
-        @threadlist = threads->list(threads::running);
-        $num_threads = $#threadlist;
+        $file = $sourcedir.$file;     
         
-        
-        while($num_threads >= $max_threads)
+        while (scalar(threads->list(threads::running)) >= $max_threads)
         {
                 sleep(1);
-                @threadlist = threads->list(threads::running);
-                $num_threads = $#threadlist;
         }
         
-       
+        my $thread = threads->create(\&load_data, $file);
 }
 
-while($num_threads != -1)
+while(threads->list(threads::running))
 {
         sleep(1);
-        @threadlist = threads->list(threads::running);
-        $num_threads = $#threadlist;
 }
 
 exit 0;
