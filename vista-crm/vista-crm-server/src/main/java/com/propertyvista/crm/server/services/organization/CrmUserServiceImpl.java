@@ -94,7 +94,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
 
         super.persist(entity, dto);
 
-        // Update name lable in UI
+        // Update name label in UI
         Context.getVisit().getUserVisit().setName(entity.name().getStringView());
     }
 

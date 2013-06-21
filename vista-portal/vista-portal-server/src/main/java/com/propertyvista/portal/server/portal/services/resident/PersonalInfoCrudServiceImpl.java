@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
@@ -70,6 +71,9 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
 
         Persistence.service().persist(tenant);
         Persistence.service().commit();
+
+        // Update name label in UI
+        Context.getVisit().getUserVisit().setName(tenant.person().name().getStringView());
 
         callback.onSuccess(tenant.getPrimaryKey());
     }
