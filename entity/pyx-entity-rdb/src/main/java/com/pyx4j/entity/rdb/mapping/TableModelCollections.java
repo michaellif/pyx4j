@@ -114,7 +114,7 @@ public class TableModelCollections {
                 numberOfParams++;
             }
 
-            if (isList) {
+            if (isList && (!member.sqlOrderColumnName().equals(dialect.getNamingConvention().sqlIdColumnName()))) {
                 sql.append(", ").append(member.sqlOrderColumnName());
                 numberOfParams++;
             }
@@ -160,7 +160,7 @@ public class TableModelCollections {
                 parameterIndex += member.getOwnerValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, entity);
                 parameterIndex += member.getValueAdapter().bindValue(persistenceContext, stmt, parameterIndex, value);
 
-                if (isList) {
+                if (isList && (!member.sqlOrderColumnName().equals(dialect.getNamingConvention().sqlIdColumnName()))) {
                     if (dataPositions != null) {
                         seq = dataPositions.indexOf(value);
                     }
