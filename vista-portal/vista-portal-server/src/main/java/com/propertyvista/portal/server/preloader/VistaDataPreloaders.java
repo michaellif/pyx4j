@@ -19,6 +19,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.portal.server.preloader.site.blacknight.BlackNightSitePreloader;
 import com.propertyvista.portal.server.preloader.site.demo.DemoSitePreloader;
 import com.propertyvista.portal.server.preloader.site.gondor.GondorSitePreloader;
 import com.propertyvista.portal.server.preloader.site.prod.ProdSitePreloader;
@@ -72,8 +73,13 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
                 break;
             case gondor:
                 add(new GondorSitePreloader());
+                break;
+            case blacknight:
+                add(new BlackNightSitePreloader());
+                break;
             case demo:
                 add(new DemoSitePreloader());
+                break;
             default:
                 add(new ProdSitePreloader());
             }
