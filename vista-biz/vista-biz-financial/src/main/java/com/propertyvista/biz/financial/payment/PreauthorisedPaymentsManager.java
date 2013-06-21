@@ -41,6 +41,7 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
@@ -125,9 +126,14 @@ class PreauthorisedPaymentsManager {
                     criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
                     criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
 
-                    if ((reportCriteria != null) && (reportCriteria.hasExpectedMoveOutFilter)) {
-                        criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.minExpectedMoveOut);
-                        criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.maxExpectedMoveOut);
+                    if (reportCriteria != null) {
+                        if (reportCriteria.isLeasesOnNoticeOnly()) {
+                            criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
+                        }
+                        if (reportCriteria.hasExpectedMoveOutFilter()) {
+                            criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
+                            criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
+                        }
                     }
 
                     criteria.asc(criteria.proto().lease().leaseId());

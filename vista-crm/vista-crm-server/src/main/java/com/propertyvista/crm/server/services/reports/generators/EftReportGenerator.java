@@ -76,11 +76,12 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             for (LogicalDate padGenerationDate : padGenerationDays) {
-                PreauthorizedPaymentsReportCriteria params = reportMetadata.filterByExpectedMoveOut().isBooleanTrue() ? new PreauthorizedPaymentsReportCriteria(
-                        padGenerationDate, selectedBuildings, reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue())
-                        : new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
-
-                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(params));
+                PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);
+                if (reportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
+                    reportCriteria.setExpectedMoveOutCriteris(reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue());
+                }
+                reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().isBooleanTrue());
+                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria));
             }
 
             for (PaymentRecord paymentRecord : paymentRecords) {

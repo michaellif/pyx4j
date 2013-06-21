@@ -25,11 +25,13 @@ public final class PreauthorizedPaymentsReportCriteria {
 
     public final List<Building> selectedBuildings;
 
-    public final boolean hasExpectedMoveOutFilter;
+    private boolean hasExpectedMoveOutFilter;
 
-    public final LogicalDate minExpectedMoveOut;
+    private LogicalDate minExpectedMoveOut;
 
-    public final LogicalDate maxExpectedMoveOut;
+    private LogicalDate maxExpectedMoveOut;
+
+    private boolean leasesOnNoticeOnly;
 
     public PreauthorizedPaymentsReportCriteria(LogicalDate padGenerationDate, List<Building> selectedBuildings) {
         this.padGenerationDate = padGenerationDate;
@@ -39,13 +41,50 @@ public final class PreauthorizedPaymentsReportCriteria {
         this.maxExpectedMoveOut = null;
     }
 
-    public PreauthorizedPaymentsReportCriteria(LogicalDate padGenerationDate, List<Building> selectedBuildings, LogicalDate minExpectedMoveOut,
-            LogicalDate maxExpectedMoveOut) {
-        this.padGenerationDate = padGenerationDate;
-        this.selectedBuildings = selectedBuildings;
+    public void setExpectedMoveOutCriteris(LogicalDate minExpectedMoveOut, LogicalDate maxExpectedMoveOut) {
         this.hasExpectedMoveOutFilter = true;
         this.minExpectedMoveOut = minExpectedMoveOut;
         this.maxExpectedMoveOut = maxExpectedMoveOut;
+    }
+
+    public boolean hasExpectedMoveOutFilter() {
+        return hasExpectedMoveOutFilter;
+    }
+
+    public void setHasExpectedMoveOutFilter(boolean hasExpectedMoveOutFilter) {
+        this.hasExpectedMoveOutFilter = hasExpectedMoveOutFilter;
+    }
+
+    public LogicalDate getMinExpectedMoveOut() {
+        return minExpectedMoveOut;
+    }
+
+    public void setMinExpectedMoveOut(LogicalDate minExpectedMoveOut) {
+        this.minExpectedMoveOut = minExpectedMoveOut;
+    }
+
+    public LogicalDate getMaxExpectedMoveOut() {
+        return maxExpectedMoveOut;
+    }
+
+    public void setMaxExpectedMoveOut(LogicalDate maxExpectedMoveOut) {
+        this.maxExpectedMoveOut = maxExpectedMoveOut;
+    }
+
+    public LogicalDate getPadGenerationDate() {
+        return padGenerationDate;
+    }
+
+    public List<Building> getSelectedBuildings() {
+        return selectedBuildings;
+    }
+
+    public boolean isLeasesOnNoticeOnly() {
+        return leasesOnNoticeOnly;
+    }
+
+    public void setLeasesOnNoticeOnly(boolean leasesOnNoticeOnly) {
+        this.leasesOnNoticeOnly = leasesOnNoticeOnly;
     }
 
 }

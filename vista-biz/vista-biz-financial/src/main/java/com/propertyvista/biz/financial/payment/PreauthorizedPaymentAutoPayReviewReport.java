@@ -34,6 +34,7 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
@@ -57,9 +58,13 @@ class PreauthorizedPaymentAutoPayReviewReport {
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
 
-            if (reportCriteria.hasExpectedMoveOutFilter) {
-                criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.minExpectedMoveOut);
-                criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.maxExpectedMoveOut);
+            if (reportCriteria.isLeasesOnNoticeOnly()) {
+                criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
+            }
+
+            if (reportCriteria.hasExpectedMoveOutFilter()) {
+                criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
+                criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
             }
 
             criteria.asc(criteria.proto().lease().unit().building().propertyCode());

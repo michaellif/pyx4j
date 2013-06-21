@@ -65,14 +65,11 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
             selectedBuildings = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
         }
 
-        PreauthorizedPaymentsReportCriteria reportCriteria;
-
+        PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);
         if (autoPayChangesReportMetadata.filterByExpectedMoveOut().isBooleanTrue()) {
-            reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings, autoPayChangesReportMetadata.minimum().getValue(),
-                    autoPayChangesReportMetadata.maximum().getValue());
-        } else {
-            reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);
+            reportCriteria.setExpectedMoveOutCriteris(autoPayChangesReportMetadata.minimum().getValue(), autoPayChangesReportMetadata.maximum().getValue());
         }
+        reportCriteria.setLeasesOnNoticeOnly(autoPayChangesReportMetadata.leasesOnNoticeOnly().isBooleanTrue());
 
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(reportCriteria));
