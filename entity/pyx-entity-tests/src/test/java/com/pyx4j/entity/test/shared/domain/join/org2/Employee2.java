@@ -26,9 +26,12 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
 
@@ -57,5 +60,9 @@ public interface Employee2 extends IEntity {
     @JoinTable(value = Employee2.class, mappedBy = Manager2ColumnId.class)
     @Detached(level = AttachLevel.Detached)
     ISet<Employee2> employees();
+
+    @Owned
+    @OrderBy(PrimaryKey.class)
+    IList<Association2> associations();
 
 }

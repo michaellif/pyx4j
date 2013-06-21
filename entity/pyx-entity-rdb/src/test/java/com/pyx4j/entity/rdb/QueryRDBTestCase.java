@@ -39,6 +39,7 @@ import com.pyx4j.entity.test.shared.domain.Task;
 import com.pyx4j.entity.test.shared.domain.join.org1.Department1;
 import com.pyx4j.entity.test.shared.domain.join.org1.Employee1;
 import com.pyx4j.entity.test.shared.domain.join.org1.Organization1;
+import com.pyx4j.entity.test.shared.domain.join.org2.Association2;
 import com.pyx4j.entity.test.shared.domain.join.org2.Department2;
 import com.pyx4j.entity.test.shared.domain.join.org2.Employee2;
 import com.pyx4j.entity.test.shared.domain.join.org2.Organization2;
@@ -574,6 +575,159 @@ public abstract class QueryRDBTestCase extends DatastoreTestBase {
             Assert.assertEquals("result set size", 2, retrived.size());
             Assert.assertTrue(retrived.contains(organization1));
             Assert.assertTrue(retrived.contains(organization2));
+        }
+
+    }
+
+    public void testCriterionOrWithJoin22() {
+        String setId = uniqueString();
+
+        Department2 department1 = EntityFactory.create(Department2.class);
+        String dep1name = "D1 " + uniqueString();
+        department1.testId().setValue(setId);
+        department1.name().setValue(dep1name);
+        srv.persist(department1);
+
+        Organization2 organization1 = EntityFactory.create(Organization2.class);
+        organization1.testId().setValue(setId);
+        organization1.name().setValue("O1");
+        organization1.departments().add(department1);
+        srv.persist(organization1);
+
+        Employee2 emp11 = EntityFactory.create(Employee2.class);
+        String emp11Name = "E1.1 " + uniqueString();
+        emp11.testId().setValue(setId);
+        emp11.name().setValue(emp11Name);
+
+        String a1name = "a1 " + uniqueString();
+        {
+            Association2 a = emp11.associations().$();
+            a.testId().setValue(setId);
+            a.name().setValue(a1name);
+            a.departments().add(department1);
+            emp11.associations().add(a);
+        }
+
+        srv.persist(emp11);
+
+        Department2 department2 = EntityFactory.create(Department2.class);
+        String dep2name = "D2 " + uniqueString();
+        department2.testId().setValue(setId);
+        department2.name().setValue(dep2name);
+        srv.persist(department2);
+
+        Organization2 organization2 = EntityFactory.create(Organization2.class);
+        organization2.testId().setValue(setId);
+        organization2.name().setValue("O2");
+        organization2.departments().add(department2);
+        srv.persist(organization2);
+
+        Employee2 emp21 = EntityFactory.create(Employee2.class);
+        String emp21Name = "E2.1 " + uniqueString();
+        emp21.name().setValue(emp21Name);
+        emp21.testId().setValue(setId);
+
+        String a2name = "a2 " + uniqueString();
+        {
+            Association2 a = emp21.associations().$();
+            a.testId().setValue(setId);
+            a.name().setValue(a2name);
+            a.organizations().add(organization2);
+            emp21.associations().add(a);
+        }
+
+        srv.persist(emp21);
+
+        // See if it retrieve Employee2 where there are associations without organizations  (LEFT JOIN  created)
+        {
+            EntityQueryCriteria<Employee2> criteria = EntityQueryCriteria.create(Employee2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().associations().$().departments(), department1);
+            or.right().eq(criteria.proto().associations().$().organizations().$().departments(), department1);
+
+            List<Employee2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+        }
+
+        // Add association condition to above
+        {
+            EntityQueryCriteria<Employee2> criteria = EntityQueryCriteria.create(Employee2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().associations().$().departments(), department1);
+            or.left().eq(criteria.proto().associations().$().testId(), setId);
+            or.right().eq(criteria.proto().associations().$().organizations().$().departments(), department1);
+            or.right().eq(criteria.proto().associations().$().testId(), setId);
+
+            List<Employee2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+        }
+
+        // Change association condition to be more specific
+        {
+            EntityQueryCriteria<Employee2> criteria = EntityQueryCriteria.create(Employee2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().associations().$().departments(), department1);
+            or.left().eq(criteria.proto().associations().$().name(), a1name);
+            or.right().eq(criteria.proto().associations().$().organizations().$().departments(), department1);
+            or.right().eq(criteria.proto().associations().$().name(), a1name);
+
+            List<Employee2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+            Assert.assertTrue(retrived.contains(emp11));
+        }
+
+        // See if it retrieve Employee2 where there are associations without departments  (LEFT JOIN  created)
+        {
+            EntityQueryCriteria<Employee2> criteria = EntityQueryCriteria.create(Employee2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().associations().$().departments(), department2);
+            or.right().eq(criteria.proto().associations().$().organizations().$().departments(), department2);
+
+            List<Employee2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+            Assert.assertTrue(retrived.contains(emp21));
+        }
+
+        // Add association condition to above
+        {
+            EntityQueryCriteria<Employee2> criteria = EntityQueryCriteria.create(Employee2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().associations().$().departments(), department2);
+            or.left().eq(criteria.proto().associations().$().testId(), setId);
+            or.right().eq(criteria.proto().associations().$().organizations().$().departments(), department2);
+            or.right().eq(criteria.proto().associations().$().testId(), setId);
+
+            List<Employee2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+            Assert.assertTrue(retrived.contains(emp21));
+        }
+
+        // Change association condition to be more specific
+        {
+            EntityQueryCriteria<Employee2> criteria = EntityQueryCriteria.create(Employee2.class);
+            criteria.eq(criteria.proto().testId(), setId);
+
+            OrCriterion or = criteria.or();
+            or.left().eq(criteria.proto().associations().$().departments(), department2);
+            or.left().eq(criteria.proto().associations().$().name(), a2name);
+            or.right().eq(criteria.proto().associations().$().organizations().$().departments(), department2);
+            or.right().eq(criteria.proto().associations().$().name(), a2name);
+
+            List<Employee2> retrived = srv.query(criteria);
+            Assert.assertEquals("result set size", 1, retrived.size());
+            Assert.assertTrue(retrived.contains(emp21));
         }
 
     }
