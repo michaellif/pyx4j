@@ -31,6 +31,7 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
+import com.propertyvista.biz.financial.billing.LeaseProductsPriceEstimator;
 import com.propertyvista.biz.financial.billing.internal.BillingInternalFacadeImpl;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -43,10 +44,12 @@ import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -166,6 +169,11 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public BillingFacade getBillingFacade() {
         return BillingInternalFacadeImpl.instance();
+    }
+
+    @Override
+    public List<InvoiceProductCharge> estimateLeaseCharges(BillingCycle billingCycle, Lease lease) {
+        return new LeaseProductsPriceEstimator(billingCycle, lease).calculateCharges();
     }
 
 }

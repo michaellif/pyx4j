@@ -33,10 +33,12 @@ import com.propertyvista.domain.financial.billing.DebitCreditLink;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -86,4 +88,6 @@ public interface ARFacade {
     ARCode getReservedARCode(ARCode.Type type);
 
     BillingFacade getBillingFacade();
+
+    List<InvoiceProductCharge> estimateLeaseCharges(BillingCycle billingCycle, Lease lease);
 }

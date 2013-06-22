@@ -35,6 +35,7 @@ import com.propertyvista.biz.financial.ar.ARArrearsManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.billing.LeaseProductsPriceEstimator;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -46,10 +47,12 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Deposit;
+import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
@@ -116,7 +119,6 @@ public class ARYardiFacadeImpl implements ARFacade {
     @Override
     public void postDepositRefund(Deposit deposit) {
         throw new UnsupportedOperationException();
-
     }
 
     @Override
@@ -181,6 +183,11 @@ public class ARYardiFacadeImpl implements ARFacade {
     @Override
     public ARCode getReservedARCode(Type type) {
         return ARYardiTransactionManager.instance().getDefaultARCode(type);
+    }
+
+    @Override
+    public List<InvoiceProductCharge> estimateLeaseCharges(BillingCycle billingCycle, Lease lease) {
+        return new LeaseProductsPriceEstimator(billingCycle, lease).calculateCharges();
     }
 
 }
