@@ -54,7 +54,7 @@ public class PortalWebRootPaneTheme extends Theme {
         Style style = new Style(".", StyleName.MainToolbar);
         style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
         style.addProperty("width", "100%");
-        style.addProperty("height", "5em");
+        style.addProperty("height", "60px");
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Button);
@@ -70,9 +70,14 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
+        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("font-size", "1em");
+        style.addProperty("margin", "1.1em 1em");
+        addStyle(style);
+
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
         style.addProperty("font-size", "1em");
-        style.addProperty("margin", "1.1em 0.4em");
+        style.addProperty("margin", "0 0.5em");
         addStyle(style);
 
     }
