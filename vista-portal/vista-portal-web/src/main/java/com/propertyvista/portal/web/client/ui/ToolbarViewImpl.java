@@ -63,7 +63,6 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     public ToolbarViewImpl() {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainToolbar.name());
-
         getElement().getStyle().setProperty("whiteSpace", "nowrap");
 
         rightToolbar = new Toolbar();

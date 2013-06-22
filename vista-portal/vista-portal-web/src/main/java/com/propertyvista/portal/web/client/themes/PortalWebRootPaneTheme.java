@@ -52,7 +52,6 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initMainToolbarStyles() {
         Style style = new Style(".", StyleName.MainToolbar);
-        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
         style.addProperty("width", "100%");
         style.addProperty("height", "60px");
         addStyle(style);
@@ -89,7 +88,6 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initFooterStyles() {
         Style style = new Style(".", StyleName.PageFooter);
-        style.addGradient(ThemeColor.foreground, 0.6, ThemeColor.foreground, 0.55);
         style.addProperty("width", "100%");
         style.addProperty("height", "15em");
         addStyle(style);
