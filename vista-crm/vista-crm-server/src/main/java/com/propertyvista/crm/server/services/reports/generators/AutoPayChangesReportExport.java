@@ -47,6 +47,8 @@ public class AutoPayChangesReportExport {
 
     private Font redBoldFont;
 
+    private int leaseInfoColumns = 0;
+
     public ExportedReport createReport(List<AutoPayReviewDTO> reviewRecords, ReportProgressStatusHolder reportProgressStatusHolder) {
         int numOfRecords = reviewRecords.size();
         String stageName = i18n.tr("Preparing Excel Spreadsheet");
@@ -100,12 +102,16 @@ public class AutoPayChangesReportExport {
         formatter.mergeCells(2, 1);
 
         formatter.header(i18n.tr("Lease Status"));
+        leaseInfoColumns++;
         formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Lease From"));
+        leaseInfoColumns++;
         formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Lease To"));
+        leaseInfoColumns++;
         formatter.mergeCells(2, 1);
         formatter.header(i18n.tr("Expected Move Out"));
+        leaseInfoColumns++;
         formatter.mergeCells(2, 1);
 
         formatter.header(i18n.tr("Tenant Name"));
@@ -115,15 +121,15 @@ public class AutoPayChangesReportExport {
 
         formatter.header(i18n.tr("Auto Pay - Suspended"));
         formatter.mergeCells(1, 3);
-        formatter.cellEmpty(2);
+        formatter.cellsEmpty(2, false);
         formatter.header(i18n.tr("Auto Pay - Suggested"));
         formatter.mergeCells(1, 4);
-        formatter.cellEmpty(3);
+        formatter.cellsEmpty(3, false);
         formatter.header(i18n.tr("Payment Due"));
         formatter.mergeCells(2, 1);
         formatter.newRow();
 
-        formatter.cellEmpty(5);
+        formatter.cellsEmpty(5 + leaseInfoColumns, false);
         formatter.header(i18n.tr("Total Price"));
         formatter.header(i18n.tr("Payment"));
         formatter.header(i18n.tr("% of Total"));
@@ -151,14 +157,14 @@ public class AutoPayChangesReportExport {
             if (isFirstLine) {
                 isFirstLine = false;
             } else {
-                formatter.cellEmpty(3);
+                formatter.cellsEmpty(3, false);
             }
             formatter.cell(reviewPap.tenantName().getValue());
 
             boolean isFirstCharge = true;
             for (AutoPayReviewChargeDTO charge : reviewPap.items()) {
                 if (!isFirstCharge) {
-                    formatter.cellEmpty(7);
+                    formatter.cellsEmpty(4 + leaseInfoColumns, false);
                 }
 
                 formatter.cell(charge.leaseCharge().getValue());
@@ -193,10 +199,10 @@ public class AutoPayChangesReportExport {
         }
 
         // add summary for lease
-        formatter.cellEmpty(2);
+        formatter.cellsEmpty(2, false);
         formatter.header(i18n.tr("Total for lease:"));
         formatter.mergeCells(1, 3);
-        formatter.cellEmpty(2);
+        formatter.cellsEmpty(2 + leaseInfoColumns, true);
 
         formatter.cell(reviewCase.totalSuspended().totalPrice().getValue());
         formatter.cell(reviewCase.totalSuspended().payment().getValue());
@@ -263,7 +269,7 @@ public class AutoPayChangesReportExport {
     private void reportBuildingTotals(ReportTableXLSXFormatter formatter, AutoPayReviewDTO totals) {
         formatter.header(i18n.tr("Total for Building {0}:", totals.building()));
         formatter.mergeCells(1, 5);
-        formatter.cellEmpty(4);
+        formatter.cellsEmpty(4 + leaseInfoColumns, true);
 
         formatter.cell(totals.totalSuspended().totalPrice().getValue());
         formatter.cell(totals.totalSuspended().payment().getValue());
