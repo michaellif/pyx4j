@@ -30,7 +30,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class ResponsiveLayoutTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyHeaderHolder, ResponsiveLayoutFooterHolder;
+        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyHeaderHolder, ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder;
     }
 
     public ResponsiveLayoutTheme() {
@@ -54,6 +54,10 @@ public class ResponsiveLayoutTheme extends Theme {
 
         style = new Style(".", StyleName.ResponsiveLayoutFooterHolder);
         style.addGradient(ThemeColor.foreground, 0.6, ThemeColor.foreground, 0.55);
+        addStyle(style);
+
+        style = new Style(".", StyleName.ResponsiveLayoutContentHolder);
+        style.addProperty("min-height", "400px");
         addStyle(style);
 
     }

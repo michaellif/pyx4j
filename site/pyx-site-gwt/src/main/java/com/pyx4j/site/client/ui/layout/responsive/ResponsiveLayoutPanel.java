@@ -115,6 +115,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         getStickyHeaderDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         FlowPanel contentHolder = new FlowPanel();
+        contentHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
         contentHolder.getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         contentHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
         contentHolder.getElement().getStyle().setPosition(Position.RELATIVE);
