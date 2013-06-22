@@ -36,7 +36,7 @@ public class DefaultWidgetsTheme extends Theme {
 
         StatusBar,
 
-        Button, ButtonContent, ButtonText,
+        Button, ButtonText,
 
         Anchor,
 
@@ -139,9 +139,6 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("-ms-user-select", "none");
         style.addProperty("user-select", "none");
 
-        addStyle(style);
-
-        style = new Style(".", StyleName.ButtonContent);
         addStyle(style);
 
         style = new Style(".", StyleName.ButtonText);

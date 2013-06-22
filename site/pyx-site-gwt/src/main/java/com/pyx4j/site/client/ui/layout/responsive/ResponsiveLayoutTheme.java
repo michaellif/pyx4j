@@ -46,6 +46,7 @@ public class ResponsiveLayoutTheme extends Theme {
         Style style = new Style(".", StyleName.ResponsiveLayoutMainHolder);
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("max-width", "1200px");
+        style.addProperty("min-width", "320px");
 
         addStyle(style);
     }

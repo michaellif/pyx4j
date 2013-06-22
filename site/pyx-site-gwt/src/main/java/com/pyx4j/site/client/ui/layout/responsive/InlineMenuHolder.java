@@ -46,6 +46,7 @@ public class InlineMenuHolder extends SimplePanel {
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
                 getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);
             }
+            getWidget().getElement().getStyle().setProperty("height", "auto");
         }
     }
 

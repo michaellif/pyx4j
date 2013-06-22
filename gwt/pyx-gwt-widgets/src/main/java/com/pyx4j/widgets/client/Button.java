@@ -52,13 +52,13 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private final SimplePanel imageHolder;
 
-    private final ImageResource imageResource;
+    private ImageResource imageResource;
 
     private final ButtonFacesHandler buttonFacesHandler;
 
-    private DropDownPanel popup;
-
     private Command command;
+
+    private ButtonMenuBar menu;
 
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
@@ -89,8 +89,6 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     protected Button(ButtonFacesHandler facesHandler, ImageResource imageResource, String text) {
 
-        this.imageResource = imageResource;
-
         setStylePrimaryName(getElement(), DefaultWidgetsTheme.StyleName.Button.name());
 
         buttonFacesHandler = facesHandler;
@@ -98,28 +96,31 @@ public class Button extends FocusPanel implements IFocusWidget {
         facesHandler.init(this);
 
         textLabel = new HTML();
-        setTextLabel(text);
+        if (text == null) {
+            setTextLabel("");
+        } else {
+            setTextLabel(text);
+        }
 
         textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
         imageHolder = new SimplePanel();
+        imageHolder.getElement().getStyle().setProperty("height", "100%");
 
         imageHolder.setWidget(textLabel);
 
         setWidget(imageHolder);
 
-        if (imageResource != null) {
-            setImageVisible(true);
-        }
+        setImageResource(imageResource);
 
         super.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (popup != null) {
-                    if (popup.isShowing()) {
-                        popup.hide();
+                if (menu != null) {
+                    if (menu.getMenuPopup().isShowing()) {
+                        menu.getMenuPopup().hide();
                     } else if (isEnabled()) {
-                        popup.showRelativeTo(Button.this);
+                        menu.getMenuPopup().showRelativeTo(Button.this);
                     }
                 } else {
                     if (isEnabled() && (command != null)) {
@@ -151,22 +152,21 @@ public class Button extends FocusPanel implements IFocusWidget {
         return super.addClickHandler(wrapper);
     }
 
+    @Deprecated
     public ButtonMenuBar createMenu() {
         ButtonMenuBar menu = new ButtonMenuBar();
         return menu;
     }
 
     public void setMenu(ButtonMenuBar menu) {
+        this.menu = menu;
         if (menu == null) {
-            popup = null;
             textLabel.getElement().getStyle().setProperty("paddingRight", "0");
             textLabel.getElement().getStyle().setProperty("background", "none");
         } else {
             Image menuIndicator = new Image(ImageFactory.getImages().viewMenu());
             textLabel.getElement().getStyle().setProperty("paddingRight", (menuIndicator.getWidth() + 5) + "px");
-            textLabel.getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right 90%");
-            popup = new DropDownPanel();
-            popup.setWidget(menu);
+            textLabel.getElement().getStyle().setProperty("background", "url('" + menuIndicator.getUrl() + "') no-repeat scroll right center");
         }
     }
 
@@ -189,19 +189,16 @@ public class Button extends FocusPanel implements IFocusWidget {
         setTitle(text);
     }
 
-    public void setImageVisible(boolean visible) {
+    public void setImageResource(ImageResource imageResource) {
+        this.imageResource = imageResource;
         if (imageResource != null) {
-            if (visible) {
-                imageHolder.getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
-                imageHolder.getElement().getStyle().setProperty("height", "100%");
-                imageHolder.getElement().getStyle()
-                        .setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
-            } else {
-                imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
-                imageHolder.getElement().getStyle().setProperty("background", "none");
-            }
-
+            imageHolder.getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
+            imageHolder.getElement().getStyle().setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
+        } else {
+            imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
+            imageHolder.getElement().getStyle().setProperty("background", "none");
         }
+
     }
 
     public void click() {
@@ -336,12 +333,16 @@ public class Button extends FocusPanel implements IFocusWidget {
         return false;
     }
 
-    public class ButtonMenuBar extends MenuBar {
+    public static class ButtonMenuBar extends MenuBar {
+
+        private final DropDownPanel popup;
 
         public ButtonMenuBar() {
             super(true);
             setAutoOpen(true);
             setAnimationEnabled(true);
+            popup = new DropDownPanel();
+            popup.setWidget(this);
         }
 
         @Override
@@ -377,6 +378,10 @@ public class Button extends FocusPanel implements IFocusWidget {
         @Override
         public List<MenuItem> getItems() {
             return super.getItems();
+        }
+
+        public DropDownPanel getMenuPopup() {
+            return popup;
         }
     }
 }

@@ -177,9 +177,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.footer);
     }
 
-    public void forceLayout() {
+    public void forceLayout(int animationTime) {
         doLayout();
-        pageLayout.layout(ANIMATION_TIME);
+        pageLayout.layout(animationTime);
         resizeComponents();
         AppSite.getEventBus().fireEvent(new LayoutChangeEvent(layoutType));
     }
@@ -219,7 +219,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
 
         if (previousLayoutType != layoutType) {
-            forceLayout();
+            forceLayout(0);
         } else {
             resizeComponents();
         }
@@ -240,7 +240,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     @Override
     protected void onLoad() {
         super.onLoad();
-        forceLayout();
+        forceLayout(0);
     }
 
     private boolean isSideMenuEnabled() {
@@ -251,7 +251,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     private void setSideMenuVisible(boolean visible) {
         if (this.sideMenuVisible != visible) {
             this.sideMenuVisible = visible;
-            forceLayout();
+            forceLayout(ANIMATION_TIME);
         }
     }
 
