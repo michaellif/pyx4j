@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.AppSite;
@@ -44,6 +45,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.Chan
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
+
+    public static final int MAX_WIDTH = 1200;
 
     public enum LayoutType {
 
@@ -102,17 +105,18 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         FlowPanel mainHolder = new FlowPanel();
         mainHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
-        mainHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-
         mainScroll = new ScrollPanel(mainHolder);
 
         sideMenuHolder = new SideMenuHolder();
 
-        getStickyHeaderDisplay().getElement().getStyle().setZIndex(10);
         stickyHeaderHolder = new StickyHeaderHolder();
         stickyHeaderHolder.setWidget(getStickyHeaderDisplay());
+        getStickyHeaderDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        getStickyHeaderDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         FlowPanel contentHolder = new FlowPanel();
+        contentHolder.getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        contentHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
         contentHolder.getElement().getStyle().setPosition(Position.RELATIVE);
 
         inlineMenuHolder = new InlineMenuHolder(stickyHeaderHolder);
@@ -128,10 +132,15 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
             }
         });
 
+        SimplePanel footerHolder = new SimplePanel(getFooterDisplay());
+        footerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
+        getFooterDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        getFooterDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+
         mainHolder.add(getHeaderDisplay());
         mainHolder.add(stickyHeaderHolder);
         mainHolder.add(contentHolder);
-        mainHolder.add(getFooterDisplay());
+        mainHolder.add(footerHolder);
 
         // ============ Content Layer ============
         {

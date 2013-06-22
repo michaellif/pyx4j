@@ -23,10 +23,23 @@ package com.pyx4j.site.client.ui.layout.responsive;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class StickyHeaderHolder extends SimplePanel {
 
+    private final SimplePanel stickyHeaderContainer;
+
     public StickyHeaderHolder() {
+        stickyHeaderContainer = new SimplePanel();
+        stickyHeaderContainer.getElement().getStyle().setZIndex(10);
+        super.setWidget(stickyHeaderContainer);
+        stickyHeaderContainer.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyHeaderHolder.name());
+
+    }
+
+    @Override
+    public void setWidget(Widget w) {
+        stickyHeaderContainer.setWidget(w);
     }
 
     public void onPositionChange() {
