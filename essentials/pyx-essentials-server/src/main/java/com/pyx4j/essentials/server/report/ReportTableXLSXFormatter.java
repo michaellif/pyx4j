@@ -223,8 +223,14 @@ public class ReportTableXLSXFormatter implements ReportTableFormatter {
         this.cellIdx++;
     }
 
-    public void cellEmpty(int count) {
-        this.cellIdx += count;
+    public void cellsEmpty(int count, boolean create) {
+        if (create) {
+            for (int c = 0; c < count; c++) {
+                createCell();
+            }
+        } else {
+            this.cellIdx += count;
+        }
     }
 
     public Cell createCell() {
