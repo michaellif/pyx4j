@@ -50,6 +50,7 @@ public class PortalWebTheme extends Theme {
     protected void initStyles() {
         initGeneralStyles();
         initBodyStyles();
+        initMenuBarStyles();
 
         addTheme(new PortalWebRootPaneTheme());
 
@@ -221,6 +222,11 @@ public class PortalWebTheme extends Theme {
         style.addProperty("margin-left", "40px");
         style.addProperty("margin-right", "40px");
         addStyle(style);
+
+        style = new Style(".gwt-DropDownPanel");
+        style.addProperty("z-index", "20");
+        addStyle(style);
+
     }
 
     protected void initBodyStyles() {
@@ -232,6 +238,52 @@ public class PortalWebTheme extends Theme {
         style.addProperty("font", "12px/14px Arial, Helvetica, sans-serif");
         addStyle(style);
 
+    }
+
+    protected void initMenuBarStyles() {
+        Style style = new Style(".gwt-MenuBar");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("color", ThemeColor.foreground, 0.2);
+        addStyle(style);
+
+        style = new Style(".gwt-MenuItem");
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("background-color", ThemeColor.foreground, 0.2);
+        style.addProperty("background", "transparent");
+        style.addProperty("color", "#E5F0E1");
+        style.addProperty("border", "0");
+        addStyle(style);
+
+        style = new Style(".gwt-MenuItem-selected");
+        style.addProperty("background", ThemeColor.foreground, 0.8);
+        style.addProperty("cursor", "pointer");
+        style.addProperty("cursor", "hand");
+        style.addProperty("text-decoration", "underline");
+        style.addProperty("background", "transparent");
+        addStyle(style);
+
+        style = new Style(".gwt-MenuBar-vertical");
+        style.addProperty("margin-top", "0px");
+        style.addProperty("margin-left", "0px");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-color", ThemeColor.foreground, 0.2);
+        style.addProperty("background", "#FFFFFF");
+        addStyle(style);
+
+        style = new Style(".gwt-MenuBar-vertical .gwt-MenuItem");
+        style.addProperty("padding", "4px 14px 4px 1px");
+        style.addProperty("color", "#666666");
+        addStyle(style);
+
+        style = new Style(".gwt-MenuBar-horizontal");
+        addStyle(style);
+
+        style = new Style(".gwt-MenuBar-horizontal .gwt-MenuItem");
+        style.addProperty("vertical-align", "bottom");
+        style.addProperty("background", "transparent");
+        addStyle(style);
     }
 
     private void initTenantInsuranceStyles() {

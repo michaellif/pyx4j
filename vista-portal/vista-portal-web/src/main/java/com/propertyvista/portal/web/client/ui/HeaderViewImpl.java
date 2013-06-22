@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.ui;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
@@ -26,7 +27,12 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
         Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
-        setWidget(logoImage);
+
+        SimplePanel logoHolder = new SimplePanel(logoImage);
+        logoHolder.setWidth("200px");
+
+        logoHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        setWidget(logoHolder);
 
     }
 

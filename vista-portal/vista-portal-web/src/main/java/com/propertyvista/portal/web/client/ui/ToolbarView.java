@@ -13,7 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
+
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public interface ToolbarView extends IsWidget {
 
@@ -29,10 +33,13 @@ public interface ToolbarView extends IsWidget {
 
         void showProfile();
 
+        void setLocale(CompiledLocale locale);
     }
 
     void onLogedOut();
 
     void onLogedIn(String userName);
+
+    void setAvailableLocales(List<CompiledLocale> locales);
 
 }

@@ -13,19 +13,29 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.FontWeight;
-import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import java.util.List;
+
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.MenuItem;
 
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.Button.ButtonMenuBar;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.common.client.ClientNavigUtils;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
@@ -33,63 +43,103 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private ToolbarPresenter presenter;
 
-    private final Anchor greetings;
+    private final Button loginButton;
 
-    private final Anchor logout;
+    private final Button tenantButton;
 
-    private final Anchor login;
+    private final MenuItem myProfileMenu;
+
+    private final MenuItem myAccountMenu;
+
+    private final MenuItem logoutMenu;
+
+    private final Button sideMenuButton;
+
+    private final Button languageButton;
+
+    private final Image brandImage;
+
+    private final Toolbar rightToolbar;
 
     public ToolbarViewImpl() {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainToolbar.name());
 
-        SimplePanel toolbarHolder = new SimplePanel();
-        toolbarHolder.setStyleName(PortalWebRootPaneTheme.StyleName.MainToolbarActions.name());
-        Toolbar toolbar = new Toolbar();
-        toolbarHolder.setWidget(toolbar);
-        add(toolbarHolder);
+        getElement().getStyle().setProperty("whiteSpace", "nowrap");
 
-        greetings = new Anchor(null);
-        greetings.addClickHandler(new ClickHandler() {
+        rightToolbar = new Toolbar();
+        rightToolbar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
+        tenantButton = new Button("");
+        ButtonMenuBar tenantButtonMenu = new ButtonMenuBar();
+
+        myProfileMenu = new MenuItem(i18n.tr("My Profile"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                presenter.showProfile();
+            }
+        });
+        tenantButtonMenu.addItem(myProfileMenu);
+
+        myAccountMenu = new MenuItem(i18n.tr("My Account"), new Command() {
+            @Override
+            public void execute() {
                 presenter.showAccount();
             }
         });
-        greetings.ensureDebugId("account");
-        greetings.asWidget().getElement().getStyle().setDisplay(Display.INLINE);
-        greetings.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        greetings.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        tenantButtonMenu.addItem(myAccountMenu);
 
-        logout = new Anchor(null);
-        logout.addClickHandler(new ClickHandler() {
+        logoutMenu = new MenuItem(i18n.tr("Logout"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.logout();
             }
         });
+        tenantButtonMenu.addItem(logoutMenu);
 
-        logout.ensureDebugId("logout");
-        logout.setHTML(i18n.tr("Log Out"));
-        logout.setVisible(false);
-        logout.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        tenantButton.setMenu(tenantButtonMenu);
 
-        login = new Anchor(null);
-        login.addClickHandler(new ClickHandler() {
+        loginButton = new Button(i18n.tr("Log In"), new Command() {
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
                 presenter.login();
             }
         });
+        loginButton.ensureDebugId("login");
 
-        login.ensureDebugId("login");
-        login.setHTML(i18n.tr("Log In"));
-        login.asWidget().getElement().getStyle().setMarginRight(1, Unit.EM);
+        languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
 
-        toolbar.add(greetings);
-        toolbar.add(login);
-        toolbar.add(logout);
+        rightToolbar.add(loginButton);
+        rightToolbar.add(tenantButton);
+        rightToolbar.add(languageButton);
 
+        Toolbar leftToolbar = new Toolbar();
+        leftToolbar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+        sideMenuButton = new Button(PortalImages.INSTANCE.menu(), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
+            }
+        });
+        leftToolbar.add(sideMenuButton);
+
+        brandImage = new Image(PortalImages.INSTANCE.brand());
+        brandImage.getElement().getStyle().setProperty("margin", "5px");
+        brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
+
+        add(brandImage);
+        add(leftToolbar);
+        add(rightToolbar);
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
     }
 
     @Override
@@ -99,18 +149,50 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     @Override
     public void onLogedOut() {
-        logout.setVisible(false);
-        login.setVisible(true);
-        greetings.setVisible(false);
-        greetings.setHTML("");
+        loginButton.setVisible(true);
+        tenantButton.setVisible(false);
+        tenantButton.setTextLabel("");
     }
 
     @Override
     public void onLogedIn(String userName) {
-        logout.setVisible(true);
-        login.setVisible(false);
-        greetings.setHTML(i18n.tr("Welcome {0}", userName));
-        greetings.setVisible(true);
+        loginButton.setVisible(false);
+        tenantButton.setVisible(true);
+        tenantButton.setTextLabel(userName);
+        tenantButton.setImageResource(PortalImages.INSTANCE.avatar());
     }
 
+    @Override
+    public void setAvailableLocales(List<CompiledLocale> localeList) {
+        languageButton.setMenu(null);
+        ButtonMenuBar menuBar = new ButtonMenuBar();
+        for (final CompiledLocale compiledLocale : localeList) {
+            Command changeLanguage = new Command() {
+                @Override
+                public void execute() {
+                    presenter.setLocale(compiledLocale);
+                }
+            };
+            MenuItem item = new MenuItem(compiledLocale.getNativeDisplayName(), changeLanguage);
+            menuBar.addItem(item);
+        }
+        languageButton.setMenu(menuBar);
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+            sideMenuButton.setVisible(true);
+            rightToolbar.setVisible(false);
+            brandImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+            break;
+
+        default:
+            sideMenuButton.setVisible(false);
+            rightToolbar.setVisible(true);
+            brandImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            break;
+        }
+    }
 }

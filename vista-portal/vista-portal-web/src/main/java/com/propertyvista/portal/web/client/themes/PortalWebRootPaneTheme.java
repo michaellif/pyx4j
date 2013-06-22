@@ -20,13 +20,14 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
+import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
 public class PortalWebRootPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         PageHeader, PageFooter,
 
-        MainToolbar, MainToolbarActions,
+        MainToolbar,
 
         MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel;
     }
@@ -56,9 +57,24 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("height", "5em");
         addStyle(style);
 
-        style = new Style(" .", StyleName.MainToolbarActions);
-        style.addProperty("float", "right");
+        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("height", "2.6em");
+        style.addProperty("line-height", "2.6em");
+        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
+        style.addProperty("background", ThemeColor.foreground, 0.7);
+        style.addProperty("border-color", ThemeColor.foreground, 0.75);
+        style.addProperty("border-radius", "5px");
         addStyle(style);
+
+        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+        style.addProperty("font-size", "1em");
+        style.addProperty("margin", "1.1em 0.4em");
+        addStyle(style);
+
     }
 
     private void initMainMStyles() {

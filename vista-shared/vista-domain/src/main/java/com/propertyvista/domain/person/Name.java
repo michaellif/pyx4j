@@ -47,24 +47,22 @@ public interface Name extends IEntity {
         }
     }
 
-    @ToString(index = 1, sortable = false)
     IPrimitive<Prefix> namePrefix();
 
     @NotNull
-    @ToString(index = 2)
+    @ToString(index = 1)
     @BusinessEqualValue
     IPrimitive<String> firstName();
 
-    @ToString(index = 3, sortable = false)
+    @ToString(index = 2, sortable = false)
     IPrimitive<String> middleName();
 
     @NotNull
-    @ToString(index = 4)
+    @ToString(index = 3)
     @BusinessEqualValue
     IPrimitive<String> lastName();
 
     IPrimitive<String> maidenName();
 
-    @ToString(index = 5, sortable = false)
     IPrimitive<String> nameSuffix();
 }

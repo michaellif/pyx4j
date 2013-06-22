@@ -56,9 +56,9 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
 
     private HTML thisIsDemo;
 
-    MenuBar languageMenu;
+    private MenuBar languageMenu;
 
-    MenuBar languages;
+    private MenuBar languages;
 
     private Anchor getSatisfaction;
 
@@ -100,7 +100,8 @@ public class HeaderViewImpl extends HorizontalPanel implements HeaderView {
             logoContainer.setWidget(logoImage);
             logoElement = logoImage;
         } else {
-            HTML logoHtml = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "") + "</h1>");
+            HTML logoHtml = new HTML("<h1>" + (brandedHeader != null ? new SafeHtmlBuilder().appendEscaped(brandedHeader).toSafeHtml().asString() : "")
+                    + "</h1>");
             logoHtml.getElement().getStyle().setCursor(Cursor.POINTER);
 
             logoContainer.setWidget(logoHtml);

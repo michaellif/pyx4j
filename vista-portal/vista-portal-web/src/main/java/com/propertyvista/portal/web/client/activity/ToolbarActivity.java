@@ -25,9 +25,11 @@ import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.web.client.ui.ToolbarView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
+import com.propertyvista.shared.i18n.CompiledLocale;
 
 public class ToolbarActivity extends AbstractActivity implements ToolbarView.ToolbarPresenter {
 
@@ -57,6 +59,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
                 updateAuthenticatedView();
             }
         });
+
+        obtainAvailableLocales();
     }
 
     private void updateAuthenticatedView() {
@@ -85,5 +89,14 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
     @Override
     public void showProfile() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ProfileViewer());
+    }
+
+    private void obtainAvailableLocales() {
+        view.setAvailableLocales(ClientNavigUtils.obtainAvailableLocales());
+    }
+
+    @Override
+    public void setLocale(CompiledLocale locale) {
+        ClientNavigUtils.changeApplicationLocale(locale);
     }
 }
