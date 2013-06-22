@@ -14,17 +14,19 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class FooterViewImpl extends SimplePanel implements FooterView {
+public class FooterViewImpl extends FlowPanel implements FooterView {
 
     private final Label label;
 
@@ -34,7 +36,12 @@ public class FooterViewImpl extends SimplePanel implements FooterView {
 
         label = new Label();
 
-        setWidget(label);
+        Image brandImage = new Image(PortalImages.INSTANCE.brand());
+        brandImage.getElement().getStyle().setProperty("margin", "5px");
+        brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
+
+        add(brandImage);
+        add(label);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
