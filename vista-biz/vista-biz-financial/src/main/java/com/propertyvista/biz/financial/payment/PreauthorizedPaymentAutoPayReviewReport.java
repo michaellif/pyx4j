@@ -287,6 +287,8 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
                 AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
 
+                chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
+
                 chargeReview.suspended().billableItem().set(coveredItem.billableItem().createIdentityStub());
                 chargeReview.suspended().totalPrice().setValue(getActualPrice(coveredItem.billableItem()));
                 chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
