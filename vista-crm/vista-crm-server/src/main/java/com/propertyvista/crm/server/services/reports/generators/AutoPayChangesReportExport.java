@@ -157,7 +157,7 @@ public class AutoPayChangesReportExport {
             if (isFirstLine) {
                 isFirstLine = false;
             } else {
-                formatter.cellsEmpty(3, false);
+                formatter.cellsEmpty(3 + leaseInfoColumns, false);
             }
             formatter.cell(reviewPap.tenantName().getValue());
 
