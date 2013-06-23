@@ -57,6 +57,16 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableDialog<AptUn
     @Override
     protected List<ColumnDescriptor> defineColumnDescriptors() {
         return Arrays.asList(//@formatter:off
+                // unit data
+                new MemberColumnDescriptor.Builder(proto().info().floor(), false).build(),
+                new MemberColumnDescriptor.Builder(proto().info().number(), true).build(),
+                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
+                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
+                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
+                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build(),
+
                 // building data                
                 new MemberColumnDescriptor.Builder(proto().building().propertyCode(), true).build(),
                 new MemberColumnDescriptor.Builder(proto().building().complex(), false).build(),
@@ -91,17 +101,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableDialog<AptUn
                 new MemberColumnDescriptor.Builder(proto().building().financial().lastAppraisalValue(), false).build(),
                 new MemberColumnDescriptor.Builder(proto().building().financial().currency().name(), false).title(proto().building().financial().currency())
                         .build(),
-                new MemberColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build(),
-
-                // unit data
-                new MemberColumnDescriptor.Builder(proto().info().floor(), false).build(),
-                new MemberColumnDescriptor.Builder(proto().info().number(), true).build(),
-                new MemberColumnDescriptor.Builder(proto().info().area()).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bedrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().info()._bathrooms()).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().name()).title(i18n.tr("Floorplan")).build(),
-                new MemberColumnDescriptor.Builder(proto().floorplan().marketingName(), false).build(),
-                new MemberColumnDescriptor.Builder(proto()._availableForRent()).build()
+                new MemberColumnDescriptor.Builder(proto().building().marketing().name(), false).title(i18n.tr("Building Marketing Name")).build()
                 ); //@formatter:on
     }
 
