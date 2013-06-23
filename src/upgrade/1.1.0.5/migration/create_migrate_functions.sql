@@ -165,6 +165,7 @@ BEGIN
         IF EXISTS (SELECT 'x' FROM _admin_.admin_pmc a JOIN _admin_.admin_pmc_vista_features f 
                         ON (a.features = f.id AND f.yardi_integration AND a.namespace = v_schema_name ))
         THEN
+                              
                 
                 /**     Set expiring to '2013-06-29' for preauthorized_payment  **/
                 
@@ -189,6 +190,27 @@ BEGIN
                                 
                         EXECUTE 'DELETE FROM '||v_schema_name||'.billable_item WHERE id = '||v_billable_item;
                 END LOOP;
+                
+                
+                /** Change a way uid is set - uid + sequential number grouped by lease_term, lease_version  **/
+                
+                EXECUTE 'WITH t AS (    SELECT  ltf.owner,ltv.version_number,b.uid, b.id,  '
+                        ||'                     row_number() OVER (PARTITION BY ltf.owner,ltv.version_number,b.uid ORDER BY b.id) '
+                        ||'             FROM    '||v_schema_name||'.lease_term_v ltv '
+                        ||'             JOIN    '||v_schema_name||'.lease_term_vlease_products$feature_items ltf ON (ltv.id = ltf.owner) '
+                        ||'             JOIN    '||v_schema_name||'.billable_item b ON (ltf.value = b.id) '
+                        ||'             ORDER BY b.id ) '
+                        ||'UPDATE       '||v_schema_name||'.billable_item AS b '
+                        ||'SET  uid = b.uid||'':''||t.row_number '
+                        ||'FROM t '
+                        ||'WHERE b.id = t.id ';
+                
+                
+                EXECUTE 'UPDATE '||v_schema_name||'.billable_item '
+                        ||'SET  uid = uid||'':1'' '
+                        ||'WHERE uid = ''rrent'' ';
+                
+                
         END IF;
         
         
