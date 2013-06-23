@@ -37,10 +37,10 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResize, ProvidesResize, LayoutChangeRerquestHandler {
@@ -70,7 +70,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public enum Display {
-        header, stickyHeader, menu, content, footer
+        header, stickyHeader, menu, content, footer, notifications
     }
 
     private static final int ANIMATION_TIME = 500;
@@ -85,9 +85,15 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SideMenuHolder sideMenuHolder;
 
+    private final PopupNotificationsHolder popupNotificationsHolder;
+
+    private final SideMenuHolder sideNotificationsHolder;
+
     private final ScrollPanel mainScroll;
 
     private boolean sideMenuVisible = false;
+
+    private boolean sideNotificationsVisible = false;
 
     private LayoutType layoutType;
 
@@ -105,8 +111,6 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         FlowPanel mainHolder = new FlowPanel();
         mainHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
         mainScroll = new ScrollPanel(mainHolder);
-
-        sideMenuHolder = new SideMenuHolder();
 
         stickyHeaderHolder = new StickyHeaderHolder();
         stickyHeaderHolder.setWidget(getStickyHeaderDisplay());
@@ -132,6 +136,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
             }
         });
 
+        popupNotificationsHolder = new PopupNotificationsHolder();
+
         SimplePanel footerHolder = new SimplePanel(getFooterDisplay());
         footerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
         getFooterDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
@@ -153,11 +159,26 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         // ============ Side Menu Layer ============
         {
+
+            sideMenuHolder = new SideMenuHolder();
+
             Layer layer = pageLayout.attachChild(sideMenuHolder.asWidget().getElement(), sideMenuHolder);
             sideMenuHolder.setLayoutData(layer);
 
             getChildren().add(sideMenuHolder);
             adopt(sideMenuHolder);
+        }
+
+        // ============ Side Notifications Layer ============
+        {
+
+            sideNotificationsHolder = new SideMenuHolder();
+
+            Layer layer = pageLayout.attachChild(sideNotificationsHolder.asWidget().getElement(), sideNotificationsHolder);
+            sideNotificationsHolder.setLayoutData(layer);
+
+            getChildren().add(sideNotificationsHolder);
+            adopt(sideNotificationsHolder);
         }
 
         AppSite.getEventBus().addHandler(LayoutChangeRerquestEvent.TYPE, this);
@@ -182,6 +203,10 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.menu);
     }
 
+    public DisplayPanel getNotificationsDisplay() {
+        return displays.get(Display.notifications);
+    }
+
     public DisplayPanel getFooterDisplay() {
         return displays.get(Display.footer);
     }
@@ -199,23 +224,32 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case phonePortrait:
         case phoneLandscape:
             sideMenuHolder.setWidget(getMenuDisplay());
+            sideNotificationsHolder.setWidget(getNotificationsDisplay());
             getHeaderDisplay().setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
             inlineMenuHolder.setWidget(getMenuDisplay());
+            popupNotificationsHolder.setWidget(getNotificationsDisplay());
             getHeaderDisplay().setVisible(true);
             break;
         }
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
+        Layer notifications = (Layer) sideNotificationsHolder.getLayoutData();
         Layer mainLayer = (Layer) mainScroll.getLayoutData();
 
         if (sideMenuVisible) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
+            notifications.setLeftWidth(175.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
+        } else if (sideNotificationsVisible) {
+            menuLayer.setLeftWidth(-150.0, Unit.PCT, 75.0, Unit.PCT);
+            notifications.setLeftWidth(25.0, Unit.PCT, 75.0, Unit.PCT);
+            mainLayer.setLeftWidth(-75.0, Unit.PCT, 100.0, Unit.PCT);
         } else {
             menuLayer.setLeftWidth(-75.0, Unit.PCT, 75.0, Unit.PCT);
+            notifications.setLeftWidth(100.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
         }
 
@@ -253,6 +287,16 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
+    private boolean isSideNotificationsEnabled() {
+        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+        return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
+    }
+
+    private boolean isPopupNotificationsEnabled() {
+        LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
+        return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType);
+    }
+
     private void setSideMenuVisible(boolean visible) {
         if (this.sideMenuVisible != visible) {
             this.sideMenuVisible = visible;
@@ -260,22 +304,44 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
     }
 
+    private void setSideNotificationsVisible(boolean visible) {
+        if (this.sideNotificationsVisible != visible) {
+            this.sideNotificationsVisible = visible;
+            forceLayout(ANIMATION_TIME);
+        }
+    }
+
+    private void togglePopupNotificationsVisible(Widget anchor) {
+        if (!popupNotificationsHolder.isShowing()) {
+            popupNotificationsHolder.showRelativeTo(anchor);
+        } else {
+            popupNotificationsHolder.hide();
+        }
+    }
+
     @Override
     public void onLayoutChangeRerquest(LayoutChangeRerquestEvent event) {
-        for (ChangeType changeType : event.getChangeTypes()) {
-            switch (changeType) {
-            case toggleSideMenu:
-                if (isSideMenuEnabled()) {
-                    setSideMenuVisible(!sideMenuVisible);
-                }
-                break;
-            case resizeComponents:
-                resizeComponents();
-                break;
-            default:
-                break;
+        switch (event.getChangeType()) {
+        case toggleSideMenu:
+            if (isSideMenuEnabled()) {
+                setSideMenuVisible(!sideMenuVisible);
             }
+            break;
+        case toggleSideNotifications:
+            if (isSideNotificationsEnabled()) {
+                setSideNotificationsVisible(!sideNotificationsVisible);
+            }
+            break;
+        case togglePopupNotifications:
+            if (isPopupNotificationsEnabled()) {
+                togglePopupNotificationsVisible(event.getPopupNotificationsAnchor());
+            }
+            break;
+        case resizeComponents:
+            resizeComponents();
+            break;
+        default:
+            break;
         }
-
     }
 }

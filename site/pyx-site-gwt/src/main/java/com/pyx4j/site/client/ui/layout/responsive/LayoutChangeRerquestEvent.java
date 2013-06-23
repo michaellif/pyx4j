@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.google.gwt.event.shared.GwtEvent;
+import com.google.gwt.user.client.ui.Widget;
 
 public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHandler> {
 
@@ -28,13 +29,20 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
 
     public static enum ChangeType {
 
-        toggleSideMenu, resizeComponents;
+        toggleSideMenu, toggleSideNotifications, togglePopupNotifications, resizeComponents;
     }
 
-    private final ChangeType[] types;
+    private final ChangeType type;
 
-    public LayoutChangeRerquestEvent(ChangeType... types) {
-        this.types = types;
+    private Widget popupNotificationsAnchor;
+
+    public LayoutChangeRerquestEvent(ChangeType type) {
+        this.type = type;
+    }
+
+    public LayoutChangeRerquestEvent(Widget popupNotificationsAnchor) {
+        this.type = ChangeType.togglePopupNotifications;
+        this.popupNotificationsAnchor = popupNotificationsAnchor;
     }
 
     @Override
@@ -47,8 +55,11 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
         handler.onLayoutChangeRerquest(this);
     }
 
-    public ChangeType[] getChangeTypes() {
-        return types;
+    public ChangeType getChangeType() {
+        return type;
     }
 
+    public Widget getPopupNotificationsAnchor() {
+        return popupNotificationsAnchor;
+    }
 }
