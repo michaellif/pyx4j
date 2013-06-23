@@ -146,25 +146,34 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         callback.onSuccess(entity);
     }
 
-    private void fillCoveredItems(PreauthorizedPaymentDTO dto, LeaseProducts products) {
-        dto.total().setValue(BigDecimal.ZERO);
+    private void fillCoveredItems(PreauthorizedPaymentDTO papDto, LeaseProducts products) {
+        papDto.total().setValue(BigDecimal.ZERO);
 
         PreauthorizedPaymentCoveredItemDTO item = createCoveredItemDTO(products.serviceItem());
-        dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
-        dto.coveredItemsDTO().add(item);
+        papDto.total().setValue(papDto.total().getValue().add(item.amount().getValue()));
+        papDto.coveredItemsDTO().add(item);
 
         for (BillableItem billableItem : products.featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
             if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
                 && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
-              /*&& !isCoveredItemExist(papDto, billableItem)*/) {                                                                                                 // absent
+                && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
             //@formatter:on
                 item = createCoveredItemDTO(billableItem);
-                dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
-                dto.coveredItemsDTO().add(item);
+                papDto.total().setValue(papDto.total().getValue().add(item.amount().getValue()));
+                papDto.coveredItemsDTO().add(item);
             }
         }
+    }
+
+    private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
+        for (PreauthorizedPaymentCoveredItem item : papDto.coveredItemsDTO()) {
+            if (item.billableItem().id().equals(billableItem.id())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private PreauthorizedPaymentCoveredItemDTO createCoveredItemDTO(BillableItem billableItem) {

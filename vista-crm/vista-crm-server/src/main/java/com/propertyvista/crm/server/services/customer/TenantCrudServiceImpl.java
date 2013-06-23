@@ -287,9 +287,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         for (BillableItem billableItem : lease.currentTerm().version().leaseProducts().featureItems()) {
             Persistence.ensureRetrieve(billableItem.item().product(), AttachLevel.Attached);
             //@formatter:off
-                if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
-                    && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
-                    && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
+            if (!ARCode.Type.nonReccuringFeatures().contains(billableItem.item().product().holder().type().getValue())                                          // recursive
+                && (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(new LogicalDate(SystemDateManager.getDate())))     // non-expired 
+                && !isCoveredItemExist(papDto, billableItem)) {                                                                                                 // absent
             //@formatter:on
                 papDto.coveredItemsDTO().add(createCoveredItemDto(billableItem, lease, papDto.getPrimaryKey() == null));
             }
@@ -298,7 +298,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
     private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
         for (PreauthorizedPaymentCoveredItem item : papDto.coveredItemsDTO()) {
-            if (item.billableItem().uid().getValue().equals(billableItem.uid().getValue())) {
+            if (item.billableItem().id().equals(billableItem.id())) {
                 return true;
             }
         }
