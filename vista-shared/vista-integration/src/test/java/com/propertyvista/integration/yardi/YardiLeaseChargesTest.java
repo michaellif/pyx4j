@@ -161,7 +161,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rpark:1").
         description("Parking A").
         agreedPrice("50.00");  
         // @formatter:on
@@ -175,7 +175,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rpark:1").
         description("Parking A").
         agreedPrice("55.00");  
         // @formatter:on
@@ -196,7 +196,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rpark:1").
         description("Parking A");
         // @formatter:on
 
@@ -250,7 +250,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rpark:1").
         description("Parking A");
         // @formatter:on
 
@@ -263,7 +263,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rpark:1").
         description("Parking A").
         expirationDate("31-Aug-2014");
         // @formatter:on

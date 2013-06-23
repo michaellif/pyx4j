@@ -673,6 +673,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         // TODO load guarantors
         // ...
 
+        ServerSideFactory.create(LeaseFacade.class).persist(lease);
         ServerSideFactory.create(LeaseFacade.class).finalize(lease);
 
         // create applications

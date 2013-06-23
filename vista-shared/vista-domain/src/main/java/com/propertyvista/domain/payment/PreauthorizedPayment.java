@@ -43,7 +43,8 @@ public interface PreauthorizedPayment extends IEntity {
     public interface PreauthorizedPaymentCoveredItem extends IEntity {
 
         @NotNull
-        @ReadOnly
+        // TODO make ReadOnly with BillableItem versioning
+        //@ReadOnly
         @ToString(index = 0)
         BillableItem billableItem();
 

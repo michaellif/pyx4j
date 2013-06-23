@@ -156,6 +156,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
+    public void renewPreauthorizedPayments(Lease lease) {
+        new PreauthorizedPaymentAgreementMananger().renewPreauthorizedPayments(lease);
+    }
+
+    @Override
     public AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccount) {
         return new PreauthorizedPaymentAutoPayReviewReport().getSuspendedPreauthorizedPaymentReview(billingAccount);
     }
@@ -164,4 +169,5 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
         return new PreauthorisedPaymentsManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
     }
+
 }

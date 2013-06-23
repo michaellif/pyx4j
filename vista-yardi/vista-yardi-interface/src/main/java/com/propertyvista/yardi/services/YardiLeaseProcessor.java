@@ -16,7 +16,9 @@ package com.propertyvista.yardi.services;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,12 +42,10 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -58,6 +58,7 @@ import com.propertyvista.yardi.merger.LeaseMerger.LeaseChargesMergeStatus;
 import com.propertyvista.yardi.merger.TenantMerger;
 
 public class YardiLeaseProcessor {
+
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
     final ExecutionMonitor executionMonitor;
@@ -215,25 +216,47 @@ public class YardiLeaseProcessor {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         log.info("      Updating billable items for lease {} ", lease.getStringView());
         List<BillableItem> newItems = new ArrayList<BillableItem>();
+
+        // Ensure all items are uniquely identified by the order in YArdi
+        /**
+         * rrent -> rrent:1
+         * rpark -> rpark:1
+         * rpark -> rpark:2
+         * routpark -> routpark:1
+         */
+        Map<String, Integer> chargeCodeItemsCount = new HashMap<String, Integer>();
+
         for (Transactions tr : transactions) {
             if (tr == null || tr.getCharge() == null) {
                 continue;
             }
-            newItems.add(createBillableItem(tr.getCharge().getDetail()));
+            Integer chargeCodeItemNo = chargeCodeItemsCount.get(tr.getCharge().getDetail().getChargeCode());
+            if (chargeCodeItemNo == null) {
+                chargeCodeItemNo = 1;
+            } else {
+                chargeCodeItemNo = chargeCodeItemNo + 1;
+            }
+            chargeCodeItemsCount.put(tr.getCharge().getDetail().getChargeCode(), chargeCodeItemNo);
+
+            newItems.add(createBillableItem(tr.getCharge().getDetail(), chargeCodeItemNo));
         }
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease);
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
             // finalize term
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            // suspend PAP if total amount has changed
+
             if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
-                suspendPADPayments(lease);
+                String msg = SimpleMessageFormat.format("charges changed for lease {0}", leaseId.leaseId());
+                log.info(msg);
+                if (executionMonitor != null) {
+                    executionMonitor.addInfoEvent("chargesChanged", msg);
+                }
             }
         }
         return lease;
     }
 
-    public Lease expireLeaseProducts(Lease leaseId) {
+    public boolean expireLeaseProducts(Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()) < 0) {
             log.info("      Terminating billable items for lease {} ", lease.getStringView());
@@ -244,10 +267,10 @@ public class YardiLeaseProcessor {
             lease.currentTerm().version().leaseProducts().featureItems().clear();
             // finalize
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
-            suspendPADPayments(lease);
+            return true;
+        } else {
+            return false;
         }
-
-        return lease;
     }
 
     //
@@ -309,24 +332,9 @@ public class YardiLeaseProcessor {
         return date;
     }
 
-    // TODO - may need a way to suspend PAD payments only for modified BillableItems (after yardi implements chargeId)
-    private void suspendPADPayments(Lease lease) {
-        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        criteria.in(criteria.proto().tenant().lease(), lease);
-        for (PreauthorizedPayment pap : Persistence.service().query(criteria)) {
-            ServerSideFactory.create(PaymentMethodFacade.class).suspendPreauthorizedPayment(pap);
-        }
-        String msg = SimpleMessageFormat.format("PreauthorizedPayment PAP for lease {0}", lease.leaseId());
-        log.info(msg);
-        if (executionMonitor != null) {
-            executionMonitor.addFailedEvent("SuspendPreauthorizedPayment", msg);
-        }
-    }
-
-    private BillableItem createBillableItem(ChargeDetail detail) {
+    private BillableItem createBillableItem(ChargeDetail detail, int chargeCodeItemNo) {
         BillableItem billableItem = EntityFactory.create(BillableItem.class);
-        billableItem.uid().setValue(detail.getChargeCode());
+        billableItem.uid().setValue(detail.getChargeCode() + ":" + chargeCodeItemNo);
         billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
         billableItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
         billableItem.effectiveDate().setValue(getLogicalDate(detail.getServiceFromDate()));

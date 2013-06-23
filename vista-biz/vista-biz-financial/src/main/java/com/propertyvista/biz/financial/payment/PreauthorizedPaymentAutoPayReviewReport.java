@@ -16,8 +16,11 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.pyx4j.commons.LogicalDate;
@@ -26,6 +29,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.policy.PolicyFacade;
@@ -35,6 +39,8 @@ import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymen
 import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.domain.tenant.lease.LeaseTerm.LeaseTermV;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.util.DomainUtil;
@@ -55,7 +61,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
             if (reportCriteria.selectedBuildings != null) {
                 criteria.in(criteria.proto().lease().unit().building(), reportCriteria.selectedBuildings);
             }
-            criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+            criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
 
             if (reportCriteria.isLeasesOnNoticeOnly()) {
@@ -160,6 +166,46 @@ class PreauthorizedPaymentAutoPayReviewReport {
         return billableItem.agreedPrice().getValue();
     }
 
+    private Map<String, BillableItem> getAllBillableItems(LeaseTerm.LeaseTermV leaseTermV) {
+        Map<String, BillableItem> billableItems = new LinkedHashMap<String, BillableItem>();
+        billableItems.put(leaseTermV.leaseProducts().serviceItem().uid().getValue(), leaseTermV.leaseProducts().serviceItem());
+        for (BillableItem bi : leaseTermV.leaseProducts().featureItems()) {
+            billableItems.put(bi.uid().getValue(), bi);
+        }
+        return billableItems;
+    }
+
+    private PreauthorizedPaymentCoveredItem getCoveredItem(List<PreauthorizedPaymentCoveredItem> coveredItems, BillableItem billableItem) {
+        for (PreauthorizedPaymentCoveredItem coveredItem : coveredItems) {
+            if (coveredItem.billableItem().uid().equals(billableItem.uid())) {
+                return coveredItem;
+            }
+        }
+        return null;
+    }
+
+    private LeaseTermV findSuspentionLeaseTermV(LeaseTermV leaseTermV, IList<PreauthorizedPaymentCoveredItem> coveredItems) {
+        LeaseTerm.LeaseTermV previousVersion = null;
+        {
+            // get previous version
+            EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
+            criteria.eq(criteria.proto().holder(), leaseTermV.holder());
+            criteria.eq(criteria.proto().versionNumber(), leaseTermV.versionNumber().getValue() - 1);
+            previousVersion = Persistence.service().retrieve(criteria);
+        }
+        if (previousVersion == null) {
+            return null;
+        } else {
+            Map<String, BillableItem> billableItems = getAllBillableItems(previousVersion);
+            for (PreauthorizedPaymentCoveredItem coveredItem : coveredItems) {
+                if (billableItems.containsKey(coveredItem.billableItem().uid().getValue())) {
+                    return previousVersion;
+                }
+            }
+            return findSuspentionLeaseTermV(previousVersion, coveredItems);
+        }
+    }
+
     private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(BillingAccount billingAccount, AutoPayChangePolicy.ChangeRule changeRule,
             LogicalDate preauthorizedPaymentDate, PreauthorizedPayment preauthorizedPayment) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
@@ -168,24 +214,55 @@ class PreauthorizedPaymentAutoPayReviewReport {
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
         papReview.tenantName().setValue(preauthorizedPayment.tenant().customer().person().name().getStringView());
 
-        // Once BillableItem is consumed by CoveredItem it is removed from the list
-        List<BillableItem> allBillableItem = new ArrayList<BillableItem>();
-        allBillableItem.add(billingAccount.lease().currentTerm().version().leaseProducts().serviceItem());
-        allBillableItem.addAll(billingAccount.lease().currentTerm().version().leaseProducts().featureItems());
+        // ordered by insertion-order. 
+        Map<String, BillableItem> newBillableItems = getAllBillableItems(billingAccount.lease().currentTerm().version());
 
-        for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+        LeaseTerm.LeaseTermV previousVersion = findSuspentionLeaseTermV(billingAccount.lease().currentTerm().version(), preauthorizedPayment.coveredItems());
+        Map<String, BillableItem> previousBillableItems;
+        if (previousVersion != null) {
+            previousBillableItems = getAllBillableItems(previousVersion);
+        } else {
+            previousBillableItems = Collections.emptyMap();
+        }
+
+        for (Map.Entry<String, BillableItem> bi : newBillableItems.entrySet()) {
+            BillableItem billableItem = bi.getValue();
+            PreauthorizedPaymentCoveredItem coveredItem = getCoveredItem(preauthorizedPayment.coveredItems(), bi.getValue());
             AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
+            if (coveredItem == null) {
+                // newly added items or not covered
+                if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+                    BillableItem previousBillableItem = previousBillableItems.get(bi.getKey());
+                    if (previousBillableItem != null) {
+                        chargeReview.suspended().billableItem().set(previousBillableItem.createIdentityStub());
+                        chargeReview.suspended().totalPrice().setValue(getActualPrice(previousBillableItem));
+                        chargeReview.suspended().payment().setValue(BigDecimal.ZERO);
+                        calulatePercent(chargeReview.suspended());
+                    }
 
-            chargeReview.suspended().billableItem().set(coveredItem.billableItem().createIdentityStub());
-            chargeReview.suspended().totalPrice().setValue(getActualPrice(coveredItem.billableItem()));
-            chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
-            calulatePercent(chargeReview.suspended());
+                    chargeReview.suggested().billableItem().set(billableItem.createIdentityStub());
+                    chargeReview.suggested().totalPrice().setValue(getActualPrice(billableItem));
 
-            chargeReview.suggested().set(calulateSuggestedChargeDetail(billingAccount, changeRule, preauthorizedPaymentDate, allBillableItem, coveredItem));
+                    chargeReview.leaseCharge().setValue(getLeaseChargeDescription(billableItem));
+                    papReview.items().add(chargeReview);
+                }
+            } else {
+                chargeReview.suspended().billableItem().set(coveredItem.billableItem().createIdentityStub());
+                chargeReview.suspended().totalPrice().setValue(getActualPrice(coveredItem.billableItem()));
+                chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
+                calulatePercent(chargeReview.suspended());
 
-            chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
+                if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+                    chargeReview.suggested()
+                            .set(calulateSuggestedChargeDetail(billingAccount, changeRule, preauthorizedPaymentDate, billableItem, coveredItem));
+                }
 
-            if (!chargeReview.suggested().totalPrice().isNull()) {
+                chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
+
+                papReview.items().add(chargeReview);
+            }
+
+            if (!chargeReview.suggested().totalPrice().isNull() && !chargeReview.suspended().totalPrice().isNull()) {
                 chargeReview
                         .suggested()
                         .percentChange()
@@ -194,21 +271,22 @@ class PreauthorizedPaymentAutoPayReviewReport {
                                         .divide(chargeReview.suspended().totalPrice().getValue(), 4, RoundingMode.FLOOR).subtract(BigDecimal.ONE));
             }
 
-            papReview.items().add(chargeReview);
         }
 
-        // Add newly added items
-        for (BillableItem billableItem : allBillableItem) {
-            if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
+        // Removed items at the end
+        for (PreauthorizedPaymentCoveredItem coveredItem : preauthorizedPayment.coveredItems()) {
+            if (!newBillableItems.containsKey(coveredItem.billableItem().uid().getValue())) {
+
                 AutoPayReviewChargeDTO chargeReview = EntityFactory.create(AutoPayReviewChargeDTO.class);
 
-                chargeReview.suggested().billableItem().set(billableItem.createIdentityStub());
-                chargeReview.suggested().totalPrice().setValue(getActualPrice(billableItem));
-
-                chargeReview.leaseCharge().setValue(getLeaseChargeDescription(billableItem));
+                chargeReview.suspended().billableItem().set(coveredItem.billableItem().createIdentityStub());
+                chargeReview.suspended().totalPrice().setValue(getActualPrice(coveredItem.billableItem()));
+                chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
+                calulatePercent(chargeReview.suspended());
 
                 papReview.items().add(chargeReview);
             }
+
         }
 
         return papReview;
@@ -237,39 +315,18 @@ class PreauthorizedPaymentAutoPayReviewReport {
         return (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(preauthorizedPaymentDate));
     }
 
-    public BillableItem extractSameBillableItem(BillableItem item, LogicalDate preauthorizedPaymentDate, List<BillableItem> allBillableItem) {
-        for (BillableItem billableItem : allBillableItem) {
-            if (billableItem.uid().equals(item.uid())) {
-                allBillableItem.remove(billableItem);
-
-                if (isBillableItemPapable(billableItem, preauthorizedPaymentDate)) {
-                    return billableItem;
-                } else {
-                    // Just return matching item from the list (test case two parkings with the same code)
-                    return null;
-                }
-            }
-        }
-        return null;
-    }
-
     private AutoPayReviewChargeDetailDTO calulateSuggestedChargeDetail(BillingAccount billingAccount, AutoPayChangePolicy.ChangeRule changeRule,
-            LogicalDate preauthorizedPaymentDate, List<BillableItem> allBillableItem, PreauthorizedPaymentCoveredItem coveredItem) {
+            LogicalDate preauthorizedPaymentDate, BillableItem newBillableItem, PreauthorizedPaymentCoveredItem coveredItem) {
         AutoPayReviewChargeDetailDTO suggestedChargeDetail = EntityFactory.create(AutoPayReviewChargeDetailDTO.class);
 
-        BillableItem sameBillableItem = extractSameBillableItem(coveredItem.billableItem(), preauthorizedPaymentDate, allBillableItem);
-        if (sameBillableItem == null) {
-            // Removed item
-        } else {
-            suggestedChargeDetail.billableItem().set(sameBillableItem.createIdentityStub());
-            suggestedChargeDetail.totalPrice().setValue(getActualPrice(sameBillableItem));
+        suggestedChargeDetail.billableItem().set(newBillableItem.createIdentityStub());
+        suggestedChargeDetail.totalPrice().setValue(getActualPrice(newBillableItem));
 
-            suggestedChargeDetail.payment().setValue(
-                    calulateNewPaymentValue(coveredItem.amount().getValue(), getActualPrice(coveredItem.billableItem()), getActualPrice(sameBillableItem),
-                            changeRule));
+        suggestedChargeDetail.payment().setValue(
+                calulateNewPaymentValue(coveredItem.amount().getValue(), getActualPrice(coveredItem.billableItem()), getActualPrice(newBillableItem),
+                        changeRule));
 
-            calulatePercent(suggestedChargeDetail);
-        }
+        calulatePercent(suggestedChargeDetail);
 
         return suggestedChargeDetail;
     }

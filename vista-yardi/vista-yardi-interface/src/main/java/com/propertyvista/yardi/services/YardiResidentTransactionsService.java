@@ -481,7 +481,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Void execute() throws YardiServiceException {
                 // expire current billable items
-                new YardiLeaseProcessor(executionMonitor).expireLeaseProducts(leaseId);
+                if (new YardiLeaseProcessor(executionMonitor).expireLeaseProducts(leaseId)) {
+                    String msg = SimpleMessageFormat.format("charges expired for lease {0}", leaseId.leaseId());
+                    log.info(msg);
+                    if (executionMonitor != null) {
+                        executionMonitor.addInfoEvent("chargesEexpired", msg);
+                    }
+                }
                 return null;
             }
         });

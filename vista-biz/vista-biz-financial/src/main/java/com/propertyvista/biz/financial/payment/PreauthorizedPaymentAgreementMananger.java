@@ -13,23 +13,33 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.tenant.lease.BillableItem;
+import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 class PreauthorizedPaymentAgreementMananger {
@@ -122,4 +132,95 @@ class PreauthorizedPaymentAgreementMananger {
         ServerSideFactory.create(NotificationFacade.class).papSuspension(preauthorizedPayment.tenant().lease());
     }
 
+    private BigDecimal getActualPrice(BillableItem billableItem) {
+        return billableItem.agreedPrice().getValue();
+    }
+
+    private Map<String, BillableItem> getAllBillableItems(LeaseTerm.LeaseTermV leaseTermV) {
+        Map<String, BillableItem> billableItems = new HashMap<String, BillableItem>();
+        billableItems.put(leaseTermV.leaseProducts().serviceItem().uid().getValue(), leaseTermV.leaseProducts().serviceItem());
+        for (BillableItem bi : leaseTermV.leaseProducts().featureItems()) {
+            billableItems.put(bi.uid().getValue(), bi);
+        }
+        return billableItems;
+    }
+
+    public void renewPreauthorizedPayments(Lease lease) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        List<PreauthorizedPayment> activePap;
+        {
+            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+            {
+                OrCriterion or = criteria.or();
+                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
+                or.left().isNull(criteria.proto().expiring());
+            }
+            criteria.in(criteria.proto().tenant().lease(), lease);
+            activePap = Persistence.service().query(criteria);
+        }
+
+        if (activePap.size() == 0) {
+            return;
+        }
+
+        Map<String, BillableItem> billableItems = getAllBillableItems(lease.currentTerm().version());
+
+        // Verify that new charges not added
+        LeaseTerm.LeaseTermV previousVersion = null;
+        {
+            // get previous version
+            EntityQueryCriteria<LeaseTerm.LeaseTermV> criteria = EntityQueryCriteria.create(LeaseTerm.LeaseTermV.class);
+            criteria.eq(criteria.proto().holder(), lease.currentTerm());
+            criteria.eq(criteria.proto().versionNumber(), lease.currentTerm().version().versionNumber().getValue() - 1);
+            previousVersion = Persistence.service().retrieve(criteria);
+        }
+
+        if (previousVersion == null) {
+            // LeaseLifecycleSimulator or preload
+            return;
+        }
+
+        boolean suspend = false;
+
+        Map<String, BillableItem> previousBillableItems = getAllBillableItems(previousVersion);
+
+        if (!EqualsHelper.equals(previousBillableItems.keySet(), billableItems.keySet())) {
+            suspend = true;
+        } else {
+            for (BillableItem previousBillableItem : previousBillableItems.values()) {
+                BillableItem newBillableItem = billableItems.get(previousBillableItem.uid().getValue());
+                if ((newBillableItem == null) || (getActualPrice(newBillableItem).compareTo(getActualPrice(previousBillableItem)) != 0)) {
+                    suspend = true;
+                    break;
+                }
+            }
+        }
+
+        if (!suspend) {
+            // migrate each PAP to new billableItems
+            forEachAllPap: for (PreauthorizedPayment pap : activePap) {
+                for (PreauthorizedPaymentCoveredItem pi : pap.coveredItems()) {
+                    BillableItem bi = billableItems.get(pi.billableItem().uid().getValue());
+                    // Not found or price changed, should have been caught by previous comparison
+                    if ((bi == null) || (getActualPrice(bi).compareTo(getActualPrice(pi.billableItem())) != 0)) {
+                        suspend = true;
+                        break forEachAllPap;
+                    } else {
+                        pi.billableItem().set(bi);
+                    }
+                }
+            }
+        }
+
+        // Suspend all or update all
+        for (PreauthorizedPayment pap : activePap) {
+            if (suspend) {
+                suspendPreauthorizedPayment(pap);
+            } else {
+                Persistence.service().merge(pap);
+            }
+        }
+
+    }
 }

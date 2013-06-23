@@ -48,6 +48,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.deposit.DepositFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.biz.occupancy.OccupancyOperationException;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
@@ -240,6 +241,8 @@ public abstract class LeaseAbstractManager {
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
         if (leaseTerm.equals(leaseTerm.lease().currentTerm())) {
             updateLeaseDeposits(leaseTerm.lease());
+
+            ServerSideFactory.create(PaymentMethodFacade.class).renewPreauthorizedPayments(leaseTerm.lease());
         }
 
         return leaseTerm;
@@ -255,7 +258,7 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException(SimpleMessageFormat.format("Invalid Lease Status (\"{0}\")", lease.status().getValue()));
         }
         if (LeaseApplication.Status.Created != lease.leaseApplication().status().getValue()) {
-            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Applicatino Status (\"{0}\")", lease.leaseApplication().status().getValue()));
+            throw new IllegalStateException(SimpleMessageFormat.format("Invalid Application Status (\"{0}\")", lease.leaseApplication().status().getValue()));
         }
 
         ServerSideFactory.create(OnlineApplicationFacade.class).createMasterOnlineApplication(lease.leaseApplication().onlineApplication());

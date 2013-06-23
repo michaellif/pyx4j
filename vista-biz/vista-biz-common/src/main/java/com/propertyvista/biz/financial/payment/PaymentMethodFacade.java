@@ -65,6 +65,13 @@ public interface PaymentMethodFacade {
 
     void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId);
 
+    /**
+     * Suspend PreauthorizedPayments if required during LeaseTerm finalize.
+     * 
+     * Update PreauthorizedPaymentCoveredItem to point to new BillableItem (May not be required after BillableItem version support)
+     */
+    void renewPreauthorizedPayments(Lease lease);
+
     AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccountId);
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
@@ -76,4 +83,5 @@ public interface PaymentMethodFacade {
     LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
 
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
+
 }

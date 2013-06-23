@@ -200,7 +200,7 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rpark").
+        uid("rpark:1").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Parking B").
@@ -209,7 +209,7 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
-        uid("rinpark").
+        uid("rinpark:1").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
@@ -288,7 +288,7 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(0)).
-        uid("rlock").
+        uid("rlock:1").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Locker A").
@@ -297,7 +297,7 @@ public class YardiImportTest extends YardiTestBase {
 
         // @formatter:off
         new BillableItemTester(lease.currentTerm().version().leaseProducts().featureItems().get(1)).
-        uid("rinpark").
+        uid("rinpark:1").
         effectiveDate("01-Jun-2012").
         expirationDate("31-Jul-2014").
         description("Indoor Parking").
