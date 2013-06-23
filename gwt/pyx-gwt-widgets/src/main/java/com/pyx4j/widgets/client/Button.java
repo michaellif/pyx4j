@@ -94,11 +94,7 @@ public class Button extends FocusPanel implements IFocusWidget {
         facesHandler.init(this);
 
         textLabel = new HTML();
-        if (text == null) {
-            setTextLabel("");
-        } else {
-            setTextLabel(text);
-        }
+        setTextLabel(text);
 
         textLabel.setStyleName(DefaultWidgetsTheme.StyleName.ButtonText.name());
 
@@ -169,10 +165,8 @@ public class Button extends FocusPanel implements IFocusWidget {
     }
 
     public void setTextLabel(String label) {
-        if (label == null) {
-            label = "";
-        }
         textLabel.setHTML(label);
+        textLabel.setVisible(label != null);
     }
 
     protected HTML getTextLabelComponent() {

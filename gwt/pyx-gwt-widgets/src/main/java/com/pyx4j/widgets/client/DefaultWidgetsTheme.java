@@ -142,12 +142,13 @@ public class DefaultWidgetsTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ButtonText);
-        style.addProperty("vertical-align", "middle");
+        style.addProperty("display", "inline");
         style.addProperty("whiteSpace", "nowrap");
         style.addProperty("position", "relative");
         style.addProperty("text-indent", "0");
         style.addProperty("height", "100%");
         style.addProperty("text-align", "center");
+        style.addProperty("padding", "0 3px");
         addStyle(style);
 
         style = new Style(".", StyleName.Button, "-", DefaultWidgetsTheme.StyleDependent.hover);
@@ -166,12 +167,12 @@ public class DefaultWidgetsTheme extends Theme {
 
         Style style = new Style(".", StyleName.Toolbar);
         style.addProperty("white-space", "nowrap");
+        style.addProperty("display", "inline-block");
         addStyle(style);
 
         style = new Style(".", StyleName.ToolbarItem);
         style.addProperty("display", "inline-block");
-        style.addProperty("padding-left", "4px");
-        style.addProperty("vertical-align", "middle");
+        style.addProperty("vertical-align", "top");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
         addStyle(style);
