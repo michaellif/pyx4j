@@ -138,6 +138,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().customer().person().name()).setViewable(true);
         }
+
         return main;
     }
 

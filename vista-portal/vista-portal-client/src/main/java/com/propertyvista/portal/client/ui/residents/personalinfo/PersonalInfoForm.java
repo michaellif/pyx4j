@@ -90,6 +90,10 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
             container.setWidget(++row, 0, resetPassword);
         }
 
+        if (VistaFeatures.instance().yardiIntegration()) {
+            get(proto().name()).setViewable(true);
+        }
+
         return container;
     }
 
