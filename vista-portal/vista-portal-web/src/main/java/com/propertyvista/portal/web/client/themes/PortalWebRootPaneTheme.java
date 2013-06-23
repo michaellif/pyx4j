@@ -29,17 +29,17 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainToolbar,
 
-        MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel;
+        MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel, MainMenuIcon;
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, active
+        hover, active, sideMenu, collapsedMenu
     }
 
     public PortalWebRootPaneTheme() {
         initHeaderStyles();
         initMainToolbarStyles();
-        initMainMStyles();
+        initMainMenuStyles();
         initFooterStyles();
 
     }
@@ -81,9 +81,52 @@ public class PortalWebRootPaneTheme extends Theme {
 
     }
 
-    private void initMainMStyles() {
+    private void initMainMenuStyles() {
         Style style = new Style(".", StyleName.MainMenu);
+        style.addProperty("margin", "20px 0 ");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("background", ThemeColor.foreground, 0.01);
         addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu);
+        style.addProperty("border-radius", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu, " .", StyleName.MainMenuLabel);
+        style.addProperty("display", "none");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuTab);
+        style.addProperty("line-height", "20px");
+        style.addProperty("height", "20px");
+        style.addProperty("white-space", "nowrap");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("padding", "8px");
+        style.addProperty("list-style", "none");
+        style.addProperty("border-bottom", "1px solid");
+        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.15);
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuTab, ":last-child");
+        style.addProperty("border-bottom", "0px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuTab, "-", StyleDependent.active);
+        style.addProperty("background", ThemeColor.contrast1);
+        style.addProperty("color", ThemeColor.foreground, 0.01);
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuLabel);
+        style.addProperty("float", "left");
+        style.addProperty("padding-left", "10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuIcon);
+        style.addProperty("float", "left");
+        addStyle(style);
+
     }
 
     private void initFooterStyles() {

@@ -33,7 +33,10 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.IconButton;
+import com.pyx4j.widgets.client.images.IconButtonImages;
 
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class MenuViewImpl extends SimplePanel implements MenuView {
@@ -44,7 +47,6 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
     public MenuViewImpl() {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainMenu.name());
-        setSize("100%", "100%");
         tabsHolder = new NavigTabList();
         setWidget(tabsHolder);
 
@@ -69,7 +71,7 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
     public void setNavig(List<AppPlace> items) {
         tabsHolder.clear();
         for (AppPlace item : items) {
-            NavigTab navigTab = new NavigTab(item);
+            NavigTab navigTab = new NavigTab(item, PortalImages.INSTANCE.dashboardButton());
             tabsHolder.add(navigTab);
 
             AppPlace currentPlace = presenter.getWhere();
@@ -83,17 +85,17 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            getElement().getStyle().setBackgroundColor("#abc");
-            setWidth("auto");
+            addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
+            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             break;
         case tabletPortrait:
         case tabletLandscape:
-            getElement().getStyle().setBackgroundColor("#caa");
-            setWidth("50px");
+            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
+            addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             break;
         default:
-            getElement().getStyle().setBackgroundColor("#caa");
-            setWidth("200px");
+            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
+            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             break;
         }
     }
@@ -150,13 +152,15 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
     class NavigTab extends ComplexPanel {
 
+        private final IconButton icon;
+
         private final Label label;
 
         private boolean selected;
 
         private final AppPlace place;
 
-        NavigTab(AppPlace appPlace) {
+        NavigTab(AppPlace appPlace, IconButtonImages images) {
             super();
 
             this.place = appPlace;
@@ -166,6 +170,10 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
             setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuTab.name());
 
             sinkEvents(Event.ONCLICK);
+
+            icon = new IconButton(null, images);
+            icon.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuIcon.name());
+            add(icon);
 
             label = new Label(AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel());
             label.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuLabel.name());
@@ -183,11 +191,11 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
         public void deselect() {
             selected = false;
-            removeStyleName(PortalWebRootPaneTheme.StyleDependent.active.name());
+            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
         }
 
         public void select() {
-            addStyleName(PortalWebRootPaneTheme.StyleDependent.active.name());
+            addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
             selected = true;
         }
 

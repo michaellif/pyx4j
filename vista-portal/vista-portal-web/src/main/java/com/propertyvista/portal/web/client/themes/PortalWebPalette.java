@@ -21,8 +21,12 @@ public class PortalWebPalette extends Palette {
     public PortalWebPalette() {
         putThemeColor(ThemeColor.object1, "#315EAF");
         putThemeColor(ThemeColor.object2, "B26C1F");
-        putThemeColor(ThemeColor.contrast1, "red");
-        putThemeColor(ThemeColor.contrast2, "orange");
+        putThemeColor(ThemeColor.contrast1, "#ffcb00");
+        putThemeColor(ThemeColor.contrast2, "#f68308");
+        putThemeColor(ThemeColor.contrast3, "#ef231b");
+        putThemeColor(ThemeColor.contrast4, "#ef231b");
+        putThemeColor(ThemeColor.contrast5, "#0091dc");
+        putThemeColor(ThemeColor.contrast6, "#a41f8f");
         putThemeColor(ThemeColor.background, "#efefef");
         putThemeColor(ThemeColor.foreground, "#4f565a");
     }

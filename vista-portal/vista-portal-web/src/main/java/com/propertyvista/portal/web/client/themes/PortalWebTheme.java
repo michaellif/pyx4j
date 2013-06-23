@@ -216,6 +216,7 @@ public class PortalWebTheme extends Theme {
 
         style = new Style("blockquote, ul, fieldset, form, ol, dl, dir, menu");
         style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
         addStyle(style);
 
         style = new Style("blockquote");
