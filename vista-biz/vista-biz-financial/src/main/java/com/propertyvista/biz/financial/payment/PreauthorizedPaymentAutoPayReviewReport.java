@@ -263,12 +263,20 @@ class PreauthorizedPaymentAutoPayReviewReport {
             }
 
             if (!chargeReview.suggested().totalPrice().isNull() && !chargeReview.suspended().totalPrice().isNull()) {
-                chargeReview
-                        .suggested()
-                        .percentChange()
-                        .setValue( //
-                                chargeReview.suggested().totalPrice().getValue()
-                                        .divide(chargeReview.suspended().totalPrice().getValue(), 4, RoundingMode.FLOOR).subtract(BigDecimal.ONE));
+                if (chargeReview.suspended().totalPrice().getValue().compareTo(BigDecimal.ZERO) == 0) {
+                    if (chargeReview.suggested().totalPrice().getValue().compareTo(BigDecimal.ZERO) == 0) {
+                        chargeReview.suggested().percentChange().setValue(BigDecimal.ZERO);
+                    } else {
+                        chargeReview.suggested().percentChange().setValue(BigDecimal.ONE);
+                    }
+                } else {
+                    chargeReview
+                            .suggested()
+                            .percentChange()
+                            .setValue( //
+                                    chargeReview.suggested().totalPrice().getValue()
+                                            .divide(chargeReview.suspended().totalPrice().getValue(), 4, RoundingMode.FLOOR).subtract(BigDecimal.ONE));
+                }
             }
 
         }
