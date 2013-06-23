@@ -15,11 +15,14 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -37,7 +40,7 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
+public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresResize {
 
     private static final I18n i18n = I18n.get(ToolbarViewImpl.class);
 
@@ -59,16 +62,21 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private final Button languageButton;
 
-    private final Image brandImage;
-
     private final Toolbar rightToolbar;
+
+    private final SimplePanel brandImageHolder;
+
+    private LayoutType layoutType;
+
+    private boolean hideLoginButton = false;
+
+    private boolean loggedIn = false;
 
     public ToolbarViewImpl() {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainToolbar.name());
         getElement().getStyle().setProperty("whiteSpace", "nowrap");
 
         rightToolbar = new Toolbar();
-        rightToolbar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
 
         tenantButton = new Button("");
         ButtonMenuBar tenantButtonMenu = new ButtonMenuBar();
@@ -109,7 +117,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
 
-        notificationsButton = new Button(PortalImages.INSTANCE.menu(), new Command() {
+        notificationsButton = new Button(PortalImages.INSTANCE.alert(), new Command() {
             @Override
             public void execute() {
                 AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
@@ -120,9 +128,10 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         rightToolbar.add(loginButton);
         rightToolbar.add(tenantButton);
         rightToolbar.add(languageButton);
+        rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        rightToolbar.getElement().getStyle().setProperty("right", "0");
 
         Toolbar leftToolbar = new Toolbar();
-        leftToolbar.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
         sideMenuButton = new Button(PortalImages.INSTANCE.menu(), new Command() {
             @Override
             public void execute() {
@@ -130,13 +139,18 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             }
         });
         leftToolbar.add(sideMenuButton);
+        leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        leftToolbar.getElement().getStyle().setProperty("left", "0");
 
-        brandImage = new Image(PortalImages.INSTANCE.brand());
-        brandImage.getElement().getStyle().setProperty("margin", "5px");
+        Image brandImage = new Image(PortalImages.INSTANCE.brand());
+        brandImage.getElement().getStyle().setProperty("margin", "7px");
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
+        brandImageHolder = new SimplePanel(brandImage);
+        brandImageHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
+        brandImageHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
 
-        add(brandImage);
         add(leftToolbar);
+        add(brandImageHolder);
         add(rightToolbar);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -157,18 +171,19 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     }
 
     @Override
-    public void onLogedOut() {
-        loginButton.setVisible(true);
-        tenantButton.setVisible(false);
+    public void onLogedOut(boolean hideLoginButton) {
+        this.loggedIn = false;
+        this.hideLoginButton = hideLoginButton;
         tenantButton.setTextLabel("");
+        calculateActionsState();
     }
 
     @Override
     public void onLogedIn(String userName) {
-        loginButton.setVisible(false);
-        tenantButton.setVisible(true);
+        this.loggedIn = true;
         tenantButton.setTextLabel(userName);
         tenantButton.setImageResource(PortalImages.INSTANCE.avatar());
+        calculateActionsState();
     }
 
     @Override
@@ -189,19 +204,42 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
     }
 
     private void doLayout(LayoutType layoutType) {
+        this.layoutType = layoutType;
+        calculateActionsState();
+    }
+
+    private void calculateActionsState() {
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
             sideMenuButton.setVisible(true);
-            rightToolbar.setVisible(false);
-            brandImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.RIGHT);
+            tenantButton.setVisible(false);
+            languageButton.setVisible(false);
+            brandImageHolder.getElement().getStyle().setProperty("margin", "0 auto");
             break;
-
         default:
             sideMenuButton.setVisible(false);
-            rightToolbar.setVisible(true);
-            brandImage.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            tenantButton.setVisible(loggedIn);
+            languageButton.setVisible(true);
+            brandImageHolder.getElement().getStyle().setProperty("margin", "0");
             break;
         }
+        loginButton.setVisible(!loggedIn && !hideLoginButton);
+        notificationsButton.setVisible(loggedIn);
+
+    }
+
+    @Override
+    public void onResize() {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+            brandImageHolder.getElement().getStyle().setProperty("left", ((getOffsetWidth() - brandImageHolder.getOffsetWidth()) / 2) + "px");
+            break;
+        default:
+            brandImageHolder.getElement().getStyle().setProperty("left", "0");
+            break;
+        }
+
     }
 }

@@ -35,7 +35,10 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     private final ToolbarView view;
 
+    private final Place place;
+
     public ToolbarActivity(Place place) {
+        this.place = place;
         this.view = PortalWebViewFactory.instance(ToolbarView.class);
         assert (view != null);
         view.setPresenter(this);
@@ -67,7 +70,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
         } else {
-            view.onLogedOut();
+            boolean hideLoginButton = place instanceof PortalSiteMap.Login;
+            view.onLogedOut(hideLoginButton);
         }
     }
 

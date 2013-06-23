@@ -36,7 +36,7 @@ public interface ToolbarView extends IsWidget {
         void setLocale(CompiledLocale locale);
     }
 
-    void onLogedOut();
+    void onLogedOut(boolean hideLoginButton);
 
     void onLogedIn(String userName);
 

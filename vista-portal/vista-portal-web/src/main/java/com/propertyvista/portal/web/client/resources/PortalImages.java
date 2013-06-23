@@ -86,6 +86,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     @Source("profile_l.png")
     ImageResource avatar();
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("alert.png")
+    ImageResource alert();
+
     @Source("communication-message.png")
     ImageResource communicationMessage();
 

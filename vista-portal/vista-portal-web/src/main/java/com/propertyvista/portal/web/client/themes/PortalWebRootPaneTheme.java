@@ -27,7 +27,7 @@ public class PortalWebRootPaneTheme extends Theme {
     public static enum StyleName implements IStyleName {
         PageHeader, PageFooter,
 
-        MainToolbar,
+        MainToolbar, BrandImage,
 
         MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel, MainMenuIcon;
     }
@@ -52,7 +52,11 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initMainToolbarStyles() {
         Style style = new Style(".", StyleName.MainToolbar);
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "relative");
+
         style.addProperty("width", "100%");
+        style.addProperty("min-width", "320px");
         style.addProperty("height", "60px");
         addStyle(style);
 
@@ -62,6 +66,7 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("background", ThemeColor.foreground, 0.7);
         style.addProperty("border-color", ThemeColor.foreground, 0.75);
         style.addProperty("border-radius", "5px");
+        style.addProperty("margin", "0 6px");
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
@@ -71,12 +76,18 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("font-size", "1em");
-        style.addProperty("margin", "12px");
+        style.addProperty("margin", "15px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "top");
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
         style.addProperty("font-size", "1em");
-        style.addProperty("margin", "0 0.5em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.BrandImage);
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "top");
         addStyle(style);
 
     }
