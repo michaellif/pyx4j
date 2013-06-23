@@ -37,7 +37,6 @@ import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.DisplayPanel;
@@ -236,11 +235,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     private void resizeComponents() {
-        for (Widget child : getChildren()) {
-            if (child instanceof RequiresResize) {
-                ((RequiresResize) child).onResize();
-            }
-        }
+        stickyHeaderHolder.onResize();
         stickyHeaderHolder.onPositionChange();
         inlineMenuHolder.onPositionChange();
 

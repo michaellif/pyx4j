@@ -50,6 +50,7 @@ public class ResponsiveLayoutTheme extends Theme {
 
         style = new Style(".", StyleName.ResponsiveLayoutStickyHeaderHolder);
         style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
+        style.addProperty("min-width", "320px");
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutFooterHolder);

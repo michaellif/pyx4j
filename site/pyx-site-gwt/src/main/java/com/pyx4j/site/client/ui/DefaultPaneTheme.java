@@ -201,6 +201,7 @@ public class DefaultPaneTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 0);
         style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 2);
         style.addProperty("padding", "2px 12px");
+        style.addProperty("margin", "0 4px");
         style.addProperty("font-size", "11px");
         style.addProperty("font-weight", "bold");
         style.addProperty("border-radius", "5px");

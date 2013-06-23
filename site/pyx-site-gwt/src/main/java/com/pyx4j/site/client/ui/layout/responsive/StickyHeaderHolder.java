@@ -22,10 +22,11 @@ package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class StickyHeaderHolder extends SimplePanel {
+public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
 
     private final SimplePanel stickyHeaderContainer;
 
@@ -55,6 +56,13 @@ public class StickyHeaderHolder extends SimplePanel {
                 //keeps space for fixed child
                 getElement().getStyle().setHeight(getWidget().getOffsetHeight(), Unit.PX);
             }
+        }
+    }
+
+    @Override
+    public void onResize() {
+        if (stickyHeaderContainer.getWidget() instanceof RequiresResize) {
+            ((RequiresResize) stickyHeaderContainer.getWidget()).onResize();
         }
     }
 }
