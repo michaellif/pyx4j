@@ -198,7 +198,8 @@ class PreauthorizedPaymentAutoPayReviewReport {
         } else {
             Map<String, BillableItem> billableItems = getAllBillableItems(previousVersion);
             for (PreauthorizedPaymentCoveredItem coveredItem : coveredItems) {
-                if (billableItems.containsKey(coveredItem.billableItem().uid().getValue())) {
+                // Find items by ID,  not by UID
+                if (billableItems.values().contains(coveredItem.billableItem())) {
                     return previousVersion;
                 }
             }
