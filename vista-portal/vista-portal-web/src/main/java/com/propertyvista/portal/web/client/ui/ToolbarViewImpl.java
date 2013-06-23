@@ -120,7 +120,15 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
         notificationsButton = new Button(PortalImages.INSTANCE.alert(), new Command() {
             @Override
             public void execute() {
-                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
+                switch (layoutType) {
+                case phonePortrait:
+                case phoneLandscape:
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideNotifications));
+                    break;
+                default:
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(notificationsButton));
+                    break;
+                }
             }
         });
 

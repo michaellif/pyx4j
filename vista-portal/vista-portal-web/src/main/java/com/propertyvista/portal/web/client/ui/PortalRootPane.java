@@ -22,6 +22,7 @@ import com.propertyvista.portal.web.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.web.client.mvp.FooterActivityMapper;
 import com.propertyvista.portal.web.client.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.web.client.mvp.MenuActivityMapper;
+import com.propertyvista.portal.web.client.mvp.NotificationsActivityMapper;
 import com.propertyvista.portal.web.client.mvp.StickyHeaderActivityMapper;
 
 public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
@@ -32,6 +33,7 @@ public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new StickyHeaderActivityMapper(), asWidget().getStickyHeaderDisplay());
         bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
+        bind(new NotificationsActivityMapper(), asWidget().getNotificationsDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
 

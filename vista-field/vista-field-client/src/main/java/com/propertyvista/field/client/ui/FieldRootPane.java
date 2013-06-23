@@ -22,6 +22,7 @@ import com.propertyvista.field.client.mvp.ContentActivityMapper;
 import com.propertyvista.field.client.mvp.FooterActivityMapper;
 import com.propertyvista.field.client.mvp.HeaderActivityMapper;
 import com.propertyvista.field.client.mvp.MenuActivityMapper;
+import com.propertyvista.field.client.mvp.NotificationsActivityMapper;
 import com.propertyvista.field.client.mvp.StickyHeaderActivityMapper;
 
 public class FieldRootPane extends RootPane<ResponsiveLayoutPanel> {
@@ -33,6 +34,7 @@ public class FieldRootPane extends RootPane<ResponsiveLayoutPanel> {
         bind(new StickyHeaderActivityMapper(), asWidget().getStickyHeaderDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
+        bind(new NotificationsActivityMapper(), asWidget().getNotificationsDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
 
     }
