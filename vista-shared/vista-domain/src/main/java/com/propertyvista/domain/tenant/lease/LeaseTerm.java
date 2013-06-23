@@ -50,7 +50,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
         Fixed,
 
-        @Translate("Fixed with Extention")
+        @Translate("Fixed with Extension")
         FixedEx,
 
         Periodic;
