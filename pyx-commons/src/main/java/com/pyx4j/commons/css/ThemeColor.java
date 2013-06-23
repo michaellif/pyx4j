@@ -32,6 +32,14 @@ public enum ThemeColor {
 
     contrast2("#E76B6B"),
 
+    contrast3("#E76B6B"),
+
+    contrast4("#E76B6B"),
+
+    contrast5("#E76B6B"),
+
+    contrast6("#E76B6B"),
+
     background("#FFFFFF"),
 
     foreground("#000000");

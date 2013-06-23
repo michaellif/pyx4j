@@ -52,8 +52,6 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private final SimplePanel imageHolder;
 
-    private ImageResource imageResource;
-
     private final ButtonFacesHandler buttonFacesHandler;
 
     private Command command;
@@ -190,7 +188,6 @@ public class Button extends FocusPanel implements IFocusWidget {
     }
 
     public void setImageResource(ImageResource imageResource) {
-        this.imageResource = imageResource;
         if (imageResource != null) {
             imageHolder.getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
             imageHolder.getElement().getStyle().setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
