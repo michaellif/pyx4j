@@ -58,7 +58,6 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("height", "2.6em");
-        style.addProperty("line-height", "2.6em");
         style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
         style.addProperty("background", ThemeColor.foreground, 0.7);
         style.addProperty("border-color", ThemeColor.foreground, 0.75);
@@ -67,11 +66,12 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ButtonText);
         style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("line-height", "2.6em");
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("font-size", "1em");
-        style.addProperty("margin", "1.1em 1em");
+        style.addProperty("margin", "12px");
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
@@ -120,7 +120,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainMenuLabel);
         style.addProperty("float", "left");
-        style.addProperty("padding-left", "10px");
+        style.addProperty("padding", "0 10px");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuIcon);

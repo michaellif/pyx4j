@@ -47,6 +47,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private final Button tenantButton;
 
+    private final Button notificationsButton;
+
     private final MenuItem myProfileMenu;
 
     private final MenuItem myAccountMenu;
@@ -107,6 +109,14 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
 
+        notificationsButton = new Button(PortalImages.INSTANCE.menu(), new Command() {
+            @Override
+            public void execute() {
+                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
+            }
+        });
+
+        rightToolbar.add(notificationsButton);
         rightToolbar.add(loginButton);
         rightToolbar.add(tenantButton);
         rightToolbar.add(languageButton);
