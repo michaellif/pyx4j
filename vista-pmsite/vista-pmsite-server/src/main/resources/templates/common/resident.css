@@ -1769,3 +1769,7 @@ ul.footer_locations li {
 .WizardPanel {
     min-height: 25em;
 }
+
+.warningMessage {
+	color: #C03A47 !important;
+}
