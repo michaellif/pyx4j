@@ -13,8 +13,21 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface MessageView extends IsWidget {
+import com.propertyvista.common.client.site.UserMessage;
 
+public interface UserMessageHeaderView extends IsWidget {
+
+    interface Presenter {
+
+        void acceptMessage(UserMessage userMessages);
+
+    }
+
+    void setPresenter(Presenter presenter);
+
+    void populate(List<UserMessage> userMessages);
 }

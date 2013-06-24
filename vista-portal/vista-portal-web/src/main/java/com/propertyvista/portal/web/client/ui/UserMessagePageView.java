@@ -11,13 +11,13 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.usermessage;
+package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.site.UserMessage;
 
-public interface UserMessageView extends IsWidget {
+public interface UserMessagePageView extends IsWidget {
 
     interface Presenter {
 

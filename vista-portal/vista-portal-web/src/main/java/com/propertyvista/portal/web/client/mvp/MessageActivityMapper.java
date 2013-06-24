@@ -17,7 +17,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.web.client.activity.MessageActivity;
+import com.propertyvista.portal.web.client.activity.UserMessageHeaderActivity;
 
 public class MessageActivityMapper implements ActivityMapper {
 
@@ -26,7 +26,7 @@ public class MessageActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new MessageActivity(place);
+        return new UserMessageHeaderActivity(place);
     }
 
 }

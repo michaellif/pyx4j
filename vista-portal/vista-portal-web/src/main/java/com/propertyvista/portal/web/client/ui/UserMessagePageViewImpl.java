@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.usermessage;
+package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.dialog.images.DialogImages;
 import com.propertyvista.common.client.site.UserMessage;
 import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 
-public class UserMessageViewImpl extends Composite implements UserMessageView {
+public class UserMessagePageViewImpl extends Composite implements UserMessagePageView {
 
     public interface MessageTypeImages {
 
@@ -43,7 +43,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
         ImageResource warning();
     }
 
-    private static final I18n i18n = I18n.get(UserMessageView.class);
+    private static final I18n i18n = I18n.get(UserMessagePageView.class);
 
     private final SimplePanel messageTypeImageHolder;
 
@@ -55,7 +55,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
 
     private final MessageTypeImages messageTypeImageResources;
 
-    public UserMessageViewImpl(MessageTypeImages messageTypeImageResources) {
+    public UserMessagePageViewImpl(MessageTypeImages messageTypeImageResources) {
         this.messageTypeImageResources = messageTypeImageResources;
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
@@ -89,7 +89,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
         initWidget(viewPanel);
     }
 
-    public UserMessageViewImpl() {
+    public UserMessagePageViewImpl() {
         this(new MessageTypeImages() {
 
             private DialogImages di;
