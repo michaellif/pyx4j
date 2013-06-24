@@ -137,8 +137,12 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         if (VistaFeatures.instance().yardiIntegration()) {
 
             get(proto().item()).setVisible(false);
-            get(proto().effectiveDate()).setVisible(false);
-            get(proto().expirationDate()).setVisible(false);
+
+            get(proto().effectiveDate()).setVisible(true);
+            get(proto().effectiveDate()).setTooltip(null);
+
+            get(proto().expirationDate()).setVisible(true);
+            get(proto().expirationDate()).setTooltip(null);
 
             adjustmentPanel.setVisible(!getValue().adjustments().isEmpty());
             depositPanel.setVisible(!getValue().deposits().isEmpty());
