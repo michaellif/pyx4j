@@ -34,7 +34,7 @@ public class DropDownPanel extends PopupPanel {
      */
     public DropDownPanel() {
         super(true, false);
-        setStyleName("gwt-DropDownPanel");
+        setStyleName(DefaultWidgetsTheme.StyleName.DropDownPanel.name());
         setPreviewingAllNativeEvents(true);
         Window.addResizeHandler(new ResizeHandler() {
             @Override

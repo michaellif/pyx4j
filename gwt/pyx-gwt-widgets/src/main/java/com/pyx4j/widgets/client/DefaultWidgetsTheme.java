@@ -46,7 +46,9 @@ public class DefaultWidgetsTheme extends Theme {
 
         RadioGroup, RadioGroupItem,
 
-        GlassPanel, GlassPanelLabel
+        GlassPanel, GlassPanelLabel,
+
+        DropDownPanel;
     }
 
     public static enum StyleDependent implements IStyleDependent {
