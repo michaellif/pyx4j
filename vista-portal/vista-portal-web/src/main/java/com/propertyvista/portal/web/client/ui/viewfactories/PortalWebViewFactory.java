@@ -23,6 +23,8 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
+import com.propertyvista.portal.web.client.ui.CommercialView;
+import com.propertyvista.portal.web.client.ui.CommercialViewImpl;
 import com.propertyvista.portal.web.client.ui.FooterView;
 import com.propertyvista.portal.web.client.ui.FooterViewImpl;
 import com.propertyvista.portal.web.client.ui.HeaderView;
@@ -161,6 +163,8 @@ public class PortalWebViewFactory extends ViewFactoryBase {
                 map.put(type, new MenuViewImpl());
             } else if (NotificationsView.class.equals(type)) {
                 map.put(type, new NotificationsViewImpl());
+            } else if (CommercialView.class.equals(type)) {
+                map.put(type, new CommercialViewImpl());
             } else if (ToolbarView.class.equals(type)) {
                 map.put(type, new ToolbarViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {
