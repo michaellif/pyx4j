@@ -22,25 +22,45 @@ package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.site.client.DisplayPanel;
 
 public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
 
-    private final SimplePanel stickyHeaderContainer;
+    private final SimplePanel headerHolder;
+
+    private final SimplePanel messageHolder;
+
+    private DisplayPanel headerDisplay;
+
+    private DisplayPanel messageDisplay;
 
     public StickyHeaderHolder() {
-        stickyHeaderContainer = new SimplePanel();
-        stickyHeaderContainer.getElement().getStyle().setZIndex(10);
-        super.setWidget(stickyHeaderContainer);
-        stickyHeaderContainer.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyHeaderHolder.name());
+        FlowPanel container = new FlowPanel();
+        container.getElement().getStyle().setZIndex(10);
+        super.setWidget(container);
+
+        headerHolder = new SimplePanel();
+        headerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyHeaderHolder.name());
+        container.add(headerHolder);
+
+        messageHolder = new SimplePanel();
+        messageHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyMessageHolder.name());
+        container.add(messageHolder);
 
     }
 
-    @Override
-    public void setWidget(Widget w) {
-        stickyHeaderContainer.setWidget(w);
+    public void setHeaderDisplay(DisplayPanel display) {
+        this.headerDisplay = display;
+        headerHolder.add(display);
+    }
+
+    public void setMessageDisplay(DisplayPanel display) {
+        this.messageDisplay = display;
+        messageHolder.add(display);
     }
 
     public void onPositionChange() {
@@ -61,8 +81,11 @@ public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
 
     @Override
     public void onResize() {
-        if (stickyHeaderContainer.getWidget() instanceof RequiresResize) {
-            ((RequiresResize) stickyHeaderContainer.getWidget()).onResize();
+        if (headerDisplay instanceof RequiresResize) {
+            ((RequiresResize) headerDisplay).onResize();
+        }
+        if (messageDisplay instanceof RequiresResize) {
+            ((RequiresResize) messageDisplay).onResize();
         }
     }
 }

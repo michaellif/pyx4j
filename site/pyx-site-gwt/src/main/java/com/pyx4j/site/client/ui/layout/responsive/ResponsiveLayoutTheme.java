@@ -30,7 +30,7 @@ import com.pyx4j.commons.css.ThemeId;
 public class ResponsiveLayoutTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyHeaderHolder, ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder;
+        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyHeaderHolder, ResponsiveLayoutStickyMessageHolder, ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder;
     }
 
     public ResponsiveLayoutTheme() {

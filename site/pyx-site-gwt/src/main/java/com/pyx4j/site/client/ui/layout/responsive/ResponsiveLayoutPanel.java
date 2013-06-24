@@ -70,7 +70,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public enum Display {
-        header, stickyHeader, menu, content, footer, notifications, commersial
+        header, stickyHeader, menu, content, footer, notifications, commersial, message
     }
 
     private static final int ANIMATION_TIME = 500;
@@ -88,6 +88,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     private final PopupNotificationsHolder popupNotificationsHolder;
 
     private final SideMenuHolder sideNotificationsHolder;
+
+    private final SimplePanel commercialHolder;
 
     private final ScrollPanel pageScroll;
 
@@ -114,11 +116,16 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         pageScroll = new ScrollPanel(pagePanel);
 
         stickyHeaderHolder = new StickyHeaderHolder();
-        stickyHeaderHolder.setWidget(getStickyHeaderDisplay());
+
+        stickyHeaderHolder.setHeaderDisplay(getStickyHeaderDisplay());
         getStickyHeaderDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getStickyHeaderDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
-        SimplePanel commercialHolder = new SimplePanel();
+        stickyHeaderHolder.setMessageDisplay(getMessageDisplay());
+        getMessageDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        getMessageDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+
+        commercialHolder = new SimplePanel();
         commercialHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
         commercialHolder.getElement().getStyle().setProperty("verticalAlign", "top");
         commercialHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -234,6 +241,10 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.commersial);
     }
 
+    public DisplayPanel getMessageDisplay() {
+        return displays.get(Display.message);
+    }
+
     public void forceLayout(int animationTime) {
         doLayout();
         pageLayout.layout(animationTime);
@@ -307,6 +318,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         inlineMenuHolder.onPositionChange();
 
         getContentDisplay().getElement().getStyle().setMarginLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
+        getContentDisplay().getElement().getStyle().setMarginRight(commercialHolder.getOffsetWidth(), Unit.PX);
     }
 
     @Override
