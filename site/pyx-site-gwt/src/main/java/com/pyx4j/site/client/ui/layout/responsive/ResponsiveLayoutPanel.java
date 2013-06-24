@@ -70,7 +70,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public enum Display {
-        header, stickyHeader, menu, content, footer, notifications
+        header, stickyHeader, menu, content, footer, notifications, commersial
     }
 
     private static final int ANIMATION_TIME = 500;
@@ -89,7 +89,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SideMenuHolder sideNotificationsHolder;
 
-    private final ScrollPanel mainScroll;
+    private final ScrollPanel pageScroll;
 
     private boolean sideMenuVisible = false;
 
@@ -108,26 +108,45 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         pageLayout = new Layout(getElement());
 
-        FlowPanel mainHolder = new FlowPanel();
-        mainHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
-        mainScroll = new ScrollPanel(mainHolder);
+        FlowPanel pagePanel = new FlowPanel();
+        pagePanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
+
+        pageScroll = new ScrollPanel(pagePanel);
 
         stickyHeaderHolder = new StickyHeaderHolder();
         stickyHeaderHolder.setWidget(getStickyHeaderDisplay());
         getStickyHeaderDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getStickyHeaderDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
-        FlowPanel contentHolder = new FlowPanel();
-        contentHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
-        contentHolder.getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
-        contentHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-        contentHolder.getElement().getStyle().setPosition(Position.RELATIVE);
+        SimplePanel commercialHolder = new SimplePanel();
+        commercialHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
+        commercialHolder.getElement().getStyle().setProperty("verticalAlign", "top");
+        commercialHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        commercialHolder.getElement().getStyle().setProperty("right", "0");
+
+        commercialHolder.setWidget(getCommercialDisplay());
+
+        SimplePanel contentHolder = new SimplePanel(getContentDisplay());
+        contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
+        contentHolder.getElement().getStyle().setProperty("verticalAlign", "top");
+
+        FlowPanel contentPanel = new FlowPanel();
+        contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+
+        contentPanel.add(contentHolder);
+        contentPanel.add(commercialHolder);
 
         inlineMenuHolder = new InlineMenuHolder(stickyHeaderHolder);
-        contentHolder.add(inlineMenuHolder);
-        contentHolder.add(getContentDisplay());
 
-        mainScroll.addScrollHandler(new ScrollHandler() {
+        FlowPanel mainPanel = new FlowPanel();
+        mainPanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
+        mainPanel.getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
+        mainPanel.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        mainPanel.getElement().getStyle().setPosition(Position.RELATIVE);
+        mainPanel.add(contentPanel);
+        mainPanel.add(inlineMenuHolder);
+
+        pageScroll.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
                 stickyHeaderHolder.onPositionChange();
@@ -143,18 +162,18 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         getFooterDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getFooterDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
-        mainHolder.add(getHeaderDisplay());
-        mainHolder.add(stickyHeaderHolder);
-        mainHolder.add(contentHolder);
-        mainHolder.add(footerHolder);
+        pagePanel.add(getHeaderDisplay());
+        pagePanel.add(stickyHeaderHolder);
+        pagePanel.add(mainPanel);
+        pagePanel.add(footerHolder);
 
         // ============ Content Layer ============
         {
-            Layer layer = pageLayout.attachChild(mainScroll.asWidget().getElement(), mainScroll);
-            mainScroll.setLayoutData(layer);
+            Layer layer = pageLayout.attachChild(pageScroll.asWidget().getElement(), pageScroll);
+            pageScroll.setLayoutData(layer);
 
-            getChildren().add(mainScroll);
-            adopt(mainScroll);
+            getChildren().add(pageScroll);
+            adopt(pageScroll);
         }
 
         // ============ Side Menu Layer ============
@@ -211,6 +230,10 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.footer);
     }
 
+    public DisplayPanel getCommercialDisplay() {
+        return displays.get(Display.commersial);
+    }
+
     public void forceLayout(int animationTime) {
         doLayout();
         pageLayout.layout(animationTime);
@@ -235,9 +258,19 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
             break;
         }
 
+        switch (layoutType) {
+        case monitor:
+        case tabletLandscape:
+            getCommercialDisplay().setVisible(true);
+            break;
+        default:
+            getCommercialDisplay().setVisible(false);
+            break;
+        }
+
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
         Layer notifications = (Layer) sideNotificationsHolder.getLayoutData();
-        Layer mainLayer = (Layer) mainScroll.getLayoutData();
+        Layer mainLayer = (Layer) pageScroll.getLayoutData();
 
         if (sideMenuVisible) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
