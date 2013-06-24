@@ -1060,7 +1060,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    private LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ARCode.Type leaseType) {
+    protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ARCode.Type leaseType) {
         Persistence.ensureRetrieve(unit, AttachLevel.Attached);
         Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);

@@ -24,11 +24,17 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.financial.offering.ProductItem;
+import com.propertyvista.domain.policy.framework.PolicyNode;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
+import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 
 public class LeaseYardiManager extends LeaseAbstractManager {
 
@@ -141,5 +147,32 @@ public class LeaseYardiManager extends LeaseAbstractManager {
         super.updateLeaseDates(lease);
 
         lease.expectedMoveOut().setValue(expectedMoveOut);
+    }
+
+    //
+    // Functionality, removed in Yardi mode:
+    //
+    @Override
+    public Lease setService(Lease lease, ProductItem serviceId) {
+        // Do nothing in Yardi mode!
+        return lease;
+    }
+
+    @Override
+    public LeaseTerm setService(LeaseTerm leaseTerm, ProductItem serviceId) {
+        // Do nothing in Yardi mode!
+        return leaseTerm;
+    }
+
+    @Override
+    public BillableItem createBillableItem(Lease lease, ProductItem productItemId, PolicyNode node) {
+        // Do nothing in Yardi mode!
+        return null;
+    }
+
+    @Override
+    protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, Type leaseType) {
+        // Do nothing in Yardi mode!
+        return leaseTerm;
     }
 }

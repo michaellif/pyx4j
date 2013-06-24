@@ -240,6 +240,7 @@ public class YardiLeaseProcessor {
 
             newItems.add(createBillableItem(tr.getCharge().getDetail(), chargeCodeItemNo));
         }
+
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease);
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
             // finalize term
@@ -253,6 +254,7 @@ public class YardiLeaseProcessor {
                 }
             }
         }
+
         return lease;
     }
 
@@ -334,6 +336,7 @@ public class YardiLeaseProcessor {
 
     private BillableItem createBillableItem(ChargeDetail detail, int chargeCodeItemNo) {
         BillableItem billableItem = EntityFactory.create(BillableItem.class);
+
         billableItem.uid().setValue(detail.getChargeCode() + ":" + chargeCodeItemNo);
         billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
         billableItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));
