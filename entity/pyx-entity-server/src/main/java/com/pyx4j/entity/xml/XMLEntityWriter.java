@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.ICollection;
@@ -200,6 +201,9 @@ public class XMLEntityWriter {
             if ((transientAnnotation != null) && (transientAnnotation.logTransient())) {
                 return;
             }
+            if (entity.getEntityMeta().getAnnotation(LogTransient.class) != null) {
+                return;
+            }
         }
         Map<String, String> entityAttributes = new LinkedHashMap<String, String>();
         if (attributes != null) {
@@ -279,6 +283,10 @@ public class XMLEntityWriter {
             if (!isEmitLogTransient()) {
                 Transient transientAnnotation = memberMeta.getAnnotation(Transient.class);
                 if ((transientAnnotation != null) && (transientAnnotation.logTransient())) {
+                    xml.write(memberName, "****");
+                    continue;
+                }
+                if (memberMeta.getAnnotation(LogTransient.class) != null) {
                     xml.write(memberName, "****");
                     continue;
                 }
