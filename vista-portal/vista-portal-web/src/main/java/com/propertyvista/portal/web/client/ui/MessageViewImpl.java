@@ -13,10 +13,13 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
+
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class MessageViewImpl extends FlowPanel implements MessageView {
@@ -25,17 +28,32 @@ public class MessageViewImpl extends FlowPanel implements MessageView {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.Messages.name());
 
-        HTML warning = new HTML("<b>Error Notification</b><br>Error Message goes here");
-        warning.getElement().getStyle().setProperty("textAlign", "center");
+        WidgetsImageBundle images = ImageFactory.getImages();
 
-        warning.getElement().getStyle()
-                .setProperty("background", "url('" + PortalImages.INSTANCE.warning().getSafeUri().asString() + "') no-repeat scroll 30px center");
-        warning.setHeight("40px");
+        HTML error = new HTML("<b>Error Notification</b><br>Error Message goes here");
+        error.getElement().getStyle().setProperty("textAlign", "center");
+        error.getElement().getStyle().setProperty("background", "url('" + images.error().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        error.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        error.setHeight("40px");
+        error.getElement().getStyle().setProperty("border", "1px solid #E09293");
+        error.getElement().getStyle().setProperty("borderRadius", "5px");
+        error.getElement().getStyle().setProperty("margin", "2px");
+        error.getElement().getStyle().setProperty("backgroundColor", "#FFD2D3");
+
+        HTML info = new HTML("<b>Notification</b><br>Message goes here");
+        info.getElement().getStyle().setProperty("textAlign", "center");
+        info.getElement().getStyle().setProperty("background", "url('" + images.info().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        info.getElement().getStyle().setPaddingTop(10, Unit.PX);
+        info.setHeight("40px");
+        info.getElement().getStyle().setProperty("border", "1px solid #9ADF8F");
+        info.getElement().getStyle().setProperty("borderRadius", "5px");
+        info.getElement().getStyle().setProperty("margin", "2px");
+        info.getElement().getStyle().setProperty("backgroundColor", "#D4FFCD");
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.getElement().getStyle().setProperty("backgroundColor", "#FFD2D3");
 
-        contentPanel.add(warning);
+        contentPanel.add(error);
+        contentPanel.add(info);
 
         add(contentPanel);
 

@@ -19,11 +19,12 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.widgets.client.ImageFactory;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.events.UserMessageHandler;
-import com.propertyvista.portal.web.client.resources.PortalImages;
 
 public class UserMessagePanel extends HorizontalPanel implements UserMessageHandler {
 
@@ -56,24 +57,26 @@ public class UserMessagePanel extends HorizontalPanel implements UserMessageHand
     }
 
     public void setMessage(String msg, UserMessageType type) {
+        WidgetsImageBundle images = ImageFactory.getImages();
+
         String color;
         switch (type) {
         case INFO:
             color = "#BBB";
-            image.setResource(PortalImages.INSTANCE.userMessageInfo());
+            image.setResource(images.info());
             break;
         case WARN:
             color = "#F3931F";
-            image.setResource(PortalImages.INSTANCE.warning());
+            image.setResource(images.warning());
             break;
         case ERROR:
         case FAILURE:
             color = "#E12900";
-            image.setResource(PortalImages.INSTANCE.warning());
+            image.setResource(images.error());
             break;
         default:
             color = "inherit";
-            image.setResource(PortalImages.INSTANCE.userMessageInfo());
+            image.setResource(images.info());
         }
         message.setHTML(msg);
         message.getElement().getStyle().setColor(color);

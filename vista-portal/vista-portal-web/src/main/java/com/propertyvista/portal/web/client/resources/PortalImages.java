@@ -42,37 +42,13 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     @Source("del_hover.png")
     ImageResource delRowHover();
 
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("map_marker.png")
-    ImageResource mapMarker();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("map_marker_outbound.png")
-    ImageResource mapMarkerOutbound();
-
     @ImageOptions(repeatStyle = RepeatStyle.None)
     @Source("noImage.jpg")
     ImageResource noImage();
 
-    @ImageOptions(repeatStyle = RepeatStyle.None)
-    @Source("map.png")
-    ImageResource map();
-
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("pointer_menu.png")
     ImageResource pointer();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("warning.png")
-    ImageResource warning();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("info_side_orange.png")
-    ImageResource warningSide();
-
-    @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("user_message_info.png")
-    ImageResource userMessageInfo();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("menu.png")
