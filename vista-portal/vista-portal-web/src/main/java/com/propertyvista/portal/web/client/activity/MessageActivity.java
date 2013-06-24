@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 23, 2013
+ * Created on Jun 24, 2013
  * @author michaellif
  * @version $Id$
  */
@@ -22,15 +22,15 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
-import com.propertyvista.portal.web.client.ui.CommercialView;
+import com.propertyvista.portal.web.client.ui.MessageView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class CommercialActivity extends AbstractActivity {
+public class MessageActivity extends AbstractActivity {
 
-    private final CommercialView view;
+    private final MessageView view;
 
-    public CommercialActivity(Place place) {
-        view = PortalWebViewFactory.instance(CommercialView.class);
+    public MessageActivity(Place place) {
+        view = PortalWebViewFactory.instance(MessageView.class);
     }
 
     @Override

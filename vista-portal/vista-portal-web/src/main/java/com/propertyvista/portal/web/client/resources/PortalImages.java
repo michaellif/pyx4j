@@ -63,7 +63,7 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     ImageResource pointer();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("info_orange.png")
+    @Source("warning.png")
     ImageResource warning();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

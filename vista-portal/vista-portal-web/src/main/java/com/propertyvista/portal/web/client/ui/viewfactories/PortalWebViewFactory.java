@@ -33,6 +33,8 @@ import com.propertyvista.portal.web.client.ui.LeaseContextSelectionView;
 import com.propertyvista.portal.web.client.ui.LeaseContextSelectionViewImpl;
 import com.propertyvista.portal.web.client.ui.MenuView;
 import com.propertyvista.portal.web.client.ui.MenuViewImpl;
+import com.propertyvista.portal.web.client.ui.MessageView;
+import com.propertyvista.portal.web.client.ui.MessageViewImpl;
 import com.propertyvista.portal.web.client.ui.NotificationsView;
 import com.propertyvista.portal.web.client.ui.NotificationsViewImpl;
 import com.propertyvista.portal.web.client.ui.ToolbarView;
@@ -165,6 +167,8 @@ public class PortalWebViewFactory extends ViewFactoryBase {
                 map.put(type, new NotificationsViewImpl());
             } else if (CommercialView.class.equals(type)) {
                 map.put(type, new CommercialViewImpl());
+            } else if (MessageView.class.equals(type)) {
+                map.put(type, new MessageViewImpl());
             } else if (ToolbarView.class.equals(type)) {
                 map.put(type, new ToolbarViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {

@@ -33,7 +33,9 @@ public class PortalWebRootPaneTheme extends Theme {
 
         Notifications,
 
-        Commercial;
+        Commercial,
+
+        Messages;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -45,6 +47,7 @@ public class PortalWebRootPaneTheme extends Theme {
         initMainToolbarStyles();
         initMainMenuStyles();
         initFooterStyles();
+        initMessagesStyles();
 
     }
 
@@ -148,6 +151,12 @@ public class PortalWebRootPaneTheme extends Theme {
         Style style = new Style(".", StyleName.PageFooter);
         style.addProperty("width", "100%");
         style.addProperty("height", "15em");
+        addStyle(style);
+    }
+
+    private void initMessagesStyles() {
+        Style style = new Style(".", StyleName.Messages);
+        style.addProperty("margin", "0 10%");
         addStyle(style);
     }
 
