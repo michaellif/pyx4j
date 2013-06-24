@@ -24,14 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ScrollEvent;
-import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
@@ -39,7 +35,6 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.SimpleMessageFormat;
@@ -137,7 +132,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     private final SimplePanel settingsFormPanel;
 
-    private final ScrollPanel reportPanel;
+    private final SimplePanel reportPanel;
 
     private final ReportSettingsFormControlBar reportSettingsFormControlBar;
 
@@ -238,17 +233,18 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         errorPanel.setVisible(false);
         viewPanel.add(errorPanel);
 
-        reportPanel = new ScrollPanel();
-        reportPanel.addScrollHandler(new ScrollHandler() {
-            @Override
-            public void onScroll(ScrollEvent event) {
-                getMemento().setCurrentPlace(presenter.getPlace());
-                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name(),
-                        reportPanel.getHorizontalScrollPosition());
-                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name(),
-                        reportPanel.getVerticalScrollPosition());
-            }
-        });
+        reportPanel = new SimplePanel();
+        // TODO add memento for scroll positions of the report
+//        reportPanel.addScrollHandler(new ScrollHandler() {
+//            @Override
+//            public void onScroll(ScrollEvent event) {
+//                getMemento().setCurrentPlace(presenter.getPlace());
+//                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name(),
+//                        reportPanel.getHorizontalScrollPosition());
+//                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name(),
+//                        reportPanel.getVerticalScrollPosition());
+//            }
+//        });
         reportPanel.setStylePrimaryName(Styles.ReportPanel.name());
         reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
         reportPanel.getElement().getStyle().setLeft(0, Unit.PX);
@@ -422,21 +418,22 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
                     ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasData.name()));
             if (hadData) {
                 presenter.apply(reportMetadata);
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        Integer horizontalScrollPosition = getMemento().getInteger(
-                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name());
-                        if (horizontalScrollPosition != null) {
-                            reportPanel.setHorizontalScrollPosition(horizontalScrollPosition);
-                        }
-                        Integer verticalScrollPosition = getMemento().getInteger(
-                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name());
-                        if (verticalScrollPosition != null) {
-                            reportPanel.setVerticalScrollPosition(verticalScrollPosition);
-                        }
-                    }
-                });
+                // TODO fix the MEMENTO of report
+                //                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                //                    @Override
+                //                    public void execute() {
+                //                        Integer horizontalScrollPosition = getMemento().getInteger(
+                //                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name());
+                //                        if (horizontalScrollPosition != null) {
+                //                            reportPanel.setHorizontalScrollPosition(horizontalScrollPosition);
+                //                        }
+                //                        Integer verticalScrollPosition = getMemento().getInteger(
+                //                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name());
+                //                        if (verticalScrollPosition != null) {
+                //                            reportPanel.setVerticalScrollPosition(verticalScrollPosition);
+                //                        }
+                //                    }
+                //                });
             }
         } else {
             setReportSettings(((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
