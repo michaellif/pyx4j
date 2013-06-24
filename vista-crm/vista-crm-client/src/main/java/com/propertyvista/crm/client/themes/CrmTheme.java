@@ -490,7 +490,6 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + CommonReportStyles.RReportTableFixedHeader.name() + " th");
-        style.addProperty("width", "100px");
         addStyle(style);
 
         style = new Style("." + CommonReportStyles.RReportTableScrollableBody.name());
@@ -504,7 +503,6 @@ public class CrmTheme extends VistaTheme {
         addStyle(style);
 
         style = new Style("." + CommonReportStyles.RReportTableScrollableBody.name() + " td");
-        style.addProperty("width", "100px");
         addStyle(style);
 
     }

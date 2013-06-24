@@ -80,7 +80,7 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(reportCriteria));
 
-        if (false) {
+        if (true) {
             fillWithMockup(suspenedPreauthorizedPayments);
         }
         return suspenedPreauthorizedPayments;
