@@ -22,8 +22,6 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.AttachEvent;
-import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -109,13 +107,6 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
 
                 reportHtml.getElement().getStyle().setOverflowX(Overflow.SCROLL);
                 reportHtml.getElement().getStyle().setOverflowY(Overflow.AUTO);
-                reportHtml.addAttachHandler(new Handler() {
-                    @Override
-                    public void onAttachOrDetach(AttachEvent event) {
-                        if (event.isAttached()) {
-                        }
-                    }
-                });
             }
 
             @Override
