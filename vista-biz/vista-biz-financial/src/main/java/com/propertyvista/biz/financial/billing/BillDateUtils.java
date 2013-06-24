@@ -1,8 +1,8 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
@@ -33,6 +33,11 @@ public class BillDateUtils {
     private static final I18n i18n = I18n.get(BillDateUtils.class);
 
     public static final DateRange getOverlappingRange(DateRange range1, DateRange range2) {
+
+        if (range1 == null || range2 == null) {
+            return null;
+        }
+
         LogicalDate fromDate1 = range1.getFromDate() == null ? new LogicalDate(0) : range1.getFromDate();
         LogicalDate toDate1 = range1.getToDate() == null ? new LogicalDate(Long.MAX_VALUE) : range1.getToDate();
 

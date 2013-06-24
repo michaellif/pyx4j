@@ -23,6 +23,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -39,11 +40,14 @@ import com.pyx4j.server.mail.MailAttachment;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.financial.billing.InvoiceProductCharge;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -103,6 +107,9 @@ class CaledonReport {
         model.leaseCount().setValue(0);
         model.eftCount().setValue(0);
         model.averageEFT().setValue(BigDecimal.ZERO);
+        model.averageRent().setValue(BigDecimal.ZERO);
+        model.maxLeaseCharges().setValue(BigDecimal.ZERO);
+
         {
             ICursorIterator<Lease> leaseIterator;
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
@@ -118,7 +125,9 @@ class CaledonReport {
             }
         }
 
-        model.averageEFT().setValue(model.averageEFT().getValue().divide(new BigDecimal(model.eftCount().getValue()), 2, RoundingMode.FLOOR));
+        if (model.eftCount().getValue() != 0) {
+            model.averageEFT().setValue(model.averageEFT().getValue().divide(new BigDecimal(model.eftCount().getValue()), 2, RoundingMode.FLOOR));
+        }
         model.averageRent().setValue(model.averageRent().getValue().divide(new BigDecimal(model.leaseCount().getValue()), 2, RoundingMode.FLOOR));
 
         model.pmcName().setValue(VistaDeployment.getCurrentPmc().name().getStringView());
@@ -127,9 +136,19 @@ class CaledonReport {
 
     private static void calulateLeaseStats(Lease lease, CaledonReportModel model) {
         model.leaseCount().setValue(model.leaseCount().getValue() + 1);
+        model.averageRent().setValue(model.averageRent().getValue().add(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()));
 
-        //TODO Calculate Average Rent,   Max Lease charges
+        // Calculate Max Lease charges
         BigDecimal leaseCharges = BigDecimal.ZERO;
+
+        LogicalDate date = new LogicalDate(new Date());
+        BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, date);
+        List<InvoiceProductCharge> charges = ServerSideFactory.create(ARFacade.class).estimateLeaseCharges(cycle, lease);
+
+        for (InvoiceProductCharge charge : charges) {
+            leaseCharges = leaseCharges.add(charge.amount().getValue());
+        }
+
         model.maxLeaseCharges().setValue(DomainUtil.max(model.maxLeaseCharges().getValue(), leaseCharges));
 
         // Calculate total EFT
