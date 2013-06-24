@@ -268,7 +268,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             get(proto().effectiveScreening()).setVisible(!getValue().effectiveScreening().isNull());
             get(proto().relationship()).setVisible(getValue().role().getValue() != LeaseTermParticipant.Role.Applicant);
-            preauthorizedPaymentsPanel.setVisible(!isEditable() /* && !getValue().leaseParticipant().preauthorizedPayments().isEmpty() */);
+            preauthorizedPaymentsPanel.setVisible(!isEditable() && !getValue().leaseParticipant().preauthorizedPayments().isEmpty());
 
             if (isEditable()) {
                 ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.tenant, get(proto().leaseParticipant().participantId()), getValue()

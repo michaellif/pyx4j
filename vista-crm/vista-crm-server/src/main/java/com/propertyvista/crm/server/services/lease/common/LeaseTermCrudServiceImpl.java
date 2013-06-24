@@ -289,8 +289,14 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private void fillPreauthorizedPayments(LeaseTermTenant item) {
         item.leaseParticipant().preauthorizedPayments().setAttachLevel(AttachLevel.Attached);
         item.leaseParticipant().preauthorizedPayments().clear();
-        item.leaseParticipant().preauthorizedPayments()
-                .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
+
+        Persistence.ensureRetrieve(item.leaseTermV(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(item.leaseTermV().holder(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(item.leaseTermV().holder().lease(), AttachLevel.Attached);
+        if (item.leaseTermV().equals(item.leaseTermV().holder().lease().currentTerm().version())) {
+            item.leaseParticipant().preauthorizedPayments()
+                    .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
+        }
     }
 
     private void updateAdjustments(LeaseTerm leaseTerm) {
