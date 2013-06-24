@@ -17,6 +17,6 @@ import com.pyx4j.commons.css.IStyleName;
 
 public enum CommonReportStyles implements IStyleName {
 
-    RRowTotal, RCellNumber;
+    RReportTableFixedHeader, RReportTableScrollableBody, RRowTotal, RCellNumber;
 
 }

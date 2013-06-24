@@ -16,6 +16,14 @@ package com.propertyvista.crm.client.ui.reports.factories.autopay;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.dom.client.Element;
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.AttachEvent;
+import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
@@ -90,7 +98,25 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
     public Report getReport() {
         return new Report() {
 
-            private final HTML reportHtml = new HTML();
+            private final HTML reportHtml;
+            {
+                reportHtml = new HTML();
+                reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
+                reportHtml.getElement().getStyle().setLeft(0, Unit.PX);
+                reportHtml.getElement().getStyle().setRight(0, Unit.PX);
+                reportHtml.getElement().getStyle().setTop(0, Unit.PX);
+                reportHtml.getElement().getStyle().setBottom(0, Unit.PX);
+
+                reportHtml.getElement().getStyle().setOverflowX(Overflow.SCROLL);
+                reportHtml.getElement().getStyle().setOverflowY(Overflow.AUTO);
+                reportHtml.addAttachHandler(new Handler() {
+                    @Override
+                    public void onAttachOrDetach(AttachEvent event) {
+                        if (event.isAttached()) {
+                        }
+                    }
+                });
+            }
 
             @Override
             public Widget asWidget() {
@@ -102,7 +128,9 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
 
                 // header
                 SafeHtmlBuilder builder = new SafeHtmlBuilder();
-                builder.appendHtmlConstant("<table style=\"width: 100%; white-space: nowrap; border-collapse: separate; border-spacing: 0px;\" border='1'>");
+                builder.appendHtmlConstant("<table style=\"display: block; position: absolute; left:0px; width: 1400px; top: 0px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border='1'>");
+
+                builder.appendHtmlConstant("<thead class=\"" + CommonReportStyles.RReportTableFixedHeader.name() + "\">");
                 builder.appendHtmlConstant("<tr>");
                 builder.appendHtmlConstant("<th rowspan='2'>");
                 builder.appendEscaped(i18n.tr("Building"));
@@ -155,8 +183,10 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendEscaped(i18n.tr("% of Total"));
                 builder.appendHtmlConstant("</th>");
                 builder.appendHtmlConstant("</tr>");
+                builder.appendHtmlConstant("</thead>");
 
                 // rows
+                builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
                 Vector<AutoPayReviewDTO> autoPayReviews = (Vector<AutoPayReviewDTO>) data;
                 for (AutoPayReviewDTO reviewCase : autoPayReviews) {
                     int numOfCaseRows = caseRows(reviewCase);
@@ -234,9 +264,20 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                             + reviewCase.totalSuggested().percent().getStringView() + "</td>"); // %                    
                     builder.appendHtmlConstant("</tr>");
                 }
-
+                builder.appendHtmlConstant("</tbody>");
                 builder.appendHtmlConstant("</table>");
                 reportHtml.setHTML(builder.toSafeHtml());
+
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        Element tableHead = reportHtml.getElement().getElementsByTagName("thead").getItem(0);
+                        int tableHeadHeight = tableHead.getClientHeight();
+
+                        Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                        tableBody.getStyle().setTop(tableHeadHeight + 1, Unit.PX);
+                    }
+                });
 
             }
 

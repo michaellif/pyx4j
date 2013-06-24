@@ -484,6 +484,29 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("font-face", "monospace");
         addStyle(style);
 
+        style = new Style("." + CommonReportStyles.RReportTableFixedHeader.name());
+        style.addProperty("display", "block");
+        style.addProperty("overflow-y", "scroll");
+        addStyle(style);
+
+        style = new Style("." + CommonReportStyles.RReportTableFixedHeader.name() + " th");
+        style.addProperty("width", "100px");
+        addStyle(style);
+
+        style = new Style("." + CommonReportStyles.RReportTableScrollableBody.name());
+        style.addProperty("position", "absolute");
+        style.addProperty("top", "0px"); // this value has to be computed and set after the table header is drawn;
+        style.addProperty("bottom", "0px");
+        style.addProperty("left", "0px");
+        style.addProperty("width", "100%");
+        style.addProperty("display", "block");
+        style.addProperty("overflow-y", "scroll");
+        addStyle(style);
+
+        style = new Style("." + CommonReportStyles.RReportTableScrollableBody.name() + " td");
+        style.addProperty("width", "100px");
+        addStyle(style);
+
     }
 
     private void initKeywordBoxStyles() {
