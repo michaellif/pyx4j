@@ -21,14 +21,9 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
-import com.propertyvista.portal.web.client.ui.decorations.UserMessagePanel;
-
 public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBase<E> {
 
     protected static final I18n i18n = I18n.get(ViewBaseImpl.class);
-
-    private final UserMessagePanel messagePanel;
 
     private final SimplePanel formHolder;
 
@@ -43,7 +38,6 @@ public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBa
     }
 
     public ViewBaseImpl(CEntityForm<E> form) {
-        add(messagePanel = new UserMessagePanel());
         add(formHolder = new SimplePanel());
         add(footer = new FlowPanel());
 
@@ -83,20 +77,8 @@ public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBa
 
     @Override
     public void populate(E value) {
-        messagePanel.clearMessage();
-
         form.reset();
         form.populate(value);
-    }
-
-    @Override
-    public void showError(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.ERROR);
-    }
-
-    @Override
-    public void showNote(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.INFO);
     }
 
     public Presenter<E> getPresenter() {

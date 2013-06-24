@@ -70,7 +70,7 @@ public class EditImpl<E extends IEntity> extends ViewBaseImpl<E> implements Edit
     protected void onSubmit() {
         if (!getForm().isValid()) {
             Window.scrollTo(0, 0);
-            showError(getForm().getValidationResults().getValidationMessage(true, false));
+            // TODO Show validation error in dialog
         } else {
             ((Edit.Presenter<E>) getPresenter()).save(getForm().getValue());
         }

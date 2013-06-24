@@ -16,16 +16,12 @@ package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
-import com.propertyvista.portal.web.client.ui.decorations.UserMessagePanel;
 
 public class PreauthorizedPaymentsViewImpl extends FlowPanel implements PreauthorizedPaymentsView {
-
-    protected final UserMessagePanel messagePanel;
 
     private final PreauthorizedPaymentsForm form;
 
     public PreauthorizedPaymentsViewImpl() {
-        add(messagePanel = new UserMessagePanel());
 
         form = new PreauthorizedPaymentsForm();
         form.initContent();
@@ -39,8 +35,6 @@ public class PreauthorizedPaymentsViewImpl extends FlowPanel implements Preautho
 
     @Override
     public void populate(PreauthorizedPaymentListDTO preauthorizedPayments) {
-        messagePanel.clearMessage();
-
         form.reset();
         form.populate(preauthorizedPayments);
     }

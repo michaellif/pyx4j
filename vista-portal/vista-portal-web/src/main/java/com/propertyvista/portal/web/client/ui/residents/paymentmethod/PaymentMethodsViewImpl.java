@@ -18,16 +18,12 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.web.client.ui.decorations.UserMessagePanel;
 
 public class PaymentMethodsViewImpl extends FlowPanel implements PaymentMethodsView {
-
-    protected final UserMessagePanel messagePanel;
 
     private final PaymentMethodsForm form;
 
     public PaymentMethodsViewImpl() {
-        add(messagePanel = new UserMessagePanel());
 
         form = new PaymentMethodsForm();
         form.initContent();
@@ -41,7 +37,6 @@ public class PaymentMethodsViewImpl extends FlowPanel implements PaymentMethodsV
 
     @Override
     public void populate(List<LeasePaymentMethod> paymentMethods) {
-        messagePanel.clearMessage();
 
         form.reset();
         form.populate(paymentMethods);

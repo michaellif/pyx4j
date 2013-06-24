@@ -27,7 +27,4 @@ public interface ViewBase<E extends IEntity> extends IsWidget {
 
     void populate(E value);
 
-    void showError(String msg);
-
-    void showNote(String msg);
 }
