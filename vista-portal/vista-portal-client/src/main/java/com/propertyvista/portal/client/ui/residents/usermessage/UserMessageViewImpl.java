@@ -29,8 +29,8 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.images.DialogImages;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 
 public class UserMessageViewImpl extends Composite implements UserMessageView {
 

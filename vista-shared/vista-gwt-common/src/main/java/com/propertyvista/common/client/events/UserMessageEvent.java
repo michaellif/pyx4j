@@ -15,21 +15,10 @@ package com.propertyvista.common.client.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-import com.pyx4j.commons.IDebugId;
-
 import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
-
-    public enum UserMessageType implements IDebugId {
-
-        INFO, WARN, ERROR, FAILURE;
-
-        @Override
-        public String debugId() {
-            return this.name();
-        }
-    }
 
     private static Type<UserMessageHandler> TYPE;
 

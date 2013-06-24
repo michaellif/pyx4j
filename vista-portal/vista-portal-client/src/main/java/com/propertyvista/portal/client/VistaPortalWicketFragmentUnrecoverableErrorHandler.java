@@ -15,8 +15,8 @@ package com.propertyvista.portal.client;
 
 import com.google.gwt.user.client.Window;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 
 public class VistaPortalWicketFragmentUnrecoverableErrorHandler extends VistaUnrecoverableErrorHandler {
 

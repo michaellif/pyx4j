@@ -28,7 +28,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {

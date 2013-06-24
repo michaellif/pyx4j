@@ -15,9 +15,19 @@ package com.propertyvista.common.client.site;
 
 import com.google.gwt.user.client.Command;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.pyx4j.commons.IDebugId;
 
 public class UserMessage extends Message {
+
+    public enum UserMessageType implements IDebugId {
+
+        INFO, WARN, ERROR, FAILURE;
+
+        @Override
+        public String debugId() {
+            return this.name();
+        }
+    }
 
     private final UserMessageType messageType;
 

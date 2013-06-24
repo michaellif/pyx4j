@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
 import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 import com.propertyvista.portal.client.resources.PortalImages;
 
 public class UserMessagePanel extends HorizontalPanel implements UserMessageHandler {

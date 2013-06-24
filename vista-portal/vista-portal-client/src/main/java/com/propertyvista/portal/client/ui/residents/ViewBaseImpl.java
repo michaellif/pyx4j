@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
 public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBase<E> {

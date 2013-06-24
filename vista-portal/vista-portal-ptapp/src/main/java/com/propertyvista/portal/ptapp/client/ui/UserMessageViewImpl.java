@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.CompositeDebugId;
 
-import com.propertyvista.common.client.events.UserMessageEvent.UserMessageType;
+import com.propertyvista.common.client.site.UserMessage.UserMessageType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
