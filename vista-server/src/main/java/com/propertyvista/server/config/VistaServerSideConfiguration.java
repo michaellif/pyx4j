@@ -178,7 +178,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     public String getDefaultBaseURLresidentPortalWeb(String pmcDnsName) {
         String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
-            return base;
+            return base + DeploymentConsts.RESIDENT_URL_PATH;
         } else {
             return base + DeploymentConsts.PORTAL_URL + DeploymentConsts.RESIDENT_URL_PATH;
         }
