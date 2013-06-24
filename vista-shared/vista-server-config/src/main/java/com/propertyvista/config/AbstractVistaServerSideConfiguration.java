@@ -60,39 +60,41 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true);
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.TenantPortal, true);
      */
-    public abstract String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure);
+    public abstract String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure);
+
+    public abstract String getDefaultBaseURLresidentPortalWeb(String pmcDnsName);
 
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true);
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
      */
     public abstract String getDefaultBaseURLvistaCrm(String pmcDnsName);
 
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
+     */
+    public abstract String getDefaultBaseURLvistaField(String pmcDnsName);
+
+    /**
+     * This method should not be used directly since PMC may have custom DNS configuration
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.ProspectiveApp, true);
      */
     public abstract String getDefaultBaseURLprospectPortal(String pmcDnsName);
 
     /**
      * This method should not be used directly
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true);
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.Operations, true);
      */
     public abstract String getDefaultBaseURLvistaOperations();
 
     /**
      * This method should not be used directly
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Onboarding, true);
+     * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.Onboarding, true);
      */
     public abstract String getDefaultBaseURLvistaOnboarding();
-
-    /**
-     * This method should not be used directly since PMC may have custom DNS configuration
-     * Use @see VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true);
-     */
-    public abstract String getDefaultBaseURLvistaField(String pmcDnsName);
 
     public abstract String getCardServiceSimulatorUrl();
 

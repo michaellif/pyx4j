@@ -72,7 +72,7 @@ public class PaymentAcceptanceUtils {
 
         Collection<Acceptance> requireAcceptance;
         switch (vistaApplication) {
-        case resident:
+        case residentPortal:
             requireAcceptance = residentPortalRequire;
             break;
         case crm:

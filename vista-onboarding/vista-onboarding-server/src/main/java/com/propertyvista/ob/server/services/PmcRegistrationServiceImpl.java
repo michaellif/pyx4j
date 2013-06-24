@@ -41,7 +41,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.ob.rpc.dto.OnboardingApplicationStatus;
 import com.propertyvista.ob.rpc.dto.OnboardingCrmURL;
@@ -140,7 +140,7 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
                 Pmc pmc = Persistence.service().retrieve(criteria);
 
                 if ((pmc != null) && (pmc.status().getValue() == PmcStatus.Active)) {
-                    return VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true);
+                    return VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.crm, true);
                 } else {
                     return null;
                 }

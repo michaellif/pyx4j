@@ -144,7 +144,27 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
+    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "crm" + getApplicationURLNamespace(true);
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.CRM_URL;
+        }
+    }
+
+    @Override
+    public String getDefaultBaseURLvistaField(String pmcDnsName) {
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "field" + getApplicationURLNamespace(true);
+        if (isAppsContextlessDepoyment()) {
+            return base;
+        } else {
+            return base + DeploymentConsts.FIELD_URL;
+        }
+    }
+
+    @Override
+    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
         String base = secure ? getApplicationDeploymentProtocol() : "http";
         base += "://" + pmcDnsName + getAppUrlSeparator() + "portal" + getApplicationURLNamespace(secure);
         if (isAppsContextlessDepoyment()) {
@@ -155,12 +175,12 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public String getDefaultBaseURLvistaCrm(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "crm" + getApplicationURLNamespace(true);
+    public String getDefaultBaseURLresidentPortalWeb(String pmcDnsName) {
+        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "resident" + getApplicationURLNamespace(true);
         if (isAppsContextlessDepoyment()) {
             return base;
         } else {
-            return base + DeploymentConsts.CRM_URL;
+            return base + DeploymentConsts.RESIDENT_URL;
         }
     }
 
@@ -177,16 +197,6 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public String getDefaultBaseURLvistaOperations() {
         return getApplicationDeploymentProtocol() + "://" + "operations" + getApplicationURLNamespace(true) + DeploymentConsts.OPERATIONS_URL;
-    }
-
-    @Override
-    public String getDefaultBaseURLvistaField(String pmcDnsName) {
-        String base = getApplicationDeploymentProtocol() + "://" + pmcDnsName + getAppUrlSeparator() + "field" + getApplicationURLNamespace(true);
-        if (isAppsContextlessDepoyment()) {
-            return base;
-        } else {
-            return base + DeploymentConsts.FIELD_URL;
-        }
     }
 
     @Override

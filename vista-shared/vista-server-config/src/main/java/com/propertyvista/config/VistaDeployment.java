@@ -26,7 +26,6 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.server.config.VistaFeatures;
@@ -80,47 +79,7 @@ public class VistaDeployment {
     }
 
     /**
-     * @deprecated Use function with VistaApplication argument
-     */
-    @Deprecated
-    public static String getBaseApplicationURL(VistaBasicBehavior behavior, boolean secure) {
-        if (behavior == VistaBasicBehavior.Operations) {
-            return getBaseApplicationURL(null, behavior, secure);
-        } else {
-            return getBaseApplicationURL(getCurrentPmc(), behavior, secure);
-        }
-    }
-
-    /**
-     * @deprecated Use function with VistaApplication argument
-     */
-    @Deprecated
-    public static String getBaseApplicationURL(Pmc pmc, VistaBasicBehavior behavior, boolean secure) {
-        VistaApplication application;
-        switch (behavior) {
-        case Operations:
-            application = VistaApplication.operations;
-            break;
-        case Onboarding:
-            application = VistaApplication.onboarding;
-            break;
-        case CRM:
-            application = VistaApplication.crm;
-            break;
-        case ProspectiveApp:
-            application = VistaApplication.prospect;
-            break;
-        case TenantPortal:
-            application = VistaApplication.resident;
-            break;
-        default:
-            throw new IllegalArgumentException();
-        }
-        return getBaseApplicationURL(pmc, application, secure);
-    }
-
-    /**
-     * @param target
+     * @param application
      *            residentPortal. Crm or PtApp
      * @param secure
      *            only matters for residentPortal, for other types will be ignored
@@ -144,17 +103,18 @@ public class VistaDeployment {
         case crm:
             target = DnsNameTarget.vistaCrm;
             break;
+        case field:
+            target = DnsNameTarget.field;
+            break;
         case prospect:
             target = DnsNameTarget.prospectPortal;
             break;
-        case resident:
+        case residentPortal:
             target = DnsNameTarget.residentPortal;
             break;
-        case field:
-            target = DnsNameTarget.field;
-            //TODO fix that after dns will be added to database
-            return "http://vista.field.dev.birchwoodsoftwaregroup.com:8888/vista/field/";
-            //break;   
+        case resident:
+            target = DnsNameTarget.resident;
+            break;
         default:
             throw new IllegalArgumentException();
         }
@@ -175,10 +135,14 @@ public class VistaDeployment {
         case prospectPortal:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLprospectPortal(pmc.dnsName().getValue());
         case residentPortal:
-            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
-                    .getDefaultBaseURLresidentPortal(pmc.dnsName().getValue(), secure);
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLresidentPortalSite(pmc.dnsName().getValue(),
+                    secure);
+        case resident:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLresidentPortalWeb(pmc.dnsName().getValue());
         case vistaCrm:
             return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaCrm(pmc.dnsName().getValue());
+        case field:
+            return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getDefaultBaseURLvistaField(pmc.dnsName().getValue());
         default:
             throw new IllegalArgumentException();
         }

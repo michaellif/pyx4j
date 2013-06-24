@@ -56,7 +56,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
         // filter out not allowed payment types:
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(
-                TenantAppContext.getCurrentUserLease().billingAccount(), VistaApplication.resident);
+                TenantAppContext.getCurrentUserLease().billingAccount(), VistaApplication.residentPortal);
 
         dbCriteria.add(PropertyCriterion.in(dbCriteria.proto().type(), allowedPaymentTypes));
     }
@@ -70,7 +70,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                VistaApplication.resident);
+                VistaApplication.residentPortal);
 
         // save just allowed methods here:
         if (allowedPaymentTypes.contains(entity.type().getValue())) {

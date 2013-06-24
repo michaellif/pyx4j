@@ -17,6 +17,9 @@ public interface DeploymentConsts {
 
     public static final String PORTAL_URL = "portal/";
 
+    // TODO rename to resident
+    public static final String RESIDENT_URL = "portalWeb/";
+
     public static final String PTAPP_URL = "ptapp/";
 
     public static final String CRM_URL = "crm/";

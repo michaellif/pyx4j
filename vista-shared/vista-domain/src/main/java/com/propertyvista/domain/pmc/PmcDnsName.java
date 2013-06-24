@@ -39,11 +39,14 @@ public interface PmcDnsName extends IEntity {
 
         vistaCrm,
 
+        field,
+
+        // TODO rename to site
         residentPortal,
 
-        prospectPortal,
+        resident,
 
-        field;
+        prospectPortal;
 
         @Override
         public String toString() {

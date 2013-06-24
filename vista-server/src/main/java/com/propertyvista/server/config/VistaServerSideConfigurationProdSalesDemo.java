@@ -44,7 +44,7 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
+    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
         String protocol;
         if (secure) {
             protocol = "https://";

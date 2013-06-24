@@ -75,7 +75,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
         new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(AddressRetriever.getLeaseAddress(lease), dto.address());
 
@@ -108,7 +108,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
             Validate.isTrue(PaymentType.avalableInPortal().contains(entity.paymentMethod().type().getValue()));
             Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                    VistaApplication.resident);
+                    VistaApplication.residentPortal);
 
             // save just allowed methods here:
             if (allowedPaymentTypes.contains(entity.paymentMethod().type().getValue())) {

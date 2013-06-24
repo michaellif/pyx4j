@@ -63,7 +63,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
     @Override
     protected VistaApplication getVistaApplication() {
-        return VistaApplication.resident;
+        return VistaApplication.residentPortal;
     }
 
     @Override
@@ -135,7 +135,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
 
         if (selectedLease != null) {
             Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(selectedLease.billingAccount(),
-                    VistaApplication.resident);
+                    VistaApplication.residentPortal);
             for (PaymentType paymentType : allowedPaymentTypes) {
                 switch (paymentType) {
                 case CreditCard:

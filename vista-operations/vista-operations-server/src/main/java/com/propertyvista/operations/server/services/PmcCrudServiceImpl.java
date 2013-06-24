@@ -46,7 +46,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -78,9 +78,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTarget RetrieveTarget) {
         super.enhanceRetrieved(entity, dto, RetrieveTarget);
 
-        dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.CRM, true));
-        dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.TenantPortal, false));
-        dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaBasicBehavior.ProspectiveApp, true));
+        dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.crm, true));
+        dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.residentPortal, false));
+        dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.prospect, true));
     }
 
     @Override

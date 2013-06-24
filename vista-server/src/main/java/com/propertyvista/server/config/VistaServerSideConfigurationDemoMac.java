@@ -74,7 +74,7 @@ public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfigur
     }
 
     @Override
-    public String getDefaultBaseURLresidentPortal(String pmcDnsName, boolean secure) {
+    public String getDefaultBaseURLresidentPortalSite(String pmcDnsName, boolean secure) {
         String protocol;
         if (secure) {
             protocol = "http://";

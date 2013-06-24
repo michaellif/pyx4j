@@ -36,7 +36,7 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractUser;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -53,9 +53,9 @@ public class EmailTemplateRootObjectLoader {
         }
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
-            t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false));
-            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH);
-            t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true));
+            t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, false));
+            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH);
+            t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
             // TODO use proper locale
@@ -168,20 +168,20 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String getCrmAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), true,
-                CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true), true, CrmSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
     private static String getPtappAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true,
-                PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
+                AuthenticationService.AUTH_TOKEN_ARG, token);
 
     }
 
     private static String getPortalAccessUrl(String token) {
-        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH,
-                true, PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
+        return AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
+                PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
     private static OnlineApplication getApplication(LeaseTermParticipant tenantInLease) {

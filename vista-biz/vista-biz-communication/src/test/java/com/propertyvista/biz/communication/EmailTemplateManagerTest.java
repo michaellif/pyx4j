@@ -68,6 +68,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
 import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
@@ -145,11 +146,11 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         createPmc();
 
-        portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, false);
-        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH;
-        ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true);
+        portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, false);
+        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH;
+        ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true);
 
-        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true, PtSiteMap.LoginWithToken.class,
+        appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
     }
 
@@ -335,7 +336,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     crmUser.name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.CRM, true), true,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true), true,
                             CrmSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
@@ -352,7 +353,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
                             PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
@@ -369,7 +370,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             if (asString) {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.ProspectiveApp, true), true,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL( VistaApplication.prospect, true), true,
                             PtSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token)
                 };
                 fmtArgs = args;
@@ -491,7 +492,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 String[] args = {
                     mainAplt.leaseParticipant().customer().user().name().getValue(),
                     company,
-                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
+                    AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH, true,
                             PortalSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token),
                     portalHomeUrl,
                     tenantHomeUrl,

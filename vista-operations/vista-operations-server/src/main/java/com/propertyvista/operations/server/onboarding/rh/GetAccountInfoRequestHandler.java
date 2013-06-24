@@ -24,18 +24,18 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.VistaCrmBehavior;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.onboarding.AccountInfoIO;
 import com.propertyvista.onboarding.AccountInfoResponseIO;
 import com.propertyvista.onboarding.GetAccountInfoRequestIO;
 import com.propertyvista.onboarding.OnboardingPmcAccountStatus;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAccountInfoRequestIO> {
@@ -85,9 +85,9 @@ public class GetAccountInfoRequestHandler extends AbstractRequestHandler<GetAcco
             return response;
         }
 
-        response.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
-        response.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, false));
-        response.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.ProspectiveApp, true));
+        response.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.crm, true));
+        response.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.residentPortal, false));
+        response.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.prospect, true));
 
         EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
         credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));

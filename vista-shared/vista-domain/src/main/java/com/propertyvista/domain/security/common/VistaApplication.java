@@ -27,13 +27,17 @@ public enum VistaApplication implements Behavior {
 
     crm,
 
+    field,
+
+    // TODO rename to site
+    residentPortal,
+
+    // New site for residents
     resident,
 
     prospect,
 
-    onboarding,
-
-    field;
+    onboarding;
 
     public static VistaApplication getVistaApplication(Set<Behavior> behaviours) {
         for (VistaApplication behaviour : VistaApplication.values()) {

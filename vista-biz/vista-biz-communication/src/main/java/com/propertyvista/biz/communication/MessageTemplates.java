@@ -62,7 +62,6 @@ import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaApplication;
-import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -235,7 +234,7 @@ public class MessageTemplates {
         PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
         pwdReqT.RequestorName().set(user.name());
         pwdReqT.PasswordResetUrl().setValue(
-                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.Operations, true), true,
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
                         OperationsSiteMap.LoginWithToken.class, AuthenticationService.AUTH_TOKEN_ARG, token));
         data.add(pwdReqT);
 
@@ -505,8 +504,8 @@ public class MessageTemplates {
         try {
             String body = IOUtils.getTextResource("email/new-pmc.html");
             body = body.replace("${ownerName}", user.firstName().getValue());
-            body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.CRM, true));
-            body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaBasicBehavior.TenantPortal, true));
+            body = body.replace("${crmLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.crm, true));
+            body = body.replace("${portalLink}", VistaDeployment.getBaseApplicationURL(pmc, VistaApplication.residentPortal, true));
 
             // TODO i18n body
             template.content().setValue(wrapAdminHtml(body));
@@ -540,7 +539,7 @@ public class MessageTemplates {
             String body = IOUtils.getTextResource("email/tenantsure-payment-not-processed.html");
             body = body.replace("${cancellationDate}", dateFormat.format(cancellationDate));
             body = body.replace("${gracePeriodEndDate}", dateFormat.format(gracePeriodEndDate));
-            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaBasicBehavior.TenantPortal, true)
+            body = body.replace("${paymentMethodLink}", AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true)
                     + DeploymentConsts.TENANT_URL_PATH, true, PortalSiteMap.Resident.TenantInsurance.TenantSure.Management.UpdateCreditCard.class));
             // TODO i18n body
             template.content().setValue(wrapTenantSureHtml(body));
@@ -609,7 +608,7 @@ public class MessageTemplates {
                 String crmUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
                 mrUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.MaintenanceRequest().formViewerPlace(request.getPrimaryKey()));
             } else {
-                String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
+                String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true);
                 mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
                         new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(request.getPrimaryKey()));
             }

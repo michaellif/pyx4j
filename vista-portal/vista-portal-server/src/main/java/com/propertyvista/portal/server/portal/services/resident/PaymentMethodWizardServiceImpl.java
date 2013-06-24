@@ -59,7 +59,7 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
-                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.resident));
+                ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
         if (dto.allowedPaymentTypes().contains(PaymentType.Echeck)) {
             dto.paymentMethod().type().setValue(PaymentType.Echeck);
@@ -80,7 +80,7 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
 
         Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
         Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                VistaApplication.resident);
+                VistaApplication.residentPortal);
 
         Key key = null;
 
