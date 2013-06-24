@@ -14,7 +14,7 @@ SET search_path = 'public';
 BEGIN TRANSACTION;
 
 -- Sequences to drop
--- DROP SEQUENCE portal_preferences_seq;
+ -- DROP SEQUENCE portal_preferences_seq;
 
 -- New sequences
  CREATE SEQUENCE auto_pay_change_policy_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;

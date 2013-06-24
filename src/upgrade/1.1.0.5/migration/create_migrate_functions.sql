@@ -269,7 +269,7 @@ BEGIN
         CREATE INDEX notification$buildings_owner_idx ON notification$buildings USING btree (owner);
         CREATE INDEX notification$portfolios_owner_idx ON notification$portfolios USING btree (owner);
         CREATE INDEX notification_employee_idx ON notification USING btree (employee);
-        CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
+        -- CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
 
         
         

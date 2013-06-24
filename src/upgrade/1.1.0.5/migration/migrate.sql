@@ -261,6 +261,18 @@ BEGIN TRANSACTION;
         AND     namespace ~ '^z';
 COMMIT;
 
+/**
+***     One-time update for greenwin 
+**/
+
+BEGIN TRANSACTION;
+
+UPDATE  greenwin.preauthorized_payment_covered_item
+SET     billable_Item = 31843 
+WHERE   id = 2228 ;
+
+COMMIT;
+
 
 
 SET client_min_messages = 'notice';
