@@ -224,7 +224,7 @@ public class PortalWebTheme extends Theme {
         style.addProperty("margin-right", "40px");
         addStyle(style);
 
-        style = new Style(".gwt-DropDownPanel");
+        style = new Style(".", DefaultWidgetsTheme.StyleName.DropDownPanel);
         style.addProperty("z-index", "20");
         addStyle(style);
 

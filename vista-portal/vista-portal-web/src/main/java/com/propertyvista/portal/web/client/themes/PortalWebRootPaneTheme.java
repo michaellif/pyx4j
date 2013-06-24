@@ -29,7 +29,9 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainToolbar, BrandImage,
 
-        MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel, MainMenuIcon;
+        MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel, MainMenuIcon,
+
+        Notifications;
     }
 
     public static enum StyleDependent implements IStyleDependent {

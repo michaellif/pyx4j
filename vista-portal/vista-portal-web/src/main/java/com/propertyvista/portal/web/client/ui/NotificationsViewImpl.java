@@ -20,14 +20,24 @@ import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class NotificationsViewImpl extends FlowPanel implements NotificationsView {
 
-    private final Label label;
-
     public NotificationsViewImpl() {
 
-        setStyleName(PortalWebRootPaneTheme.StyleName.PageFooter.name());
+        getElement().getStyle().setProperty("margin", "10px");
 
-        label = new Label("Alerts");
-        add(label);
+        setStyleName(PortalWebRootPaneTheme.StyleName.Notifications.name());
+
+        FlowPanel contentPanel = new FlowPanel();
+        contentPanel.setSize("400px", "600px");
+        contentPanel.getElement().getStyle().setProperty("border", "solid 1px #aaa");
+        contentPanel.getElement().getStyle().setProperty("backgroundColor", "white");
+
+        for (int i = 0; i < 6; i++) {
+            Label label = new Label("This is message #" + i);
+            label.getElement().getStyle().setProperty("margin", "30px");
+            contentPanel.add(label);
+        }
+
+        add(contentPanel);
 
     }
 
