@@ -128,7 +128,9 @@ class CaledonReport {
         if (model.eftCount().getValue() != 0) {
             model.averageEFT().setValue(model.averageEFT().getValue().divide(new BigDecimal(model.eftCount().getValue()), 2, RoundingMode.FLOOR));
         }
-        model.averageRent().setValue(model.averageRent().getValue().divide(new BigDecimal(model.leaseCount().getValue()), 2, RoundingMode.FLOOR));
+        if (model.leaseCount().getValue() != 0) {
+            model.averageRent().setValue(model.averageRent().getValue().divide(new BigDecimal(model.leaseCount().getValue()), 2, RoundingMode.FLOOR));
+        }
 
         model.pmcName().setValue(VistaDeployment.getCurrentPmc().name().getStringView());
         er.reportEntity(formatter, model);
