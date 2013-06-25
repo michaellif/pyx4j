@@ -58,7 +58,7 @@ public class ResponsiveLayoutTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutContentHolder);
-        style.addProperty("min-height", "400px");
+        style.addProperty("min-height", "600px");
         addStyle(style);
 
     }
