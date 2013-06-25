@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -69,7 +71,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     private enum MementoKeys {
 
-        ReportMetadata, HasData, HorizontalScrollPosition, VerticalScrollPosition
+        ReportMetadata, HasData, HorizontalScrollPosition, VerticalScrollPosition, ReportMemento
 
     }
 
@@ -234,17 +236,6 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         viewPanel.add(errorPanel);
 
         reportPanel = new SimplePanel();
-        // TODO add memento for scroll positions of the report
-//        reportPanel.addScrollHandler(new ScrollHandler() {
-//            @Override
-//            public void onScroll(ScrollEvent event) {
-//                getMemento().setCurrentPlace(presenter.getPlace());
-//                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name(),
-//                        reportPanel.getHorizontalScrollPosition());
-//                getMemento().putInteger(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name(),
-//                        reportPanel.getVerticalScrollPosition());
-//            }
-//        });
         reportPanel.setStylePrimaryName(Styles.ReportPanel.name());
         reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
         reportPanel.getElement().getStyle().setLeft(0, Unit.PX);
@@ -410,11 +401,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         getMemento().setCurrentPlace(place);
         getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMetadata.name(), settingsForm.getValue());
         getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HasData.name(), hasData);
-        // TODO see reportPanel initialzation and ScollEventHandler
-        //getMemento().putInteger(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name(),
-        //                reportPanel.getHorizontalScrollPosition());
-        //getMemento().putInteger(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name(),
-        //        reportPanel.getVerticalScrollPosition());
+        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMemento.name(), report.getMemento());
     }
 
     @Override
@@ -426,23 +413,16 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
             boolean hadData = Boolean.TRUE.equals(getMemento().getObject(
                     ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasData.name()));
             if (hadData) {
+                // not good: here we rely its not going to be async because activity has cache
                 presenter.apply(reportMetadata);
-                // TODO fix the MEMENTO of report
-                //                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                //                    @Override
-                //                    public void execute() {
-                //                        Integer horizontalScrollPosition = getMemento().getInteger(
-                //                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HorizontalScrollPosition.name());
-                //                        if (horizontalScrollPosition != null) {
-                //                            reportPanel.setHorizontalScrollPosition(horizontalScrollPosition);
-                //                        }
-                //                        Integer verticalScrollPosition = getMemento().getInteger(
-                //                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.VerticalScrollPosition.name());
-                //                        if (verticalScrollPosition != null) {
-                //                            reportPanel.setVerticalScrollPosition(verticalScrollPosition);
-                //                        }
-                //                    }
-                //                });
+                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                    @Override
+                    public void execute() {
+                        Object reportMemento = getMemento().getObject(
+                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMemento.name());
+                        report.setMemento(reportMemento);
+                    }
+                });
             }
         } else {
             setReportSettings(((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
