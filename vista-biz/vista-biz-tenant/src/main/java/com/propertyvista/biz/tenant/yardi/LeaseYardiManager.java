@@ -99,6 +99,9 @@ public class LeaseYardiManager extends LeaseAbstractManager {
         if (lease.status().getValue() == Lease.Status.Completed) {
             lease.actualMoveOut().setValue(null);
             lease.status().setValue(Status.Active);
+            if (lease.completion().isNull()) {
+                lease.completion().setValue(CompletionType.Termination);
+            }
             Persistence.service().merge(lease);
         }
 

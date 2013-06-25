@@ -19,6 +19,7 @@ import java.util.List;
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.resident.RTCustomer;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
 
@@ -121,8 +122,10 @@ public class TenantMerger {
             boolean isChanged = true;
 
             for (LeaseTermTenant tenant : tenants) {
-                if (customer.getName().getFirstName().equals(tenant.leaseParticipant().customer().person().name().firstName().getValue())
-                        && customer.getName().getLastName().equals(tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
+                //@formatter:off
+                if (CommonsStringUtils.equals(customer.getName().getFirstName(), tenant.leaseParticipant().customer().person().name().firstName().getValue()) &&
+                    CommonsStringUtils.equals(customer.getName().getLastName(),  tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
+                //@formatter:on
                     isChanged = false;
                     break;
                 }
@@ -142,14 +145,16 @@ public class TenantMerger {
                 for (LeaseTermTenant tenant : tenants) {
                     if (tenant.leaseParticipant().participantId().getValue().equals(yardiCustomer.getCustomerID())
                             && !new TenantMerger().sameName(yardiCustomer, tenant)) {
+
                         Customer cust = tenant.leaseParticipant().customer();
+
                         cust.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
                         cust.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
+
                         Persistence.service().persist(cust);
                     }
                 }
             }
         }
     }
-
 }
