@@ -24,9 +24,9 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface IconButtonImages extends ClientBundle {
+public interface ButtonImages extends ClientBundle {
 
-    public static final IconButtonImages INSTANCE = GWT.create(IconButtonImages.class);
+    public static final ButtonImages INSTANCE = GWT.create(ButtonImages.class);
 
     @Source("icon-button-regular.png")
     ImageResource regular();

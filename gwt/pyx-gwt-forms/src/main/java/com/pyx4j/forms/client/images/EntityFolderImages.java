@@ -25,10 +25,10 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
+public interface EntityFolderImages extends WidgetsImages, ButtonImages {
 
     EntityFolderImages INSTANCE = GWT.create(EntityFolderImages.class);
 
@@ -36,7 +36,7 @@ public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
 
     MoveDownIconButtonImages moveDownButton();
 
-    public interface MoveUpIconButtonImages extends IconButtonImages {
+    public interface MoveUpIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("arrow_up.png")
@@ -53,7 +53,7 @@ public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
         ImageResource active();
     }
 
-    public interface MoveDownIconButtonImages extends IconButtonImages {
+    public interface MoveDownIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("arrow_down.png")

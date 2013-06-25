@@ -296,13 +296,13 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                         case KeyCodes.KEY_TAB:
                         case KeyCodes.KEY_ESCAPE:
                         case KeyCodes.KEY_UP:
-                            if (triggerButton.isChecked()) {
-                                triggerButton.toggleChecked();
+                            if (triggerButton.isActive()) {
+                                triggerButton.toggleActive();
                             }
                             break;
                         case KeyCodes.KEY_DOWN:
-                            if (!triggerButton.isChecked()) {
-                                triggerButton.toggleChecked();
+                            if (!triggerButton.isActive()) {
+                                triggerButton.toggleActive();
                             }
                             break;
                         }
@@ -314,8 +314,8 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                     @Override
                     public void onDoubleClick(DoubleClickEvent event) {
                         if (NComponent.this.isEditable() && NComponent.this.isEnabled()) {
-                            if (!triggerButton.isChecked()) {
-                                triggerButton.toggleChecked();
+                            if (!triggerButton.isActive()) {
+                                triggerButton.toggleActive();
                             }
                         }
                     }

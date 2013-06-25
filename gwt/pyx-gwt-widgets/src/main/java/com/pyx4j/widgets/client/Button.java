@@ -46,6 +46,8 @@ import com.google.gwt.user.client.ui.MenuBar;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.widgets.client.images.ButtonImages;
+
 public class Button extends FocusPanel implements IFocusWidget {
 
     private final HTML textLabel;
@@ -57,6 +59,10 @@ public class Button extends FocusPanel implements IFocusWidget {
     private Command command;
 
     private ButtonMenuBar menu;
+
+    private ImageResource singleImage;
+
+    private ButtonImages imageBundle;
 
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
@@ -182,14 +188,18 @@ public class Button extends FocusPanel implements IFocusWidget {
     }
 
     public void setImageResource(ImageResource imageResource) {
-        if (imageResource != null) {
-            imageHolder.getElement().getStyle().setProperty("paddingLeft", imageResource.getWidth() + "px");
-            imageHolder.getElement().getStyle().setProperty("background", "url('" + imageResource.getSafeUri().asString() + "') no-repeat scroll left center");
+        this.singleImage = imageResource;
+        updateImageState();
+    }
+
+    private void updateImageState() {
+        if (singleImage != null) {
+            imageHolder.getElement().getStyle().setProperty("paddingLeft", singleImage.getWidth() + "px");
+            imageHolder.getElement().getStyle().setProperty("background", "url('" + singleImage.getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
             imageHolder.getElement().getStyle().setProperty("background", "none");
         }
-
     }
 
     public void click() {

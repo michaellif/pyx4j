@@ -43,7 +43,7 @@ import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
 
@@ -154,7 +154,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         return handlerRegistration;
     }
 
-    public void addAction(ActionType action, String title, IconButtonImages images, Command command) {
+    public void addAction(ActionType action, String title, ButtonImages images, Command command) {
         actionsBar.addAction(action, title, images, command);
     }
 
@@ -162,7 +162,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
         actionsBar.setActionCommand(type, command);
     }
 
-    private void setActionImage(ActionType type, IconButtonImages images) {
+    private void setActionImage(ActionType type, ButtonImages images) {
         actionsBar.setActionImage(type, images);
     }
 

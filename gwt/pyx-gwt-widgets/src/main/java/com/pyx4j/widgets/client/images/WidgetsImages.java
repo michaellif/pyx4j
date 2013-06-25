@@ -91,7 +91,7 @@ public interface WidgetsImages extends ClientBundle {
     @Source("rate-full-star.png")
     ImageResource rateFullStar();
 
-    public interface AddIconButtonImages extends IconButtonImages {
+    public interface AddIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("add.png")
@@ -108,7 +108,7 @@ public interface WidgetsImages extends ClientBundle {
         ImageResource active();
     }
 
-    public interface DelIconButtonImages extends IconButtonImages {
+    public interface DelIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("del.png")

@@ -49,16 +49,16 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
                         @Override
                         public void hideDatePicker() {
                             super.hideDatePicker();
-                            if (triggerButton.isChecked()) {
-                                triggerButton.toggleChecked();
+                            if (triggerButton.isActive()) {
+                                triggerButton.toggleActive();
                             }
                         };
 
                         @Override
                         public void showDatePicker() {
                             super.showDatePicker();
-                            if (!triggerButton.isChecked()) {
-                                triggerButton.toggleChecked();
+                            if (!triggerButton.isActive()) {
+                                triggerButton.toggleActive();
                             }
                         };
                     };
@@ -69,14 +69,14 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
 
                         @Override
                         public void onClose(CloseEvent<PopupPanel> event) {
-                            if (triggerButton.isChecked()) {
-                                triggerButton.toggleChecked();
+                            if (triggerButton.isActive()) {
+                                triggerButton.toggleActive();
                             }
                         }
                     });
                 }
 
-                if (triggerButton.isChecked()) {
+                if (triggerButton.isActive()) {
                     datePickerDropDown.showDatePicker();
                 } else {
                     datePickerDropDown.hideDatePicker();

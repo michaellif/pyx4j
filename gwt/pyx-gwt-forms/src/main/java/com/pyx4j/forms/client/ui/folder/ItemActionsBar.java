@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.widgets.client.IconButton;
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 
 public class ItemActionsBar extends HorizontalPanel {
 
@@ -77,7 +77,7 @@ public class ItemActionsBar extends HorizontalPanel {
         }
     }
 
-    public void addAction(ActionType action, String title, IconButtonImages images, Command command) {
+    public void addAction(ActionType action, String title, ButtonImages images, Command command) {
         IconButton button = new IconButton(title, images, command);
         actions.put(action, button);
     }
@@ -87,7 +87,7 @@ public class ItemActionsBar extends HorizontalPanel {
         actions.get(type).setCommand(command);
     }
 
-    public void setActionImage(ActionType type, IconButtonImages images) {
+    public void setActionImage(ActionType type, ButtonImages images) {
         assert actions.containsKey(type) : "Command is not added";
         actions.get(type).setImages(images);
     }

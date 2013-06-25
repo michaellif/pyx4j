@@ -28,7 +28,7 @@ import com.google.gwt.resources.client.ImageResource;
 
 public class ToggleButton extends Button {
 
-    private boolean checked = false;
+    private boolean active = false;
 
     public ToggleButton(ImageResource imageResource) {
         this(imageResource, null);
@@ -42,11 +42,11 @@ public class ToggleButton extends Button {
         super(new ToggleButtonFacesHandler(), imageResource, text);
     }
 
-    public boolean isChecked() {
-        return checked;
+    public boolean isActive() {
+        return active;
     }
 
-    public void toggleChecked() {
+    public void toggleActive() {
         this.fireEvent(new ClickEvent() {
         });
     }
@@ -60,7 +60,7 @@ public class ToggleButton extends Button {
         public void onMouseOver(MouseOverEvent event) {
             super.onMouseOver(event);
             ToggleButton button = (ToggleButton) getButton();
-            if (isEnabled() && button.checked) {
+            if (isEnabled() && button.active) {
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
@@ -70,7 +70,7 @@ public class ToggleButton extends Button {
         public void onMouseOut(MouseOutEvent event) {
             super.onMouseOut(event);
             ToggleButton button = (ToggleButton) getButton();
-            if (isEnabled() && button.checked) {
+            if (isEnabled() && button.active) {
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             }
@@ -80,8 +80,8 @@ public class ToggleButton extends Button {
         @Override
         public void onClick(ClickEvent event) {
             ToggleButton button = (ToggleButton) getButton();
-            button.checked = !button.checked;
-            if (button.checked) {
+            button.active = !button.active;
+            if (button.active) {
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
             } else {
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());

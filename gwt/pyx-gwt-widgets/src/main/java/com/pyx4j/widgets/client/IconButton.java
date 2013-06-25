@@ -35,7 +35,7 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Image;
 
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 
 /*
  *  Image widget which acts as push-button.
@@ -52,11 +52,11 @@ public class IconButton extends Image {
         this(title, null);
     }
 
-    public IconButton(String title, final IconButtonImages images) {
+    public IconButton(String title, final ButtonImages images) {
         this(title, images, null);
     }
 
-    public IconButton(String title, final IconButtonImages images, final Command command) {
+    public IconButton(String title, final ButtonImages images, final Command command) {
         this.title = title;
         setImages(images);
         setCommand(command);
@@ -99,7 +99,7 @@ public class IconButton extends Image {
         });
     }
 
-    public void setImages(IconButtonImages images) {
+    public void setImages(ButtonImages images) {
         if (images != null) {
             setResource(images.regular());
             getElement().getStyle().setCursor(Cursor.POINTER);
