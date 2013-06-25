@@ -27,7 +27,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
-import com.pyx4j.widgets.client.dialog.images.DialogImages;
+import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
 import com.propertyvista.common.client.site.UserMessage;
 import com.propertyvista.common.client.site.UserMessage.UserMessageType;
@@ -92,9 +92,9 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
     public UserMessageViewImpl() {
         this(new MessageTypeImages() {
 
-            private DialogImages di;
+            private NotificationImages di;
             {
-                di = GWT.create(DialogImages.class);
+                di = GWT.create(NotificationImages.class);
             }
 
             @Override

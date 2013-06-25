@@ -20,11 +20,31 @@ import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.images.IconButtonImages;
 
-public interface PortalImages extends ClientBundle, EntityFolderImages {
+public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsImageBundle {
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
+
+    // ================= Notification images ================= 
+    @Override
+    @Source("Messages_Icon_Success.png")
+    ImageResource confirm();
+
+    @Override
+    @Source("Messages_Icon_Error.png")
+    ImageResource error();
+
+    @Override
+    @Source("Messages_Icon_Information.png")
+    ImageResource info();
+
+    @Override
+    @Source("Messages_Icon_Warning.png")
+    ImageResource warning();
+
+    // ==================================  
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("add.png")
