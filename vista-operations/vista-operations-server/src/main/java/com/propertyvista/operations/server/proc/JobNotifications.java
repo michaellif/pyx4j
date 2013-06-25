@@ -20,12 +20,16 @@ import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailMessage;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerNotification;
 import com.propertyvista.operations.domain.scheduler.TriggerNotificationEvent;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class JobNotifications {
 
@@ -72,6 +76,11 @@ public class JobNotifications {
         if (!run.errorMessage().isNull()) {
             message += SimpleMessageFormat.format("Error Message: {0}<br/>\n", run.errorMessage());
         }
+
+        message += SimpleMessageFormat.format("Execution details <a style=\"color:#929733\" href=\"{0}\">here</a>", //
+                AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.operations, true), true,
+                        new OperationsSiteMap.Management.TriggerRun().formViewerPlace(run.getPrimaryKey())));
+
         message += "</body></html>";
         m.setHtmlBody(message);
 
