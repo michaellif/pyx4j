@@ -75,7 +75,7 @@ public class IconButton extends Image {
             @Override
             public void onMouseDown(MouseDownEvent event) {
                 if (images != null) {
-                    setResource(images.pushed());
+                    setResource(images.active());
                 }
             }
         });

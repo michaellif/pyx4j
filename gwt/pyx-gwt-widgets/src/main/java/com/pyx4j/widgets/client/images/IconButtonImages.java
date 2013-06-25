@@ -35,6 +35,6 @@ public interface IconButtonImages extends ClientBundle {
     ImageResource hover();
 
     @Source("icon-button-regular.png")
-    ImageResource pushed();
+    ImageResource active();
 
 }

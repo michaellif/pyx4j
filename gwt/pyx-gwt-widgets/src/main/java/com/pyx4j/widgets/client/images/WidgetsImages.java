@@ -105,7 +105,7 @@ public interface WidgetsImages extends ClientBundle {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("add.png")
-        ImageResource pushed();
+        ImageResource active();
     }
 
     public interface DelIconButtonImages extends IconButtonImages {
@@ -122,7 +122,7 @@ public interface WidgetsImages extends ClientBundle {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("del.png")
-        ImageResource pushed();
+        ImageResource active();
     }
 
 }

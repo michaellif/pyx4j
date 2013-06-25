@@ -50,7 +50,7 @@ public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("arrow_up.png")
-        ImageResource pushed();
+        ImageResource active();
     }
 
     public interface MoveDownIconButtonImages extends IconButtonImages {
@@ -67,6 +67,6 @@ public interface EntityFolderImages extends WidgetsImages, IconButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("arrow_down.png")
-        ImageResource pushed();
+        ImageResource active();
     }
 }
