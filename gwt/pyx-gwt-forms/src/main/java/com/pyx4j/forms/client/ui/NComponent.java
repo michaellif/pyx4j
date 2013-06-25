@@ -47,7 +47,6 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
-import com.pyx4j.widgets.client.ToggleButton;
 
 public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CComponent<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
         INativeComponent<DATA> {
@@ -62,7 +61,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private EditorPanel editorPanel;
 
-    private ToggleButton triggerButton;
+    private Button triggerButton;
 
     private ViewerPanel viewerPanel;
 
@@ -84,7 +83,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         return viewer;
     }
 
-    public void setTriggerButton(ToggleButton triggerButton) {
+    public void setTriggerButton(Button triggerButton) {
         this.triggerButton = triggerButton;
         if (editorPanel != null) {
             editorPanel.setTriggerButton();

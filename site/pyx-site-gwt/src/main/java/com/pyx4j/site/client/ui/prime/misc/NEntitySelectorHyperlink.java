@@ -31,15 +31,15 @@ import com.pyx4j.forms.client.ui.NFocusComponent;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.TextBox;
-import com.pyx4j.widgets.client.ToggleButton;
 
 class NEntitySelectorHyperlink<E extends IEntity> extends NFocusComponent<E, TextBox, CEntitySelectorHyperlink<E>, Anchor> implements INativeTextComponent<E> {
 
     public NEntitySelectorHyperlink(CEntitySelectorHyperlink<E> cComponent) {
         super(cComponent);
 
-        ToggleButton triggerButton = new ToggleButton(ImageFactory.getImages().triggerDown());
+        Button triggerButton = new Button(ImageFactory.getImages().triggerDown());
         triggerButton.setCommand(new Command() {
 
             @Override

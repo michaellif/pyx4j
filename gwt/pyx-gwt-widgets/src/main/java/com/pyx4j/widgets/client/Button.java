@@ -64,6 +64,8 @@ public class Button extends FocusPanel implements IFocusWidget {
 
     private ButtonImages imageBundle;
 
+    private boolean active = false;
+
     public Button(ImageResource imageResource) {
         this(imageResource, (String) null);
     }
@@ -111,7 +113,7 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         setWidget(imageHolder);
 
-        setImageResource(imageResource);
+        setImage(imageResource);
 
         super.addClickHandler(new ClickHandler() {
             @Override
@@ -124,6 +126,7 @@ public class Button extends FocusPanel implements IFocusWidget {
                     }
                 } else {
                     if (isEnabled() && (command != null)) {
+                        active = !active;
                         command.execute();
                     }
                 }
@@ -187,8 +190,19 @@ public class Button extends FocusPanel implements IFocusWidget {
         setTitle(text);
     }
 
-    public void setImageResource(ImageResource imageResource) {
+    public void setImage(ImageResource imageResource) {
         this.singleImage = imageResource;
+        if (singleImage != null) {
+            this.imageBundle = null;
+        }
+        updateImageState();
+    }
+
+    public void setImageBundle(ButtonImages imageBundle) {
+        this.imageBundle = imageBundle;
+        if (imageBundle != null) {
+            this.singleImage = null;
+        }
         updateImageState();
     }
 
@@ -196,10 +210,23 @@ public class Button extends FocusPanel implements IFocusWidget {
         if (singleImage != null) {
             imageHolder.getElement().getStyle().setProperty("paddingLeft", singleImage.getWidth() + "px");
             imageHolder.getElement().getStyle().setProperty("background", "url('" + singleImage.getSafeUri().asString() + "') no-repeat scroll left center");
+        } else if (imageBundle != null) {
+            imageHolder.getElement().getStyle().setProperty("paddingLeft", singleImage.getWidth() + "px");
+            imageHolder.getElement().getStyle()
+                    .setProperty("background", "url('" + imageBundle.regular().getSafeUri().asString() + "') no-repeat scroll left center");
         } else {
             imageHolder.getElement().getStyle().setProperty("paddingLeft", "0px");
             imageHolder.getElement().getStyle().setProperty("background", "none");
         }
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void toggleActive() {
+        this.fireEvent(new ClickEvent() {
+        });
     }
 
     public void click() {
@@ -214,7 +241,7 @@ public class Button extends FocusPanel implements IFocusWidget {
     @Override
     public void setEnabled(boolean enabled) {
         DOM.setElementPropertyBoolean(getElement(), "disabled", !enabled);
-        buttonFacesHandler.enable(enabled);
+        buttonFacesHandler.setEnabled(enabled);
     }
 
     @Override
@@ -233,14 +260,12 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         private Button button;
 
-        private boolean enabled = true;
-
         private boolean mouseOver = false;
 
         public ButtonFacesHandler() {
         }
 
-        public void init(Button button) {
+        void init(Button button) {
             this.button = button;
             button.addMouseOverHandler(this);
             button.addMouseOutHandler(this);
@@ -250,11 +275,10 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         }
 
-        public void enable(boolean enabled) {
+        public void setEnabled(boolean enabled) {
             if (button == null) {
                 return;
             }
-            this.enabled = enabled;
             if (enabled) {
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
                 if (mouseOver) {
@@ -262,28 +286,39 @@ public class Button extends FocusPanel implements IFocusWidget {
                 }
             } else {
                 button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.disabled.name());
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
                 button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
                 // IE8: fix for Buttons remain in Mouse Over position after they are clicked in filter
                 mouseOver = false;
             }
         }
 
+        public void setActive(boolean active) {
+            if (button == null) {
+                return;
+            }
+            if (button.isEnabled()) {
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+            }
+        }
+
         @Override
         public void onMouseOver(MouseOverEvent event) {
             mouseOver = true;
-            if (isEnabled()) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+            if (button.isEnabled()) {
+                if (!button.active) {
+                    button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                }
             }
         }
 
         @Override
         public void onMouseOut(MouseOutEvent event) {
             mouseOver = false;
-            if (isEnabled()) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+            if (button.isEnabled()) {
+                if (!button.active) {
+                    button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                }
             }
         }
 
@@ -294,33 +329,34 @@ public class Button extends FocusPanel implements IFocusWidget {
 
         @Override
         public void onMouseDown(MouseDownEvent event) {
-            if (isEnabled()) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+            if (button.isEnabled()) {
+                if (!button.active) {
+                    button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                    button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                }
             }
         }
 
         @Override
         public void onMouseUp(MouseUpEvent event) {
-            if (isEnabled()) {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+            if (button.isEnabled()) {
+                if (!button.active) {
+                    button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
+                    button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+                }
             }
         }
 
         @Override
         public void onClick(ClickEvent event) {
-            // fix for Buttons remain in Mouse Over position after they are clicked.
-            button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
-            button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+            if (!button.active) {
+                // fix for Buttons remain in Mouse Over position after they are clicked.
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.hover.name());
+            }
         }
 
         public Button getButton() {
             return button;
-        }
-
-        public boolean isEnabled() {
-            return enabled;
         }
 
     }

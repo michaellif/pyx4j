@@ -25,9 +25,7 @@ import com.google.gwt.event.dom.client.KeyDownEvent;
 import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ITextWidget;
-import com.pyx4j.widgets.client.ToggleButton;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
 public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends

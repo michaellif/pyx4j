@@ -52,7 +52,7 @@ public class DefaultWidgetsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, disabled, pushed, semitransparent
+        watermark, hover, disabled, active, semitransparent
     }
 
     public DefaultWidgetsTheme() {
@@ -244,7 +244,7 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("padding-left", "5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.pushed);
+        style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.active);
         addStyle(style);
 
         style = new Style(".", StyleName.RadioGroupItem, "-", DefaultWidgetsTheme.StyleDependent.disabled);

@@ -30,7 +30,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.PopupPanel;
 
 import com.pyx4j.forms.client.ImageFactory;
-import com.pyx4j.widgets.client.ToggleButton;
+import com.pyx4j.widgets.client.Button;
 
 public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<Date> {
 
@@ -39,7 +39,7 @@ public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<
     public NDatePicker(CDatePicker cComponent) {
         super(cComponent);
 
-        final ToggleButton triggerButton = new ToggleButton(ImageFactory.getImages().datePicker());
+        final Button triggerButton = new Button(ImageFactory.getImages().datePicker());
         triggerButton.setCommand(new Command() {
 
             @Override

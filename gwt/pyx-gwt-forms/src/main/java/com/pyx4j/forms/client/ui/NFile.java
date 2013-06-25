@@ -29,13 +29,13 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Anchor;
-import com.pyx4j.widgets.client.ToggleButton;
+import com.pyx4j.widgets.client.Button;
 
 public class NFile<E extends IFile> extends NComponent<E, Anchor, CFile<E>, Anchor> implements INativeHyperlink<E> {
 
     public NFile(final CFile<E> file) {
         super(file);
-        final ToggleButton triggerButton = new ToggleButton(ImageFactory.getImages().triggerDown());
+        final Button triggerButton = new Button(ImageFactory.getImages().triggerDown());
         triggerButton.setCommand(new Command() {
 
             @Override

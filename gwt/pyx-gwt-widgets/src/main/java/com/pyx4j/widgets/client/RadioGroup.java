@@ -176,9 +176,9 @@ public class RadioGroup<E> extends SimplePanel implements IFocusWidget, HasValue
     private void applySelectionStyles() {
         for (RadioButton button : buttons.values()) {
             if (button.getValue()) {
-                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+                button.addStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
             } else {
-                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.pushed.name());
+                button.removeStyleDependentName(DefaultWidgetsTheme.StyleDependent.active.name());
             }
         }
     }
