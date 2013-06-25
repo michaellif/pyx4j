@@ -91,7 +91,11 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SimplePanel commercialHolder;
 
+    private final FlowPanel contentHolder;
+
     private final ScrollPanel pageScroll;
+
+    private final FlowPanel mainPanel;
 
     private boolean sideMenuVisible = false;
 
@@ -115,27 +119,19 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         pageScroll = new ScrollPanel(pagePanel);
 
-        stickyHeaderHolder = new StickyHeaderHolder();
-
-        stickyHeaderHolder.setHeaderDisplay(getStickyHeaderDisplay());
-        getStickyHeaderDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
-        getStickyHeaderDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-
-        stickyHeaderHolder.setMessageDisplay(getMessageDisplay());
-        getMessageDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
-        getMessageDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        stickyHeaderHolder = new StickyHeaderHolder(this);
 
         commercialHolder = new SimplePanel();
         commercialHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
         commercialHolder.getElement().getStyle().setProperty("verticalAlign", "top");
         commercialHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
         commercialHolder.getElement().getStyle().setProperty("right", "0");
-
         commercialHolder.setWidget(getCommercialDisplay());
 
-        SimplePanel contentHolder = new SimplePanel(getContentDisplay());
-        contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
+        contentHolder = new FlowPanel();
         contentHolder.getElement().getStyle().setProperty("verticalAlign", "top");
+        contentHolder.add(getMessageDisplay());
+        contentHolder.add(getContentDisplay());
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -143,9 +139,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         contentPanel.add(contentHolder);
         contentPanel.add(commercialHolder);
 
-        inlineMenuHolder = new InlineMenuHolder(stickyHeaderHolder);
+        inlineMenuHolder = new InlineMenuHolder(this, stickyHeaderHolder);
 
-        FlowPanel mainPanel = new FlowPanel();
+        mainPanel = new FlowPanel();
         mainPanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
         mainPanel.getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         mainPanel.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
@@ -248,8 +244,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     public void forceLayout(int animationTime) {
         doLayout();
         pageLayout.layout(animationTime);
-        resizeComponents();
         AppSite.getEventBus().fireEvent(new LayoutChangeEvent(layoutType));
+        resizeComponents();
     }
 
     private void doLayout() {
@@ -257,13 +253,13 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            sideMenuHolder.setWidget(getMenuDisplay());
+            sideMenuHolder.setMenuDisplay(getMenuDisplay());
             sideNotificationsHolder.setWidget(getNotificationsDisplay());
             getHeaderDisplay().setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
-            inlineMenuHolder.setWidget(getMenuDisplay());
+            inlineMenuHolder.setMenuDisplay(getMenuDisplay());
             popupNotificationsHolder.setWidget(getNotificationsDisplay());
             getHeaderDisplay().setVisible(true);
             break;
@@ -273,9 +269,11 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case monitor:
         case tabletLandscape:
             getCommercialDisplay().setVisible(true);
+            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
             break;
         default:
             getCommercialDisplay().setVisible(false);
+            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.BLOCK);
             break;
         }
 
@@ -317,8 +315,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         stickyHeaderHolder.onPositionChange();
         inlineMenuHolder.onPositionChange();
 
-        getContentDisplay().getElement().getStyle().setMarginLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
-        getContentDisplay().getElement().getStyle().setMarginRight(commercialHolder.getOffsetWidth(), Unit.PX);
+        contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
+        contentHolder.setWidth((mainPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - commercialHolder.getOffsetWidth()) + "px");
+
     }
 
     @Override

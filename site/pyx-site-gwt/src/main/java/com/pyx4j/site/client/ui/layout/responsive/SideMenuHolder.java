@@ -22,16 +22,16 @@ package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.site.client.DisplayPanel;
 
 public class SideMenuHolder extends SimplePanel {
 
     public SideMenuHolder() {
     }
 
-    @Override
-    public void setWidget(Widget w) {
-        super.setWidget(w);
+    public void setMenuDisplay(DisplayPanel display) {
+        super.setWidget(display);
         getWidget().getElement().getStyle().setPosition(Position.STATIC);
         getWidget().getElement().getStyle().setProperty("width", "auto");
         getWidget().getElement().getStyle().setProperty("height", "100%");

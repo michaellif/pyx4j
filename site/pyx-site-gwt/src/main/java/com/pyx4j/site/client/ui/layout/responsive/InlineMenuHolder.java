@@ -23,13 +23,14 @@ package com.pyx4j.site.client.ui.layout.responsive;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
+
+import com.pyx4j.site.client.DisplayPanel;
 
 public class InlineMenuHolder extends SimplePanel {
 
     private final StickyHeaderHolder stickyHeaderHolder;
 
-    public InlineMenuHolder(StickyHeaderHolder stickyHeaderHolder) {
+    public InlineMenuHolder(ResponsiveLayoutPanel parent, StickyHeaderHolder stickyHeaderHolder) {
         this.stickyHeaderHolder = stickyHeaderHolder;
     }
 
@@ -56,9 +57,8 @@ public class InlineMenuHolder extends SimplePanel {
         onPositionChange();
     }
 
-    @Override
-    public void setWidget(Widget w) {
-        super.setWidget(w);
+    public void setMenuDisplay(DisplayPanel display) {
+        super.setWidget(display);
         onPositionChange();
     }
 

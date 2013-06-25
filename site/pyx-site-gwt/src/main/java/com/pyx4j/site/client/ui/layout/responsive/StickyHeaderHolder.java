@@ -27,6 +27,7 @@ import com.google.gwt.user.client.ui.RequiresResize;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.DisplayPanel;
+import com.pyx4j.widgets.client.style.theme.HorizontalAlignCenterMixin;
 
 public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
 
@@ -34,11 +35,9 @@ public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
 
     private final SimplePanel messageHolder;
 
-    private DisplayPanel headerDisplay;
+    private final DisplayPanel headerDisplay;
 
-    private DisplayPanel messageDisplay;
-
-    public StickyHeaderHolder() {
+    public StickyHeaderHolder(ResponsiveLayoutPanel parent) {
         FlowPanel container = new FlowPanel();
         container.getElement().getStyle().setZIndex(10);
         super.setWidget(container);
@@ -47,20 +46,16 @@ public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
         headerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyHeaderHolder.name());
         container.add(headerHolder);
 
+        this.headerDisplay = parent.getStickyHeaderDisplay();
+        headerHolder.add(headerDisplay);
+
+        parent.getStickyHeaderDisplay().getElement().getStyle().setProperty("maxWidth", ResponsiveLayoutPanel.MAX_WIDTH + "px");
+        parent.getStickyHeaderDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+
         messageHolder = new SimplePanel();
         messageHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutStickyMessageHolder.name());
         container.add(messageHolder);
 
-    }
-
-    public void setHeaderDisplay(DisplayPanel display) {
-        this.headerDisplay = display;
-        headerHolder.add(display);
-    }
-
-    public void setMessageDisplay(DisplayPanel display) {
-        this.messageDisplay = display;
-        messageHolder.add(display);
     }
 
     public void onPositionChange() {
@@ -83,9 +78,6 @@ public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
     public void onResize() {
         if (headerDisplay instanceof RequiresResize) {
             ((RequiresResize) headerDisplay).onResize();
-        }
-        if (messageDisplay instanceof RequiresResize) {
-            ((RequiresResize) messageDisplay).onResize();
         }
     }
 }
