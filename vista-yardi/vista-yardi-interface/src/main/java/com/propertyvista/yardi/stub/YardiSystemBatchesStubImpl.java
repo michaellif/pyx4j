@@ -51,8 +51,8 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
     @Override
     public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {
-
         init(Action.OpenReceiptBatch);
+        validateWriteAccess(yc);
 
         OpenReceiptBatch l = new OpenReceiptBatch();
         l.setUserName(yc.username().getValue());
@@ -66,7 +66,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
         OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(l);
 
         long result = response.getOpenReceiptBatchResult();
-        log.info("OpenReceiptBatch: {}", result);
+        log.debug("OpenReceiptBatch: {}", result);
         return result;
     }
 
@@ -74,8 +74,8 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
     public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
             RemoteException {
         try {
-
             init(Action.AddReceiptsToBatch);
+            validateWriteAccess(yc);
 
             AddReceiptsToBatch l = new AddReceiptsToBatch();
             l.setUserName(yc.username().getValue());
@@ -89,7 +89,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             TransactionXml_type1 transactionXml = new TransactionXml_type1();
 
             String batchXml = MarshallUtil.marshall(residentTransactions);
-            log.info(batchXml);
+            log.debug("{}", batchXml);
             OMElement element = AXIOMUtil.stringToOM(batchXml);
             transactionXml.setExtraElement(element);
 
@@ -97,7 +97,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             AddReceiptsToBatchResponse response = getResidentTransactionsSysBatchService(yc).addReceiptsToBatch(l);
             String responseXml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
-            log.info("AddReceiptsToBatch: {}", responseXml);
+            log.debug("AddReceiptsToBatch: {}", responseXml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, responseXml);
             if (messages.isError()) {
@@ -112,9 +112,11 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
         }
     }
 
+    @Override
     public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
         try {
             init(Action.PostReceiptBatch);
+            validateWriteAccess(yc);
 
             PostReceiptBatch l = new PostReceiptBatch();
             l.setUserName(yc.username().getValue());
@@ -127,7 +129,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(l);
             String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
-            log.info("PostReceiptBatch: {}", xml);
+            log.debug("PostReceiptBatch: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
@@ -144,6 +146,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
     public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
         try {
             init(Action.PostReceiptBatch);
+            validateWriteAccess(yc);
 
             CancelReceiptBatch l = new CancelReceiptBatch();
             l.setUserName(yc.username().getValue());
@@ -156,7 +159,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(l);
             String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
-            log.info("CancelReceiptBatch: {}", xml);
+            log.debug("CancelReceiptBatch: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
@@ -172,7 +175,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
     private ItfResidentTransactions20_SysBatch getResidentTransactionsSysBatchService(PmcYardiCredential yc) throws AxisFault {
         ItfResidentTransactions20_SysBatchStub serviceStub = new ItfResidentTransactions20_SysBatchStub(sysBatchServiceURL(yc));
         addMessageContextListener("ResidentTransactions", serviceStub, null);
-        setTransportOptions(serviceStub);
+        setTransportOptions(serviceStub, yc);
         return serviceStub;
     }
 

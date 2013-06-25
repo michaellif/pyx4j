@@ -190,6 +190,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             Validate.notNull(requests, "requests can not be null");
 
             init(Action.CreateOrEditServiceRequests);
+            validateWriteAccess(yc);
 
             CreateOrEditServiceRequests params = new CreateOrEditServiceRequests();
             params.setUserName(yc.username().getValue());
@@ -201,14 +202,14 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             ServiceRequestXml_type0 serviceRequestXml = new ServiceRequestXml_type0();
             String rawXml = MarshallUtil.marshall(requests);
-            log.info(rawXml);
+            log.debug("{}", rawXml);
             OMElement element = AXIOMUtil.stringToOM(rawXml);
             serviceRequestXml.setExtraElement(element);
             params.setServiceRequestXml(serviceRequestXml);
 
             CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(params);
             String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
-            log.info("CreateOrEditServiceRequests: {}", responseXml);
+            log.debug("CreateOrEditServiceRequests: {}", responseXml);
 
             // When Yardi has problems it returns invalid request with undocumented Error element inside !?
             String error = yardiErrorCheck(responseXml);
@@ -236,7 +237,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
     private ItfServiceRequests getMaintenanceRequestsService(PmcYardiCredential yc) throws AxisFault {
         ItfServiceRequestsStub serviceStub = new ItfServiceRequestsStub(maintenanceRequestsServiceURL(yc));
         addMessageContextListener("ServiceRequests", serviceStub, null);
-        setTransportOptions(serviceStub);
+        setTransportOptions(serviceStub, yc);
         return serviceStub;
     }
 

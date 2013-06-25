@@ -347,7 +347,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     private ItfResidentTransactions2_0 getResidentTransactionsService(PmcYardiCredential yc) throws AxisFault {
         ItfResidentTransactions2_0Stub serviceStub = new ItfResidentTransactions2_0Stub(getResidentTransactionsServiceURL(yc));
         addMessageContextListener("ResidentTransactions", serviceStub, null);
-        setTransportOptions(serviceStub);
+        setTransportOptions(serviceStub, yc);
         return serviceStub;
     }
 

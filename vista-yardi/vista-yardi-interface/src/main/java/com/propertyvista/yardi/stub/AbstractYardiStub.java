@@ -13,6 +13,9 @@
  */
 package com.propertyvista.yardi.stub;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.Stub;
 import org.apache.axis2.context.MessageContext;
@@ -28,6 +31,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants;
@@ -36,6 +40,8 @@ import com.propertyvista.yardi.YardiConstants.Action;
 public class AbstractYardiStub {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractYardiStub.class);
+
+    private final static Set<String> testSystemsUrl = new HashSet<String>();
 
     /**
      * Use to name transaction log files
@@ -46,9 +52,39 @@ public class AbstractYardiStub {
 
     private Long transactionId = 0l;
 
+    static {
+        testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
+        testSystemsUrl.add("https://www.iyardiasp.com/8223");
+    }
+
     protected void init(Action currentAction) {
         this.transactionId = TransactionLog.getNextNumber();
         this.currentAction = currentAction;
+    }
+
+    protected void validateWriteAccess(PmcYardiCredential yc) {
+        if (!VistaDeployment.isVistaProduction()) {
+            validateWriteAccess(yc.serviceURLBase().getValue());
+            validateWriteAccess(yc.residentTransactionsServiceURL().getValue());
+            validateWriteAccess(yc.sysBatchServiceURL().getValue());
+            validateWriteAccess(yc.maintenanceRequestsServiceURL().getValue());
+        }
+    }
+
+    private void validateWriteAccess(String url) {
+        if (CommonsStringUtils.isEmpty(url)) {
+            return;
+        }
+        boolean allow = false;
+        for (String urlBase : testSystemsUrl) {
+            if (url.startsWith(urlBase)) {
+                allow = true;
+                break;
+            }
+        }
+        if (!allow) {
+            throw new AssertionError("Write access to " + url + " from test system if forbiden");
+        }
     }
 
     protected void addMessageContextListener(final String prefix, Stub stub, final StringBuilder envelopeBuffer) {
@@ -84,7 +120,7 @@ public class AbstractYardiStub {
         });
     }
 
-    protected void setTransportOptions(Stub stub) {
+    protected void setTransportOptions(Stub stub, PmcYardiCredential yc) {
         Options options = stub._getServiceClient().getOptions();
         if (options == null) {
             options = new Options();
@@ -107,6 +143,8 @@ public class AbstractYardiStub {
         }
 
         stub._getServiceClient().setOptions(options);
+
+        log.debug("open yardi connection to {} @ {}", yc.database().getStringView(), options.getTo().getAddress());
     }
 
     protected String serviceWithPath(PmcYardiCredential yc, String path) {
