@@ -22,8 +22,6 @@ public class CommercialViewImpl extends FlowPanel implements CommercialView {
 
     public CommercialViewImpl() {
 
-        getElement().getStyle().setProperty("margin", "10px");
-
         setStyleName(PortalWebRootPaneTheme.StyleName.Commercial.name());
 
         FlowPanel contentPanel = new FlowPanel();

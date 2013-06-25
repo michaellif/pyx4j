@@ -45,7 +45,7 @@ public class UserMessageHeaderViewImpl extends FlowPanel implements UserMessageH
         error.setHeight("40px");
         error.getElement().getStyle().setProperty("border", "1px solid #E09293");
         error.getElement().getStyle().setProperty("borderRadius", "5px");
-        error.getElement().getStyle().setProperty("margin", "2px");
+        error.getElement().getStyle().setProperty("margin", "0 10px 10px 10px");
         error.getElement().getStyle().setProperty("backgroundColor", "#FFD2D3");
 
         HTML info = new HTML("<b>Notification</b><br>Message goes here");
@@ -55,7 +55,7 @@ public class UserMessageHeaderViewImpl extends FlowPanel implements UserMessageH
         info.setHeight("40px");
         info.getElement().getStyle().setProperty("border", "1px solid #9ADF8F");
         info.getElement().getStyle().setProperty("borderRadius", "5px");
-        info.getElement().getStyle().setProperty("margin", "2px");
+        info.getElement().getStyle().setProperty("margin", "0 10px 10px 10px");
         info.getElement().getStyle().setProperty("backgroundColor", "#D4FFCD");
 
         contentPanel = new FlowPanel();
