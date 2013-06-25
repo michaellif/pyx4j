@@ -30,14 +30,21 @@ import com.propertyvista.yardi.mapper.TenantMapper;
 
 public class TenantMerger {
 
-    public boolean checkChanges(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
+    public boolean isChanged(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
+        if (yardiCustomers.size() != tenants.size()) {
+            return true;
+        }
+
         for (YardiCustomer customer : yardiCustomers) {
             boolean isNew = true;
+
             for (LeaseTermTenant tenant : tenants) {
                 if (customer.getCustomerID().equals(tenant.leaseParticipant().participantId().getValue())) {
                     isNew = false;
+                    break;
                 }
             }
+
             if (isNew) {
                 return true;
             }
@@ -109,15 +116,18 @@ public class TenantMerger {
         return null;
     }
 
-    public boolean changedNames(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
+    public boolean isNamesChanged(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
         for (YardiCustomer customer : yardiCustomers) {
             boolean isChanged = true;
+
             for (LeaseTermTenant tenant : tenants) {
                 if (customer.getName().getFirstName().equals(tenant.leaseParticipant().customer().person().name().firstName().getValue())
                         && customer.getName().getLastName().equals(tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
                     isChanged = false;
+                    break;
                 }
             }
+
             if (isChanged) {
                 return true;
             }
@@ -127,7 +137,7 @@ public class TenantMerger {
 
     public void updateTenantNames(RTCustomer rtCustomer, Lease lease) {
         List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
-        if (new TenantMerger().changedNames(rtCustomer.getCustomers().getCustomer(), tenants)) {
+        if (new TenantMerger().isNamesChanged(rtCustomer.getCustomers().getCustomer(), tenants)) {
             for (YardiCustomer yardiCustomer : rtCustomer.getCustomers().getCustomer()) {
                 for (LeaseTermTenant tenant : tenants) {
                     if (tenant.leaseParticipant().participantId().getValue().equals(yardiCustomer.getCustomerID())

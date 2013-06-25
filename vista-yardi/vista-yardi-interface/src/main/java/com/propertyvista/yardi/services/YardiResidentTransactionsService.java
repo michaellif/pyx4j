@@ -313,7 +313,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private LeaseFinancialStats importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
         final LeaseFinancialStats state = new LeaseFinancialStats();
 
-        log.info("      Importing lease");
+        log.info("    Importing lease:");
         if (YardiLeaseProcessor.isEligibleForProcessing(rtCustomer)) {
             new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
                 @Override
@@ -350,7 +350,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             });
         } else {
-            log.info("      Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
+            log.info("    Lease and transactions for: {} skipped, lease does not meet criteria.", rtCustomer.getCustomerID());
             // TODO skipping monitor message
             return state;
         }
@@ -461,7 +461,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         if (lease == null) {
             throw new YardiServiceException(i18n.tr("Lease not found for customer: {0}", customerId));
         }
-        log.info("Processing lease: {}", customerId);
+        log.info("    Processing lease: {}", customerId);
 
         new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, YardiServiceException>() {
             @Override

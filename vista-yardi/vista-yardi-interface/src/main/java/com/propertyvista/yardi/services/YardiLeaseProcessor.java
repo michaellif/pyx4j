@@ -81,10 +81,10 @@ public class YardiLeaseProcessor {
     public Lease processLease(RTCustomer rtCustomer, String propertyCode) {
         Lease existingLease = findLease(getLeaseId(rtCustomer), propertyCode);
         if (existingLease != null) {
-            log.info("      Updating lease {}", getLeaseId(rtCustomer));
+            log.info("      = Updating lease {}", getLeaseId(rtCustomer));
             return updateLease(rtCustomer, existingLease);
         } else {
-            log.info("      Creating new lease {}", getLeaseId(rtCustomer));
+            log.info("      = Creating new lease {}", getLeaseId(rtCustomer));
             return createLease(rtCustomer, propertyCode);
         }
     }
@@ -142,6 +142,8 @@ public class YardiLeaseProcessor {
         leaseFacade.activate(lease);
         Persistence.service().retrieve(lease);
 
+        // manage state:
+
         if (isOnNotice(rtCustomer)) {
             lease = markLeaseOnNotice(lease, yardiLease);
         }
@@ -165,34 +167,45 @@ public class YardiLeaseProcessor {
         if (new LeaseMerger().isLeaseDatesChanged(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);
             toPersist = true;
+            log.debug("        - LeaseDatesChanged...");
         }
 
         if (new LeaseMerger().isTermDatesChanged(yardiLease, lease.currentTerm())) {
             lease.currentTerm().set(new LeaseMerger().mergeTermDates(yardiLease, lease.currentTerm()));
             toFinalize = true;
+            log.debug("        - TermDatesChanged...");
         }
 
         if (new LeaseMerger().isPaymentTypeChanged(rtCustomer, lease)) {
             new LeaseMerger().mergePaymentType(rtCustomer, lease);
             toPersist = true;
+            log.debug("        - PaymentTypeChanged...");
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        if (new TenantMerger().checkChanges(yardiCustomers, lease.currentTerm().version().tenants())) {
+        if (new TenantMerger().isChanged(yardiCustomers, lease.currentTerm().version().tenants())) {
             lease.currentTerm().set(new TenantMerger().updateTenants(yardiCustomers, lease.currentTerm()));
             toFinalize = true;
+            log.debug("        - TenantsChanged...");
         }
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
-        if (new TenantMerger().changedNames(yardiCustomers, lease.currentTerm().version().tenants())) {
+        if (new TenantMerger().isNamesChanged(yardiCustomers, lease.currentTerm().version().tenants())) {
             new TenantMerger().updateTenantNames(rtCustomer, lease);
+            log.debug("        - TenantNamesChanged...");
         }
+
+        // persist: 
 
         if (toFinalize) {
             lease = ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            log.debug("        >> Finalizing lease! <<");
         } else if (toPersist) {
             lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+            log.debug("        >> Persisting lease! <<");
         }
+
+        // manage state:
 
         if (lease.status().getValue().isActive()) {
             if (isOnNotice(rtCustomer)) {
@@ -214,7 +227,7 @@ public class YardiLeaseProcessor {
 
     public Lease updateLeaseProducts(List<Transactions> transactions, Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
-        log.info("      Updating billable items for lease {} ", lease.getStringView());
+        log.info("        = Updating billable items for lease: {} ", lease.leaseId().getStringView());
         List<BillableItem> newItems = new ArrayList<BillableItem>();
 
         // Ensure all items are uniquely identified by the order in YArdi
@@ -243,8 +256,8 @@ public class YardiLeaseProcessor {
 
         LeaseChargesMergeStatus mergeStatus = new LeaseMerger().mergeBillableItems(newItems, lease);
         if (!LeaseChargesMergeStatus.NoChange.equals(mergeStatus)) {
-            // finalize term
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            log.debug("        >> Finalizing lease! <<");
 
             if (LeaseChargesMergeStatus.TotalAmount.equals(mergeStatus)) {
                 String msg = SimpleMessageFormat.format("charges changed for lease {0}", leaseId.leaseId());
@@ -261,7 +274,7 @@ public class YardiLeaseProcessor {
     public boolean expireLeaseProducts(Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()) < 0) {
-            log.info("      Terminating billable items for lease {} ", lease.getStringView());
+            log.info("      Terminating billable items for lease {} ", lease.leaseId().getStringView());
 
             // set service charge to zero
             lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(BigDecimal.ZERO);
@@ -269,10 +282,11 @@ public class YardiLeaseProcessor {
             lease.currentTerm().version().leaseProducts().featureItems().clear();
             // finalize
             ServerSideFactory.create(LeaseFacade.class).finalize(lease);
+            log.debug("        >> Finalizing lease! <<");
+
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     //
@@ -328,7 +342,7 @@ public class YardiLeaseProcessor {
             date = getLogicalDate(yardiLease.getLeaseSignDate());
         } else {
             date = new LogicalDate(SystemDateManager.getDate());
-            log.info("Warning", "Empty Yardi 'Lease From' date - substitute with current date!");
+            log.warn("Empty Yardi 'Lease From' date - substitute with current date!");
         }
 
         return date;
