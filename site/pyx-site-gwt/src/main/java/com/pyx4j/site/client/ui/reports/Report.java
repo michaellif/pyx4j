@@ -26,4 +26,8 @@ public interface Report extends IsWidget {
 
     void setData(Object data);
 
+    /** this is to be used along with data to store information about visual representation, i.e. scroll bar position */
+    Object getMemento();
+
+    void setMemento(Object memento);
 }
