@@ -351,6 +351,7 @@ public class YardiLeaseProcessor {
     private BillableItem createBillableItem(ChargeDetail detail, int chargeCodeItemNo) {
         BillableItem billableItem = EntityFactory.create(BillableItem.class);
 
+        // @see function in migration PadProcessorInformation.billableItemId  that use the same value
         billableItem.uid().setValue(detail.getChargeCode() + ":" + chargeCodeItemNo);
         billableItem.agreedPrice().setValue(new BigDecimal(detail.getAmount()));
         billableItem.updated().setValue(getLogicalDate(SystemDateManager.getDate()));

@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -132,19 +130,6 @@ class PreauthorizedPaymentAgreementMananger {
         ServerSideFactory.create(NotificationFacade.class).papSuspension(preauthorizedPayment.tenant().lease());
     }
 
-    private BigDecimal getActualPrice(BillableItem billableItem) {
-        return billableItem.agreedPrice().getValue();
-    }
-
-    private Map<String, BillableItem> getAllBillableItems(LeaseTerm.LeaseTermV leaseTermV) {
-        Map<String, BillableItem> billableItems = new HashMap<String, BillableItem>();
-        billableItems.put(leaseTermV.leaseProducts().serviceItem().uid().getValue(), leaseTermV.leaseProducts().serviceItem());
-        for (BillableItem bi : leaseTermV.leaseProducts().featureItems()) {
-            billableItems.put(bi.uid().getValue(), bi);
-        }
-        return billableItems;
-    }
-
     public void renewPreauthorizedPayments(Lease lease) {
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
         List<PreauthorizedPayment> activePap;
@@ -164,7 +149,7 @@ class PreauthorizedPaymentAgreementMananger {
             return;
         }
 
-        Map<String, BillableItem> billableItems = getAllBillableItems(lease.currentTerm().version());
+        Map<String, BillableItem> billableItems = PaymentBillableUtils.getAllBillableItems(lease.currentTerm().version());
 
         // Verify that new charges not added
         LeaseTerm.LeaseTermV previousVersion = null;
@@ -183,14 +168,15 @@ class PreauthorizedPaymentAgreementMananger {
 
         boolean suspend = false;
 
-        Map<String, BillableItem> previousBillableItems = getAllBillableItems(previousVersion);
+        Map<String, BillableItem> previousBillableItems = PaymentBillableUtils.getAllBillableItems(previousVersion);
 
         if (!EqualsHelper.equals(previousBillableItems.keySet(), billableItems.keySet())) {
             suspend = true;
         } else {
             for (BillableItem previousBillableItem : previousBillableItems.values()) {
                 BillableItem newBillableItem = billableItems.get(previousBillableItem.uid().getValue());
-                if ((newBillableItem == null) || (getActualPrice(newBillableItem).compareTo(getActualPrice(previousBillableItem)) != 0)) {
+                if ((newBillableItem == null)
+                        || (PaymentBillableUtils.getActualPrice(newBillableItem).compareTo(PaymentBillableUtils.getActualPrice(previousBillableItem)) != 0)) {
                     suspend = true;
                     break;
                 }
@@ -203,7 +189,7 @@ class PreauthorizedPaymentAgreementMananger {
                 for (PreauthorizedPaymentCoveredItem pi : pap.coveredItems()) {
                     BillableItem bi = billableItems.get(pi.billableItem().uid().getValue());
                     // Not found or price changed, should have been caught by previous comparison
-                    if ((bi == null) || (getActualPrice(bi).compareTo(getActualPrice(pi.billableItem())) != 0)) {
+                    if ((bi == null) || (PaymentBillableUtils.getActualPrice(bi).compareTo(PaymentBillableUtils.getActualPrice(pi.billableItem())) != 0)) {
                         suspend = true;
                         break forEachAllPap;
                     } else {

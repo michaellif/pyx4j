@@ -18,7 +18,6 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -161,20 +160,6 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
     }
 
-    //TODO proper implementation that will use adjustments
-    private BigDecimal getActualPrice(BillableItem billableItem) {
-        return billableItem.agreedPrice().getValue();
-    }
-
-    private Map<String, BillableItem> getAllBillableItems(LeaseTerm.LeaseTermV leaseTermV) {
-        Map<String, BillableItem> billableItems = new LinkedHashMap<String, BillableItem>();
-        billableItems.put(leaseTermV.leaseProducts().serviceItem().uid().getValue(), leaseTermV.leaseProducts().serviceItem());
-        for (BillableItem bi : leaseTermV.leaseProducts().featureItems()) {
-            billableItems.put(bi.uid().getValue(), bi);
-        }
-        return billableItems;
-    }
-
     private PreauthorizedPaymentCoveredItem getCoveredItem(List<PreauthorizedPaymentCoveredItem> coveredItems, BillableItem billableItem) {
         for (PreauthorizedPaymentCoveredItem coveredItem : coveredItems) {
             if (coveredItem.billableItem().uid().equals(billableItem.uid())) {
@@ -196,7 +181,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         if (previousVersion == null) {
             return null;
         } else {
-            Map<String, BillableItem> billableItems = getAllBillableItems(previousVersion);
+            Map<String, BillableItem> billableItems = PaymentBillableUtils.getAllBillableItems(previousVersion);
             for (PreauthorizedPaymentCoveredItem coveredItem : coveredItems) {
                 // Find items by ID,  not by UID
                 if (billableItems.values().contains(coveredItem.billableItem())) {
@@ -216,12 +201,12 @@ class PreauthorizedPaymentAutoPayReviewReport {
         papReview.tenantName().setValue(preauthorizedPayment.tenant().customer().person().name().getStringView());
 
         // ordered by insertion-order. 
-        Map<String, BillableItem> newBillableItems = getAllBillableItems(billingAccount.lease().currentTerm().version());
+        Map<String, BillableItem> newBillableItems = PaymentBillableUtils.getAllBillableItems(billingAccount.lease().currentTerm().version());
 
         LeaseTerm.LeaseTermV previousVersion = findSuspentionLeaseTermV(billingAccount.lease().currentTerm().version(), preauthorizedPayment.coveredItems());
         Map<String, BillableItem> previousBillableItems;
         if (previousVersion != null) {
-            previousBillableItems = getAllBillableItems(previousVersion);
+            previousBillableItems = PaymentBillableUtils.getAllBillableItems(previousVersion);
         } else {
             previousBillableItems = Collections.emptyMap();
         }
@@ -236,20 +221,20 @@ class PreauthorizedPaymentAutoPayReviewReport {
                     BillableItem previousBillableItem = previousBillableItems.get(bi.getKey());
                     if (previousBillableItem != null) {
                         chargeReview.suspended().billableItem().set(previousBillableItem.createIdentityStub());
-                        chargeReview.suspended().totalPrice().setValue(getActualPrice(previousBillableItem));
+                        chargeReview.suspended().totalPrice().setValue(PaymentBillableUtils.getActualPrice(previousBillableItem));
                         chargeReview.suspended().payment().setValue(BigDecimal.ZERO);
                         calulatePercent(chargeReview.suspended());
                     }
 
                     chargeReview.suggested().billableItem().set(billableItem.createIdentityStub());
-                    chargeReview.suggested().totalPrice().setValue(getActualPrice(billableItem));
+                    chargeReview.suggested().totalPrice().setValue(PaymentBillableUtils.getActualPrice(billableItem));
 
                     chargeReview.leaseCharge().setValue(getLeaseChargeDescription(billableItem));
                     papReview.items().add(chargeReview);
                 }
             } else {
                 chargeReview.suspended().billableItem().set(coveredItem.billableItem().createIdentityStub());
-                chargeReview.suspended().totalPrice().setValue(getActualPrice(coveredItem.billableItem()));
+                chargeReview.suspended().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItem.billableItem()));
                 chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
                 calulatePercent(chargeReview.suspended());
 
@@ -291,7 +276,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
                 chargeReview.leaseCharge().setValue(getLeaseChargeDescription(coveredItem.billableItem()));
 
                 chargeReview.suspended().billableItem().set(coveredItem.billableItem().createIdentityStub());
-                chargeReview.suspended().totalPrice().setValue(getActualPrice(coveredItem.billableItem()));
+                chargeReview.suspended().totalPrice().setValue(PaymentBillableUtils.getActualPrice(coveredItem.billableItem()));
                 chargeReview.suspended().payment().setValue(coveredItem.amount().getValue());
                 calulatePercent(chargeReview.suspended());
 
@@ -331,11 +316,11 @@ class PreauthorizedPaymentAutoPayReviewReport {
         AutoPayReviewChargeDetailDTO suggestedChargeDetail = EntityFactory.create(AutoPayReviewChargeDetailDTO.class);
 
         suggestedChargeDetail.billableItem().set(newBillableItem.createIdentityStub());
-        suggestedChargeDetail.totalPrice().setValue(getActualPrice(newBillableItem));
+        suggestedChargeDetail.totalPrice().setValue(PaymentBillableUtils.getActualPrice(newBillableItem));
 
         suggestedChargeDetail.payment().setValue(
-                calulateNewPaymentValue(coveredItem.amount().getValue(), getActualPrice(coveredItem.billableItem()), getActualPrice(newBillableItem),
-                        changeRule));
+                calulateNewPaymentValue(coveredItem.amount().getValue(), PaymentBillableUtils.getActualPrice(coveredItem.billableItem()),
+                        PaymentBillableUtils.getActualPrice(newBillableItem), changeRule));
 
         calulatePercent(suggestedChargeDetail);
 

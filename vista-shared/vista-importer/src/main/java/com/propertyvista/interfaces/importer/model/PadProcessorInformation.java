@@ -67,6 +67,9 @@ public interface PadProcessorInformation extends IEntity {
 
     IPrimitive<BigDecimal> estimatedChargeSplit();
 
+    // Maps to BillableItem.uid
+    IPrimitive<String> billableItemId();
+
     IPrimitive<BigDecimal> chargeAmount();
 
     IPrimitive<BigDecimal> chargeEftAmount();
