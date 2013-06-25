@@ -21,7 +21,7 @@ import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 
 public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsImageBundle {
 
@@ -97,7 +97,7 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
 
     DashboardMenuImages dashboardMenu();
 
-    interface DashboardMenuImages extends IconButtonImages {
+    interface DashboardMenuImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("Nav_Icon_Dashboard-Inactive.png")
@@ -116,7 +116,7 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
 
     BillingMenuImages billingMenu();
 
-    interface BillingMenuImages extends IconButtonImages {
+    interface BillingMenuImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("Nav_Icon_BillingPayments-Inactive.png")

@@ -18,7 +18,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.resources.client.ImageResource.ImageOptions;
 import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.common.client.resources.VistaImages;
 
@@ -207,7 +207,7 @@ public interface CrmImages extends VistaImages {
 
     EditIconButtonImages editButton();
 
-    public interface EditIconButtonImages extends IconButtonImages {
+    public interface EditIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("Dashboards_normal.png")

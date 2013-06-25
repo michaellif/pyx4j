@@ -35,7 +35,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.IconButton;
-import com.pyx4j.widgets.client.images.IconButtonImages;
+import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
@@ -188,7 +188,7 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
         private final AppPlace place;
 
-        NavigTab(AppPlace appPlace, IconButtonImages images) {
+        NavigTab(AppPlace appPlace, ButtonImages images) {
             super();
 
             this.place = appPlace;
