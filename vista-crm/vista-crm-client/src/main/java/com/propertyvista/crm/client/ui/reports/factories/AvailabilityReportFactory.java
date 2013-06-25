@@ -20,6 +20,8 @@ import java.util.HashMap;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -156,6 +158,8 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
 
             FlowPanel reportPanel;
 
+            ScrollBarPositionMemento scrollBarPositionMemento;
+
             {
                 reportPanel = new FlowPanel();
                 reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -188,7 +192,29 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
                 ReportTable reportTable = new ReportTable(Arrays.asList(AVAILABILITY_TABLE_COLUMNS), new ArrayList<CellFormatter>());
                 reportTable.populate(reportData.unitStatuses);
                 reportPanel.add(reportTable);
+                reportPanel.addDomHandler(new ScrollHandler() {
 
+                    @Override
+                    public void onScroll(ScrollEvent event) {
+                        scrollBarPositionMemento = new ScrollBarPositionMemento(reportPanel.getElement().getScrollLeft(), reportPanel.getElement()
+                                .getScrollTop());
+                    }
+                }, ScrollEvent.getType());
+
+            }
+
+            @Override
+            public Object getMemento() {
+                return scrollBarPositionMemento;
+            }
+
+            @Override
+            public void setMemento(Object memento) {
+                if (memento != null) {
+                    ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento;
+                    reportPanel.getElement().setScrollLeft(scrollBarPosition.posX);
+                    reportPanel.getElement().setScrollTop(scrollBarPosition.posY);
+                }
             }
 
         };

@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.reports.factories;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -89,6 +91,8 @@ public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerC
         return new Report() {
             HTML reportHtml;
 
+            ScrollBarPositionMemento scrollBarPositionMemento;
+
             {
                 reportHtml = new HTML();
                 reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -135,6 +139,26 @@ public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerC
                 bb.appendHtmlConstant("</table>");
 
                 reportHtml.setHTML(bb.toSafeHtml());
+                reportHtml.addDomHandler(new ScrollHandler() {
+                    @Override
+                    public void onScroll(ScrollEvent event) {
+                        scrollBarPositionMemento = new ScrollBarPositionMemento(reportHtml.getElement().getScrollLeft(), reportHtml.getElement().getScrollTop());
+                    }
+                }, ScrollEvent.getType());
+            }
+
+            @Override
+            public Object getMemento() {
+                return scrollBarPositionMemento;
+            }
+
+            @Override
+            public void setMemento(Object memento) {
+                if (memento != null) {
+                    ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento;
+                    reportHtml.getElement().setScrollLeft(scrollBarPosition.posX);
+                    reportHtml.getElement().setScrollTop(scrollBarPosition.posY);
+                }
             }
 
             private void cell(SafeHtmlBuilder bb, String data) {

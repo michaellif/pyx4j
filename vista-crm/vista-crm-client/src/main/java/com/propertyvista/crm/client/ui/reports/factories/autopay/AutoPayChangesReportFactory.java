@@ -22,10 +22,15 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Event;
+import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -39,6 +44,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.factories.ScrollBarPositionMemento;
 import com.propertyvista.crm.client.ui.reports.factories.eft.SelectedBuildingsFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
@@ -97,6 +103,11 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
         return new Report() {
 
             private final HTML reportHtml;
+
+            private ScrollBarPositionMemento tableBodyScrollBarPositionMemento;
+
+            private ScrollBarPositionMemento reportScrollBarPositionMemento;
+
             {
                 reportHtml = new HTML();
                 reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -263,6 +274,13 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 builder.appendHtmlConstant("</tbody>");
                 builder.appendHtmlConstant("</table>");
                 reportHtml.setHTML(builder.toSafeHtml());
+                reportHtml.addDomHandler(new ScrollHandler() {
+                    @Override
+                    public void onScroll(ScrollEvent event) {
+                        reportScrollBarPositionMemento = new ScrollBarPositionMemento(reportHtml.getElement().getScrollLeft(), reportHtml.getElement()
+                                .getScrollLeft());
+                    }
+                }, ScrollEvent.getType());
 
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
@@ -270,11 +288,44 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                         Element tableHead = reportHtml.getElement().getElementsByTagName("thead").getItem(0);
                         int tableHeadHeight = tableHead.getClientHeight();
 
-                        Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                        final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
                         tableBody.getStyle().setTop(tableHeadHeight + 1, Unit.PX);
+
+                        DOM.sinkEvents((com.google.gwt.user.client.Element) tableBody, Event.ONSCROLL);
+                        DOM.setEventListener((com.google.gwt.user.client.Element) tableBody, new EventListener() {
+                            @Override
+                            public void onBrowserEvent(Event event) {
+                                if (event.getTypeInt() == Event.ONSCROLL
+                                        && Element.as(Event.getCurrentEvent().getEventTarget()).getTagName().toUpperCase().equals("TBODY")) {
+                                    tableBodyScrollBarPositionMemento = new ScrollBarPositionMemento(tableBody.getScrollLeft(), tableBody.getScrollTop());
+                                }
+                            }
+                        });
+
                     }
                 });
 
+            }
+
+            @Override
+            public Object getMemento() {
+                return new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento };
+            }
+
+            @Override
+            public void setMemento(Object memento) {
+                if (memento != null) {
+                    final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                    ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) memento;
+                    if (scrollBarPositionMementi[0] != null) {
+                        reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
+                        reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
+                    }
+                    if (scrollBarPositionMementi[1] != null) {
+                        tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
+                        tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
+                    }
+                }
             }
 
             private int caseRows(AutoPayReviewDTO reviewCase) {
