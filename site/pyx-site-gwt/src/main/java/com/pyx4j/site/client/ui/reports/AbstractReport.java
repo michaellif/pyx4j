@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
@@ -32,7 +33,6 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -389,7 +389,16 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         printableHtml.append("</style>");
         printableHtml.append("</head>");
         printableHtml.append("<body>");
-        printableHtml.append(DOM.clone(reportPanel.getElement(), true).getInnerHTML());
+        Element reportElement = (Element) reportPanel.getElement().getFirstChildElement().cloneNode(true);
+        reportElement.getStyle().setPosition(Position.STATIC);
+        reportElement.getStyle().setDisplay(Display.BLOCK);
+        reportElement.getStyle().clearOverflow();
+        reportElement.getStyle().clearLeft();
+        reportElement.getStyle().clearTop();
+        reportElement.getStyle().clearRight();
+        reportElement.getStyle().clearBottom();
+
+        printableHtml.append(reportElement.getString());
         printableHtml.append("</body>");
         printableHtml.append("</html>");
 
