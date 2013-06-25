@@ -236,7 +236,7 @@ public class PortalWebTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("margin", "0");
         style.addProperty("border", "none");
-        style.addProperty("font", "12px/14px Arial, Helvetica, sans-serif");
+        style.addProperty("font-family", "'Lato', sans-serif");
         addStyle(style);
 
     }

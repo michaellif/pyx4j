@@ -172,6 +172,7 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
             sinkEvents(Event.ONCLICK);
 
             icon = new IconButton(null, images);
+
             icon.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuIcon.name());
             add(icon);
 

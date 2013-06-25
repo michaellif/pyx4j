@@ -82,8 +82,7 @@ public class PortalWebRootPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
-        style.addProperty("font-size", "1em");
-        style.addProperty("margin", "15px");
+        style.addProperty("margin", "10px");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
         addStyle(style);

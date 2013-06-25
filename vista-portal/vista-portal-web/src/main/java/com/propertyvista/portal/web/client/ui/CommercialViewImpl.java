@@ -33,7 +33,7 @@ public class CommercialViewImpl extends FlowPanel implements CommercialView {
 
         for (int i = 0; i < 6; i++) {
             Label label = new Label("This is commercial #" + i);
-            label.getElement().getStyle().setProperty("margin", "30px");
+            label.getElement().getStyle().setProperty("margin", "10px");
             contentPanel.add(label);
         }
 
