@@ -124,5 +124,27 @@ END;
 $$
 LANGUAGE plpgsql VOLATILE;
 
+BEGIN TRANSACTION;
+
+        -- disable scheduled triggers
+        
+        UPDATE  _admin_.scheduler_trigger
+        SET     schedule_suspended = true;
+        
+        -- remove email notification for Yuriy
+        
+        DELETE  FROM _admin_.scheduler_trigger_notification
+        WHERE   usr = 6;
+        
+        -- set yardi to test env
+        
+        UPDATE  _admin_.admin_pmc_yardi_credential
+        SET     service_urlbase = 'http://yardi.birchwoodsoftwaregroup.com/Voyager60/',
+                resident_transactions_service_url = NULL,
+                sys_batch_service_url = NULL,
+                maintenance_requests_service_url = NULL;
+                
+COMMIT;
+
 SELECT * FROM _dba_.obfuscate_prod_data();
 
