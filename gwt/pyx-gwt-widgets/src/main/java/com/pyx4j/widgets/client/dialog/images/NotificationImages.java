@@ -23,7 +23,7 @@ package com.pyx4j.widgets.client.dialog.images;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
-public interface DialogImages extends ClientBundle {
+public interface NotificationImages extends ClientBundle {
 
     @Source("dialogConfirm.gif")
     ImageResource confirm();
