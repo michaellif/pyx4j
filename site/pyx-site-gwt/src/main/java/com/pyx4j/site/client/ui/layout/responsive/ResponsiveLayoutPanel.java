@@ -89,9 +89,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SideMenuHolder sideNotificationsHolder;
 
-    private final SimplePanel commercialHolder;
+    private final CommercialHolder commercialHolder;
 
-    private final FlowPanel contentHolder;
+    private final ContentHolder contentHolder;
 
     private final SimplePanel footerHolder;
 
@@ -123,17 +123,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         stickyHeaderHolder = new StickyHeaderHolder(this);
 
-        commercialHolder = new SimplePanel();
-        commercialHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
-        commercialHolder.getElement().getStyle().setProperty("verticalAlign", "top");
-        commercialHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
-        commercialHolder.getElement().getStyle().setProperty("right", "0");
-        commercialHolder.setWidget(getCommercialDisplay());
+        commercialHolder = new CommercialHolder(this);
 
-        contentHolder = new FlowPanel();
-        contentHolder.getElement().getStyle().setProperty("verticalAlign", "top");
-        contentHolder.add(getMessageDisplay());
-        contentHolder.add(getContentDisplay());
+        contentHolder = new ContentHolder(this);
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
