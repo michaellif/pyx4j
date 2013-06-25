@@ -23,4 +23,7 @@ public interface ITableColumnFormatter {
 
     SafeHtml formatContent(IEntity entity);
 
+    /** return width in pixels */
+    int getWidth();
+
 }

@@ -23,8 +23,11 @@ public class ColumnDescriptorTableColumnFormatter implements ITableColumnFormatt
 
     private final ColumnDescriptor columnDescriptor;
 
-    public ColumnDescriptorTableColumnFormatter(ColumnDescriptor columnDescriptor) {
+    private final int width;
+
+    public ColumnDescriptorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor) {
         this.columnDescriptor = columnDescriptor;
+        this.width = width;
     }
 
     @Override
@@ -35,6 +38,11 @@ public class ColumnDescriptorTableColumnFormatter implements ITableColumnFormatt
     @Override
     public SafeHtml formatContent(IEntity entity) {
         return new SafeHtmlBuilder().appendEscaped(columnDescriptor.convert(entity)).toSafeHtml();
+    }
+
+    @Override
+    public int getWidth() {
+        return this.width;
     }
 
 }

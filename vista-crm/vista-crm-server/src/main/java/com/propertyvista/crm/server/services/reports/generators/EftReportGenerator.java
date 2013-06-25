@@ -107,18 +107,7 @@ public class EftReportGenerator implements ReportExporter {
             }
 
             if (false) {
-                int dummyMax = 1000;
-                for (int i = 0; i < dummyMax; ++i) {
-                    if (aborted) {
-                        break;
-                    }
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                    }
-                    reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, i, dummyMax));
-
-                }
+                makeMockupProgress();
             }
             return paymentRecords;
         }
@@ -203,6 +192,22 @@ public class EftReportGenerator implements ReportExporter {
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
+    }
+
+    /** this is for testing progress UI */
+    private void makeMockupProgress() {
+        int dummyMax = 1000;
+        for (int i = 0; i < dummyMax; ++i) {
+            if (aborted) {
+                break;
+            }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+            reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, i, dummyMax));
+
+        }
     }
 
 }

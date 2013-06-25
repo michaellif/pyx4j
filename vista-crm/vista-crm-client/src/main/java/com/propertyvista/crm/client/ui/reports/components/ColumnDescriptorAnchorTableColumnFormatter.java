@@ -28,11 +28,14 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
 
     private final boolean linkOptional;
 
-    public ColumnDescriptorAnchorTableColumnFormatter(ColumnDescriptor columnDescriptor) {
-        this(columnDescriptor, false);
+    private final int width;
+
+    public ColumnDescriptorAnchorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor) {
+        this(width, columnDescriptor, false);
     }
 
-    public ColumnDescriptorAnchorTableColumnFormatter(ColumnDescriptor columnDescriptor, boolean linkOptional) {
+    public ColumnDescriptorAnchorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor, boolean linkOptional) {
+        this.width = width;
         this.columnDescriptor = columnDescriptor;
         this.linkOptional = linkOptional;
     }
@@ -57,6 +60,11 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
             //@formatter:on
         }
 
+    }
+
+    @Override
+    public int getWidth() {
+        return this.width;
     }
 
     protected abstract CrudAppPlace makePlace(IEntity entity);
