@@ -108,7 +108,8 @@ BEGIN
         LOOP
         
                 EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '
-                        ||'SET account_no_number = regexp_replace(account_no_obfuscated_number,''X'',''0'',''g'') ';
+                        ||'SET  account_no_number = regexp_replace(account_no_obfuscated_number,''X'',''0'',''g''), '
+                        ||'     token = NULL ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.merchant_account m '
                         ||'SET  account_number = LPAD(m.id::text,12,''0''),'
