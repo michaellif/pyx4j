@@ -18,7 +18,6 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.NPersonalIdentityField;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.ToggleButton;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.domain.payment.AccountNumberIdentity;
@@ -34,7 +33,7 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
 
         NPersonalIdentityField<AccountNumberIdentity> field = new NPersonalIdentityField<AccountNumberIdentity>(this);
 
-        final Button actionButton = new ToggleButton(VistaImages.INSTANCE.triggerDown());
+        final Button actionButton = new Button(VistaImages.INSTANCE.triggerDown());
         actionButton.setCommand(new Command() {
 
             @Override

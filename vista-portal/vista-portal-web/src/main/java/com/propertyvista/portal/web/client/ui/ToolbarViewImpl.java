@@ -190,7 +190,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
     public void onLogedIn(String userName) {
         this.loggedIn = true;
         tenantButton.setTextLabel(userName);
-        tenantButton.setImageResource(PortalImages.INSTANCE.avatar());
+        tenantButton.setImage(PortalImages.INSTANCE.avatar());
         calculateActionsState();
     }
 

@@ -84,7 +84,7 @@ public class NewPaymentMethodEditorTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorButtons, ".", DefaultWidgetsTheme.StyleName.RadioGroupItem, "-",
-                DefaultWidgetsTheme.StyleDependent.pushed);
+                DefaultWidgetsTheme.StyleDependent.active);
 //        style.addProperty("border-top", "1px solid #bbb");
 //        style.addProperty("border-bottom", "1px solid #bbb");
         style.addProperty("width", "130px");
