@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-import com.propertyvista.domain.financial.PaymentRecord.PaidRejectedAggregatedTransferId;
+import com.propertyvista.domain.financial.PaymentRecord.PaidOrRejectedAggregatedTransferId;
 import com.propertyvista.domain.financial.PaymentRecord.ReturnAggregatedTransferId;
 
 public interface AggregatedTransfer extends IEntity {
@@ -113,7 +113,7 @@ public interface AggregatedTransfer extends IEntity {
     IPrimitive<BigDecimal> fundsReleased();
 
     @Detached(level = AttachLevel.Detached)
-    @JoinTable(value = PaymentRecord.class, mappedBy = PaidRejectedAggregatedTransferId.class)
+    @JoinTable(value = PaymentRecord.class, mappedBy = PaidOrRejectedAggregatedTransferId.class)
     ISet<PaymentRecord> payments();
 
     @Detached(level = AttachLevel.Detached)

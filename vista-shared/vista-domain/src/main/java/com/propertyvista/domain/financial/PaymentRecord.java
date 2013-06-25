@@ -191,10 +191,10 @@ public interface PaymentRecord extends IEntity {
     @Caption(name = "Transaction Authorization #")
     IPrimitive<String> transactionAuthorizationNumber();
 
-    interface PaidRejectedAggregatedTransferId extends ColumnId {
+    interface PaidOrRejectedAggregatedTransferId extends ColumnId {
     }
 
-    @JoinColumn(PaidRejectedAggregatedTransferId.class)
+    @JoinColumn(PaidOrRejectedAggregatedTransferId.class)
     @ReadOnly(allowOverrideNull = true)
     AggregatedTransfer aggregatedTransfer();
 

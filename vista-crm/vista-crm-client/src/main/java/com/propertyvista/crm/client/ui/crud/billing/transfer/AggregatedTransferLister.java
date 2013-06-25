@@ -18,11 +18,14 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
 public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer> {
+
+    private static final I18n i18n = I18n.get(AggregatedTransferLister.class);
 
     public AggregatedTransferLister() {
         super(AggregatedTransfer.class, false);
@@ -31,7 +34,8 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
                 new MemberColumnDescriptor.Builder(proto().paymentDate()).build(), 
                 new MemberColumnDescriptor.Builder(proto().status()).build(),
                 
-                new MemberColumnDescriptor.Builder(proto().merchantAccount()).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number")).build(),
+                new MemberColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(),
                 
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
                 new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(),
@@ -42,12 +46,15 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
                 
                 new MemberColumnDescriptor.Builder(proto().returnItemsAmount()).build(),
                 new MemberColumnDescriptor.Builder(proto().returnItemsFee()).build(),
-                new MemberColumnDescriptor.Builder(proto().returnItemsCount()).build()
+                new MemberColumnDescriptor.Builder(proto().returnItemsCount()).build(),
+                
+                new MemberColumnDescriptor.Builder(proto().payments().$().id()).searchableOnly().columnTitle(i18n.tr("Payment Id")).build(),
+                new MemberColumnDescriptor.Builder(proto().returnedPayments().$().id()).searchableOnly().columnTitle(i18n.tr("Returned Payment Id")).build()
         );//@formatter:on
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().paymentDate(), true), new Sort(proto().status(), false));
+        return Arrays.asList(new Sort(proto().paymentDate(), false), new Sort(proto().status(), false));
     }
 }
