@@ -55,6 +55,6 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().paymentDate(), false), new Sort(proto().status(), false));
+        return Arrays.asList(new Sort(proto().paymentDate(), true), new Sort(proto().status(), false));
     }
 }
