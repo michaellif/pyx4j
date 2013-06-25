@@ -75,23 +75,42 @@ public interface PortalImages extends ClientBundle, EntityFolderImages {
     @Source("communication-maintanance.png")
     ImageResource communicationMaintanancee();
 
-    DashboardIconButtonImages dashboardButton();
+    DashboardMenuImages dashboardMenu();
 
-    public interface DashboardIconButtonImages extends IconButtonImages {
+    interface DashboardMenuImages extends IconButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_normal.png")
+        @Source("Nav_Icon_Dashboard-Inactive.png")
         ImageResource regular();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_hover.png")
+        @Source("Nav_Icon_Dashboard-Inactive.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_active.png")
-        ImageResource pushed();
+        @Source("Nav_Icon_Dashboard-Active.png")
+        ImageResource active();
+    }
+
+    BillingMenuImages billingMenu();
+
+    interface BillingMenuImages extends IconButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_BillingPayments-Inactive.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_BillingPayments-Inactive.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_BillingPayments-Active.png")
+        ImageResource active();
     }
 
 }

@@ -221,6 +221,6 @@ public interface CrmImages extends VistaImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
         @Source("Dashboards_active.png")
-        ImageResource pushed();
+        ImageResource active();
     }
 }

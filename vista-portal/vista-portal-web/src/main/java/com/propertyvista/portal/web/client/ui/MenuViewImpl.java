@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
@@ -36,8 +37,16 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.images.IconButtonImages;
 
+import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.security.VistaCustomerBehavior;
+import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
+import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTypesUtil;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MenuViewImpl extends SimplePanel implements MenuView {
 
@@ -49,6 +58,35 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainMenu.name());
         tabsHolder = new NavigTabList();
         setWidget(tabsHolder);
+
+        tabsHolder.add(new NavigTab(new Resident(), PortalImages.INSTANCE.dashboardMenu()));
+
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            tabsHolder.add(new NavigTab(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu()));
+        } else {
+            tabsHolder.add(new NavigTab(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu()));
+        }
+        tabsHolder.add(new NavigTab(new Resident.Maintenance(), PortalImages.INSTANCE.billingMenu()));
+        if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
+            tabsHolder.add(new NavigTab(new Resident.CommunicationCenter(), PortalImages.INSTANCE.billingMenu()));
+        }
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
+                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
+
+            if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
+                tabsHolder.add(new NavigTab(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu()));
+            }
+
+            tabsHolder.add(new NavigTab(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu()));
+        }
+        tabsHolder.add(new NavigTab(new Resident.ProfileViewer(), PortalImages.INSTANCE.billingMenu()));
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            tabsHolder.add(new NavigTab(new Resident.TenantInsurance(), PortalImages.INSTANCE.billingMenu()));
+        }
+        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
+            tabsHolder.add(new NavigTab(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.billingMenu()));
+        }
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -65,19 +103,9 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
     @Override
     public void setPresenter(MenuPresenter presenter) {
         this.presenter = presenter;
-    }
-
-    @Override
-    public void setNavig(List<AppPlace> items) {
-        tabsHolder.clear();
-        for (AppPlace item : items) {
-            NavigTab navigTab = new NavigTab(item, PortalImages.INSTANCE.dashboardButton());
-            tabsHolder.add(navigTab);
-
-            AppPlace currentPlace = presenter.getWhere();
-            if (item.equals(currentPlace)) {
-                navigTab.select();
-            }
+        AppPlace currentPlace = presenter.getWhere();
+        for (NavigTab tab : tabsHolder.tabs) {
+            tab.setSelected(tab.getPlace().equals(currentPlace));
         }
     }
 
@@ -190,14 +218,13 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
         }
 
-        public void deselect() {
-            selected = false;
-            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
-        }
-
-        public void select() {
-            addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
-            selected = true;
+        public void setSelected(boolean select) {
+            selected = select;
+            if (select) {
+                addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
+            } else {
+                removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
+            }
         }
 
         public Label getLabel() {

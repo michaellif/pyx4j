@@ -103,10 +103,6 @@ public class PortalWebRootPaneTheme extends Theme {
         Style style = new Style(".", StyleName.MainMenu);
         style.addProperty("width", "14em");
         style.addProperty("margin", "10px 0 ");
-        style.addProperty("border", "1px solid");
-        style.addProperty("border-radius", "5px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.15);
-        style.addProperty("background", ThemeColor.foreground, 0.01);
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu);
@@ -123,18 +119,26 @@ public class PortalWebRootPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuTab);
-        style.addProperty("line-height", "20px");
-        style.addProperty("height", "20px");
+        style.addProperty("background", ThemeColor.foreground, 0.01);
+        style.addProperty("line-height", "34px");
+        style.addProperty("height", "34px");
         style.addProperty("white-space", "nowrap");
         style.addProperty("font-weight", "bold");
-        style.addProperty("padding", "8px");
+        style.addProperty("padding", "5px");
         style.addProperty("list-style", "none");
-        style.addProperty("border-bottom", "1px solid");
-        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-bottom-width", "0px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuTab, ":first-child");
+        style.addProperty("border-radius", "5px 5px 0 0");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuTab, ":last-child");
-        style.addProperty("border-bottom", "0px");
+        style.addProperty("border-bottom-width", "1px");
+        style.addProperty("border-radius", "0 0 5px 5px");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuTab, "-", StyleDependent.active);

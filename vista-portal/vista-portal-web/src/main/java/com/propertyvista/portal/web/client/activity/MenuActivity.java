@@ -13,30 +13,18 @@
  */
 package com.propertyvista.portal.web.client.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
-import com.propertyvista.misc.VistaTODO;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.web.client.ui.MenuView;
-import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class MenuActivity extends AbstractActivity implements MenuView.MenuPresenter {
 
@@ -54,7 +42,6 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setNavig(createNavigationItems());
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
     }
@@ -69,38 +56,4 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
         return AppSite.getPlaceController().getWhere();
     }
 
-    private List<AppPlace> createNavigationItems() {
-        List<AppPlace> items = new ArrayList<AppPlace>();
-
-        items.add(new Resident());
-
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            items.add(new Resident.Financial.BillSummary());
-            items.add(new Resident.Financial.BillingHistory());
-        } else {
-            items.add(new Resident.Financial.FinancialSummary());
-        }
-        items.add(new Resident.Maintenance());
-        if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            items.add(new Resident.CommunicationCenter());
-        }
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
-                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
-
-            if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
-                items.add(new Resident.Financial.PreauthorizedPayments());
-            }
-
-            items.add(new Resident.PaymentMethods());
-        }
-        items.add(new Resident.ProfileViewer());
-        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            items.add(new Resident.TenantInsurance());
-        }
-        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
-            items.add(new PortalSiteMap.LeaseContextSelection());
-        }
-
-        return items;
-    }
 }

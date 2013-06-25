@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
@@ -22,8 +20,6 @@ import com.pyx4j.site.rpc.AppPlace;
 public interface MenuView extends IsWidget {
 
     public void setPresenter(MenuPresenter presenter);
-
-    public void setNavig(List<AppPlace> items);
 
     public interface MenuPresenter {
         public void navigTo(AppPlace place);
