@@ -107,6 +107,7 @@ class CaledonReport {
         model.leaseCount().setValue(0);
         model.eftCount().setValue(0);
         model.averageEFT().setValue(BigDecimal.ZERO);
+        model.totalEFT().setValue(BigDecimal.ZERO);
         model.averageRent().setValue(BigDecimal.ZERO);
         model.maxLeaseCharges().setValue(BigDecimal.ZERO);
 
@@ -126,7 +127,7 @@ class CaledonReport {
         }
 
         if (model.eftCount().getValue() != 0) {
-            model.averageEFT().setValue(model.averageEFT().getValue().divide(new BigDecimal(model.eftCount().getValue()), 2, RoundingMode.FLOOR));
+            model.averageEFT().setValue(model.totalEFT().getValue().divide(new BigDecimal(model.eftCount().getValue()), 2, RoundingMode.FLOOR));
         }
         if (model.leaseCount().getValue() != 0) {
             model.averageRent().setValue(model.averageRent().getValue().divide(new BigDecimal(model.leaseCount().getValue()), 2, RoundingMode.FLOOR));
@@ -158,7 +159,7 @@ class CaledonReport {
         for (PaymentRecord paymentRecord : ServerSideFactory.create(PaymentMethodFacade.class).calulatePreauthorizedPayment(nextBillingCycle,
                 lease.billingAccount())) {
             model.eftCount().setValue(model.eftCount().getValue() + 1);
-            model.averageEFT().setValue(model.averageEFT().getValue().add(paymentRecord.amount().getValue()));
+            model.totalEFT().setValue(model.totalEFT().getValue().add(paymentRecord.amount().getValue()));
         }
     }
 

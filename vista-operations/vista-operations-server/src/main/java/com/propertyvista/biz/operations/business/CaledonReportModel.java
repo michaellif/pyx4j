@@ -46,4 +46,6 @@ public interface CaledonReportModel extends IEntity {
 
     IPrimitive<BigDecimal> averageEFT();
 
+    IPrimitive<BigDecimal> totalEFT();
+
 }
