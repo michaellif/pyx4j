@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.reports.factories;
 
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -84,7 +87,17 @@ public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerC
     @Override
     public Report getReport() {
         return new Report() {
-            HTML reportHtml = new HTML();
+            HTML reportHtml;
+
+            {
+                reportHtml = new HTML();
+                reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
+                reportHtml.getElement().getStyle().setLeft(0, Unit.PX);
+                reportHtml.getElement().getStyle().setTop(0, Unit.PX);
+                reportHtml.getElement().getStyle().setRight(0, Unit.PX);
+                reportHtml.getElement().getStyle().setBottom(0, Unit.PX);
+                reportHtml.getElement().getStyle().setOverflow(Overflow.AUTO);
+            }
 
             @Override
             public Widget asWidget() {

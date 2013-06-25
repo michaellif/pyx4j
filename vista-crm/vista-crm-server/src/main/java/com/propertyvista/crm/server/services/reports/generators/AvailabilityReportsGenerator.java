@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
 
@@ -29,6 +30,10 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentReadiness;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Scoping;
+import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -56,6 +61,9 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
         reportData.unitStatuses = new Vector<UnitAvailabilityStatus>(statuses);
         reportData.asOf = meta.asOf().getValue();
 
+        if (false) {
+            fillMockupAvailabilityReportData(reportData);
+        }
         return reportData;
     }
 
@@ -126,4 +134,34 @@ public class AvailabilityReportsGenerator implements ReportGenerator {
         return criteria;
     }
 
+    private void fillMockupAvailabilityReportData(AvailabilityReportDataDTO reportData) {
+        for (int i = 0; i < 2000; ++i) {
+
+            UnitAvailabilityStatus status = EntityFactory.create(UnitAvailabilityStatus.class);
+            status.building().propertyCode().setValue("mockup1234");
+            status.building().externalId().setValue("bb");
+            status.building().info().name().setValue("bla-bla");
+            status.building().info().address().streetName().setValue("haShalom");
+            status.building().info().address().streetNumber().setValue("1");
+            status.building().info().address().country().name().setValue("Canada");
+            status.building().info().address().province().name().setValue("Ontario");
+            status.building().info().address().province().code().setValue("ON");
+            status.building().info().address().postalCode().setValue("TBD G2G");
+            status.unit().info().number().setValue("unit #" + i);
+            status.floorplan().name().setValue("fplan");
+            status.floorplan().name().setValue("r2d2");
+            status.vacancyStatus().setValue(Vacancy.Vacant);
+            status.rentedStatus().setValue(RentedStatus.Rented);
+            status.scoping().setValue(Scoping.Scoped);
+            status.rentReadinessStatus().setValue(RentReadiness.RentReady);
+            status.unitRent().setValue(new BigDecimal("1999.99"));
+            status.marketRent().setValue(new BigDecimal("2055.00"));
+            status.rentDeltaAbsolute().setValue(new BigDecimal("55.00"));
+            status.rentDeltaRelative().setValue(new BigDecimal("0.02"));
+            status.rentEndDay().setValue(new LogicalDate());
+            status.rentedFromDay().setValue(new LogicalDate());
+            status.moveInDay().setValue(new LogicalDate());
+            reportData.unitStatuses.add(status);
+        }
+    }
 }

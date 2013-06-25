@@ -14,10 +14,13 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Vector;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportGenerator;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
@@ -26,6 +29,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
+import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
 
 public class CustomerCreditCheckReportGenerator implements ReportGenerator {
 
@@ -53,6 +57,9 @@ public class CustomerCreditCheckReportGenerator implements ReportGenerator {
         reportData.minCreditCheckDate = meta.minCreditCheckDate().getValue();
         reportData.maxCreditCheckDate = meta.maxCreditCheckDate().getValue();
 
+        if (false) {
+            fillMockupCusomerCreditCheckStatuses(reportData);
+        }
         return reportData;
     }
 
@@ -85,4 +92,19 @@ public class CustomerCreditCheckReportGenerator implements ReportGenerator {
         return criteria;
     }
 
+    private void fillMockupCusomerCreditCheckStatuses(CustomerCreditCheckReportDataDTO reportData) {
+        for (int i = 0; i < 1000; ++i) {
+            CustomerCreditCheck status = EntityFactory.create(CustomerCreditCheck.class);
+            status.screening().screene().person().name().firstName().setValue("Xin");
+            status.screening().screene().person().name().lastName().setValue("Zhao");
+            status.creditCheckDate().setValue(new LogicalDate());
+            status.createdBy().name().firstName().setValue("Buka");
+            status.createdBy().name().lastName().setValue("Bukin");
+
+            status.amountChecked().setValue(new BigDecimal("1000.00"));
+            status.creditCheckResult().setValue(CreditCheckResult.Accept);
+            status.reason().setValue("Veni Vedi Vici");
+            reportData.unitStatuses.add(status);
+        }
+    }
 }

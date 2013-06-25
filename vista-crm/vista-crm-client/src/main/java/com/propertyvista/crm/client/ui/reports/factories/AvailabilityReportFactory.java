@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import com.google.gwt.dom.client.Style.Overflow;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -151,7 +154,17 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
     public Report getReport() {
         return new Report() {
 
-            FlowPanel reportPanel = new FlowPanel();
+            FlowPanel reportPanel;
+
+            {
+                reportPanel = new FlowPanel();
+                reportPanel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+                reportPanel.getElement().getStyle().setLeft(0, Unit.PX);
+                reportPanel.getElement().getStyle().setTop(0, Unit.PX);
+                reportPanel.getElement().getStyle().setRight(0, Unit.PX);
+                reportPanel.getElement().getStyle().setBottom(0, Unit.PX);
+                reportPanel.getElement().getStyle().setOverflow(Overflow.AUTO);
+            }
 
             @Override
             public Widget asWidget() {
@@ -163,10 +176,10 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
                 reportPanel.clear();
                 AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
                 SafeHtmlBuilder bb = new SafeHtmlBuilder();
-                bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
+                bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt; line-height: 22pt;\">");
                 bb.appendEscaped(i18n.tr("Unit Availability Report"));
                 bb.appendHtmlConstant("</div>");
-                bb.appendHtmlConstant("<div>");
+                bb.appendHtmlConstant("<div style=\"text-align: center;\">");
                 bb.appendEscaped(i18n.tr("As of Date: {0}", reportData.asOf));
                 bb.appendHtmlConstant("</div>");
                 HTML header = new HTML(bb.toSafeHtml());
