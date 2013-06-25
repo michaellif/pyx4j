@@ -22,30 +22,45 @@ package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.DisplayPanel;
 
 public class InlineMenuHolder extends SimplePanel {
 
-    private final StickyHeaderHolder stickyHeaderHolder;
+    private final ResponsiveLayoutPanel parent;
 
-    public InlineMenuHolder(ResponsiveLayoutPanel parent, StickyHeaderHolder stickyHeaderHolder) {
-        this.stickyHeaderHolder = stickyHeaderHolder;
+    public InlineMenuHolder(ResponsiveLayoutPanel parent) {
+        this.parent = parent;
+    }
+
+    public void setMenuDisplay(DisplayPanel display) {
+        super.setWidget(display);
+        onPositionChange();
     }
 
     public void onPositionChange() {
         if (getWidget() != null && isAttached()) {
-            int offset = stickyHeaderHolder.getOffsetHeight();
-            if (getAbsoluteTop() >= offset) {
+            int offsetTop = parent.getStickyHeaderHolder().getOffsetHeight();
+
+            int offsetBottom = parent.getFooterHolder().getAbsoluteTop();
+
+            if (getAbsoluteTop() >= offsetTop) {
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
                 getElement().getStyle().setPosition(Position.ABSOLUTE);
                 getElement().getStyle().setTop(0, Unit.PX);
                 getElement().getStyle().setProperty("width", "auto");
             } else {
-                getWidget().getElement().getStyle().setTop(offset, Unit.PX);
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
                 getElement().getStyle().setWidth(getWidget().getOffsetWidth(), Unit.PX);
+                if ((offsetTop + getWidget().getOffsetHeight()) <= offsetBottom) {
+                    getWidget().getElement().getStyle().setProperty("top", offsetTop + "px");
+                    getWidget().getElement().getStyle().setProperty("bottom", "auto");
+                } else {
+                    getWidget().getElement().getStyle().setProperty("bottom", Window.getClientHeight() - offsetBottom + "px");
+                    getWidget().getElement().getStyle().setProperty("top", "auto");
+                }
             }
             getWidget().getElement().getStyle().setProperty("height", "auto");
         }
@@ -54,11 +69,6 @@ public class InlineMenuHolder extends SimplePanel {
     @Override
     protected void onLoad() {
         super.onLoad();
-        onPositionChange();
-    }
-
-    public void setMenuDisplay(DisplayPanel display) {
-        super.setWidget(display);
         onPositionChange();
     }
 

@@ -93,6 +93,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final FlowPanel contentHolder;
 
+    private final SimplePanel footerHolder;
+
     private final ScrollPanel pageScroll;
 
     private final FlowPanel mainPanel;
@@ -139,7 +141,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         contentPanel.add(contentHolder);
         contentPanel.add(commercialHolder);
 
-        inlineMenuHolder = new InlineMenuHolder(this, stickyHeaderHolder);
+        inlineMenuHolder = new InlineMenuHolder(this);
 
         mainPanel = new FlowPanel();
         mainPanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
@@ -160,7 +162,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         popupNotificationsHolder = new PopupNotificationsHolder();
 
-        SimplePanel footerHolder = new SimplePanel(getFooterDisplay());
+        footerHolder = new SimplePanel(getFooterDisplay());
         footerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
         getFooterDisplay().getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
         getFooterDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
@@ -207,6 +209,14 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         layoutType = LayoutType.getLayoutType(Window.getClientWidth());
 
+    }
+
+    StickyHeaderHolder getStickyHeaderHolder() {
+        return stickyHeaderHolder;
+    }
+
+    SimplePanel getFooterHolder() {
+        return footerHolder;
     }
 
     public DisplayPanel getHeaderDisplay() {
