@@ -73,12 +73,9 @@ public class TenantMerger {
         return term;
     }
 
-    public boolean sameName(YardiCustomer customer, LeaseTermTenant tenant) {
-        if (customer.getName().getFirstName().equals(tenant.leaseParticipant().customer().person().name().firstName().getValue())
-                && customer.getName().getLastName().equals(tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
-            return true;
-        }
-        return false;
+    public boolean isSameName(YardiCustomer customer, LeaseTermTenant tenant) {
+        return (CommonsStringUtils.equals(customer.getName().getFirstName(), tenant.leaseParticipant().customer().person().name().firstName().getValue()) && //
+        CommonsStringUtils.equals(customer.getName().getLastName(), tenant.leaseParticipant().customer().person().name().lastName().getValue()));
     }
 
     private List<String> fromT(List<LeaseTermTenant> tenants) {
@@ -122,10 +119,7 @@ public class TenantMerger {
             boolean isChanged = true;
 
             for (LeaseTermTenant tenant : tenants) {
-                //@formatter:off
-                if (CommonsStringUtils.equals(customer.getName().getFirstName(), tenant.leaseParticipant().customer().person().name().firstName().getValue()) &&
-                    CommonsStringUtils.equals(customer.getName().getLastName(),  tenant.leaseParticipant().customer().person().name().lastName().getValue())) {
-                //@formatter:on
+                if (isSameName(customer, tenant)) {
                     isChanged = false;
                     break;
                 }
@@ -144,7 +138,7 @@ public class TenantMerger {
             for (YardiCustomer yardiCustomer : rtCustomer.getCustomers().getCustomer()) {
                 for (LeaseTermTenant tenant : tenants) {
                     if (tenant.leaseParticipant().participantId().getValue().equals(yardiCustomer.getCustomerID())
-                            && !new TenantMerger().sameName(yardiCustomer, tenant)) {
+                            && !new TenantMerger().isSameName(yardiCustomer, tenant)) {
 
                         Customer cust = tenant.leaseParticipant().customer();
 
