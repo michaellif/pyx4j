@@ -24,17 +24,19 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.widgets.client.IconButton;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
@@ -59,33 +61,33 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
         tabsHolder = new NavigTabList();
         setWidget(tabsHolder);
 
-        tabsHolder.add(new NavigTab(new Resident(), PortalImages.INSTANCE.dashboardMenu()));
+        tabsHolder.add(new NavigTab(new Resident(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            tabsHolder.add(new NavigTab(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu()));
-            tabsHolder.add(new NavigTab(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+            tabsHolder.add(new NavigTab(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast3));
         } else {
-            tabsHolder.add(new NavigTab(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
         }
-        tabsHolder.add(new NavigTab(new Resident.Maintenance(), PortalImages.INSTANCE.billingMenu()));
+        tabsHolder.add(new NavigTab(new Resident.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            tabsHolder.add(new NavigTab(new Resident.CommunicationCenter(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new Resident.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
         }
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
                 VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
 
             if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
-                tabsHolder.add(new NavigTab(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu()));
+                tabsHolder.add(new NavigTab(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast1));
             }
 
-            tabsHolder.add(new NavigTab(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
         }
-        tabsHolder.add(new NavigTab(new Resident.ProfileViewer(), PortalImages.INSTANCE.billingMenu()));
+        tabsHolder.add(new NavigTab(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.contrast3));
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            tabsHolder.add(new NavigTab(new Resident.TenantInsurance(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
         }
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
-            tabsHolder.add(new NavigTab(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.billingMenu()));
+            tabsHolder.add(new NavigTab(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
         }
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -180,7 +182,7 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
     class NavigTab extends ComplexPanel {
 
-        private final IconButton icon;
+        private final Image icon;
 
         private final Label label;
 
@@ -188,10 +190,16 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
         private final AppPlace place;
 
-        NavigTab(AppPlace appPlace, ButtonImages images) {
+        private final ButtonImages images;
+
+        private final String color;
+
+        NavigTab(AppPlace appPlace, ButtonImages images, ThemeColor color) {
             super();
 
             this.place = appPlace;
+            this.images = images;
+            this.color = StyleManager.getPalette().getThemeColor(color, 1);
             selected = false;
 
             setElement(DOM.createElement("li"));
@@ -199,7 +207,7 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
 
             sinkEvents(Event.ONCLICK);
 
-            icon = new IconButton(null, images);
+            icon = new Image(images.regular());
 
             icon.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuIcon.name());
             add(icon);
@@ -222,8 +230,14 @@ public class MenuViewImpl extends SimplePanel implements MenuView {
             selected = select;
             if (select) {
                 addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
+                getElement().getStyle().setProperty("background", color);
+                label.getElement().getStyle().setProperty("background", color);
+                icon.setResource(images.active());
             } else {
                 removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.active.name());
+                getElement().getStyle().setProperty("background", "");
+                label.getElement().getStyle().setProperty("background", "");
+                icon.setResource(images.regular());
             }
         }
 

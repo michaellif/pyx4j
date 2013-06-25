@@ -133,4 +133,60 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource active();
     }
 
+    MaintenanceMenuImages maintenanceMenu();
+
+    interface MaintenanceMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Maintenance-Inactive.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Maintenance-Inactive.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Maintenance-Active.png")
+        ImageResource active();
+    }
+
+    ProfileMenuImages profileMenu();
+
+    interface ProfileMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Profile-Inactive.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Profile-Inactive.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Profile-Active.png")
+        ImageResource active();
+    }
+
+    ResidentServicesMenuImages residentServicesMenu();
+
+    interface ResidentServicesMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_ResidentServices-Inactive.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_ResidentServices-Inactive.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_ResidentServices-Active.png")
+        ImageResource active();
+    }
 }

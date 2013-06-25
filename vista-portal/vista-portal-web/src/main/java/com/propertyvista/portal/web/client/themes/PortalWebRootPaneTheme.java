@@ -118,6 +118,19 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("display", "none");
         addStyle(style);
 
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu, " .", StyleName.MainMenuTab, ":hover .", StyleName.MainMenuLabel);
+        style.addProperty("display", "inline");
+        style.addProperty("position", "absolute");
+        style.addProperty("margin-top", "-6px");
+        style.addProperty("padding", "5px 5px 5px 10px");
+        style.addProperty("background", ThemeColor.foreground, 0.01);
+        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-left-width", "0px");
+        style.addProperty("border-radius", "0 5px 5px 0");
+        addStyle(style);
+
         style = new Style(".", StyleName.MainMenuTab);
         style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("line-height", "34px");
@@ -142,7 +155,6 @@ public class PortalWebRootPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenuTab, "-", StyleDependent.active);
-        style.addProperty("background", ThemeColor.contrast1);
         style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 

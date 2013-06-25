@@ -97,9 +97,7 @@ public class PortalWebSite extends VistaSite {
             @Override
             public void onSuccess(SiteDefinitionsDTO descriptor) {
                 hideLoadingIndicator();
-                if (!descriptor.useCustomHtml().isBooleanTrue()) {
-                    StyleManager.installTheme(new PortalWebTheme(descriptor.skin().getValue()), new PortalWebPalette());
-                }
+                StyleManager.installTheme(new PortalWebTheme(descriptor.skin().getValue()), new PortalWebPalette());
                 VistaFeaturesCustomizationClient.setVistaFeatures(descriptor.features());
                 VistaFeaturesCustomizationClient.setGoogleAnalyticDisableForEmployee(descriptor.isGoogleAnalyticDisableForEmployee().getValue());
                 VistaFeaturesCustomizationClient.enviromentTitleVisible = descriptor.enviromentTitleVisible().getValue(Boolean.TRUE);

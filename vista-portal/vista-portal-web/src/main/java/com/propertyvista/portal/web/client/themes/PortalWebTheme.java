@@ -329,7 +329,6 @@ public class PortalWebTheme extends Theme {
 
         {
             Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIRequirements.name());
-            style.addProperty("width", "53em");
             style.addProperty("text-align", "justify");
             style.addProperty("font-weight", "normal");
             style.addProperty("font-style", "normal");

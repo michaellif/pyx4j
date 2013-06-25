@@ -14,7 +14,7 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
@@ -23,19 +23,23 @@ public class CommercialViewImpl extends FlowPanel implements CommercialView {
     public CommercialViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.Commercial.name());
+        setWidth("200px");
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.setWidth("200px");
-        contentPanel.getElement().getStyle().setProperty("border", "solid 1px #ddd");
-        contentPanel.getElement().getStyle().setProperty("backgroundColor", "white");
+        HTML add = new HTML(
+                "<b>COMMERCIAL</b><br/>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. ");
+        add.getElement().getStyle().setProperty("padding", "10px");
+        add.getElement().getStyle().setProperty("border", "solid 1px #ddd");
+        add.getElement().getStyle().setProperty("backgroundColor", "white");
 
-        for (int i = 0; i < 6; i++) {
-            Label label = new Label("This is commercial #" + i);
-            label.getElement().getStyle().setProperty("margin", "10px");
-            contentPanel.add(label);
-        }
+        HTML news = new HTML(
+                "<b>NEWS</b><br/>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.");
+        news.getElement().getStyle().setProperty("padding", "10px");
+        news.getElement().getStyle().setProperty("marginTop", "10px");
+        news.getElement().getStyle().setProperty("border", "solid 1px #ddd");
+        news.getElement().getStyle().setProperty("backgroundColor", "white");
 
-        add(contentPanel);
+        add(add);
+        add(news);
 
     }
 
