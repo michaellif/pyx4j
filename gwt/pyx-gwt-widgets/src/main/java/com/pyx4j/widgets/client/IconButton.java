@@ -60,6 +60,7 @@ public class IconButton extends Image {
         this.title = title;
         setImages(images);
         setCommand(command);
+        getElement().getStyle().setProperty("backgroundSize", "contain");
 
         addMouseOverHandler(new MouseOverHandler() {
             @Override
