@@ -17,16 +17,22 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.security.client.ClientContext;
+
 import com.propertyvista.portal.web.client.activity.UserMessageHeaderActivity;
 
-public class MessageActivityMapper implements ActivityMapper {
+public class UserMessageActivityMapper implements ActivityMapper {
 
-    public MessageActivityMapper() {
+    public UserMessageActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return new UserMessageHeaderActivity(place);
+        if (ClientContext.isAuthenticated()) {
+            return new UserMessageHeaderActivity(place);
+        } else {
+            return null;
+        }
     }
 
 }

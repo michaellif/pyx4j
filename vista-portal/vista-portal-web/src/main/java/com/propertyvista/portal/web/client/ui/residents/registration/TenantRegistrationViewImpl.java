@@ -19,7 +19,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Composite;
@@ -39,10 +38,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
-import com.propertyvista.portal.web.client.themes.LandingPagesTheme;
-import com.propertyvista.portal.web.client.ui.components.LandingViewLayoutPanel;
-import com.propertyvista.portal.web.client.ui.components.LandingViewLayoutPanel.Side;
-import com.propertyvista.portal.web.client.ui.residents.login.LandingViewImpl.LandingHtmlTemplates;
 import com.propertyvista.portal.web.client.ui.residents.login.LoginAndSignUpResources;
 
 public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {
@@ -56,9 +51,9 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     private Anchor termsAndConditionsAnchor;
 
     public TenantRegistrationViewImpl() {
-        LandingViewLayoutPanel viewPanel = new LandingViewLayoutPanel();
-        bindResitrationPanel(viewPanel.getLeft());
-        bindGreetingPanel(viewPanel.getRight());
+        FlowPanel viewPanel = new FlowPanel();
+        bindResitrationPanel(viewPanel);
+        bindGreetingPanel(viewPanel);
         initWidget(viewPanel);
     }
 
@@ -86,12 +81,12 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         MessageDialog.error(i18n.tr("Registration Error"), message);
     }
 
-    private void bindResitrationPanel(Side layout) {
-        layout.getHeader().add(new HTML(formatCaption(i18n.tr("Create your account"), "")));
+    private void bindResitrationPanel(FlowPanel layout) {
+        layout.add(new HTML(i18n.tr("Create your account")));
 
         signupform = new TenantRegistrationForm();
         signupform.initContent();
-        layout.getContent().add(signupform);
+        layout.add(signupform);
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.signUpViewTermsAgreementText().getText());
         termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
@@ -104,10 +99,9 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
             }
         });
         loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
-        layout.getContent().add(loginTermsLinkPanel);
+        layout.add(loginTermsLinkPanel);
 
         SimplePanel buttonHolder = new SimplePanel();
-        buttonHolder.addStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         buttonHolder.getElement().getStyle().setTextAlign(TextAlign.RIGHT); // TODO should it be in the THEME? add style dependant?
 
         Button registerButton = new Button(i18n.tr("Register"), new Command() {
@@ -116,9 +110,8 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
                 onRegister();
             }
         });
-        registerButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         buttonHolder.setWidget(registerButton);
-        layout.getFooter().add(buttonHolder);
+        layout.add(buttonHolder);
     }
 
     @Override
@@ -126,40 +119,25 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         signupform.setEntityValidationError(caught);
     }
 
-    private void bindGreetingPanel(Side layout) {
-        HTML greetingCaption = new HTML();
-        greetingCaption.setHTML(formatCaption(i18n.tr("Why choose Us?"), ""));
-        layout.getHeader().add(greetingCaption);
+    private void bindGreetingPanel(FlowPanel layout) {
+        HTML greetingCaption = new HTML(i18n.tr("Why choose Us?"));
+        layout.add(greetingCaption);
 
         FlowPanel signUpGreetingPanel = new FlowPanel();
-        signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
         HTML row1 = new HTML(i18n.tr("Place To Call Home..."));
         row1.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
-        row1.addStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow1.name());
 
         signUpGreetingPanel.add(row1);
 
         HTML row2 = new HTML(i18n.tr("...is just a click away!"));
         row2.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
-        row2.addStyleName(LandingPagesTheme.StyleName.SignUpGreetingRow2.name());
         signUpGreetingPanel.add(row2);
 
         SimplePanel imageHolder = new SimplePanel();
-        imageHolder.setStyleName(LandingPagesTheme.StyleName.SignUpGreetingImageHolder.name());
         imageHolder.setWidget(new Image(LoginAndSignUpResources.INSTANCE.key()));
         signUpGreetingPanel.add(imageHolder);
 
-        layout.getContent().add(signUpGreetingPanel);
-    }
-
-    private SafeHtml formatCaption(String emph, String normal) {
-        return LandingHtmlTemplates.TEMPLATES.landingCaption(//@formatter:off
-                    emph,
-                    normal,
-                    LandingPagesTheme.StyleName.LandingCaption.name(),
-                    LandingPagesTheme.StyleName.LandingCaptionText.name(),
-                    LandingPagesTheme.StyleName.LandingCaptionTextEmph.name()
-        );//@formatter:on        
+        layout.add(signUpGreetingPanel);
     }
 
     private void onRegister() {

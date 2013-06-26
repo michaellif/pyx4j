@@ -36,7 +36,6 @@ import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
-import com.propertyvista.portal.web.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
 public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrationDTO> {
@@ -150,7 +149,6 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
     }
 
     private Widget center(IsWidget w) {
-        w.asWidget().addStyleName(LandingPagesTheme.StyleName.LandingInputField.name());
         return w.asWidget();
     }
 

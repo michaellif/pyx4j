@@ -17,6 +17,7 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.web.client.activity.MenuActivity;
@@ -28,6 +29,12 @@ public class MenuActivityMapper implements AppActivityMapper {
 
     @Override
     public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
-        callback.onSuccess(new MenuActivity(place));
+
+        if (ClientContext.isAuthenticated()) {
+            callback.onSuccess(new MenuActivity(place));
+        } else {
+            callback.onSuccess(null);
+        }
+
     }
 }

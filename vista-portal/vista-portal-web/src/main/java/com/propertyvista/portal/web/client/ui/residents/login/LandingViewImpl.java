@@ -26,8 +26,6 @@ import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.event.logical.shared.AttachEvent.Handler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.safehtml.client.SafeHtmlTemplates;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -62,27 +60,12 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.DemoData;
-import com.propertyvista.portal.web.client.themes.LandingPagesTheme;
-import com.propertyvista.portal.web.client.ui.components.LandingViewLayoutPanel;
-import com.propertyvista.portal.web.client.ui.components.LandingViewLayoutPanel.Side;
 import com.propertyvista.portal.web.client.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
     private static final I18n i18n = I18n.get(LandingViewImpl.class);
-
-    public interface LandingHtmlTemplates extends SafeHtmlTemplates {
-
-        public static LandingHtmlTemplates TEMPLATES = GWT.create(LandingHtmlTemplates.class);
-
-        @Template("<div class=\"{2}\"><span class=\"{4}\">{0}</span><span class=\"{3}\">&nbsp;{1}</span></div>")
-        SafeHtml landingCaption(String emph, String normal, String style, String textStlye, String emphTextStyle);
-
-        @Template("<div class=\"{0}\"><div style=\"width:0px; height:100%; border-width:1px; border-style:inset;\"/></div>")
-        SafeHtml orLineSeparator(String style);
-
-    }
 
     private class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
 
@@ -123,7 +106,6 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
 
         private Widget center(Widget w) {
-            w.addStyleName(LandingPagesTheme.StyleName.LandingInputField.name());
             return w;
         }
 
@@ -250,7 +232,7 @@ public class LandingViewImpl extends Composite implements LandingView {
     private Anchor termsAndConditionsAnchor;
 
     public LandingViewImpl() {
-        LandingViewLayoutPanel viewPanel = new LandingViewLayoutPanel();
+        FlowPanel viewPanel = new FlowPanel();
         // attach handler to invoke login via ENTER key
         viewPanel.addAttachHandler(new Handler() {
 
@@ -274,8 +256,8 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         });
 
-        bindLoginWidgets(viewPanel.getLeft());
-        bindSingupWidgets(viewPanel.getRight());
+        bindLoginWidgets(viewPanel);
+        bindSingupWidgets(viewPanel);
 
         initWidget(viewPanel);
     }
@@ -325,12 +307,13 @@ public class LandingViewImpl extends Composite implements LandingView {
         presenter.gotoResetPassword();
     }
 
-    private void bindLoginWidgets(Side sideLayout) {
-        sideLayout.getHeader().add(makeCaption(i18n.tr("Welcome."), i18n.tr("Please Login")));
+    private void bindLoginWidgets(FlowPanel sideLayout) {
+        sideLayout.add(new HTML(i18n.tr("Welcome.")));
+        sideLayout.add(new HTML(i18n.tr("Please Login")));
 
         loginForm = new LoginForm();
         loginForm.initContent();
-        sideLayout.getContent().add(loginForm);
+        sideLayout.add(loginForm);
 
         HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
         termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
@@ -343,7 +326,7 @@ public class LandingViewImpl extends Composite implements LandingView {
             }
         });
         loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
-        sideLayout.getContent().add(loginTermsLinkPanel);
+        sideLayout.add(loginTermsLinkPanel);
 
         loginButton = new Button(i18n.tr("LOGIN"), new Command() {
             @Override
@@ -352,11 +335,10 @@ public class LandingViewImpl extends Composite implements LandingView {
             }
 
         });
-        loginButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
         SimplePanel loginButtonHolder = new SimplePanel();
-        loginButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         loginButtonHolder.setWidget(loginButton);
-        sideLayout.getFooter().add(loginButtonHolder);
+
+        sideLayout.add(loginButtonHolder);
 
         SimplePanel resetPasswordAnchorHolder = new SimplePanel();
         resetPasswordAnchorHolder.setWidth("100%");
@@ -369,9 +351,9 @@ public class LandingViewImpl extends Composite implements LandingView {
             }
         });
         resetPasswordAnchorHolder.add(resetPassword);
-        sideLayout.getFooter().add(resetPasswordAnchorHolder);
+        sideLayout.add(resetPasswordAnchorHolder);
 
-        sideLayout.getFooter().add(devLoginPanel = new DevLoginPanel() {
+        sideLayout.add(devLoginPanel = new DevLoginPanel() {
             @Override
             protected void onDevCredentialsSelected(String userId, String password) {
                 loginForm.get(loginForm.proto().email()).setValue(userId);
@@ -380,21 +362,15 @@ public class LandingViewImpl extends Composite implements LandingView {
         });
     }
 
-    private void bindSingupWidgets(Side sideLayout) {
-        sideLayout.getHeader().add(makeCaption(i18n.tr("First Time."), i18n.tr("Get Started")));
+    private void bindSingupWidgets(FlowPanel sideLayout) {
+        sideLayout.add(new HTML(i18n.tr("First Time.")));
+        sideLayout.add(new HTML(i18n.tr("Get Started")));
 
         signUpGreeting = new Label();
-        signUpGreeting.setStyleName(LandingPagesTheme.StyleName.LandingGreetingText.name());
 
         FlowPanel signUpGreetingPanel = new FlowPanel();
-        signUpGreetingPanel.setStyleName(LandingPagesTheme.StyleName.LandingGreetingPanel.name());
-        // TODO customizable sign up greeting is not implemented and images are used instead        
-        // signUpGreetingPanel.setWidget(signUpGreeting);
-        signUpGreetingPanel.add(new LoginImageDecoration(LoginAndSignUpResources.INSTANCE.home(), i18n.tr("For a place to call home")));
-        signUpGreetingPanel.add(new LoginImageDecoration(LoginAndSignUpResources.INSTANCE.secure(), i18n.tr("Safe and secure")));
-        signUpGreetingPanel.add(new LoginImageDecoration(LoginAndSignUpResources.INSTANCE.easy(), i18n.tr("Easy Access")));
 
-        sideLayout.getContent().add(signUpGreetingPanel);
+        sideLayout.add(signUpGreetingPanel);
 
         signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
             @Override
@@ -402,22 +378,10 @@ public class LandingViewImpl extends Composite implements LandingView {
                 LandingViewImpl.this.onSignUp();
             }
         });
-        signUpButton.addStyleName(LandingPagesTheme.StyleName.LandingButton.name());
 
         SimplePanel signUpButtonHolder = new SimplePanel();
-        signUpButtonHolder.setStyleName(LandingPagesTheme.StyleName.LandingButtonHolder.name());
         signUpButtonHolder.setWidget(signUpButton);
-        sideLayout.getFooter().add(signUpButtonHolder);
-    }
-
-    private HTML makeCaption(String emph, String normal) {
-        return new HTML(LandingHtmlTemplates.TEMPLATES.landingCaption(//@formatter:off
-                emph,
-                normal,
-                LandingPagesTheme.StyleName.LandingCaption.name(),
-                LandingPagesTheme.StyleName.LandingCaptionText.name(),
-                LandingPagesTheme.StyleName.LandingCaptionTextEmph.name())
-        );//@formatter:on
+        sideLayout.add(signUpButtonHolder);
     }
 
     @Override
