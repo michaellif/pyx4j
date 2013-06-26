@@ -22,5 +22,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.google.gwt.dev.HostedMode"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-noserver -codeServerPort 9997 -remoteUI &quot;${gwt_remote_ui_server_port}:${unique_id}&quot; -startupUrl http://vista.portal.dev.birchwoodsoftwaregroup.com:8888/vista/portal/en/residents -logLevel INFO -extra &quot;${workspace_loc:vista-portal-client}/target/hosted-extra&quot; -gen &quot;${workspace_loc:vista-portal-client}/target/hosted-gen&quot; -war &quot;${workspace_loc:vista-server}/src/main/webapp/portal&quot; -deploy &quot;${workspace_loc:vista-server}/src/main/webapp/WEB-INF/deploy&quot; vista.portalHosted"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="vista-portal-client"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx512m -enableassertions"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx1024m -enableassertions -Djava.net.preferIPv4Stack=true -XX:MaxPermSize=256m -XX:ReservedCodeCacheSize=128m"/>
 </launchConfiguration>
