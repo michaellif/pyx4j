@@ -30,6 +30,7 @@ public class CommercialHolder extends SimplePanel {
         getElement().getStyle().setProperty("verticalAlign", "top");
         getElement().getStyle().setPosition(Position.ABSOLUTE);
         getElement().getStyle().setProperty("right", "0");
+        getElement().getStyle().setProperty("top", "0");
         setWidget(parent.getCommercialDisplay());
     }
 
