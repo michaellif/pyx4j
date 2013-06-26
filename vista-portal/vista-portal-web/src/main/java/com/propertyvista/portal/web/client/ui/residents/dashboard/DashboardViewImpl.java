@@ -20,12 +20,12 @@ import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
 public class DashboardViewImpl extends ViewImpl<TenantDashboardDTO> implements DashboardView {
 
     public DashboardViewImpl() {
-        super(new DashboardForm(), true, true);
+        super(new DashboardForm_New(), true, true);
     }
 
     @Override
     public void setPresenter(ViewBase.Presenter<TenantDashboardDTO> presenter) {
-        ((DashboardForm) getForm()).setPresenter((DashboardView.Presenter) presenter);
+        ((DashboardForm_New) getForm()).setPresenter((DashboardView.Presenter) presenter);
     }
 
 }

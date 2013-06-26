@@ -48,7 +48,7 @@ import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDT
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-import com.propertyvista.portal.rpc.portal.dto.TenantGeneralInfoDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
@@ -98,9 +98,9 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         }
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
-        leftPanel.setWidget(++row, 0, inject(proto().general(), new GeneralInfoViewer()));
-        get(proto().general()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-        get(proto().general()).setHeight("");
+        leftPanel.setWidget(++row, 0, inject(proto().profileInfo(), new GeneralInfoViewer()));
+        get(proto().profileInfo()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
+        get(proto().profileInfo()).setHeight("");
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("RENT BALANCE"));
         leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new FinancialSummaryViewer()));
@@ -205,9 +205,9 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         }
     }
 
-    class GeneralInfoViewer extends CEntityViewer<TenantGeneralInfoDTO> {
+    class GeneralInfoViewer extends CEntityViewer<TenantProfileDTO> {
         @Override
-        public IsWidget createContent(TenantGeneralInfoDTO value) {
+        public IsWidget createContent(TenantProfileDTO value) {
             FlexTable content = new FlexTable();
             int row = -1;
 

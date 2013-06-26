@@ -48,9 +48,9 @@ public class DashboardServiceImpl implements DashboardService {
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
         Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
 
-        dashboard.general().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
-        dashboard.general().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
-        dashboard.general().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
+        dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
+        dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
+        dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
         dashboard.billSummary().set(BillSummaryServiceImpl.retrieve());
 
