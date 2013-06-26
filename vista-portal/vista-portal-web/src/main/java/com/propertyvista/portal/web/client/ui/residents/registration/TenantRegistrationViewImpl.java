@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
@@ -132,10 +131,6 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         HTML row2 = new HTML(i18n.tr("...is just a click away!"));
         row2.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         signUpGreetingPanel.add(row2);
-
-        SimplePanel imageHolder = new SimplePanel();
-        imageHolder.setWidget(new Image(LoginAndSignUpResources.INSTANCE.key()));
-        signUpGreetingPanel.add(imageHolder);
 
         layout.add(signUpGreetingPanel);
     }
