@@ -16,8 +16,12 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.PasswordTextBox;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
@@ -32,6 +36,8 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
     private final MenuItem viewLoginLogAction;
 
     private final MenuItem accountRecoveryOptionsAction;
+
+    private final MenuItem clearSecurityQuestionAction;
 
     public EmployeeViewerViewImpl() {
         setForm(new EmployeeForm(this));
@@ -61,6 +67,33 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
             }
         });
         addAction(accountRecoveryOptionsAction);
+
+        clearSecurityQuestionAction = new MenuItem(i18n.tr("Clear Security Question"), new Command() {
+
+            @Override
+            public void execute() {
+                ((EmployeeViewerView.Presenter) getPresenter()).clearSecurityQuestionAction(new DefaultAsyncCallback<VoidSerializable>() {
+
+                    @Override
+                    public void onSuccess(VoidSerializable result) {
+                        MessageDialog.info(i18n.tr("Security question has been cleared successfully"));
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        if (caught instanceof UserRuntimeException) {
+                            MessageDialog.error("", ((UserRuntimeException) caught).getMessage());
+                        } else {
+                            super.onFailure(caught);
+                        }
+                    }
+
+                });
+
+            }
+
+        });
+        addAction(clearSecurityQuestionAction);
     }
 
     @Override
@@ -68,6 +101,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         setActionVisible(passwordAction, false);
         setActionVisible(viewLoginLogAction, false);
         setActionVisible(accountRecoveryOptionsAction, false);
+        setActionVisible(clearSecurityQuestionAction, false);
         super.reset();
     }
 
@@ -78,6 +112,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
         setActionVisible(passwordAction, getPresenter().canEdit());
         setActionVisible(viewLoginLogAction, getPresenter().canEdit());
         setActionVisible(accountRecoveryOptionsAction, ((EmployeeViewerView.Presenter) getPresenter()).canGoToAccountRecoveryOptions());
+        setActionVisible(clearSecurityQuestionAction, ((EmployeeViewerView.Presenter) getPresenter()).canClearSecurityQuestion());
     }
 
     private class GetPasswordDialog extends OkCancelDialog {

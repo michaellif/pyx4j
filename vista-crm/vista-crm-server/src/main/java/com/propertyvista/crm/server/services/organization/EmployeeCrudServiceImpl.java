@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
@@ -24,6 +26,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
@@ -239,5 +242,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 }
             }
         }
+    }
+
+    @Override
+    public void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback) {
+        // TODO Auto-generated method stub        
     }
 }

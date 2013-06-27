@@ -17,6 +17,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -75,5 +77,15 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     @Override
     public boolean canGoToAccountRecoveryOptions() {
         return false;
+    }
+
+    @Override
+    public boolean canClearSecurityQuestion() {
+        return SecurityController.checkBehavior(VistaCrmBehavior.Organization);
+    }
+
+    @Override
+    public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
+        ((EmployeeCrudService) getService()).clearSecurityQuestion(asyncCallback);
     }
 }

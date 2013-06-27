@@ -20,6 +20,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -107,6 +108,16 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     protected void onPopulateSuccess(EmployeeDTO result) {
         ((EmployeeViewerView) getView()).restrictSecuritySensitiveControls(SecurityController.checkBehavior(VistaCrmBehavior.Organization), true);
         super.onPopulateSuccess(result);
+    }
+
+    @Override
+    public boolean canClearSecurityQuestion() {
+        return false;
+    }
+
+    @Override
+    public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
+        // this is never possible since canClearSecurityQuestion always will return false        
     }
 
 }

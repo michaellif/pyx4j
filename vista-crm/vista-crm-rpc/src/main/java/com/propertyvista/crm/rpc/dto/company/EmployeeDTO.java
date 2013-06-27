@@ -37,4 +37,8 @@ public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
     IList<CrmRole> roles();
 
     UserAuditingConfigurationDTO userAuditingConfiguration();
+
+    @Caption(name = "Has security question")
+    IPrimitive<Boolean> isSecurityQuestionSet();
+
 }
