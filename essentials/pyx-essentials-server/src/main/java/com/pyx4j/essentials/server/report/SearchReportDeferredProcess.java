@@ -76,11 +76,24 @@ public class SearchReportDeferredProcess<E extends IEntity> implements IDeferred
         SecurityController.assertPermission(new EntityPermission(request.getCriteria().getEntityClass(), EntityPermission.READ));
         this.request = request;
         this.entityClass = request.getCriteria().getEntityClass();
-        this.formatter = new ReportTableCSVFormatter();
+
         if (request.getDownloadFormat() == null) {
             request.setDownloadFormat(DownloadFormat.CSV);
         }
-        ((ReportTableCSVFormatter) this.formatter).setTimezoneOffset(request.getTimezoneOffset());
+        switch (request.getDownloadFormat()) {
+        case XLS:
+            this.formatter = new ReportTableXLSXFormatter(false);
+            break;
+        case XLSX:
+            this.formatter = new ReportTableXLSXFormatter(true);
+            break;
+        case CSV:
+            this.formatter = new ReportTableCSVFormatter();
+            ((ReportTableCSVFormatter) this.formatter).setTimezoneOffset(request.getTimezoneOffset());
+            break;
+        default:
+            break;
+        }
     }
 
     @Override
