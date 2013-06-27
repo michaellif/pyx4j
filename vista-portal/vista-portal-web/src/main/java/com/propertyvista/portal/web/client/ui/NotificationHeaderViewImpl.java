@@ -22,17 +22,17 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 
-import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class UserMessageHeaderViewImpl extends FlowPanel implements UserMessageHeaderView {
+public class NotificationHeaderViewImpl extends FlowPanel implements NotificationHeaderView {
 
     private Presenter presenter;
 
     private final FlowPanel contentPanel;
 
-    public UserMessageHeaderViewImpl() {
+    public NotificationHeaderViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.Messages.name());
 
@@ -73,15 +73,15 @@ public class UserMessageHeaderViewImpl extends FlowPanel implements UserMessageH
     }
 
     @Override
-    public void populate(List<UserMessage> userMessages) {
+    public void populate(List<Notification> userMessages) {
         contentPanel.clear();
         WidgetsImageBundle images = ImageFactory.getImages();
 
-        for (UserMessage userMessage : userMessages) {
+        for (Notification userMessage : userMessages) {
 
             ImageResource image;
 
-            switch (userMessage.getMessageType()) {
+            switch (userMessage.getNotificationType()) {
             case FAILURE:
                 image = images.error();
                 break;

@@ -18,13 +18,13 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class NotificationsViewImpl extends FlowPanel implements NotificationsView {
+public class CommunicationViewImpl extends FlowPanel implements CommunicationView {
 
-    public NotificationsViewImpl() {
+    public CommunicationViewImpl() {
 
         getElement().getStyle().setProperty("margin", "10px");
 
-        setStyleName(PortalWebRootPaneTheme.StyleName.Notifications.name());
+        setStyleName(PortalWebRootPaneTheme.StyleName.Communication.name());
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.setSize("400px", "600px");
@@ -32,7 +32,7 @@ public class NotificationsViewImpl extends FlowPanel implements NotificationsVie
         contentPanel.getElement().getStyle().setProperty("backgroundColor", "white");
 
         for (int i = 0; i < 6; i++) {
-            Label label = new Label("This is message #" + i);
+            Label label = new Label("This is Communication Message #" + i);
             label.getElement().getStyle().setProperty("margin", "30px");
             contentPanel.add(label);
         }

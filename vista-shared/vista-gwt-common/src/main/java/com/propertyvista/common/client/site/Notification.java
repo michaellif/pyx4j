@@ -15,7 +15,19 @@ package com.propertyvista.common.client.site;
 
 import com.google.gwt.user.client.Command;
 
-public class Message {
+import com.pyx4j.commons.IDebugId;
+
+public class Notification {
+
+    public enum NotificationType implements IDebugId {
+
+        INFO, WARN, ERROR, FAILURE;
+
+        @Override
+        public String debugId() {
+            return this.name();
+        }
+    }
 
     private final String message;
 
@@ -25,12 +37,29 @@ public class Message {
 
     private final Command command;
 
-    public Message(String message, String title, String buttonText, Command command) {
-        super();
+    private final NotificationType notificationType;
+
+    private String debugMessage;
+
+    public Notification(String message, NotificationType type, String title, String buttonText, Command command) {
         this.message = message;
         this.title = title;
         this.buttonText = buttonText;
         this.command = command;
+        notificationType = type;
+    }
+
+    public Notification setDebugMessage(String message) {
+        debugMessage = message;
+        return this;
+    }
+
+    public String getDebugMessage() {
+        return debugMessage;
+    }
+
+    public NotificationType getNotificationType() {
+        return notificationType;
     }
 
     public String getMessage() {
@@ -48,5 +77,4 @@ public class Message {
     public Command getCommand() {
         return command;
     }
-
 }

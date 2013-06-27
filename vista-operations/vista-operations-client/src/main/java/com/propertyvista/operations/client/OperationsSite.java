@@ -22,7 +22,8 @@ import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.operations.client.themes.OperationsPalette;
 import com.propertyvista.operations.client.themes.OperationsTheme;
@@ -54,7 +55,7 @@ public class OperationsSite extends VistaSite {
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setMessage(new Message(message, title, buttonText, command));
+        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
         //TODO getPlaceController().goTo(new AdminSiteMap.GenericMessage());
     }
 

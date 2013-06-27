@@ -17,16 +17,16 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
-import com.propertyvista.portal.web.client.activity.NotificationsActivity;
+import com.propertyvista.portal.web.client.activity.CommunicationActivity;
 
-public class NotificationsActivityMapper implements ActivityMapper {
+public class CommunicationActivityMapper implements ActivityMapper {
 
-    public NotificationsActivityMapper() {
+    public CommunicationActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
-        return new NotificationsActivity(place);
+        return new CommunicationActivity(place);
     }
 
 }

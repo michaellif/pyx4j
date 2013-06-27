@@ -35,7 +35,7 @@ public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErr
 
     @Override
     public void start(AcceptsOneWidget container, EventBus eventBus) {
-        view.setError(CrmSite.instance().getUserMessage());
+        view.setError(CrmSite.instance().getNotification());
         container.setWidget(view);
     }
 

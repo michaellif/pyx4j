@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 23, 2013
- * @author michaellif
+ * Created on 2013-02-05
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.activity;
@@ -18,19 +18,31 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.portal.web.client.ui.NotificationsView;
+import com.pyx4j.site.client.AppSite;
+
+import com.propertyvista.portal.web.client.PortalWebSite;
+import com.propertyvista.portal.web.client.ui.NotificationPageView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class NotificationsActivity extends AbstractActivity {
+public class NotificationPageActivity extends AbstractActivity implements NotificationPageView.Presenter {
 
-    private final NotificationsView view;
+    private final NotificationPageView view;
 
-    public NotificationsActivity(Place place) {
-        view = PortalWebViewFactory.instance(NotificationsView.class);
+    public NotificationPageActivity(Place place) {
+        view = PortalWebViewFactory.instance(NotificationPageView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setPresenter(this);
+        view.populate(PortalWebSite.instance().getNotification());
         panel.setWidget(view);
+
     }
+
+    @Override
+    public void acceptMessage() {
+        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
+    }
+
 }

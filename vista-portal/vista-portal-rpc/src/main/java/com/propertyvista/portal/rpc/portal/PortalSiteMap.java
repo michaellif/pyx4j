@@ -64,7 +64,7 @@ public class PortalSiteMap implements SiteMap {
     }
 
     @PlaceProperties(navigLabel = "", caption = "")
-    public static class UserMessagePlace extends AppPlace implements PublicPlace {
+    public static class NotificationPlace extends AppPlace implements PublicPlace {
 
     }
 

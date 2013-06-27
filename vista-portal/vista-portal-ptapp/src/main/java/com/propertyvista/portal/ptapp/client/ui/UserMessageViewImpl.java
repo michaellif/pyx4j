@@ -26,17 +26,17 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.CompositeDebugId;
 
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.portal.ptapp.client.resources.PortalImages;
 import com.propertyvista.portal.rpc.ptapp.VistaFormsDebugId;
 
 public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
-    private final Map<UserMessageType, Holder> holders;
+    private final Map<NotificationType, Holder> holders;
 
     public UserMessageViewImpl() {
-        holders = new HashMap<UserMessageType, Holder>();
-        for (UserMessageType type : UserMessageType.values()) {
+        holders = new HashMap<NotificationType, Holder>();
+        for (NotificationType type : NotificationType.values()) {
 
             Holder holder = new Holder(type);
             holders.put(type, holder);
@@ -49,7 +49,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     }
 
     @Override
-    public void show(String userMessages, String debugMessages, UserMessageType type) {
+    public void show(String userMessages, String debugMessages, NotificationType type) {
         Holder holder = holders.get(type);
         StringBuilder message = new StringBuilder();
         message.append(userMessages);
@@ -61,7 +61,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
     }
 
     @Override
-    public void hide(UserMessageType type) {
+    public void hide(NotificationType type) {
         Holder holder = holders.get(type);
         holder.setHTML("");
         holder.setVisible(false);
@@ -83,7 +83,7 @@ public class UserMessageViewImpl extends FlowPanel implements UserMessageView {
 
         private final String colour;
 
-        Holder(UserMessageType type) {
+        Holder(NotificationType type) {
             setWidth("100%");
             getElement().getStyle().setMarginTop(15, Unit.PX);
             getElement().getStyle().setMarginBottom(15, Unit.PX);

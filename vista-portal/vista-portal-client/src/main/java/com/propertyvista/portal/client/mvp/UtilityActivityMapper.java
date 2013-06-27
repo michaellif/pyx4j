@@ -54,7 +54,7 @@ public class UtilityActivityMapper implements AppActivityMapper {
             activity = new LeaseContextSelectionActivity();
         } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {
             activity = new VistaTermsActivity();
-        } else if (place instanceof PortalSiteMap.UserMessagePlace) {
+        } else if (place instanceof PortalSiteMap.NotificationPlace) {
             activity = new UserMessageActivity(place);
         }
         callback.onSuccess(activity);

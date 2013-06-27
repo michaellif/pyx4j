@@ -23,25 +23,9 @@ import com.propertyvista.dto.CommunicationCenterDTO;
 public interface CommunicationCenterView extends IsWidget {
 
     interface Presenter {
-        /**
-         * Send a new message
-         * 
-         * @param topic
-         * @param messageContent
-         * @param isHighImportance
-         * @param destinations
-         *            if null, than the destination will be the logined user
-         */
+
         void sendNewMessage(String topic, String messageContent, boolean isHighImportance, AbstractUser[] destinations);
 
-        /**
-         * Send a reply to a message
-         * 
-         * @param topic
-         * @param messageContent
-         * @param isHighImportance
-         * @param parentMessage
-         */
         void sendReply(String topic, String messageContent, boolean isHighImportance, CommunicationCenterDTO parentMessage);
 
     }

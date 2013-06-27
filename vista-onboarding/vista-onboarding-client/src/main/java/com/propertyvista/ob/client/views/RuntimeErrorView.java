@@ -15,7 +15,7 @@ package com.propertyvista.ob.client.views;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.Notification;
 
 public interface RuntimeErrorView extends IsWidget {
 
@@ -25,7 +25,7 @@ public interface RuntimeErrorView extends IsWidget {
 
     }
 
-    void setErrorMessage(UserMessage errorMessage);
+    void setErrorMessage(Notification errorMessage);
 
     void setPresenter(Presenter presenter);
 

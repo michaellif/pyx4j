@@ -25,7 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.ob.client.themes.OnboardingStyles;
 
 public class RuntimeErrorViewImpl extends Composite implements RuntimeErrorView {
@@ -74,7 +74,7 @@ public class RuntimeErrorViewImpl extends Composite implements RuntimeErrorView 
     }
 
     @Override
-    public void setErrorMessage(UserMessage errorMessage) {
+    public void setErrorMessage(Notification errorMessage) {
         errorMessageTitle.setText(errorMessage.getTitle() == null || errorMessage.getTitle().isEmpty() ? i18n.tr("Error") : errorMessage.getTitle());
         errorMessageLabel.setText(errorMessage.getMessage());
     }

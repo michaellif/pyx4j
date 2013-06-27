@@ -50,7 +50,8 @@ import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.CrmSiteBrowserRequirments;
-import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.crm.client.themes.CrmTheme;
@@ -103,7 +104,7 @@ public class CrmSite extends VistaSite {
         getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
             @Override
             public void onUserMessage(UserMessageEvent event) {
-                setUserMessage(event.getUserMessage());
+                setNotification(event.getUserMessage());
                 getPlaceController().goToUserMessagePlace();
             }
         });
@@ -115,7 +116,7 @@ public class CrmSite extends VistaSite {
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setMessage(new Message(message, title, buttonText, command));
+        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
     }
 
     private void initialize() {

@@ -33,14 +33,14 @@ import com.propertyvista.portal.web.client.ui.LeaseContextSelectionView;
 import com.propertyvista.portal.web.client.ui.LeaseContextSelectionViewImpl;
 import com.propertyvista.portal.web.client.ui.MenuView;
 import com.propertyvista.portal.web.client.ui.MenuViewImpl;
-import com.propertyvista.portal.web.client.ui.UserMessageHeaderView;
-import com.propertyvista.portal.web.client.ui.UserMessageHeaderViewImpl;
-import com.propertyvista.portal.web.client.ui.NotificationsView;
-import com.propertyvista.portal.web.client.ui.NotificationsViewImpl;
+import com.propertyvista.portal.web.client.ui.NotificationHeaderView;
+import com.propertyvista.portal.web.client.ui.NotificationHeaderViewImpl;
+import com.propertyvista.portal.web.client.ui.CommunicationView;
+import com.propertyvista.portal.web.client.ui.CommunicationViewImpl;
 import com.propertyvista.portal.web.client.ui.ToolbarView;
 import com.propertyvista.portal.web.client.ui.ToolbarViewImpl;
-import com.propertyvista.portal.web.client.ui.UserMessagePageView;
-import com.propertyvista.portal.web.client.ui.UserMessagePageViewImpl;
+import com.propertyvista.portal.web.client.ui.NotificationPageView;
+import com.propertyvista.portal.web.client.ui.NotificationPageViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillingHistoryView;
@@ -163,12 +163,12 @@ public class PortalWebViewFactory extends ViewFactoryBase {
                 map.put(type, new FooterViewImpl());
             } else if (MenuView.class.equals(type)) {
                 map.put(type, new MenuViewImpl());
-            } else if (NotificationsView.class.equals(type)) {
-                map.put(type, new NotificationsViewImpl());
+            } else if (CommunicationView.class.equals(type)) {
+                map.put(type, new CommunicationViewImpl());
             } else if (CommercialView.class.equals(type)) {
                 map.put(type, new CommercialViewImpl());
-            } else if (UserMessageHeaderView.class.equals(type)) {
-                map.put(type, new UserMessageHeaderViewImpl());
+            } else if (NotificationHeaderView.class.equals(type)) {
+                map.put(type, new NotificationHeaderViewImpl());
             } else if (ToolbarView.class.equals(type)) {
                 map.put(type, new ToolbarViewImpl());
             } else if (PasswordResetRequestView.class.equals(type)) {
@@ -201,8 +201,8 @@ public class PortalWebViewFactory extends ViewFactoryBase {
             } else if (TenantInsuranceCoveredByOtherTenantView.class.equals(type)) {
                 map.put(type, new TenantInsuranceCoveredByOtherTenantViewImpl());
 
-            } else if (UserMessagePageView.class.equals(type)) {
-                map.put(type, new UserMessagePageViewImpl());
+            } else if (NotificationPageView.class.equals(type)) {
+                map.put(type, new NotificationPageViewImpl());
             }
 
         }

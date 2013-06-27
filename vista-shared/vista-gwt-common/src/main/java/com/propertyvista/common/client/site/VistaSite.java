@@ -36,7 +36,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class VistaSite extends AppSite {
 
-    private UserMessage message;
+    private Notification notification;
 
     public VistaSite(String appId, Class<? extends SiteMap> siteMapClass) {
         super(appId, siteMapClass);
@@ -68,22 +68,12 @@ public abstract class VistaSite extends AppSite {
         return (VistaSite) AppSite.instance();
     }
 
-    @Deprecated
-    public void setMessage(Message message) {
-        this.message = new UserMessage(message);
+    protected void setNotification(Notification notification) {
+        this.notification = notification;
     }
 
-    @Deprecated
-    public Message getMessage() {
-        return message;
-    }
-
-    protected void setUserMessage(UserMessage message) {
-        this.message = message;
-    }
-
-    public UserMessage getUserMessage() {
-        return message;
+    public Notification getNotification() {
+        return notification;
     }
 
     public abstract void showMessageDialog(String message, String title, String buttonText, Command command);

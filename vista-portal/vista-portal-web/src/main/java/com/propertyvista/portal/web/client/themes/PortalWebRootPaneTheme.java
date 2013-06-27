@@ -31,7 +31,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel, MainMenuIcon,
 
-        Notifications,
+        Communication,
 
         Commercial,
 

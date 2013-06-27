@@ -28,7 +28,7 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHandler {
@@ -48,7 +48,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     protected void showReloadApplication() {
         String message = i18n.tr("We Updated Our Application\nIn Order To Continue Using This Application You Need To Refresh The Page"
                 + "\nPlease Refresh The Page Now");
-        showMessage(message, UserMessageType.FAILURE);
+        showMessage(message, NotificationType.FAILURE);
     }
 
     @Override
@@ -58,25 +58,25 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
             // This is response from our GoolgeApps login, environment restarted. Need to relogin.
             Window.Location.reload();
         } else {
-            showMessage(i18n.tr("This Session Has Been Terminated"), UserMessageType.FAILURE);
+            showMessage(i18n.tr("This Session Has Been Terminated"), NotificationType.FAILURE);
         }
 
     }
 
     @Override
     protected void showWarning(String text) {
-        showMessage(text, UserMessageType.WARN);
+        showMessage(text, NotificationType.WARN);
     }
 
     @Override
     protected void showThrottle() {
         showMessage(i18n.tr("We're Sorry But Your Requests Look Similar To Automated Requests Initiated By Computer Virus Or Spyware Applications. "
-                + "To Protect Our Users, We Can't Process Your Request At This Time"), UserMessageType.FAILURE);
+                + "To Protect Our Users, We Can't Process Your Request At This Time"), NotificationType.FAILURE);
     }
 
     @Override
     protected void showInternetConnectionError() {
-        showMessage(i18n.tr("Please make sure you are connected to Internet"), UserMessageType.FAILURE);
+        showMessage(i18n.tr("Please make sure you are connected to Internet"), NotificationType.FAILURE);
 
     }
 
@@ -87,7 +87,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
 
     @Override
     protected void showUserError(String text, UserRuntimeException cause) {
-        showMessage(text, UserMessageType.ERROR);
+        showMessage(text, NotificationType.ERROR);
     }
 
     @Override
@@ -122,15 +122,15 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
             }
         }
 
-        showMessage(userMessage, debugMessage.toString(), UserMessageType.ERROR);
+        showMessage(userMessage, debugMessage.toString(), NotificationType.ERROR);
     }
 
-    protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {
+    protected void showMessage(String userMessage, String debugMessage, NotificationType messageType) {
         AppSite.getEventBus().fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
 
     }
 
-    protected void showMessage(String userMessage, UserMessageType messageType) {
+    protected void showMessage(String userMessage, NotificationType messageType) {
         showMessage(userMessage, null, messageType);
     }
 

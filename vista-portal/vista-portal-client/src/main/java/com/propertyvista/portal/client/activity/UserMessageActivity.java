@@ -35,7 +35,7 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
-        view.populate(PortalSite.instance().getUserMessage());
+        view.populate(PortalSite.instance().getNotification());
         panel.setWidget(view);
 
     }

@@ -27,7 +27,7 @@ public class PortalWebSiteDispatcher extends AbstractAppPlaceDispatcher {
 
     @Override
     public AppPlace getUserMessagePlace() {
-        AppPlace userMessagePlace = new PortalSiteMap.UserMessagePlace();
+        AppPlace userMessagePlace = new PortalSiteMap.NotificationPlace();
         userMessagePlace.setStable(false);
         return userMessagePlace;
     }

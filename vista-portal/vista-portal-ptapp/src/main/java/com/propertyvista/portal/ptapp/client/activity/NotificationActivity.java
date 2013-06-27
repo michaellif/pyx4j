@@ -18,9 +18,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
-import com.propertyvista.portal.ptapp.client.ui.GenericMessageView;
+import com.propertyvista.portal.ptapp.client.ui.NotificationView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 
 /**
@@ -28,32 +28,32 @@ import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
  * Shows dialog style message on full screen
  * 
  */
-public class GenericMessageActivity extends AbstractActivity implements GenericMessageView.Presenter {
+public class NotificationActivity extends AbstractActivity implements NotificationView.Presenter {
 
     enum Params {
         TITLE, MESSAGE, BUTTON_LABEL
     }
 
-    private final GenericMessageView view;
+    private final NotificationView view;
 
-    private Message message;
+    private Notification message;
 
-    public GenericMessageActivity(Place place) {
-        view = (GenericMessageView) PtAppViewFactory.instance(GenericMessageView.class);
+    public NotificationActivity(Place place) {
+        view = PtAppViewFactory.instance(NotificationView.class);
         assert (view != null);
         view.setPresenter(this);
         withPlace(place);
     }
 
-    public GenericMessageActivity withPlace(Place place) {
+    public NotificationActivity withPlace(Place place) {
         return this;
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        message = PtAppSite.instance().getMessage();
-        view.setMessage(message);
+        message = PtAppSite.instance().getNotification();
+        view.setNotification(message);
     }
 
     @Override

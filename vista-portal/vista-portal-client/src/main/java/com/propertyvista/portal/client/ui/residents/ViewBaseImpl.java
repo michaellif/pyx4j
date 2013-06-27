@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.portal.client.ui.decorations.UserMessagePanel;
 
 public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBase<E> {
@@ -91,12 +91,12 @@ public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBa
 
     @Override
     public void showError(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.ERROR);
+        messagePanel.setMessage(msg, NotificationType.ERROR);
     }
 
     @Override
     public void showNote(String msg) {
-        messagePanel.setMessage(msg, UserMessageType.INFO);
+        messagePanel.setMessage(msg, NotificationType.INFO);
     }
 
     public Presenter<E> getPresenter() {

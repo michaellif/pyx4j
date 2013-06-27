@@ -13,7 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.ui;
 
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -24,11 +23,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.Notification;
 
-public class GenericMessageViewImpl extends FlowPanel implements GenericMessageView {
+public class NotificationViewImpl extends FlowPanel implements NotificationView {
 
-    private static final I18n i18n = I18n.get(GenericMessageViewImpl.class);
+    private static final I18n i18n = I18n.get(NotificationViewImpl.class);
 
     private Presenter presenter;
 
@@ -38,7 +37,7 @@ public class GenericMessageViewImpl extends FlowPanel implements GenericMessageV
 
     private final Button actionButton;
 
-    public GenericMessageViewImpl() {
+    public NotificationViewImpl() {
 
         titleHtml = new HTML();
         add(titleHtml);
@@ -73,18 +72,18 @@ public class GenericMessageViewImpl extends FlowPanel implements GenericMessageV
     }
 
     @Override
-    public void setMessage(Message message) {
-        if (message == null) {
+    public void setNotification(Notification notification) {
+        if (notification == null) {
             titleHtml.setText("");
             messageHtml.setText("");
             actionButton.setVisible(false);
         } else {
-            titleHtml.setText(message.getTitle());
-            messageHtml.setText(message.getMessage());
-            if (message.getCommand() == null) {
+            titleHtml.setText(notification.getTitle());
+            messageHtml.setText(notification.getMessage());
+            if (notification.getCommand() == null) {
                 actionButton.setVisible(false);
             } else {
-                actionButton.setText(message.getButtonText());
+                actionButton.setText(notification.getButtonText());
                 actionButton.setVisible(true);
             }
 

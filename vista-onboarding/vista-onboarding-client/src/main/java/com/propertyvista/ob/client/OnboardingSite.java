@@ -66,7 +66,7 @@ public class OnboardingSite extends VistaSite {
         getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
             @Override
             public void onUserMessage(UserMessageEvent event) {
-                setUserMessage(event.getUserMessage());
+                setNotification(event.getUserMessage());
                 getPlaceController().goToUserMessagePlace();
             }
         });

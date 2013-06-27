@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-02-05
- * @author ArtyomB
+ * Created on Jun 24, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.activity;
@@ -19,30 +19,23 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
-import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.ui.UserMessagePageView;
+import com.propertyvista.portal.web.client.ui.NotificationHeaderView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class UserMessagePageActivity extends AbstractActivity implements UserMessagePageView.Presenter {
+public class NotificationHeaderActivity extends AbstractActivity {
 
-    private final UserMessagePageView view;
+    private final NotificationHeaderView view;
 
-    public UserMessagePageActivity(Place place) {
-        view = PortalWebViewFactory.instance(UserMessagePageView.class);
+    public NotificationHeaderActivity(Place place) {
+        view = PortalWebViewFactory.instance(NotificationHeaderView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setPresenter(this);
-        view.populate(PortalWebSite.instance().getUserMessage());
         panel.setWidget(view);
-
+        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
     }
-
-    @Override
-    public void acceptMessage() {
-        AppSite.getPlaceController().goTo(AppSite.getPlaceController().getForwardedFrom());
-    }
-
 }

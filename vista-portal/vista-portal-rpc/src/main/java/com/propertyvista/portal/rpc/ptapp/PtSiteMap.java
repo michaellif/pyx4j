@@ -77,7 +77,7 @@ public class PtSiteMap implements SiteMap {
     public static class ApplicationStatus extends AppPlace {
     }
 
-    public static class GenericMessage extends AppPlace {
+    public static class Notification extends AppPlace {
     }
 
     // FIXME this is map of Mockup Move-In AKA Welcome AKA Wizard for approved tenants, needs review for real implementation    

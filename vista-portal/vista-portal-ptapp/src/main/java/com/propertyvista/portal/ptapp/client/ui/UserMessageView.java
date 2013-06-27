@@ -15,15 +15,15 @@ package com.propertyvista.portal.ptapp.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 
 public interface UserMessageView extends IsWidget {
 
     public void setPresenter(Presenter presenter);
 
-    void show(String userMessages, String debugMessages, UserMessageType type);
+    void show(String userMessages, String debugMessages, NotificationType type);
 
-    void hide(UserMessageType type);
+    void hide(NotificationType type);
 
     void hideAll();
 

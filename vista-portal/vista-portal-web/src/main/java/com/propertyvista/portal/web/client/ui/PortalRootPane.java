@@ -23,8 +23,8 @@ import com.propertyvista.portal.web.client.mvp.ContentActivityMapper;
 import com.propertyvista.portal.web.client.mvp.FooterActivityMapper;
 import com.propertyvista.portal.web.client.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.web.client.mvp.MenuActivityMapper;
-import com.propertyvista.portal.web.client.mvp.UserMessageActivityMapper;
-import com.propertyvista.portal.web.client.mvp.NotificationsActivityMapper;
+import com.propertyvista.portal.web.client.mvp.NotificationActivityMapper;
+import com.propertyvista.portal.web.client.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.web.client.mvp.StickyHeaderActivityMapper;
 
 public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
@@ -35,11 +35,11 @@ public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
         bind(new StickyHeaderActivityMapper(), asWidget().getStickyHeaderDisplay());
         bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
-        bind(new NotificationsActivityMapper(), asWidget().getNotificationsDisplay());
+        bind(new CommunicationActivityMapper(), asWidget().getCommunicationDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
         bind(new CommercialActivityMapper(), asWidget().getCommercialDisplay());
-        bind(new UserMessageActivityMapper(), asWidget().getMessageDisplay());
+        bind(new NotificationActivityMapper(), asWidget().getNotificationDisplay());
 
     }
 

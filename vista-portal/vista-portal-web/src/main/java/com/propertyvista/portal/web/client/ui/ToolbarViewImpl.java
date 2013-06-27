@@ -50,7 +50,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
 
     private final Button tenantButton;
 
-    private final Button notificationsButton;
+    private final Button communicationButton;
 
     private final MenuItem myProfileMenu;
 
@@ -117,22 +117,22 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
 
         languageButton = new Button(ClientNavigUtils.getCurrentLocale().toString());
 
-        notificationsButton = new Button(PortalImages.INSTANCE.alert(), new Command() {
+        communicationButton = new Button(PortalImages.INSTANCE.alert(), new Command() {
             @Override
             public void execute() {
                 switch (layoutType) {
                 case phonePortrait:
                 case phoneLandscape:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideNotifications));
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideCommunication));
                     break;
                 default:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(notificationsButton));
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(communicationButton));
                     break;
                 }
             }
         });
 
-        rightToolbar.add(notificationsButton);
+        rightToolbar.add(communicationButton);
         rightToolbar.add(loginButton);
         rightToolbar.add(tenantButton);
         rightToolbar.add(languageButton);
@@ -233,7 +233,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
-        notificationsButton.setVisible(loggedIn);
+        communicationButton.setVisible(loggedIn);
 
     }
 

@@ -36,7 +36,8 @@ import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.common.client.theme.VistaPalette;
 import com.propertyvista.portal.ptapp.client.themes.PtAppTheme;
@@ -134,8 +135,8 @@ public class PtAppSite extends VistaSite {
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setMessage(new Message(message, title, buttonText, command));
-        getPlaceController().goTo(new PtSiteMap.GenericMessage());
+        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
+        getPlaceController().goTo(new PtSiteMap.Notification());
     }
 
     public static PtAppWizardManager getWizardManager() {

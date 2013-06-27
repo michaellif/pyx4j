@@ -29,12 +29,12 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
-import com.propertyvista.common.client.site.UserMessage;
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 
-public class UserMessagePageViewImpl extends Composite implements UserMessagePageView {
+public class NotificationPageViewImpl extends Composite implements NotificationPageView {
 
-    public interface MessageTypeImages {
+    public interface NotificationTypeImages {
 
         ImageResource error();
 
@@ -43,9 +43,9 @@ public class UserMessagePageViewImpl extends Composite implements UserMessagePag
         ImageResource warning();
     }
 
-    private static final I18n i18n = I18n.get(UserMessagePageView.class);
+    private static final I18n i18n = I18n.get(NotificationPageView.class);
 
-    private final SimplePanel messageTypeImageHolder;
+    private final SimplePanel notificationTypeImageHolder;
 
     private final Label messageLabel;
 
@@ -53,15 +53,15 @@ public class UserMessagePageViewImpl extends Composite implements UserMessagePag
 
     private Presenter presenter;
 
-    private final MessageTypeImages messageTypeImageResources;
+    private final NotificationTypeImages notificationTypeImageResources;
 
-    public UserMessagePageViewImpl(MessageTypeImages messageTypeImageResources) {
-        this.messageTypeImageResources = messageTypeImageResources;
+    public NotificationPageViewImpl(NotificationTypeImages messageTypeImageResources) {
+        this.notificationTypeImageResources = messageTypeImageResources;
         FlowPanel viewPanel = new FlowPanel();
         viewPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        messageTypeImageHolder = new SimplePanel();
-        viewPanel.add(messageTypeImageHolder);
+        notificationTypeImageHolder = new SimplePanel();
+        viewPanel.add(notificationTypeImageHolder);
 
         messageLabel = new Label();
         viewPanel.add(messageLabel);
@@ -89,8 +89,8 @@ public class UserMessagePageViewImpl extends Composite implements UserMessagePag
         initWidget(viewPanel);
     }
 
-    public UserMessagePageViewImpl() {
-        this(new MessageTypeImages() {
+    public NotificationPageViewImpl() {
+        this(new NotificationTypeImages() {
 
             private NotificationImages di;
             {
@@ -120,8 +120,8 @@ public class UserMessagePageViewImpl extends Composite implements UserMessagePag
     }
 
     @Override
-    public void populate(UserMessage userMessage) {
-        messageTypeImageHolder.setWidget(new Image(getUserMessageImageResource(userMessage.getMessageType())));
+    public void populate(Notification userMessage) {
+        notificationTypeImageHolder.setWidget(new Image(getUserMessageImageResource(userMessage.getNotificationType())));
         messageLabel.setText(userMessage.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
@@ -132,26 +132,26 @@ public class UserMessagePageViewImpl extends Composite implements UserMessagePag
         return ApplicationMode.isDevelopment();
     }
 
-    private ImageResource getUserMessageImageResource(UserMessageType messageType) {
+    private ImageResource getUserMessageImageResource(NotificationType messageType) {
         ImageResource messageImageResource = null;
         if (messageType == null) {
-            messageImageResource = messageTypeImageResources.warning();
+            messageImageResource = notificationTypeImageResources.warning();
         } else {
             switch (messageType) {
             case ERROR:
-                messageImageResource = messageTypeImageResources.error();
+                messageImageResource = notificationTypeImageResources.error();
                 break;
             case FAILURE:
-                messageImageResource = messageTypeImageResources.error();
+                messageImageResource = notificationTypeImageResources.error();
                 break;
             case INFO:
-                messageImageResource = messageTypeImageResources.info();
+                messageImageResource = notificationTypeImageResources.info();
                 break;
             case WARN:
-                messageImageResource = messageTypeImageResources.warning();
+                messageImageResource = notificationTypeImageResources.warning();
                 break;
             default:
-                messageImageResource = messageTypeImageResources.warning();
+                messageImageResource = notificationTypeImageResources.warning();
                 break;
             }
         }

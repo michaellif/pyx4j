@@ -19,17 +19,17 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.portal.web.client.activity.UserMessageHeaderActivity;
+import com.propertyvista.portal.web.client.activity.NotificationHeaderActivity;
 
-public class UserMessageActivityMapper implements ActivityMapper {
+public class NotificationActivityMapper implements ActivityMapper {
 
-    public UserMessageActivityMapper() {
+    public NotificationActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated()) {
-            return new UserMessageHeaderActivity(place);
+            return new NotificationHeaderActivity(place);
         } else {
             return null;
         }

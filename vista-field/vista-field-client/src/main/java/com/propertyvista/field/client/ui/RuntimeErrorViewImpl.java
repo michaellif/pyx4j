@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.Notification;
 
 public class RuntimeErrorViewImpl extends VerticalPanel implements RuntimeErrorView {
 
@@ -78,7 +78,7 @@ public class RuntimeErrorViewImpl extends VerticalPanel implements RuntimeErrorV
     }
 
     @Override
-    public void setError(UserMessage error) {
+    public void setError(Notification error) {
         if (error != null) {
             label.setHTML(error.getMessage());
         } else

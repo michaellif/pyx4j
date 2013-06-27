@@ -16,7 +16,7 @@ package com.propertyvista.portal.client;
 import com.google.gwt.user.client.Window;
 
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 
 public class VistaPortalWicketFragmentUnrecoverableErrorHandler extends VistaUnrecoverableErrorHandler {
 
@@ -25,7 +25,7 @@ public class VistaPortalWicketFragmentUnrecoverableErrorHandler extends VistaUnr
     }
 
     @Override
-    protected void showMessage(String userMessage, String debugMessage, UserMessageType messageType) {
+    protected void showMessage(String userMessage, String debugMessage, NotificationType messageType) {
         Window.alert(userMessage);
     }
 

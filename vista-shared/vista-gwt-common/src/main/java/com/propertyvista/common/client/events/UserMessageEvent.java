@@ -15,17 +15,17 @@ package com.propertyvista.common.client.events;
 
 import com.google.gwt.event.shared.GwtEvent;
 
-import com.propertyvista.common.client.site.UserMessage;
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 
 public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
 
     private static Type<UserMessageHandler> TYPE;
 
-    private final UserMessage userMessage;
+    private final Notification userMessage;
 
-    public UserMessageEvent(String message, String debugMessage, UserMessageType messageType) {
-        userMessage = new UserMessage(message, messageType, null, null, null);
+    public UserMessageEvent(String message, String debugMessage, NotificationType messageType) {
+        userMessage = new Notification(message, messageType, null, null, null);
         userMessage.setDebugMessage(debugMessage);
     }
 
@@ -46,7 +46,7 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
         handler.onUserMessage(this);
     }
 
-    public UserMessage getUserMessage() {
+    public Notification getUserMessage() {
         return userMessage;
     }
 
@@ -58,8 +58,8 @@ public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
         return userMessage.getDebugMessage();
     }
 
-    public UserMessageType getMessageType() {
-        return userMessage.getMessageType();
+    public NotificationType getMessageType() {
+        return userMessage.getNotificationType();
     }
 
 }

@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 24, 2013
+ * Created on Jun 23, 2013
  * @author michaellif
  * @version $Id$
  */
@@ -18,24 +18,19 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
-import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
-
-import com.propertyvista.portal.web.client.ui.UserMessageHeaderView;
+import com.propertyvista.portal.web.client.ui.CommunicationView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class UserMessageHeaderActivity extends AbstractActivity {
+public class CommunicationActivity extends AbstractActivity {
 
-    private final UserMessageHeaderView view;
+    private final CommunicationView view;
 
-    public UserMessageHeaderActivity(Place place) {
-        view = PortalWebViewFactory.instance(UserMessageHeaderView.class);
+    public CommunicationActivity(Place place) {
+        view = PortalWebViewFactory.instance(CommunicationView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
     }
 }

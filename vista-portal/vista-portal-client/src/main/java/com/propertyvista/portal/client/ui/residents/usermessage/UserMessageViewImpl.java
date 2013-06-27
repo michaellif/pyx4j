@@ -29,8 +29,8 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.images.NotificationImages;
 
-import com.propertyvista.common.client.site.UserMessage;
-import com.propertyvista.common.client.site.UserMessage.UserMessageType;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 
 public class UserMessageViewImpl extends Composite implements UserMessageView {
 
@@ -120,8 +120,8 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
     }
 
     @Override
-    public void populate(UserMessage userMessage) {
-        messageTypeImageHolder.setWidget(new Image(getUserMessageImageResource(userMessage.getMessageType())));
+    public void populate(Notification userMessage) {
+        messageTypeImageHolder.setWidget(new Image(getUserMessageImageResource(userMessage.getNotificationType())));
         messageLabel.setText(userMessage.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
@@ -132,7 +132,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
         return ApplicationMode.isDevelopment();
     }
 
-    private ImageResource getUserMessageImageResource(UserMessageType messageType) {
+    private ImageResource getUserMessageImageResource(NotificationType messageType) {
         ImageResource messageImageResource = null;
         if (messageType == null) {
             messageImageResource = messageTypeImageResources.warning();

@@ -34,8 +34,8 @@ import com.propertyvista.portal.ptapp.client.ui.CaptionView;
 import com.propertyvista.portal.ptapp.client.ui.CaptionViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.FooterView;
 import com.propertyvista.portal.ptapp.client.ui.FooterViewImpl;
-import com.propertyvista.portal.ptapp.client.ui.GenericMessageView;
-import com.propertyvista.portal.ptapp.client.ui.GenericMessageViewImpl;
+import com.propertyvista.portal.ptapp.client.ui.NotificationView;
+import com.propertyvista.portal.ptapp.client.ui.NotificationViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.LoginViewImpl;
 import com.propertyvista.portal.ptapp.client.ui.LogoView;
 import com.propertyvista.portal.ptapp.client.ui.LogoViewImpl;
@@ -62,8 +62,8 @@ public class PtAppViewFactory extends ViewFactoryBase {
                 map.put(type, new TopRightActionsViewImpl());
             } else if (LogoView.class.equals(type)) {
                 map.put(type, new LogoViewImpl());
-            } else if (GenericMessageView.class.equals(type)) {
-                map.put(type, new GenericMessageViewImpl());
+            } else if (NotificationView.class.equals(type)) {
+                map.put(type, new NotificationViewImpl());
             } else if (FooterView.class.equals(type)) {
                 map.put(type, new FooterViewImpl());
             } else if (StaticContentView.class.equals(type)) {

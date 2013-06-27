@@ -22,9 +22,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.ptapp.client.activity.ApplicationSelectionActivity;
 import com.propertyvista.portal.ptapp.client.activity.ApplicationStatusActivity;
-import com.propertyvista.portal.ptapp.client.activity.GenericMessageActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginActivity;
 import com.propertyvista.portal.ptapp.client.activity.LoginWithTokenActivity;
+import com.propertyvista.portal.ptapp.client.activity.NotificationActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordChangeActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetActivity;
 import com.propertyvista.portal.ptapp.client.activity.PasswordResetRequestActivity;
@@ -57,8 +57,8 @@ public class ContentActivityMapper implements ActivityMapper {
             return new PasswordChangeActivity(place);
         } else if (place instanceof PtSiteMap.PasswordReset) {
             return new PasswordResetActivity(place);
-        } else if (place instanceof PtSiteMap.GenericMessage) {
-            return new GenericMessageActivity(place);
+        } else if (place instanceof PtSiteMap.Notification) {
+            return new NotificationActivity(place);
 // WizardSteps:
         } else if (place instanceof PtSiteMap.Apartment) {
             return new ApartmentActivity((AppPlace) place);

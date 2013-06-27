@@ -37,7 +37,8 @@ import com.propertyvista.common.client.events.UserMessageEvent;
 import com.propertyvista.common.client.events.UserMessageHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.site.Message;
+import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.SiteDefinitionsDTO;
@@ -84,7 +85,7 @@ public class PortalWebSite extends VistaSite {
 
     @Override
     public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setMessage(new Message(message, title, buttonText, command));
+        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
     }
 
     private void initialize() {
@@ -174,7 +175,7 @@ public class PortalWebSite extends VistaSite {
 
         @Override
         public void onUserMessage(UserMessageEvent event) {
-            setUserMessage(event.getUserMessage());
+            setNotification(event.getUserMessage());
             PortalWebSite.getPlaceController().goToUserMessagePlace();
         }
 

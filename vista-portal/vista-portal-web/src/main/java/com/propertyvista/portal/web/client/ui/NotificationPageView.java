@@ -7,27 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 24, 2013
- * @author michaellif
+ * Created on 2013-02-05
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.ui;
 
-import java.util.List;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.UserMessage;
+import com.propertyvista.common.client.site.Notification;
 
-public interface UserMessageHeaderView extends IsWidget {
+public interface NotificationPageView extends IsWidget {
 
     interface Presenter {
 
-        void acceptMessage(UserMessage userMessages);
+        void acceptMessage();
 
     }
 
     void setPresenter(Presenter presenter);
 
-    void populate(List<UserMessage> userMessages);
+    void populate(Notification userMessage);
+
 }
