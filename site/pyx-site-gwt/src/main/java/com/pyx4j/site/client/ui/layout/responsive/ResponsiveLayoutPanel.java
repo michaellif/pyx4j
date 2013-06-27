@@ -257,13 +257,13 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case phoneLandscape:
             sideMenuHolder.setMenuDisplay(getMenuDisplay());
             sideNotificationsHolder.setWidget(getNotificationsDisplay());
-            getHeaderDisplay().setVisible(false);
+//            getHeaderDisplay().setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
             inlineMenuHolder.setMenuDisplay(getMenuDisplay());
             popupNotificationsHolder.setWidget(getNotificationsDisplay());
-            getHeaderDisplay().setVisible(true);
+//            getHeaderDisplay().setVisible(true);
             break;
         }
 
