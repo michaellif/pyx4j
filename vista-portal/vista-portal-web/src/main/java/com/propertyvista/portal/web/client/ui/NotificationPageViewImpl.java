@@ -125,7 +125,7 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
         messageLabel.setText(userMessage.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
-        debugMessageLabel.setText(isDebugInfoRequired() & userMessage.getDebugMessage() != null ? userMessage.getDebugMessage() : "");
+        debugMessageLabel.setText(isDebugInfoRequired() & userMessage.getSystemInfo() != null ? userMessage.getSystemInfo() : "");
     }
 
     private boolean isDebugInfoRequired() {

@@ -19,7 +19,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -37,8 +36,6 @@ import com.pyx4j.widgets.client.RateIt;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.domain.communication.Message;
-import com.propertyvista.domain.communication.Message.MessageType;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
@@ -49,7 +46,6 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
-import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
@@ -91,11 +87,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         container.setCellHeight(leftPanelHolder, "100%");
 
         int row = -1;
-
-        if (false) {
-            leftPanel.setH1(++row, 0, 1, i18n.tr("COMMUNICATION"));
-            leftPanel.setWidget(++row, 0, inject(proto().notifications(), new CommunicationViewer()));
-        }
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
         leftPanel.setWidget(++row, 0, inject(proto().profileInfo(), new GeneralInfoViewer()));
@@ -152,57 +143,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
-    }
-
-    class CommunicationViewer extends CEntityViewer<IList<Message>> {
-        @Override
-        public IsWidget createContent(IList<Message> value) {
-            FlexTable container = new FlexTable();
-
-            if (value.size() > 0) {
-                container.getColumnFormatter().setWidth(0, "35px");
-                container.getColumnFormatter().setWidth(1, "250px");
-                container.getColumnFormatter().setWidth(2, "75px");
-
-                container.setHTML(0, 1, i18n.tr("Subject"));
-                container.setHTML(0, 2, i18n.tr("Date"));
-                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
-
-                int row = 0;
-                for (Message message : value) {
-                    container.setWidget(++row, 0, getIcon(message.type().getValue()));
-                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-                    container.setHTML(row, 1, message.subject().getValue());
-                    container.setHTML(row, 2, message.date().getStringView());
-                    container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-                }
-            } else {
-                container.setHTML(0, 0, NoRecordsFound);
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
-                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
-                container.setHTML(1, 0, "");
-                container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            }
-
-            container.setWidth("100%");
-            return container;
-        }
-
-        private Image getIcon(MessageType messageType) {
-            switch (messageType) {
-            case communication:
-                return new Image(PortalImages.INSTANCE.communicationMessage());
-            case maintananceAlert:
-                return new Image(PortalImages.INSTANCE.communicationMaintanancee());
-            case paymnetPastDue:
-            case paymentMethodExpired:
-                return new Image(PortalImages.INSTANCE.communicationAlert());
-            default:
-                break;
-            }
-
-            return new Image(PortalImages.INSTANCE.communicationMessage());
-        }
     }
 
     class GeneralInfoViewer extends CEntityViewer<TenantProfileDTO> {

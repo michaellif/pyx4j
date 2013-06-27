@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.site;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -76,7 +75,7 @@ public abstract class VistaSite extends AppSite {
         return notification;
     }
 
-    public abstract void showMessageDialog(String message, String title, String buttonText, Command command);
+    public abstract void showMessageDialog(String message, String title);
 
     public native static boolean isIEVersion9Native()
     /*-{ return $wnd.ieVersion9 === true; }-*/;

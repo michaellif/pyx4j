@@ -58,8 +58,6 @@ public class NotificationActivity extends AbstractActivity implements Notificati
 
     @Override
     public void action() {
-        if (message != null && message.getCommand() != null) {
-            message.getCommand().execute();
-        }
+
     }
 }

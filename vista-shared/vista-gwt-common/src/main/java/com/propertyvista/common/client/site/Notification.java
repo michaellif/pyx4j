@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.site;
 
-import com.google.gwt.user.client.Command;
-
 import com.pyx4j.commons.IDebugId;
 
 public class Notification {
@@ -33,29 +31,23 @@ public class Notification {
 
     private final String title;
 
-    private final String buttonText;
-
-    private final Command command;
-
     private final NotificationType notificationType;
 
-    private String debugMessage;
+    private String systemInfo;
 
-    public Notification(String message, NotificationType type, String title, String buttonText, Command command) {
+    public Notification(String message, NotificationType type, String title) {
         this.message = message;
         this.title = title;
-        this.buttonText = buttonText;
-        this.command = command;
         notificationType = type;
     }
 
     public Notification setDebugMessage(String message) {
-        debugMessage = message;
+        systemInfo = message;
         return this;
     }
 
-    public String getDebugMessage() {
-        return debugMessage;
+    public String getSystemInfo() {
+        return systemInfo;
     }
 
     public NotificationType getNotificationType() {
@@ -70,11 +62,4 @@ public class Notification {
         return title;
     }
 
-    public String getButtonText() {
-        return buttonText;
-    }
-
-    public Command getCommand() {
-        return command;
-    }
 }

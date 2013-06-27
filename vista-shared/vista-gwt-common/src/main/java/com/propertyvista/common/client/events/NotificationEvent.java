@@ -18,48 +18,48 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 
-public class UserMessageEvent extends GwtEvent<UserMessageHandler> {
+public class NotificationEvent extends GwtEvent<NotificationHandler> {
 
-    private static Type<UserMessageHandler> TYPE;
+    private static Type<NotificationHandler> TYPE;
 
-    private final Notification userMessage;
+    private final Notification notification;
 
-    public UserMessageEvent(String message, String debugMessage, NotificationType messageType) {
-        userMessage = new Notification(message, messageType, null, null, null);
-        userMessage.setDebugMessage(debugMessage);
+    public NotificationEvent(String message, String debugMessage, NotificationType messageType) {
+        notification = new Notification(message, messageType, null);
+        notification.setDebugMessage(debugMessage);
     }
 
-    public static Type<UserMessageHandler> getType() {
+    public static Type<NotificationHandler> getType() {
         if (TYPE == null) {
-            TYPE = new Type<UserMessageHandler>();
+            TYPE = new Type<NotificationHandler>();
         }
         return TYPE;
     }
 
     @Override
-    public final Type<UserMessageHandler> getAssociatedType() {
+    public final Type<NotificationHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(UserMessageHandler handler) {
+    protected void dispatch(NotificationHandler handler) {
         handler.onUserMessage(this);
     }
 
-    public Notification getUserMessage() {
-        return userMessage;
+    public Notification getNotification() {
+        return notification;
     }
 
     public String getMessage() {
-        return userMessage.getMessage();
+        return notification.getMessage();
     }
 
     public String getDebugMessage() {
-        return userMessage.getDebugMessage();
+        return notification.getSystemInfo();
     }
 
     public NotificationType getMessageType() {
-        return userMessage.getNotificationType();
+        return notification.getNotificationType();
     }
 
 }

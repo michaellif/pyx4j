@@ -14,7 +14,6 @@
 package com.propertyvista.portal.ptapp.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -134,8 +133,8 @@ public class PtAppSite extends VistaSite {
     }
 
     @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
+    public void showMessageDialog(String message, String title) {
+        setNotification(new Notification(message, NotificationType.ERROR, title));
         getPlaceController().goTo(new PtSiteMap.Notification());
     }
 

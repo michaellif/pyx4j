@@ -80,12 +80,7 @@ public class NotificationViewImpl extends FlowPanel implements NotificationView 
         } else {
             titleHtml.setText(notification.getTitle());
             messageHtml.setText(notification.getMessage());
-            if (notification.getCommand() == null) {
-                actionButton.setVisible(false);
-            } else {
-                actionButton.setText(notification.getButtonText());
-                actionButton.setVisible(true);
-            }
+            actionButton.setVisible(false);
 
         }
 

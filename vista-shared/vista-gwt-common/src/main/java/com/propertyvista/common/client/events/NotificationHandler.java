@@ -7,24 +7,15 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 26, 2011
- * @author vlads
+ * Created on Feb 15, 2011
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.common.client.events;
 
-import java.util.Date;
+import com.google.gwt.event.shared.EventHandler;
 
-import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IPrimitive;
+public interface NotificationHandler extends EventHandler {
 
-import com.propertyvista.domain.communication.Message;
-
-@Transient
-public interface MessageDTO extends Message {
-
-    @Override
-    @Format("MMM dd, yyyy")
-    IPrimitive<Date> date();
+    void onUserMessage(NotificationEvent event);
 }

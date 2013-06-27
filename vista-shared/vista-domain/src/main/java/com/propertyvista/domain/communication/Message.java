@@ -22,10 +22,6 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 public interface Message extends IEntity {
 
-    enum MessageType {
-        communication, maintananceAlert, paymnetPastDue, paymentMethodExpired
-    }
-
     IPrimitive<String> subject();
 
     IPrimitive<String> text();
@@ -33,9 +29,6 @@ public interface Message extends IEntity {
     @MemberColumn(name = "messageDate")
     @Format("MM/dd/yyyy")
     IPrimitive<Date> date();
-
-    @MemberColumn(name = "messageType")
-    IPrimitive<MessageType> type();
 
     IPrimitive<Boolean> acknowledged();
 

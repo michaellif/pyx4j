@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.misc.VistaTODO;
 
 public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter<E>> extends FlowPanel implements WizardStepView<E, T> {
@@ -68,7 +68,7 @@ public class WizardStepViewImpl<E extends IEntity, T extends WizardStepPresenter
     }
 
     protected void onAction() {
-        AppSite.getEventBus().fireEvent(new UserMessageEvent(null, null, null));
+        AppSite.getEventBus().fireEvent(new NotificationEvent(null, null, null));
         if (!form.isValid()) {
             form.setUnconditionalValidationErrorRendering(true);
             Window.scrollTo(0, 0);

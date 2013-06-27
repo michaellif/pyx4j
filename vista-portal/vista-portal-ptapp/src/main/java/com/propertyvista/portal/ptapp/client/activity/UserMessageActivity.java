@@ -18,12 +18,12 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.events.NotificationEvent;
+import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.portal.ptapp.client.ui.UserMessageView;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 
-public class UserMessageActivity extends AbstractActivity implements UserMessageView.Presenter, UserMessageHandler {
+public class UserMessageActivity extends AbstractActivity implements UserMessageView.Presenter, NotificationHandler {
 
     private final UserMessageView view;
 
@@ -42,11 +42,11 @@ public class UserMessageActivity extends AbstractActivity implements UserMessage
     @Override
     public void start(AcceptsOneWidget panel, final EventBus eventBus) {
         panel.setWidget(view);
-        eventBus.addHandler(UserMessageEvent.getType(), this);
+        eventBus.addHandler(NotificationEvent.getType(), this);
     }
 
     @Override
-    public void onUserMessage(UserMessageEvent event) {
+    public void onUserMessage(NotificationEvent event) {
         view.hideAll();
         if (event.getMessageType() != null) {
             view.show(event.getMessage(), event.getDebugMessage(), event.getMessageType());

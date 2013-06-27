@@ -46,10 +46,10 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
 
         List<Notification> notifications = new ArrayList<Notification>();
-        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification", "Hide", null));
-        notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification", "Hide", null));
-        notifications.add(new Notification("Warn Message goes here", NotificationType.WARN, "Warn Notification", "Hide", null));
-        notifications.add(new Notification("Confirm Message goes here", NotificationType.CONFIRM, "Confirm Notification", "Hide", null));
+        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
+        notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification"));
+        notifications.add(new Notification("Warn Message goes here", NotificationType.WARN, "Warn Notification"));
+        notifications.add(new Notification("Confirm Message goes here", NotificationType.CONFIRM, "Confirm Notification"));
 
         view.populate(notifications);
     }

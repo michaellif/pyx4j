@@ -125,7 +125,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
         messageLabel.setText(userMessage.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
-        debugMessageLabel.setText(isDebugInfoRequired() & userMessage.getDebugMessage() != null ? userMessage.getDebugMessage() : "");
+        debugMessageLabel.setText(isDebugInfoRequired() & userMessage.getSystemInfo() != null ? userMessage.getSystemInfo() : "");
     }
 
     private boolean isDebugInfoRequired() {

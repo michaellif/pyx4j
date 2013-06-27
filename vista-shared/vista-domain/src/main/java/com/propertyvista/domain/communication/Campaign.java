@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
 public interface Campaign extends IEntity {
+
     Message message();
 
     IList<CommunicationMedia> media();

@@ -20,12 +20,12 @@ import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.events.NotificationEvent;
+import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.portal.client.resources.PortalImages;
 
-public class UserMessagePanel extends HorizontalPanel implements UserMessageHandler {
+public class UserMessagePanel extends HorizontalPanel implements NotificationHandler {
 
     private final HTML message;
 
@@ -52,7 +52,7 @@ public class UserMessagePanel extends HorizontalPanel implements UserMessageHand
 
         setVisible(false);
 
-        AppSite.getEventBus().addHandler(UserMessageEvent.getType(), this);
+        AppSite.getEventBus().addHandler(NotificationEvent.getType(), this);
     }
 
     public void setMessage(String msg, NotificationType type) {
@@ -87,7 +87,7 @@ public class UserMessagePanel extends HorizontalPanel implements UserMessageHand
     }
 
     @Override
-    public void onUserMessage(UserMessageEvent event) {
+    public void onUserMessage(NotificationEvent event) {
         if (event.getMessage() != null) {
             setMessage(event.getMessage(), event.getMessageType());
         }

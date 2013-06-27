@@ -18,7 +18,6 @@ import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -35,8 +34,8 @@ import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.events.NotificationEvent;
+import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.site.VistaSite;
 import com.propertyvista.ob.client.mvp.OnboardingActivityMapper;
@@ -63,10 +62,10 @@ public class OnboardingSite extends VistaSite {
         super.onSiteLoad();
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
         // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
-        getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
+        getEventBus().addHandler(NotificationEvent.getType(), new NotificationHandler() {
             @Override
-            public void onUserMessage(UserMessageEvent event) {
-                setNotification(event.getUserMessage());
+            public void onUserMessage(NotificationEvent event) {
+                setNotification(event.getNotification());
                 getPlaceController().goToUserMessagePlace();
             }
         });
@@ -80,8 +79,8 @@ public class OnboardingSite extends VistaSite {
     }
 
     @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        MessageDialog.confirm(title, message, command);
+    public void showMessageDialog(String message, String title) {
+        MessageDialog.info(title, message);
     }
 
     private void obtainAuthenticationData() {

@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface Recipient extends IEntity {
 
     enum RecipientType {
-        person, business
+        person, company, group
     }
 
     IPrimitive<RecipientType> recipientType();

@@ -14,7 +14,6 @@
 package com.propertyvista.field.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -93,7 +92,7 @@ public class FieldSite extends VistaSite {
     }
 
     @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
+    public void showMessageDialog(String message, String title) {
     }
 
 }

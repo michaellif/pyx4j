@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
@@ -45,8 +44,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
-import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.events.NotificationEvent;
+import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.CrmSiteBrowserRequirments;
@@ -101,10 +100,10 @@ public class CrmSite extends VistaSite {
         });
 
         // subscribe to UserMessageEvent fired from VistaUnrecoverableErrorHandler
-        getEventBus().addHandler(UserMessageEvent.getType(), new UserMessageHandler() {
+        getEventBus().addHandler(NotificationEvent.getType(), new NotificationHandler() {
             @Override
-            public void onUserMessage(UserMessageEvent event) {
-                setNotification(event.getUserMessage());
+            public void onUserMessage(NotificationEvent event) {
+                setNotification(event.getNotification());
                 getPlaceController().goToUserMessagePlace();
             }
         });
@@ -115,8 +114,8 @@ public class CrmSite extends VistaSite {
     }
 
     @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
+    public void showMessageDialog(String message, String title) {
+        setNotification(new Notification(message, NotificationType.ERROR, title));
     }
 
     private void initialize() {

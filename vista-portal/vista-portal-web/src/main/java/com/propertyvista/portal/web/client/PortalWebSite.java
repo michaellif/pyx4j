@@ -14,7 +14,6 @@
 package com.propertyvista.portal.web.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -33,8 +32,8 @@ import com.pyx4j.widgets.client.dialog.OkOption;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
-import com.propertyvista.common.client.events.UserMessageEvent;
-import com.propertyvista.common.client.events.UserMessageHandler;
+import com.propertyvista.common.client.events.NotificationEvent;
+import com.propertyvista.common.client.events.NotificationHandler;
 import com.propertyvista.common.client.handlers.VistaUnrecoverableErrorHandler;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.site.Notification;
@@ -64,7 +63,7 @@ public class PortalWebSite extends VistaSite {
     @Override
     public void onSiteLoad() {
         super.onSiteLoad();
-        AppSite.getEventBus().addHandler(UserMessageEvent.getType(), new PortalUserMessageHandlerByPlace());
+        AppSite.getEventBus().addHandler(NotificationEvent.getType(), new PortalUserMessageHandlerByPlace());
 
         UncaughtHandler.setUnrecoverableErrorHandler(new VistaUnrecoverableErrorHandler());
 
@@ -84,8 +83,8 @@ public class PortalWebSite extends VistaSite {
     }-*/;
 
     @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
+    public void showMessageDialog(String message, String title) {
+        setNotification(new Notification(message, NotificationType.ERROR, title));
     }
 
     private void initialize() {
@@ -138,10 +137,10 @@ public class PortalWebSite extends VistaSite {
         return portalSiteServices;
     }
 
-    private static class PortalUserMessageHandlerByDialog implements UserMessageHandler {
+    private static class PortalUserMessageHandlerByDialog implements NotificationHandler {
 
         @Override
-        public void onUserMessage(UserMessageEvent event) {
+        public void onUserMessage(NotificationEvent event) {
             Dialog.Type dialogType = null;
             switch (event.getMessageType()) {
             case ERROR:
@@ -171,11 +170,11 @@ public class PortalWebSite extends VistaSite {
         }
     }
 
-    private class PortalUserMessageHandlerByPlace implements UserMessageHandler {
+    private class PortalUserMessageHandlerByPlace implements NotificationHandler {
 
         @Override
-        public void onUserMessage(UserMessageEvent event) {
-            setNotification(event.getUserMessage());
+        public void onUserMessage(NotificationEvent event) {
+            setNotification(event.getNotification());
             PortalWebSite.getPlaceController().goToUserMessagePlace();
         }
 

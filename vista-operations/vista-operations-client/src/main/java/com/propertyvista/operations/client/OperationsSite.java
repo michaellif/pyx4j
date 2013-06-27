@@ -14,7 +14,6 @@
 package com.propertyvista.operations.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Command;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
@@ -54,8 +53,8 @@ public class OperationsSite extends VistaSite {
     }
 
     @Override
-    public void showMessageDialog(String message, String title, String buttonText, Command command) {
-        setNotification(new Notification(message, NotificationType.ERROR, title, buttonText, command));
+    public void showMessageDialog(String message, String title) {
+        setNotification(new Notification(message, NotificationType.ERROR, title));
         //TODO getPlaceController().goTo(new AdminSiteMap.GenericMessage());
     }
 

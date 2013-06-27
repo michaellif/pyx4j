@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.common.client.events.UserMessageEvent;
+import com.propertyvista.common.client.events.NotificationEvent;
 import com.propertyvista.common.client.site.Notification.NotificationType;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -126,7 +126,7 @@ public class VistaUnrecoverableErrorHandler extends DefaultUnrecoverableErrorHan
     }
 
     protected void showMessage(String userMessage, String debugMessage, NotificationType messageType) {
-        AppSite.getEventBus().fireEvent(new UserMessageEvent(userMessage, debugMessage, messageType));
+        AppSite.getEventBus().fireEvent(new NotificationEvent(userMessage, debugMessage, messageType));
 
     }
 
