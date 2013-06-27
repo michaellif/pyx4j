@@ -31,7 +31,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainToolbar, BrandImage,
 
-        MainMenu, MainMenuHolder, MainMenuTab, MainMenuLabel, MainMenuIcon,
+        MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon,
 
         Communication,
 
@@ -107,33 +107,16 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("margin", "10px 0 ");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu);
-        style.addProperty("width", "auto");
-        style.addProperty("border-radius", "0");
-        addStyle(style);
-
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu);
         style.addProperty("width", "auto");
+        style.addProperty("height", "auto");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu, " .", StyleName.MainMenuLabel);
         style.addProperty("display", "none");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu, " .", StyleName.MainMenuTab, ":hover .", StyleName.MainMenuLabel);
-        style.addProperty("display", "inline");
-        style.addProperty("position", "absolute");
-        style.addProperty("margin-top", "-6px");
-        style.addProperty("padding", "5px 5px 5px 10px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.15);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-left-width", "0px");
-        style.addProperty("border-radius", "0 5px 5px 0");
-        style.addProperty("background", ThemeColor.foreground, 0.1);
-        addStyle(style);
-
-        style = new Style(".", StyleName.MainMenuTab);
+        style = new Style(".", StyleName.MainMenuNavigItem);
         style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("line-height", "34px");
         style.addProperty("height", "34px");
@@ -147,20 +130,20 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("border-bottom-width", "0px");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainMenuTab, ":first-child");
+        style = new Style(".", StyleName.MainMenuNavigItem, ":first-child");
         style.addProperty("border-radius", "5px 5px 0 0");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainMenuTab, ":last-child");
+        style = new Style(".", StyleName.MainMenuNavigItem, ":last-child");
         style.addProperty("border-bottom-width", "1px");
         style.addProperty("border-radius", "0 0 5px 5px");
         addStyle(style);
 
-        style = new Style(".", StyleName.MainMenuTab, "-", StyleDependent.active);
+        style = new Style(".", StyleName.MainMenuNavigItem, "-", StyleDependent.active);
         style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
-        style = new Style(".", StyleName.MainMenuTab, ":hover");
+        style = new Style(".", StyleName.MainMenuNavigItem, ":hover");
         style.addProperty("background", ThemeColor.foreground, 0.1);
         addStyle(style);
 
@@ -171,6 +154,31 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainMenuIcon);
         style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu, " .", StyleName.MainMenuNavigItem, ":hover .", StyleName.MainMenuLabel);
+        style.addProperty("display", "inline");
+        style.addProperty("position", "absolute");
+        style.addProperty("margin-top", "-6px");
+        style.addProperty("padding", "5px 5px 5px 10px");
+        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-left-width", "0px");
+        style.addProperty("border-radius", "0 5px 5px 0");
+        style.addProperty("background", ThemeColor.foreground, 0.1);
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu);
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
+        style.addProperty("margin", "0 ");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu, " .", StyleName.MainMenuNavigItem);
+        style.addProperty("border-radius", "0");
+        style.addProperty("border-left-width", "0");
+        style.addProperty("border-right-width", "0");
         addStyle(style);
 
     }
