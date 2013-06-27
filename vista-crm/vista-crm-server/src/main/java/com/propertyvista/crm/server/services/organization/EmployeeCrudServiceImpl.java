@@ -31,6 +31,7 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
@@ -253,7 +254,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
-        // TODO implement this
+    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, CrmUser crmUserId) {
+        ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(crmUserId);
+        // TODO do we need some kind of autid log for this??
+        Persistence.service().commit();
+        asyncCallback.onSuccess(null);
     }
 }

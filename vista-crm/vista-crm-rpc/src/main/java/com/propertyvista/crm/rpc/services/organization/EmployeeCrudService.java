@@ -19,6 +19,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
+import com.propertyvista.domain.security.CrmUser;
 
 /**
  * Service used by managers to create new users/employees.
@@ -27,5 +28,5 @@ public interface EmployeeCrudService extends AbstractCrudService<EmployeeDTO> {
 
     void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);
 
-    void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);
+    void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, CrmUser crmUserId);
 }
