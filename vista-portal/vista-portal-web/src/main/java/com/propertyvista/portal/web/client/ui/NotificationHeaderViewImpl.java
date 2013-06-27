@@ -46,12 +46,12 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
     public void populate(List<Notification> notifications) {
         contentPanel.clear();
 
-        for (Notification userMessage : notifications) {
+        for (Notification notification : notifications) {
 
-            HTML message = new HTML("<b>" + userMessage.getTitle() + "</b><br/>" + userMessage.getMessage());
+            HTML message = new HTML("<b>" + notification.getTitle() + "</b><br/>" + notification.getMessage());
             message.setStyleName(PortalWebRootPaneTheme.StyleName.NotificationItem.name());
 
-            switch (userMessage.getNotificationType()) {
+            switch (notification.getNotificationType()) {
             case FAILURE:
                 message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
                 break;
