@@ -136,17 +136,20 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(true);
+            headerHolder.setVisible(true);
             break;
         case tabletPortrait:
         case tabletLandscape:
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
+            headerHolder.setVisible(false);
             break;
         case monitor:
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
+            headerHolder.setVisible(false);
             break;
         }
     }
