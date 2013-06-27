@@ -208,6 +208,7 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
+import com.propertyvista.crm.client.activity.reports.AutoPayReviewUpdaterActivity;
 import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
@@ -1161,6 +1162,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
                 } else if (place instanceof CrmSiteMap.Reports) {
                     activity = new CrmReportsActivity((CrmSiteMap.Reports) place);
+                } else if (place instanceof CrmSiteMap.AutoPayReviewUpdater) {
+                    activity = new AutoPayReviewUpdaterActivity(place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();
                 } else if (place instanceof Administration.Settings.CreditCheck.Setup) {

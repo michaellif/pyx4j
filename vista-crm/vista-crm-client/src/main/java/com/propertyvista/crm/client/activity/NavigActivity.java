@@ -26,6 +26,7 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
@@ -205,7 +206,11 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AvailabilityReportMetadata.class)));
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(CustomerCreditCheckReportMetadata.class)));
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(EftReportMetadata.class)));
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AutoPayChangesReportMetadata.class)));//        
+        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AutoPayChangesReportMetadata.class)));
+
+        if (!ApplicationMode.isDevelopment()) {
+            folder.addNavigItem(new CrmSiteMap.AutoPayReviewUpdater());
+        }
         return folder;
     }
 }
