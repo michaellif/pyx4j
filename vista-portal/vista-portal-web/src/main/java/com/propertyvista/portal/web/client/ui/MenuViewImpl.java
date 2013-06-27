@@ -28,6 +28,7 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -55,44 +56,57 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     private MenuPresenter presenter;
 
-    private final NavigItemList navigItemsHolder;
+    private final SimplePanel headerHolder;
+
+    private final NavigItemList mainHolder;
+
+    private final NavigItemList footerHolder;
 
     public MenuViewImpl() {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainMenu.name());
-        navigItemsHolder = new NavigItemList();
 
-        add(new HTML("header"), DockPanel.NORTH);
-        add(navigItemsHolder, DockPanel.CENTER);
-        add(new HTML("footer"), DockPanel.SOUTH);
+        headerHolder = new SimplePanel();
+        headerHolder.setWidget(new HTML("header"));
+        mainHolder = new NavigItemList();
+        footerHolder = new NavigItemList();
 
-        navigItemsHolder.add(new NavigItem(new Resident(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
+        add(headerHolder, DockPanel.NORTH);
+        setCellHeight(headerHolder, "1px");
+        add(mainHolder, DockPanel.CENTER);
+        add(footerHolder, DockPanel.SOUTH);
+        setCellHeight(footerHolder, "1px");
+
+        mainHolder.add(new NavigItem(new Resident(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
         if (!VistaFeatures.instance().yardiIntegration()) {
-            navigItemsHolder.add(new NavigItem(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
-            navigItemsHolder.add(new NavigItem(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast3));
+            mainHolder.add(new NavigItem(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+            mainHolder.add(new NavigItem(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast3));
         } else {
-            navigItemsHolder.add(new NavigItem(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
+            mainHolder.add(new NavigItem(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
         }
-        navigItemsHolder.add(new NavigItem(new Resident.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
+        mainHolder.add(new NavigItem(new Resident.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
-            navigItemsHolder.add(new NavigItem(new Resident.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
+            mainHolder.add(new NavigItem(new Resident.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
         }
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
                 VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
 
             if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
-                navigItemsHolder.add(new NavigItem(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast1));
+                mainHolder.add(new NavigItem(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast1));
             }
 
-            navigItemsHolder.add(new NavigItem(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+            mainHolder.add(new NavigItem(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
         }
-        navigItemsHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.contrast3));
+        mainHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.contrast3));
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            navigItemsHolder.add(new NavigItem(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
+            mainHolder.add(new NavigItem(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
         }
         if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
-            navigItemsHolder.add(new NavigItem(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
+            mainHolder.add(new NavigItem(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
         }
+
+        footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
+        footerHolder.add(new NavigItem(new PortalSiteMap.LogOut(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -110,7 +124,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     public void setPresenter(MenuPresenter presenter) {
         this.presenter = presenter;
         AppPlace currentPlace = presenter.getWhere();
-        for (NavigItem item : navigItemsHolder.items) {
+        for (NavigItem item : mainHolder.items) {
             item.setSelected(item.getPlace().equals(currentPlace));
         }
     }
@@ -121,15 +135,18 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         case phoneLandscape:
             addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
+            footerHolder.setVisible(true);
             break;
         case tabletPortrait:
         case tabletLandscape:
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
+            footerHolder.setVisible(false);
             break;
-        default:
+        case monitor:
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
+            footerHolder.setVisible(false);
             break;
         }
     }
