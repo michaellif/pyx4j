@@ -15,100 +15,66 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.widgets.client.ImageFactory;
-import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
-
 import com.propertyvista.common.client.site.Notification;
-import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class NotificationHeaderViewImpl extends FlowPanel implements NotificationHeaderView {
 
-    private Presenter presenter;
+    private NotificationHeaderPresenter presenter;
 
     private final FlowPanel contentPanel;
 
     public NotificationHeaderViewImpl() {
 
-        setStyleName(PortalWebRootPaneTheme.StyleName.Messages.name());
-
-        HTML error = new HTML("<b>Error Notification</b><br>Error Message goes here");
-        error.getElement().getStyle().setProperty("textAlign", "center");
-        error.getElement().getStyle()
-                .setProperty("background", "url('" + PortalImages.INSTANCE.error().getSafeUri().asString() + "') no-repeat scroll 10px center");
-        error.getElement().getStyle().setProperty("padding", "6px");
-        error.setHeight("40px");
-        error.getElement().getStyle().setProperty("border", "1px solid #E09293");
-        error.getElement().getStyle().setProperty("borderRadius", "5px");
-        error.getElement().getStyle().setProperty("margin", "0 10px 10px 10px");
-        error.getElement().getStyle().setProperty("backgroundColor", "#FFD2D3");
-
-        HTML info = new HTML("<b>Notification</b><br>Message goes here");
-        info.getElement().getStyle().setProperty("textAlign", "center");
-        info.getElement().getStyle()
-                .setProperty("background", "url('" + PortalImages.INSTANCE.confirm().getSafeUri().asString() + "') no-repeat scroll 10px center");
-        info.getElement().getStyle().setProperty("padding", "6px");
-        info.setHeight("40px");
-        info.getElement().getStyle().setProperty("border", "1px solid #9ADF8F");
-        info.getElement().getStyle().setProperty("borderRadius", "5px");
-        info.getElement().getStyle().setProperty("margin", "0 10px 10px 10px");
-        info.getElement().getStyle().setProperty("backgroundColor", "#D4FFCD");
+        setStyleName(PortalWebRootPaneTheme.StyleName.NotificationContainer.name());
 
         contentPanel = new FlowPanel();
-
-        contentPanel.add(error);
-        contentPanel.add(info);
 
         add(contentPanel);
 
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(NotificationHeaderPresenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void populate(List<Notification> userMessages) {
+    public void populate(List<Notification> notifications) {
         contentPanel.clear();
-        WidgetsImageBundle images = ImageFactory.getImages();
 
-        for (Notification userMessage : userMessages) {
+        for (Notification userMessage : notifications) {
 
-            ImageResource image;
+            HTML message = new HTML("<b>" + userMessage.getTitle() + "</b><br/>" + userMessage.getMessage());
+            message.setStyleName(PortalWebRootPaneTheme.StyleName.NotificationItem.name());
 
             switch (userMessage.getNotificationType()) {
             case FAILURE:
-                image = images.error();
+                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
                 break;
             case ERROR:
-                image = images.error();
+                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
                 break;
             case WARN:
-                image = images.warn();
+                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.warning.name());
                 break;
             case INFO:
-                image = images.info();
+                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
+                break;
+            case CONFIRM:
+                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.confirm.name());
                 break;
 
             default:
-                image = images.info();
+                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
                 break;
             }
 
-            HTML message = new HTML("<b>" + userMessage.getTitle() + "</b><br/>" + userMessage.getMessage());
-            message.getElement().getStyle().setProperty("textAlign", "center");
-            message.getElement().getStyle().setProperty("background", "url('" + image.getSafeUri().asString() + "') no-repeat scroll 10px center");
-            message.getElement().getStyle().setProperty("padding", "6px");
-            message.setHeight("40px");
-            message.getElement().getStyle().setProperty("border", "1px solid #E09293");
-            message.getElement().getStyle().setProperty("borderRadius", "5px");
-            message.getElement().getStyle().setProperty("margin", "2px");
-            message.getElement().getStyle().setProperty("backgroundColor", "#FFD2D3");
+            contentPanel.add(message);
+
         }
 
     }

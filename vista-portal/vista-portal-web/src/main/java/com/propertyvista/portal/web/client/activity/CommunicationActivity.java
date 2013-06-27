@@ -19,14 +19,16 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.propertyvista.portal.web.client.ui.CommunicationView;
+import com.propertyvista.portal.web.client.ui.CommunicationView.CommunicationPresenter;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class CommunicationActivity extends AbstractActivity {
+public class CommunicationActivity extends AbstractActivity implements CommunicationPresenter {
 
     private final CommunicationView view;
 
     public CommunicationActivity(Place place) {
         view = PortalWebViewFactory.instance(CommunicationView.class);
+        view.setPresenter(this);
     }
 
     @Override

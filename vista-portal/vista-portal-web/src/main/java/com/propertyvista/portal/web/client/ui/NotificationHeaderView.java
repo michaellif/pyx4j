@@ -21,13 +21,13 @@ import com.propertyvista.common.client.site.Notification;
 
 public interface NotificationHeaderView extends IsWidget {
 
-    interface Presenter {
+    public interface NotificationHeaderPresenter {
 
-        void acceptMessage(Notification userMessages);
+        void acceptMessage(Notification notification);
 
     }
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(NotificationHeaderPresenter presenter);
 
-    void populate(List<Notification> userMessages);
+    void populate(List<Notification> notifications);
 }

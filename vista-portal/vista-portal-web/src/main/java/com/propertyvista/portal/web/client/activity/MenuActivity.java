@@ -33,11 +33,6 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     public MenuActivity(Place place) {
         this.view = PortalWebViewFactory.instance(MenuView.class);
         view.setPresenter(this);
-        withPlace(place);
-    }
-
-    public MenuActivity withPlace(Place place) {
-        return this;
     }
 
     @Override

@@ -22,6 +22,8 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 
+import com.propertyvista.portal.web.client.resources.PortalImages;
+
 public class PortalWebRootPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
@@ -35,11 +37,11 @@ public class PortalWebRootPaneTheme extends Theme {
 
         Commercial,
 
-        Messages;
+        NotificationContainer, NotificationItem;
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, active, sideMenu, collapsedMenu
+        hover, active, sideMenu, collapsedMenu, error, warning, info, confirm
     }
 
     public PortalWebRootPaneTheme() {
@@ -187,9 +189,43 @@ public class PortalWebRootPaneTheme extends Theme {
     }
 
     private void initMessagesStyles() {
-        Style style = new Style(".", StyleName.Messages);
-        style.addProperty("padding", "10px 0 ");
+        Style style = new Style(".", StyleName.NotificationContainer);
+        style.addProperty("padding-top", "10px");
         addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItem);
+        style.addProperty("text-align", "center");
+        style.addProperty("padding", "6px");
+        style.addProperty("min-height", "40px");
+        style.addProperty("border", "1px solid");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("margin", "0 10px 4px 10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItem, "-" + StyleDependent.error);
+        style.addProperty("background", "url('" + PortalImages.INSTANCE.error().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", ThemeColor.contrast3, 0.3);
+        style.addProperty("border-color", ThemeColor.contrast3, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItem, "-" + StyleDependent.warning);
+        style.addProperty("background", "url('" + PortalImages.INSTANCE.warning().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", ThemeColor.contrast2, 0.3);
+        style.addProperty("border-color", ThemeColor.contrast2, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItem, "-" + StyleDependent.info);
+        style.addProperty("background", "url('" + PortalImages.INSTANCE.info().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", ThemeColor.contrast5, 0.3);
+        style.addProperty("border-color", ThemeColor.contrast5, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItem, "-" + StyleDependent.confirm);
+        style.addProperty("background", "url('" + PortalImages.INSTANCE.confirm().getSafeUri().asString() + "') no-repeat scroll 10px center");
+        style.addProperty("background-color", ThemeColor.contrast4, 0.3);
+        style.addProperty("border-color", ThemeColor.contrast4, 0.7);
+        addStyle(style);
+
     }
 
     @Override

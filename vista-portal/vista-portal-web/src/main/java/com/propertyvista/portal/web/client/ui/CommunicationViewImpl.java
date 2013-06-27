@@ -41,4 +41,10 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
     }
 
+    @Override
+    public void setPresenter(CommunicationPresenter presenter) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

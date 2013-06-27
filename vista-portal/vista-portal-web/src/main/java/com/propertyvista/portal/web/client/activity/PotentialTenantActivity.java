@@ -37,6 +37,5 @@ public class PotentialTenantActivity extends AbstractActivity {
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-
     }
 }

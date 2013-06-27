@@ -19,12 +19,13 @@ import com.pyx4j.site.rpc.AppPlace;
 
 public interface MenuView extends IsWidget {
 
-    public void setPresenter(MenuPresenter presenter);
-
     public interface MenuPresenter {
         public void navigTo(AppPlace place);
 
         public AppPlace getWhere();
 
     }
+
+    public void setPresenter(MenuPresenter presenter);
+
 }

@@ -21,7 +21,7 @@ public class Notification {
 
     public enum NotificationType implements IDebugId {
 
-        INFO, WARN, ERROR, FAILURE;
+        INFO, WARN, ERROR, FAILURE, CONFIRM;
 
         @Override
         public String debugId() {

@@ -17,4 +17,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 public interface CommunicationView extends IsWidget {
 
+    public interface CommunicationPresenter {
+    }
+
+    public void setPresenter(CommunicationPresenter presenter);
+
 }
