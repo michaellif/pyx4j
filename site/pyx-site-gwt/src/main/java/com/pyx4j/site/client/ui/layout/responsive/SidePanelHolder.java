@@ -25,9 +25,9 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.DisplayPanel;
 
-public class SideMenuHolder extends SimplePanel {
+public class SidePanelHolder extends SimplePanel {
 
-    public SideMenuHolder() {
+    public SidePanelHolder() {
     }
 
     public void setMenuDisplay(DisplayPanel display) {
