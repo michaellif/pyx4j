@@ -35,7 +35,6 @@ import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmRole;
@@ -47,6 +46,7 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.generator.SecurityGenerator;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
@@ -226,6 +226,14 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         Persistence.service().persist(credential);
 
         return credential;
+    }
+
+    @Override
+    public <E extends AbstractUser> void clearSecurityQuestion(Class<? extends AbstractUserCredential<E>> credentialClass, E user) {
+        AbstractUserCredential<?> credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
+        credential.securityAnswer().setValue(null);
+        credential.securityQuestion().setValue(null);
+        Persistence.service().persist(credential);
     }
 
 }

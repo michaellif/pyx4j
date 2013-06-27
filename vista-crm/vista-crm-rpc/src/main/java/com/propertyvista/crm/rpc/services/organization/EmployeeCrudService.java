@@ -25,7 +25,7 @@ import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
  */
 public interface EmployeeCrudService extends AbstractCrudService<EmployeeDTO> {
 
-    void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback);
+    void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);
 
-    void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback);
+    void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);
 }

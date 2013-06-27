@@ -116,7 +116,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     }
 
     @Override
-    public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
+    public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
         // this is never possible since canClearSecurityQuestion always will return false        
     }
 
@@ -126,9 +126,8 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     }
 
     @Override
-    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback) {
+    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId) {
         // TODO Auto-generated method stub
-
     }
 
 }

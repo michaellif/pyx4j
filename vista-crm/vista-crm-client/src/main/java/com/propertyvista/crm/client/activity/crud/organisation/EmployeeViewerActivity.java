@@ -85,8 +85,8 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     }
 
     @Override
-    public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
-        ((EmployeeCrudService) getService()).clearSecurityQuestion(asyncCallback);
+    public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
+        ((EmployeeCrudService) getService()).clearSecurityQuestion(asyncCallback, employeeId);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     }
 
     @Override
-    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
-        ((EmployeeCrudService) getService()).sendPasswordResetEmail(asyncCallback);
+    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
+        ((EmployeeCrudService) getService()).sendPasswordResetEmail(asyncCallback, employeeId);
     }
 }

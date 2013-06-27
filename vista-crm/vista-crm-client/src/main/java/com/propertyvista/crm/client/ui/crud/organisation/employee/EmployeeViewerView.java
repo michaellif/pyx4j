@@ -35,11 +35,11 @@ public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
 
         boolean canClearSecurityQuestion();
 
-        void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback);
+        void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId);
 
         boolean canSendPasswordResetEmail();
 
-        void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback);
+        void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId);
 
     }
 

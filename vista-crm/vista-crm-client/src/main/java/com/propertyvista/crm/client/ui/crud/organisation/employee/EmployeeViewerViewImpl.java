@@ -90,7 +90,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                         }
                     }
 
-                });
+                }, getForm().getValue().<EmployeeDTO> createIdentityStub());
 
             }
 
@@ -117,8 +117,9 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                         }
                     }
 
-                });
+                }, getForm().getValue().<EmployeeDTO> createIdentityStub());
             }
+
         });
         addAction(sendPasswordResetEmailAction);
 

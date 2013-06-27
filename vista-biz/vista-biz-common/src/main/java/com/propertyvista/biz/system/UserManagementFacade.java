@@ -18,10 +18,10 @@ import java.util.Set;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.Behavior;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public interface UserManagementFacade {
@@ -29,6 +29,8 @@ public interface UserManagementFacade {
     <E extends AbstractUserCredential<? extends AbstractUser>> void selfChangePassword(Class<E> credentialClass, PasswordChangeRequest request);
 
     <E extends AbstractUserCredential<? extends AbstractUser>> void managedSetPassword(Class<E> credentialClass, PasswordChangeRequest request);
+
+    <E extends AbstractUser> void clearSecurityQuestion(Class<? extends AbstractUserCredential<E>> credentialClass, E user);
 
     Set<Behavior> getBehaviors(CrmUserCredential userCredentialId);
 

@@ -245,12 +245,15 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    public void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback) {
-        // TODO Auto-generated method stub        
+    public void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
+        Employee emp = Persistence.service().retrieve(Employee.class, employeeId.getPrimaryKey());
+        ServerSideFactory.create(UserManagementFacade.class).clearSecurityQuestion(CrmUserCredential.class, emp.user());
+        Persistence.service().commit();
+        asyncCallback.onSuccess(null);
     }
 
     @Override
-    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback) {
+    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
         // TODO implement this
     }
 }
