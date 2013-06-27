@@ -37,7 +37,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         Commercial,
 
-        NotificationContainer, NotificationItem;
+        NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -195,11 +195,12 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.NotificationItem);
         style.addProperty("text-align", "center");
-        style.addProperty("padding", "6px");
+        style.addProperty("padding", "6px 6px 6px 50px");
         style.addProperty("min-height", "40px");
         style.addProperty("border", "1px solid");
         style.addProperty("border-radius", "5px");
         style.addProperty("margin", "0 10px 4px 10px");
+        style.addProperty("position", "relative");
         addStyle(style);
 
         style = new Style(".", StyleName.NotificationItem, "-" + StyleDependent.error);
@@ -224,6 +225,17 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("background", "url('" + PortalImages.INSTANCE.confirm().getSafeUri().asString() + "') no-repeat scroll 10px center");
         style.addProperty("background-color", ThemeColor.contrast4, 0.3);
         style.addProperty("border-color", ThemeColor.contrast4, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItemTitle);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.NotificationItemCloseButton);
+        style.addProperty("display", "inline-block");
+        style.addProperty("position", "absolute");
+        style.addProperty("right", "5px");
+        style.addProperty("top", "5px");
         addStyle(style);
 
     }

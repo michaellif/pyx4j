@@ -15,13 +15,20 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.IconButton;
+
 import com.propertyvista.common.client.site.Notification;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class NotificationHeaderViewImpl extends FlowPanel implements NotificationHeaderView {
+
+    private static final I18n i18n = I18n.get(NotificationHeaderViewImpl.class);
 
     private NotificationHeaderPresenter presenter;
 
@@ -45,35 +52,58 @@ public class NotificationHeaderViewImpl extends FlowPanel implements Notificatio
     @Override
     public void populate(List<Notification> notifications) {
         contentPanel.clear();
+        if (notifications.size() == 0) {
+            setVisible(false);
+        } else {
+            setVisible(true);
+            for (final Notification notification : notifications) {
 
-        for (Notification notification : notifications) {
+                FlowPanel message = new FlowPanel();
+                message.setStyleName(PortalWebRootPaneTheme.StyleName.NotificationItem.name());
 
-            HTML message = new HTML("<b>" + notification.getTitle() + "</b><br/>" + notification.getMessage());
-            message.setStyleName(PortalWebRootPaneTheme.StyleName.NotificationItem.name());
+                HTML title = new HTML(notification.getTitle());
+                title.setStyleName(PortalWebRootPaneTheme.StyleName.NotificationItemTitle.name());
 
-            switch (notification.getNotificationType()) {
-            case FAILURE:
-                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
-                break;
-            case ERROR:
-                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
-                break;
-            case WARN:
-                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.warning.name());
-                break;
-            case INFO:
-                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
-                break;
-            case CONFIRM:
-                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.confirm.name());
-                break;
+                HTML body = new HTML(notification.getMessage());
 
-            default:
-                message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
-                break;
+                message.add(title);
+                message.add(body);
+
+                IconButton closeButton = new IconButton(i18n.tr("Close"), PortalImages.INSTANCE.delButton(), new Command() {
+
+                    @Override
+                    public void execute() {
+                        presenter.acceptMessage(notification);
+                    }
+                });
+                message.add(closeButton);
+                closeButton.setStyleName(PortalWebRootPaneTheme.StyleName.NotificationItemCloseButton.name());
+
+                switch (notification.getNotificationType()) {
+                case FAILURE:
+                    message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
+                    break;
+                case ERROR:
+                    message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.error.name());
+                    break;
+                case WARN:
+                    message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.warning.name());
+                    break;
+                case INFO:
+                    message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
+                    break;
+                case CONFIRM:
+                    message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.confirm.name());
+                    break;
+
+                default:
+                    message.addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.info.name());
+                    break;
+                }
+
+                contentPanel.add(message);
+
             }
-
-            contentPanel.add(message);
 
         }
 

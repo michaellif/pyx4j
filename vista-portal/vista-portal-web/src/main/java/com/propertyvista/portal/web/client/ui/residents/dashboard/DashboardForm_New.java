@@ -147,7 +147,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
             content.add(new HTML(value.tenantAddress().getValue()));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setPadding(10, Unit.PX);
+            container.getElement().getStyle().setProperty("padding", "10px");
             return container;
         }
     }
@@ -171,7 +171,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
                     "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setPadding(10, Unit.PX);
+            container.getElement().getStyle().setProperty("padding", "10px");
             return container;
         }
     }
@@ -195,7 +195,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
                     "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setPadding(10, Unit.PX);
+            container.getElement().getStyle().setProperty("padding", "10px");
             return container;
         }
     }
@@ -218,7 +218,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
                     "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setPadding(10, Unit.PX);
+            container.getElement().getStyle().setProperty("padding", "10px");
             return container;
         }
     }

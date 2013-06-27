@@ -35,28 +35,33 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
 
     private final NotificationHeaderView view;
 
+    private static List<Notification> notifications;
+
+    static {
+        notifications = new ArrayList<Notification>();
+        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
+        notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification"));
+        notifications.add(new Notification("Warn Message goes here", NotificationType.WARN, "Warn Notification"));
+        notifications.add(new Notification("Confirm Message goes here", NotificationType.CONFIRM, "Confirm Notification"));
+
+    }
+
     public NotificationHeaderActivity(Place place) {
         view = PortalWebViewFactory.instance(NotificationHeaderView.class);
         view.setPresenter(this);
+
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
-
-        List<Notification> notifications = new ArrayList<Notification>();
-        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
-        notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification"));
-        notifications.add(new Notification("Warn Message goes here", NotificationType.WARN, "Warn Notification"));
-        notifications.add(new Notification("Confirm Message goes here", NotificationType.CONFIRM, "Confirm Notification"));
-
         view.populate(notifications);
     }
 
     @Override
     public void acceptMessage(Notification notification) {
-        // TODO Auto-generated method stub
-
+        notifications.remove(notification);
+        view.populate(notifications);
     }
 }
