@@ -126,7 +126,7 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
     }
 
     @Override
-    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> asyncCallback, CrmUser crmUserId) {
+    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId) {
         // do nothing: this is not permitted in this activity because it doesn't make a lot of sense
     }
 

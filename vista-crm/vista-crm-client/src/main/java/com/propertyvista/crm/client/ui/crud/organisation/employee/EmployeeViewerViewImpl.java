@@ -26,7 +26,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
-import com.propertyvista.domain.security.CrmUser;
 
 public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> implements EmployeeViewerView {
 
@@ -118,7 +117,7 @@ public class EmployeeViewerViewImpl extends CrmViewerViewImplBase<EmployeeDTO> i
                         }
                     }
 
-                }, getForm().getValue().user().<CrmUser> createIdentityStub());
+                }, getForm().getValue().<EmployeeDTO> createIdentityStub());
             }
 
         });

@@ -254,10 +254,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, CrmUser crmUserId) {
-        ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(crmUserId);
-        // TODO do we need some kind of autid log for this??
+    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback, EmployeeDTO employeeId) {
+        Employee emp = Persistence.service().retrieve(Employee.class, employeeId.getPrimaryKey());
+        Persistence.service().retrieve(emp.user());
+        ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(emp.user());
         Persistence.service().commit();
-        asyncCallback.onSuccess(null);
     }
 }

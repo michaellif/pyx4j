@@ -39,7 +39,7 @@ public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
 
         boolean canSendPasswordResetEmail();
 
-        void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, CrmUser crmUserId);
+        void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback, EmployeeDTO employeeId);
 
     }
 
