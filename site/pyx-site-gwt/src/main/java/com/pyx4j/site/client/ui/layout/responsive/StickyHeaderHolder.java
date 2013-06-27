@@ -52,7 +52,7 @@ public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
 
     public void onPositionChange() {
         if (getWidget() != null && isAttached()) {
-            if (getAbsoluteTop() >= 0) {
+            if (getAbsoluteTop() > 0) {
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
                 getWidget().getElement().getStyle().setProperty("width", "auto");
                 getElement().getStyle().setProperty("height", "auto");
