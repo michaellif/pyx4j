@@ -21,7 +21,6 @@ import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -60,9 +59,9 @@ public interface Notification extends IEntity {
     @MemberColumn(name = "tp")
     IPrimitive<NotificationType> type();
 
-    @Detached(level = AttachLevel.ToStringMembers)
+    @Detached
     IList<Building> buildings();
 
-    @Detached(level = AttachLevel.ToStringMembers)
+    @Detached
     IList<Portfolio> portfolios();
 }
