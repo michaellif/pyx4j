@@ -73,4 +73,17 @@ public class Messages {
         }
         return false;
     }
+
+    public Message getErrorMessage() {
+        if (messages.size() == 0) {
+            throw new Error("Can't parse Message");
+        }
+
+        for (Message message : messages) {
+            if (message.getType() == MessageType.Error) {
+                return message;
+            }
+        }
+        return null;
+    }
 }

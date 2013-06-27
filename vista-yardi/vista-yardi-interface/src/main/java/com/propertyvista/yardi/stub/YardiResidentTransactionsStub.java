@@ -29,7 +29,8 @@ public interface YardiResidentTransactionsStub {
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
-    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException;
+    ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, YardiPropertyNoAccessException,
+            RemoteException;
 
     ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException;

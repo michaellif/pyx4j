@@ -114,7 +114,8 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     }
 
     @Override
-    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+    public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException,
+            YardiPropertyNoAccessException, RemoteException {
         try {
 
             init(Action.GetResidentTransactions);
@@ -140,7 +141,11 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
+                    if (messages.getErrorMessage().getValue().startsWith("Invalid or no access to Yardi Property")) {
+                        throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    } else {
+                        throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
+                    }
                 } else {
                     log.info(messages.toString());
                 }

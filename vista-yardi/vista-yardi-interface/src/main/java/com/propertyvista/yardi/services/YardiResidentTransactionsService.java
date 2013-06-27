@@ -62,6 +62,7 @@ import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 /**
@@ -365,9 +366,15 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            ResidentTransactions residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
-            if (residentTransactions != null) {
-                transactions.add(residentTransactions);
+            ResidentTransactions residentTransactions;
+            try {
+                residentTransactions = stub.getAllResidentTransactions(yc, propertyCode);
+                if (residentTransactions != null) {
+                    transactions.add(residentTransactions);
+                }
+            } catch (YardiPropertyNoAccessException e) {
+                suspendBuilding(propertyCode);
+                executionMonitor.addErredEvent("Building", e.getMessage());
             }
         }
         return transactions;
@@ -511,15 +518,23 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
-            BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
-            BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
-            ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, nextCycle.billingCycleStartDate().getValue());
-            if (residentTransactions != null) {
-                transactions.add(residentTransactions);
+
+            if (isBuildingExistsAndNotSuspended(propertyCode)) {
+                BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
+                BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
+                ResidentTransactions residentTransactions = stub.getAllLeaseCharges(yc, propertyCode, nextCycle.billingCycleStartDate().getValue());
+                if (residentTransactions != null) {
+                    transactions.add(residentTransactions);
+                }
             }
         }
 
         return transactions;
+    }
+
+    private boolean isBuildingExistsAndNotSuspended(String propertyCode) {
+        Building bulding = findBuilding(propertyCode);
+        return (bulding != null && !bulding.propertyCode().isNull());
     }
 
     public List<Property> getProperties(ResidentTransactions transaction) {
@@ -577,6 +592,19 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     private void closeLeases(List<Lease> leases) {
         for (Lease lease : leases) {
             YardiLeaseProcessor.completeLease(lease);
+        }
+    }
+
+    private Building findBuilding(String propertyCode) {
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        criteria.eq(criteria.proto().propertyCode(), propertyCode);
+        return Persistence.service().retrieve(criteria);
+    }
+
+    private void suspendBuilding(String propertyCode) {
+        Building building = findBuilding(propertyCode);
+        if (building != null) {
+            ServerSideFactory.create(BuildingFacade.class).suspend(building);
         }
     }
 }

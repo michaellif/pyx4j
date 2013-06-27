@@ -22,4 +22,5 @@ public interface BuildingFacade {
 
     AptUnit persist(AptUnit unit);
 
+    void suspend(Building building);
 }

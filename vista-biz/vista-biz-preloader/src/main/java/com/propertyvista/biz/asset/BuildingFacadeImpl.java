@@ -72,4 +72,10 @@ public class BuildingFacadeImpl implements BuildingFacade {
         return unit;
     }
 
+    @Override
+    public void suspend(Building building) {
+        // TODO Auto-generated method stub
+
+    }
+
 }
