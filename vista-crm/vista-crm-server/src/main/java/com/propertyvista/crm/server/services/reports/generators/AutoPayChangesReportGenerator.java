@@ -21,6 +21,7 @@ import java.util.Vector;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -80,9 +81,8 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
         Vector<AutoPayReviewDTO> suspenedPreauthorizedPayments = new Vector<AutoPayReviewDTO>(ServerSideFactory.create(PaymentReportFacade.class)
                 .reportSuspendedPreauthorizedPayments(reportCriteria));
 
-        if (true) {
-            fillWithMockup(suspenedPreauthorizedPayments);
-        }
+        devFillWithMockup(suspenedPreauthorizedPayments);
+
         return suspenedPreauthorizedPayments;
     }
 
@@ -101,7 +101,10 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
     /**
      * Generate mockup data for UI debugging
      */
-    private void fillWithMockup(Vector<AutoPayReviewDTO> data) {
+    private void devFillWithMockup(Vector<AutoPayReviewDTO> data) {
+        if (!ApplicationMode.isDevelopment()) {
+            return;
+        }
         AutoPayReviewDTO dto = EntityFactory.create(AutoPayReviewDTO.class);
         dto.building().setValue("building #B");
         dto.unit().setValue("unit #U");
