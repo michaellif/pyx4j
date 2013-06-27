@@ -168,6 +168,7 @@ public class PortalWebTheme extends Theme {
 
     protected void initGeneralStyles() {
         Style style = new Style("html");
+        style.addProperty("overflow", "hidden");
         addStyle(style);
 
         style = new Style("td");
