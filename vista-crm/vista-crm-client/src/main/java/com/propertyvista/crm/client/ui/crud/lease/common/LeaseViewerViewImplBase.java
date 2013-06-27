@@ -43,6 +43,8 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     protected final MenuItem viewFutureTerm;
 
+    protected final MenuItem viewHistoricTerms;
+
     public LeaseViewerViewImplBase() {
         super(true);
 
@@ -67,7 +69,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         });
         termsMenu.addItem(viewFutureTerm);
 
-        MenuItem viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
+        viewHistoricTerms = new MenuItem(i18n.tr("Historic..."), new Command() {
             @Override
             public void execute() {
                 new LeaseTermSelectorDialog() {
@@ -107,6 +109,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
         super.populate(value);
 
         viewFutureTerm.setVisible(!value.nextTerm().isNull());
+        viewHistoricTerms.setVisible(value.historyPresent().isBooleanTrue());
 
         setupPapsMenu(value);
     }

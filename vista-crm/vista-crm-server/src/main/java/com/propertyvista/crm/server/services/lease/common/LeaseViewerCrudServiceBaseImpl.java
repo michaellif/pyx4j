@@ -23,13 +23,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseViewerCrudServiceBase;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -62,6 +62,12 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
             checkUnitMoveOut(dto);
         }
+
+        EntityQueryCriteria<LeaseTerm> criteria = EntityQueryCriteria.create(LeaseTerm.class);
+        criteria.eq(criteria.proto().lease(), in);
+        criteria.ne(criteria.proto().id(), in.currentTerm().getPrimaryKey());
+        criteria.ne(criteria.proto().status(), LeaseTerm.Status.Offer);
+        dto.historyPresent().setValue(Persistence.service().exists(criteria));
     }
 
     @Override
@@ -93,9 +99,9 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
 
     void checkUnitMoveOut(DTO dto) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
-        criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-        criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.getPrimaryKey()));
+        criteria.eq(criteria.proto().unit(), dto.unit());
+        criteria.in(criteria.proto().status(), Lease.Status.current());
+        criteria.ne(criteria.proto().id(), dto.getPrimaryKey());
         criteria.isNotNull(criteria.proto().completion());
         criteria.isNull(criteria.proto().actualMoveOut());
 

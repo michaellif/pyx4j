@@ -42,6 +42,8 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<Boolean> papPresent();
 
+    IPrimitive<Boolean> historyPresent();
+
     IList<TenantInsuranceCertificateDTO> tenantInsuranceCertificates();
 
     @NotNull
