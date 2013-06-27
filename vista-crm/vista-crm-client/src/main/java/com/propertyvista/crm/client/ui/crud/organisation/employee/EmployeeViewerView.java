@@ -37,6 +37,10 @@ public interface EmployeeViewerView extends IViewer<EmployeeDTO> {
 
         void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback);
 
+        boolean canSendPasswordResetEmail();
+
+        void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback);
+
     }
 
     void restrictSecuritySensitiveControls(boolean isManager, boolean isSelfEditor);

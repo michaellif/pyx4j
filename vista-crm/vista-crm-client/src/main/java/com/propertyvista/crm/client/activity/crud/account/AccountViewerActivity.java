@@ -120,4 +120,15 @@ public class AccountViewerActivity extends CrmViewerActivity<EmployeeDTO> implem
         // this is never possible since canClearSecurityQuestion always will return false        
     }
 
+    @Override
+    public boolean canSendPasswordResetEmail() {
+        return false;
+    }
+
+    @Override
+    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> defaultAsyncCallback) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -248,4 +248,9 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     public void clearSecurityQuestion(AsyncCallback<VoidSerializable> asyncCallback) {
         // TODO Auto-generated method stub        
     }
+
+    @Override
+    public void sendPasswordResetEmail(AsyncCallback<VoidSerializable> asyncCallback) {
+        // TODO implement this
+    }
 }

@@ -88,4 +88,14 @@ public class EmployeeViewerActivity extends CrmViewerActivity<EmployeeDTO> imple
     public void clearSecurityQuestionAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
         ((EmployeeCrudService) getService()).clearSecurityQuestion(asyncCallback);
     }
+
+    @Override
+    public boolean canSendPasswordResetEmail() {
+        return true;
+    }
+
+    @Override
+    public void sendPasswordResetEmailAction(DefaultAsyncCallback<VoidSerializable> asyncCallback) {
+        ((EmployeeCrudService) getService()).sendPasswordResetEmail(asyncCallback);
+    }
 }
