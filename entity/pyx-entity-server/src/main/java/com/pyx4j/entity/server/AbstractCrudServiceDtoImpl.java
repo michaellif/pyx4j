@@ -42,22 +42,22 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
      * Used to retrieve bound detached members before they are copied to DTO
      * TODO To make it work magically we have implemented retriveDetachedMember
      * 
-     * retrieveTraget when called for save operations
+     * retrieveTarget when called for save operations
      */
-    protected void retrievedSingle(E entity, RetrieveTarget retrieveTraget) {
+    protected void retrievedSingle(E entity, RetrieveTarget retrieveTarget) {
     }
 
     /**
      * This method called for single entity returned to the GWT client. As opposite to entries in list.
      * This is empty callback function that don't need to be called from implementation.
      * 
-     * @param retrieveTraget
+     * @param retrieveTarget
      *            TODO
      */
-    protected void enhanceRetrieved(E entity, DTO dto, RetrieveTarget retrieveTraget) {
+    protected void enhanceRetrieved(E entity, DTO dto, RetrieveTarget retrieveTarget) {
     }
 
-    protected E retrieve(Key entityId, RetrieveTarget retrieveTraget) {
+    protected E retrieve(Key entityId, RetrieveTarget retrieveTarget) {
         E entity = Persistence.secureRetrieve(entityClass, entityId);
         if (entity == null) {
             throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(entityClass).getCaption()));
@@ -78,13 +78,13 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     }
 
     @Override
-    public void retrieve(AsyncCallback<DTO> callback, Key entityId, RetrieveTarget retrieveTraget) {
-        E entity = retrieve(entityId, retrieveTraget);
+    public void retrieve(AsyncCallback<DTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
+        E entity = retrieve(entityId, retrieveTarget);
         if (entity != null) {
-            retrievedSingle(entity, retrieveTraget);
+            retrievedSingle(entity, retrieveTarget);
         }
         DTO dto = createDTO(entity);
-        enhanceRetrieved(entity, dto, retrieveTraget);
+        enhanceRetrieved(entity, dto, retrieveTarget);
         callback.onSuccess(dto);
     }
 

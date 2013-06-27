@@ -40,19 +40,19 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    protected E retrieve(Key entityId, RetrieveTarget retrieveTraget) {
+    protected E retrieve(Key entityId, RetrieveTarget retrieveTarget) {
         Key primaryKey;
         // Force draft for edit
-        if (retrieveTraget == RetrieveTarget.Edit) {
+        if (retrieveTarget == RetrieveTarget.Edit) {
             primaryKey = entityId.asDraftKey();
         } else {
             primaryKey = entityId;
         }
-        E entity = super.retrieve(primaryKey, retrieveTraget);
+        E entity = super.retrieve(primaryKey, retrieveTarget);
         if (primaryKey.getVersion() == Key.VERSION_DRAFT && entity.version().isNull()) {
-            entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTraget);
+            entity = super.retrieve(primaryKey.asCurrentKey(), retrieveTarget);
         } else if (primaryKey.getVersion() == Key.VERSION_CURRENT && entity.version().isNull()) {
-            entity = super.retrieve(primaryKey.asDraftKey(), retrieveTraget);
+            entity = super.retrieve(primaryKey.asDraftKey(), retrieveTarget);
         }
         return entity;
     }
@@ -71,7 +71,7 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
     }
 
     @Override
-    public void retrieve(final AsyncCallback<DTO> callback, final Key entityId, final RetrieveTarget retrieveTraget) {
+    public void retrieve(final AsyncCallback<DTO> callback, final Key entityId, final RetrieveTarget retrieveTarget) {
         super.retrieve(new AsyncCallback<DTO>() {
             @Override
             public void onFailure(Throwable caught) {
@@ -81,14 +81,14 @@ public abstract class AbstractVersionedCrudServiceDtoImpl<E extends IVersionedEn
             @Override
             public void onSuccess(DTO result) {
                 // If draft do not exists, we return clone of the data from current version
-                if ((retrieveTraget == RetrieveTarget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
+                if ((retrieveTarget == RetrieveTarget.Edit) && (result.getPrimaryKey().getVersion() == Key.VERSION_CURRENT)) {
                     result.version().set(EntityGraph.businessDuplicate(result.version()));
                     VersionedEntityUtils.setAsDraft(result.version());
                     result.setPrimaryKey(entityId.asDraftKey());
                 }
                 callback.onSuccess(result);
             }
-        }, entityId, retrieveTraget);
+        }, entityId, retrieveTarget);
     }
 
     protected void saveAsFinal(E entity) {
