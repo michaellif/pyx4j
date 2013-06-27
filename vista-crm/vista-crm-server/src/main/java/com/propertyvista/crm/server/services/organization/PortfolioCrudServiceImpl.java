@@ -17,6 +17,7 @@ import java.util.HashSet;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
@@ -34,6 +35,13 @@ public class PortfolioCrudServiceImpl extends AbstractCrudServiceImpl<Portfolio>
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceRetrieved(Portfolio entity, Portfolio dto, RetrieveTarget retrieveTraget) {
+        Persistence.service().retrieveMember(entity.buildings());
+        dto.buildings().set(entity.buildings());
+        BuildingFolderUtil.stripExtraData(dto.buildings());
     }
 
     @Override

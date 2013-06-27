@@ -194,7 +194,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         @Override
         protected void addItem() {
-            new SelectEnumDialog<NotificationType>(i18n.tr("Select Concessions"), EnumSet.allOf(NotificationType.class)) {
+            new SelectEnumDialog<NotificationType>(i18n.tr("Select Notification Type"), EnumSet.allOf(NotificationType.class)) {
                 @Override
                 public boolean onClickOk() {
                     Notification item = EntityFactory.create(Notification.class);

@@ -21,7 +21,6 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -69,6 +68,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
         Persistence.service().retrieveMember(entity.buildingAccess());
         dto.buildingAccess().set(entity.buildingAccess());
+        BuildingFolderUtil.stripExtraData(dto.buildingAccess());
 
         Persistence.service().retrieve(dto.employees());
 
@@ -87,8 +87,9 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
         Persistence.service().retrieveMember(entity.notifications());
         dto.notifications().set(entity.notifications());
         for (Notification item : dto.notifications()) {
-            Persistence.service().retrieve(item.buildings(), AttachLevel.ToStringMembers);
-            Persistence.service().retrieve(item.portfolios(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.buildings());
+            BuildingFolderUtil.stripExtraData(item.buildings());
+            Persistence.service().retrieve(item.portfolios());
         }
     }
 

@@ -22,7 +22,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
@@ -74,8 +73,9 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         Persistence.service().retrieveMember(entity.notifications());
         dto.notifications().set(entity.notifications());
         for (Notification item : dto.notifications()) {
-            Persistence.service().retrieve(item.buildings(), AttachLevel.ToStringMembers);
-            Persistence.service().retrieve(item.portfolios(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(item.buildings());
+            BuildingFolderUtil.stripExtraData(dto.buildingAccess());
+            Persistence.service().retrieve(item.portfolios());
         }
     }
 
