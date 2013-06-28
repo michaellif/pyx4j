@@ -14,27 +14,34 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
+
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class CommunicationViewImpl extends FlowPanel implements CommunicationView {
 
+    private final HTML calloutHandler;
+
     public CommunicationViewImpl() {
 
-        getElement().getStyle().setProperty("marginTop", "15px");
+        setStyleName(PortalWebRootPaneTheme.StyleName.Communication.name());
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.setStyleName(PortalWebRootPaneTheme.StyleName.Communication.name());
 
         for (int i = 0; i < 6; i++) {
             Label label = new Label("This is Communication Message #" + i);
             contentPanel.add(label);
         }
 
-        HTML calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
+        calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
                 + PortalWebRootPaneTheme.StyleName.CommunicationCallout.name() + "'/></svg>");
         calloutHandler.getElement().getStyle().setPosition(Position.ABSOLUTE);
         calloutHandler.getElement().getStyle().setProperty("right", "38px");
@@ -42,6 +49,32 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         add(calloutHandler);
         add(contentPanel);
 
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+            calloutHandler.setVisible(false);
+            addStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideComm.name());
+            break;
+        case tabletPortrait:
+        case tabletLandscape:
+        case monitor:
+            calloutHandler.setVisible(true);
+            removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideComm.name());
+            break;
+        }
     }
 
     @Override

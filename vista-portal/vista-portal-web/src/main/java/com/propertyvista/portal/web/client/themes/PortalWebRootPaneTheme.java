@@ -41,7 +41,7 @@ public class PortalWebRootPaneTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        hover, active, sideMenu, collapsedMenu, error, warning, info, confirm
+        hover, active, sideMenu, collapsedMenu, sideComm, error, warning, info, confirm
     }
 
     public PortalWebRootPaneTheme() {
@@ -261,10 +261,21 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");
         style.addProperty("border-color", ThemeColor.foreground, 0.7);
+        style.addProperty("margin-top", "15px");
         addStyle(style);
 
         style = new Style(".", StyleName.CommunicationCallout);
         style.addProperty("fill", ThemeColor.foreground, 0.8);
+        addStyle(style);
+
+        style = new Style(".", StyleName.Communication, "-", StyleDependent.sideComm);
+        style.addProperty("width", "100%");
+        style.addProperty("height", "100%");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
+        style.addProperty("background", ThemeColor.foreground, 0.8);
+        style.addProperty("border-width", "0");
+        style.addProperty("border-radius", "0");
         addStyle(style);
 
     }
