@@ -15,14 +15,15 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -64,9 +65,11 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
 
     private final Toolbar rightToolbar;
 
-    private final SimplePanel brandImageHolder;
+    private final FlowPanel brandHolder;
 
     private LayoutType layoutType;
+
+    private final HTML brandLabel;
 
     private boolean hideLoginButton = false;
 
@@ -132,10 +135,10 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
             }
         });
 
-        rightToolbar.add(communicationButton);
         rightToolbar.add(loginButton);
         rightToolbar.add(tenantButton);
         rightToolbar.add(languageButton);
+        rightToolbar.add(communicationButton);
         rightToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         rightToolbar.getElement().getStyle().setProperty("right", "0");
 
@@ -151,14 +154,24 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
         leftToolbar.getElement().getStyle().setProperty("left", "0");
 
         Image brandImage = new Image(PortalImages.INSTANCE.brand());
+        brandImage.getElement().getStyle().setFloat(Float.LEFT);
         brandImage.getElement().getStyle().setProperty("margin", "5px 10px 0 10px");
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
-        brandImageHolder = new SimplePanel(brandImage);
-        brandImageHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
-        brandImageHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
+
+        brandLabel = new HTML(
+                "<span style='font-weight:bold;font-size:1.2em'><span style='color:#eee'>my</span><span style='color:#bbb'>community</span></span>");
+        brandLabel.getElement().getStyle().setProperty("lineHeight", "60px");
+        brandLabel.getElement().getStyle().setFloat(Float.RIGHT);
+
+        brandHolder = new FlowPanel();
+        brandHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
+        brandHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
+
+        brandHolder.add(brandImage);
+        brandHolder.add(brandLabel);
 
         add(leftToolbar);
-        add(brandImageHolder);
+        add(brandHolder);
         add(rightToolbar);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
@@ -223,18 +236,27 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
             sideMenuButton.setVisible(loggedIn && true);
             tenantButton.setVisible(false);
             languageButton.setVisible(false);
-            brandImageHolder.getElement().getStyle().setProperty("margin", "0 auto");
+            brandHolder.getElement().getStyle().setProperty("margin", "0 auto");
             break;
         default:
             sideMenuButton.setVisible(false);
             tenantButton.setVisible(loggedIn);
             languageButton.setVisible(true);
-            brandImageHolder.getElement().getStyle().setProperty("margin", "0");
+            brandHolder.getElement().getStyle().setProperty("margin", "0");
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
         communicationButton.setVisible(loggedIn);
 
+        switch (layoutType) {
+        case monitor:
+        case tabletLandscape:
+            brandLabel.setVisible(true);
+            break;
+        default:
+            brandLabel.setVisible(false);
+            break;
+        }
     }
 
     @Override
@@ -242,10 +264,10 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            brandImageHolder.getElement().getStyle().setProperty("left", ((getOffsetWidth() - brandImageHolder.getOffsetWidth()) / 2) + "px");
+            brandHolder.getElement().getStyle().setProperty("left", ((getOffsetWidth() - brandHolder.getOffsetWidth()) / 2) + "px");
             break;
         default:
-            brandImageHolder.getElement().getStyle().setProperty("left", "0");
+            brandHolder.getElement().getStyle().setProperty("left", "0");
             break;
         }
 

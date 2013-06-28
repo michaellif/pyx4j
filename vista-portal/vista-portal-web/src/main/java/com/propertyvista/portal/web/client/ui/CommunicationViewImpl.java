@@ -13,7 +13,9 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
 
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
@@ -22,21 +24,22 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
 
     public CommunicationViewImpl() {
 
-        getElement().getStyle().setProperty("margin", "10px");
-
-        setStyleName(PortalWebRootPaneTheme.StyleName.Communication.name());
+        getElement().getStyle().setProperty("marginTop", "15px");
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.setSize("400px", "600px");
-        contentPanel.getElement().getStyle().setProperty("border", "solid 1px #aaa");
-        contentPanel.getElement().getStyle().setProperty("backgroundColor", "white");
+        contentPanel.setStyleName(PortalWebRootPaneTheme.StyleName.Communication.name());
 
         for (int i = 0; i < 6; i++) {
             Label label = new Label("This is Communication Message #" + i);
-            label.getElement().getStyle().setProperty("margin", "30px");
             contentPanel.add(label);
         }
 
+        HTML calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
+                + PortalWebRootPaneTheme.StyleName.CommunicationCallout.name() + "'/></svg>");
+        calloutHandler.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        calloutHandler.getElement().getStyle().setProperty("right", "38px");
+        calloutHandler.getElement().getStyle().setProperty("top", "0px");
+        add(calloutHandler);
         add(contentPanel);
 
     }

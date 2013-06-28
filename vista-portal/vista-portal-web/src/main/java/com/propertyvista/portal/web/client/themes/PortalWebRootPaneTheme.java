@@ -33,7 +33,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName, MainMenuFooter,
 
-        Communication,
+        Communication, CommunicationCallout,
 
         Commercial, CommercialItem, CommercialItemTitle,
 
@@ -252,8 +252,20 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initCommunicationStyles() {
         Style style = new Style(".", StyleName.Communication);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("padding", "10px");
+        style.addBoxShadow(ThemeColor.foreground, "5px 5px 5px");
         style.addProperty("background", ThemeColor.foreground, 0.8);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("border-color", ThemeColor.foreground, 0.7);
         addStyle(style);
+
+        style = new Style(".", StyleName.CommunicationCallout);
+        style.addProperty("fill", ThemeColor.foreground, 0.8);
+        addStyle(style);
+
     }
 
     private void initNotificationStyles() {

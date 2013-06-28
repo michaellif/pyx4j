@@ -89,7 +89,7 @@ public class SiteViewTheme extends Theme {
 
         style = new Style(".", StyleName.SiteViewNavigContainer.name(), " .gwt-StackLayoutPanelHeader-", StyleDependent.selected.name());
         style.addProperty("font-weight", "bold");
-        style.addShadow(ThemeColor.foreground, "1px 1px 0");
+        style.addTextShadow(ThemeColor.foreground, "1px 1px 0");
         style.addGradient(ThemeColor.object1, 1, ThemeColor.object1, 0.8);
         addStyle(style);
 
