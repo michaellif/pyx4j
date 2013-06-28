@@ -83,12 +83,20 @@ public class Style {
         properties.add(new GradientProperty(startColor, 1, endColor, 1));
     }
 
-    public void addShadow(ThemeColor color, String value) {
-        properties.add(new ShadowProperty(color, 1, value));
+    public void addTextShadow(ThemeColor color, String value) {
+        properties.add(new TextShadowProperty(color, 1, value));
     }
 
-    public void addShadow(ThemeColor color, double vibrance, String value) {
-        properties.add(new ShadowProperty(color, vibrance, value));
+    public void addTextShadow(ThemeColor color, double vibrance, String value) {
+        properties.add(new TextShadowProperty(color, vibrance, value));
+    }
+
+    public void addBoxShadow(ThemeColor color, String value) {
+        properties.add(new BoxShadowProperty(color, 1, value));
+    }
+
+    public void addBoxShadow(ThemeColor color, double vibrance, String value) {
+        properties.add(new BoxShadowProperty(color, vibrance, value));
     }
 
     public String toString(Theme theme, Palette palette) {

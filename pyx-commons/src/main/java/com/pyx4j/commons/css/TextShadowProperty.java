@@ -20,7 +20,7 @@
  */
 package com.pyx4j.commons.css;
 
-public class ShadowProperty extends Property {
+public class TextShadowProperty extends Property {
 
     private final ThemeColor color;
 
@@ -28,7 +28,7 @@ public class ShadowProperty extends Property {
 
     private final String value;
 
-    public ShadowProperty(ThemeColor color, double vibrance, String value) {
+    public TextShadowProperty(ThemeColor color, double vibrance, String value) {
         super("text-shadow");
         this.color = color;
         this.vibrance = vibrance;

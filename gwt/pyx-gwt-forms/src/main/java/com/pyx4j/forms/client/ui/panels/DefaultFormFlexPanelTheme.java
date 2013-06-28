@@ -78,7 +78,7 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelH1Label);
-        style.addShadow(getBackgroundColor(), 0, "1px 2px 0");
+        style.addTextShadow(getBackgroundColor(), 0, "1px 2px 0");
         style.addProperty("color", getBackgroundColor(), 0.8);
         style.addProperty("padding", "4px");
         style.addProperty("font-size", "1.3em");
