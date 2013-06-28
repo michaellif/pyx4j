@@ -17,6 +17,8 @@ import com.google.gwt.activity.shared.Activity;
 import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
 
+import com.pyx4j.security.client.ClientContext;
+
 import com.propertyvista.portal.web.client.activity.CommercialActivity;
 
 public class CommercialActivityMapper implements ActivityMapper {
@@ -26,7 +28,11 @@ public class CommercialActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new CommercialActivity(place);
+        if (ClientContext.isAuthenticated()) {
+            return new CommercialActivity(place);
+        } else {
+            return null;
+        }
     }
 
 }

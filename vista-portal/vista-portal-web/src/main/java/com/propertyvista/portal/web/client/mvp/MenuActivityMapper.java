@@ -14,27 +14,24 @@
 package com.propertyvista.portal.web.client.mvp;
 
 import com.google.gwt.activity.shared.Activity;
+import com.google.gwt.activity.shared.ActivityMapper;
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.activity.AppActivityMapper;
 
 import com.propertyvista.portal.web.client.activity.MenuActivity;
 
-public class MenuActivityMapper implements AppActivityMapper {
+public class MenuActivityMapper implements ActivityMapper {
 
     public MenuActivityMapper() {
     }
 
     @Override
-    public void obtainActivity(Place place, AsyncCallback<Activity> callback) {
-
+    public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated()) {
-            callback.onSuccess(new MenuActivity(place));
+            return new MenuActivity(place);
         } else {
-            callback.onSuccess(null);
+            return null;
         }
-
     }
 }

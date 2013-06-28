@@ -35,7 +35,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         Communication,
 
-        Commercial,
+        Commercial, CommercialItem, CommercialItemTitle,
 
         NotificationContainer, NotificationItem, NotificationItemTitle, NotificationItemCloseButton;
     }
@@ -202,8 +202,23 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initCommercialStyles() {
         Style style = new Style(".", StyleName.Commercial);
-        style.addProperty("padding", "10px 0 ");
+        style.addProperty("width", "220px");
         addStyle(style);
+
+        style = new Style(".", StyleName.CommercialItem);
+        style.addProperty("margin", "10px 10px 0 0");
+        style.addProperty("padding", "10px ");
+        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-style", "solid");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("background", ThemeColor.foreground, 0.01);
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommercialItemTitle);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
     }
 
     private void initCommunicationStyles() {

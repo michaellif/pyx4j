@@ -13,8 +13,18 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.propertyvista.common.client.site.Commercial;
+
 public interface CommercialView extends IsWidget {
+
+    public interface CommercialPresenter {
+
+    }
+
+    void populate(List<Commercial> notifications);
 
 }

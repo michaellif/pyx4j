@@ -13,33 +13,53 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.propertyvista.common.client.site.Commercial;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class CommercialViewImpl extends FlowPanel implements CommercialView {
 
+    private final FlowPanel contentPanel;
+
     public CommercialViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.Commercial.name());
-        setWidth("200px");
 
-        HTML add = new HTML(
-                "<b>COMMERCIAL</b><br/>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. ");
-        add.getElement().getStyle().setProperty("padding", "10px");
-        add.getElement().getStyle().setProperty("border", "solid 1px #ddd");
-        add.getElement().getStyle().setProperty("backgroundColor", "white");
+        contentPanel = new FlowPanel();
 
-        HTML news = new HTML(
-                "<b>NEWS</b><br/>Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.");
-        news.getElement().getStyle().setProperty("padding", "10px");
-        news.getElement().getStyle().setProperty("marginTop", "10px");
-        news.getElement().getStyle().setProperty("border", "solid 1px #ddd");
-        news.getElement().getStyle().setProperty("backgroundColor", "white");
+        add(contentPanel);
 
-        add(add);
-        add(news);
+    }
+
+    @Override
+    public void populate(List<Commercial> commercials) {
+        contentPanel.clear();
+        if (commercials.size() == 0) {
+            setVisible(false);
+        } else {
+            setVisible(true);
+            for (final Commercial commercial : commercials) {
+
+                FlowPanel message = new FlowPanel();
+                message.setStyleName(PortalWebRootPaneTheme.StyleName.CommercialItem.name());
+
+                HTML title = new HTML(commercial.getTitle());
+                title.setStyleName(PortalWebRootPaneTheme.StyleName.CommercialItemTitle.name());
+
+                HTML body = new HTML(commercial.getMessage());
+
+                message.add(title);
+                message.add(body);
+
+                contentPanel.add(message);
+
+            }
+
+        }
 
     }
 

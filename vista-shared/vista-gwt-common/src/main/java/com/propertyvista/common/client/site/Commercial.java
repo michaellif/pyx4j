@@ -13,44 +13,15 @@
  */
 package com.propertyvista.common.client.site;
 
-import com.pyx4j.commons.IDebugId;
-
-public class Notification {
-
-    public enum NotificationType implements IDebugId {
-
-        INFO, WARN, ERROR, FAILURE, CONFIRM;
-
-        @Override
-        public String debugId() {
-            return this.name();
-        }
-    }
+public class Commercial {
 
     private final String message;
 
     private final String title;
 
-    private final NotificationType notificationType;
-
-    private String systemInfo;
-
-    public Notification(String message, NotificationType type, String title) {
+    public Commercial(String message, String title) {
         this.message = message;
         this.title = title;
-        notificationType = type;
-    }
-
-    public void setSystemInfo(String message) {
-        systemInfo = message;
-    }
-
-    public String getSystemInfo() {
-        return systemInfo;
-    }
-
-    public NotificationType getNotificationType() {
-        return notificationType;
     }
 
     public String getMessage() {

@@ -26,7 +26,7 @@ public class NotificationEvent extends GwtEvent<NotificationHandler> {
 
     public NotificationEvent(String message, String debugMessage, NotificationType messageType) {
         notification = new Notification(message, messageType, null);
-        notification.setDebugMessage(debugMessage);
+        notification.setSystemInfo(debugMessage);
     }
 
     public static Type<NotificationHandler> getType() {

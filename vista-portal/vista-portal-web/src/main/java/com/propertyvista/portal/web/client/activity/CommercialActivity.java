@@ -13,6 +13,9 @@
  */
 package com.propertyvista.portal.web.client.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
@@ -22,12 +25,24 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
+import com.propertyvista.common.client.site.Commercial;
 import com.propertyvista.portal.web.client.ui.CommercialView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class CommercialActivity extends AbstractActivity {
 
+    private static List<Commercial> commercials = new ArrayList<Commercial>();
+
     private final CommercialView view;
+
+    static {
+        commercials
+                .add(new Commercial(
+                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.",
+                        "COMMERCIAL"));
+        commercials.add(new Commercial(
+                "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.", "NEWS"));
+    }
 
     public CommercialActivity(Place place) {
         view = PortalWebViewFactory.instance(CommercialView.class);
@@ -37,5 +52,6 @@ public class CommercialActivity extends AbstractActivity {
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+        view.populate(commercials);
     }
 }
