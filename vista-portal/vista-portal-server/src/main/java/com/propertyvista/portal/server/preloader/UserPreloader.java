@@ -29,6 +29,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
@@ -41,7 +42,6 @@ import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.generator.util.CommonsGenerator;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.preloader.BaseVistaDevDataPreloader;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -72,7 +72,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(email));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(email));
         credential.enabled().setValue(Boolean.TRUE);
 
         Persistence.service().persist(credential);
@@ -101,7 +101,7 @@ public class UserPreloader extends BaseVistaDevDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
         credential.accessAllBuildings().setValue(Boolean.TRUE);
         for (CrmRole role : roles) {

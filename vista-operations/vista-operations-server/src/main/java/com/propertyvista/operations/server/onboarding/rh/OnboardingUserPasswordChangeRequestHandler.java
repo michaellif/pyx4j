@@ -28,19 +28,20 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserPasswordChangeRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordChangeRequestIO> {
@@ -59,7 +60,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
 
         ResponseIO response = EntityFactory.create(ResponseIO.class);
 
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         AbstractAntiBot.assertLogin(LoginType.userLogin, email, null);
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
@@ -104,7 +105,8 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
                     CrmUserCredential credential = Persistence.service().retrieve(crmUCrt);
 
                     if (credential != null) {
-                        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
+                        if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.currentPassword().getValue(),
+                                credential.credential().getValue())) {
                             AbstractAntiBot.authenticationFailed(LoginType.userLogin, email);
                             log.info("Invalid password for user {}", email);
                             response.success().setValue(Boolean.FALSE);
@@ -112,7 +114,8 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
                             return response;
                         }
 
-                        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+                        if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(),
+                                credential.credential().getValue())) {
                             log.info("Invalid new password for user {}", email);
                             response.errorMessage().setValue(i18n.tr("Your password cannot repeat your previous password"));
                             response.success().setValue(Boolean.FALSE);
@@ -120,7 +123,8 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
                             return response;
                         }
 
-                        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+                        credential.credential().setValue(
+                                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
                         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
                         ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
                         Persistence.service().persist(credential);
@@ -136,7 +140,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
         }
 
         if (validateAgainstOnboarding) {
-            if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
+            if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.currentPassword().getValue(), cr.credential().getValue())) {
                 AbstractAntiBot.authenticationFailed(LoginType.userLogin, email);
                 log.info("Invalid password for user {}", email);
                 response.success().setValue(Boolean.FALSE);
@@ -144,7 +148,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
                 return response;
             }
 
-            if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), cr.credential().getValue())) {
+            if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(), cr.credential().getValue())) {
                 log.info("Invalid new password for user {}", email);
                 response.errorMessage().setValue(i18n.tr("Your password cannot repeat your previous password"));
                 response.success().setValue(Boolean.FALSE);
@@ -154,7 +158,7 @@ public class OnboardingUserPasswordChangeRequestHandler extends AbstractRequestH
         }
 
         cr.accessKey().setValue(null);
-        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        cr.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         cr.passwordUpdated().setValue(new Date());
         cr.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(cr);

@@ -18,10 +18,14 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
+import com.pyx4j.forms.client.ui.CPersonalIdentityField;
+import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
 class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
@@ -47,7 +51,9 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().username()), 30).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credential()), 30).build());
+        CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
+        password.setFormat(new PasswordIdentityFormat(password));
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password(), password), 30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serverName()), 30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().database()), 30).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().platform()), 15).build());
@@ -90,30 +96,26 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         case 0:
             get(proto().serviceURLBase()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             get(proto().username()).setValue("sa");
-            get(proto().credential()).setValue("Vista2012!");
+            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("Vista2012!");
             get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
             get(proto().database()).setValue("vista_dev");
+            q++;
             break;
         case 1:
-            get(proto().serviceURLBase()).setValue("https://yardi.starlightinvest.com/voyager6008sp17");
-            get(proto().username()).setValue("propvist");
-            get(proto().credential()).setValue("access@123");
-            get(proto().serverName()).setValue("SLDB02");
-            get(proto().database()).setValue("PropertyVista_TEST");
+            get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
+            get(proto().username()).setValue("propertyvistaws");
+            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("52673");
+            get(proto().serverName()).setValue("aspdb04");
+            get(proto().database()).setValue("afqoml_live");
+            q++;
             break;
         case 2:
             get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
-            get(proto().username()).setValue("propertyvistaws");
-            get(proto().credential()).setValue("52673");
-            get(proto().serverName()).setValue("aspdb04");
-            get(proto().database()).setValue("afqoml_live");
-            break;
-        case 3:
-            get(proto().serviceURLBase()).setValue("https://www.iyardiasp.com/8223thirddev");
             get(proto().username()).setValue("propertyvista-srws");
-            get(proto().credential()).setValue("55548");
+            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("55548");
             get(proto().serverName()).setValue("aspdb04");
             get(proto().database()).setValue("afqoml_live");
+            q++;
             break;
         default:
             q = 0;

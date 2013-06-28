@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.Pmc;
@@ -45,7 +46,6 @@ import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.shared.config.VistaDemo;
 
@@ -146,7 +146,7 @@ public class PmcCreator {
             credential.credential().setValue(onbUserCred.credential().getValue());
             credential.interfaceUid().setValue(onbUserCred.interfaceUid().getValue());
         } else if (password != null) {
-            credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+            credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
         }
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
             SecurityGenerator.assignSecurityQuestion(credential);

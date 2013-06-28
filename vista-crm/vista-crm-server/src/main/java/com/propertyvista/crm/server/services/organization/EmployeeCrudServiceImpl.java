@@ -27,6 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
@@ -35,6 +36,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
@@ -48,7 +50,6 @@ import com.propertyvista.domain.security.UserAuditingConfigurationDTO;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -121,7 +122,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             }
 
             user.name().setValue(dbo.name().getStringView());
-            user.email().setValue(PasswordEncryptor.normalizeEmailAddress(dbo.email().getStringView()));
+            user.email().setValue(EmailValidator.normalizeEmailAddress(dbo.email().getStringView()));
             Persistence.service().persist(user);
 
             if (isNew) {
@@ -139,7 +140,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 credential = EntityFactory.create(CrmUserCredential.class);
                 credential.setPrimaryKey(user.getPrimaryKey());
                 credential.user().set(user);
-                credential.credential().setValue(PasswordEncryptor.encryptPassword(in.password().getValue()));
+                credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(in.password().getValue()));
             }
             credential.enabled().set(in.enabled());
             credential.roles().clear();
@@ -202,7 +203,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
                     onbUserCred.crmUser().setValue(user.getPrimaryKey());
                     onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
-                    onbUserCred.credential().setValue(PasswordEncryptor.encryptPassword(in.password().getValue()));
+                    onbUserCred.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(in.password().getValue()));
                     onbUserCred.enabled().setValue(in.enabled().getValue());
                     onbUserCred.onboardingAccountId().setValue(null);
                     onbUserCred.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());

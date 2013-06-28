@@ -29,12 +29,11 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.OnboardingXMLUtils;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -42,7 +41,9 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.OnboardingXMLUtils;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestHandler<OnboardingUserAuthenticationRequestIO> {
@@ -63,7 +64,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
         OnboardingUserAuthenticationResponseIO response = EntityFactory.create(OnboardingUserAuthenticationResponseIO.class);
         response.success().setValue(Boolean.TRUE);
 
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         AbstractAntiBot.assertLogin(LoginType.userLogin, email, new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response()
                 .getValue()));
 
@@ -123,7 +124,8 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                         return response;
                     }
 
-                    if (!PasswordEncryptor.checkPassword(request.password().getValue(), crmCred.credential().getValue())) {
+                    if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(),
+                            crmCred.credential().getValue())) {
                         if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                             response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
                             response.reCaptchaPublicKey().setValue(
@@ -144,7 +146,8 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
                     NamespaceManager.setNamespace(curNameSpace);
                 }
             } else {
-                if (!PasswordEncryptor.checkPassword(request.password().getValue(), credential.credential().getValue())) {
+                if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(),
+                        credential.credential().getValue())) {
                     log.info("Invalid password for user {}", email);
                     if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                         response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);
@@ -174,7 +177,7 @@ public class OnboardingUserAuthenticationRequestHandler extends AbstractRequestH
             }
 
         } else {
-            if (!PasswordEncryptor.checkPassword(request.password().getValue(), credential.credential().getValue())) {
+            if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credential.credential().getValue())) {
                 log.info("Invalid password for user {}", email);
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, email)) {
                     response.status().setValue(OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode.ChallengeVerificationRequired);

@@ -31,21 +31,22 @@ import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.OnboardingXMLUtils;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
 import com.propertyvista.onboarding.OnboardingUserPasswordResetRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.OnboardingXMLUtils;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHandler<OnboardingUserPasswordResetRequestIO> {
@@ -66,7 +67,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
         response.success().setValue(Boolean.TRUE);
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
-        String email = PasswordEncryptor.normalizeEmailAddress(token.email);
+        String email = EmailValidator.normalizeEmailAddress(token.email);
         AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
@@ -137,7 +138,8 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
                         throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
                     }
 
-                    if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), crmCredential.credential().getValue())) {
+                    if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(),
+                            crmCredential.credential().getValue())) {
                         throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
                     }
 
@@ -154,7 +156,7 @@ public class OnboardingUserPasswordResetRequestHandler extends AbstractRequestHa
             if ((!credential.securityQuestion().isNull()) && (!credential.securityAnswer().equals(request.securityAnswer()))) {
                 throw new UserRuntimeException(i18n.tr("The answer to security question is incorrect"));
             }
-            if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+            if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(), credential.credential().getValue())) {
                 throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
             }
         }

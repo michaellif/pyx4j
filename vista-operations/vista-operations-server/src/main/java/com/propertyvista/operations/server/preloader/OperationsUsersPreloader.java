@@ -16,16 +16,17 @@ package com.propertyvista.operations.server.preloader;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.math.RandomUtils;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.shared.config.VistaDemo;
 
 class OperationsUsersPreloader extends AbstractDataPreloader {
@@ -40,7 +41,7 @@ class OperationsUsersPreloader extends AbstractDataPreloader {
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
         credential.behaviors().add(behaivior);
 

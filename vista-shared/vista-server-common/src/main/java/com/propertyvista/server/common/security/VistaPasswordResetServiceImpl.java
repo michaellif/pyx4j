@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -31,6 +32,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 
@@ -74,7 +76,7 @@ public abstract class VistaPasswordResetServiceImpl<E extends AbstractUserCreden
         }
 
         credentials.accessKey().setValue(null);
-        credentials.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credentials.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         credentials.passwordUpdated().setValue(new Date());
         credentials.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(credentials);

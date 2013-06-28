@@ -40,7 +40,6 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.settings.PmcYardiCredential.Platform;
-import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 
 @Ignore
@@ -64,7 +63,7 @@ public class YardiMaintenanceRequestsServiceTest {
 
         yc = EntityFactory.create(PmcYardiCredential.class);
         yc.username().setValue("propertyvista-srws");
-        yc.credential().setValue("55548");
+        yc.password().number().setValue("55548");
         yc.serverName().setValue("aspdb04");
         yc.database().setValue("afqoml_live");
         yc.platform().setValue(Platform.SQL);

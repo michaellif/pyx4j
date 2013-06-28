@@ -37,7 +37,7 @@ public class YardiMaintenanceRequestsServiceClient {
     public void testPostRequests() throws YardiServiceException, IOException, JAXBException {
         PmcYardiCredential yc = EntityFactory.create(PmcYardiCredential.class);
         yc.username().setValue("propertyvista-srws");
-        yc.credential().setValue("55548");
+        yc.password().number().setValue("55548");
         yc.serverName().setValue("aspdb04");
         yc.database().setValue("afqoml_live");
         yc.platform().setValue(Platform.SQL);

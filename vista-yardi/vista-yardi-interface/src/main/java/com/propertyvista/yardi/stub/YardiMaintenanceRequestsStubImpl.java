@@ -40,9 +40,11 @@ import com.yardi.ws.operations.requests.GetServiceRequest_Search;
 import com.yardi.ws.operations.requests.GetServiceRequest_SearchResponse;
 import com.yardi.ws.operations.requests.ServiceRequestXml_type0;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -60,7 +62,7 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
 
             GetPropertyConfigurations request = new GetPropertyConfigurations();
             request.setUserName(yc.username().getValue());
-            request.setPassword(yc.credential().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
             request.setServerName(yc.serverName().getValue());
             request.setDatabase(yc.database().getValue());
             request.setPlatform(yc.platform().getValue().name());
@@ -108,15 +110,15 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
         try {
             init(Action.GetCustomValues);
 
-            GetCustomValues params = new GetCustomValues();
-            params.setUserName(yc.username().getValue());
-            params.setPassword(yc.credential().getValue());
-            params.setServerName(yc.serverName().getValue());
-            params.setDatabase(yc.database().getValue());
-            params.setPlatform(yc.platform().getValue().name());
-            params.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            GetCustomValues request = new GetCustomValues();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
 
-            GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(params);
+            GetCustomValuesResponse response = getMaintenanceRequestsService(yc).getCustomValues(request);
             String xml = response.getGetCustomValuesResult().getExtraElement().toString();
 
             log.info("GetCustomValues: {}", xml);
@@ -144,18 +146,18 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
     }
 
     @Override
-    public ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search params) throws YardiServiceException, RemoteException {
+    public ServiceRequests getRequestsByParameters(PmcYardiCredential yc, GetServiceRequest_Search request) throws YardiServiceException, RemoteException {
         try {
             init(Action.GetServiceRequests);
 
-            params.setUserName(yc.username().getValue());
-            params.setPassword(yc.credential().getValue());
-            params.setServerName(yc.serverName().getValue());
-            params.setDatabase(yc.database().getValue());
-            params.setPlatform(yc.platform().getValue().name());
-            params.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
 
-            GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(params);
+            GetServiceRequest_SearchResponse response = getMaintenanceRequestsService(yc).getServiceRequest_Search(request);
             String xml = response.getGetServiceRequest_SearchResult().getExtraElement().toString();
 
             log.info("GetServiceRequests: {}", xml);
@@ -192,22 +194,22 @@ public class YardiMaintenanceRequestsStubImpl extends AbstractYardiStub implemen
             init(Action.CreateOrEditServiceRequests);
             validateWriteAccess(yc);
 
-            CreateOrEditServiceRequests params = new CreateOrEditServiceRequests();
-            params.setUserName(yc.username().getValue());
-            params.setPassword(yc.credential().getValue());
-            params.setServerName(yc.serverName().getValue());
-            params.setDatabase(yc.database().getValue());
-            params.setPlatform(yc.platform().getValue().name());
-            params.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
+            CreateOrEditServiceRequests request = new CreateOrEditServiceRequests();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.MAINTENANCE_INTERFACE_ENTITY);
 
             ServiceRequestXml_type0 serviceRequestXml = new ServiceRequestXml_type0();
             String rawXml = MarshallUtil.marshall(requests);
             log.debug("{}", rawXml);
             OMElement element = AXIOMUtil.stringToOM(rawXml);
             serviceRequestXml.setExtraElement(element);
-            params.setServiceRequestXml(serviceRequestXml);
+            request.setServiceRequestXml(serviceRequestXml);
 
-            CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(params);
+            CreateOrEditServiceRequestsResponse response = getMaintenanceRequestsService(yc).createOrEditServiceRequests(request);
             String responseXml = response.getCreateOrEditServiceRequestsResult().getExtraElement().toString();
             log.debug("CreateOrEditServiceRequests: {}", responseXml);
 

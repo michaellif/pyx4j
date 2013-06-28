@@ -39,6 +39,7 @@ import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCr
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
 import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.tests.VistaDBTestBase;
@@ -83,6 +84,7 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 
 public class EmailTemplateManagerTest extends VistaDBTestBase {
 
@@ -140,6 +142,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
         TestLifecycle.testSession(null, VistaBasicBehavior.CRM);
         TestLifecycle.beginRequest();

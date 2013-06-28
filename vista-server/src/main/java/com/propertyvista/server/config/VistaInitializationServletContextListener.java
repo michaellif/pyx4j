@@ -15,11 +15,13 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContextEvent;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.operations.server.proc.PmcProcessMonitor;
 import com.propertyvista.sshd.InterfaceSSHDServer;
@@ -31,6 +33,9 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
         try {
             super.contextInitialized(sce);
             Persistence.service();
+
+            ServerSideFactory.create(PasswordEncryptorFacade.class).activateDecryption();
+
             SchedulerHelper.init();
             SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
             InterfaceSSHDServer.init();

@@ -37,9 +37,11 @@ import com.yardi.ws.operations.transactionsbatch.PostReceiptBatch;
 import com.yardi.ws.operations.transactionsbatch.PostReceiptBatchResponse;
 import com.yardi.ws.operations.transactionsbatch.TransactionXml_type1;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.essentials.j2se.util.MarshallUtil;
 
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
@@ -54,16 +56,16 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
         init(Action.OpenReceiptBatch);
         validateWriteAccess(yc);
 
-        OpenReceiptBatch l = new OpenReceiptBatch();
-        l.setUserName(yc.username().getValue());
-        l.setPassword(yc.credential().getValue());
-        l.setServerName(yc.serverName().getValue());
-        l.setDatabase(yc.database().getValue());
-        l.setPlatform(yc.platform().getValue().name());
-        l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-        l.setYardiPropertyId(propertyId);
+        OpenReceiptBatch request = new OpenReceiptBatch();
+        request.setUserName(yc.username().getValue());
+        request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+        request.setServerName(yc.serverName().getValue());
+        request.setDatabase(yc.database().getValue());
+        request.setPlatform(yc.platform().getValue().name());
+        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+        request.setYardiPropertyId(propertyId);
 
-        OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(l);
+        OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
 
         long result = response.getOpenReceiptBatchResult();
         log.debug("OpenReceiptBatch: {}", result);
@@ -77,14 +79,14 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             init(Action.AddReceiptsToBatch);
             validateWriteAccess(yc);
 
-            AddReceiptsToBatch l = new AddReceiptsToBatch();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            l.setBatchId(batchId);
+            AddReceiptsToBatch request = new AddReceiptsToBatch();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setBatchId(batchId);
 
             TransactionXml_type1 transactionXml = new TransactionXml_type1();
 
@@ -93,9 +95,9 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             OMElement element = AXIOMUtil.stringToOM(batchXml);
             transactionXml.setExtraElement(element);
 
-            l.setTransactionXml(transactionXml);
+            request.setTransactionXml(transactionXml);
 
-            AddReceiptsToBatchResponse response = getResidentTransactionsSysBatchService(yc).addReceiptsToBatch(l);
+            AddReceiptsToBatchResponse response = getResidentTransactionsSysBatchService(yc).addReceiptsToBatch(request);
             String responseXml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
             log.debug("AddReceiptsToBatch: {}", responseXml);
 
@@ -118,16 +120,16 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             init(Action.PostReceiptBatch);
             validateWriteAccess(yc);
 
-            PostReceiptBatch l = new PostReceiptBatch();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            l.setBatchId(batchId);
+            PostReceiptBatch request = new PostReceiptBatch();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setBatchId(batchId);
 
-            PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(l);
+            PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
             String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
             log.debug("PostReceiptBatch: {}", xml);
 
@@ -148,16 +150,16 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             init(Action.PostReceiptBatch);
             validateWriteAccess(yc);
 
-            CancelReceiptBatch l = new CancelReceiptBatch();
-            l.setUserName(yc.username().getValue());
-            l.setPassword(yc.credential().getValue());
-            l.setServerName(yc.serverName().getValue());
-            l.setDatabase(yc.database().getValue());
-            l.setPlatform(yc.platform().getValue().name());
-            l.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-            l.setBatchId(batchId);
+            CancelReceiptBatch request = new CancelReceiptBatch();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setBatchId(batchId);
 
-            CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(l);
+            CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
             String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
             log.debug("CancelReceiptBatch: {}", xml);
 

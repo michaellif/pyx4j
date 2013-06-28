@@ -40,6 +40,7 @@ import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.PmcNameValidator;
 import com.propertyvista.biz.system.UserManagementFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
@@ -47,6 +48,7 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -72,6 +74,12 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         Persistence.service().retrieveMember(entity.equifaxInfo());
         Persistence.service().retrieveMember(entity.equifaxFee());
         Persistence.service().retrieveMember(entity.yardiCredential());
+
+        if (!entity.yardiCredential().password().encrypted().isNull()) {
+            entity.yardiCredential().password().obfuscatedNumber().setValue("**");
+        } else if (!entity.yardiCredential().password().number().isNull()) {
+            entity.yardiCredential().password().obfuscatedNumber().setValue("##");
+        }
     }
 
     @Override
@@ -106,6 +114,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             entity.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }
 
+        encryptPassword(entity.yardiCredential());
+
         super.persist(entity, dto);
 
         // Ppopagate onboardingAccountId to accounts
@@ -134,6 +144,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         if (!PmcNameValidator.canCreatePmcName(entity.dnsName().getValue(), null)) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
+        encryptPassword(entity.yardiCredential());
         ServerSideFactory.create(PmcFacade.class).create(entity);
 
         OnboardingUserCredential cred;
@@ -153,6 +164,21 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         }
         cred.pmc().set(entity);
         Persistence.service().persist(cred);
+    }
+
+    private void encryptPassword(PmcYardiCredential yardiCredential) {
+        if (!yardiCredential.password().newNumber().isNull()) {
+            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(yardiCredential.password(),
+                    yardiCredential.password().newNumber().getValue());
+        } else if (yardiCredential.getPrimaryKey() != null) {
+            PmcYardiCredential orig = Persistence.service().retrieve(PmcYardiCredential.class, yardiCredential.getPrimaryKey());
+            if (!orig.password().number().isNull()) {
+                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptPassword(yardiCredential.password(), orig.password().number().getValue());
+                yardiCredential.password().number().setValue(null);
+            } else {
+                yardiCredential.password().encrypted().setValue(orig.password().encrypted().getValue());
+            }
+        }
     }
 
     @Override

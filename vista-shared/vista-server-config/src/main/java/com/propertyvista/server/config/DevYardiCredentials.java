@@ -26,34 +26,27 @@ public class DevYardiCredentials {
             cr.propertyCode().setValue("gran0002");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             cr.username().setValue("sa");
-            cr.credential().setValue("Vista2012!");
+            cr.password().number().setValue("Vista2012!");
             cr.serverName().setValue("WIN-CO5DPAKNUA4\\YARDI");
             cr.database().setValue("vista_dev");
         } else if (false) {
             cr.propertyCode().setValue("prvista2");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
             cr.username().setValue("propertyvistaws");
-            cr.credential().setValue("52673");
+            cr.password().number().setValue("52673");
             cr.serverName().setValue("aspdb04");
             cr.database().setValue("afqoml_live");
         } else if (false) {
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirdqa");
             cr.username().setValue("propertyvista");
-            cr.credential().setValue("52673");
+            cr.password().number().setValue("52673");
             cr.serverName().setValue("aspdb06\\sql2k5");
             cr.database().setValue("afqoml_qa6008");
-        } else if (false) {
-            cr.propertyCode().setValue(".pvberk");
-            cr.serviceURLBase().setValue("https://yardi.starlightinvest.com/voyager6008sp17");
-            cr.username().setValue("propvist");
-            cr.credential().setValue("access@123");
-            cr.serverName().setValue("SLDB02");
-            cr.database().setValue("PropertyVista_TEST");
         } else if (false) {
             cr.propertyCode().setValue("prvista1");
             cr.serviceURLBase().setValue("https://www.iyardiasp.com/8223thirddev");
             cr.username().setValue("propertyvista-srws");
-            cr.credential().setValue("55548");
+            cr.password().number().setValue("55548");
             cr.serverName().setValue("aspdb04");
             cr.database().setValue("afqoml_live");
         }

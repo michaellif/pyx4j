@@ -28,17 +28,17 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
+import com.pyx4j.security.server.EmailValidator;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserPasswordResetQuestionResponseIO;
 import com.propertyvista.onboarding.OnboardingUserTokenValidationRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -57,7 +57,7 @@ public class OnboardingUserTokenValidationRequestHandler extends AbstractRequest
         final OnboardingUserPasswordResetQuestionResponseIO response = EntityFactory.create(OnboardingUserPasswordResetQuestionResponseIO.class);
 
         AccessKey.TokenParser token = new AccessKey.TokenParser(request.token().getValue());
-        String email = PasswordEncryptor.normalizeEmailAddress(token.email);
+        String email = EmailValidator.normalizeEmailAddress(token.email);
         AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);

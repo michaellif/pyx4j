@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.RuntimeExceptionSerializable;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -39,11 +40,11 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.portal.rpc.ptapp.services.ActivationService;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 
 public class ActivationServiceImpl extends ApplicationEntityServiceImpl implements ActivationService {
@@ -119,7 +120,7 @@ public class ActivationServiceImpl extends ApplicationEntityServiceImpl implemen
         if ((new Date().after(cr.accessKeyExpire().getValue()))) {
             throw new RuntimeExceptionSerializable(i18n.tr("Token Has Expired"));
         }
-        cr.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        cr.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         cr.accessKey().setValue(null);
         Persistence.service().persist(cr);
 

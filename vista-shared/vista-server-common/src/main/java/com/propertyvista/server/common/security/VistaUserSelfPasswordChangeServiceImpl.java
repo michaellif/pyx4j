@@ -33,6 +33,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 
@@ -59,7 +60,8 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
         }
         Persistence.service().retrieve(credential.user());
         AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
-        if (!PasswordEncryptor.checkPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
+        if (!ServerSideFactory.create(PasswordEncryptorFacade.class)
+                .checkUserPassword(request.currentPassword().getValue(), credential.credential().getValue())) {
             log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
             if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
                 throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
@@ -67,11 +69,11 @@ public abstract class VistaUserSelfPasswordChangeServiceImpl<E extends AbstractU
                 throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
             }
         }
-        if (PasswordEncryptor.checkPassword(request.newPassword().getValue(), credential.credential().getValue())) {
+        if (ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.newPassword().getValue(), credential.credential().getValue())) {
             throw new UserRuntimeException(i18n.tr("Your password cannot repeat your previous password"));
         }
         credential.accessKey().setValue(null);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         credential.passwordUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
 

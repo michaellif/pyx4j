@@ -16,12 +16,15 @@ package com.propertyvista.operations.server.services;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityFromatUtils;
+import com.pyx4j.security.server.EmailValidator;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
@@ -29,7 +32,6 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.rpc.OnboardingUserDTO;
 import com.propertyvista.operations.rpc.services.OnboardingUserCrudService;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -117,12 +119,12 @@ public class OnboardingUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<On
     @SuppressWarnings("unchecked")
     @Override
     protected void persist(final OnboardingUserCredential dbo, final OnboardingUserDTO dto) {
-        dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
+        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(dto.email().getValue()));
         dbo.user().name().setValue(EntityFromatUtils.nvl_concat(" ", dbo.user().firstName(), dbo.user().lastName()));
         Persistence.service().merge(dbo.user());
 
         if (dbo.getPrimaryKey() == null) {
-            dbo.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
+            dbo.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(dto.password().getValue()));
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
         if (!dbo.pmc().isNull()) {

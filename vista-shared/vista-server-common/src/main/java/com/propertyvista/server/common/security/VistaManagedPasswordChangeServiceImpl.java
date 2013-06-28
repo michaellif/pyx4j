@@ -29,6 +29,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 
@@ -55,7 +56,7 @@ public abstract class VistaManagedPasswordChangeServiceImpl<E extends AbstractUs
             }
         }
         E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
         }

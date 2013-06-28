@@ -8,13 +8,15 @@
  */
 package com.propertyvista.operations.server.services;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.security.server.EmailValidator;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserCrudService {
 
@@ -54,14 +56,14 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
 
     @Override
     protected void persist(OperationsUserCredential dbo, OperationsUserDTO dto) {
-        dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
+        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(dto.email().getValue()));
         Persistence.service().merge(dbo.user());
 
         dbo.behaviors().clear();
         dbo.behaviors().add(dto.role().getValue());
 
         if (dbo.getPrimaryKey() == null) {
-            dbo.credential().setValue(PasswordEncryptor.encryptPassword(dto.password().getValue()));
+            dbo.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(dto.password().getValue()));
         }
         dbo.setPrimaryKey(dbo.user().getPrimaryKey());
         Persistence.service().merge(dbo);

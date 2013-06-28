@@ -28,6 +28,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.security.PasswordIdentity;
 
 @Table(prefix = "admin", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -56,8 +57,7 @@ public interface PmcYardiCredential extends IEntity {
     @Caption(name = "Web Service User")
     IPrimitive<String> username();
 
-    @Caption(name = "Password")
-    IPrimitive<String> credential();
+    PasswordIdentity password();
 
     IPrimitive<String> serverName();
 

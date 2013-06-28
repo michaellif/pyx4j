@@ -32,9 +32,11 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
+import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
@@ -45,7 +47,6 @@ import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.server.common.security.AccessKey;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
@@ -67,7 +68,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         if (!customer.person().email().isNull()) {
             Persistence.service().retrieve(customer.user());
             customer.user().name().setValue(customer.person().name().getStringView());
-            customer.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(customer.person().email().getValue()));
+            customer.user().email().setValue(EmailValidator.normalizeEmailAddress(customer.person().email().getValue()));
             if (customer.user().getPrimaryKey() != null) {
                 Persistence.service().merge(customer.user());
             } else {
@@ -77,7 +78,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 credential.setPrimaryKey(customer.user().getPrimaryKey());
                 credential.user().set(customer.user());
                 if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {
-                    credential.credential().setValue(PasswordEncryptor.encryptPassword(customer.user().email().getValue()));
+                    credential.credential().setValue(
+                            ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(customer.user().email().getValue()));
                 }
                 credential.enabled().setValue(Boolean.TRUE);
                 Persistence.service().persist(credential);
@@ -233,7 +235,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         CustomerUserCredential credential = Persistence.service().retrieve(CustomerUserCredential.class, tenant.customer().user().getPrimaryKey());
         credential.accessKey().setValue(null);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(selfRegistration.password().getValue()));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(selfRegistration.password().getValue()));
 
         credential.passwordUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);

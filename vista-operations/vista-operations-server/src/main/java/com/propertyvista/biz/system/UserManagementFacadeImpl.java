@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,10 +32,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmRole;
@@ -47,7 +50,6 @@ import com.propertyvista.domain.security.common.AbstractUserCredential;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -94,7 +96,8 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
                         }
 
                         crmCredential.accessKey().setValue(null);
-                        crmCredential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+                        crmCredential.credential().setValue(
+                                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
                         crmCredential.passwordUpdated().setValue(new Date());
                         crmCredential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
                         Persistence.service().persist(crmCredential);
@@ -108,7 +111,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         }
 
         credential.accessKey().setValue(null);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         credential.passwordUpdated().setValue(new Date());
         credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
         Persistence.service().persist(credential);
@@ -139,7 +142,8 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
                         crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), cr.getPrimaryKey()));
                         CrmUserCredential crmCredential = Persistence.service().retrieve(crmUCrt);
 
-                        crmCredential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+                        crmCredential.credential().setValue(
+                                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
                         if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
                             crmCredential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
                         }
@@ -154,7 +158,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
             }
         }
 
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(request.newPassword().getValue()));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
         }
@@ -196,7 +200,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
     @Override
     public OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
             String onboardingAccountId) {
-        email = PasswordEncryptor.normalizeEmailAddress(email);
+        email = EmailValidator.normalizeEmailAddress(email);
         OnboardingUser user = EntityFactory.create(OnboardingUser.class);
         user.firstName().setValue(firstName);
         user.lastName().setValue(lastName);
@@ -213,7 +217,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
 
         credential.user().set(user);
         credential.behavior().setValue(role);
-        credential.credential().setValue(PasswordEncryptor.encryptPassword(password));
+        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
         credential.enabled().setValue(Boolean.TRUE);
         credential.onboardingAccountId().setValue(onboardingAccountId);
 

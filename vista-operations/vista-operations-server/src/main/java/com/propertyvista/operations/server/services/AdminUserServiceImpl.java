@@ -20,11 +20,11 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserService;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 
 public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsUserCredential, OperationsUserDTO> implements AdminUserService {
 
@@ -67,7 +67,7 @@ public class AdminUserServiceImpl extends AbstractCrudServiceDtoImpl<OperationsU
 
     @Override
     protected void persist(OperationsUserCredential dbo, OperationsUserDTO dto) {
-        dbo.user().email().setValue(PasswordEncryptor.normalizeEmailAddress(dto.email().getValue()));
+        dbo.user().email().setValue(EmailValidator.normalizeEmailAddress(dto.email().getValue()));
         Persistence.service().merge(dbo.user());
 
         // ignore role changes (don't copy role from dto to dbo);

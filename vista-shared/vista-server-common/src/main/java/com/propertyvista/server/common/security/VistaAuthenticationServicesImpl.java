@@ -54,6 +54,7 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
@@ -62,6 +63,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Lifecycle;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -165,10 +167,10 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             }
         }
         AccessKey.TokenParser token = new AccessKey.TokenParser(accessToken);
-        if (!validEmailAddress(token.email)) {
+        if (!EmailValidator.isValid(token.email)) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        String email = PasswordEncryptor.normalizeEmailAddress(token.email);
+        String email = EmailValidator.normalizeEmailAddress(token.email);
         AbstractAntiBot.assertLogin(LoginType.accessToken, email, null);
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
@@ -242,11 +244,11 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             }
         }
 
-        if (CommonsStringUtils.isEmpty(request.email().getValue()) || !validEmailAddress(request.email().getValue())
+        if (CommonsStringUtils.isEmpty(request.email().getValue()) || !EmailValidator.isValid(request.email().getValue())
                 || CommonsStringUtils.isEmpty(request.password().getValue())) {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         AbstractAntiBot.assertLogin(LoginType.userLogin, email, request.captcha().getValue());
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
@@ -312,7 +314,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     }
 
     protected boolean checkPassword(U user, E credentials, String email, String inputPassword, String encryptedPassword) {
-        return PasswordEncryptor.checkPassword(inputPassword, encryptedPassword);
+        return ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(inputPassword, encryptedPassword);
     }
 
     public static <T extends Behavior> boolean containsAnyBehavior(Collection<T> list, Collection<T> subSet) {
@@ -392,12 +394,12 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     @Override
     public final void requestPasswordReset(AsyncCallback<VoidSerializable> callback, PasswordRetrievalRequest request) {
 
-        if (!validEmailAddress(request.email().getValue())) {
+        if (!EmailValidator.isValid(request.email().getValue())) {
             throw new UserRuntimeException(i18n.tr(GENERIC_FAILED_MESSAGE));
         }
         AbstractAntiBot.assertCaptcha(request.captcha().getValue());
 
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
 
         EntityQueryCriteria<U> criteria = new EntityQueryCriteria<U>(userClass);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));

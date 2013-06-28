@@ -27,15 +27,15 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.essentials.server.AbstractAntiBot.LoginType;
+import com.pyx4j.security.server.EmailValidator;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.onboarding.OnboardingUserSendPasswordResetTokenRequestIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 
 public class OnboardingUserSendPasswordResetTokenRequestHandler extends AbstractRequestHandler<OnboardingUserSendPasswordResetTokenRequestIO> {
 
@@ -54,7 +54,7 @@ public class OnboardingUserSendPasswordResetTokenRequestHandler extends Abstract
 
         AbstractAntiBot.assertCaptcha(new Pair<String, String>(request.captcha().challenge().getValue(), request.captcha().response().getValue()));
 
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
 
         EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));

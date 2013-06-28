@@ -23,13 +23,13 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.security.server.EmailValidator;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
-import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.onboarding.GetSatisfactionFastpassUrlRequestIO;
 import com.propertyvista.onboarding.GetSatisfactionFastpassUrlResponseIO;
 import com.propertyvista.onboarding.ResponseIO;
-import com.propertyvista.server.common.security.PasswordEncryptor;
+import com.propertyvista.operations.domain.security.OnboardingUserCredential;
+import com.propertyvista.operations.server.onboarding.rhf.AbstractRequestHandler;
 import com.propertyvista.server.common.security.UserAccessUtils;
 import com.propertyvista.server.getsatisfaction.GetSatisfactionUrl;
 
@@ -56,7 +56,7 @@ public class GetSatisfactionFastpassUrlHandler extends AbstractRequestHandler<Ge
         String name;
 
         EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
-        String email = PasswordEncryptor.normalizeEmailAddress(request.email().getValue());
+        String email = EmailValidator.normalizeEmailAddress(request.email().getValue());
         criteria.add(PropertyCriterion.eq(criteria.proto().user().email(), email));
         List<OnboardingUserCredential> users = Persistence.service().query(criteria);
         if (users.size() != 1) {

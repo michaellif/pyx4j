@@ -36,12 +36,12 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.biz.system.AuditFacade;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.services.security.CrmAccountRecoveryOptionsUserService;
 import com.propertyvista.crm.server.services.pub.CrmAuthenticationServiceImpl;
 import com.propertyvista.domain.security.SecurityQuestion;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.portal.rpc.shared.dto.AccountRecoveryOptionsDTO;
-import com.propertyvista.server.common.security.PasswordEncryptor;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
@@ -62,7 +62,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             // Verify password
             Persistence.service().retrieve(credential.user());
             AbstractAntiBot.assertLogin(LoginType.userLogin, credential.user().email().getValue(), null);
-            if (!PasswordEncryptor.checkPassword(request.password().getValue(), credential.credential().getValue())) {
+            if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credential.credential().getValue())) {
                 log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
@@ -91,7 +91,7 @@ public class CrmAccountRecoveryOptionsUserServiceImpl implements CrmAccountRecov
             // Verify password
             Persistence.service().retrieve(credentials.user());
             AbstractAntiBot.assertLogin(LoginType.userLogin, credentials.user().email().getValue(), null);
-            if (!PasswordEncryptor.checkPassword(request.password().getValue(), credentials.credential().getValue())) {
+            if (!ServerSideFactory.create(PasswordEncryptorFacade.class).checkUserPassword(request.password().getValue(), credentials.credential().getValue())) {
                 log.info("Invalid password for user {}", Context.getVisit().getUserVisit().getEmail());
                 if (AbstractAntiBot.authenticationFailed(LoginType.userLogin, Context.getVisit().getUserVisit().getEmail())) {
                     throw new ChallengeVerificationRequired(i18n.tr("Too Many Failed Log In Attempts"));
