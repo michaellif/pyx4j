@@ -22,6 +22,6 @@ package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.pyx4j.widgets.client.DropDownPanel;
 
-public class PopupCommunicationHolder extends DropDownPanel {
+public class PopupCommHolder extends DropDownPanel {
 
 }

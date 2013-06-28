@@ -85,9 +85,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SidePanelHolder sideMenuHolder;
 
-    private final PopupCommunicationHolder popupCommunicationHolder;
+    private final PopupCommHolder popupCommHolder;
 
-    private final SidePanelHolder sideCommunicationHolder;
+    private final SidePanelHolder sideCommHolder;
 
     private final CommercialHolder commercialHolder;
 
@@ -101,7 +101,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private boolean sideMenuVisible = false;
 
-    private boolean sideCommunicationVisible = false;
+    private boolean sideCommVisible = false;
 
     private LayoutType layoutType;
 
@@ -152,7 +152,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
             }
         });
 
-        popupCommunicationHolder = new PopupCommunicationHolder();
+        popupCommHolder = new PopupCommHolder();
 
         footerHolder = new SimplePanel(getFooterDisplay());
         footerHolder.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
@@ -188,13 +188,13 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         // ============ Side Communication Layer ============
         {
 
-            sideCommunicationHolder = new SidePanelHolder();
+            sideCommHolder = new SidePanelHolder();
 
-            Layer layer = pageLayout.attachChild(sideCommunicationHolder.asWidget().getElement(), sideCommunicationHolder);
-            sideCommunicationHolder.setLayoutData(layer);
+            Layer layer = pageLayout.attachChild(sideCommHolder.asWidget().getElement(), sideCommHolder);
+            sideCommHolder.setLayoutData(layer);
 
-            getChildren().add(sideCommunicationHolder);
-            adopt(sideCommunicationHolder);
+            getChildren().add(sideCommHolder);
+            adopt(sideCommHolder);
         }
 
         AppSite.getEventBus().addHandler(LayoutChangeRerquestEvent.TYPE, this);
@@ -227,7 +227,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.menu);
     }
 
-    public DisplayPanel getCommunicationDisplay() {
+    public DisplayPanel getCommDisplay() {
         return displays.get(Display.communication);
     }
 
@@ -256,13 +256,14 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case phonePortrait:
         case phoneLandscape:
             sideMenuHolder.setMenuDisplay(getMenuDisplay());
-            sideCommunicationHolder.setMenuDisplay(getCommunicationDisplay());
+            sideCommHolder.setMenuDisplay(getCommDisplay());
             getHeaderDisplay().setVisible(false);
             break;
         default:
             setSideMenuVisible(false);
+            setSideCommVisible(false);
             inlineMenuHolder.setMenuDisplay(getMenuDisplay());
-            popupCommunicationHolder.setWidget(getCommunicationDisplay());
+            popupCommHolder.setWidget(getCommDisplay());
             getHeaderDisplay().setVisible(true);
             break;
         }
@@ -280,20 +281,20 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
-        Layer communicationLayer = (Layer) sideCommunicationHolder.getLayoutData();
+        Layer commLayer = (Layer) sideCommHolder.getLayoutData();
         Layer mainLayer = (Layer) pageScroll.getLayoutData();
 
         if (sideMenuVisible) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
-            communicationLayer.setLeftWidth(175.0, Unit.PCT, 75.0, Unit.PCT);
+            commLayer.setLeftWidth(175.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(75.0, Unit.PCT, 100.0, Unit.PCT);
-        } else if (sideCommunicationVisible) {
+        } else if (sideCommVisible) {
             menuLayer.setLeftWidth(-150.0, Unit.PCT, 75.0, Unit.PCT);
-            communicationLayer.setLeftWidth(25.0, Unit.PCT, 75.0, Unit.PCT);
+            commLayer.setLeftWidth(25.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(-75.0, Unit.PCT, 100.0, Unit.PCT);
         } else {
             menuLayer.setLeftWidth(-75.0, Unit.PCT, 75.0, Unit.PCT);
-            communicationLayer.setLeftWidth(100.0, Unit.PCT, 75.0, Unit.PCT);
+            commLayer.setLeftWidth(100.0, Unit.PCT, 75.0, Unit.PCT);
             mainLayer.setLeftWidth(0.0, Unit.PCT, 100.0, Unit.PCT);
         }
 
@@ -333,12 +334,12 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
-    private boolean isSideCommunicationEnabled() {
+    private boolean isSideCommEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
         return LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType;
     }
 
-    private boolean isPopupCommunicationEnabled() {
+    private boolean isPopupCommEnabled() {
         LayoutType layoutType = LayoutType.getLayoutType(Window.getClientWidth());
         return !(LayoutType.phonePortrait == layoutType || LayoutType.phoneLandscape == layoutType);
     }
@@ -350,18 +351,18 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
     }
 
-    private void setSideCommunicationVisible(boolean visible) {
-        if (this.sideCommunicationVisible != visible) {
-            this.sideCommunicationVisible = visible;
+    private void setSideCommVisible(boolean visible) {
+        if (this.sideCommVisible != visible) {
+            this.sideCommVisible = visible;
             forceLayout(ANIMATION_TIME);
         }
     }
 
-    private void togglePopupCommunicationVisible(Widget anchor) {
-        if (!popupCommunicationHolder.isShowing()) {
-            popupCommunicationHolder.showRelativeTo(anchor);
+    private void togglePopupCommVisible(Widget anchor) {
+        if (!popupCommHolder.isShowing()) {
+            popupCommHolder.showRelativeTo(anchor);
         } else {
-            popupCommunicationHolder.hide();
+            popupCommHolder.hide();
         }
     }
 
@@ -373,14 +374,14 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
                 setSideMenuVisible(!sideMenuVisible);
             }
             break;
-        case toggleSideCommunication:
-            if (isSideCommunicationEnabled()) {
-                setSideCommunicationVisible(!sideCommunicationVisible);
+        case toggleSideComm:
+            if (isSideCommEnabled()) {
+                setSideCommVisible(!sideCommVisible);
             }
             break;
-        case togglePopupCommunication:
-            if (isPopupCommunicationEnabled()) {
-                togglePopupCommunicationVisible(event.getPopupCommunicationAnchor());
+        case togglePopupComm:
+            if (isPopupCommEnabled()) {
+                togglePopupCommVisible(event.getPopupCommAnchor());
             }
             break;
         case resizeComponents:

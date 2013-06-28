@@ -29,7 +29,7 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
 
     public static enum ChangeType {
 
-        toggleSideMenu, toggleSideCommunication, togglePopupCommunication, resizeComponents;
+        toggleSideMenu, toggleSideComm, togglePopupComm, resizeComponents;
     }
 
     private final ChangeType type;
@@ -41,7 +41,7 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
     }
 
     public LayoutChangeRerquestEvent(Widget popupCommunicationAnchor) {
-        this.type = ChangeType.togglePopupCommunication;
+        this.type = ChangeType.togglePopupComm;
         this.popupCommunicationAnchor = popupCommunicationAnchor;
     }
 
@@ -59,7 +59,7 @@ public class LayoutChangeRerquestEvent extends GwtEvent<LayoutChangeRerquestHand
         return type;
     }
 
-    public Widget getPopupCommunicationAnchor() {
+    public Widget getPopupCommAnchor() {
         return popupCommunicationAnchor;
     }
 }
