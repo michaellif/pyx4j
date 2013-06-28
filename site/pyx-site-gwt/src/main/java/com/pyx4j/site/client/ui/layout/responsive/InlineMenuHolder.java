@@ -43,9 +43,8 @@ public class InlineMenuHolder extends SimplePanel {
     public void onPositionChange() {
         if (getWidget() != null && isAttached()) {
             int offsetTop = parent.getStickyHeaderHolder().getOffsetHeight();
-
             int offsetBottom = parent.getFooterHolder().getAbsoluteTop();
-
+            getWidget().setHeight("auto");
             if (getAbsoluteTop() >= offsetTop) {
                 getWidget().getElement().getStyle().setPosition(Position.STATIC);
                 getElement().getStyle().setPosition(Position.ABSOLUTE);
