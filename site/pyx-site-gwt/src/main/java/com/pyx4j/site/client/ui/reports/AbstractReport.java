@@ -184,7 +184,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
             public void onApply() {
                 if (presenter != null & settingsForm != null) {
                     if (settingsForm.isValid()) {
-                        presenter.apply(settingsForm.getValue());
+                        presenter.apply(settingsForm.getValue(), true);
                     } else {
                         settingsForm.setUnconditionalValidationErrorRendering(true);
                     }
@@ -243,13 +243,6 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         reportPanel.getElement().getStyle().setRight(0, Unit.PX);
         reportPanel.getElement().getStyle().setBottom(0, Unit.PX);
         viewPanel.add(reportPanel);
-
-        addHeaderToolbarItem(new Button(i18n.tr("Refresh"), new Command() {
-            @Override
-            public void execute() {
-                presenter.refresh(settingsForm.getValue());
-            }
-        }));
 
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
             @Override
@@ -414,7 +407,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
                     ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasData.name()));
             if (hadData) {
                 // not good: here we rely its not going to be async because activity has cache
-                presenter.apply(reportMetadata);
+                presenter.apply(reportMetadata, false);
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {

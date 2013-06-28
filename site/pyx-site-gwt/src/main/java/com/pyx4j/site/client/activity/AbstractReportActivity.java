@@ -162,9 +162,9 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     }
 
     @Override
-    public void apply(final ReportMetadata reportMetadata) {
+    public void apply(final ReportMetadata reportMetadata, boolean forceRefresh) {
         CachedReportData cachedData = reportDataCache.get(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()));
-        if (cachedData != null && EntityGraph.fullyEqualValues(reportMetadata, cachedData.reportMetadata)) {
+        if (!forceRefresh && cachedData != null && EntityGraph.fullyEqualValues(reportMetadata, cachedData.reportMetadata)) {
             view.setReportData(cachedData.data);
         } else {
             reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
@@ -225,14 +225,6 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
             }
 
         }, request);
-    }
-
-    @Override
-    public void refresh(ReportMetadata reportMetadata) {
-        if (reportMetadata != null) {
-            reportDataCache.remove(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()));
-        }
-        apply(reportMetadata);
     }
 
     @Override
