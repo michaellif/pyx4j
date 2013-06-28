@@ -24,6 +24,8 @@ import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -64,6 +66,8 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
         });
 
         obtainAvailableLocales();
+        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+
     }
 
     private void updateView() {
