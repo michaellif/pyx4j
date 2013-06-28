@@ -9,7 +9,7 @@
 **/
 
 -- Adjust for the database in use
-USE sl_0627;
+USE sl_0628;
 
 DROP VIEW tenant_EFT_charges;
 
@@ -56,5 +56,4 @@ AND		ts.status IN ('Current','Notice')
 AND		pl.SADDR1 LIKE '%Vista%'
 AND		e.SACCT NOT IN ('0','1')
 );
-
 
