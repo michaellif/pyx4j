@@ -38,6 +38,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
@@ -69,6 +71,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         headerHolder = new HeaderHolder();
         mainHolder = new NavigItemList();
         footerHolder = new NavigItemList();
+        footerHolder.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuFooter.name());
 
         add(headerHolder, DockPanel.NORTH);
         setCellHeight(headerHolder, "1px");
@@ -105,8 +108,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         }
 
         footerHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
-        footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.background));
-        footerHolder.add(new NavigItem(new PortalSiteMap.LogOut(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.background));
+        footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+        footerHolder.add(new NavigItem(new PortalSiteMap.LogOut(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -253,7 +256,13 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             addDomHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
+
                     presenter.navigTo(place);
+
+                    LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
+                    if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
+                        AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
+                    }
                 }
             }, ClickEvent.getType());
             getElement().getStyle().setCursor(Cursor.POINTER);

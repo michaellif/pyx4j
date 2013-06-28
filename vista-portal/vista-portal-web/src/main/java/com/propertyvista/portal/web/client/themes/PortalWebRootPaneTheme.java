@@ -31,7 +31,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainToolbar, BrandImage,
 
-        MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName,
+        MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName, MainMenuFooter,
 
         Communication,
 
@@ -181,6 +181,7 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("border-radius", "0");
         style.addProperty("border-left-width", "0");
         style.addProperty("border-right-width", "0");
+        style.addProperty("border-color", ThemeColor.foreground, 0.7);
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu, " .", StyleName.MainMenuNavigItem, ":first-child");
@@ -207,6 +208,16 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("vertical-align", "top");
         style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuFooter, " .", StyleName.MainMenuNavigItem);
+        style.addProperty("background", ThemeColor.foreground, 0.6);
+        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("border-color", ThemeColor.foreground, 0.7);
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuFooter, " .", StyleName.MainMenuNavigItem, ":hover");
+        style.addProperty("background", ThemeColor.foreground, 0.5);
         addStyle(style);
 
     }

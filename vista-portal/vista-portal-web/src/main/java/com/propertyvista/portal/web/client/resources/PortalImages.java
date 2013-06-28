@@ -148,17 +148,17 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     interface ProfileMenuImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_Icon_Profile-Inactive.png")
+        @Source("Nav_Icon_Profile-Active.png")
         ImageResource regular();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_Icon_Profile-Inactive.png")
+        @Source("Nav_Icon_Profile-Active.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Nav_Icon_Profile-Active.png")
+        @Source("Nav_Icon_Profile-Inactive.png")
         ImageResource active();
     }
 
@@ -180,4 +180,24 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         @Source("Nav_Icon_ResidentServices-Active.png")
         ImageResource active();
     }
+
+    AccountMenuImages accountMenu();
+
+    interface AccountMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Settings-Active.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Settings-Active.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Settings-Inactive.png")
+        ImageResource active();
+    }
+
 }
