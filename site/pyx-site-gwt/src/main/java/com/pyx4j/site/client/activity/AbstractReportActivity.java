@@ -128,7 +128,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
         if (place.getReportMetadata() == null) {
             for (Class<? extends ReportMetadata> reportMetadataClass : view.getSupportedReportMetadata()) {
                 if (GWTJava5Helper.getSimpleName(reportMetadataClass).equals(place.getReportMetadataName())) {
-                    place = new ReportsAppPlace(EntityFactory.create(reportMetadataClass));
+                    place = createReportsPlace(EntityFactory.create(reportMetadataClass));
                     break;
                 }
             }
@@ -320,5 +320,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     public void refresh() {
 
     }
+
+    protected abstract ReportsAppPlace createReportsPlace(ReportMetadata reportMetadata);
 
 }
