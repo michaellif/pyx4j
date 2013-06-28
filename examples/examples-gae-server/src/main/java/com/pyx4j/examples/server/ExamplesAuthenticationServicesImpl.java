@@ -45,6 +45,7 @@ import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.ChallengeVerificationRequired;
 import com.pyx4j.security.server.AuthenticationServiceImpl;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Lifecycle;
@@ -58,7 +59,7 @@ public class ExamplesAuthenticationServicesImpl extends AuthenticationServiceImp
         if (CommonsStringUtils.isEmpty(request.email().getValue()) || CommonsStringUtils.isEmpty(request.password().getValue())) {
             throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
-        if (!validEmailAddress(request.email().getValue())) {
+        if (!EmailValidator.isValid(request.email().getValue())) {
             throw new RuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 
