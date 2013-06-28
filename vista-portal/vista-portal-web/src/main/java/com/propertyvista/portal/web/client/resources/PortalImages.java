@@ -86,15 +86,6 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @Source("alert.png")
     ImageResource alert();
 
-    @Source("communication-message.png")
-    ImageResource communicationMessage();
-
-    @Source("communication-alert.png")
-    ImageResource communicationAlert();
-
-    @Source("communication-maintanance.png")
-    ImageResource communicationMaintanancee();
-
     DashboardMenuImages dashboardMenu();
 
     interface DashboardMenuImages extends ButtonImages {
