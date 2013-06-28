@@ -18,6 +18,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -37,7 +38,7 @@ public interface RequestMessageIO extends IEntity {
      * You must provide your Interface password for every HTTP request.
      */
     @NotNull
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> interfaceEntityPassword();
 
     /**

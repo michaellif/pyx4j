@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
@@ -35,13 +36,13 @@ public interface UserCredentialEditDTO extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Password")
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> password();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Confirm password")
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> passwordConfirm();
 
     @Caption(name = "Require to change password on next sign in")

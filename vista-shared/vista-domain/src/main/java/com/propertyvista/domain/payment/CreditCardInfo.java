@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -82,7 +83,8 @@ public interface CreditCardInfo extends PaymentDetails {
 
     @NotNull
     @Caption(name = "Card Security Code")
-    @Transient(logTransient = true)
+    @Transient
+    @LogTransient
     IPrimitive<String> securityCode();
 
     @NotNull

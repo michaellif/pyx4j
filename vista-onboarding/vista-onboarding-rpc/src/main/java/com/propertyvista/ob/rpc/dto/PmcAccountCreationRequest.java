@@ -17,6 +17,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,19 +45,18 @@ public interface PmcAccountCreationRequest extends IEntity {
 
     @Editor(type = EditorType.email)
     @NotNull
-    @Transient(logTransient = true)
     @Caption(watermark = "Confirm Email")
     IPrimitive<String> confirmEmail();
 
     @NotNull
     @Editor(type = EditorType.password)
-    @Transient(logTransient = true)
+    @LogTransient
     @Caption(watermark = "****************")
     IPrimitive<String> password();
 
     @NotNull
     @Editor(type = EditorType.password)
-    @Transient(logTransient = true)
+    @LogTransient
     @Caption(watermark = "****************")
     IPrimitive<String> confirmPassword();
 

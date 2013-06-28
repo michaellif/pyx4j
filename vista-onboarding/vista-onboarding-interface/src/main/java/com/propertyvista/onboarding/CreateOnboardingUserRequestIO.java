@@ -13,6 +13,7 @@
  */
 package com.propertyvista.onboarding;
 
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -32,7 +33,7 @@ public interface CreateOnboardingUserRequestIO extends RequestIO {
     IPrimitive<String> email();
 
     @NotNull
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> password();
 
     /**

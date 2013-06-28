@@ -15,6 +15,7 @@ package com.propertyvista.domain.payment;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -28,12 +29,14 @@ public interface CreditCardNumberIdentity extends IPersonalIdentity {
 
     @Override
     @RpcTransient
-    @Transient(logTransient = true)
+    @Transient
+    @LogTransient
     @Length(16)
     IPrimitive<String> number();
 
     @Override
-    @Transient(logTransient = true)
+    @Transient
+    @LogTransient
     @Length(16)
     IPrimitive<String> newNumber();
 

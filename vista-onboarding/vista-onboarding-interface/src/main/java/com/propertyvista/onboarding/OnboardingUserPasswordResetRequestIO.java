@@ -15,6 +15,7 @@ package com.propertyvista.onboarding;
 
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -35,7 +36,7 @@ public interface OnboardingUserPasswordResetRequestIO extends RequestIO {
     IPrimitive<String> securityAnswer();
 
     @NotNull
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> newPassword();
 
     /**
