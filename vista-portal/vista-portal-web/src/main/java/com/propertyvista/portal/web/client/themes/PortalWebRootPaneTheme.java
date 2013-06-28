@@ -50,7 +50,8 @@ public class PortalWebRootPaneTheme extends Theme {
         initMainMenuStyles();
         initFooterStyles();
         initCommercialStyles();
-        initMessagesStyles();
+        initNotificationStyles();
+        initCommunicationStyles();
 
     }
 
@@ -62,9 +63,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initMainToolbarStyles() {
         Style style = new Style(".", StyleName.MainToolbar);
-        style.addProperty("display", "inline-block");
         style.addProperty("position", "relative");
-
         style.addProperty("width", "100%");
         style.addProperty("min-width", "320px");
         style.addProperty("height", "60px");
@@ -85,7 +84,7 @@ public class PortalWebRootPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.MainToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
-        style.addProperty("margin", "10px");
+        style.addProperty("margin", "8px 8px 0 8px");
         style.addProperty("display", "inline-block");
         style.addProperty("vertical-align", "top");
         addStyle(style);
@@ -105,6 +104,7 @@ public class PortalWebRootPaneTheme extends Theme {
         Style style = new Style(".", StyleName.MainMenu);
         style.addProperty("width", "14em");
         style.addProperty("margin", "10px 0 ");
+        style.addProperty("padding-left", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.collapsedMenu);
@@ -172,13 +172,23 @@ public class PortalWebRootPaneTheme extends Theme {
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
-        style.addProperty("margin", "0 ");
+        style.addProperty("margin", "0");
+        style.addProperty("padding", "0");
+        style.addProperty("background", ThemeColor.foreground, 0.8);
         addStyle(style);
 
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu, " .", StyleName.MainMenuNavigItem);
         style.addProperty("border-radius", "0");
         style.addProperty("border-left-width", "0");
         style.addProperty("border-right-width", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu, " .", StyleName.MainMenuNavigItem, ":first-child");
+        style.addProperty("border-top-width", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu, " .", StyleName.MainMenuNavigItem, ":last-child");
+        style.addProperty("border-bottom-width", "0");
         addStyle(style);
 
     }
@@ -196,7 +206,13 @@ public class PortalWebRootPaneTheme extends Theme {
         addStyle(style);
     }
 
-    private void initMessagesStyles() {
+    private void initCommunicationStyles() {
+        Style style = new Style(".", StyleName.Communication);
+        style.addProperty("background", ThemeColor.foreground, 0.8);
+        addStyle(style);
+    }
+
+    private void initNotificationStyles() {
         Style style = new Style(".", StyleName.NotificationContainer);
         style.addProperty("padding-top", "10px");
         addStyle(style);

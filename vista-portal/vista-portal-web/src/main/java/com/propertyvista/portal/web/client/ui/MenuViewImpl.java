@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Cursor;
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
@@ -25,10 +27,9 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
@@ -56,7 +57,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     private MenuPresenter presenter;
 
-    private final SimplePanel headerHolder;
+    private final HeaderHolder headerHolder;
 
     private final NavigItemList mainHolder;
 
@@ -65,8 +66,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
     public MenuViewImpl() {
         setStyleName(PortalWebRootPaneTheme.StyleName.MainMenu.name());
 
-        headerHolder = new SimplePanel();
-        headerHolder.setWidget(new HTML("header"));
+        headerHolder = new HeaderHolder();
         mainHolder = new NavigItemList();
         footerHolder = new NavigItemList();
 
@@ -97,7 +97,6 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
             mainHolder.add(new NavigItem(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
         }
-        mainHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.contrast3));
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             mainHolder.add(new NavigItem(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
         }
@@ -105,8 +104,9 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             mainHolder.add(new NavigItem(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
         }
 
-        footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
-        footerHolder.add(new NavigItem(new PortalSiteMap.LogOut(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
+        footerHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
+        footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.background));
+        footerHolder.add(new NavigItem(new PortalSiteMap.LogOut(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -282,6 +282,29 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             return place;
         }
 
+    }
+
+    class HeaderHolder extends FlowPanel {
+
+        private final Label name;
+
+        private final Image photo;
+
+        public HeaderHolder() {
+
+            setHeight("60px");
+
+            getElement().getStyle().setPosition(Position.RELATIVE);
+
+            photo = new Image(PortalImages.INSTANCE.avatar());
+            photo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+            name = new Label("Name");
+            name.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+            add(photo);
+            add(name);
+        }
     }
 
 }

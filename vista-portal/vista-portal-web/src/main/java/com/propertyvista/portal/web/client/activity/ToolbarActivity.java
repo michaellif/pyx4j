@@ -47,11 +47,11 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        updateAuthenticatedView();
+        updateView();
         eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                updateAuthenticatedView();
+                updateView();
             }
         });
 
@@ -59,14 +59,14 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
             @Override
             public void onContextChange(ContextChangeEvent event) {
-                updateAuthenticatedView();
+                updateView();
             }
         });
 
         obtainAvailableLocales();
     }
 
-    private void updateAuthenticatedView() {
+    private void updateView() {
         if (ClientContext.isAuthenticated()) {
             view.onLogedIn(ClientContext.getUserVisit().getName());
         } else {
