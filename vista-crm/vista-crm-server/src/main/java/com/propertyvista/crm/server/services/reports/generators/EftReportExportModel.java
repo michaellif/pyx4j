@@ -44,7 +44,9 @@ public interface EftReportExportModel extends IEntity {
 
     IPrimitive<LogicalDate> expectedMoveOut();
 
-    IPrimitive<String> tenantId();
+    IPrimitive<String> participantId();
+
+    IPrimitive<String> customer();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> amount();
