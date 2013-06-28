@@ -254,6 +254,7 @@ public class PortalWebRootPaneTheme extends Theme {
         Style style = new Style(".", StyleName.Communication);
         style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("padding", "10px");
+        style.addProperty("width", "400px");
         style.addBoxShadow(ThemeColor.foreground, "5px 5px 5px");
         style.addProperty("background", ThemeColor.foreground, 0.8);
         style.addProperty("border-style", "solid");
