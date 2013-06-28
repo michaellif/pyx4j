@@ -151,7 +151,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
         leftToolbar.getElement().getStyle().setProperty("left", "0");
 
         Image brandImage = new Image(PortalImages.INSTANCE.brand());
-        brandImage.getElement().getStyle().setProperty("margin", "5px 0 0 10px");
+        brandImage.getElement().getStyle().setProperty("margin", "5px 10px 0 10px");
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
         brandImageHolder = new SimplePanel(brandImage);
         brandImageHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
