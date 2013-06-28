@@ -30,11 +30,9 @@ public interface IReportsView extends IPrimePane {
 
     public interface Presenter extends IPrimePane.Presenter {
 
-        void refresh(ReportMetadata settings);
-
         void export(ReportMetadata settings);
 
-        void apply(ReportMetadata settings);
+        void apply(ReportMetadata settings, boolean forceRefresh);
 
         void loadSettings(String reportSettingsId);
 
