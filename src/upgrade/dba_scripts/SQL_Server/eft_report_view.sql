@@ -9,7 +9,7 @@
 **/
 
 
-USE sl_0427;
+USE sl_0628;
 
 DROP VIEW eft_trans_report;
 
@@ -26,4 +26,6 @@ CREATE VIEW eft_trans_report AS
 FROM	ACHTRANS at
 JOIN	ACHFILE af ON (af.HMY = at.HFILE)
 JOIN	TENANT t ON (at.HPERSON = t.HMYPERSON));
+
+
 
