@@ -21,6 +21,7 @@
 package com.pyx4j.site.client.ui.layout.responsive;
 
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.DisplayPanel;
@@ -37,6 +38,11 @@ public class SidePanelHolder extends SimplePanel {
         getWidget().getElement().getStyle().setProperty("height", "100%");
         getElement().getStyle().setProperty("height", "100%");
         getElement().getStyle().setProperty("width", "100%");
+    }
+
+    @Override
+    public void setWidget(IsWidget w) {
+        throw new Error("Use setMenuDisplay() instead.");
     }
 
 }

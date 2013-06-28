@@ -256,7 +256,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case phonePortrait:
         case phoneLandscape:
             sideMenuHolder.setMenuDisplay(getMenuDisplay());
-            sideCommunicationHolder.setWidget(getCommunicationDisplay());
+            sideCommunicationHolder.setMenuDisplay(getCommunicationDisplay());
             getHeaderDisplay().setVisible(false);
             break;
         default:
