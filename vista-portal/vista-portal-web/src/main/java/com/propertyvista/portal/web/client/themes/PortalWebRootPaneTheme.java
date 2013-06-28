@@ -31,7 +31,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainToolbar, BrandImage,
 
-        MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon,
+        MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName,
 
         Communication,
 
@@ -189,6 +189,24 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.MainMenu, "-", StyleDependent.sideMenu, " .", StyleName.MainMenuNavigItem, ":last-child");
         style.addProperty("border-bottom-width", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuHeader);
+        style.addProperty("height", "60px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuHeaderPhoto);
+        style.addProperty("height", "34px");
+        style.addProperty("margin", "13px 5px 0 5px");
+        style.addProperty("vertical-align", "top");
+        addStyle(style);
+
+        style = new Style(".", StyleName.MainMenuHeaderName);
+        style.addProperty("line-height", "60px");
+        style.addProperty("margin-left", "5px");
+        style.addProperty("vertical-align", "top");
+        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
     }

@@ -26,6 +26,10 @@ public interface MenuView extends IsWidget {
 
     }
 
+    void onLogedOut();
+
+    void onLogedIn(String userName);
+
     public void setPresenter(MenuPresenter presenter);
 
 }

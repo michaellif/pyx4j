@@ -18,6 +18,11 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.client.ContextChangeEvent;
+import com.pyx4j.security.client.ContextChangeHandler;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
@@ -38,7 +43,31 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        updateView();
+        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                updateView();
+            }
+        });
+
+        eventBus.addHandler(ContextChangeEvent.getType(), new ContextChangeHandler() {
+
+            @Override
+            public void onContextChange(ContextChangeEvent event) {
+                updateView();
+            }
+        });
+
         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+    }
+
+    private void updateView() {
+        if (ClientContext.isAuthenticated()) {
+            view.onLogedIn(ClientContext.getUserVisit().getName());
+        } else {
+            view.onLogedOut();
+        }
     }
 
     @Override

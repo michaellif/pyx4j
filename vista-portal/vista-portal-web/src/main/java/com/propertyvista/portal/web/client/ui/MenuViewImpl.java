@@ -154,6 +154,16 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         }
     }
 
+    @Override
+    public void onLogedOut() {
+        headerHolder.setName(null);
+    }
+
+    @Override
+    public void onLogedIn(String userName) {
+        headerHolder.setName(userName);
+    }
+
     class NavigItemList extends ComplexPanel {
         private final List<NavigItem> items;
 
@@ -286,24 +296,31 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
     class HeaderHolder extends FlowPanel {
 
-        private final Label name;
+        private final Label nameLabel;
 
-        private final Image photo;
+        private final Image photoImage;
 
         public HeaderHolder() {
 
-            setHeight("60px");
+            setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuHeader.name());
 
             getElement().getStyle().setPosition(Position.RELATIVE);
 
-            photo = new Image(PortalImages.INSTANCE.avatar());
-            photo.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            photoImage = new Image(PortalImages.INSTANCE.avatar());
+            photoImage.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuHeaderPhoto.name());
+            photoImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-            name = new Label("Name");
-            name.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            nameLabel = new Label("Name");
+            nameLabel.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuHeaderName.name());
+            nameLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-            add(photo);
-            add(name);
+            add(photoImage);
+            add(nameLabel);
+
+        }
+
+        public void setName(String name) {
+            nameLabel.setText(name);
         }
     }
 
