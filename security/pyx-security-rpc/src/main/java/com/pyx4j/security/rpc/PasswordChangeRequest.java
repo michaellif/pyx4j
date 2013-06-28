@@ -25,6 +25,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -45,7 +46,7 @@ public interface PasswordChangeRequest extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Current Password")
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> currentPassword();
 
     @Editor(type = EditorType.label)
@@ -59,13 +60,13 @@ public interface PasswordChangeRequest extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "New Password", description = "Password Guidelines:\n(1) Use 8 to 20 characters.\n(2) Don't use your name or email address.\n(3) Use a mix of lowercase and uppercase letters, numbers, and symbols.\n(4) Make your password hard to guess.")
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> newPassword();
 
     @NotNull
     @Editor(type = EditorType.password)
     @Caption(name = "Confirm New Password")
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> newPasswordConfirm();
 
     /**

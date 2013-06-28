@@ -22,6 +22,7 @@ package com.pyx4j.entity.shared;
 
 import com.pyx4j.entity.annotations.ColumnId;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
@@ -42,7 +43,8 @@ public interface IPersonalIdentity extends IEntity {
      * Indicator for Server to update number() base on obfuscatedNumber().
      */
     //TODO for pyx @ColumnIdentificator(NumberUpdateValue.class)
-    @Transient(logTransient = true)
+    @Transient
+    @LogTransient
     IPrimitive<String> newNumber();
 
     // -- New implementation

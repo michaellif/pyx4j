@@ -75,6 +75,11 @@ public interface MemberMeta {
     public boolean isRpcTransient();
 
     /**
+     * @see com.pyx4j.entity.annotations.LogTransient
+     */
+    public boolean isLogTransient();
+
+    /**
      * When @Indexed indexPrimaryValue != false
      * 
      * @see com.pyx4j.entity.annotations.Indexed

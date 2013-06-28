@@ -49,6 +49,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.ReadOnly;
@@ -399,6 +400,8 @@ public class EntityMetaWriter {
                 }
             }
             data.rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
+            data.logTransient = (method.getAnnotation(LogTransient.class) != null);
+
             Detached detachedAnnotation = method.getAnnotation(Detached.class);
             if (detachedAnnotation == null) {
                 data.attachLevel = AttachLevel.Attached;
@@ -564,6 +567,7 @@ public class EntityMetaWriter {
         writer.print(Boolean.valueOf(data.valueClassIsNumber).toString() + ", ");
         writer.print(Boolean.valueOf(data.persistenceTransient).toString() + ", ");
         writer.print(Boolean.valueOf(data.rpcTransient).toString() + ", ");
+        writer.print(Boolean.valueOf(data.logTransient).toString() + ", ");
         writer.print(AttachLevel.class.getSimpleName() + "." + data.attachLevel.name() + ", ");
         writer.print(Boolean.valueOf(data.ownedRelationships).toString() + ", ");
         writer.print(Boolean.valueOf(data.cascadePersist).toString() + ", ");

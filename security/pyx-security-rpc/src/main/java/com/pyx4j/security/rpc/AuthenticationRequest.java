@@ -24,6 +24,7 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -43,7 +44,7 @@ public interface AuthenticationRequest extends IEntity {
 
     @Editor(type = EditorType.password)
     @NotNull
-    @Transient(logTransient = true)
+    @LogTransient
     IPrimitive<String> password();
 
     @Caption(name = "Remember Me")

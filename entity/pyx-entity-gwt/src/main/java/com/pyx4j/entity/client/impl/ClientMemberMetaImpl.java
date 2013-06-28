@@ -64,8 +64,9 @@ public class ClientMemberMetaImpl implements MemberMeta {
      */
     public ClientMemberMetaImpl(String fieldName, String captionNL, String caption, String description, String watermark, Class<?> valueClass,
             @SuppressWarnings("rawtypes") Class<? extends IObject> objectClass, ObjectClassType objectClassType, boolean valueClassIsNumber,
-            boolean persistenceTransient, boolean rpcTransient, AttachLevel attachLevel, boolean ownedRelationships, boolean cascadePersist, boolean owner,
-            boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat, String nullString, boolean isToStringMember) {
+            boolean persistenceTransient, boolean rpcTransient, boolean logTransient, AttachLevel attachLevel, boolean ownedRelationships,
+            boolean cascadePersist, boolean owner, boolean embedded, boolean indexed, int stringLength, String format, boolean useMessageFormat,
+            String nullString, boolean isToStringMember) {
         super();
         this.data = new MemberMetaData();
         this.data.valueClass = valueClass;
@@ -73,6 +74,7 @@ public class ClientMemberMetaImpl implements MemberMeta {
         this.fieldName = fieldName;
         this.data.persistenceTransient = persistenceTransient;
         this.data.rpcTransient = rpcTransient;
+        this.data.logTransient = logTransient;
         this.data.attachLevel = attachLevel;
         this.data.ownedRelationships = ownedRelationships;
         this.data.cascadePersist = cascadePersist;
@@ -142,6 +144,11 @@ public class ClientMemberMetaImpl implements MemberMeta {
     @Override
     public boolean isRpcTransient() {
         return data.rpcTransient;
+    }
+
+    @Override
+    public boolean isLogTransient() {
+        return data.logTransient;
     }
 
     @Override

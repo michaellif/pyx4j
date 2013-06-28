@@ -31,6 +31,8 @@ public class MemberMetaData {
 
     public boolean rpcTransient;
 
+    public boolean logTransient;
+
     public AttachLevel attachLevel;
 
     public boolean ownedRelationships;

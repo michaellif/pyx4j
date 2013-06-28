@@ -35,9 +35,4 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Transient {
 
-    /**
-     * Do not store this data in any log files
-     */
-    boolean logTransient() default false;
-
 }

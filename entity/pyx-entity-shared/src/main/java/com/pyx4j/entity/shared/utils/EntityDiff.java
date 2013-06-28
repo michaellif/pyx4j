@@ -30,8 +30,6 @@ import java.util.Vector;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.EqualsHelper;
-import com.pyx4j.entity.annotations.LogTransient;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -133,14 +131,7 @@ public class EntityDiff {
                     continue;
                 }
 
-                boolean logTransient = false;
-                Transient transientAnnotation = memberMeta.getAnnotation(Transient.class);
-                if ((transientAnnotation != null) && (transientAnnotation.logTransient())) {
-                    logTransient = true;
-                }
-                if (memberMeta.getAnnotation(LogTransient.class) != null) {
-                    logTransient = true;
-                }
+                boolean logTransient = memberMeta.isLogTransient();
 
                 switch (memberMeta.getObjectClassType()) {
                 case Entity:

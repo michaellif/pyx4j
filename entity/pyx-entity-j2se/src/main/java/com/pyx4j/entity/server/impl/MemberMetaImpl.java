@@ -38,6 +38,7 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.RpcTransient;
@@ -68,6 +69,8 @@ public class MemberMetaImpl implements MemberMeta {
     private final boolean persistenceTransient;
 
     private final boolean rpcTransient;
+
+    private final boolean logTransient;
 
     private final AttachLevel attachLevel;
 
@@ -197,6 +200,7 @@ public class MemberMetaImpl implements MemberMeta {
 
         persistenceTransient = (method.getAnnotation(Transient.class) != null);
         rpcTransient = (method.getAnnotation(RpcTransient.class) != null);
+        logTransient = (method.getAnnotation(LogTransient.class) != null);
         Owned aOwned = method.getAnnotation(Owned.class);
         boolean hasEmbedded = (method.getAnnotation(EmbeddedEntity.class) != null);
         if (hasEmbedded && ((objectClassType == ObjectClassType.Primitive) || (objectClassType == ObjectClassType.PrimitiveSet))) {
@@ -304,6 +308,11 @@ public class MemberMetaImpl implements MemberMeta {
     @Override
     public final boolean isRpcTransient() {
         return rpcTransient;
+    }
+
+    @Override
+    public final boolean isLogTransient() {
+        return logTransient;
     }
 
     @Override
