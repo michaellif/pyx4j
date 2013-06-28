@@ -34,7 +34,7 @@ public class FieldRootPane extends RootPane<ResponsiveLayoutPanel> {
         bind(new StickyHeaderActivityMapper(), asWidget().getStickyHeaderDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
         bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
-        bind(new NotificationsActivityMapper(), asWidget().getCommunicationDisplay());
+        bind(new NotificationsActivityMapper(), asWidget().getCommDisplay());
         bind(new FooterActivityMapper(), asWidget().getFooterDisplay());
 
     }

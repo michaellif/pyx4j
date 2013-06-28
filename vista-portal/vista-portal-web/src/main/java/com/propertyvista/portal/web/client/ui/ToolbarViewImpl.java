@@ -126,7 +126,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
                 switch (layoutType) {
                 case phonePortrait:
                 case phoneLandscape:
-                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideCommunication));
+                    AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideComm));
                     break;
                 default:
                     AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(communicationButton));
