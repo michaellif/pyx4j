@@ -87,6 +87,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource avatar();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Nav_Icon_Profile-Inactive.png")
+    ImageResource avatar2();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Header_Icon_Notifications-New.png")
     ImageResource alert();
 

@@ -14,6 +14,7 @@
 package com.propertyvista.portal.web.client.activity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.activity.shared.AbstractActivity;
@@ -33,11 +34,12 @@ public class CommunicationActivity extends AbstractActivity implements Communica
     private static List<Message> messages = new ArrayList<Message>();
 
     static {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 3; i++) {
 
             Message message = EntityFactory.create(Message.class);
             message.subject().setValue("Message #" + i);
             message.text().setValue("This is Communication Message #" + i);
+            message.date().setValue(new Date(System.currentTimeMillis() - i * 24 * 60 * 60 * 1000));
 
             messages.add(message);
         }

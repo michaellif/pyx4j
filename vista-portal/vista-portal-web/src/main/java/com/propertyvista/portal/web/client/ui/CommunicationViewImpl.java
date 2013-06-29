@@ -17,12 +17,16 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.DockLayoutPanel;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
@@ -33,32 +37,40 @@ import com.propertyvista.domain.communication.Message;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class CommunicationViewImpl extends DockPanel implements CommunicationView {
+public class CommunicationViewImpl extends FlowPanel implements CommunicationView, RequiresResize {
 
     private CommunicationPresenter presenter;
 
-    private final HTML calloutHandler;
+    private final DockLayoutPanel contentPanel;
+
+    private final HeaderHolder headerHolder;
 
     private final FlowPanel mainHolder;
+
+    private final HTML calloutHandler;
 
     public CommunicationViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.Comm.name());
-
-        HeaderHolder headerHolder = new HeaderHolder();
-        mainHolder = new FlowPanel();
 
         calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
                 + PortalWebRootPaneTheme.StyleName.CommCallout.name() + "'/></svg>");
         calloutHandler.getElement().getStyle().setPosition(Position.ABSOLUTE);
         calloutHandler.getElement().getStyle().setProperty("right", "38px");
         calloutHandler.getElement().getStyle().setProperty("top", "0px");
-        add(calloutHandler, DockPanel.NORTH);
 
-        add(headerHolder, DockPanel.NORTH);
-        setCellHeight(headerHolder, "1px");
+        headerHolder = new HeaderHolder();
+        mainHolder = new FlowPanel();
 
-        add(mainHolder, DockPanel.CENTER);
+        contentPanel = new DockLayoutPanel(Unit.PX);
+        contentPanel.setStyleName(PortalWebRootPaneTheme.StyleName.CommContent.name());
+
+        add(calloutHandler);
+        add(contentPanel);
+
+        contentPanel.addNorth(headerHolder, 60);
+
+        contentPanel.add(new ScrollPanel(mainHolder));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -101,7 +113,9 @@ public class CommunicationViewImpl extends DockPanel implements CommunicationVie
         }
     }
 
-    class MessagePanel extends FlowPanel {
+    class MessagePanel extends FlexTable {
+
+        private final Image photoImage;
 
         private final Label subjectField;
 
@@ -112,18 +126,27 @@ public class CommunicationViewImpl extends DockPanel implements CommunicationVie
         private final Label senderField;
 
         public MessagePanel(Message message) {
-
             setStyleName(PortalWebRootPaneTheme.StyleName.CommMessage.name());
 
+            photoImage = new Image(PortalImages.INSTANCE.avatar2());
             subjectField = new Label(message.subject().getStringView());
             messageField = new Label(message.text().getStringView());
             dateField = new Label(message.date().getStringView());
             senderField = new Label("John Smith");
 
-            add(senderField);
-            add(subjectField);
-            add(messageField);
-            add(dateField);
+            setWidget(0, 0, photoImage);
+            getFlexCellFormatter().setRowSpan(0, 0, 2);
+            getFlexCellFormatter().setWidth(0, 0, "1px");
+
+            setWidget(0, 1, senderField);
+
+            setWidget(0, 2, dateField);
+            getFlexCellFormatter().setWidth(0, 2, "1px");
+
+            setWidget(1, 0, subjectField);
+            getFlexCellFormatter().setColSpan(1, 0, 2);
+            setWidget(2, 0, messageField);
+            getFlexCellFormatter().setColSpan(2, 0, 3);
 
         }
     }
@@ -156,5 +179,10 @@ public class CommunicationViewImpl extends DockPanel implements CommunicationVie
         public void setNumberOfMessages(int number) {
             messagesLabel.setText(String.valueOf(number));
         }
+    }
+
+    @Override
+    public void onResize() {
+        contentPanel.onResize();
     }
 }
