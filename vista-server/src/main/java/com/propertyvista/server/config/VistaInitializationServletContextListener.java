@@ -15,6 +15,9 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContextEvent;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.quartz.SchedulerHelper;
@@ -30,8 +33,8 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        super.contextInitialized(sce);
         try {
-            super.contextInitialized(sce);
             Persistence.service();
 
             ServerSideFactory.create(PasswordEncryptorFacade.class).activateDecryption();
@@ -39,6 +42,10 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
             SchedulerHelper.init();
             SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
             InterfaceSSHDServer.init();
+        } catch (Throwable e) {
+            Logger log = LoggerFactory.getLogger(VistaInitializationServletContextListener.class);
+            log.error("VistaServer initialization error", e);
+            throw new Error("VistaServer initialization error", e);
         } finally {
             Lifecycle.endContext();
         }

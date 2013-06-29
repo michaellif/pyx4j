@@ -45,7 +45,7 @@ public class PasswordEncryptorFacadeImpl implements PasswordEncryptorFacade {
     public void activateDecryption() {
         AbstractVistaServerSideConfiguration serverSideConfiguration = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
         File credentialsFile = new File(serverSideConfiguration.getConfigDirectory(), "master-credentials.properties");
-        if (!credentialsFile.canRead()) {
+        if (!credentialsFile.canRead() || credentialsFile.length() == 0) {
             saveCredentialsFile(credentialsFile, generateMasterPassword());
         }
         Credentials credentials = CredentialsFileStorage.getCredentials(credentialsFile);
