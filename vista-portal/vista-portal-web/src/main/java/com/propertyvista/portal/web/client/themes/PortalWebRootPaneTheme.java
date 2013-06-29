@@ -252,17 +252,19 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initCommunicationStyles() {
         Style style = new Style(".", StyleName.Comm);
-        style.addProperty("padding", "1px");
         style.addProperty("width", "400px");
         style.addBoxShadow(ThemeColor.foreground, "5px 5px 5px");
-        style.addProperty("background", ThemeColor.foreground, 0.8);
+        style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("border-radius", "5px");
+        style.addProperty("border-width", "1px");
+        style.addProperty("border-color", ThemeColor.foreground, 0.8);
+        style.addProperty("border-style", "solid");
         style.addProperty("margin-top", "15px");
         addStyle(style);
 
         style = new Style(".", StyleName.CommContent);
         style.addProperty("max-height", "400px");
-        style.addProperty("height", "100%");
+        style.addProperty("height", "400px");
         addStyle(style);
 
         style = new Style(".", StyleName.CommCallout);
@@ -271,6 +273,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.CommHeader);
         style.addProperty("line-height", "60px");
+        style.addProperty("background", ThemeColor.foreground, 0.8);
         addStyle(style);
 
         style = new Style(".", StyleName.CommHeaderTitle);
@@ -291,8 +294,9 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("padding", "5px");
         style.addProperty("width", "100%");
-        style.addProperty("margin-bottom", "1px");
-        style.addProperty("background", ThemeColor.foreground, 0.01);
+        style.addProperty("border-bottom-width", "1px");
+        style.addProperty("border-bottom-color", ThemeColor.foreground, 0.8);
+        style.addProperty("border-bottom-style", "solid");
         addStyle(style);
 
         style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm);
@@ -303,8 +307,8 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("border-radius", "0");
         addStyle(style);
 
-        style = new Style(".", StyleName.CommContent, "-", StyleDependent.sideComm);
-        style.addProperty("max-height", "auto");
+        style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm, " .", StyleName.CommContent);
+        style.addProperty("max-height", "none");
         style.addProperty("height", "100%");
         addStyle(style);
 

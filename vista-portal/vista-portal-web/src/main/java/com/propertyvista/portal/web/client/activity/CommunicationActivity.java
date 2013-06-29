@@ -34,7 +34,7 @@ public class CommunicationActivity extends AbstractActivity implements Communica
     private static List<Message> messages = new ArrayList<Message>();
 
     static {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
 
             Message message = EntityFactory.create(Message.class);
             message.subject().setValue("Message #" + i);
