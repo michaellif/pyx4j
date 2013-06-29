@@ -95,8 +95,8 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         switch (q) {
         case 0:
             get(proto().serviceURLBase()).setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
-            get(proto().username()).setValue("sa");
-            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("Vista2012!");
+            get(proto().username()).setValue("vista_dev");
+            ((CTextFieldBase<?, ?>) get(proto().password())).setValueByString("vista_dev");
             get(proto().serverName()).setValue("WIN-CO5DPAKNUA4\\YARDI");
             get(proto().database()).setValue("vista_dev");
             q++;
