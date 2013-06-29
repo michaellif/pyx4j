@@ -33,7 +33,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName, MainMenuFooter,
 
-        Communication, CommunicationCallout,
+        Comm, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction,
 
         Commercial, CommercialItem, CommercialItemTitle,
 
@@ -251,7 +251,7 @@ public class PortalWebRootPaneTheme extends Theme {
     }
 
     private void initCommunicationStyles() {
-        Style style = new Style(".", StyleName.Communication);
+        Style style = new Style(".", StyleName.Comm);
         style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("padding", "10px");
         style.addProperty("width", "400px");
@@ -264,18 +264,38 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("margin-top", "15px");
         addStyle(style);
 
-        style = new Style(".", StyleName.CommunicationCallout);
+        style = new Style(".", StyleName.CommCallout);
         style.addProperty("fill", ThemeColor.foreground, 0.8);
         addStyle(style);
 
-        style = new Style(".", StyleName.Communication, "-", StyleDependent.sideComm);
+        style = new Style(".", StyleName.CommHeader);
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommHeaderTitle);
+        style.addProperty("line-height", "30px");
+        style.addProperty("margin-left", "5px");
+        style.addProperty("vertical-align", "top");
+        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("font-weight", "bold");
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommHeaderWriteAction);
+        style.addProperty("margin", "17px 15px 0 5px");
+        style.addProperty("vertical-align", "top");
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         style.addProperty("margin", "0");
         style.addProperty("padding", "0");
-        style.addProperty("background", ThemeColor.foreground, 0.8);
         style.addProperty("border-width", "0");
         style.addProperty("border-radius", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm, " .", StyleName.CommHeaderTitle);
+        style.addProperty("line-height", "60px");
         addStyle(style);
 
     }
