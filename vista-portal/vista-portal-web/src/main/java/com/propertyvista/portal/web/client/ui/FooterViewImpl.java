@@ -14,9 +14,11 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
@@ -26,22 +28,23 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class FooterViewImpl extends FlowPanel implements FooterView {
-
-    private final Label label;
+public class FooterViewImpl extends FlexTable implements FooterView {
 
     public FooterViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageFooter.name());
 
-        label = new Label();
+        SimplePanel pmcInfoPanel = new SimplePanel(new HTML("PMC Info"));
+        SimplePanel followUsPanel = new SimplePanel(new HTML("Follow Us"));
+        BrandPanel brandPanel = new BrandPanel();
+        SimplePanel langSelectorPanel = new SimplePanel(new HTML("Languages"));
+        SimplePanel linksPanel = new SimplePanel(new HTML("Terms of Use - Privacy - FAQ"));
 
-        Image brandImage = new Image(PortalImages.INSTANCE.brand());
-        brandImage.getElement().getStyle().setProperty("margin", "5px");
-        brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
-
-        add(brandImage);
-        add(label);
+        setWidget(0, 0, pmcInfoPanel);
+        setWidget(0, 1, langSelectorPanel);
+        setWidget(0, 2, followUsPanel);
+        setWidget(0, 3, brandPanel);
+        setWidget(1, 0, linksPanel);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -56,7 +59,20 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
     }
 
     private void doLayout(LayoutType layoutType) {
-        label.setText(layoutType.toString());
+    }
+
+    class BrandPanel extends FlowPanel {
+        public BrandPanel() {
+
+            Image brandImage = new Image(PortalImages.INSTANCE.brand());
+            brandImage.getElement().getStyle().setProperty("margin", "5px");
+            brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
+
+            add(brandImage);
+            add(new HTML("My Community + Vista"));
+
+        }
+
     }
 
 }

@@ -225,7 +225,7 @@ public class PortalWebRootPaneTheme extends Theme {
     private void initFooterStyles() {
         Style style = new Style(".", StyleName.PageFooter);
         style.addProperty("width", "100%");
-        style.addProperty("height", "15em");
+        style.addProperty("height", "100%");
         addStyle(style);
     }
 
