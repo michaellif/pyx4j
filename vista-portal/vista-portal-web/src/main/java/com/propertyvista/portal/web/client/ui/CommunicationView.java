@@ -13,13 +13,18 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.user.client.ui.IsWidget;
+
+import com.propertyvista.domain.communication.Message;
 
 public interface CommunicationView extends IsWidget {
 
-    public interface CommunicationPresenter {
+    interface CommunicationPresenter {
     }
 
-    public void setPresenter(CommunicationPresenter presenter);
+    void setPresenter(CommunicationPresenter presenter);
 
+    void populate(List<Message> messages);
 }

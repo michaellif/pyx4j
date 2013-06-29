@@ -33,7 +33,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
         MainMenu, MainMenuHolder, MainMenuNavigItem, MainMenuLabel, MainMenuIcon, MainMenuHeader, MainMenuHeaderPhoto, MainMenuHeaderName, MainMenuFooter,
 
-        Comm, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction,
+        Comm, CommCallout, CommHeader, CommHeaderTitle, CommHeaderWriteAction, CommMessage,
 
         Commercial, CommercialItem, CommercialItemTitle,
 
@@ -252,8 +252,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initCommunicationStyles() {
         Style style = new Style(".", StyleName.Comm);
-        style.addProperty("color", ThemeColor.foreground, 0.1);
-        style.addProperty("padding", "10px");
+        style.addProperty("padding", "1px");
         style.addProperty("width", "400px");
         style.addBoxShadow(ThemeColor.foreground, "5px 5px 5px");
         style.addProperty("background", ThemeColor.foreground, 0.8);
@@ -269,14 +268,15 @@ public class PortalWebRootPaneTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.CommHeader);
+        style.addProperty("line-height", "60px");
         addStyle(style);
 
         style = new Style(".", StyleName.CommHeaderTitle);
-        style.addProperty("line-height", "30px");
         style.addProperty("margin-left", "5px");
         style.addProperty("vertical-align", "top");
         style.addProperty("color", ThemeColor.foreground, 0.1);
         style.addProperty("font-weight", "bold");
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
         style = new Style(".", StyleName.CommHeaderWriteAction);
@@ -292,6 +292,13 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("padding", "0");
         style.addProperty("border-width", "0");
         style.addProperty("border-radius", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.CommMessage);
+        style.addProperty("color", ThemeColor.foreground);
+        style.addProperty("padding", "5px");
+        style.addProperty("margin-bottom", "1px");
+        style.addProperty("background", ThemeColor.foreground, 0.01);
         addStyle(style);
 
         style = new Style(".", StyleName.Comm, "-", StyleDependent.sideComm, " .", StyleName.CommHeaderTitle);

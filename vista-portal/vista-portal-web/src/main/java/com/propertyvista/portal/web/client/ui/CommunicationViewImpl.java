@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Window;
@@ -27,6 +29,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
+import com.propertyvista.domain.communication.Message;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
@@ -36,17 +39,14 @@ public class CommunicationViewImpl extends DockPanel implements CommunicationVie
 
     private final HTML calloutHandler;
 
+    private final FlowPanel mainHolder;
+
     public CommunicationViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.Comm.name());
 
         HeaderHolder headerHolder = new HeaderHolder();
-        FlowPanel mainHolder = new FlowPanel();
-
-        for (int i = 0; i < 6; i++) {
-            Label label = new Label("This is Communication Message #" + i);
-            mainHolder.add(label);
-        }
+        mainHolder = new FlowPanel();
 
         calloutHandler = new HTML("<svg xmlns='http://www.w3.org/2000/svg' version='1.1'><polyline points='16,0 0,16 32,16' class='"
                 + PortalWebRootPaneTheme.StyleName.CommCallout.name() + "'/></svg>");
@@ -91,6 +91,41 @@ public class CommunicationViewImpl extends DockPanel implements CommunicationVie
     @Override
     public void setPresenter(CommunicationPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void populate(List<Message> messages) {
+        mainHolder.clear();
+        for (final Message message : messages) {
+            mainHolder.add(new MessagePanel(message));
+        }
+    }
+
+    class MessagePanel extends FlowPanel {
+
+        private final Label subjectField;
+
+        private final Label messageField;
+
+        private final Label dateField;
+
+        private final Label senderField;
+
+        public MessagePanel(Message message) {
+
+            setStyleName(PortalWebRootPaneTheme.StyleName.CommMessage.name());
+
+            subjectField = new Label(message.subject().getStringView());
+            messageField = new Label(message.text().getStringView());
+            dateField = new Label(message.date().getStringView());
+            senderField = new Label("John Smith");
+
+            add(senderField);
+            add(subjectField);
+            add(messageField);
+            add(dateField);
+
+        }
     }
 
     class HeaderHolder extends FlowPanel {
