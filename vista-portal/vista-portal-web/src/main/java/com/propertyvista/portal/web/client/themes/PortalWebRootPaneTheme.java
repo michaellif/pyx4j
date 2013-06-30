@@ -57,7 +57,6 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initHeaderStyles() {
         Style style = new Style(".", StyleName.PageHeader);
-        style.addProperty("background-color", "#fff");
         addStyle(style);
     }
 

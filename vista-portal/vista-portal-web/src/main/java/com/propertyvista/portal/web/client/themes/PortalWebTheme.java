@@ -34,6 +34,7 @@ import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
@@ -51,6 +52,8 @@ public class PortalWebTheme extends Theme {
         initGeneralStyles();
         initBodyStyles();
         initMenuBarStyles();
+
+        initBackground();
 
         addTheme(new PortalWebRootPaneTheme());
 
@@ -164,6 +167,25 @@ public class PortalWebTheme extends Theme {
         addTheme(new TenantSureTheme());
 
         initTenantInsuranceStyles(); // TODO move this to a theme class
+    }
+
+    private void initBackground() {
+
+        Style style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
+        style.addProperty("background-image", "url('" + PortalImages.INSTANCE.background().getSafeUri().asString() + "')");
+        style.addProperty("background-size", "cover");
+        style.addProperty("background-repeat", "no-repeat");
+        addStyle(style);
+
+        style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
+        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("opacity", "1");
+        addStyle(style);
+
+        style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());
+        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("opacity", "0.9");
+        addStyle(style);
     }
 
     protected void initGeneralStyles() {
