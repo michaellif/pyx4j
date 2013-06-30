@@ -56,6 +56,9 @@ public class ResponsiveLayoutTheme extends Theme {
 
         style = new Style(".", StyleName.ResponsiveLayoutFooterHolder);
         style.addGradient(ThemeColor.foreground, 0.6, ThemeColor.foreground, 0.55);
+        style.addProperty("border-top", "4px solid");
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.8);
+
         addStyle(style);
 
         style = new Style(".", StyleName.ResponsiveLayoutContentHolder);
