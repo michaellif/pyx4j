@@ -97,7 +97,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final ScrollPanel pageScroll;
 
-    private final FlowPanel mainPanel;
+    private final CenterPanel centerPanel;
 
     private boolean sideMenuVisible = false;
 
@@ -135,13 +135,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         inlineMenuHolder = new InlineMenuHolder(this);
 
-        mainPanel = new FlowPanel();
-        mainPanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentHolder.name());
-        mainPanel.getElement().getStyle().setProperty("maxWidth", MAX_WIDTH + "px");
-        mainPanel.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-        mainPanel.getElement().getStyle().setPosition(Position.RELATIVE);
-        mainPanel.add(contentPanel);
-        mainPanel.add(inlineMenuHolder);
+        centerPanel = new CenterPanel(contentPanel, inlineMenuHolder);
 
         pageScroll.addScrollHandler(new ScrollHandler() {
             @Override
@@ -161,7 +155,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         pagePanel.add(getHeaderDisplay());
         pagePanel.add(stickyHeaderHolder);
-        pagePanel.add(mainPanel);
+        pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
         // ============ Content Layer ============
@@ -255,8 +249,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
-            sideMenuHolder.setMenuDisplay(getMenuDisplay());
-            sideCommHolder.setMenuDisplay(getCommDisplay());
+            sideMenuHolder.setDisplay(getMenuDisplay());
+            sideCommHolder.setDisplay(getCommDisplay());
             getHeaderDisplay().setVisible(false);
             break;
         default:
@@ -319,7 +313,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         inlineMenuHolder.onPositionChange();
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
-        contentHolder.setWidth((mainPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - commercialHolder.getOffsetWidth()) + "px");
+        contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - commercialHolder.getOffsetWidth()) + "px");
 
     }
 

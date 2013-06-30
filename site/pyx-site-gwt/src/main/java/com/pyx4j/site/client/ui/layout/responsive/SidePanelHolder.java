@@ -31,7 +31,7 @@ public class SidePanelHolder extends SimplePanel {
     public SidePanelHolder() {
     }
 
-    public void setMenuDisplay(DisplayPanel display) {
+    public void setDisplay(DisplayPanel display) {
         super.setWidget(display);
         getWidget().getElement().getStyle().setPosition(Position.STATIC);
         getWidget().getElement().getStyle().setProperty("width", "auto");
