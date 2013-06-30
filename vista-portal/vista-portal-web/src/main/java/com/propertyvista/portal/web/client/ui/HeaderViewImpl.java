@@ -26,10 +26,14 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
-        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
-
-        SimplePanel logoHolder = new SimplePanel(logoImage);
-        logoHolder.setWidth("200px");
+        SimplePanel logoHolder = new SimplePanel();
+        logoHolder.getElement().getStyle().setProperty("backgroundImage", "url('" + MediaUtils.createSiteLogoUrl() + "')");
+        logoHolder.getElement().getStyle().setProperty("backgroundSize", "contain");
+        logoHolder.getElement().getStyle().setProperty("backgroundRepeat", "no-repeat");
+        logoHolder.getElement().getStyle().setProperty("borderLeft", "4px solid #666");
+        logoHolder.getElement().getStyle().setProperty("borderRight", "4px solid #666");
+        logoHolder.setWidth(new Image(MediaUtils.createSiteLogoUrl()).getWidth() + "px");
+        logoHolder.setHeight(new Image(MediaUtils.createSiteLogoUrl()).getHeight() + "px");
 
         logoHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
         setWidget(logoHolder);
