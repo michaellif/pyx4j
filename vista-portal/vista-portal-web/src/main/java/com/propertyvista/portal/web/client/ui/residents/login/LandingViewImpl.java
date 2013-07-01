@@ -60,6 +60,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.DemoData;
+import com.propertyvista.portal.web.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.web.client.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
@@ -73,6 +74,7 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         public LoginForm() {
             super(AuthenticationRequest.class);
+
         }
 
         @Override
@@ -141,7 +143,7 @@ public class LandingViewImpl extends Composite implements LandingView {
         public DevLoginPanel() {
             FlowPanel devMessagePanel = new FlowPanel();
             devMessagePanel.getElement().getStyle().setMargin(20, Unit.PX);
-            devMessagePanel.getElement().getStyle().setProperty("textAlign", "center");
+
             devMessagePanel.addAttachHandler(new AttachEvent.Handler() {
                 private HandlerRegistration handlerRegistration;
 
@@ -232,7 +234,10 @@ public class LandingViewImpl extends Composite implements LandingView {
     private Anchor termsAndConditionsAnchor;
 
     public LandingViewImpl() {
+
         FlowPanel viewPanel = new FlowPanel();
+        viewPanel.setStyleName(LandingPagesTheme.StyleName.LandingPage.name());
+
         // attach handler to invoke login via ENTER key
         viewPanel.addAttachHandler(new Handler() {
 

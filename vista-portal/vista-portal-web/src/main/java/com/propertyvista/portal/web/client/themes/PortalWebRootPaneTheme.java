@@ -123,7 +123,7 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("font-weight", "bold");
         style.addProperty("padding", "5px");
         style.addProperty("list-style", "none");
-        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-bottom-width", "0px");
@@ -160,7 +160,7 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("position", "absolute");
         style.addProperty("margin-top", "-6px");
         style.addProperty("padding", "5px 5px 5px 10px");
-        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-left-width", "0px");
@@ -236,7 +236,7 @@ public class PortalWebRootPaneTheme extends Theme {
         style = new Style(".", StyleName.CommercialItem);
         style.addProperty("margin", "10px 10px 0 0");
         style.addProperty("padding", "10px ");
-        style.addProperty("border-color", ThemeColor.foreground, 0.15);
+        style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");

@@ -174,12 +174,11 @@ public class PortalWebTheme extends Theme {
         Style style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
         style.addProperty("background-image", "url('" + PortalImages.INSTANCE.background().getSafeUri().asString() + "')");
         style.addProperty("background-size", "100% auto");
-        //style.addProperty("background-repeat", "no-repeat");
         addStyle(style);
 
         style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutContentBackground.name());
         style.addProperty("background-color", ThemeColor.background);
-        style.addProperty("opacity", "1");
+        style.addProperty("opacity", "0.9");
         addStyle(style);
 
         style = new Style(".", ResponsiveLayoutTheme.StyleName.ResponsiveLayoutFooterHolder.name());

@@ -15,25 +15,26 @@ package com.propertyvista.portal.web.client.themes;
 
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-/**
- * Defines style names and CSS for the public portal pages as login, sign-up, password reset etc...
- */
 public class LandingPagesTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        //@formatter:off
+        LandingPage
+    }
 
-        
-        LoginImageDecoration,
-        LoginImageDecorationImage,
-        LoginImageDecorationLabel,
-        
+    public LandingPagesTheme() {
+        Style style = new Style(".", StyleName.LandingPage);
+        style.addProperty("margin", "40px auto");
+        style.addProperty("padding", "40px");
+        style.addProperty("text-align", "center");
+        style.addProperty("max-width", "400px");
+        style.addProperty("background", ThemeColor.foreground, 0.01);
 
-        //@formatter:on
-
+        addStyle(style);
     }
 
     @Override
