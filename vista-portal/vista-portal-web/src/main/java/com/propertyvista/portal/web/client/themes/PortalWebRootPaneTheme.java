@@ -223,7 +223,7 @@ public class PortalWebRootPaneTheme extends Theme {
 
     private void initFooterStyles() {
         Style style = new Style(".", StyleName.PageFooter);
-        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.01);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         addStyle(style);
