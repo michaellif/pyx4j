@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
@@ -28,23 +28,45 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class FooterViewImpl extends FlexTable implements FooterView {
+public class FooterViewImpl extends FlowPanel implements FooterView {
 
     public FooterViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageFooter.name());
+        getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 
         SimplePanel pmcInfoPanel = new SimplePanel(new HTML("PMC Info"));
-        SimplePanel followUsPanel = new SimplePanel(new HTML("Follow Us"));
-        BrandPanel brandPanel = new BrandPanel();
-        SimplePanel langSelectorPanel = new SimplePanel(new HTML("Languages"));
-        SimplePanel linksPanel = new SimplePanel(new HTML("Terms of Use - Privacy - FAQ"));
+        pmcInfoPanel.getElement().getStyle().setFloat(Float.LEFT);
+        pmcInfoPanel.setWidth("50%");
 
-        setWidget(0, 0, pmcInfoPanel);
-        setWidget(0, 1, langSelectorPanel);
-        setWidget(0, 2, followUsPanel);
-        setWidget(0, 3, brandPanel);
-        setWidget(1, 0, linksPanel);
+        FlowPanel actionsPanel = new FlowPanel();
+        actionsPanel.getElement().getStyle().setFloat(Float.LEFT);
+        actionsPanel.setWidth("50%");
+
+        SimplePanel linksPanel = new SimplePanel(new HTML("Terms of Use - Privacy - FAQ"));
+        linksPanel.getElement().getStyle().setFloat(Float.LEFT);
+        linksPanel.getElement().getStyle().setProperty("textAlign", "center");
+        linksPanel.setWidth("100%");
+
+        SimplePanel followUsPanel = new SimplePanel(new HTML("Follow Us"));
+        followUsPanel.getElement().getStyle().setFloat(Float.LEFT);
+        followUsPanel.setWidth("30%");
+
+        SimplePanel langSelectorPanel = new SimplePanel(new HTML("Languages"));
+        langSelectorPanel.getElement().getStyle().setFloat(Float.LEFT);
+        langSelectorPanel.setWidth("30%");
+
+        BrandPanel brandPanel = new BrandPanel();
+        brandPanel.getElement().getStyle().setFloat(Float.RIGHT);
+        brandPanel.setWidth("40%");
+
+        actionsPanel.add(langSelectorPanel);
+        actionsPanel.add(followUsPanel);
+        actionsPanel.add(brandPanel);
+
+        add(pmcInfoPanel);
+        add(actionsPanel);
+        add(linksPanel);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
