@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
@@ -26,17 +27,14 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
-        SimplePanel logoHolder = new SimplePanel();
-        logoHolder.getElement().getStyle().setProperty("backgroundImage", "url('" + MediaUtils.createSiteLogoUrl() + "')");
-        logoHolder.getElement().getStyle().setProperty("backgroundSize", "contain");
-        logoHolder.getElement().getStyle().setProperty("backgroundRepeat", "no-repeat");
-        logoHolder.getElement().getStyle().setProperty("borderLeft", "4px solid #666");
-        logoHolder.getElement().getStyle().setProperty("borderRight", "4px solid #666");
-        logoHolder.setWidth(new Image(MediaUtils.createSiteLogoUrl()).getWidth() + "px");
-        logoHolder.setHeight(new Image(MediaUtils.createSiteLogoUrl()).getHeight() + "px");
+        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
 
-        logoHolder.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
-        setWidget(logoHolder);
+        logoImage.getElement().getStyle().setProperty("borderLeft", "4px solid #666");
+        logoImage.getElement().getStyle().setProperty("borderRight", "4px solid #666");
+        logoImage.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
+        logoImage.getElement().getStyle().setDisplay(Display.BLOCK);
+
+        setWidget(logoImage);
 
     }
 
