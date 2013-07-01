@@ -15,7 +15,6 @@ package com.propertyvista.portal.web.client.ui.residents.dashboard;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -38,6 +37,7 @@ import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO> {
 
@@ -132,22 +132,21 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
 
         ProfileGadget() {
-            asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
         public IsWidget createContent(TenantProfileDTO value) {
 
             FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setBackgroundColor("#fdfdfd");
-            content.getElement().getStyle().setPadding(5, Unit.PX);
+            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
 
             content.add(new HTML("Welcome " + value.tenantName().getValue()));
             content.add(new HTML(value.floorplanName().getValue()));
             content.add(new HTML(value.tenantAddress().getValue()));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setProperty("padding", "10px");
+            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
     }
@@ -155,15 +154,14 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class BillingGadget extends CEntityViewer<TenantBillingDTO> {
 
         BillingGadget() {
-            asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
         public IsWidget createContent(TenantBillingDTO value) {
 
             FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setBackgroundColor("#fdfdfd");
-            content.getElement().getStyle().setPadding(5, Unit.PX);
+            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
 
             content.add(new Image(PortalImages.INSTANCE.billingMenu().regular()));
             content.add(new HTML("My Billing Summary"));
@@ -171,7 +169,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
                     "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setProperty("padding", "10px");
+            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
     }
@@ -179,15 +177,14 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class MaintenanceGadget extends CEntityViewer<TenantMaintenanceDTO> {
 
         MaintenanceGadget() {
-            asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
         public IsWidget createContent(TenantMaintenanceDTO value) {
 
             FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setBackgroundColor("#fdfdfd");
-            content.getElement().getStyle().setPadding(5, Unit.PX);
+            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
 
             content.add(new Image(PortalImages.INSTANCE.maintenanceMenu().regular()));
             content.add(new HTML("My Maintenance Requests"));
@@ -195,7 +192,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
                     "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setProperty("padding", "10px");
+            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
     }
@@ -203,14 +200,13 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class ResidentServicesGadget extends CEntityViewer<TenantResidentServicesDTO> {
 
         ResidentServicesGadget() {
-            asWidget().getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
+            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
         public IsWidget createContent(TenantResidentServicesDTO value) {
             FlowPanel content = new FlowPanel();
-            content.getElement().getStyle().setBackgroundColor("#fdfdfd");
-            content.getElement().getStyle().setPadding(5, Unit.PX);
+            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
 
             content.add(new Image(PortalImages.INSTANCE.residentServicesMenu().regular()));
             content.add(new HTML("Resident Services"));
@@ -218,7 +214,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
                     "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
             SimplePanel container = new SimplePanel(content);
-            container.getElement().getStyle().setProperty("padding", "10px");
+            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
     }

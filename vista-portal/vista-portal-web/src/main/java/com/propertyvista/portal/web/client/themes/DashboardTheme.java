@@ -20,24 +20,30 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class LandingPagesTheme extends Theme {
+public class DashboardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        LandingPage
+        Gadget, GadgetContainer, GadgetContent
     }
 
-    public LandingPagesTheme() {
-        Style style = new Style(".", StyleName.LandingPage);
-        style.addProperty("margin", "40px auto");
-        style.addProperty("padding", "40px");
-        style.addProperty("text-align", "center");
-        style.addProperty("max-width", "400px");
+    public DashboardTheme() {
+        Style style = new Style(".", StyleName.Gadget);
+        style.addProperty("float", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.GadgetContent);
         style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");
+        style.addProperty("padding", "5px");
         addStyle(style);
+
+        style = new Style(".", StyleName.GadgetContainer);
+        style.addProperty("padding", "10px");
+        addStyle(style);
+
     }
 
     @Override
