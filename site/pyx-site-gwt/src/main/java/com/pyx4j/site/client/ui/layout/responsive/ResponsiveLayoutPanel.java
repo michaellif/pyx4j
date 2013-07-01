@@ -126,6 +126,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         commercialHolder = new CommercialHolder(this);
 
         contentHolder = new ContentHolder(this);
+        contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
@@ -266,11 +267,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         case monitor:
         case tabletLandscape:
             getCommercialDisplay().setVisible(true);
-            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
             break;
         default:
             getCommercialDisplay().setVisible(false);
-            contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.BLOCK);
             break;
         }
 
