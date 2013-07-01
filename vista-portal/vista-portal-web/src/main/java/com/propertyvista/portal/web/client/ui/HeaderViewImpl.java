@@ -14,8 +14,14 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.event.dom.client.LoadEvent;
+import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
+
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -28,6 +34,13 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
         Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
+        logoImage.addLoadHandler(new LoadHandler() {
+
+            @Override
+            public void onLoad(LoadEvent event) {
+                AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
+            }
+        });
 
         logoImage.getElement().getStyle().setProperty("borderLeft", "4px solid #666");
         logoImage.getElement().getStyle().setProperty("borderRight", "4px solid #666");
