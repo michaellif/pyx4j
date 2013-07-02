@@ -35,11 +35,6 @@ public abstract class CEntityViewer<E extends IObject<?>> extends CEntityContain
         setContent(createContent(value));
     };
 
-    @Override
-    protected NEntityContainer<E> createWidget() {
-        return new NEntityContainer<E>(this);
-    }
-
     public abstract IsWidget createContent(E value);
 
     protected void setContent(IsWidget widget) {
