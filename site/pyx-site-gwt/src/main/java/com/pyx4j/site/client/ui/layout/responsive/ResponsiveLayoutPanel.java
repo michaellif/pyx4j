@@ -49,7 +49,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     public enum LayoutType {
 
-        phonePortrait(0, 320), phoneLandscape(321, 480), tabletPortrait(481, 768), tabletLandscape(769, 1024), monitor(1025, Integer.MAX_VALUE);
+        phonePortrait(0, 320), phoneLandscape(321, 480), tabletPortrait(481, 768), tabletLandscape(769, 1024), monitor(1025, 1200), huge(1201,
+                Integer.MAX_VALUE);
 
         private int minWidth;
 
@@ -264,8 +265,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         }
 
         switch (layoutType) {
-        case monitor:
-        case tabletLandscape:
+        case huge:
             getExtraDisplay().setVisible(true);
             break;
         default:
