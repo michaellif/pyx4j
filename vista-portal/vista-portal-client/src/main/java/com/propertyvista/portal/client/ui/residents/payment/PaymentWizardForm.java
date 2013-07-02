@@ -65,7 +65,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
-    private final VistaWizardStep paymentMethodStep, comfirmationStep;
+    private final VistaWizardStep paymentMethodSelectionStep, paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -97,7 +97,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         super(PaymentRecordDTO.class, view);
 
         addStep(createDetailsStep());
-        addStep(createSelectPaymentMethodStep());
+        paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
         paymentMethodStep = addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
     }
@@ -249,9 +249,10 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
                 get(proto().selectPaymentMethod()).reset();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
-                get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
                         true, populate);
+
+                paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
     }

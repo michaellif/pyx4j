@@ -77,7 +77,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
-    private final VistaWizardStep detailsStep, paymentMethodStep, comfirmationStep;
+    private final VistaWizardStep detailsStep, paymentMethodSelectionStep, paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -113,7 +113,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         super(PreauthorizedPaymentDTO.class, view);
 
         detailsStep = addStep(createDetailsStep());
-        addStep(createSelectPaymentMethodStep());
+        paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
         paymentMethodStep = addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());
     }
@@ -293,6 +293,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 get(proto().selectPaymentMethod()).setVisible(hasProfiledMethods);
                 get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
                         true, populate);
+
+                paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
 
