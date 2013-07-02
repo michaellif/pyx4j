@@ -14,9 +14,12 @@
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.prime.lister.ILister;
 
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface MerchantAccountViewerView extends IViewer<MerchantAccount> {
 
+    ILister<Building> getBuildingListerView();
 }

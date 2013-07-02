@@ -13,9 +13,12 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
+import com.google.gwt.user.client.ui.HTML;
+
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -31,14 +34,14 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
             setViewable(true);
         }
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel general = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentsStatus()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 30).build());
+        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentsStatus()), 25).build());
+        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 5).build());
+        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber()), 15).build());
+        general.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 30).build());
 
         // tweak:
         if (isEditable()) {
@@ -46,7 +49,10 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
             get(proto().chargeDescription()).setViewable(false);
         }
 
-        selectTab(addTab(content));
+        selectTab(addTab(general));
 
+        Tab buildingsTab = addTab(isEditable() ? new HTML() : ((MerchantAccountViewerView) getParentView()).getBuildingListerView().asWidget(),
+                i18n.tr("Buildings"));
+        setTabEnabled(buildingsTab, !isEditable());
     }
 }

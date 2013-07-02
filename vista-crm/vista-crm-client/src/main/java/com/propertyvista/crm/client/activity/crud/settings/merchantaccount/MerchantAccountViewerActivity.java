@@ -16,18 +16,41 @@ package com.propertyvista.crm.client.activity.crud.settings.merchantaccount;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountViewerView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
+import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAccount> {
+
+    private final Presenter<Building> buildingLister;
 
     public MerchantAccountViewerActivity(CrudAppPlace place) {
         super(place, SettingsViewFactory.instance(MerchantAccountViewerView.class), GWT
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
+
+        buildingLister = ListerControllerFactory.create(((MerchantAccountViewerView) getView()).getBuildingListerView(),
+                GWT.<AbstractListService<Building>> create(SelectBuildingListService.class), Building.class, VistaCrmBehavior.PropertyManagement);
+    }
+
+    @Override
+    protected void onPopulateSuccess(MerchantAccount result) {
+        super.onPopulateSuccess(result);
+
+        buildingLister.clearPreDefinedFilters();
+        buildingLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(Building.class).merchantAccounts().$().merchantAccount(),
+                result));
+        buildingLister.populate();
     }
 }
