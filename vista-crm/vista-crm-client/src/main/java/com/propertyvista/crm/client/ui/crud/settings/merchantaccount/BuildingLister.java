@@ -28,7 +28,7 @@ public class BuildingLister extends AbstractLister<Building> {
     private static final I18n i18n = I18n.get(BuildingLister.class);
 
     public BuildingLister() {
-        super(Building.class);
+        super(Building.class, false);
 
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().propertyCode(), true).build(),
