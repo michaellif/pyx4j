@@ -250,6 +250,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
 
         switch (layoutType) {
         case monitor:
+        case huge:
         case tabletLandscape:
             brandLabel.setVisible(true);
             break;

@@ -94,6 +94,7 @@ public class CommunicationViewImpl extends FlowPanel implements CommunicationVie
         case tabletPortrait:
         case tabletLandscape:
         case monitor:
+        case huge:
             calloutHandler.setVisible(true);
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideComm.name());
             break;

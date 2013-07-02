@@ -42,8 +42,6 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
             }
         });
 
-        logoImage.getElement().getStyle().setProperty("borderLeft", "4px solid #666");
-        logoImage.getElement().getStyle().setProperty("borderRight", "4px solid #666");
         logoImage.addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
         logoImage.getElement().getStyle().setDisplay(Display.BLOCK);
 

@@ -99,7 +99,7 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource alert();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("home-collage.jpg")
+    @Source("brushed_alu.png")
     ImageResource background();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)

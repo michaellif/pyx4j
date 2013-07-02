@@ -23,4 +23,24 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityViewer
     public AbstractGadget() {
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
+//
+//    @Override
+//    protected IDecorator<?> createDecorator() {
+//        return new GadgetDecorator();
+//    }
+//
+//    class GadgetDecorator extends FlowPanel implements IDecorator<CEntityViewer<?>> {
+//
+//        @Override
+//        public void setComponent(CEntityViewer<?> viewer) {
+//            add(viewer.createContent());
+//        }
+//
+//        @Override
+//        public void onSetDebugId(IDebugId parentDebugId) {
+//            // TODO Auto-generated method stub
+//
+//        }
+//
+//    }
 }

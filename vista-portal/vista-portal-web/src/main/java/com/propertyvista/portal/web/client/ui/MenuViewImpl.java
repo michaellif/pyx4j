@@ -149,6 +149,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             headerHolder.setVisible(false);
             break;
         case monitor:
+        case huge:
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.sideMenu.name());
             removeStyleDependentName(PortalWebRootPaneTheme.StyleDependent.collapsedMenu.name());
             footerHolder.setVisible(false);
