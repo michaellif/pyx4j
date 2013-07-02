@@ -17,14 +17,14 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.common.client.site.Commercial;
+import com.propertyvista.common.client.site.ExtraGadget;
 
-public interface CommercialView extends IsWidget {
+public interface ExtraView extends IsWidget {
 
-    public interface CommercialPresenter {
+    public interface ExtraPresenter {
 
     }
 
-    void populate(List<Commercial> notifications);
+    void populate(List<ExtraGadget> notifications);
 
 }

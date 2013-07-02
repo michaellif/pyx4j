@@ -19,17 +19,17 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.portal.web.client.activity.CommercialActivity;
+import com.propertyvista.portal.web.client.activity.ExtraActivity;
 
-public class CommercialActivityMapper implements ActivityMapper {
+public class ExtraActivityMapper implements ActivityMapper {
 
-    public CommercialActivityMapper() {
+    public ExtraActivityMapper() {
     }
 
     @Override
     public Activity getActivity(Place place) {
         if (ClientContext.isAuthenticated()) {
-            return new CommercialActivity(place);
+            return new ExtraActivity(place);
         } else {
             return null;
         }

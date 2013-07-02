@@ -25,33 +25,32 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
-import com.propertyvista.common.client.site.Commercial;
-import com.propertyvista.portal.web.client.ui.CommercialView;
+import com.propertyvista.common.client.site.ExtraGadget;
+import com.propertyvista.portal.web.client.ui.ExtraView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class CommercialActivity extends AbstractActivity {
+public class ExtraActivity extends AbstractActivity {
 
-    private static List<Commercial> commercials = new ArrayList<Commercial>();
+    private static List<ExtraGadget> gadgets = new ArrayList<ExtraGadget>();
 
-    private final CommercialView view;
+    private final ExtraView view;
 
     static {
-        commercials
-                .add(new Commercial(
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.",
-                        "COMMERCIAL"));
-        commercials.add(new Commercial(
+        gadgets.add(new ExtraGadget(
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.",
+                "COMMERCIAL"));
+        gadgets.add(new ExtraGadget(
                 "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.", "NEWS"));
     }
 
-    public CommercialActivity(Place place) {
-        view = PortalWebViewFactory.instance(CommercialView.class);
+    public ExtraActivity(Place place) {
+        view = PortalWebViewFactory.instance(ExtraView.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.resizeComponents));
-        view.populate(commercials);
+        view.populate(gadgets);
     }
 }

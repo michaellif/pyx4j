@@ -13,13 +13,13 @@
  */
 package com.propertyvista.common.client.site;
 
-public class Commercial {
+public class ExtraGadget {
 
     private final String message;
 
     private final String title;
 
-    public Commercial(String message, String title) {
+    public ExtraGadget(String message, String title) {
         this.message = message;
         this.title = title;
     }

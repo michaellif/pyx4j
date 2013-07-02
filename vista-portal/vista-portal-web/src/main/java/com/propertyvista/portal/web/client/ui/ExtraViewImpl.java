@@ -18,16 +18,16 @@ import java.util.List;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.propertyvista.common.client.site.Commercial;
+import com.propertyvista.common.client.site.ExtraGadget;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
-public class CommercialViewImpl extends FlowPanel implements CommercialView {
+public class ExtraViewImpl extends FlowPanel implements ExtraView {
 
     private final FlowPanel contentPanel;
 
-    public CommercialViewImpl() {
+    public ExtraViewImpl() {
 
-        setStyleName(PortalWebRootPaneTheme.StyleName.Commercial.name());
+        setStyleName(PortalWebRootPaneTheme.StyleName.ExtraGadget.name());
 
         contentPanel = new FlowPanel();
 
@@ -36,21 +36,21 @@ public class CommercialViewImpl extends FlowPanel implements CommercialView {
     }
 
     @Override
-    public void populate(List<Commercial> commercials) {
+    public void populate(List<ExtraGadget> gadgets) {
         contentPanel.clear();
-        if (commercials.size() == 0) {
+        if (gadgets.size() == 0) {
             setVisible(false);
         } else {
             setVisible(true);
-            for (final Commercial commercial : commercials) {
+            for (final ExtraGadget gadget : gadgets) {
 
                 FlowPanel message = new FlowPanel();
-                message.setStyleName(PortalWebRootPaneTheme.StyleName.CommercialItem.name());
+                message.setStyleName(PortalWebRootPaneTheme.StyleName.ExtraGadgetItem.name());
 
-                HTML title = new HTML(commercial.getTitle());
-                title.setStyleName(PortalWebRootPaneTheme.StyleName.CommercialItemTitle.name());
+                HTML title = new HTML(gadget.getTitle());
+                title.setStyleName(PortalWebRootPaneTheme.StyleName.ExtraGadgetItemTitle.name());
 
-                HTML body = new HTML(commercial.getMessage());
+                HTML body = new HTML(gadget.getMessage());
 
                 message.add(title);
                 message.add(body);
