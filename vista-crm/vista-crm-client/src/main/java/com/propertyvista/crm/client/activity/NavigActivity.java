@@ -208,7 +208,8 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(EftReportMetadata.class)));
         folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AutoPayChangesReportMetadata.class)));
 
-        if (!ApplicationMode.isDevelopment()) {
+        // TODO this is a temporary place for this view to be used only for development and experimentation
+        if (!GWT.isProdMode() & ApplicationMode.isDevelopment()) {
             folder.addNavigItem(new CrmSiteMap.AutoPayReviewUpdater());
         }
         return folder;
