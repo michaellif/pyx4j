@@ -23,15 +23,15 @@ package com.pyx4j.site.client.ui.layout.responsive;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-public class CommercialHolder extends SimplePanel {
+public class ExtraHolder extends SimplePanel {
 
-    public CommercialHolder(ResponsiveLayoutPanel parent) {
+    public ExtraHolder(ResponsiveLayoutPanel parent) {
         getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
         getElement().getStyle().setProperty("verticalAlign", "top");
         getElement().getStyle().setPosition(Position.ABSOLUTE);
         getElement().getStyle().setProperty("right", "0");
         getElement().getStyle().setProperty("top", "0");
-        setWidget(parent.getCommercialDisplay());
+        setWidget(parent.getExtraDisplay());
     }
 
 }

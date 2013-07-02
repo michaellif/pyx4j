@@ -70,7 +70,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public enum Display {
-        header, stickyHeader, menu, content, footer, communication, commersial, notification
+        header, stickyHeader, menu, content, footer, communication, extra, notification
     }
 
     private static final int ANIMATION_TIME = 500;
@@ -89,7 +89,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SidePanelHolder sideCommHolder;
 
-    private final CommercialHolder commercialHolder;
+    private final ExtraHolder extraHolder;
 
     private final ContentHolder contentHolder;
 
@@ -123,7 +123,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         stickyHeaderHolder = new StickyHeaderHolder(this);
 
-        commercialHolder = new CommercialHolder(this);
+        extraHolder = new ExtraHolder(this);
 
         contentHolder = new ContentHolder(this);
         contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
@@ -132,7 +132,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         contentPanel.getElement().getStyle().setPosition(Position.RELATIVE);
 
         contentPanel.add(contentHolder);
-        contentPanel.add(commercialHolder);
+        contentPanel.add(extraHolder);
 
         inlineMenuHolder = new InlineMenuHolder(this);
 
@@ -230,8 +230,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.footer);
     }
 
-    public DisplayPanel getCommercialDisplay() {
-        return displays.get(Display.commersial);
+    public DisplayPanel getExtraDisplay() {
+        return displays.get(Display.extra);
     }
 
     public DisplayPanel getNotificationDisplay() {
@@ -266,10 +266,10 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         switch (layoutType) {
         case monitor:
         case tabletLandscape:
-            getCommercialDisplay().setVisible(true);
+            getExtraDisplay().setVisible(true);
             break;
         default:
-            getCommercialDisplay().setVisible(false);
+            getExtraDisplay().setVisible(false);
             break;
         }
 
@@ -312,7 +312,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         inlineMenuHolder.onPositionChange();
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
-        contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - commercialHolder.getOffsetWidth()) + "px");
+        contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - extraHolder.getOffsetWidth()) + "px");
 
     }
 
