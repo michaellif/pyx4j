@@ -122,6 +122,11 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
 
+            contentPanel.setWidget(row, ++col, new HTML());
+            contentPanel.getFlexCellFormatter().setHeight(row, col, "100%");
+            contentPanel.getFlexCellFormatter().setStyleName(row, col, DashboardTheme.StyleName.GadgetBlockSeparator.name());
+            contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
+
             contentPanel.setWidget(row, ++col, new Image(PortalImages.INSTANCE.marker()));
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
