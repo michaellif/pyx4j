@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.reports.factories;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -25,6 +26,7 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
@@ -139,7 +141,7 @@ public class EftReport extends Composite implements Report {
                 new ColumnDescriptorAnchorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().customer()).build()) {
                     @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Tenant().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().getPath())).getPrimaryKey()); }
                 },
-                new ColumnDescriptorAnchorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.amount()).build(), true) {
+                new ColumnDescriptorAnchorTableColumnFormatter(150, CommonReportStyles.RCellNumber.name(), new MemberColumnDescriptor.Builder(proto.amount()).build(), true) {
                     @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Finance.Payment().formViewerPlace(entity.getPrimaryKey()); }                    
                 },
                 new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build()),
@@ -196,13 +198,57 @@ public class EftReport extends Composite implements Report {
 
         @SuppressWarnings("unchecked")
         Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) data;
-        for (PaymentRecord paymentRecord : paymentRecords) {
-            builder.appendHtmlConstant("<tr>");
-            for (ITableColumnFormatter desc : COLUMN_DESCRIPTORS) {
-                builder.appendHtmlConstant("<td style=\"width: " + desc.getWidth() + "px;\">");
-                builder.append(desc.formatContent(paymentRecord));
-                builder.appendHtmlConstant("</td>");
+        if (!paymentRecords.isEmpty()) {
+            String currentPropertyCode = paymentRecords.get(0).preauthorizedPayment().tenant().lease().unit().building().propertyCode().getValue();
+            BigDecimal propertyCodeTotal = new BigDecimal("0.00");
+            BigDecimal overallTotal = new BigDecimal("0.00");
+            NumberFormat currencyFormat = NumberFormat.getFormat(paymentRecords.get(0).amount().getMeta().getFormat());
+            for (PaymentRecord paymentRecord : paymentRecords) {
+                if (!currentPropertyCode.equals(paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().getValue())) {
+                    builder.appendHtmlConstant("<tr>");
+                    builder.appendHtmlConstant("<td colspan='10' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+                    builder.appendEscaped(i18n.tr("Total for Building {0}:", currentPropertyCode));
+                    builder.appendHtmlConstant("</td colspan='10'>");
+                    builder.appendHtmlConstant("<td style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+                    builder.appendEscaped(currencyFormat.format(propertyCodeTotal));
+                    builder.appendHtmlConstant("</td>");
+                    builder.appendHtmlConstant("<td colspan='2'>");
+                    builder.appendHtmlConstant("</td>");
+                    builder.appendHtmlConstant("</tr>");
+                    currentPropertyCode = paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().getValue();
+                    overallTotal = overallTotal.add(propertyCodeTotal);
+                    propertyCodeTotal = new BigDecimal("0.00");
+                }
+                builder.appendHtmlConstant("<tr>");
+                for (ITableColumnFormatter desc : COLUMN_DESCRIPTORS) {
+                    builder.appendHtmlConstant("<td style=\"width: " + desc.getWidth() + "px;\">");
+                    builder.append(desc.formatContent(paymentRecord));
+                    builder.appendHtmlConstant("</td>");
+                }
+                propertyCodeTotal = propertyCodeTotal.add(paymentRecord.amount().getValue());
+                builder.appendHtmlConstant("</tr>");
             }
+            builder.appendHtmlConstant("<tr>");
+            builder.appendHtmlConstant("<td colspan='10' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+            builder.appendEscaped(i18n.tr("Total for Building {0}:", currentPropertyCode));
+            builder.appendHtmlConstant("</td colspan='10'>");
+            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RRowTotal.name() + " " + CommonReportStyles.RCellNumber + "'>");
+            builder.appendEscaped(currencyFormat.format(propertyCodeTotal));
+            builder.appendHtmlConstant("</td>");
+            builder.appendHtmlConstant("<td colspan='2'>");
+            builder.appendHtmlConstant("</td>");
+            builder.appendHtmlConstant("</tr>");
+
+            overallTotal = overallTotal.add(propertyCodeTotal);
+            builder.appendHtmlConstant("<tr>");
+            builder.appendHtmlConstant("<td colspan='10' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+            builder.appendEscaped(i18n.tr("Total:", overallTotal));
+            builder.appendHtmlConstant("</td colspan='10'>");
+            builder.appendHtmlConstant("<td class='" + CommonReportStyles.RRowTotal.name() + " " + CommonReportStyles.RCellNumber + "'>");
+            builder.appendEscaped(currencyFormat.format(overallTotal));
+            builder.appendHtmlConstant("</td>");
+            builder.appendHtmlConstant("<td colspan='2'>");
+            builder.appendHtmlConstant("</td>");
             builder.appendHtmlConstant("</tr>");
         }
         builder.appendHtmlConstant("</tbody>");

@@ -30,14 +30,17 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
 
     private final int width;
 
+    private final String styleName;
+
     public ColumnDescriptorAnchorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor) {
-        this(width, columnDescriptor, false);
+        this(width, null, columnDescriptor, false);
     }
 
-    public ColumnDescriptorAnchorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor, boolean linkOptional) {
+    public ColumnDescriptorAnchorTableColumnFormatter(int width, String styleName, ColumnDescriptor columnDescriptor, boolean linkOptional) {
         this.width = width;
         this.columnDescriptor = columnDescriptor;
         this.linkOptional = linkOptional;
+        this.styleName = styleName;
     }
 
     @Override
@@ -48,16 +51,32 @@ public abstract class ColumnDescriptorAnchorTableColumnFormatter implements ITab
     @Override
     public SafeHtml formatContent(IEntity entity) {
         if (linkOptional && entity.id().isNull()) {
-            return new SafeHtmlBuilder().appendEscaped(columnDescriptor.convert(entity)).toSafeHtml();
+            SafeHtmlBuilder b = new SafeHtmlBuilder();
+            if (styleName != null) {
+                b.appendHtmlConstant("<div class='" + styleName + "'>");
+            }
+            b.appendEscaped(columnDescriptor.convert(entity));
+            if (styleName != null) {
+                b.appendHtmlConstant("</div>");
+            }
+
+            return b.toSafeHtml();
         } else {
-            //@formatter:off
+
             String url = AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, makePlace(entity));
-            return new SafeHtmlBuilder()
-                .appendHtmlConstant("<a href=\"" + url + "\">")
-                .appendEscaped(columnDescriptor.convert(entity))
-                .appendHtmlConstant("</a>")
-                .toSafeHtml();
-            //@formatter:on
+            SafeHtmlBuilder b = new SafeHtmlBuilder();
+            b.appendHtmlConstant("<a href=\"" + url + "\">");
+            if (styleName != null) {
+                b.appendHtmlConstant("<div class='" + styleName + "'>");
+            }
+
+            b.appendEscaped(columnDescriptor.convert(entity));
+            if (styleName != null) {
+                b.appendHtmlConstant("</div>");
+            }
+
+            b.appendHtmlConstant("</a>");
+            return b.toSafeHtml();
         }
 
     }

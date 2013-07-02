@@ -25,9 +25,16 @@ public class ColumnDescriptorTableColumnFormatter implements ITableColumnFormatt
 
     private final int width;
 
-    public ColumnDescriptorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor) {
+    private final String styleName;
+
+    public ColumnDescriptorTableColumnFormatter(int width, String styleName, ColumnDescriptor columnDescriptor) {
         this.columnDescriptor = columnDescriptor;
         this.width = width;
+        this.styleName = styleName;
+    }
+
+    public ColumnDescriptorTableColumnFormatter(int width, ColumnDescriptor columnDescriptor) {
+        this(width, null, columnDescriptor);
     }
 
     @Override
@@ -37,7 +44,15 @@ public class ColumnDescriptorTableColumnFormatter implements ITableColumnFormatt
 
     @Override
     public SafeHtml formatContent(IEntity entity) {
-        return new SafeHtmlBuilder().appendEscaped(columnDescriptor.convert(entity)).toSafeHtml();
+        SafeHtmlBuilder b = new SafeHtmlBuilder();
+        if (styleName != null) {
+            b.appendHtmlConstant("<div class='" + styleName + ">");
+        }
+        b.appendEscaped(columnDescriptor.convert(entity)).toSafeHtml();
+        if (styleName != null) {
+            b.appendHtmlConstant("</div>");
+        }
+        return b.toSafeHtml();
     }
 
     @Override

@@ -476,12 +476,12 @@ public class CrmTheme extends VistaTheme {
 
         style = new Style("." + CommonReportStyles.RCellNumber.name());
         style.addProperty("text-align", "right");
-        style.addProperty("font-face", "monospace");
+        style.addProperty("padding-right", "5px");
         addStyle(style);
 
         style = new Style("." + CommonReportStyles.RRowTotal.name());
         style.addProperty("background-color", ThemeColor.foreground, 0.5);
-        style.addProperty("font-face", "monospace");
+        style.addProperty("font-weight", "bold");
         addStyle(style);
 
         style = new Style("." + CommonReportStyles.RReportTableFixedHeader.name());
