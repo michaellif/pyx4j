@@ -18,15 +18,15 @@ import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -131,76 +131,91 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
         BillingGadget() {
+            super(PortalImages.INSTANCE.billingMenu().regular(), "My Billing Summary", new BillingToolbar());
         }
 
         @Override
-        public IsWidget createContent(TenantBillingDTO value) {
-
+        public IsWidget createContent() {
             FlowPanel billingBlock = new FlowPanel();
             billingBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
-            billingBlock.add(new Image(PortalImages.INSTANCE.billingMenu().regular()));
-            billingBlock.add(new HTML("My Billing Summary"));
             billingBlock
                     .add(new HTML(
                             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+            return billingBlock;
+        }
 
-            SimplePanel contentPanel = new SimplePanel(billingBlock);
-            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+        @Override
+        protected void setComponentsValue(TenantBillingDTO value, boolean fireEvent, boolean populate) {
+        }
 
-            SimplePanel container = new SimplePanel(contentPanel);
-            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
-            return container;
+    }
+
+    class BillingToolbar extends Toolbar {
+        public BillingToolbar() {
+            add(new Button("Make a Payment"));
+            add(new Button("Setup Auto Pay"));
         }
     }
 
     class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO> {
 
         MaintenanceGadget() {
+            super(PortalImages.INSTANCE.maintenanceMenu().regular(), "My Maintenance Requests", new MaintenanceToolbar());
         }
 
         @Override
-        public IsWidget createContent(TenantMaintenanceDTO value) {
+        public IsWidget createContent() {
 
             FlowPanel maintenanceBlock = new FlowPanel();
             maintenanceBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
 
-            maintenanceBlock.add(new Image(PortalImages.INSTANCE.maintenanceMenu().regular()));
-            maintenanceBlock.add(new HTML("My Maintenance Requests"));
             maintenanceBlock
                     .add(new HTML(
                             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+            return maintenanceBlock;
+        }
 
-            SimplePanel contentPanel = new SimplePanel(maintenanceBlock);
-            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+        @Override
+        protected void setComponentsValue(TenantMaintenanceDTO value, boolean fireEvent, boolean populate) {
+            // TODO Auto-generated method stub
 
-            SimplePanel container = new SimplePanel(contentPanel);
-            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
-            return container;
+        }
+    }
+
+    class MaintenanceToolbar extends Toolbar {
+        public MaintenanceToolbar() {
+            add(new Button("Create New Request"));
         }
     }
 
     class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO> {
 
         ResidentServicesGadget() {
+            super(PortalImages.INSTANCE.residentServicesMenu().regular(), "Resident Services", new ResidentServicesToolbar());
         }
 
         @Override
-        public IsWidget createContent(TenantResidentServicesDTO value) {
+        public IsWidget createContent() {
             FlowPanel servicesBlock = new FlowPanel();
             servicesBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
 
-            servicesBlock.add(new Image(PortalImages.INSTANCE.residentServicesMenu().regular()));
-            servicesBlock.add(new HTML("Resident Services"));
             servicesBlock
                     .add(new HTML(
                             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+            return servicesBlock;
+        }
 
-            SimplePanel contentPanel = new SimplePanel(servicesBlock);
-            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+        @Override
+        protected void setComponentsValue(TenantResidentServicesDTO value, boolean fireEvent, boolean populate) {
+            // TODO Auto-generated method stub
 
-            SimplePanel container = new SimplePanel(contentPanel);
-            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
-            return container;
+        }
+    }
+
+    class ResidentServicesToolbar extends Toolbar {
+        public ResidentServicesToolbar() {
+            add(new Button("Purchase Insurance"));
+            add(new Button("Provide Proof of my Insurance"));
         }
     }
 }

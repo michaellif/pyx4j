@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -32,28 +31,28 @@ import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
+public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
 
     private PersonInfoPanel personInfoPanel;
 
     private AddressPanel addressPanel;
 
     ProfileGadget() {
+        super();
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 
     @Override
-    public IsWidget createContent(TenantProfileDTO value) {
+    public IsWidget createContent() {
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
 
-        personInfoPanel = new PersonInfoPanel(value);
+        personInfoPanel = new PersonInfoPanel();
         personInfoPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         personInfoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         personInfoPanel.setWidth("50%");
 
-        addressPanel = new AddressPanel(value);
+        addressPanel = new AddressPanel();
         addressPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         addressPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         addressPanel.setWidth("50%");
@@ -61,9 +60,7 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
         contentPanel.add(personInfoPanel);
         contentPanel.add(addressPanel);
 
-        SimplePanel container = new SimplePanel(contentPanel);
-        container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
-        return container;
+        return contentPanel;
     }
 
     public void doLayout(LayoutType layoutType) {
@@ -84,7 +81,10 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
     }
 
     class PersonInfoPanel extends SimplePanel {
-        public PersonInfoPanel(TenantProfileDTO value) {
+
+        private final HTML nameLabel;
+
+        public PersonInfoPanel() {
             FlowPanel contentPanel = new FlowPanel();
             setWidget(contentPanel);
 
@@ -96,17 +96,26 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
             image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             contentPanel.add(image);
 
-            HTML nameLabel = new HTML(value.tenantName().getValue());
+            nameLabel = new HTML();
             nameLabel.setStyleName(DashboardTheme.StyleName.PersonName.name());
             nameLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             nameLabel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
             contentPanel.add(nameLabel);
         }
+
+        void setValue(TenantProfileDTO value) {
+            nameLabel.setHTML(value.tenantName().getValue());
+        }
     }
 
     class AddressPanel extends SimplePanel {
-        public AddressPanel(TenantProfileDTO value) {
+
+        private final HTML floorplanLabel;
+
+        private final HTML addressLabel;
+
+        public AddressPanel() {
             FlexTable contentPanel = new FlexTable();
             contentPanel.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
             setWidget(contentPanel);
@@ -132,14 +141,26 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
 
-            HTML floorplanLabel = new HTML(value.floorplanName().getValue());
+            floorplanLabel = new HTML();
             floorplanLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
             contentPanel.setWidget(row, ++col, floorplanLabel);
 
             col = 0;
-            contentPanel.setWidget(++row, col, new HTML(value.tenantAddress().getValue()));
+            addressLabel = new HTML();
+            contentPanel.setWidget(++row, col, addressLabel);
 
         }
+
+        void setValue(TenantProfileDTO value) {
+            floorplanLabel.setHTML(value.floorplanName().getValue());
+            addressLabel.setHTML(value.tenantAddress().getValue());
+        }
+    }
+
+    @Override
+    protected void setComponentsValue(TenantProfileDTO value, boolean fireEvent, boolean populate) {
+        personInfoPanel.setValue(value);
+        addressPanel.setValue(value);
     }
 
 }

@@ -24,7 +24,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DashboardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Gadget, GadgetContainer, GadgetContent, GadgetBlock, GadgetBlockSeparator,
+        Gadget, GadgetContent, GadgetBlock, GadgetBlockSeparator, GadgetDecorator,
 
         PersonPhoto, PersonName
     }
@@ -43,7 +43,7 @@ public class DashboardTheme extends Theme {
         style.addProperty("padding", "10px");
         addStyle(style);
 
-        style = new Style(".", StyleName.GadgetContainer);
+        style = new Style(".", StyleName.GadgetDecorator);
         style.addProperty("padding", "10px");
         addStyle(style);
 
@@ -73,6 +73,30 @@ public class DashboardTheme extends Theme {
         style.addProperty("border-left-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-left-width", "1px");
         style.addProperty("border-left-style", "solid");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style.addProperty("white-space", "normal");
+        style.addProperty("text-align", "center");
+        style.addProperty("width", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+        style.addProperty("max-width", "250px");
+        style.addProperty("width", "100%");
+        style.addProperty("margin", "10px 10px 0 10px");
+        style.addProperty("text-align", "center");
+        style.addProperty("font-size", "0.9em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.ToolbarItem, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("width", "100%");
+        style.addProperty("line-height", "40px");
+        style.addProperty("background", "none");
+        style.addProperty("background-color", ThemeColor.contrast2);
+        style.addProperty("border-radius", "5px");
+        style.addProperty("border", "none");
+        style.addProperty("color", ThemeColor.foreground, 0.1);
         addStyle(style);
 
     }
