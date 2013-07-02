@@ -40,7 +40,7 @@ public class DashboardTheme extends Theme {
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");
-        style.addProperty("width", "100%");
+        style.addProperty("padding", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetContainer);
@@ -48,7 +48,6 @@ public class DashboardTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetBlock);
-        style.addProperty("padding", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetBlock, " .", DefaultWidgetsTheme.StyleName.Anchor);

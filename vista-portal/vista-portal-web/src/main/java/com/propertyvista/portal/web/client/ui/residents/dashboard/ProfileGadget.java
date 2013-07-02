@@ -14,6 +14,7 @@
 package com.propertyvista.portal.web.client.ui.residents.dashboard;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -131,7 +132,9 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
 
-            contentPanel.setWidget(row, ++col, new HTML(value.floorplanName().getValue()));
+            HTML floorplanLabel = new HTML(value.floorplanName().getValue());
+            floorplanLabel.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+            contentPanel.setWidget(row, ++col, floorplanLabel);
 
             col = 0;
             contentPanel.setWidget(++row, col, new HTML(value.tenantAddress().getValue()));

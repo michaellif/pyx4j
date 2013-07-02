@@ -22,7 +22,6 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.forms.client.ui.CEntityViewer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
@@ -129,10 +128,9 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         return contentPanel;
     }
 
-    class BillingGadget extends CEntityViewer<TenantBillingDTO> {
+    class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
         BillingGadget() {
-            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
@@ -155,10 +153,9 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         }
     }
 
-    class MaintenanceGadget extends CEntityViewer<TenantMaintenanceDTO> {
+    class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO> {
 
         MaintenanceGadget() {
-            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
@@ -182,10 +179,9 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         }
     }
 
-    class ResidentServicesGadget extends CEntityViewer<TenantResidentServicesDTO> {
+    class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO> {
 
         ResidentServicesGadget() {
-            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
         }
 
         @Override
