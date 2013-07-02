@@ -91,12 +91,20 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource avatar2();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("avatar.png")
+    ImageResource avatar3();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Header_Icon_Notifications-New.png")
     ImageResource alert();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("home-collage.jpg")
     ImageResource background();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Marker.png")
+    ImageResource marker();
 
     DashboardMenuImages dashboardMenu();
 

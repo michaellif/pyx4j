@@ -45,7 +45,6 @@ import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDT
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.portal.web.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
@@ -87,11 +86,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         container.setCellHeight(leftPanelHolder, "100%");
 
         int row = -1;
-
-        leftPanel.setH1(++row, 0, 1, i18n.tr("GENERAL INFO"));
-        leftPanel.setWidget(++row, 0, inject(proto().profileInfo(), new GeneralInfoViewer()));
-        get(proto().profileInfo()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-        get(proto().profileInfo()).setHeight("");
 
         leftPanel.setH1(++row, 0, 1, i18n.tr("RENT BALANCE"));
         leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new FinancialSummaryViewer()));
@@ -143,20 +137,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
-    }
-
-    class GeneralInfoViewer extends CEntityViewer<TenantProfileDTO> {
-        @Override
-        public IsWidget createContent(TenantProfileDTO value) {
-            FlexTable content = new FlexTable();
-            int row = -1;
-
-            content.setHTML(++row, 0, value.tenantName().getValue());
-            content.setHTML(++row, 0, value.floorplanName().getValue());
-            content.setHTML(++row, 0, value.tenantAddress().getValue());
-
-            return content;
-        }
     }
 
     class FinancialSummaryViewer extends CEntityViewer<FinancialSummaryDTO> {

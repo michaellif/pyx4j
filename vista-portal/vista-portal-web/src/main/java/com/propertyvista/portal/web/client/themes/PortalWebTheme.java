@@ -193,6 +193,14 @@ public class PortalWebTheme extends Theme {
         style.addProperty("overflow", "hidden");
         addStyle(style);
 
+        style = new Style("a");
+        style.addProperty("text-decoration", "none");
+        addStyle(style);
+
+        style = new Style("a:hover");
+        style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
         style = new Style("td");
         style.addProperty("padding", "0px");
         addStyle(style);

@@ -34,7 +34,6 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.portal.rpc.portal.dto.TenantBillingDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
-import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
@@ -79,6 +78,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     }
 
     private void doLayout(LayoutType layoutType) {
+        profileGadget.doLayout(layoutType);
         switch (layoutType) {
         case phonePortrait:
         case phoneLandscape:
@@ -127,28 +127,6 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         contentPanel.add(residentServicesGadget);
 
         return contentPanel;
-    }
-
-    class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
-
-        ProfileGadget() {
-            asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
-        }
-
-        @Override
-        public IsWidget createContent(TenantProfileDTO value) {
-
-            FlowPanel content = new FlowPanel();
-            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
-
-            content.add(new HTML("Welcome " + value.tenantName().getValue()));
-            content.add(new HTML(value.floorplanName().getValue()));
-            content.add(new HTML(value.tenantAddress().getValue()));
-
-            SimplePanel container = new SimplePanel(content);
-            container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
-            return container;
-        }
     }
 
     class BillingGadget extends CEntityViewer<TenantBillingDTO> {
