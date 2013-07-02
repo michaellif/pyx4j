@@ -15,7 +15,15 @@ package com.propertyvista.crm.client.ui.reports;
 
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
+import com.propertyvista.crm.client.ui.reports.factories.autopay.AutoPayChangesReviewDataGrid;
+
 // TODO: this is an experimental implementation of a view for auto updating this
 public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
 
+    public AutoPayReviewUpdaterViewImpl() {
+        AutoPayChangesReviewDataGrid autoPayChangesReviewDataGrid = new AutoPayChangesReviewDataGrid();
+
+        setContentPane(autoPayChangesReviewDataGrid);
+        setSize("100%", "100%");
+    }
 }
