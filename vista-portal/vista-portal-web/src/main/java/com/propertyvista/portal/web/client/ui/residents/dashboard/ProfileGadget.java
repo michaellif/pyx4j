@@ -53,7 +53,7 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
         personInfoPanel.setWidth("50%");
 
         addressPanel = new AddressPanel(value);
-        addressPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        addressPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         addressPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         addressPanel.setWidth("50%");
 
@@ -113,20 +113,20 @@ public class ProfileGadget extends CEntityViewer<TenantProfileDTO> {
             int row = -1;
             int col = -1;
 
-            contentPanel.setWidget(++row, ++col, new Image(PortalImages.INSTANCE.marker()));
-            contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
-            contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
-
-            contentPanel.setWidget(row, ++col, new HTML(value.floorplanName().getValue()));
-
             FlowPanel actionsPanel = new FlowPanel();
             actionsPanel.add(new Anchor("Edit my Profile"));
             actionsPanel.add(new Anchor("Edit Settings"));
             actionsPanel.add(new Anchor("Change Password"));
 
-            contentPanel.setWidget(row, ++col, actionsPanel);
+            contentPanel.setWidget(++row, ++col, actionsPanel);
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
+
+            contentPanel.setWidget(row, ++col, new Image(PortalImages.INSTANCE.marker()));
+            contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
+            contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
+
+            contentPanel.setWidget(row, ++col, new HTML(value.floorplanName().getValue()));
 
             col = 0;
             contentPanel.setWidget(++row, col, new HTML(value.tenantAddress().getValue()));

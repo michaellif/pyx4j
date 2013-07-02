@@ -138,15 +138,18 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         @Override
         public IsWidget createContent(TenantBillingDTO value) {
 
-            FlowPanel content = new FlowPanel();
-            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            FlowPanel billingBlock = new FlowPanel();
+            billingBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
+            billingBlock.add(new Image(PortalImages.INSTANCE.billingMenu().regular()));
+            billingBlock.add(new HTML("My Billing Summary"));
+            billingBlock
+                    .add(new HTML(
+                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
-            content.add(new Image(PortalImages.INSTANCE.billingMenu().regular()));
-            content.add(new HTML("My Billing Summary"));
-            content.add(new HTML(
-                    "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+            SimplePanel contentPanel = new SimplePanel(billingBlock);
+            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
 
-            SimplePanel container = new SimplePanel(content);
+            SimplePanel container = new SimplePanel(contentPanel);
             container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
@@ -161,15 +164,19 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         @Override
         public IsWidget createContent(TenantMaintenanceDTO value) {
 
-            FlowPanel content = new FlowPanel();
-            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            FlowPanel maintenanceBlock = new FlowPanel();
+            maintenanceBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
 
-            content.add(new Image(PortalImages.INSTANCE.maintenanceMenu().regular()));
-            content.add(new HTML("My Maintenance Requests"));
-            content.add(new HTML(
-                    "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+            maintenanceBlock.add(new Image(PortalImages.INSTANCE.maintenanceMenu().regular()));
+            maintenanceBlock.add(new HTML("My Maintenance Requests"));
+            maintenanceBlock
+                    .add(new HTML(
+                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
-            SimplePanel container = new SimplePanel(content);
+            SimplePanel contentPanel = new SimplePanel(maintenanceBlock);
+            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+
+            SimplePanel container = new SimplePanel(contentPanel);
             container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
@@ -183,15 +190,19 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
         @Override
         public IsWidget createContent(TenantResidentServicesDTO value) {
-            FlowPanel content = new FlowPanel();
-            content.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            FlowPanel servicesBlock = new FlowPanel();
+            servicesBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
 
-            content.add(new Image(PortalImages.INSTANCE.residentServicesMenu().regular()));
-            content.add(new HTML("Resident Services"));
-            content.add(new HTML(
-                    "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+            servicesBlock.add(new Image(PortalImages.INSTANCE.residentServicesMenu().regular()));
+            servicesBlock.add(new HTML("Resident Services"));
+            servicesBlock
+                    .add(new HTML(
+                            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
 
-            SimplePanel container = new SimplePanel(content);
+            SimplePanel contentPanel = new SimplePanel(servicesBlock);
+            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+
+            SimplePanel container = new SimplePanel(contentPanel);
             container.setStyleName(DashboardTheme.StyleName.GadgetContainer.name());
             return container;
         }
