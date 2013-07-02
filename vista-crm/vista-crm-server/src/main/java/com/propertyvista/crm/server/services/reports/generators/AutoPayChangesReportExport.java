@@ -17,10 +17,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -28,14 +26,12 @@ import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.util.DomainUtil;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDTO;
 import com.propertyvista.dto.payment.AutoPayReviewChargeDetailDTO;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
@@ -65,30 +61,24 @@ public class AutoPayChangesReportExport {
 
         createHeader(formatter);
 
-        Map<String, AutoPayReviewDTO> buildingsTotals = new HashMap<String, AutoPayReviewDTO>();
-        String currentBuilding = null;
+        AutoPayChangesReportExportBuildingTotals buildingsTotals = new AutoPayChangesReportExportBuildingTotals(leaseInfoColumns);
 
         int counter = 0;
         for (AutoPayReviewDTO review : reviewRecords) {
             ++counter;
 
-            if ((currentBuilding != null) && !currentBuilding.equals(review.building().getValue())) {
-                reportBuildingTotals(formatter, buildingsTotals.get(currentBuilding));
-            }
+            buildingsTotals.reportTotalIfKeyChanged(formatter, review.building().getValue());
 
             reportEntity(formatter, review);
 
-            addBuildingTotals(buildingsTotals, review);
-            currentBuilding = review.building().getValue();
+            buildingsTotals.addToTotal(review.building().getValue(), review);
 
             if (counter % 50 == 0) {
                 reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, counter, numOfRecords));
             }
         }
 
-        if (currentBuilding != null) {
-            reportBuildingTotals(formatter, buildingsTotals.get(currentBuilding));
-        }
+        buildingsTotals.reportLastTotal(formatter);
 
         return new ExportedReport("auto-pay-changes-report.xlsx", formatter.getContentType(), formatter.getBinaryData());
     }
@@ -235,28 +225,7 @@ public class AutoPayChangesReportExport {
         formatter.getCurentCell().setCellStyle(style);
     }
 
-    private void addBuildingTotals(Map<String, AutoPayReviewDTO> buildingsTotals, AutoPayReviewDTO leaseReview) {
-        AutoPayReviewDTO totals = buildingsTotals.get(leaseReview.building().getValue());
-        if (totals == null) {
-            totals = EntityFactory.create(AutoPayReviewDTO.class);
-            totals.building().setValue(leaseReview.building().getValue());
-            buildingsTotals.put(leaseReview.building().getValue(), totals);
-        }
-
-        DomainUtil.nvlAddBigDecimal(totals.totalSuspended().totalPrice(), leaseReview.totalSuspended().totalPrice());
-        DomainUtil.nvlAddBigDecimal(totals.totalSuspended().payment(), leaseReview.totalSuspended().payment());
-        DomainUtil.nvlAddBigDecimal(totals.totalSuggested().totalPrice(), leaseReview.totalSuggested().totalPrice());
-        DomainUtil.nvlAddBigDecimal(totals.totalSuggested().payment(), leaseReview.totalSuggested().payment());
-
-        if (!totals.totalSuspended().totalPrice().isNull()) {
-            calulatePercent(totals.totalSuspended());
-        }
-        if (!totals.totalSuggested().totalPrice().isNull()) {
-            calulatePercent(totals.totalSuggested());
-        }
-    }
-
-    private void calulatePercent(AutoPayReviewChargeDetailDTO chargeDetail) {
+    static void calulatePercent(AutoPayReviewChargeDetailDTO chargeDetail) {
         if (chargeDetail.totalPrice().getValue().compareTo(BigDecimal.ZERO) != 0) {
             if (!chargeDetail.payment().isNull()) {
                 chargeDetail.percent().setValue(chargeDetail.payment().getValue().divide(chargeDetail.totalPrice().getValue(), 4, RoundingMode.FLOOR));
@@ -266,36 +235,7 @@ public class AutoPayChangesReportExport {
         }
     }
 
-    private void reportBuildingTotals(ReportTableXLSXFormatter formatter, AutoPayReviewDTO totals) {
-        formatter.header(i18n.tr("Total for Building {0}:", totals.building()));
-        formatter.mergeCells(1, 5);
-        formatter.cellsEmpty(4 + leaseInfoColumns, true);
-
-        formatter.cell(totals.totalSuspended().totalPrice().getValue());
-        formatter.cell(totals.totalSuspended().payment().getValue());
-        formatter.cell(prc(totals.totalSuspended().percent().getValue()));
-
-        formatter.cell(totals.totalSuggested().totalPrice().getValue());
-        formatter.createCell();
-        formatter.cell(totals.totalSuggested().payment().getValue());
-        formatter.cell(prc(totals.totalSuggested().percent().getValue()));
-        formatter.createCell();
-
-        Iterator<Cell> ci = formatter.getCurentRow().cellIterator();
-        while (ci.hasNext()) {
-            Cell cell = ci.next();
-            CellStyle style = formatter.getWorkbook().createCellStyle();
-            style.cloneStyleFrom(cell.getCellStyle());
-            style.setFillForegroundColor(IndexedColors.GREY_40_PERCENT.getIndex());
-            style.setFillPattern(CellStyle.SOLID_FOREGROUND);
-            cell.setCellStyle(style);
-        }
-
-        formatter.newRow();
-
-    }
-
-    public String prc(BigDecimal value) {
+    static String prc(BigDecimal value) {
         if (value == null) {
             return null;
         } else {

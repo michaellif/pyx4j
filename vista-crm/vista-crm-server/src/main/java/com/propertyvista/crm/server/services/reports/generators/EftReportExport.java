@@ -17,7 +17,6 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
-import com.pyx4j.essentials.server.report.ReportTableFormatter;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedReport;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
@@ -38,18 +37,28 @@ public class EftReportExport {
         String stageName = i18n.tr("Preparing Excel Spreadsheet");
         reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, 0, numOfRecords));
 
-        ReportTableFormatter formatter = new ReportTableXLSXFormatter(true);
+        ReportTableXLSXFormatter formatter = new ReportTableXLSXFormatter(true);
         EntityReportFormatter<EftReportExportModel> entityFormatter = new EntityReportFormatter<EftReportExportModel>(EftReportExportModel.class);
         entityFormatter.createHeader(formatter);
 
         int counter = 0;
+
+        EftReportExportTotals buildingsTotals = new EftReportExportTotals();
+
         for (PaymentRecord paymentRecord : paymentRecords) {
+            EftReportExportModel model = convertModel(paymentRecord);
+            buildingsTotals.reportTotalIfKeyChanged(formatter, model.building().getValue());
+
             ++counter;
-            entityFormatter.reportEntity(formatter, convertModel(paymentRecord));
+            entityFormatter.reportEntity(formatter, model);
+
+            buildingsTotals.addToTotal(model.building().getValue(), paymentRecord);
+
             if (counter % 50 == 0) {
                 reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, counter, numOfRecords));
             }
         }
+        buildingsTotals.reportLastTotal(formatter);
 
         return new ExportedReport("eft-report.xlsx", formatter.getContentType(), formatter.getBinaryData());
     }
