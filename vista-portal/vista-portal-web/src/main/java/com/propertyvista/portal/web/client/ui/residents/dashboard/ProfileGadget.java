@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -38,7 +39,7 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
     private AddressPanel addressPanel;
 
     ProfileGadget() {
-        super();
+        super(ThemeColor.contrast2);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 

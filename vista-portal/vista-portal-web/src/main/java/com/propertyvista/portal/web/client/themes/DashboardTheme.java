@@ -60,7 +60,7 @@ public class DashboardTheme extends Theme {
 
         style = new Style(".", StyleName.PersonPhoto);
         style.addProperty("border-color", ThemeColor.contrast2, 1);
-        style.addProperty("border-width", "6px");
+        style.addProperty("border-width", "5px");
         style.addProperty("margin-left", "10px");
         addStyle(style);
 
@@ -93,10 +93,9 @@ public class DashboardTheme extends Theme {
         style.addProperty("width", "100%");
         style.addProperty("line-height", "40px");
         style.addProperty("background", "none");
-        style.addProperty("background-color", ThemeColor.contrast2);
         style.addProperty("border-radius", "5px");
         style.addProperty("border", "none");
-        style.addProperty("color", ThemeColor.foreground, 0.1);
+        style.addProperty("color", ThemeColor.foreground, 0.01);
         addStyle(style);
 
     }

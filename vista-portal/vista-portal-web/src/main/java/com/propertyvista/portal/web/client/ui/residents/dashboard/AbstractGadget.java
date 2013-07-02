@@ -25,6 +25,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
@@ -42,15 +44,18 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
 
     private Toolbar actionsToolbar;
 
-    public AbstractGadget(ImageResource imageResource, String title, Toolbar actionsToolbar) {
+    private ThemeColor themeColor;
+
+    public AbstractGadget(ImageResource imageResource, String title, Toolbar actionsToolbar, ThemeColor themeColor) {
         this.imageResource = imageResource;
         this.title = title;
         this.actionsToolbar = actionsToolbar;
+        this.themeColor = themeColor;
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 
-    public AbstractGadget() {
-        this(null, null, null);
+    public AbstractGadget(ThemeColor themeColor) {
+        this(null, null, null, themeColor);
     }
 
     @Override
@@ -79,6 +84,8 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
 
             mainPanel = new FlowPanel();
             mainPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            mainPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
+            mainPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
 
             FlowPanel containerPanel = new FlowPanel();
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);

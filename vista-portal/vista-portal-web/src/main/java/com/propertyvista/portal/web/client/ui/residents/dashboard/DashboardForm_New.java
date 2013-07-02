@@ -20,6 +20,8 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
@@ -131,7 +133,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
         BillingGadget() {
-            super(PortalImages.INSTANCE.billingMenu().regular(), "My Billing Summary", new BillingToolbar());
+            super(PortalImages.INSTANCE.billingMenu().regular(), "My Billing Summary", new BillingToolbar(), ThemeColor.contrast4);
         }
 
         @Override
@@ -152,15 +154,20 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
-            add(new Button("Make a Payment"));
-            add(new Button("Setup Auto Pay"));
+            Button paymentButton = new Button("Make a Payment");
+            paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            add(paymentButton);
+
+            Button autoPayButton = new Button("Setup Auto Pay");
+            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.6));
+            add(autoPayButton);
         }
     }
 
     class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO> {
 
         MaintenanceGadget() {
-            super(PortalImages.INSTANCE.maintenanceMenu().regular(), "My Maintenance Requests", new MaintenanceToolbar());
+            super(PortalImages.INSTANCE.maintenanceMenu().regular(), "My Maintenance Requests", new MaintenanceToolbar(), ThemeColor.contrast5);
         }
 
         @Override
@@ -184,14 +191,18 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
     class MaintenanceToolbar extends Toolbar {
         public MaintenanceToolbar() {
-            add(new Button("Create New Request"));
+
+            Button createButton = new Button("Create New Request");
+            createButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
+            add(createButton);
+
         }
     }
 
     class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO> {
 
         ResidentServicesGadget() {
-            super(PortalImages.INSTANCE.residentServicesMenu().regular(), "Resident Services", new ResidentServicesToolbar());
+            super(PortalImages.INSTANCE.residentServicesMenu().regular(), "Resident Services", new ResidentServicesToolbar(), ThemeColor.contrast3);
         }
 
         @Override
@@ -214,8 +225,15 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
     class ResidentServicesToolbar extends Toolbar {
         public ResidentServicesToolbar() {
-            add(new Button("Purchase Insurance"));
-            add(new Button("Provide Proof of my Insurance"));
+
+            Button purchaseButton = new Button("Purchase Insurance");
+            purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
+            add(purchaseButton);
+
+            Button proofButton = new Button("Provide Proof of my Insurance");
+            proofButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 0.6));
+            add(proofButton);
+
         }
     }
 }
