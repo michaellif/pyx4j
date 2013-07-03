@@ -309,10 +309,11 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
                         if (value == null || padCalcDayOffset.getValue() == null) {
                             return null;
-                        } else if (value.compareTo(padCalcDayOffset.getValue()) > 0) {
+                        } else if (value.compareTo(padCalcDayOffset.getValue()) >= 0) {
                             return null;
                         } else {
-                            return new ValidationError(component, i18n.tr("Must be greater than {0}", proto().padCalculationDayOffset().getMeta().getCaption()));
+                            return new ValidationError(component, i18n.tr("Must be greater than or equals to {0}", proto().padCalculationDayOffset().getMeta()
+                                    .getCaption()));
                         }
                     }
                 });
