@@ -43,7 +43,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.ReservationDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.web.client.themes.TenantDashboardTheme;
 import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
@@ -117,12 +116,6 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
         get(proto().maintanances()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
         get(proto().maintanances()).setHeight("");
-
-        if (false) {
-            Anchor newReservations = new Anchor(i18n.tr("Order Service"));
-            rightPanel.setH1(++row, 0, 1, i18n.tr("SERVICES"), newReservations);
-            rightPanel.setWidget(++row, 0, inject(proto().reservations(), new ReservationsViewer()));
-        }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
@@ -254,38 +247,4 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         }
     }
 
-    class ReservationsViewer extends CEntityViewer<IList<ReservationDTO>> {
-        @Override
-        public IsWidget createContent(IList<ReservationDTO> value) {
-            FlexTable container = new FlexTable();
-
-            if (value.size() > 0) {
-                container.getColumnFormatter().setWidth(0, "250px");
-                container.getColumnFormatter().setWidth(1, "75px");
-
-                container.setHTML(0, 0, i18n.tr("Service"));
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
-                container.setHTML(0, 1, i18n.tr("Status"));
-                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
-
-                int row = 0;
-                for (ReservationDTO reservation : value) {
-                    container.setHTML(++row, 0, reservation.description().getValue());
-                    container.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-                    container.setHTML(row, 1, reservation.status().getStringView() + "<p><i style='font-size:0.8em'>" + reservation.date().getStringView()
-                            + "</i>");
-                    container.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-                }
-            } else {
-                container.setHTML(0, 0, NoRecordsFound);
-                container.getCellFormatter().getElement(0, 0).getStyle().setPaddingLeft(1, Unit.EM);
-                container.getRowFormatter().getElement(0).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableHeader.name());
-                container.setHTML(1, 0, "");
-                container.getRowFormatter().getElement(1).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-            }
-
-            container.setWidth("100%");
-            return container;
-        }
-    }
 }

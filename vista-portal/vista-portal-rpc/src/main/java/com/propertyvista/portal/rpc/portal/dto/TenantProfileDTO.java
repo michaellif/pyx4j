@@ -28,6 +28,4 @@ public interface TenantProfileDTO extends IEntity {
 
     IPrimitive<String> tenantAddress();
 
-    IPrimitive<String> superIntendantPhone();
-
 }

@@ -36,8 +36,6 @@ public interface TenantDashboardDTO extends IEntity {
 
     FinancialSummaryDTO billSummary();
 
-    IList<ReservationDTO> reservations();
-
     IList<MaintenanceRequestDTO> maintanances();
 
     TenantInsuranceStatusDTO tenantInsuranceStatus();
