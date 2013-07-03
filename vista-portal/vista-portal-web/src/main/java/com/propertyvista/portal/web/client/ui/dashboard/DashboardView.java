@@ -11,12 +11,14 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.dashboard;
+package com.propertyvista.portal.web.client.ui.dashboard;
+
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.web.client.ui.residents.View;
 
-public interface DashboardView extends View<TenantDashboardDTO> {
+public interface DashboardView extends IsWidget {
 
     interface Presenter extends View.Presenter<TenantDashboardDTO> {
 
@@ -27,4 +29,8 @@ public interface DashboardView extends View<TenantDashboardDTO> {
         void setAutopay();
 
     }
+
+    void setPresenter(Presenter presenter);
+
+    void populate(TenantDashboardDTO value);
 }

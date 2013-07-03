@@ -55,12 +55,12 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
         FormFlexPanel container = new FormFlexPanel();
         int row = -1;
 
-        container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
+        container.setH1(++row, 0, 1, i18n.tr("Basic Information"));
         container.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"))));
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
 
-        container.setBR(++row, 0, 1);
+        container.setH1(++row, 0, 1, i18n.tr("Contact Information"));
 
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
         container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());

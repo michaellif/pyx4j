@@ -35,7 +35,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
-import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
+import com.propertyvista.portal.web.client.ui.util.CurrentBalanceFormat;
 
 public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSummaryDTO> {
 

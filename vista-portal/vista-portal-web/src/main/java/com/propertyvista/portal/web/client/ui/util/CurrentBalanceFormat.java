@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.components;
+package com.propertyvista.portal.web.client.ui.util;
 
 import java.math.BigDecimal;
 import java.text.ParseException;

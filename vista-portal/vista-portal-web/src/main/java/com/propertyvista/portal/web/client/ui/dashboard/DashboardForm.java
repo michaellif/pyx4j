@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.dashboard;
+package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -45,8 +45,8 @@ import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDT
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.web.client.themes.TenantDashboardTheme;
-import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
+import com.propertyvista.portal.web.client.ui.util.CurrentBalanceFormat;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {

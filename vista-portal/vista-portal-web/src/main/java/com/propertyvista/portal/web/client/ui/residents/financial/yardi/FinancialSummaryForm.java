@@ -40,7 +40,7 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
-import com.propertyvista.portal.web.client.ui.components.CurrentBalanceFormat;
+import com.propertyvista.portal.web.client.ui.util.CurrentBalanceFormat;
 
 public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialSummaryDTO> {
 

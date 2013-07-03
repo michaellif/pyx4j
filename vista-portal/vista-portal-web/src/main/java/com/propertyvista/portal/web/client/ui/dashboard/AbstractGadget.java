@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.dashboard;
+package com.propertyvista.portal.web.client.ui.dashboard;
 
 import java.util.Collection;
 
@@ -46,16 +46,18 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
 
     private ThemeColor themeColor;
 
-    public AbstractGadget(ImageResource imageResource, String title, Toolbar actionsToolbar, ThemeColor themeColor) {
+    private DashboardForm_New form;
+
+    public AbstractGadget(DashboardForm_New form, ImageResource imageResource, String title, ThemeColor themeColor) {
+        this.form = form;
         this.imageResource = imageResource;
         this.title = title;
-        this.actionsToolbar = actionsToolbar;
         this.themeColor = themeColor;
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 
-    public AbstractGadget(ThemeColor themeColor) {
-        this(null, null, null, themeColor);
+    public AbstractGadget(DashboardForm_New form, ThemeColor themeColor) {
+        this(form, null, null, themeColor);
     }
 
     @Override
@@ -71,6 +73,14 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
     @Override
     protected IDecorator<?> createDecorator() {
         return new GadgetDecorator();
+    }
+
+    public DashboardForm_New getForm() {
+        return form;
+    }
+
+    protected void setActionsToolbar(Toolbar actionsToolbar) {
+        this.actionsToolbar = actionsToolbar;
     }
 
     class GadgetDecorator extends SimplePanel implements IDecorator<CEntityContainer<?>> {

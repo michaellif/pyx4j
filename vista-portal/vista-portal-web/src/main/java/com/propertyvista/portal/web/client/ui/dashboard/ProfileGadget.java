@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.dashboard;
+package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -38,8 +38,8 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
 
     private AddressPanel addressPanel;
 
-    ProfileGadget() {
-        super(ThemeColor.contrast2);
+    ProfileGadget(DashboardForm_New form) {
+        super(form, ThemeColor.contrast2);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 
