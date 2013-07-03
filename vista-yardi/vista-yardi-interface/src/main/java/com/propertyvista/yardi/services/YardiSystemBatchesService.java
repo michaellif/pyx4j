@@ -109,6 +109,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
             success = true;
         } finally {
             if (singleTrasactionBatch && !success) {
+                log.debug("Single transaction {} failed, call CancelReceiptBatch", receipt.id().getValue());
                 paymentBatchContext.cancelBatch();
             }
         }

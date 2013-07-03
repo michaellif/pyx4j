@@ -147,7 +147,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
     @Override
     public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
         try {
-            init(Action.PostReceiptBatch);
+            init(Action.CancelReceiptBatch);
             validateWriteAccess(yc);
 
             CancelReceiptBatch request = new CancelReceiptBatch();
