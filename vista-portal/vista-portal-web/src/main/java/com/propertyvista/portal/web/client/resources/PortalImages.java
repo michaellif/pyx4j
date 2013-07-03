@@ -103,7 +103,7 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource background();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
-    @Source("Marker.png")
+    @Source("Dashboard-LocationIcon.png")
     ImageResource marker();
 
     DashboardMenuImages dashboardMenu();
