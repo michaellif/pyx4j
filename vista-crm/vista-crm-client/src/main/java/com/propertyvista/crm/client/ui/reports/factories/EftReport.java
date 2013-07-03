@@ -33,6 +33,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlUtils;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -57,98 +58,6 @@ public class EftReport extends Composite implements Report {
 
     private final static I18n i18n = I18n.get(EftReportFactory.class);
 
-    private final static List<ITableColumnFormatter> COLUMN_DESCRIPTORS;
-    static {
-        // TODO use AppPlaceEntityMapper to resolve places (now its' not optimized and works really slow)        
-        final PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
-        COLUMN_DESCRIPTORS = Arrays.<ITableColumnFormatter> asList(//@formatter:off
-                new ITableColumnFormatter() {
-                    
-                    @Override
-                    public int getWidth() {
-                        return 50;
-                    }
-                    
-                    @Override
-                    public SafeHtml formatHeader() {
-                        return new SafeHtmlBuilder()
-                            .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
-                            .appendEscaped(i18n.tr("Notice"))
-                            .appendHtmlConstant("</span>")
-                            .toSafeHtml();
-                    }
-                    
-                    @Override
-                    public SafeHtml formatContent(IEntity entity) {                        
-                        PaymentRecord r = (PaymentRecord) entity;                        
-                        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                                                       
-                            return new SafeHtmlBuilder()
-                                    .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
-                                    .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + 
-                                             " src='" + CrmImages.INSTANCE.noticeWarning().getSafeUri().asString() + "'" + 
-                                             " border='0' " +
-                                             " style='width:15px; height:15px;text-al'" + 
-                                             ">")
-                                    .appendHtmlConstant("</div>")
-                                    .toSafeHtml();
-                        } else {
-                            return new SafeHtmlBuilder().toSafeHtml();
-                        }
-                    }
-                },
-                new ITableColumnFormatter() {
-                    
-                    @Override
-                    public int getWidth() {                    
-                        return 50;
-                    }
-                    
-                    @Override
-                    public SafeHtml formatHeader() {                        
-                        return new SafeHtmlBuilder()
-                                .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                                .appendEscaped(i18n.tr("Notice"))
-                                .appendHtmlConstant("</span>")
-                                .toSafeHtml();
-                    }
-                    
-                    @Override
-                    public SafeHtml formatContent(IEntity entity) {
-                        PaymentRecord r = (PaymentRecord) entity;
-                        SafeHtmlBuilder b = new SafeHtmlBuilder();
-                        if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                            
-                            b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
-                             .appendEscaped(r.notice().getValue())
-                             .appendHtmlConstant("</span>");
-                        }
-                        return b.toSafeHtml();                            
-                    }
-                },
-                
-                new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build()),
-                new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build()),
-                new ColumnDescriptorAnchorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build()) {
-                    @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Lease().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().getPath())).getPrimaryKey()); }
-                },
-                new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().expectedMoveOut()).build()),
-                new ColumnDescriptorAnchorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().building().propertyCode()).columnTitle("Building").build()) {
-                    @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Building().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().building().getPath())).getPrimaryKey()); }                    
-                },
-                new ColumnDescriptorAnchorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().info().number()).columnTitle("Unit").build()) {
-                    @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Unit().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().getPath())).getPrimaryKey()); }                    
-                },
-                new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().participantId()).columnTitle("Participant Id").build()),
-                new ColumnDescriptorAnchorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().customer()).build()) {
-                    @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Tenant().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().getPath())).getPrimaryKey()); }
-                },
-                new ColumnDescriptorAnchorTableColumnFormatter(150, CommonReportStyles.RCellNumber.name(), new MemberColumnDescriptor.Builder(proto.amount()).build(), true) {
-                    @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Finance.Payment().formViewerPlace(entity.getPrimaryKey()); }                    
-                },
-                new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build()),
-                new ColumnDescriptorTableColumnFormatter(150, new MemberColumnDescriptor.Builder(proto.paymentStatus()).build())
-        );//@formatter:on
-    }
-
     private final HTML reportHtml;
 
     private ScrollBarPositionMemento tableBodyScrollBarPositionMemento;
@@ -171,9 +80,10 @@ public class EftReport extends Composite implements Report {
     @Override
     public void setData(Object data) {
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
+        List<ITableColumnFormatter> columnDescriptors = initColumnDescriptors();
 
         int totalWidth = 0;
-        for (ITableColumnFormatter formatter : COLUMN_DESCRIPTORS) {
+        for (ITableColumnFormatter formatter : columnDescriptors) {
             totalWidth += formatter.getWidth();
         }
         builder.appendHtmlConstant("<div style=\"position: absolute; left:0px; width: " + totalWidth
@@ -186,7 +96,7 @@ public class EftReport extends Composite implements Report {
         builder.appendHtmlConstant("<thead class=\"" + CommonReportStyles.RReportTableFixedHeader.name() + "\">");
         builder.appendHtmlConstant("<tr>");
 
-        for (ITableColumnFormatter formatter : COLUMN_DESCRIPTORS) {
+        for (ITableColumnFormatter formatter : columnDescriptors) {
             builder.appendHtmlConstant("<th style=\"text-align: left; width: " + formatter.getWidth() + "px;\">");
             builder.append(formatter.formatHeader());
             builder.appendHtmlConstant("</th>");
@@ -220,7 +130,7 @@ public class EftReport extends Composite implements Report {
                     propertyCodeTotal = new BigDecimal("0.00");
                 }
                 builder.appendHtmlConstant("<tr>");
-                for (ITableColumnFormatter desc : COLUMN_DESCRIPTORS) {
+                for (ITableColumnFormatter desc : columnDescriptors) {
                     builder.appendHtmlConstant("<td style=\"width: " + desc.getWidth() + "px;\">");
                     builder.append(desc.formatContent(paymentRecord));
                     builder.appendHtmlConstant("</td>");
@@ -307,4 +217,98 @@ public class EftReport extends Composite implements Report {
         }
     }
 
+    private final static List<ITableColumnFormatter> initColumnDescriptors() {
+
+        // TODO use AppPlaceEntityMapper to resolve places (now its' not optimized and works really slow)        
+        final PaymentRecord proto = EntityFactory.getEntityPrototype(PaymentRecord.class);
+        final int wideColumnWidth = Window.getClientWidth() >= 1200 ? 150 : 100;
+        final int shortColumnWidth = Window.getClientWidth() >= 1200 ? 80 : 60;
+        List<ITableColumnFormatter> columnDescriptors = Arrays.<ITableColumnFormatter> asList(//@formatter:off
+                    new ITableColumnFormatter() {
+                        
+                        @Override
+                        public int getWidth() {
+                            return 50;
+                        }
+                        
+                        @Override
+                        public SafeHtml formatHeader() {
+                            return new SafeHtmlBuilder()
+                                .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                                .appendEscaped(i18n.tr("Notice"))
+                                .appendHtmlConstant("</span>")
+                                .toSafeHtml();
+                        }
+                        
+                        @Override
+                        public SafeHtml formatContent(IEntity entity) {                        
+                            PaymentRecord r = (PaymentRecord) entity;                        
+                            if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                                                       
+                                return new SafeHtmlBuilder()
+                                        .appendHtmlConstant("<div style='text-align:center' class='" + AbstractReport.ReportPrintTheme.Styles.ReportNonPrintable.name() + "'>")
+                                        .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + 
+                                                 " src='" + CrmImages.INSTANCE.noticeWarning().getSafeUri().asString() + "'" + 
+                                                 " border='0' " +
+                                                 " style='width:15px; height:15px;text-al'" + 
+                                                 ">")
+                                        .appendHtmlConstant("</div>")
+                                        .toSafeHtml();
+                            } else {
+                                return new SafeHtmlBuilder().toSafeHtml();
+                            }
+                        }
+                    },
+                    new ITableColumnFormatter() {
+                        
+                        @Override
+                        public int getWidth() {                    
+                            return 50;
+                        }
+                        
+                        @Override
+                        public SafeHtml formatHeader() {                        
+                            return new SafeHtmlBuilder()
+                                    .appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                                    .appendEscaped(i18n.tr("Notice"))
+                                    .appendHtmlConstant("</span>")
+                                    .toSafeHtml();
+                        }
+                        
+                        @Override
+                        public SafeHtml formatContent(IEntity entity) {
+                            PaymentRecord r = (PaymentRecord) entity;
+                            SafeHtmlBuilder b = new SafeHtmlBuilder();
+                            if (CommonsStringUtils.isStringSet(r.notice().getValue())) {                            
+                                b.appendHtmlConstant("<span class='" + AbstractReport.ReportPrintTheme.Styles.ReportPrintableOnly.name() + "'>")
+                                 .appendEscaped(r.notice().getValue())
+                                 .appendHtmlConstant("</span>");
+                            }
+                            return b.toSafeHtml();                            
+                        }
+                    },
+                    
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build()),
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build()) {
+                        @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Lease().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().getPath())).getPrimaryKey()); }
+                    },
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().expectedMoveOut()).build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().building().propertyCode()).columnTitle("Building").build()) {
+                        @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Building().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().building().getPath())).getPrimaryKey()); }                    
+                    },
+                    new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().unit().info().number()).columnTitle("Unit").build()) {
+                        @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Properties.Unit().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().unit().getPath())).getPrimaryKey()); }                    
+                    },
+                    new ColumnDescriptorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().participantId()).columnTitle("Participant Id").build()),
+                    new ColumnDescriptorAnchorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().customer()).build()) {
+                        @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Tenant().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().getPath())).getPrimaryKey()); }
+                    },
+                    new ColumnDescriptorAnchorTableColumnFormatter(wideColumnWidth, CommonReportStyles.RCellNumber.name(), new MemberColumnDescriptor.Builder(proto.amount()).build(), true) {
+                        @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Finance.Payment().formViewerPlace(entity.getPrimaryKey()); }                    
+                    },
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentMethod().type()).build()),
+                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentStatus()).build())
+        );//@formatter:on
+        return columnDescriptors;
+    }
 }
