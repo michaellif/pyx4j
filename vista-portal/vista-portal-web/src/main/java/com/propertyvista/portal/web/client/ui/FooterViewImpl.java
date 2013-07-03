@@ -92,10 +92,11 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         public BrandPanel() {
 
             brandImage = new Image(PortalImages.INSTANCE.brandFooter());
-            brandImage.getElement().getStyle().setProperty("margin", "-5px 0 0 0");
+            brandImage.getElement().getStyle().setProperty("margin", "-5px 5px 0 0");
+            brandImage.getElement().getStyle().setFloat(Float.RIGHT);
 
             add(brandImage);
-            add(new HTML("My Community + Vista"));
+            add(new HTML("Vista"));
 
         }
 
@@ -105,11 +106,15 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             case phoneLandscape:
             case tabletPortrait:
                 brandImage.setResource(PortalImages.INSTANCE.brand());
+                brandImage.getElement().getStyle().setProperty("margin", "5px 5px 0 0");
+                brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
                 break;
             case tabletLandscape:
             case monitor:
             case huge:
                 brandImage.setResource(PortalImages.INSTANCE.brandFooter());
+                brandImage.getElement().getStyle().setProperty("margin", "-5px 5px 0 0");
+                brandImage.getElement().getStyle().setProperty("borderRadius", "0");
                 break;
             }
         }
