@@ -168,7 +168,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
-        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, Unit.EM);
+        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, builder.unit);
         labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
@@ -181,7 +181,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         SimplePanel componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
-        componentHolder.getElement().getStyle().setWidth(builder.componentWidth, Unit.EM);
+        componentHolder.getElement().getStyle().setWidth(builder.componentWidth, builder.unit);
         componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         componentHolder.add(nativeComponent);
 
@@ -340,6 +340,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         private double componentWidth = 25;
 
+        private final Unit unit;
+
         private String customLabel;
 
         private Widget assistantWidget;
@@ -356,8 +358,13 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         private Layout layout = Layout.horisontal;
 
-        public Builder(final CComponent<?, ?> component) {
+        public Builder(final CComponent<?, ?> component, Unit unit) {
             this.component = component;
+            this.unit = unit;
+        }
+
+        public Builder(final CComponent<?, ?> component) {
+            this(component, Unit.EM);
         }
 
         public WidgetDecorator build() {
