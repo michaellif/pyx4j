@@ -56,7 +56,7 @@ public class DashboardTheme extends Theme {
         style.addProperty("white-space", "nowrap");
         style.addProperty("color", ThemeColor.contrast2, 1);
         style.addProperty("font-size", "0.8em");
-        style.addProperty("padding", "0 5px");
+        style.addProperty("padding", "5px 5px 5px 0");
         addStyle(style);
 
         style = new Style(".", StyleName.PersonPhoto);

@@ -125,6 +125,7 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
             int col = -1;
 
             FlowPanel actionsPanel = new FlowPanel();
+            actionsPanel.getElement().getStyle().setProperty("marginRight", "10px");
             actionsPanel.add(new Anchor("Edit my Profile"));
             actionsPanel.add(new Anchor("Edit Settings"));
             actionsPanel.add(new Anchor("Change Password"));
@@ -133,7 +134,9 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
 
-            contentPanel.setWidget(row, ++col, new HTML());
+            HTML separator = new HTML();
+            separator.getElement().getStyle().setProperty("marginRight", "10px");
+            contentPanel.setWidget(row, ++col, separator);
             contentPanel.getFlexCellFormatter().setHeight(row, col, "100%");
             contentPanel.getFlexCellFormatter().setStyleName(row, col, DashboardTheme.StyleName.GadgetBlockSeparator.name());
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
