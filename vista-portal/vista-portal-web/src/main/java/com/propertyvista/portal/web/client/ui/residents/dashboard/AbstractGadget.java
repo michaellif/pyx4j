@@ -92,6 +92,7 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
 
             if (imageResource != null && title != null) {
                 FlowPanel headerPanel = new FlowPanel();
+                headerPanel.setStyleName(DashboardTheme.StyleName.GadgetHeader.name());
                 headerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
                 if (imageResource != null) {
