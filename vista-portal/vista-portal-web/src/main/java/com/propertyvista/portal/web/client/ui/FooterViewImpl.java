@@ -30,6 +30,8 @@ import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
 public class FooterViewImpl extends FlowPanel implements FooterView {
 
+    private final BrandPanel brandPanel;
+
     public FooterViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageFooter.name());
@@ -56,7 +58,7 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         langSelectorPanel.getElement().getStyle().setFloat(Float.LEFT);
         langSelectorPanel.setWidth("30%");
 
-        BrandPanel brandPanel = new BrandPanel();
+        brandPanel = new BrandPanel();
         brandPanel.getElement().getStyle().setFloat(Float.RIGHT);
         brandPanel.setWidth("40%");
 
@@ -81,20 +83,36 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
     }
 
     private void doLayout(LayoutType layoutType) {
+        brandPanel.doLayout(layoutType);
     }
 
     class BrandPanel extends FlowPanel {
+        private final Image brandImage;
+
         public BrandPanel() {
 
-            Image brandImage = new Image(PortalImages.INSTANCE.brand());
-            brandImage.getElement().getStyle().setProperty("margin", "5px");
-            brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
+            brandImage = new Image(PortalImages.INSTANCE.brandFooter());
+            brandImage.getElement().getStyle().setProperty("margin", "-5px 0 0 0");
 
             add(brandImage);
             add(new HTML("My Community + Vista"));
 
         }
 
+        private void doLayout(LayoutType layoutType) {
+            switch (layoutType) {
+            case phonePortrait:
+            case phoneLandscape:
+            case tabletPortrait:
+                brandImage.setResource(PortalImages.INSTANCE.brand());
+                break;
+            case tabletLandscape:
+            case monitor:
+            case huge:
+                brandImage.setResource(PortalImages.INSTANCE.brandFooter());
+                break;
+            }
+        }
     }
 
 }

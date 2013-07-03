@@ -79,6 +79,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource brand();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Footer_Logo-myCommunity.png")
+    ImageResource brandFooter();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("WriteMessage.png")
     ImageResource writeMessage();
 
