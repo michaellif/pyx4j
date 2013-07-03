@@ -66,7 +66,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
 
         Assert.assertEquals("Just one PaymentMethod remains", existingPaymentMethodsCount + 1, customerDataModel.retrieveAllPaymentMethods(customer).size());
 
-        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
 
         ServerSideFactory.create(PaymentMethodFacade.class).deleteLeasePaymentMethod(paymentMethod);
 
@@ -133,7 +133,7 @@ public class PaymentMethodPersistenceTestBase extends PaymentTestBase {
             }
         }
 
-        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
         Persistence.service().commit();
 
         {

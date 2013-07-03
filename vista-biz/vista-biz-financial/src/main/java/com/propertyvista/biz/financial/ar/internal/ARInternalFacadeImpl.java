@@ -34,6 +34,7 @@ import com.propertyvista.biz.financial.billing.BillingUtils;
 import com.propertyvista.biz.financial.billing.LeaseProductsPriceEstimator;
 import com.propertyvista.biz.financial.billing.internal.BillingInternalFacadeImpl;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -71,8 +72,13 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public void postPayment(PaymentRecord paymentRecord) {
-        ARInternalPaymentManager.instance().postPayment(paymentRecord);
+    public PaymentBatchContext createPaymentBatchContext() {
+        return ARInternalPaymentManager.instance().createPaymentBatchContext();
+    }
+
+    @Override
+    public void postPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) {
+        ARInternalPaymentManager.instance().postPayment(paymentRecord, null);
     }
 
     @Override

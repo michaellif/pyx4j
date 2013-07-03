@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -50,7 +51,18 @@ public interface ARFacade {
 
     boolean validatePayment(PaymentRecord payment) throws ARException;
 
-    void postPayment(PaymentRecord payment) throws ARException;
+    /**
+     * Batch is not open, it will be open with first postPayment in this batch after this it should be posted or canceled
+     */
+    PaymentBatchContext createPaymentBatchContext();
+
+    /**
+     * @param payment
+     * @param paymentBatchContext
+     *            optional BatchContext
+     * @throws ARException
+     */
+    void postPayment(PaymentRecord payment, PaymentBatchContext paymentBatchContext) throws ARException;
 
     void rejectPayment(PaymentRecord payment, boolean applyNSF) throws ARException;
 

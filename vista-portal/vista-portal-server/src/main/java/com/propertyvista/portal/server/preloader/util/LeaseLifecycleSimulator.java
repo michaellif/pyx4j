@@ -421,7 +421,7 @@ public class LeaseLifecycleSimulator {
                 PaymentRecord payment = receivePayment(amount);
                 if (payment != null) {
                     try {
-                        ServerSideFactory.create(ARFacade.class).postPayment(payment);
+                        ServerSideFactory.create(ARFacade.class).postPayment(payment, null);
                     } catch (ARException e) {
                         throw new Error(e);
                     }

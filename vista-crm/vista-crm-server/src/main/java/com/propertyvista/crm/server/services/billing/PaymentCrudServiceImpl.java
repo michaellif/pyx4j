@@ -175,7 +175,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     @Override
     public void processPayment(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
         try {
-            ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId));
+            ServerSideFactory.create(PaymentFacade.class).processPayment(EntityFactory.createIdentityStub(PaymentRecord.class, entityId), null);
         } catch (PaymentException e) {
             throw new UserRuntimeException(i18n.tr("Payment Failed"), e);
         }

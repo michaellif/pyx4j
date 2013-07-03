@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.CompensationHandler;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
@@ -38,6 +38,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.ar.ARException;
+import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -47,30 +49,99 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class ScheduledPaymentsManager {
 
     private static final Logger log = LoggerFactory.getLogger(ScheduledPaymentsManager.class);
 
-    void processScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType) {
+    void processScheduledPayments(final ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction));
         criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
-        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), SystemDateManager.getDate()));
+        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), forDate));
+        criteria.asc(criteria.proto().billingAccount().lease().unit().building());
 
-        ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        try {
-            while (paymentRecordIterator.hasNext()) {
-                processScheduledPayment(paymentRecordIterator.next(), executionMonitor);
+        boolean paymentBatchContextRequired = VistaFeatures.instance().yardiIntegration();
+
+        if (!paymentBatchContextRequired) {
+            // Simple flow one transaction per record
+            ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            try {
+                while (paymentRecordIterator.hasNext()) {
+                    processScheduledPayment(paymentRecordIterator.next(), null, executionMonitor);
+                }
+            } finally {
+                paymentRecordIterator.close();
             }
-        } finally {
-            paymentRecordIterator.close();
+        } else {
+            // Flow with single transaction per batch
+
+            final ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            try {
+
+                while (paymentRecordIterator.hasNext()) {
+                    // Single transaction that pool multiple  paymentRecords
+                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+
+                        @Override
+                        public Void execute() {
+
+                            // Create next Batch
+                            final PaymentBatchContext paymentBatchContext = ServerSideFactory.create(ARFacade.class).createPaymentBatchContext();
+
+                            UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+
+                                @Override
+                                public Void execute() {
+                                    try {
+                                        paymentBatchContext.cancelBatch();
+                                    } catch (Throwable e) {
+                                        log.error("Unable to cancel batch", e);
+                                        executionMonitor.addErredEvent("Batch", e);
+                                    }
+                                    return null;
+                                }
+                            });
+
+                            //TODO executionMonitor with copy for each batch
+
+                            while (paymentRecordIterator.hasNext()) {
+                                PaymentRecord paymentRecord = paymentRecordIterator.next();
+                                if (!paymentBatchContext.acceptsPaymentRecord(paymentRecord)) {
+                                    break;
+                                }
+                                processScheduledPayment(paymentRecord, paymentBatchContext, executionMonitor);
+                            }
+
+                            try {
+                                paymentBatchContext.postBatch();
+                                executionMonitor.addInfoEvent("Batch", null);
+                            } catch (ARException e) {
+                                log.error("Unable to post batch", e);
+                                executionMonitor.addErredEvent("Batch", e);
+                            }
+
+                            return null;
+                        }
+                    });
+                }
+
+            } finally {
+                paymentRecordIterator.close();
+            }
         }
     }
 
-    private void processScheduledPayment(final PaymentRecord paymentRecord, final ExecutionMonitor executionMonitor) {
+    private void processScheduledPayment(final PaymentRecord paymentRecord, final PaymentBatchContext paymentBatchContext,
+            final ExecutionMonitor executionMonitor) {
         try {
-            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, PaymentException>() {
+            TransactionScopeOption transactionScopeOption = TransactionScopeOption.RequiresNew;
+            if (paymentBatchContext != null) {
+                transactionScopeOption = TransactionScopeOption.Nested;
+            }
+
+            new UnitOfWork(transactionScopeOption).execute(new Executable<Void, PaymentException>() {
 
                 @Override
                 public Void execute() throws PaymentException {
@@ -81,7 +152,7 @@ class ScheduledPaymentsManager {
                         ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
                         executionMonitor.addProcessedEvent("Canceled ElectronicPayments Not Setup");
                     } else {
-                        PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+                        PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
                         if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
                             executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
                                     SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));

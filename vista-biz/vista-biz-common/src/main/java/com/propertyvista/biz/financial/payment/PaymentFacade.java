@@ -49,8 +49,11 @@ public interface PaymentFacade {
      * Echeck: automatically -> Processing (AR. Posted) , -> Received or Rejected (AR. Reject)
      * EFT: automatically -> Received (AR. Posted)
      * 
+     * @param paymentBatchContext
+     *            optional BatchContext
+     * 
      */
-    PaymentRecord processPayment(PaymentRecord paymentId) throws PaymentException;
+    PaymentRecord processPayment(PaymentRecord paymentId, PaymentBatchContext paymentBatchContext) throws PaymentException;
 
     PaymentRecord cancel(PaymentRecord paymentId);
 

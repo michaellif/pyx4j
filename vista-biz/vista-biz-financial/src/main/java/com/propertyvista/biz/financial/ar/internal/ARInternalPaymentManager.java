@@ -21,6 +21,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
+import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
@@ -41,7 +42,13 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
     }
 
     @Override
-    protected void postPayment(PaymentRecord paymentRecord) {
+    protected PaymentBatchContext createPaymentBatchContext() {
+        // BatchContext not supported
+        return null;
+    }
+
+    @Override
+    protected void postPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) {
 
         InvoicePayment payment = EntityFactory.create(InvoicePayment.class);
         payment.paymentRecord().set(paymentRecord);

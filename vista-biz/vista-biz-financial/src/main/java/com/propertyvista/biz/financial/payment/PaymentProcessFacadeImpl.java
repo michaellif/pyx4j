@@ -109,8 +109,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType) {
-        new ScheduledPaymentsManager().processScheduledPayments(executionMonitor, paymentType);
+    public void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate) {
+        new ScheduledPaymentsManager().processScheduledPayments(executionMonitor, paymentType, forDate);
     }
 
     @Override

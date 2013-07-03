@@ -13,11 +13,7 @@
  */
 package com.propertyvista.yardi.services;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class YardiAbstractService {
-
-    private final static Logger log = LoggerFactory.getLogger(YardiAbstractService.class);
 
 }

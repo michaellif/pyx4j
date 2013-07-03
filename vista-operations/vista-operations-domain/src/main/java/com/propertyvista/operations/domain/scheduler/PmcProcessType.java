@@ -42,10 +42,10 @@ public enum PmcProcessType implements Serializable {
     paymentsUpdate(PmcProcessOptions.RunForDay),
 
     @Translate("PAD 3 - Process Scheduled eCheque Payments")
-    paymentsScheduledEcheck,
+    paymentsScheduledEcheck(PmcProcessOptions.RunForDay),
 
     @Translate("PAD 4 - Process Scheduled CreditCards Payments")
-    paymentsScheduledCreditCards,
+    paymentsScheduledCreditCards(PmcProcessOptions.RunForDay),
 
     @Translate("PAD 5 - Send eCheque Payments to Caledon")
     paymentsPadSend,

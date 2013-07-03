@@ -30,6 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -55,7 +56,12 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
     }
 
     @Override
-    protected void postPayment(PaymentRecord paymentRecord) throws ARException {
+    protected PaymentBatchContext createPaymentBatchContext() {
+        return ServerSideFactory.create(YardiARFacade.class).createPaymentBatchContext();
+    }
+
+    @Override
+    protected void postPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException {
 
         YardiReceipt receipt = createReceipt(paymentRecord);
         Persistence.service().persist(receipt);
@@ -65,7 +71,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
         try {
             ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
-            ServerSideFactory.create(YardiARFacade.class).postReceipt(receipt);
+            ServerSideFactory.create(YardiARFacade.class).postReceipt(receipt, paymentBatchContext);
         } catch (RemoteException e) {
             throw new ARException("Posting receipt to Yardi failed due to communication failure", e);
         } catch (YardiServiceException e) {

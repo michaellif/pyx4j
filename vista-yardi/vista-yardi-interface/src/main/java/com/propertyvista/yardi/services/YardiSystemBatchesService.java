@@ -22,7 +22,10 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 
+import com.propertyvista.biz.financial.ar.ARException;
+import com.propertyvista.biz.system.YardiPaymentBatchContext;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -59,20 +62,56 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         stub.cancelReceiptBatch(yc, batchId);
     }
 
-    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
+    public long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws RemoteException, YardiServiceException {
+        YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
+        return stub.openReceiptBatch(yc, propertyCode);
+    }
+
+    public void cancelBatch(PmcYardiCredential yc, YardiPaymentBatchContext paymentBatchContext) throws RemoteException, YardiServiceException {
+        ServerSideFactory.create(YardiSystemBatchesStub.class).cancelReceiptBatch(yc, paymentBatchContext.getBatchId());
+    }
+
+    public void postBatch(PmcYardiCredential yc, YardiPaymentBatchContext paymentBatchContext) throws RemoteException, YardiServiceException {
+        ServerSideFactory.create(YardiSystemBatchesStub.class).postReceiptBatch(yc, paymentBatchContext.getBatchId());
+    }
+
+    public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, YardiPaymentBatchContext paymentBatchContext) throws YardiServiceException,
+            RemoteException, ARException {
         YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
 
-        Persistence.service().retrieve(receipt.billingAccount());
-        Persistence.service().retrieve(receipt.billingAccount().lease());
-        Persistence.service().retrieve(receipt.billingAccount().lease().unit());
-        Persistence.service().retrieve(receipt.billingAccount().lease().unit().building());
+        Persistence.ensureRetrieve(receipt.billingAccount(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(receipt.billingAccount().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(receipt.billingAccount().lease().unit(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(receipt.billingAccount().lease().unit().building(), AttachLevel.Attached);
 
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
-        long batchId = stub.openReceiptBatch(yc, propertyCode);
-        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-        ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
-        stub.addReceiptsToBatch(yc, batchId, residentTransactions);
-        stub.postReceiptBatch(yc, batchId);
+
+        boolean singleTrasactionBatch = false;
+        if (paymentBatchContext == null) {
+            paymentBatchContext = new YardiPaymentBatchContext();
+            singleTrasactionBatch = true;
+        }
+
+        paymentBatchContext.ensureOpenBatch(yc, propertyCode);
+
+        boolean success = false;
+        try {
+
+            YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
+            ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
+            stub.addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
+
+            paymentBatchContext.incrementRecordCount();
+
+            if (singleTrasactionBatch) {
+                paymentBatchContext.postBatch();
+            }
+            success = true;
+        } finally {
+            if (singleTrasactionBatch && !success) {
+                paymentBatchContext.cancelBatch();
+            }
+        }
     }
 
 }

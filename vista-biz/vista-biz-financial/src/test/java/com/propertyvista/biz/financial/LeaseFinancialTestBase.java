@@ -569,7 +569,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     protected void postPayment(PaymentRecord paymentRecord) throws ARException {
-        ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
+        ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord, null);
         Persistence.service().commit();
     }
 

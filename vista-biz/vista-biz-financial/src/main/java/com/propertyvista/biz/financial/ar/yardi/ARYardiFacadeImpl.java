@@ -36,6 +36,7 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.LeaseProductsPriceEstimator;
+import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
@@ -69,8 +70,13 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public void postPayment(PaymentRecord paymentRecord) throws ARException {
-        ARYardiPaymentManager.instance().postPayment(paymentRecord);
+    public PaymentBatchContext createPaymentBatchContext() {
+        return ARYardiPaymentManager.instance().createPaymentBatchContext();
+    }
+
+    @Override
+    public void postPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException {
+        ARYardiPaymentManager.instance().postPayment(paymentRecord, paymentBatchContext);
     }
 
     @Override

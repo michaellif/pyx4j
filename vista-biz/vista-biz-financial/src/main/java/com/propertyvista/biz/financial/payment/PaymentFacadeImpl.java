@@ -150,7 +150,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
     }
 
     @Override
-    public PaymentRecord processPayment(PaymentRecord paymentId) throws PaymentException {
+    public PaymentRecord processPayment(PaymentRecord paymentId, PaymentBatchContext paymentBatchContext) throws PaymentException {
         final PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, paymentId.getPrimaryKey());
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Submitted, PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction).contains(
                 paymentRecord.paymentStatus().getValue())) {
@@ -203,19 +203,22 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         if (paymentRecord.paymentStatus().getValue() != PaymentRecord.PaymentStatus.Rejected) {
             try {
-                ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord);
-                UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
+                ServerSideFactory.create(ARFacade.class).postPayment(paymentRecord, paymentBatchContext);
 
-                    @Override
-                    public Void execute() {
-                        log.error("Unable to cancel posted Receipt Batch to Yardi; {}", paymentRecord);
+                if (paymentBatchContext == null) {
+                    UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
 
-                        ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to cancel posted Receipt Batch to Yardi; {}",
-                                paymentRecord);
+                        @Override
+                        public Void execute() {
+                            log.error("Unable to cancel posted Receipt Batch to Yardi; {}", paymentRecord);
 
-                        return null;
-                    }
-                });
+                            ServerSideFactory.create(OperationsAlertFacade.class).record(paymentRecord, "Unable to cancel posted Receipt Batch to Yardi; {}",
+                                    paymentRecord);
+
+                            return null;
+                        }
+                    });
+                }
 
             } catch (ARException e) {
                 throw new PaymentException("Failed to post payment to AR while processing payment", e);

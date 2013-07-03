@@ -39,7 +39,7 @@ public interface PaymentProcessFacade {
 
     void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate);
 
-    void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType);
+    void processPmcScheduledPayments(ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate);
 
     void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate);
 

@@ -83,7 +83,7 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
         // Make a payment
         PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
 
-        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
         Persistence.service().commit();
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
@@ -102,7 +102,7 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
         // Make a payment
         PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
 
-        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
         Persistence.service().commit();
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
@@ -124,7 +124,7 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
         // Make a payment
         PaymentRecord paymentRecord = getDataModel(LeaseDataModel.class).createPaymentRecord(getLease(), paymentMethod, "100");
 
-        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord);
+        ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, null);
         Persistence.service().commit();
 
         new PaymentRecordTester(getLease().billingAccount()).lastRecordStatus(PaymentStatus.Queued);
