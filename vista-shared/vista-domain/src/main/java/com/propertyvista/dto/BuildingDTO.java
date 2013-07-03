@@ -17,6 +17,7 @@ import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -36,4 +37,6 @@ public interface BuildingDTO extends Building {
     MerchantAccount merchantAccount();
 
     IList<DashboardMetadata> dashboards();
+
+    IPrimitive<Boolean> merchantAccountPresent();
 }

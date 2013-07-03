@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
@@ -110,9 +111,31 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
+    protected void enhanceListCriteria(EntityListCriteria<Building> dbCriteria, EntityListCriteria<BuildingDTO> dtoCriteria) {
+        PropertyCriterion merchantAccountPresentCriteria = dtoCriteria.getCriterion(dtoCriteria.proto().merchantAccountPresent());
+        if (merchantAccountPresentCriteria != null) {
+            dtoCriteria.getFilters().remove(merchantAccountPresentCriteria);
+
+            if (merchantAccountPresentCriteria.getValue() == Boolean.FALSE) {
+                dbCriteria.notExists(dbCriteria.proto().merchantAccounts());
+            } else {
+                dbCriteria.isNotNull(dbCriteria.proto().merchantAccounts());
+            }
+        }
+
+        super.enhanceListCriteria(dbCriteria, dtoCriteria);
+    }
+
+    @Override
     protected void enhanceListRetrieved(Building entity, BuildingDTO dto) {
         // just clear unnecessary data before serialization:
         dto.marketing().description().setValue(null);
+
+        {
+            EntityQueryCriteria<BuildingMerchantAccount> criteria = EntityQueryCriteria.create(BuildingMerchantAccount.class);
+            criteria.eq(criteria.proto().building(), entity);
+            dto.merchantAccountPresent().setValue(Persistence.service().count(criteria) != 0);
+        }
     }
 
     @Override
