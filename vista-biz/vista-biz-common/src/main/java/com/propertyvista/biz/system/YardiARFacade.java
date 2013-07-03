@@ -21,6 +21,7 @@ import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.tenant.lease.Lease;
 
@@ -32,7 +33,7 @@ public interface YardiARFacade {
 
     void validateReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException;
 
-    PaymentBatchContext createPaymentBatchContext();
+    PaymentBatchContext createPaymentBatchContext(Building building) throws YardiServiceException, RemoteException;
 
     void postReceipt(YardiReceipt receipt, PaymentBatchContext paymentBatchContext) throws ARException, YardiServiceException, RemoteException;
 

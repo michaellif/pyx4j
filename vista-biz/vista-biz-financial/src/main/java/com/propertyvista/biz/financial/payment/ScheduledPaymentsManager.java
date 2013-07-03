@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +49,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -70,25 +72,45 @@ class ScheduledPaymentsManager {
             try {
                 while (paymentRecordIterator.hasNext()) {
                     processScheduledPayment(paymentRecordIterator.next(), null, executionMonitor);
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
                 }
             } finally {
                 paymentRecordIterator.close();
             }
         } else {
             // Flow with single transaction per batch
-
+            final AtomicReference<PaymentRecord> iteratorPushBack = new AtomicReference<PaymentRecord>();
             final ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
             try {
 
                 while (paymentRecordIterator.hasNext()) {
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
                     // Single transaction that pool multiple  paymentRecords
                     new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
                         @Override
                         public Void execute() {
 
-                            // Create next Batch
-                            final PaymentBatchContext paymentBatchContext = ServerSideFactory.create(ARFacade.class).createPaymentBatchContext();
+                            PaymentRecord firstPaymentRecord = iteratorPushBack.get();
+                            if (firstPaymentRecord == null) {
+                                firstPaymentRecord = paymentRecordIterator.next();
+                            } else {
+                                firstPaymentRecord.set(null);
+                            }
+
+                            Building batchBuilding = getBuilding(firstPaymentRecord);
+
+                            // Create Batch
+                            final PaymentBatchContext paymentBatchContext;
+                            try {
+                                paymentBatchContext = ServerSideFactory.create(ARFacade.class).createPaymentBatchContext(batchBuilding);
+                            } catch (ARException e) {
+                                throw new Error(e);
+                            }
 
                             UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
 
@@ -104,19 +126,32 @@ class ScheduledPaymentsManager {
                                 }
                             });
 
-                            //TODO executionMonitor with copy for each batch
+                            //ExecutionMonitor that will be copied to main ExecutionMonitor for each successful batch 
+                            ExecutionMonitor batchExecutionMonitor = new ExecutionMonitor();
 
-                            while (paymentRecordIterator.hasNext()) {
+                            processScheduledPayment(firstPaymentRecord, paymentBatchContext, batchExecutionMonitor);
+
+                            while ((!paymentBatchContext.isBatchFull()) && paymentRecordIterator.hasNext()) {
                                 PaymentRecord paymentRecord = paymentRecordIterator.next();
-                                if (!paymentBatchContext.acceptsPaymentRecord(paymentRecord)) {
+
+                                if (!batchBuilding.equals(getBuilding(paymentRecord))) {
+                                    iteratorPushBack.set(paymentRecord);
                                     break;
                                 }
-                                processScheduledPayment(paymentRecord, paymentBatchContext, executionMonitor);
+
+                                processScheduledPayment(paymentRecord, paymentBatchContext, batchExecutionMonitor);
+
+                                if (executionMonitor.isTerminationRequested()) {
+                                    break;
+                                }
                             }
 
                             try {
                                 paymentBatchContext.postBatch();
                                 executionMonitor.addInfoEvent("Batch", null);
+
+                                executionMonitor.add(batchExecutionMonitor);
+
                             } catch (ARException e) {
                                 log.error("Unable to post batch", e);
                                 executionMonitor.addErredEvent("Batch", e);
@@ -131,6 +166,14 @@ class ScheduledPaymentsManager {
                 paymentRecordIterator.close();
             }
         }
+    }
+
+    private Building getBuilding(PaymentRecord payment) {
+        Persistence.ensureRetrieve(payment.billingAccount(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(payment.billingAccount().lease(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(payment.billingAccount().lease().unit(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(payment.billingAccount().lease().unit().building(), AttachLevel.Attached);
+        return payment.billingAccount().lease().unit().building();
     }
 
     private void processScheduledPayment(final PaymentRecord paymentRecord, final PaymentBatchContext paymentBatchContext,

@@ -14,11 +14,10 @@
 package com.propertyvista.biz.financial.payment;
 
 import com.propertyvista.biz.financial.ar.ARException;
-import com.propertyvista.domain.financial.PaymentRecord;
 
 public interface PaymentBatchContext {
 
-    boolean acceptsPaymentRecord(PaymentRecord payment);
+    boolean isBatchFull();
 
     public void postBatch() throws ARException;
 

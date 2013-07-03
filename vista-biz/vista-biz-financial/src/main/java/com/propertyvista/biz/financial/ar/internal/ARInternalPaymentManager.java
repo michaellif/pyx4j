@@ -25,6 +25,7 @@ import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
 import com.propertyvista.domain.financial.billing.InvoicePaymentBackOut;
+import com.propertyvista.domain.property.asset.building.Building;
 
 class ARInternalPaymentManager extends ARAbstractPaymentManager {
 
@@ -42,7 +43,7 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
     }
 
     @Override
-    protected PaymentBatchContext createPaymentBatchContext() {
+    protected PaymentBatchContext createPaymentBatchContext(Building building) {
         // BatchContext not supported
         return null;
     }

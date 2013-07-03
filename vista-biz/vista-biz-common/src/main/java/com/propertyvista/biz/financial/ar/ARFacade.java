@@ -52,9 +52,13 @@ public interface ARFacade {
     boolean validatePayment(PaymentRecord payment) throws ARException;
 
     /**
-     * Batch is not open, it will be open with first postPayment in this batch after this it should be posted or canceled
+     * Batch is open, after this call it should be posted or canceled
+     * 
+     * @param building
+     *            for with the batch should be created
+     * @throws ARException
      */
-    PaymentBatchContext createPaymentBatchContext();
+    PaymentBatchContext createPaymentBatchContext(Building building) throws ARException;
 
     /**
      * @param payment

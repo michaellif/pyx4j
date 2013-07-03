@@ -17,12 +17,8 @@ import java.rmi.RemoteException;
 
 import org.apache.commons.lang.Validate;
 
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiSystemBatchesService;
 
@@ -81,17 +77,7 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
     }
 
     @Override
-    public boolean acceptsPaymentRecord(PaymentRecord payment) {
-        Persistence.ensureRetrieve(payment.billingAccount(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(payment.billingAccount().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(payment.billingAccount().lease().unit(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(payment.billingAccount().lease().unit().building(), AttachLevel.Attached);
-
-        if (propertyCode == null) {
-            // Not open batch
-            return true;
-        } else {
-            return (recordCount < 500) && (propertyCode.equals(payment.billingAccount().lease().unit().building().propertyCode().getValue()));
-        }
+    public boolean isBatchFull() {
+        return (recordCount >= 500);
     }
 }

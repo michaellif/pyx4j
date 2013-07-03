@@ -37,6 +37,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.asset.building.Building;
 
 class ARYardiPaymentManager extends ARAbstractPaymentManager {
 
@@ -56,8 +57,14 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
     }
 
     @Override
-    protected PaymentBatchContext createPaymentBatchContext() {
-        return ServerSideFactory.create(YardiARFacade.class).createPaymentBatchContext();
+    protected PaymentBatchContext createPaymentBatchContext(Building building) throws ARException {
+        try {
+            return ServerSideFactory.create(YardiARFacade.class).createPaymentBatchContext(building);
+        } catch (RemoteException e) {
+            throw new ARException("Open Posting Batch to Yardi failed due to communication failure", e);
+        } catch (YardiServiceException e) {
+            throw new ARException("Open Posting Batch to Yardi failed", e);
+        }
     }
 
     @Override

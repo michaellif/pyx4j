@@ -15,10 +15,11 @@ package com.propertyvista.biz.financial.ar;
 
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class ARAbstractPaymentManager {
 
-    abstract protected PaymentBatchContext createPaymentBatchContext();
+    abstract protected PaymentBatchContext createPaymentBatchContext(Building building) throws ARException;
 
     abstract protected void postPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws ARException;
 

@@ -22,6 +22,7 @@ import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.yardi.YardiReceipt;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -49,9 +50,11 @@ public class YardiARFacadeImpl implements YardiARFacade {
     }
 
     @Override
-    public PaymentBatchContext createPaymentBatchContext() {
+    public PaymentBatchContext createPaymentBatchContext(Building building) throws RemoteException, YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
-        return new YardiPaymentBatchContext();
+        YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();
+        paymentBatchContext.ensureOpenBatch(VistaDeployment.getPmcYardiCredential(), building.propertyCode().getValue());
+        return paymentBatchContext;
     }
 
     @Override

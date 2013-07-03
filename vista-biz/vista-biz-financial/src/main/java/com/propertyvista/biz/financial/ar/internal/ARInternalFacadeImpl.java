@@ -72,8 +72,8 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public PaymentBatchContext createPaymentBatchContext() {
-        return ARInternalPaymentManager.instance().createPaymentBatchContext();
+    public PaymentBatchContext createPaymentBatchContext(Building building) {
+        return ARInternalPaymentManager.instance().createPaymentBatchContext(null);
     }
 
     @Override

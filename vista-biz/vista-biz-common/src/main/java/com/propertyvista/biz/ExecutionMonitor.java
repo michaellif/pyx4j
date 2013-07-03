@@ -292,6 +292,11 @@ public class ExecutionMonitor {
         ExecutionReportSection createExecutionReportSection(ExecutionReport report) {
             return null;
         }
+
+        private void add(ReportSection otherSection) {
+            add(otherSection.accumulator);
+            messages.addAll(otherSection.messages);
+        }
     }
 
     private class ReportMessage {
@@ -309,6 +314,22 @@ public class ExecutionMonitor {
             return null;
         }
 
+    }
+
+    public void add(ExecutionMonitor other) {
+        this.dirty = true;
+        processedCount += other.processedCount;
+        failedCount += other.failedCount;
+        erredCount += other.erredCount;
+
+        for (Map.Entry<ReportSectionId, ReportSection> otherSection : other.sections.entrySet()) {
+            ReportSection section = sections.get(otherSection.getKey());
+            if (section == null) {
+                sections.put(otherSection.getKey(), otherSection.getValue());
+            } else {
+                section.add(otherSection.getValue());
+            }
+        }
     }
 
     public void updateExecutionReport(ExecutionReport executionReport) {
@@ -392,4 +413,5 @@ public class ExecutionMonitor {
         return "Execution Monitor: "
                 + new ToStringBuilder(this).append("processedCount", processedCount).append("failedCount", failedCount).append("erredCount", erredCount);
     }
+
 }

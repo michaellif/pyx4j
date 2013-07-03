@@ -70,8 +70,8 @@ public class ARYardiFacadeImpl implements ARFacade {
     }
 
     @Override
-    public PaymentBatchContext createPaymentBatchContext() {
-        return ARYardiPaymentManager.instance().createPaymentBatchContext();
+    public PaymentBatchContext createPaymentBatchContext(Building building) throws ARException {
+        return ARYardiPaymentManager.instance().createPaymentBatchContext(building);
     }
 
     @Override
