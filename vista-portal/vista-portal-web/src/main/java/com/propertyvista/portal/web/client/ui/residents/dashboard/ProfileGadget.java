@@ -89,8 +89,6 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
             FlowPanel contentPanel = new FlowPanel();
             setWidget(contentPanel);
 
-            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
-
             Image image = new Image(PortalImages.INSTANCE.avatar3());
             image.setStyleName(DashboardTheme.StyleName.PersonPhoto.name());
             image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -118,7 +116,6 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
 
         public AddressPanel() {
             FlexTable contentPanel = new FlexTable();
-            contentPanel.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
             setWidget(contentPanel);
 
             int row = -1;

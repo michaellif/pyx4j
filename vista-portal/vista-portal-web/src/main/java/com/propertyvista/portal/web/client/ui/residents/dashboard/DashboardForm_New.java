@@ -38,7 +38,6 @@ import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
-import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO> {
 
@@ -139,12 +138,11 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
         @Override
         public IsWidget createContent() {
-            FlowPanel billingBlock = new FlowPanel();
-            billingBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
-            billingBlock
+            FlowPanel contentPanel = new FlowPanel();
+            contentPanel
                     .add(new HTML(
                             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
-            return billingBlock;
+            return contentPanel;
         }
 
         @Override
@@ -186,13 +184,11 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
         @Override
         public IsWidget createContent() {
 
-            FlowPanel maintenanceBlock = new FlowPanel();
-            maintenanceBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
-
-            maintenanceBlock
+            FlowPanel contentPanel = new FlowPanel();
+            contentPanel
                     .add(new HTML(
                             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
-            return maintenanceBlock;
+            return contentPanel;
         }
 
         @Override
@@ -220,13 +216,11 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
         @Override
         public IsWidget createContent() {
-            FlowPanel servicesBlock = new FlowPanel();
-            servicesBlock.setStyleName(DashboardTheme.StyleName.GadgetBlock.name());
-
-            servicesBlock
+            FlowPanel contentPanel = new FlowPanel();
+            contentPanel
                     .add(new HTML(
                             "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
-            return servicesBlock;
+            return contentPanel;
         }
 
         @Override

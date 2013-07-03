@@ -24,7 +24,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DashboardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Gadget, GadgetContent, GadgetHeader, GadgetBlock, GadgetBlockSeparator, GadgetDecorator,
+        Gadget, GadgetContent, GadgetHeader, GadgetBlockSeparator, GadgetDecorator,
 
         PersonPhoto, PersonName
     }
@@ -51,7 +51,7 @@ public class DashboardTheme extends Theme {
         style.addProperty("font-size", "1.2em");
         addStyle(style);
 
-        style = new Style(".", StyleName.GadgetBlock, " .", DefaultWidgetsTheme.StyleName.Anchor);
+        style = new Style(".", StyleName.GadgetContent, " .", DefaultWidgetsTheme.StyleName.Anchor);
         style.addProperty("display", "block");
         style.addProperty("white-space", "nowrap");
         style.addProperty("color", ThemeColor.contrast2, 1);
