@@ -125,6 +125,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource active();
     }
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("BillingPayments-Green.png")
+    ImageResource billingIcon();
+
     BillingMenuImages billingMenu();
 
     interface BillingMenuImages extends ButtonImages {
@@ -143,6 +147,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         @Source("Nav_Icon_BillingPayments-Active.png")
         ImageResource active();
     }
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Maintenance-Blue.png")
+    ImageResource maintenanceIcon();
 
     MaintenanceMenuImages maintenanceMenu();
 
@@ -181,6 +189,10 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         @Source("Nav_Icon_Profile-Inactive.png")
         ImageResource active();
     }
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("ResidentServices-Red.png")
+    ImageResource residentServicesIcon();
 
     ResidentServicesMenuImages residentServicesMenu();
 

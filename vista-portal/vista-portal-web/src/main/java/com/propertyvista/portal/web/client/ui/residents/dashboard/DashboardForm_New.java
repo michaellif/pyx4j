@@ -133,7 +133,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
         BillingGadget() {
-            super(PortalImages.INSTANCE.billingMenu().regular(), "My Billing Summary", new BillingToolbar(), ThemeColor.contrast4);
+            super(PortalImages.INSTANCE.billingIcon(), "My Billing Summary", new BillingToolbar(), ThemeColor.contrast4);
         }
 
         @Override
@@ -167,7 +167,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO> {
 
         MaintenanceGadget() {
-            super(PortalImages.INSTANCE.maintenanceMenu().regular(), "My Maintenance Requests", new MaintenanceToolbar(), ThemeColor.contrast5);
+            super(PortalImages.INSTANCE.maintenanceIcon(), "My Maintenance Requests", new MaintenanceToolbar(), ThemeColor.contrast5);
         }
 
         @Override
@@ -202,7 +202,7 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
     class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO> {
 
         ResidentServicesGadget() {
-            super(PortalImages.INSTANCE.residentServicesMenu().regular(), "Resident Services", new ResidentServicesToolbar(), ThemeColor.contrast3);
+            super(PortalImages.INSTANCE.residentServicesIcon(), "Resident Services", new ResidentServicesToolbar(), ThemeColor.contrast3);
         }
 
         @Override
