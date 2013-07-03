@@ -70,6 +70,13 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     }
 
     @Override
+    public void setAutopay() {
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
+        }
+    }
+
+    @Override
     public void edit(Key id) {
         // TODO Auto-generated method stub
 
@@ -80,4 +87,5 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
         // TODO Auto-generated method stub
 
     }
+
 }

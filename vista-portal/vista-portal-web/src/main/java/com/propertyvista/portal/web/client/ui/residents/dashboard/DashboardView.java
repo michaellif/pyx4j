@@ -23,5 +23,8 @@ public interface DashboardView extends View<TenantDashboardDTO> {
         void viewCurrentBill();
 
         void payNow();
+
+        void setAutopay();
+
     }
 }

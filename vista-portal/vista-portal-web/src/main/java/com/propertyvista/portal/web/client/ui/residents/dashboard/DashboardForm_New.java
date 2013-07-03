@@ -15,6 +15,7 @@ package com.propertyvista.portal.web.client.ui.residents.dashboard;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -154,11 +155,23 @@ public class DashboardForm_New extends CEntityDecoratableForm<TenantDashboardDTO
 
     class BillingToolbar extends Toolbar {
         public BillingToolbar() {
-            Button paymentButton = new Button("Make a Payment");
+            Button paymentButton = new Button("Make a Payment", new Command() {
+
+                @Override
+                public void execute() {
+                    presenter.payNow();
+                }
+            });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
             add(paymentButton);
 
-            Button autoPayButton = new Button("Setup Auto Pay");
+            Button autoPayButton = new Button("Setup Auto Pay", new Command() {
+
+                @Override
+                public void execute() {
+                    presenter.setAutopay();
+                }
+            });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.6));
             add(autoPayButton);
         }
