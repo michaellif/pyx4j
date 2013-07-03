@@ -55,6 +55,7 @@ public class AbstractYardiStub {
     static {
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
         testSystemsUrl.add("https://www.iyardiasp.com/8223");
+        testSystemsUrl.add("https://testvyr.realstar.ca/");
     }
 
     protected void init(Action currentAction) {
