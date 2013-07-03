@@ -34,9 +34,12 @@ public interface TenantDashboardDTO extends IEntity {
 
     TenantResidentServicesDTO residentServicesInfo();
 
+    @Deprecated
     FinancialSummaryDTO billSummary();
 
+    @Deprecated
     IList<MaintenanceRequestDTO> maintanances();
 
+    @Deprecated
     TenantInsuranceStatusDTO tenantInsuranceStatus();
 }

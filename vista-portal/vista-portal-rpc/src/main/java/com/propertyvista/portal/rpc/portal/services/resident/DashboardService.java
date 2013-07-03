@@ -15,7 +15,6 @@ package com.propertyvista.portal.rpc.portal.services.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
@@ -23,7 +22,5 @@ import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 public interface DashboardService extends IService {
 
     public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback);
-
-    public void acknowledgeMessage(AsyncCallback<TenantDashboardDTO> callback, Key messageId);
 
 }

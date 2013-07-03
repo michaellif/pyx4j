@@ -19,7 +19,6 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -77,8 +76,4 @@ public class DashboardServiceImpl implements DashboardService {
         callback.onSuccess(dashboard);
     }
 
-    @Override
-    public void acknowledgeMessage(AsyncCallback<TenantDashboardDTO> callback, Key messageId) {
-        retrieveTenantDashboard(callback);
-    }
 }
