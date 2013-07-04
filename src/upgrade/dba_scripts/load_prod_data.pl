@@ -10,12 +10,28 @@
 use strict;
 use warnings;
 use threads;
+use Getopt::Long;
 
-my ($sourcedir,$dbname) = @ARGV;
+
+my $sourcedir = '/home/akinareevski/tmp/import/';
+my $dbname = 'vista';
+my $pattern = 'vista_[a-z0-9_]+\.full.sql';
+my $threads = 16;
 my @filelist;
-my $filepattern = 'vista_[a-z0-9_]+\.full.sql';
-my $max_threads = 16;
 
+GetOptions(     "sourcedir:s" => \$sourcedir,
+                "dbname:s" => \$dbname,
+                "pattern:s" => \$pattern,
+                "threads:i" => \$threads);
+
+# Make sure there is a trailing slash in $sourcedir
+$sourcedir =~ s/\/*$/\//;
+                
+                
+#print "SOURCEDIR $sourcedir\n";
+#print "DBNAME $dbname\n";
+#print "PATTERN $pattern\n";
+#print "THREADS $threads\n";
 
 sub load_data
 {
@@ -27,21 +43,7 @@ sub load_data
         
 }
 
-if (!defined($sourcedir) or $sourcedir eq "")
-{
-	$sourcedir = '/home/akinareevski/tmp/import/';
-}
-else
-{       
-        # Make sure there is a trailing slash in $logdir 
-        $sourcedir =~ s/\/*$/\//;
-}
 
-if (!defined($dbname) or $dbname eq "")
-{
-	$dbname = 'vista';
-	
-}
 
 # Rename _admin_,_expiring_ and public schemas
 
@@ -52,17 +54,17 @@ system("psql -U vista -h localhost -d $dbname -c 'ALTER SCHEMA public RENAME TO 
 
 # Get all files in $sourcedir that match pattern
 
-opendir(my $dh, $sourcedir) || die "can't opendir $sourcedir: $!";
-    @filelist =  grep { /^$filepattern/ && -f "$sourcedir$_" } readdir($dh);
+opendir(my $dh, $sourcedir) || die "can't open dir $sourcedir: $!";
+    @filelist =  grep { /^$pattern/ && -f "$sourcedir$_" } readdir($dh);
     
 closedir $dh;
 
 
 foreach my $file (@filelist)
 {
-        $file = $sourcedir.$file;     
+        $file = $sourcedir.$file; 
         
-        while (scalar(threads->list(threads::running)) >= $max_threads)
+        while (scalar(threads->list(threads::running)) >= $threads)
         {
                 sleep(1);
         }
