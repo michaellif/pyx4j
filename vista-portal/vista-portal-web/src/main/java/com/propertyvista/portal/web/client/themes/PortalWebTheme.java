@@ -90,12 +90,13 @@ public class PortalWebTheme extends Theme {
 
                 Style style = new Style(".", StyleName.FormFlexPanelH1);
                 style.addProperty("margin", "0");
+                style.addProperty("background-color", "transparent");
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormFlexPanelH1Label);
-                style.addProperty("color", getBackgroundColor(), 1.4);
-                style.addProperty("padding", "20px");
-                style.addProperty("font-size", "1.3em");
+                style.addProperty("color", ThemeColor.foreground, 1);
+                style.addProperty("padding", "15px");
+                style.addProperty("font-size", "1.2em");
                 addStyle(style);
 
                 style = new Style(".", StyleName.FormFlexPanelActionWidget);
@@ -164,6 +165,7 @@ public class PortalWebTheme extends Theme {
         addTheme(new TransactionHistoryViewerTheme());
         addTheme(new LandingPagesTheme());
         addTheme(new DashboardTheme());
+        addTheme(new EntityViewTheme());
         addTheme(new TenantInsuranceTheme());
         addTheme(new TenantSureTheme());
 
