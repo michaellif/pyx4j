@@ -40,7 +40,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        readOnly, noMandatoryStar, invalid
+        readOnly, noMandatoryStar, invalid, viewable
     }
 
     public DefaultWidgetDecoratorTheme() {
@@ -58,7 +58,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("padding", "5px 0");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.readOnly);
+        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable);
         style.addProperty("font-weight", "bold");
         style.addProperty("color", ThemeColor.foreground, 1);
         addStyle(style);
@@ -73,7 +73,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("display", "inline");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.readOnly, " .", StyleName.WidgetDecoratorLabel);
+        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable, " .", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         addStyle(style);
 

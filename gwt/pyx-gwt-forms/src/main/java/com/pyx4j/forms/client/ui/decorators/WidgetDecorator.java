@@ -144,10 +144,22 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         label.setVisible(component.isVisible());
         setVisible(component.isVisible());
 
+        if (component.isViewable()) {
+            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+        } else {
+            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+        }
+
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
+                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.viewable) {
+                    if (component.isViewable()) {
+                        addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+                    } else {
+                        removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+                    }
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     label.setVisible(component.isVisible());
                     setVisible(component.isVisible());
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
@@ -210,10 +222,6 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         contentPanel.add(componentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
-
-        if (builder.readOnlyMode) {
-            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
-        }
 
         layout(builder);
     }
@@ -348,8 +356,6 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         private boolean useLabelSemicolon = true;
 
-        private boolean readOnlyMode = false;
-
         private boolean mandatoryMarker = true;
 
         private Alignment labelAlignment = Alignment.right;
@@ -397,11 +403,6 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         public Builder layout(Layout layout) {
             this.layout = layout;
-            return this;
-        }
-
-        public Builder readOnlyMode(boolean readOnlyMode) {
-            this.readOnlyMode = readOnlyMode;
             return this;
         }
 
