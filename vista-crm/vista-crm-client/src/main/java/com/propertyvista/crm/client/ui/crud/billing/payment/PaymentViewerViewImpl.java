@@ -16,7 +16,9 @@ package com.propertyvista.crm.client.ui.crud.billing.payment;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.MenuItem;
 
+import com.pyx4j.gwt.commons.Print;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
@@ -88,6 +90,13 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
             }
         });
         addAction(scheduleAction);
+
+        addHeaderToolbarItem(new Button(i18n.tr("Print"), new Command() {
+            @Override
+            public void execute() {
+                Print.preview(getForm().toStringForPrint());
+            }
+        }));
     }
 
     @Override
