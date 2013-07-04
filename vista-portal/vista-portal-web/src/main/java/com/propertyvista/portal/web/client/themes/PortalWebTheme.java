@@ -64,16 +64,6 @@ public class PortalWebTheme extends Theme {
         addTheme(new DefaultWidgetsTheme());
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
-            protected void initStyles() {
-                super.initStyles();
-
-                Style style = new Style(".", StyleName.WidgetDecorator);
-                style.addProperty("margin", "6px auto");
-                addStyle(style);
-
-            }
-
-            @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
             }
@@ -200,6 +190,10 @@ public class PortalWebTheme extends Theme {
 
         style = new Style("a:hover");
         style.addProperty("text-decoration", "underline");
+        addStyle(style);
+
+        style = new Style("table");
+        style.addProperty("border-collapse", "collapse");
         addStyle(style);
 
         style = new Style("td");

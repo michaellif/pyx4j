@@ -54,6 +54,10 @@ public class VistaTheme extends Theme {
         Style style = new Style("html");
         addStyle(style);
 
+        style = new Style("table");
+        style.addProperty("border-collapse", "collapse");
+        addStyle(style);
+
         style = new Style("td");
         style.addProperty("padding", "0px");
         addStyle(style);

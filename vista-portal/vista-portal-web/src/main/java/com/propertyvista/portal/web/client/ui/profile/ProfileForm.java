@@ -110,7 +110,6 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
                 } else {
                     decorator.setLayout(Layout.vertical);
                 }
-                component.doLayout();
             }
             if (component instanceof CContainer) {
                 updateDecoratorsLayout((CContainer<?, ?>) component, expanded);
@@ -130,19 +129,20 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         contentPanel.setWidget(++row, 0, createDecorator(inject(proto().birthDate()), "150px").build());
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().homePhone()), "150px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().mobilePhone()), "150px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().workPhone()), "150px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().email()), "150px").build());
+        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().homePhone()), "250px").build());
+        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().mobilePhone()), "250px").build());
+        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().workPhone()), "250px").build());
+        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().email()), "250px").build());
 
         contentPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         contentPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false, true)));
         contentPanel.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
 
-        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-
         SimplePanel containerPanel = new SimplePanel(contentPanel);
         containerPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContainer.name());
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
         return containerPanel;
     }
 
