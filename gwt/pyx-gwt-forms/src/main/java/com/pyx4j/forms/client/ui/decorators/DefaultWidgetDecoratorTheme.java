@@ -40,7 +40,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        readOnly, noMandatoryStar, invalid, viewable, vertical
+        readOnly, noMandatoryStar, invalid, viewable, verticalAlign, labelAlignRight, labelAlignCenter, componentAlignRight, componentAlignCenter
     }
 
     public DefaultWidgetDecoratorTheme() {
@@ -55,7 +55,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
     protected void initStyles() {
         Style style = new Style(".", StyleName.WidgetDecorator);
         style.addProperty("border-spacing", "0");
-        style.addProperty("padding", "5px 0");
+        style.addProperty("padding", "5px");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable);
@@ -67,7 +67,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("padding-right", "1em");
         addStyle(style);
 
-        style = new Style(".", StyleName.WidgetDecoratorLabelHolder, "-", StyleDependent.vertical);
+        style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.verticalAlign, " .", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("padding-right", "0");
         addStyle(style);
 

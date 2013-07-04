@@ -37,13 +37,13 @@ public class TesterWidgetDecorator extends WidgetDecorator {
     public TesterWidgetDecorator(final Builder builder) {
         super(builder);
 
-        addClickHandler(new ClickHandler() {
+        addHandler(new ClickHandler() {
 
             @Override
             public void onClick(ClickEvent event) {
                 TesterSite.getEventBus().fireEvent(new CComponentBrowserEvent(builder.getComponent()));
             }
-        });
+        }, ClickEvent.getType());
 
     }
 

@@ -174,9 +174,10 @@ public class DefaultWidgetsTheme extends Theme {
 
         style = new Style(".", StyleName.ToolbarItem);
         style.addProperty("display", "inline-block");
-        style.addProperty("vertical-align", "top");
+        style.addProperty("vertical-align", "middle");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
+        style.addProperty("padding", "0 2px");
         addStyle(style);
 
         style = new Style(".", StyleName.ToolbarSeparator);

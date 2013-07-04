@@ -806,7 +806,4 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return unconditionalValidationErrorRendering;
     }
 
-    public void doLayout() {
-        PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.layout);
-    }
 }

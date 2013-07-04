@@ -59,7 +59,7 @@ import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
-public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<?, ?>> {
+public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<?, ?>> {
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
@@ -90,6 +90,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
     private final CellPanel contentPanel;
 
+    private final FlexTable containerPanel;
+
     private final Builder builder;
 
     public WidgetDecorator(CComponent<?, ?> component) {
@@ -100,6 +102,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         this.builder = builder;
 
         setStyleName(WidgetDecorator.name());
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         builder.component.setDecorator(this);
         final Widget nativeComponent = component.asWidget();
@@ -168,8 +171,6 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
                     if (builder.mandatoryMarker) {
                         renderMandatoryStar();
                     }
-                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.layout) {
-                    layout();
                 }
             }
         });
@@ -221,7 +222,23 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
 
+        containerPanel = new FlexTable();
+        containerPanel.setWidget(0, 1, contentPanel);
+        containerPanel.setWidget(1, 1, validationLabel);
+        containerPanel.setWidget(2, 1, noteLabel);
+
+        add(labelHolder);
+        add(containerPanel);
+
         layout();
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        }
     }
 
     public Label getLabel() {
@@ -234,57 +251,51 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
     public void setLabelAlignment(Alignment alignment) {
         builder.labelAlignment = alignment;
-        layout();
-    }
+        switch (alignment) {
+        case left:
+            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            break;
+        case center:
+            label.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            break;
+        case right:
+            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            label.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            break;
+        }
 
-    public void setComponentAlignment(Alignment alignment) {
-        builder.componentAlignment = alignment;
-        layout();
     }
 
     public void setLayout(Layout layout) {
         builder.layout = layout;
-        layout();
+        switch (layout) {
+        case horisontal:
+            labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
+            break;
+        case vertical:
+            labelHolder.getElement().getStyle().setDisplay(Display.BLOCK);
+            containerPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
+            break;
+        }
     }
 
     protected void layout() {
-        HorizontalAlignmentConstant labelAlignment = builder.labelAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
-                : builder.labelAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
+        setLabelAlignment(builder.labelAlignment);
+        setLayout(builder.layout);
 
         HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
                 : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
 
-        switch (builder.layout) {
-        case horisontal:
-            setWidget(0, 0, labelHolder);
-            setWidget(0, 1, contentPanel);
-            setWidget(1, 1, validationLabel);
-            setWidget(2, 1, noteLabel);
-
-            getCellFormatter().setHorizontalAlignment(0, 0, labelAlignment);
-            getCellFormatter().setHorizontalAlignment(0, 1, componentAlignment);
-            getCellFormatter().setHorizontalAlignment(1, 1, componentAlignment);
-            getCellFormatter().setHorizontalAlignment(2, 1, componentAlignment);
-
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.vertical.name());
-
-            break;
-
-        case vertical:
-            setWidget(0, 0, labelHolder);
-            setWidget(1, 0, contentPanel);
-            setWidget(2, 0, validationLabel);
-            setWidget(3, 0, noteLabel);
-
-            getCellFormatter().setHorizontalAlignment(0, 0, labelAlignment);
-            getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
-            getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
-            getCellFormatter().setHorizontalAlignment(3, 0, componentAlignment);
-
-            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.vertical.name());
-
-            break;
-        }
+        containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
+        containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
+        containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
 
         if (component.isViewable()) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
@@ -293,6 +304,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(true);
         }
+
     }
 
     protected void renderMandatoryStar() {
