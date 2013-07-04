@@ -68,7 +68,7 @@ public class PortalWebTheme extends Theme {
                 super.initStyles();
 
                 Style style = new Style(".", StyleName.WidgetDecorator);
-                style.addProperty("margin", "6px 0");
+                style.addProperty("margin", "6px auto");
                 addStyle(style);
 
             }

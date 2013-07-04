@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -56,15 +57,15 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
 
         container.setH1(++row, 0, 1, i18n.tr("Basic Information"));
         container.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"))));
-        container.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().sex())).build());
-        container.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().birthDate())).build());
+        container.setWidget(++row, 0, createDecorator(inject(proto().sex())).build());
+        container.setWidget(++row, 0, createDecorator(inject(proto().birthDate())).build());
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Information"));
 
-        container.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().homePhone())).build());
-        container.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().mobilePhone())).build());
-        container.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().workPhone())).build());
-        container.setWidget(++row, 0, new WidgetDecorator.Builder(inject(proto().email())).build());
+        container.setWidget(++row, 0, createDecorator(inject(proto().homePhone())).build());
+        container.setWidget(++row, 0, createDecorator(inject(proto().mobilePhone())).build());
+        container.setWidget(++row, 0, createDecorator(inject(proto().workPhone())).build());
+        container.setWidget(++row, 0, createDecorator(inject(proto().email())).build());
 
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false, true)));
@@ -92,5 +93,9 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
                         .tr("Duplicate Emergency Contacts specified"));
             }
         });
+    }
+
+    private static Builder createDecorator(CComponent<?, ?> comp) {
+        return new WidgetDecorator.Builder(comp, Unit.PX).labelWidth(120).componentWidth(180);
     }
 }
