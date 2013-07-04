@@ -13,12 +13,24 @@
  */
 package com.propertyvista.portal.rpc.portal.dto;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface TenantBillingDTO extends IEntity {
 
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> currentBalance();
+
+    IPrimitive<LogicalDate> dueDate();
 }

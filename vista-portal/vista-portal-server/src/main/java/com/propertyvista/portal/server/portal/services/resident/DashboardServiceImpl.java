@@ -23,11 +23,14 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.tenant.insurance.TenantInsuranceFacade;
 import com.propertyvista.domain.customizations.CountryOfOperation;
+import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -73,7 +76,30 @@ public class DashboardServiceImpl implements DashboardService {
                             TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
 
         }
+
+        // fill stuff for the new web portal
+        dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
+        dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
+        dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
+
+        FinancialSummaryDTO billingSummary = BillSummaryServiceImpl.retrieve();
+        dashboard.billingInfo().currentBalance().setValue(billingSummary.currentBalance().getValue());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
+            dashboard.billingInfo().dueDate().setValue(bill.dueDate().getValue());
+        }
+
+        dashboard.maintenanceInfo();
+
+        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+            dashboard
+                    .residentServicesInfo()
+                    .tenantInsuranceStatus()
+                    .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
+
+        }
+
         callback.onSuccess(dashboard);
     }
-
 }
