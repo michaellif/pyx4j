@@ -75,6 +75,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable, " .", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", ThemeColor.foreground, 0.5);
+        style.addProperty("font-size", "0.9em");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorInfoImage);
