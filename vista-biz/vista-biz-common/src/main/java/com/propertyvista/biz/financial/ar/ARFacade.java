@@ -49,8 +49,6 @@ public interface ARFacade {
 
     void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle);
 
-    boolean validatePayment(PaymentRecord payment) throws ARException;
-
     /**
      * Batch is open, after this call it should be posted or canceled
      * 

@@ -44,12 +44,6 @@ public class YardiARFacadeImpl implements YardiARFacade {
     }
 
     @Override
-    public void validateReceipt(YardiReceipt receipt) throws YardiServiceException, RemoteException {
-        assert VistaFeatures.instance().yardiIntegration();
-        YardiSystemBatchesService.getInstance().validateReceipt(VistaDeployment.getPmcYardiCredential(), receipt);
-    }
-
-    @Override
     public PaymentBatchContext createPaymentBatchContext(Building building) throws RemoteException, YardiServiceException {
         assert VistaFeatures.instance().yardiIntegration();
         YardiPaymentBatchContext paymentBatchContext = new YardiPaymentBatchContext();

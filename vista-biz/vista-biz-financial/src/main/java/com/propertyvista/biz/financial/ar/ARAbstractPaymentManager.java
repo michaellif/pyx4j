@@ -25,5 +25,4 @@ public abstract class ARAbstractPaymentManager {
 
     abstract protected void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF) throws ARException;
 
-    abstract protected boolean validatePayment(PaymentRecord payment) throws ARException;
 }

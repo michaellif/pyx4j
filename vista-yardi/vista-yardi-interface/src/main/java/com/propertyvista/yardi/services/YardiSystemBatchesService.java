@@ -46,22 +46,6 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         return SingletonHolder.INSTANCE;
     }
 
-    public void validateReceipt(PmcYardiCredential yc, YardiReceipt receipt) throws YardiServiceException, RemoteException {
-        YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
-
-        Persistence.service().retrieve(receipt.billingAccount());
-        Persistence.service().retrieve(receipt.billingAccount().lease());
-        Persistence.service().retrieve(receipt.billingAccount().lease().unit());
-        Persistence.service().retrieve(receipt.billingAccount().lease().unit().building());
-
-        String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
-        long batchId = stub.openReceiptBatch(yc, propertyCode);
-        YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-        ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
-        stub.addReceiptsToBatch(yc, batchId, residentTransactions);
-        stub.cancelReceiptBatch(yc, batchId);
-    }
-
     public long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws RemoteException, YardiServiceException {
         YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
         return stub.openReceiptBatch(yc, propertyCode);
@@ -98,7 +82,7 @@ public class YardiSystemBatchesService extends YardiAbstractService {
         try {
 
             YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-            ResidentTransactions residentTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForPayment(receipt), null);
+            ResidentTransactions residentTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForPayment(receipt));
             stub.addReceiptsToBatch(yc, paymentBatchContext.getBatchId(), residentTransactions);
 
             paymentBatchContext.incrementRecordCount();

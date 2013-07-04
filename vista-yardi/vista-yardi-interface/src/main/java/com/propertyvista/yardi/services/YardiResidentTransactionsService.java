@@ -179,7 +179,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
         YardiPaymentProcessor paymentProcessor = new YardiPaymentProcessor();
-        ResidentTransactions reversalTransactions = paymentProcessor.addTransactionToBatch(paymentProcessor.createTransactionForReversal(reversal), null);
+        ResidentTransactions reversalTransactions = paymentProcessor.createTransactions(paymentProcessor.createTransactionForReversal(reversal));
 
         stub.importResidentTransactions(yc, reversalTransactions);
     }

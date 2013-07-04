@@ -20,7 +20,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARAbstractPaymentManager;
-import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.payment.PaymentBatchContext;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.InvoicePayment;
@@ -81,8 +80,4 @@ class ARInternalPaymentManager extends ARAbstractPaymentManager {
         }
     }
 
-    @Override
-    protected boolean validatePayment(PaymentRecord payment) throws ARException {
-        return true;
-    }
 }

@@ -166,14 +166,6 @@ public class PaymentFacadeImpl implements PaymentFacade {
             throw new UserRuntimeException(i18n.tr("No merchantAccount found to process the payment"));
         }
 
-        try {
-            if (!ServerSideFactory.create(ARFacade.class).validatePayment(paymentRecord)) {
-                throw new PaymentException("Failed to post payment to AR while processing payment");
-            }
-        } catch (ARException e) {
-            throw new PaymentException("Failed to post payment to AR while processing payment", e);
-        }
-
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Cash:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Cleared);

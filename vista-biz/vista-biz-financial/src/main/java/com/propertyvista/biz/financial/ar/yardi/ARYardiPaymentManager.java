@@ -144,18 +144,4 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         return receipt;
     }
 
-    @Override
-    protected boolean validatePayment(PaymentRecord payment) throws ARException {
-        YardiReceipt receipt = createReceipt(payment);
-
-        try {
-            ServerSideFactory.create(YardiARFacade.class).validateReceipt(receipt);
-        } catch (RemoteException e) {
-            throw new ARException("Receipt validation failed due to communication failure with Yardi", e);
-        } catch (YardiServiceException e) {
-            throw new ARException("Receipt validation failed", e);
-        }
-
-        return true;
-    }
 }

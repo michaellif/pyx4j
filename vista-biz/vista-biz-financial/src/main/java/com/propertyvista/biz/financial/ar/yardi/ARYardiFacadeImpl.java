@@ -60,16 +60,6 @@ import com.propertyvista.dto.TransactionHistoryDTO;
 public class ARYardiFacadeImpl implements ARFacade {
 
     @Override
-    public boolean validatePayment(PaymentRecord paymentRecord) throws ARException {
-        // Avoid creation of two payments in Yadi
-        if (false) {
-            return ARYardiPaymentManager.instance().validatePayment(paymentRecord);
-        } else {
-            return true;
-        }
-    }
-
-    @Override
     public PaymentBatchContext createPaymentBatchContext(Building building) throws ARException {
         return ARYardiPaymentManager.instance().createPaymentBatchContext(building);
     }

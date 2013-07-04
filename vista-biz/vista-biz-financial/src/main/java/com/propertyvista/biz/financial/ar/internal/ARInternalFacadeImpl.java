@@ -27,7 +27,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.ar.ARArrearsManager;
-import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
 import com.propertyvista.biz.financial.billing.BillingUtils;
@@ -64,11 +63,6 @@ public class ARInternalFacadeImpl implements ARFacade {
     @Override
     public void postInvoiceLineItem(InvoiceLineItem invoiceLineItem, BillingCycle billingCycle) {
         ARInternalTransactionManager.instance().postInvoiceLineItem(invoiceLineItem, billingCycle);
-    }
-
-    @Override
-    public boolean validatePayment(PaymentRecord payment) throws ARException {
-        return true;
     }
 
     @Override

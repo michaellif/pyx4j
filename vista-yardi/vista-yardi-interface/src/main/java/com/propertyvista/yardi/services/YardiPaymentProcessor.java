@@ -66,10 +66,8 @@ public class YardiPaymentProcessor {
         return transactions;
     }
 
-    public ResidentTransactions addTransactionToBatch(Transactions transaction, ResidentTransactions batch) {
-        if (batch == null) {
-            batch = new ResidentTransactions();
-        }
+    public ResidentTransactions createTransactions(Transactions transaction) {
+        ResidentTransactions transactions = new ResidentTransactions();
         // Add Payment to Customer
         RTCustomer customer = new RTCustomer();
         customer.setRTServiceTransactions(new RTServiceTransactions());
@@ -80,8 +78,8 @@ public class YardiPaymentProcessor {
         property.getRTCustomer().add(customer);
 
         // Add Property to batch
-        batch.getProperty().add(property);
+        transactions.getProperty().add(property);
 
-        return batch;
+        return transactions;
     }
 }
