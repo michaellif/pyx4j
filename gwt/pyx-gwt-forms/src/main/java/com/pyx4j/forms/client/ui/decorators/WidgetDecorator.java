@@ -57,6 +57,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.Cursor;
 import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
 public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<?, ?>> {
 
@@ -89,11 +90,14 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
     private final CellPanel contentPanel;
 
+    private final Builder builder;
+
     public WidgetDecorator(CComponent<?, ?> component) {
         this(new Builder(component));
     }
 
     protected WidgetDecorator(final Builder builder) {
+        this.builder = builder;
 
         setStyleName(WidgetDecorator.name());
 
@@ -144,26 +148,16 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         label.setVisible(component.isVisible());
         setVisible(component.isVisible());
 
-        if (component.isViewable()) {
-            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
-        } else {
-            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
-        }
-
         component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {
                 if (event.getPropertyName() == PropertyChangeEvent.PropertyName.viewable) {
-                    if (component.isViewable()) {
-                        addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
-                    } else {
-                        removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
-                    }
+                    layout();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
                     label.setVisible(component.isVisible());
                     setVisible(component.isVisible());
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
-                    label.setText(component.getTitle() + ":");
+                    label.setText(component.getTitle() + (builder.useLabelSemicolon ? ":" : ""));
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
                     renderTooltip();
                 } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
@@ -174,13 +168,16 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
                     if (builder.mandatoryMarker) {
                         renderMandatoryStar();
                     }
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.layout) {
+                    layout();
                 }
             }
         });
 
         labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
-        labelHolder.getElement().getStyle().setWidth(builder.labelWidth, builder.unit);
+
+        labelHolder.setWidth(builder.labelWidth);
         labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
@@ -193,7 +190,7 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         SimplePanel componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
-        componentHolder.getElement().getStyle().setWidth(builder.componentWidth, builder.unit);
+        componentHolder.setWidth(builder.componentWidth);
         componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         componentHolder.add(nativeComponent);
 
@@ -219,11 +216,12 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             contentPanel = null;
         }
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
+        contentPanel.setWidth(builder.contentWidth);
         contentPanel.add(componentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
 
-        layout(builder);
+        layout();
     }
 
     public Label getLabel() {
@@ -234,7 +232,22 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
         return component;
     }
 
-    protected void layout(final Builder builder) {
+    public void setLabelAlignment(Alignment alignment) {
+        builder.labelAlignment = alignment;
+        layout();
+    }
+
+    public void setComponentAlignment(Alignment alignment) {
+        builder.componentAlignment = alignment;
+        layout();
+    }
+
+    public void setLayout(Layout layout) {
+        builder.layout = layout;
+        layout();
+    }
+
+    protected void layout() {
         HorizontalAlignmentConstant labelAlignment = builder.labelAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
                 : builder.labelAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
 
@@ -253,6 +266,8 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             getCellFormatter().setHorizontalAlignment(1, 1, componentAlignment);
             getCellFormatter().setHorizontalAlignment(2, 1, componentAlignment);
 
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.vertical.name());
+
             break;
 
         case vertical:
@@ -266,9 +281,17 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
             getCellFormatter().setHorizontalAlignment(3, 0, componentAlignment);
 
-            labelHolder.getElement().getStyle().setPaddingRight(0, Unit.EM);
+            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.vertical.name());
 
             break;
+        }
+
+        if (component.isViewable()) {
+            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            mandatoryImageHolder.setVisible(false);
+        } else {
+            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            mandatoryImageHolder.setVisible(true);
         }
     }
 
@@ -344,11 +367,11 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         private final CComponent<?, ?> component;
 
-        private double labelWidth = 15;
+        private String labelWidth;
 
-        private double componentWidth = 25;
+        private String componentWidth;
 
-        private final Unit unit;
+        private String contentWidth;
 
         private String customLabel;
 
@@ -366,11 +389,13 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
 
         public Builder(final CComponent<?, ?> component, Unit unit) {
             this.component = component;
-            this.unit = unit;
         }
 
         public Builder(final CComponent<?, ?> component) {
             this(component, Unit.EM);
+            labelWidth = "15em";
+            componentWidth = "25em";
+            contentWidth = "auto";
         }
 
         public WidgetDecorator build() {
@@ -381,13 +406,30 @@ public class WidgetDecorator extends FlexTable implements IDecorator<CComponent<
             return component;
         }
 
+        @Deprecated
         public Builder labelWidth(double labelWidth) {
+            this.labelWidth = labelWidth + "em";
+            return this;
+        }
+
+        @Deprecated
+        public Builder componentWidth(double componentWidth) {
+            this.componentWidth = componentWidth + "em";
+            return this;
+        }
+
+        public Builder labelWidth(String labelWidth) {
             this.labelWidth = labelWidth;
             return this;
         }
 
-        public Builder componentWidth(double componentWidth) {
+        public Builder componentWidth(String componentWidth) {
             this.componentWidth = componentWidth;
+            return this;
+        }
+
+        public Builder contentWidth(String contentWidth) {
+            this.contentWidth = contentWidth;
             return this;
         }
 

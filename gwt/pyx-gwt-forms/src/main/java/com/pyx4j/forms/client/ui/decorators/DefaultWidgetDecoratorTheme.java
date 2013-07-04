@@ -40,7 +40,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        readOnly, noMandatoryStar, invalid, viewable
+        readOnly, noMandatoryStar, invalid, viewable, vertical
     }
 
     public DefaultWidgetDecoratorTheme() {
@@ -65,6 +65,10 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("padding-right", "1em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorLabelHolder, "-", StyleDependent.vertical);
+        style.addProperty("padding-right", "0");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorLabel);
