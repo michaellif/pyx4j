@@ -79,7 +79,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
         FlowPanel documentsDecorator = new FlowPanel();
         documentsDecorator.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecorator.name());
         if (!isEditable()) {
-            documentsDecorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.readOnly.name());
+            documentsDecorator.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
         }
         documentsDecorator.add(documentsLabel);
         documentsPanel.setWidget(++drow, 0, documentsDecorator);

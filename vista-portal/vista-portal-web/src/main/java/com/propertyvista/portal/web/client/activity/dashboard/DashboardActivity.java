@@ -18,7 +18,6 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -32,7 +31,7 @@ import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class DashboardActivity extends SecurityAwareActivity implements DashboardView.Presenter {
+public class DashboardActivity extends SecurityAwareActivity implements DashboardView.DashboardPresenter {
 
     private final DashboardView view;
 
@@ -74,18 +73,6 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
         }
-    }
-
-    @Override
-    public void edit(Key id) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void back() {
-        // TODO Auto-generated method stub
-
     }
 
 }

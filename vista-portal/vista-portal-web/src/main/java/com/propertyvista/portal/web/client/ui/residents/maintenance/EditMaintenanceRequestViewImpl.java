@@ -18,8 +18,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.web.client.ui.EntityView;
 import com.propertyvista.portal.web.client.ui.residents.EditImpl;
-import com.propertyvista.portal.web.client.ui.residents.ViewBase;
 
 public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
@@ -30,7 +30,7 @@ public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestD
     }
 
     @Override
-    public void setPresenter(ViewBase.Presenter<MaintenanceRequestDTO> presenter) {
+    public void setPresenter(EntityView.EntityPresenter<MaintenanceRequestDTO> presenter) {
         super.setPresenter(presenter);
         if (categoryMeta != null) {
             ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);

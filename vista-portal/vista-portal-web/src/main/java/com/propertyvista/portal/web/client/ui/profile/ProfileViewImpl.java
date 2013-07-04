@@ -11,20 +11,15 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.personalinfo;
+package com.propertyvista.portal.web.client.ui.profile;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
 
-public class PersonalInfoViewImpl extends ViewImpl<ResidentDTO> implements PersonalInfoView {
+public class ProfileViewImpl extends ViewImpl<ResidentDTO> implements ProfileView {
 
-    public PersonalInfoViewImpl() {
-        super(new PersonalInfoForm(), false, true);
+    public ProfileViewImpl() {
+        super(new ProfileForm(), false, true);
     }
 
-    @Override
-    public void setPresenter(com.propertyvista.portal.web.client.ui.EntityView.EntityPresenter<ResidentDTO> presenter) {
-        super.setPresenter(presenter);
-        ((PersonalInfoForm) getForm()).setPresenter((PersonalInfoView.Presenter) presenter);
-    }
 }

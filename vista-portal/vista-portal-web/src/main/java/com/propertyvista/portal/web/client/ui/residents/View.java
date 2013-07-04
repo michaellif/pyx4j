@@ -16,9 +16,11 @@ package com.propertyvista.portal.web.client.ui.residents;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface View<E extends IEntity> extends ViewBase<E> {
+import com.propertyvista.portal.web.client.ui.EntityView;
 
-    interface Presenter<E extends IEntity> extends ViewBase.Presenter<E> {
+public interface View<E extends IEntity> extends EntityView<E> {
+
+    interface Presenter<E extends IEntity> extends EntityView.EntityPresenter<E> {
 
         void edit(Key id);
 

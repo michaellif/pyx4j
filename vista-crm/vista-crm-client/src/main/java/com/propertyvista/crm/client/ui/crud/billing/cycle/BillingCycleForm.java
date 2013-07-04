@@ -81,7 +81,6 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
         public DecoratorBuilder(CComponent<?, ?> component) {
             super(component);
-            readOnlyMode(!isEditable());
             labelWidth(20);
             componentWidth(15);
         }

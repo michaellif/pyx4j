@@ -55,7 +55,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
 
-    private DashboardView.Presenter presenter;
+    private DashboardView.DashboardPresenter presenter;
 
     private Button payButton;
 
@@ -63,7 +63,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
     }
 
-    public void setPresenter(DashboardView.Presenter presenter) {
+    public void setPresenter(DashboardView.DashboardPresenter presenter) {
         this.presenter = presenter;
     }
 

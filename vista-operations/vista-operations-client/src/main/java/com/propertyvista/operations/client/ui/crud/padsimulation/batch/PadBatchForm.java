@@ -48,7 +48,7 @@ public class PadBatchForm extends OperationsEntityForm<PadSimBatch> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 10).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().accountNumber()), 10).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 25).readOnlyMode(true).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchAmount()), 10).build());
         content.setWidget(row, 1, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
 

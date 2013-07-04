@@ -7,24 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-25
- * @author Vlad
+ * Created on May 14, 2011
+ * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents;
+package com.propertyvista.portal.web.client.ui.profile;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.web.client.ui.EntityView;
 
-import com.pyx4j.entity.shared.IEntity;
+public interface ProfileView extends EntityView<ResidentDTO> {
 
-public interface ViewBase<E extends IEntity> extends IsWidget {
-
-    interface Presenter<E extends IEntity> {
+    public interface ProfilePresenter extends EntityPresenter<ResidentDTO> {
 
     }
-
-    void setPresenter(Presenter<E> presenter);
-
-    void populate(E value);
 
 }

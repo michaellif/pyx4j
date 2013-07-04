@@ -35,7 +35,7 @@ public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
 
-    private DashboardView.Presenter presenter;
+    private DashboardView.DashboardPresenter presenter;
 
     private ProfileGadget profileGadget;
 
@@ -86,11 +86,11 @@ public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
 
     }
 
-    public void setPresenter(DashboardView.Presenter presenter) {
+    public void setPresenter(DashboardView.DashboardPresenter presenter) {
         this.presenter = presenter;
     }
 
-    protected DashboardView.Presenter getPresenter() {
+    protected DashboardView.DashboardPresenter getPresenter() {
         return presenter;
     }
 

@@ -23,6 +23,8 @@ import com.propertyvista.common.client.ui.components.security.PasswordChangeView
 import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
+import com.propertyvista.portal.web.client.ui.CommunicationView;
+import com.propertyvista.portal.web.client.ui.CommunicationViewImpl;
 import com.propertyvista.portal.web.client.ui.ExtraView;
 import com.propertyvista.portal.web.client.ui.ExtraViewImpl;
 import com.propertyvista.portal.web.client.ui.FooterView;
@@ -35,14 +37,14 @@ import com.propertyvista.portal.web.client.ui.MenuView;
 import com.propertyvista.portal.web.client.ui.MenuViewImpl;
 import com.propertyvista.portal.web.client.ui.NotificationHeaderView;
 import com.propertyvista.portal.web.client.ui.NotificationHeaderViewImpl;
-import com.propertyvista.portal.web.client.ui.CommunicationView;
-import com.propertyvista.portal.web.client.ui.CommunicationViewImpl;
-import com.propertyvista.portal.web.client.ui.ToolbarView;
-import com.propertyvista.portal.web.client.ui.ToolbarViewImpl;
 import com.propertyvista.portal.web.client.ui.NotificationPageView;
 import com.propertyvista.portal.web.client.ui.NotificationPageViewImpl;
+import com.propertyvista.portal.web.client.ui.ToolbarView;
+import com.propertyvista.portal.web.client.ui.ToolbarViewImpl;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.portal.web.client.ui.profile.ProfileView;
+import com.propertyvista.portal.web.client.ui.profile.ProfileViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillingHistoryView;
@@ -114,6 +116,9 @@ public class PortalWebViewFactory extends ViewFactoryBase {
                 map.put(type, new PersonalInfoViewImpl());
             } else if (PersonalInfoEdit.class.equals(type)) {
                 map.put(type, new PersonalInfoEditImpl());
+
+            } else if (ProfileView.class.equals(type)) {
+                map.put(type, new ProfileViewImpl());
 
             } else if (BillSummaryView.class.equals(type)) {
                 map.put(type, new BillSummaryViewImpl());

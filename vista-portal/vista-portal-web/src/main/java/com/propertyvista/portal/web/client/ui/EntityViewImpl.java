@@ -11,7 +11,7 @@
  * @author Vlad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents;
+package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -21,23 +21,22 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 
-public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBase<E> {
+import com.propertyvista.portal.web.client.ui.residents.Edit;
 
-    protected static final I18n i18n = I18n.get(ViewBaseImpl.class);
+public class EntityViewImpl<E extends IEntity> extends FlowPanel implements EntityView<E> {
+
+    protected static final I18n i18n = I18n.get(EntityViewImpl.class);
 
     private final SimplePanel formHolder;
 
+    @Deprecated
     private final FlowPanel footer;
 
     private CEntityForm<E> form;
 
-    private Presenter<E> presenter;
+    private EntityPresenter<E> presenter;
 
-    public ViewBaseImpl() {
-        this(null);
-    }
-
-    public ViewBaseImpl(CEntityForm<E> form) {
+    public EntityViewImpl(CEntityForm<E> form) {
         add(formHolder = new SimplePanel());
         add(footer = new FlowPanel());
 
@@ -62,16 +61,18 @@ public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBa
         formHolder.setWidget(form.asWidget());
     }
 
+    @Deprecated
     protected void addToFooter(IsWidget widget) {
         footer.add(widget);
     }
 
+    @Deprecated
     protected void removeFromFooter(IsWidget widget) {
         footer.remove(widget);
     }
 
     @Override
-    public void setPresenter(Presenter<E> presenter) {
+    public void setPresenter(EntityPresenter<E> presenter) {
         this.presenter = presenter;
     }
 
@@ -81,7 +82,7 @@ public class ViewBaseImpl<E extends IEntity> extends FlowPanel implements ViewBa
         form.populate(value);
     }
 
-    public Presenter<E> getPresenter() {
+    public EntityPresenter<E> getPresenter() {
         return presenter;
     }
 

@@ -13,29 +13,13 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
-import com.google.gwt.user.client.ui.SimplePanel;
-
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.web.client.ui.EntityViewImpl;
 
-public class DashboardViewImpl extends SimplePanel implements DashboardView {
-
-    private final DashboardForm_New form;
+public class DashboardViewImpl extends EntityViewImpl<TenantDashboardDTO> implements DashboardView {
 
     public DashboardViewImpl() {
-        form = new DashboardForm_New();
-        form.initContent();
-        setWidget(form);
-    }
-
-    @Override
-    public void setPresenter(DashboardView.Presenter presenter) {
-        form.setPresenter(presenter);
-    }
-
-    @Override
-    public void populate(TenantDashboardDTO value) {
-        form.reset();
-        form.populate(value);
+        super(new DashboardForm_New());
     }
 
 }

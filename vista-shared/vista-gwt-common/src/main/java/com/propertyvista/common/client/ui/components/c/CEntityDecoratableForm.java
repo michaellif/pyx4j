@@ -34,18 +34,15 @@ abstract public class CEntityDecoratableForm<E extends IEntity> extends CEntityF
 
         public DecoratorBuilder(CComponent<?, ?> component) {
             super(component);
-            readOnlyMode(!isEditable());
         }
 
         public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
             super(component);
-            readOnlyMode(!isEditable());
             componentWidth(componentWidth);
         }
 
         public DecoratorBuilder(CComponent<?, ?> component, double componentWidth, double labelWidth) {
             super(component);
-            readOnlyMode(!isEditable());
             componentWidth(componentWidth);
             labelWidth(labelWidth);
         }

@@ -157,7 +157,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
         public DecoratorBuilder(CComponent<?, ?> component) {
             super(component);
-            readOnlyMode(!isEditable());
             componentAlignment(Alignment.right);
             labelAlignment(Alignment.left);
             useLabelSemicolon(false);

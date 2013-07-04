@@ -72,7 +72,7 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
                 10).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().status()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().paymentsStatus()), 25).readOnlyMode(true).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().paymentsStatus()), 25).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().invalid()), 25).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());

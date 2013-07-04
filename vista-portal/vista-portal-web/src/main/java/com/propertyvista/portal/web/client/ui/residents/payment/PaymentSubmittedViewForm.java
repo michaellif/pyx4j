@@ -33,15 +33,15 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.web.client.ui.residents.ViewBaseImpl;
+import com.propertyvista.portal.web.client.ui.EntityViewImpl;
 
 public class PaymentSubmittedViewForm extends CEntityDecoratableForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentSubmittedViewForm.class);
 
-    private final ViewBaseImpl<PaymentRecordDTO> view;
+    private final EntityViewImpl<PaymentRecordDTO> view;
 
-    public PaymentSubmittedViewForm(ViewBaseImpl<PaymentRecordDTO> view) {
+    public PaymentSubmittedViewForm(EntityViewImpl<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class);
         this.view = view;
         setViewable(true);
