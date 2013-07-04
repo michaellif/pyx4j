@@ -13,7 +13,9 @@
  */
 package com.propertyvista.yardi.stub;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.axis2.client.Options;
@@ -51,6 +53,8 @@ public class AbstractYardiStub {
     private int requestCount = 0;
 
     private Long transactionId = 0l;
+
+    protected final List<String> recordedTracastionsLogs = new ArrayList<String>();
 
     static {
         testSystemsUrl.add("http://yardi.birchwoodsoftwaregroup.com/");
@@ -104,7 +108,10 @@ public class AbstractYardiStub {
             public void attachServiceContextEvent(ServiceContext sc, MessageContext mc) {
                 if (mc.getEnvelope() != null) {
                     requestCount++;
-                    TransactionLog.log(transactionId, fileName() + "-request", mc.getEnvelope().toString(), "xml");
+                    String fileName = TransactionLog.log(transactionId, fileName() + "-request", mc.getEnvelope().toString(), "xml");
+                    if (fileName != null) {
+                        recordedTracastionsLogs.add(fileName);
+                    }
                     log.debug(prefix + " Service Context", mc.getEnvelope());
                 }
             }
@@ -112,7 +119,10 @@ public class AbstractYardiStub {
             @Override
             public void attachEnvelopeEvent(MessageContext mc) {
                 log.debug(prefix + " Envelope Event", mc.getEnvelope());
-                TransactionLog.log(transactionId, fileName() + "-response", mc.getEnvelope().toString(), "xml");
+                String fileName = TransactionLog.log(transactionId, fileName() + "-response", mc.getEnvelope().toString(), "xml");
+                if (fileName != null) {
+                    recordedTracastionsLogs.add(fileName);
+                }
                 if (envelopeBuffer != null) {
                     envelopeBuffer.append(mc.getEnvelope());
                 }

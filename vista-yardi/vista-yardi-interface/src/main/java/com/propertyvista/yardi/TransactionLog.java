@@ -36,10 +36,6 @@ public class TransactionLog {
         return transactionsCountId.getNextNumber();
     }
 
-    public static void log(Long transactionId, String contextName, String context) {
-        log(transactionId, contextName, context, "log");
-    }
-
     private static File logsDir() {
         File dir;
         if (LoggerConfig.getContextName() != null) {
@@ -51,9 +47,9 @@ public class TransactionLog {
 
     }
 
-    public static void log(Long transactionId, String contextName, String context, String fileExt) {
+    public static String log(Long transactionId, String contextName, String context, String fileExt) {
         if (transactionId == null) {
-            return;
+            return null;
         }
         FileWriter writer = null;
         try {
@@ -74,8 +70,10 @@ public class TransactionLog {
             }
             writer = new FileWriter(out);
             writer.write(context);
+            return out.getAbsolutePath();
         } catch (Throwable t) {
             log.error("failed to create transaction log", t);
+            return null;
         } finally {
             IOUtils.closeQuietly(writer);
         }

@@ -53,28 +53,37 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
     @Override
     public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {
-        init(Action.OpenReceiptBatch);
-        validateWriteAccess(yc);
+        boolean success = false;
+        try {
+            init(Action.OpenReceiptBatch);
+            validateWriteAccess(yc);
 
-        OpenReceiptBatch request = new OpenReceiptBatch();
-        request.setUserName(yc.username().getValue());
-        request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
-        request.setServerName(yc.serverName().getValue());
-        request.setDatabase(yc.database().getValue());
-        request.setPlatform(yc.platform().getValue().name());
-        request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
-        request.setYardiPropertyId(propertyId);
+            OpenReceiptBatch request = new OpenReceiptBatch();
+            request.setUserName(yc.username().getValue());
+            request.setPassword(ServerSideFactory.create(PasswordEncryptorFacade.class).decryptPassword(yc.password()));
+            request.setServerName(yc.serverName().getValue());
+            request.setDatabase(yc.database().getValue());
+            request.setPlatform(yc.platform().getValue().name());
+            request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
+            request.setYardiPropertyId(propertyId);
 
-        OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
+            OpenReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).openReceiptBatch(request);
 
-        long result = response.getOpenReceiptBatchResult();
-        log.debug("OpenReceiptBatch: {}", result);
-        return result;
+            long result = response.getOpenReceiptBatchResult();
+            log.debug("OpenReceiptBatch: {}", result);
+            success = true;
+            return result;
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
+        }
     }
 
     @Override
     public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
             RemoteException {
+        boolean success = false;
         try {
             init(Action.AddReceiptsToBatch);
             validateWriteAccess(yc);
@@ -105,17 +114,23 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             } else {
-                log.info(messages.toString());
+                log.debug(messages.toString());
             }
+            success = true;
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (XMLStreamException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
+        boolean success = false;
         try {
             init(Action.PostReceiptBatch);
             validateWriteAccess(yc);
@@ -137,15 +152,21 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             } else {
-                log.info(messages.toString());
+                log.debug(messages.toString());
             }
+            success = true;
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
+        boolean success = false;
         try {
             init(Action.CancelReceiptBatch);
             validateWriteAccess(yc);
@@ -167,10 +188,15 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             } else {
-                log.info(messages.toString());
+                log.debug(messages.toString());
             }
+            success = true;
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 

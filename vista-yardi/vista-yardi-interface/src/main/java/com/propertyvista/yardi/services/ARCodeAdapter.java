@@ -37,8 +37,8 @@ public class ARCodeAdapter {
         ARCode code = retrieveARCode(actionType, chargeCode);
 
         if (code == null) {
-            log.warn("An AR Code for yardi charge code {} wasn't found: will try to find a default with action type {}, customerId={}", chargeCode, actionType,
-                    customerId);
+            log.debug("An AR Code for yardi charge code {} wasn't found: will try to find a default with action type {}, customerId={}", chargeCode,
+                    actionType, customerId);
             code = retrieveDefaultUnkownARCode(actionType);
         } else if (code.type().getValue().getActionType() != actionType) {
             log.warn("An AR Code for yardi charge code has unexpected action type: got {} but expected {}, customerId={}", code.type().getValue()

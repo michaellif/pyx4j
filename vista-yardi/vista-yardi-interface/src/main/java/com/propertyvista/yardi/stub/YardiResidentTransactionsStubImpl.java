@@ -91,7 +91,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
-            log.info("GetPropertyConfigurations Result: {}", xml);
+            log.debug("GetPropertyConfigurations Result: {}", xml);
 
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
@@ -104,9 +104,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
             Properties properties = MarshallUtil.unmarshal(Properties.class, xml);
 
-            if (log.isDebugEnabled()) {
-                log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
-            }
+            log.debug("\n--- GetPropertyConfigurations ---\n{}\n", properties);
 
             return properties;
 
@@ -118,6 +116,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     @Override
     public ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException,
             YardiPropertyNoAccessException, RemoteException {
+        boolean success = false;
         try {
 
             init(Action.GetResidentTransactions);
@@ -139,7 +138,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             }
             String xml = response.getGetResidentTransactions_LoginResult().getExtraElement().toString();
 
-            log.info("GetResidentTransactions: {}", xml);
+            log.debug("GetResidentTransactions: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -154,16 +153,21 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             }
 
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+            success = true;
             return transactions;
-
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public ResidentTransactions getResidentTransactionsForTenant(PmcYardiCredential yc, String propertyId, String tenantId) throws YardiServiceException,
             RemoteException {
+        boolean success = false;
         try {
             init(Action.GetResidentTransaction);
 
@@ -180,7 +184,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             GetResidentTransaction_LoginResponse response = getResidentTransactionsService(yc).getResidentTransaction_Login(request);
             String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
 
-            log.info("GetResidentTransaction: {}", xml);
+            log.debug("GetResidentTransaction: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -190,15 +194,20 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 }
             }
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
+            success = true;
             return transactions;
-
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException, RemoteException {
+        boolean success = false;
         try {
             init(Action.ImportResidentTransactions);
 
@@ -211,7 +220,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
 
             String trXml = MarshallUtil.marshall(reversalTransactions);
-            log.info(trXml);
+            log.debug(trXml);
             TransactionXml_type1 transactionXml = new TransactionXml_type1();
             OMElement element = AXIOMUtil.stringToOM(trXml);
             transactionXml.setExtraElement(element);
@@ -220,23 +229,29 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             ImportResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).importResidentTransactions_Login(request);
             String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
 
-            log.info("ImportResidentTransactions: {}", xml);
+            log.debug("ImportResidentTransactions: {}", xml);
 
             Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
             if (messages.isError()) {
                 throw new YardiServiceException(messages.toString());
             } else {
-                log.info(messages.toString());
+                log.debug(messages.toString());
             }
+            success = true;
         } catch (JAXBException e) {
             throw new Error(e);
         } catch (XMLStreamException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public void getUnitInformation(PmcYardiCredential yc, String propertyId) throws YardiServiceException, RemoteException {
+        boolean success = false;
         try {
             init(Action.GetUnitInformation);
 
@@ -252,26 +267,32 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             GetUnitInformation_LoginResponse response = getResidentTransactionsService(yc).getUnitInformation_Login(request);
             String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
 
-            log.info("GetUnitInformation: {}", xml);
+            log.debug("GetUnitInformation: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
                     throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
                 } else {
-                    log.info(messages.toString());
+                    log.debug(messages.toString());
                 }
             }
             //TODO
 //            ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
 //            return transactions;
 
+            success = true;
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException {
+        boolean success = false;
         try {
             init(Action.GetResidentsLeaseCharges);
 
@@ -291,27 +312,32 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
             String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
 
-            log.info("GetResidentsLeaseCharges: {}", xml);
+            log.debug("GetResidentsLeaseCharges: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
                     throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, Date {2}", messages.toString(), propertyId, date));
                 } else {
-                    log.info(messages.toString());
+                    log.debug(messages.toString());
                 }
             }
 
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-
+            success = true;
             return transactions;
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
             throws YardiServiceException, RemoteException {
+        boolean success = false;
         try {
             init(Action.GetResidentLeaseCharges);
 
@@ -332,7 +358,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             GetResidentLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentLeaseCharges_Login(request);
             String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
 
-            log.info("GetResidentLeaseCharges: {}", xml);
+            log.debug("GetResidentLeaseCharges: {}", xml);
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
@@ -344,10 +370,14 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             }
 
             ResidentTransactions transactions = MarshallUtil.unmarshal(ResidentTransactions.class, xml);
-
+            success = true;
             return transactions;
         } catch (JAXBException e) {
             throw new Error(e);
+        } finally {
+            if (!success) {
+                log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
+            }
         }
     }
 
