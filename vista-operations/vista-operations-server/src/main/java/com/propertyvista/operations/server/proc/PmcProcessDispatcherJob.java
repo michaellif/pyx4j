@@ -42,6 +42,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.server.ExceptionMessagesExtractor;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
 import com.pyx4j.server.contexts.Lifecycle;
 import com.pyx4j.server.contexts.NamespaceManager;
@@ -190,7 +191,7 @@ public class PmcProcessDispatcherJob implements Job {
             }
         } catch (Throwable e) {
             log.error("pmcProcess execution error", e);
-            run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(e.getMessage()));
+            run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExceptionMessagesExtractor.getAllMessages(e)));
             run.status().setValue(RunStatus.Failed);
             return null;
         } finally {
@@ -302,7 +303,7 @@ public class PmcProcessDispatcherJob implements Job {
                 Persistence.service().persist(run.executionReport());
             } catch (Throwable e) {
                 log.error("pmcProcess execution error", e);
-                run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(e.getMessage()));
+                run.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExceptionMessagesExtractor.getAllMessages(e)));
                 run.status().setValue(RunStatus.Failed);
                 return;
             }
@@ -403,7 +404,7 @@ public class PmcProcessDispatcherJob implements Job {
         Persistence.service().persist(runData.executionReport());
         if (executionException != null) {
             runData.status().setValue(RunDataStatus.Erred);
-            runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExecutionMonitor.getErrorMessage(executionException)));
+            runData.errorMessage().setValue(ExecutionMonitor.truncErrorMessage(ExceptionMessagesExtractor.getAllMessages(executionException)));
         } else if (context.getExecutionMonitor().isTerminationRequested()) {
             runData.status().setValue(RunDataStatus.Terminated);
         } else {

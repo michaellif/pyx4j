@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
@@ -63,7 +64,7 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         } catch (RemoteException e) {
             throw new ARException("Open Posting Batch to Yardi failed due to communication failure", e);
         } catch (YardiServiceException e) {
-            throw new ARException("Open Posting Batch to Yardi failed", e);
+            throw new ARException(SimpleMessageFormat.format("Open Posting Batch to Yardi failed for building {0}", building.propertyCode()), e);
         }
     }
 
@@ -80,9 +81,11 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
             ServerSideFactory.create(YardiARFacade.class).updateLease(paymentRecord.billingAccount().lease());
             ServerSideFactory.create(YardiARFacade.class).postReceipt(receipt, paymentBatchContext);
         } catch (RemoteException e) {
-            throw new ARException("Posting receipt to Yardi failed due to communication failure", e);
+            throw new ARException(SimpleMessageFormat.format("Posting receipt {0} to Yardi failed due to communication failure; Lease Id {1}", //
+                    paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
         } catch (YardiServiceException e) {
-            throw new ARException("Posting receipt to Yardi failed", e);
+            throw new ARException(SimpleMessageFormat.format("Posting receipt {0} to Yardi failed; Lease Id {1}", //
+                    paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
         }
 
     }
@@ -113,9 +116,11 @@ class ARYardiPaymentManager extends ARAbstractPaymentManager {
         try {
             ServerSideFactory.create(YardiARFacade.class).postReceiptReversal(reversal);
         } catch (RemoteException e) {
-            throw new ARException("Posting receipt reversal to Yardi failed due to communication failure", e);
+            throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed due to communication failure; Lease Id {1}", //
+                    paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
         } catch (YardiServiceException e) {
-            throw new ARException("Posting receipt reversal to Yardi failed", e);
+            throw new ARException(SimpleMessageFormat.format("Posting receipt {0} reversal to Yardi failed; Lease Id {1}", //
+                    paymentRecord.id(), paymentRecord.billingAccount().lease().leaseId()), e);
         }
 
         try {

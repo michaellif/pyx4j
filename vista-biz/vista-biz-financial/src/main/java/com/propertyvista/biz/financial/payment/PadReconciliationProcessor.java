@@ -253,7 +253,7 @@ class PadReconciliationProcessor {
 
             } catch (Throwable e) {
                 log.error("payment transaction '" + debitRecord.transactionId().getValue() + "' processing error", e);
-                executionMonitor.addErredEvent("Error", debitRecord.amount().getValue());
+                executionMonitor.addErredEvent("Error", debitRecord.amount().getValue(), e);
             }
         }
     }

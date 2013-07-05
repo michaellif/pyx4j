@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.essentials.server.ExceptionMessagesExtractor;
 
 import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.operations.domain.scheduler.ExecutionReport;
@@ -190,12 +191,12 @@ public class ExecutionMonitor {
 
     public void addFailedEvent(String sectionName, Throwable throwable) {
         log.error("Event Failed", throwable);
-        addFailedEvent(sectionName, throwable.toString());
+        addFailedEvent(sectionName, ExceptionMessagesExtractor.getAllMessages(throwable));
     }
 
     public void addFailedEvent(String sectionName, String message, Throwable throwable) {
         log.error("Event Failed {}", message, throwable);
-        addFailedEvent(sectionName, message + " " + throwable.toString());
+        addFailedEvent(sectionName, message + " " + ExceptionMessagesExtractor.getAllMessages(throwable));
     }
 
     public void addErredEvent(String sectionName, String message) {
@@ -217,17 +218,17 @@ public class ExecutionMonitor {
 
     public void addErredEvent(String sectionName, BigDecimal value, Throwable throwable) {
         log.error("Event Erred", throwable);
-        addErredEvent(sectionName, value, throwable.toString());
+        addErredEvent(sectionName, value, ExceptionMessagesExtractor.getAllMessages(throwable));
     }
 
     public void addErredEvent(String sectionName, BigDecimal value, String message, Throwable throwable) {
         log.error("Event Erred {}", message, throwable);
-        addErredEvent(sectionName, value, message + " " + throwable.toString());
+        addErredEvent(sectionName, value, message + "\n" + ExceptionMessagesExtractor.getAllMessages(throwable));
     }
 
     public void addErredEvent(String sectionName, String message, Throwable throwable) {
         log.error("Event Erred {}", message, throwable);
-        addErredEvent(sectionName, null, message + " " + throwable.toString());
+        addErredEvent(sectionName, null, message + "\n" + ExceptionMessagesExtractor.getAllMessages(throwable));
     }
 
     public void setMessage(String message) {
@@ -375,20 +376,6 @@ public class ExecutionMonitor {
                 executionReportMessage.eventTime().setValue(message.eventTime);
                 executionReportSection.messages().add(executionReportMessage);
             }
-        }
-    }
-
-    public static String getErrorMessage(Throwable e) {
-        String message = e.getMessage();
-        if (message != null) {
-            String className = e.getClass().getName();
-            if (className.equals(message) || message.startsWith(className)) {
-                return message;
-            } else {
-                return e.getClass().getSimpleName() + ": " + message;
-            }
-        } else {
-            return e.toString();
         }
     }
 

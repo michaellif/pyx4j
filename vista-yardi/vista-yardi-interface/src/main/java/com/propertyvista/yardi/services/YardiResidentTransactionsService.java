@@ -374,7 +374,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 }
             } catch (YardiPropertyNoAccessException e) {
                 suspendBuilding(propertyCode);
-                executionMonitor.addErredEvent("Building", e.getMessage());
+                executionMonitor.addErredEvent("Building", e);
             }
         }
         return transactions;
