@@ -30,7 +30,6 @@ import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.S
 import static com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorMandatoryImage;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -386,12 +385,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         private Layout layout = Layout.horisontal;
 
-        public Builder(final CComponent<?, ?> component, Unit unit) {
-            this.component = component;
-        }
-
         public Builder(final CComponent<?, ?> component) {
-            this(component, Unit.EM);
+            this.component = component;
             labelWidth = "15em";
             componentWidth = "25em";
             contentWidth = "auto";
