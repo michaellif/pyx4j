@@ -20,22 +20,6 @@ import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMet
 import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsViewerView;
 import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.gadgets.HomePageGadgetViewerImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.CityIntroPageViewerImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.PageEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.page.PageViewerImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditor;
-import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteEditorImpl;
-import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewer;
-import com.propertyvista.crm.client.ui.crud.settings.content.site.SiteViewerImpl;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckListerView;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.settings.creditchecks.CustomerCreditCheckViewerView;
@@ -79,27 +63,7 @@ public class SettingsViewFactory extends ViewFactoryBase {
 
     public static <E extends IEntity, T extends IPane> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (SiteViewer.class.equals(type)) {
-                map.put(type, new SiteViewerImpl());
-            } else if (SiteEditor.class.equals(type)) {
-                map.put(type, new SiteEditorImpl());
-
-            } else if (PageViewer.class.equals(type)) {
-                map.put(type, new PageViewerImpl());
-            } else if (PageEditor.class.equals(type)) {
-                map.put(type, new PageEditorImpl());
-
-            } else if (HomePageGadgetViewer.class.equals(type)) {
-                map.put(type, new HomePageGadgetViewerImpl());
-            } else if (HomePageGadgetEditor.class.equals(type)) {
-                map.put(type, new HomePageGadgetEditorImpl());
-
-            } else if (CityIntroPageViewer.class.equals(type)) {
-                map.put(type, new CityIntroPageViewerImpl());
-            } else if (CityIntroPageEditor.class.equals(type)) {
-                map.put(type, new CityIntroPageEditorImpl());
-
-            } else if (ARCodeListerView.class.equals(type)) {
+            if (ARCodeListerView.class.equals(type)) {
                 map.put(type, new ARCodeListerViewImpl());
 
             } else if (ARCodeViewerView.class.equals(type)) {
@@ -152,6 +116,7 @@ public class SettingsViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantSecurityViewImpl());
             }
         }
+
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);
         if (impl == null) {

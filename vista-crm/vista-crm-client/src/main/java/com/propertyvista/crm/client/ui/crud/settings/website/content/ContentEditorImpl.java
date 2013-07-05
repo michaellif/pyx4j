@@ -11,16 +11,13 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.admin;
+package com.propertyvista.crm.client.ui.crud.settings.website.content;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
-
+import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
-
-    void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
+public class ContentEditorImpl extends CrmEditorViewImplBase<SiteDescriptorDTO> implements ContentEditor {
+    public ContentEditorImpl() {
+        setForm(new ContentForm(this));
+    }
 }

@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
+public interface SiteContentCrudService extends AbstractCrudService<SiteDescriptorDTO> {
 
     void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
 }

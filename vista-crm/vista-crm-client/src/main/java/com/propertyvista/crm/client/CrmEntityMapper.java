@@ -19,9 +19,10 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.rpc.CrmSiteMap;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;
@@ -147,7 +148,7 @@ public class CrmEntityMapper {
         AppPlaceEntityMapper.register(Portfolio.class, CrmSiteMap.Organization.Portfolio.class, defaultImage);
         AppPlaceEntityMapper.register(Vendor.class, CrmSiteMap.Organization.Vendor.class, defaultImage);
 
-        AppPlaceEntityMapper.register(HomePageGadget.class, Content.HomePageGadgets.class, defaultImage);
+        AppPlaceEntityMapper.register(HomePageGadget.class, Website.Content.HomePageGadgets.class, defaultImage);
 
         AppPlaceEntityMapper.register(DashboardMetadata.class, CrmSiteMap.Dashboard.Manage.class, defaultImage);
         // TODO add report place mapping here

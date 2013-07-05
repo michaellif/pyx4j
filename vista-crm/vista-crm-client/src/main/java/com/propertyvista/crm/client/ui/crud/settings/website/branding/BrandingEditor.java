@@ -11,16 +11,14 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.admin;
+package com.propertyvista.crm.client.ui.crud.settings.website.branding;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
+public interface BrandingEditor extends IEditor<SiteDescriptorDTO> {
 
-    void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
+    interface Presenter extends IEditor.Presenter {
+    }
 }

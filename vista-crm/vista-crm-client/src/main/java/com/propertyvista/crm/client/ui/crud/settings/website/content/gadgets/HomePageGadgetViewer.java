@@ -7,20 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 5, 2013
- * @author VladL
+ * Created on 2012-04-26
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.admin;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
+package com.propertyvista.crm.client.ui.crud.settings.website.content.gadgets;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.entity.rpc.AbstractCrudService;
+import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.dto.SiteDescriptorDTO;
+import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
+public interface HomePageGadgetViewer extends IViewer<HomePageGadget> {
 
-    void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
+    interface Presenter extends IViewer.Presenter {
+
+        void viewGadget(Key id);
+
+        void editNew(Key parentId);
+    }
+
+    void viewGadget(Key id);
+
+    void newGadget(Key parentId);
 }

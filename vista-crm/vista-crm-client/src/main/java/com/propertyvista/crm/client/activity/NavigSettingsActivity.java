@@ -31,6 +31,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
@@ -93,7 +94,9 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Website"));
-        folder.addNavigItem(new CrmSiteMap.Administration.Content());
+        folder.addNavigItem(new Website.General());
+        folder.addNavigItem(new Website.Content());
+        folder.addNavigItem(new Website.Branding());
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Policies"));

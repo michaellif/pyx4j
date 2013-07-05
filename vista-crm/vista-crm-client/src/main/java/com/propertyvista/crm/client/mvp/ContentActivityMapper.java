@@ -118,15 +118,6 @@ import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActiv
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeListerViewActivity;
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.CityIntroPageViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.HomePageGadgetViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.PageEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.PageViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.SiteActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.SiteEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.content.SiteViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.merchantaccount.MerchantAccountEditorActivity;
@@ -142,6 +133,21 @@ import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tenantsecurity.TenantSecurityActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.branding.BrandingActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.branding.BrandingEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.branding.BrandingViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.CityIntroPageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.CityIntroPageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.ContentActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.ContentEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.ContentViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.HomePageGadgetEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.HomePageGadgetViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.PageEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.content.PageViewerActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.general.GeneralActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.general.GeneralEditorActivity;
+import com.propertyvista.crm.client.activity.crud.settings.website.general.GeneralViewerActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemEditorActivity;
 import com.propertyvista.crm.client.activity.crud.unit.UnitItemViewerActivity;
@@ -219,9 +225,9 @@ import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizar
 import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
+import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 
 public class ContentActivityMapper implements AppActivityMapper {
@@ -792,20 +798,46 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Administration.Content) {
+                    } else if (crudPlace instanceof Website.General) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new SiteEditorActivity(crudPlace);
+                            activity = new GeneralEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new SiteViewerActivity(crudPlace);
+                            activity = new GeneralViewerActivity(crudPlace);
                             break;
                         case lister:
-                            activity = new SiteActivity(crudPlace);
+                            activity = new GeneralActivity(crudPlace);
                             break;
                         }
 
-                    } else if (crudPlace instanceof Content.Page) {
+                    } else if (crudPlace instanceof Website.Branding) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new BrandingEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new BrandingViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new BrandingActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Website.Content) {
+                        switch (crudPlace.getType()) {
+                        case editor:
+                            activity = new ContentEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new ContentViewerActivity(crudPlace);
+                            break;
+                        case lister:
+                            activity = new ContentActivity(crudPlace);
+                            break;
+                        }
+
+                    } else if (crudPlace instanceof Website.Content.Page) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PageEditorActivity(crudPlace);
@@ -817,7 +849,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Content.HomePageGadgets) {
+                    } else if (crudPlace instanceof Website.Content.HomePageGadgets) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new HomePageGadgetEditorActivity(crudPlace);
@@ -829,7 +861,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof Content.CityIntroPage) {
+                    } else if (crudPlace instanceof Website.Content.CityIntroPage) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new CityIntroPageEditorActivity(crudPlace);

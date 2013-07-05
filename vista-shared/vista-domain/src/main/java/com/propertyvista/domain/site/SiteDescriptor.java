@@ -87,6 +87,9 @@ public interface SiteDescriptor extends Descriptor {
     @Caption(name = "Website Skin")
     IPrimitive<Skin> skin();
 
+    @Owned
+    SitePalette sitePalette();
+
     @Caption(name = "Website Enabled")
     IPrimitive<Boolean> enabled();
 
@@ -94,16 +97,27 @@ public interface SiteDescriptor extends Descriptor {
 
     IPrimitive<Boolean> disableBuildingDetails();
 
+    @Owned
+    ResidentPortalSettings residentPortalSettings();
+
+    @Deprecated
     SiteImageResource crmLogo();
 
+    // Content ================================================================
+
     @Owned
-    SitePalette sitePalette();
+    IList<HomePageGadget> homePageGadgetsNarrow();
+
+    @Owned
+    IList<HomePageGadget> homePageGadgetsWide();
+
+    @Owned
+    IList<CityIntroPage> cityIntroPages();
+
+    // Branding ===============================================================
 
     @Owned
     IList<SiteTitles> siteTitles();
-
-    @Owned
-    IList<PageMetaTags> metaTags();
 
     @Owned
     IList<PortalImageResource> logo();
@@ -115,19 +129,12 @@ public interface SiteDescriptor extends Descriptor {
     IList<PortalImageSet> banner();
 
     @Owned
+    IList<PageMetaTags> metaTags();
+
+    @Owned
     IList<SocialLink> socialLinks();
 
-    @Owned
-    IList<HomePageGadget> homePageGadgetsNarrow();
-
-    @Owned
-    IList<HomePageGadget> homePageGadgetsWide();
-
-    @Owned
-    IList<CityIntroPage> cityIntroPages();
-
-    @Owned
-    ResidentPortalSettings residentPortalSettings();
+    // Internals:
 
     @Owned
     @I18n(strategy = I18n.I18nStrategy.IgnoreThis)

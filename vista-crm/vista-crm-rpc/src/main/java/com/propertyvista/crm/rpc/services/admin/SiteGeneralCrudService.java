@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 5, 2013
- * @author VladL
+ * Created on 2011-06-06
+ * @author Vlad
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.services.admin;
@@ -20,7 +20,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 
 import com.propertyvista.dto.SiteDescriptorDTO;
 
-public interface SiteDescriptorCrudService extends AbstractCrudService<SiteDescriptorDTO> {
+public interface SiteGeneralCrudService extends AbstractCrudService<SiteDescriptorDTO> {
 
     void retrieveHomeItem(AsyncCallback<Key> asyncCallback);
 }

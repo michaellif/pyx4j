@@ -412,15 +412,26 @@ public class CrmSiteMap implements SiteMap {
             }
         }
 
-        public static class Content extends CrmCrudAppPlace {
+        public static class Website extends CrmCrudAppPlace {
 
-            public static class HomePageGadgets extends CrmCrudAppPlace {
+            public static class General extends CrmCrudAppPlace {
+
             }
 
-            public static class Page extends CrmCrudAppPlace {
+            public static class Content extends CrmCrudAppPlace {
+
+                public static class HomePageGadgets extends CrmCrudAppPlace {
+                }
+
+                public static class Page extends CrmCrudAppPlace {
+                }
+
+                public static class CityIntroPage extends CrmCrudAppPlace {
+                }
             }
 
-            public static class CityIntroPage extends CrmCrudAppPlace {
+            public static class Branding extends CrmCrudAppPlace {
+
             }
         }
 
