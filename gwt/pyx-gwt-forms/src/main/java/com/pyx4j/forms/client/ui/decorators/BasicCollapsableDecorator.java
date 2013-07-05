@@ -34,7 +34,7 @@ public class BasicCollapsableDecorator<E extends IEntity> extends CollapsablePan
 
     @Override
     public void setComponent(CEntityContainer<E> viewer) {
-        setWidget(viewer.createContent());
+        setWidget(viewer.createContent().asWidget());
     }
 
     @Override

@@ -20,10 +20,13 @@
  */
 package com.pyx4j.widgets.client;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -35,7 +38,7 @@ import com.pyx4j.widgets.client.event.shared.ToggleEvent;
 import com.pyx4j.widgets.client.event.shared.ToggleHandler;
 import com.pyx4j.widgets.client.images.WidgetsImages;
 
-public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
+public class CollapsablePanel extends FlowPanel implements HasToggleHandlers {
 
     private final WidgetsImages images;
 
@@ -49,26 +52,24 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
 
     public CollapsablePanel(WidgetsImages images) {
         this.images = images;
-
-        HorizontalPanel mainPanel = new HorizontalPanel();
-        mainPanel.setWidth("100%");
+        getElement().getStyle().setPosition(Position.RELATIVE);
 
         collapseImage = new Image();
         collapseImage.setResource(images.collapse());
+        collapseImage.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        collapseImage.getElement().getStyle().setDisplay(Display.INLINE);
+        collapseImage.getElement().getStyle().setTop(0, Unit.PX);
+        collapseImage.getElement().getStyle().setLeft(0, Unit.PX);
         collapseImage.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
                 setExpended(!expended);
             }
         });
-        mainPanel.add(collapseImage);
+        add(collapseImage);
 
-        mainPanel.setCellWidth(collapseImage, collapseImage.getWidth() + "px");
         contentHolder = new SimplePanel();
-        mainPanel.add(contentHolder);
-        mainPanel.setCellVerticalAlignment(contentHolder, HorizontalPanel.ALIGN_MIDDLE);
-
-        super.setWidget(mainPanel);
+        add(contentHolder);
     }
 
     public void setExpended(boolean expended) {
@@ -92,7 +93,6 @@ public class CollapsablePanel extends SimplePanel implements HasToggleHandlers {
         return addHandler(handler, ToggleEvent.getType());
     }
 
-    @Override
     public void setWidget(Widget w) {
         contentHolder.setWidget(w);
     }

@@ -63,7 +63,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         setWidth("100%");
 
         captionHolder = new HorizontalPanel();
-        captionHolder.getElement().getStyle().setMarginLeft(5, Unit.PX);
+        captionHolder.getElement().getStyle().setMarginLeft(50, Unit.PX);
         captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
 
         caption = new Label("");
