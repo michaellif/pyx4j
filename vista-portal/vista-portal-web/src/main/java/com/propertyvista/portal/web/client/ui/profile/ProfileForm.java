@@ -115,24 +115,26 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
-        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
+        FormFlexPanel mainPanel = new FormFlexPanel();
         int row = -1;
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().name(), new CEntityLabel<Name>()), "250px").customLabel("").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().sex()), "50px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().birthDate()), "150px").build());
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().name(), new CEntityLabel<Name>()), "250px").customLabel("").build());
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().sex()), "50px").build());
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().birthDate()), "150px").build());
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().homePhone()), "250px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().mobilePhone()), "250px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().workPhone()), "250px").build());
-        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().email()), "250px").build());
+        mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().homePhone()), "250px").build());
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().mobilePhone()), "250px").build());
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().workPhone()), "250px").build());
+        mainPanel.setWidget(++row, 0, createDecorator(inject(proto().email()), "250px").build());
 
-        contentPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        contentPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false, true)));
-        contentPanel.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
+        mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
+        mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), false, true)));
+        mainPanel.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
+
+        SimplePanel contentPanel = new SimplePanel(mainPanel);
+        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
 
         SimplePanel containerPanel = new SimplePanel(contentPanel);
         containerPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContainer.name());

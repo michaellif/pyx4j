@@ -41,7 +41,6 @@ public class EntityViewTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");
         style.addProperty("padding", "10px");
-        style.addProperty("width", "100%");
         style.addProperty("text-align", "center");
         addStyle(style);
 
