@@ -221,7 +221,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
 
     @SuppressWarnings("unchecked")
     protected void calculateActionsState() {
-        boolean enabled = isEnabled() && isEditable();
+        boolean enabled = getParent().isEnabled() && getParent().isEditable();
         if (!enabled) {
             actionsBar.setDefaultActionsState(false, false, false);
         } else {
@@ -238,10 +238,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
             actionsBar.setDefaultActionsState(removable, movable && !first && previousSibling.isMovable(), movable && !last && nextSibling.isMovable());
         }
 
-    }
-
-    protected void disableActions() {
-        ((IFolderItemDecorator<?>) getDecorator()).setActionsState(false, false, false);
     }
 
     @Override
