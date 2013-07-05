@@ -322,6 +322,7 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
                     image.getElement().getStyle().setMarginTop(0.2, Unit.EM);
                     image.getElement().getStyle().setMarginRight(0.5, Unit.EM);
+                    image.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
                     add(image);
                     setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
                 }
