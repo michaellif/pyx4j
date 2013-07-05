@@ -32,12 +32,8 @@ import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat.Build
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.AccessDeniedGagetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
-import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata.RefreshInterval;
-import com.propertyvista.misc.VistaTODO;
 
 public class DashboardManagementFacadeImpl implements DashboardManagementFacade {
 
@@ -156,14 +152,7 @@ public class DashboardManagementFacadeImpl implements DashboardManagementFacade 
     private GadgetMetadata enforcePermissions(GadgetMetadata gadgetMetadata) {
         GadgetDescription description = gadgetMetadata.getInstanceValueClass().getAnnotation(GadgetDescription.class);
         if (SecurityController.checkAnyBehavior(description.allowedBehaviors())) {
-            if (VistaTODO.VISTA_3093_ARREARS_STATUS_GADGET_DEPRECATION & gadgetMetadata.getInstanceValueClass().equals(ArrearsStatusGadgetMetadata.class)) {
-                ArrearsSummaryGadgetMetadata arreasSummaryHackGadget = EntityFactory.create(ArrearsSummaryGadgetMetadata.class);
-                arreasSummaryHackGadget.gadgetId().setValue(gadgetMetadata.gadgetId().getValue());
-                arreasSummaryHackGadget.refreshInterval().setValue(RefreshInterval.Never);
-                return arreasSummaryHackGadget;
-            } else {
-                return gadgetMetadata;
-            }
+            return gadgetMetadata;
         } else {
             AccessDeniedGagetMetadata accessDenied = EntityFactory.create(AccessDeniedGagetMetadata.class);
             accessDenied.gadgetId().setValue(gadgetMetadata.gadgetId().getValue());
