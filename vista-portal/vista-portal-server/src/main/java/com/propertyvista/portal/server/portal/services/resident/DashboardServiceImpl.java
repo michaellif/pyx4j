@@ -32,6 +32,7 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantMainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressRetriever;
@@ -78,10 +79,6 @@ public class DashboardServiceImpl implements DashboardService {
         }
 
         // fill stuff for the new web portal
-        dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
-        dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
-        dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
-
         FinancialSummaryDTO billingSummary = BillSummaryServiceImpl.retrieve();
         dashboard.billingInfo().currentBalance().setValue(billingSummary.currentBalance().getValue());
         if (!VistaFeatures.instance().yardiIntegration()) {
@@ -89,7 +86,13 @@ public class DashboardServiceImpl implements DashboardService {
             dashboard.billingInfo().dueDate().setValue(bill.dueDate().getValue());
         }
 
-        dashboard.maintenanceInfo();
+        for (MaintenanceRequestDTO maintenanceRequest : mrList) {
+            TenantMainenanceRequestStatusDTO requestStatusDto = dashboard.maintenanceInfo().maintenanceRequestStauses().$();
+            requestStatusDto.description().setValue(maintenanceRequest.summary().getValue());
+            requestStatusDto.status().set(maintenanceRequest.status().duplicate());
+            requestStatusDto.submitted().setValue(maintenanceRequest.submitted().getValue());
+            dashboard.maintenanceInfo().maintenanceRequestStauses().add(requestStatusDto);
+        }
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             dashboard
