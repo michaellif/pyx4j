@@ -5,7 +5,7 @@
 <head>
 
 <meta http-equiv="Content-type" content="text/html; charset=ISO-8859-1" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!--  <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
 
 <title>Property Management Services in Ontario, Quebec and Nova
 	Scotia</title>
@@ -19,8 +19,6 @@
 
 
 
-<meta name="description"
-	content="Toronto Apartments for rent from Greenwin .  Apartment rentals also available in Hamilton, Ottawa, London, Mississauga, Cambridge, Scarborough, Halifax and Montreal." />
 <link href="http://www.greenwin.ca/css/lws/lws-reset-1.0.0.css"
 	type="text/css" rel="stylesheet" media="screen, projection"
 	charset="utf-8" />
@@ -33,20 +31,9 @@
 <link href="http://www.greenwin.ca/css/greenwin/greenwin-2.0.0.css"
 	type="text/css" rel="stylesheet" media="screen, projection"
 	charset="utf-8" />
-<link
-	href="http://www.greenwin.ca/css/boxslider/jquery.bxslider2.0.1.css"
-	type="text/css" rel="stylesheet" media="screen, projection"
-	charset="utf-8" />
 <script src="http://www.greenwin.ca/js/modernizr.custom.js"
 	type="text/javascript" charset="utf-8"></script>
 <script src="http://www.greenwin.ca/js/jquery/jquery-1.6.2.min.js"
-	type="text/javascript" charset="utf-8"></script>
-<script src="http://www.greenwin.ca/swf/AC_RunActiveContent.js"
-	type="text/javascript" charset="utf-8"></script>
-<script src="http://www.greenwin.ca/swf/swfobject.js"
-	type="text/javascript" charset="utf-8"></script>
-<script
-	src="http://www.greenwin.ca/js/boxslider/jquery.bxslider2.0.1.min.js"
 	type="text/javascript" charset="utf-8"></script>
 <meta name="google-site-verification"
 	content="n_EtxYQ2-ZQXdVxg09colKp6sKFTSHxqI9d5YVBx1fU" />
@@ -56,25 +43,41 @@
 	rel='stylesheet' type='text/css'>
 
 <style>
+.footer-bottom {
+	padding-top: 0 !important;
+}
+
+.caption {
+	padding-top: 20px;
+}
+
 div.FormFlexPanelH1Label {
 	font: bold 16px 'Droid Sans', helvetica, arial, sans-serif;
 	color: #117140;
 }
 
 div.Button,button.gwt-Button {
-	background: #5E7FBE;
-	border: 5px double #FFFFFF;
+	background: #454545;
+	border: 0 none;
+	cursor: pointer;
+	display: inline-block;
+	min-width: 90px;
+	padding: 5px 15px;
+	text-align: center;
 }
 
 div.Button:hover,button.gwt-Button:hover {
-	background: #4F6DA9;
-	border: 5px double #FFFFFF;
+	background: #000000;
+	color: white;
+	text-decoration: none;
 }
 
 div.ButtonText,button.gwt-Button {
-	color: #FFFFFF;
-	text-transform: lowercase;
-	text-shadow: 0 2px 4px #000000;
+	color: white;
+	font-family: Corbel, Arial, sans-serif;
+	font-size: 15px;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 button.gwt-Button {
@@ -87,8 +90,34 @@ button.gwt-Button {
 	text-transform: inherit;
 }
 
+div.secondaryNavig {
+	padding-top: 14px;
+}
+
+div.secondaryNavig ul li {
+	border-bottom: 1px solid #E1E1E1;
+	border-top: 1px solid #E1E1E1;
+	color: black;
+	display: block;
+	font-size: 15px;
+	margin-top: -1px;
+	padding: 6px 20px;
+	height: auto !important;
+	width: 142px !important;
+}
+
 div.secondaryNavig ul li:hover {
-	color: #05572D;
+	border-left: 3px solid #106C3B;
+	text-decoration: none;
+	color: #106C3B;
+	background-color: #F0F0F0;
+}
+
+li.MainMenuTab.active {
+	border-left: 3px solid #106C3B;
+	text-decoration: none;
+	color: #106C3B;
+	background-color: #F0F0F0;
 }
 
 .EntityFolderAddButton {
@@ -103,25 +132,11 @@ div.LandingCaption {
 	color: #117140;
 }
 
-div#siteAuthInsert {
-	bottom: 0 !important;
-}
-
-div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.WidgetDecoratorComponent select
-	{
-	border: 1px solid #AAAAAA;
-	width: 95% !important;
-}
-
 ol li {
 	line-height: 1.5em;
 	padding-bottom: 10px;
 	position: relative;
 	text-align: justify;
-}
-
-div#body_inside {
-	box-shadow: 0 0 2px #888888 !important;
 }
 
 div.LandingOrLineSeparator div {
@@ -144,7 +159,13 @@ div.LandingOrLineSeparator div {
 .legal_poweredby {
 	margin: 0 auto;
 	width: 960px;
-	padding-top: 0.7em;
+}
+
+.legal_poweredby h6 {
+	color: #FFFFFF;
+	display: inline-block;
+	font-weight: normal;
+	margin: 0 5px 0 0;
 }
 
 .gwt-SuggestBoxPopup {
@@ -152,137 +173,142 @@ div.LandingOrLineSeparator div {
 }
 
 .EditorPanel .TextBox {
-    min-width: 75px !important;
+	min-width: 75px !important;
 }
 
 .WidgetDecoratorContentPanel td {
-    vertical-align: baseline !important;
+	vertical-align: baseline !important;
 }
+
+.LandingInputField {
+	margin-left: inherit !important;
+	margin-right: inherit !important;
+}
+
+.LandingViewSectionContent>div:first-child {
+	padding-left: 100px;
+}
+
+.TenantDashboardTableHeader>td {
+	white-space: nowrap;
+}
+
 </style>
 
 </head>
 
 <body>
-
-	<style>
-</style>
-
+	<div class="dropdown-bg"></div>
 	<div class="wrapper_outside">
 
 		<div class="wrapper" id="wrapper_header">
 
-
-
-
-
 			<div id="header">
 
-				<div id="logo">
-					<a href="http://www.greenwin.ca"><img
-						src="http://www.greenwin.ca/images/logo4.gif" /></a><br /> Creating
-					Value<br /> <br />
+				<div class="social1">
+					<ul>
+						<li><a href="http://greenwin.ca/rss/updates/" target="_blank"><img
+								src="http://www.greenwin.ca/images/icon-rss.gif" alt="Updates" /></a></li>
+						<li><a href="http://www.linkedin.com/company/1869205"
+							target="_blank" title="LinkedIn"><img
+								src="http://www.greenwin.ca/images/logo-linkedin.png" width="20"
+								alt="LinkedIn" /></a></li>
+						<li><a href="http://twitter.com/GreenwinTALKS"
+							target="_blank"><img
+								src="http://www.greenwin.ca/images/icon-twitter.gif"
+								alt="Twitter" /></a></li>
+						<li><a href="http://www.facebook.com/greenwininc"
+							target="_blank"><img
+								src="http://www.greenwin.ca/images/icon-facebook.gif"
+								alt="Facebook" /></a></li>
+						<li><a href="http://www.greenwin.ca/contact/" target="_blank"><img
+								src="http://www.greenwin.ca/images/icon-email.gif" alt="Email"></a></li>
+					</ul>
 				</div>
 
-				<div style="float: right; position: relative; bottom: 30px"
-					id="resident_login" />
 
+
+				<div class="searchbox2">
+					<form name="search_site" id="search_site_form" method="post"
+						action="/search/">
+						<input type="text" name="searchq" id="site_search_input"
+							value="keyword search" /> <input type="image"
+							src="http://www.greenwin.ca/images/search_button.png"
+							value="Submit" alt="Submit">
+					</form>
+					<script>
+            jQuery('#search_site_form').submit(function(event){
+                event.preventDefault();
+
+                var term = jQuery('#site_search_input').val();
+
+                window.location = '/search/term=' + term;
+            });
+
+            var term = jQuery('#site_search_input').val();
+            if (!term) {
+                term = 'keyword search';
+            }
+
+            jQuery('#site_search_input').focus(function(){
+                if (jQuery(this).val() == 'keyword search') {
+                    jQuery(this).val('');
+                }
+            });
+            jQuery('#site_search_input').blur(function(){
+                if (jQuery(this).val() == '') {
+                    jQuery(this).val(term);
+                }
+            });
+        </script>
+					<!--[if IE]>
+        <style>
+            #site_search_input {
+                padding-top: 7px;
+                height: 21px;
+            }
+        </style>
+        <![endif]-->
+				</div>
+				<div class="clear"></div>
 
 			</div>
-		</div>
-
-	</div>
-
-	<div class="wrapper_outside clear_left" id="main_menu_outside">
-
-		<div class="wrapper">
-
 			<div id="main_menu">
 
-
-				<ul class="dropdown">
-					<li class="first"><a href="http://www.greenwin.ca">Home</a></li>
-					<li><a href="http://www.greenwin.ca/about/">About Us</a>
-						<ul style="width: 140px;">
-							<li><a href="http://www.greenwin.ca/about/our_story/">Our
-									Story</a></li>
-							<li><a href="http://www.greenwin.ca/about/leadership/">Leadership</a></li>
-							<li><a href="http://www.greenwin.ca/articles/">News</a></li>
-							<li><a href="http://www.greenwin.ca/greenwin-cares">Greenwin
-									Cares</a></li>
-							<li><a href="http://www.greenwin.ca/testimonials">Testimonials</a></li>
-						</ul></li>
-					<li><a href="http://www.greenwin.ca/apartments-for-rent/">Apartments
-							For Rent</a>
-						<ul>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/cambridge/"><b>Cambridge</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/hamilton/"><b>Hamilton</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/hanover/"><b>Hanover</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/kanata/"><b>Kanata</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/kingston/"><b>Kingston</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/london/"><b>London</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/mississauga/"><b>Mississauga</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/montreal/"><b>Montreal</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/north-york/"><b>North
-										York</b> Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/oakville/"><b>Oakville</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/orangeville/"><b>Orangeville</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/oshawa/"><b>Oshawa</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/ottawa/"><b>Ottawa</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/scarborough/"><b>Scarborough</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/tillsonburg/"><b>Tillsonburg</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/toronto/"><b>Toronto</b>
-									Apartments</a></li>
-							<li><a
-								href="http://www.greenwin.ca/apartments-for-rent/woodstock/"><b>Woodstock</b>
-									Apartments</a></li>
-
-						</ul></li>
-
-					<li><a href="http://www.greenwin.ca/resident_services/">Residential</a>
-						<ul style="width: 200px;">
-							<li><a href="http://www.greenwin.ca/management_services/">Management
-									Services</a></li>
-							<li><a href="http://www.greenwin.ca/apartments-for-rent/">Apartments
-									For Rent</a></li>
-							<li><a
-								href="http://www.greenwin.ca/resident_services/before_you_rent/">Before
-									You Rent</a></li>
-						</ul></li>
-					<li><a href="http://www.greenwin.ca/commercial/">Commercial</a></li>
-					<li><a href="http://www.greenwin.ca/careers/">Careers</a></li>
-					<li><a href="http://www.greenwin.ca/contact/">Contact Us</a></li>
-				</ul>
-
+				<div class="nav">
+					<a class="brand" href="http://www.greenwin.ca/"></a>
+					<ul class="dropdown">
+						<li class="first"><a href="http://www.greenwin.ca/">Home</a></li>
+						<li><a href="http://www.greenwin.ca/about/">About Us</a>
+							<ul class="dropmenu-about">
+								<li><a href="http://www.greenwin.ca/about/our_story/">Our
+										Story</a></li>
+								<li><a href="http://www.greenwin.ca/about/leadership/">Leadership</a></li>
+								<!--<li><a href="http://www.greenwin.ca/articles/" >News</a></li>-->
+								<li><a href="http://www.greenwin.ca/careers/">Careers</a></li>
+								<li><a href="http://www.greenwin.ca/greenwin_cares">Greenwin
+										Cares</a></li>
+								<li><a href="http://www.greenwin.ca/testimonials">Testimonials</a></li>
+							</ul></li>
+						<li><a href="http://www.greenwin.ca/apartments-for-rent/">Apartments
+								For Rent</a>
+							<ul class="dropmenu-apartments">
+								<li><a href="http://www.greenwin.ca/apartments-for-rent/">Apartments
+										For Rent</a></li>
+								<li><a
+									href="http://www.greenwin.ca/resident_services/before_you_rent/">Before
+										You Rent</a></li>
+								<li><a href="http://www.greenwin.ca/students/">Students</a></li>
+							</ul></li>
+						<li><a href="http://www.greenwin.ca/management_services/">Management
+								Services</a></li>
+						<li><a href="http://www.greenwin.ca/commercial/">Commercial</a></li>
+						<li><a href="http://www.greenwin.ca/articles/">News</a></li>
+						<li class="contact"><a href="http://www.greenwin.ca/contact/">Contact
+								Us</a></li>
+					</ul>
+					<div class="clear"></div>
+				</div>
 
 			</div>
 		</div>
@@ -295,134 +321,149 @@ div.LandingOrLineSeparator div {
 
 			<!--<div class="breadcrumbs">
 
-
+					
 				</div> -->
 
 		</div>
 
 	</div>
 
-	<div class="wrapper_outside" style="padding: 20px">
+	<div class="wrapper_outside">
 
-		<div class="wrapper" id="body_inside"
-			style="border: 1px solid #888; min-height: 360px; box-shadow: 0 0 5px #888">
+		<div class="wrapper" id="body_inside">
+
+			<div style="float: right; position: relative;" id="resident_login" />
 			<div id="resident_content" />
+
 		</div>
 
 	</div>
 
-
-
 	<div class="wrapper_outside" id="footer_menu_outside">
 
-		<div id="footer_menu">
+		<div id="footer" class="wrapper">
+			<div class="footer-top">
+				<div class="footer-menu">
+					<h4>
+						<a href="http://www.greenwin.ca/sitemap/">Sitemap</a>
+					</h4>
 
-			<ul>
-				<li><a href="http://www.greenwin.ca">home</a></li>
-				<li><a href="http://www.greenwin.ca/about/">about us</a></li>
-				<li><a href="http://www.greenwin.ca/apartments-for-rent/">apartments
-						for rent</a></li>
-				<li><a href="http://www.greenwin.ca/resident_services/">residential</a></li>
-				<li><a href="http://www.greenwin.ca/commercial/">commercial</a></li>
-				<li><a href="http://www.greenwin.ca/careers/">careers</a></li>
-				<li><a href="http://www.greenwin.ca/contact/">contact us</a></li>
-				<li><a href="http://www.greenwin.ca/privacy/">privacy</a></li>
-				<li><a href="http://www.greenwin.ca/sitemap/">sitemap</a></li>
-			</ul>
+					<ul>
+						<li><a href="http://www.greenwin.ca/">Home</a></li>
+						<li><a href="http://www.greenwin.ca/about/">About Us</a></li>
+						<li><a href="http://www.greenwin.ca/apartments-for-rent/">Apartments
+								for Rent</a></li>
+						<li><a href="http://www.greenwin.ca/management_services/">Management
+								Services</a></li>
+						<li><a href="http://www.greenwin.ca/commercial/">Commercial</a></li>
+						<li><a href="http://www.greenwin.ca/contact/">Contact Us</a></li>
+						<li><a href="http://www.greenwin.ca/privacy/">Privacy</a></li>
+						<li><a href="http://www.greenwin.ca/sitemap/">Sitemap</a></li>
+					</ul>
 
+					<div class="vr"></div>
+				</div>
 
-		</div>
-		<div class="clear_both"></div>
+				<div class="why-greenwin">
+					<h4>Why Choose Greenwin</h4>
 
-		<div id="copyright1">Copyright &copy; 2013 Greenwin</div>
+					<p>Our user friendly apartment search lets you search through
+						more than 20,000 apartments and townhouses across Canada. Just
+						choose the city and neighbourhood you're looking to move to, at
+						the price you can afford, and find your new Greenwin Home!</p>
 
-		<div id="extra_footer">
-			<div class="policy">
-				<a href="http://www.greenwin.ca#accessibility-policy-modal"
-					id="policy-link"> Accessibility for<br> Ontarians with
-					Disabilities
-				</a>
+					<div class="vr"></div>
+				</div>
+
+				<div class="my-greenwin">
+					<h4>My Greenwin</h4>
+
+					<div class="policy">
+						<a href="http://www.greenwin.ca/#accessibility-policy-modal"
+							id="policy-link"> Accessibility for<br> Ontarians with
+							Disabilities
+						</a>
+					</div>
+
+					<div class="social-buttons">
+						<a href="http://www.facebook.com/greenwininc" target="_blank"><img
+							src="http://www.greenwin.ca/images/icon-facebook.png"
+							alt="Facebook" /></a> <a href="http://twitter.com/GreenwinTALKS"
+							target="_blank"><img
+							src="http://www.greenwin.ca/images/icon-twitter.png"
+							alt="Twitter" /></a> <a
+							href="http://www.linkedin.com/company/1869205" target="_blank"
+							title="LinkedIn"><img
+							src="http://www.greenwin.ca/images/icon-linkedin.png"
+							alt="LinkedIn" /></a> <a href="http://greenwin.ca/rss/updates/"
+							target="_blank"><img
+							src="http://www.greenwin.ca/images/icon-rss.png" alt="Updates" /></a>
+					</div>
+
+					<div class="copyright">Copyright &copy; 2013 Greenwin. All
+						Rights Reserved.</div>
+				</div>
 			</div>
 
-			<div class="social-buttons">
-				<a href="http://www.greenwin.ca/contact/" target="_blank"><img
-					src="http://www.greenwin.ca/images/icon-email.gif" alt="Email"></a>
-				<a href="http://www.facebook.com/greenwininc" target="_blank"><img
-					src="http://www.greenwin.ca/images/icon-facebook.gif"
-					alt="Facebook" /></a> <a href="http://twitter.com/GreenwinTALKS"
-					target="_blank"><img
-					src="http://www.greenwin.ca/images/icon-twitter.gif" alt="Twitter" /></a>
-				<a href="http://www.linkedin.com/company/1869205" target="_blank"
-					title="LinkedIn"><img
-					src="http://www.greenwin.ca/images/logo-linkedin.png" width="20"
-					alt="LinkedIn" /></a> <a href="http://greenwin.ca/rss/updates/"
-					target="_blank"><img
-					src="http://www.greenwin.ca/images/icon-rss.gif" alt="Updates" /></a>
+			<div class="footer-bottom">
+
+				<div class="legal_poweredby">
+					<h6 class="powered_product">Property Management Software</h6>
+					<h6 class="powered_by">by</h6>
+					<a class="powered_logo" href="http://www.propertyvista.com"
+						title="Property Management Software by PropertyVista"
+						alt="PropertyVista Logo"></a>
+				</div>
+
 			</div>
 
-			<div class="copyright">
-				<a href="http://www.landlordwebsolutions.com" target="_blank">
-					Website Development by Landlord Web Solutions </a>
-			</div>
-			<div class="clear"></div>
-		</div>
+			<script src="http://www.greenwin.ca/js/fancybox/fancybox-1.3.1.js"
+				type="text/javascript"></script>
+			<link type="text/css"
+				href="http://www.greenwin.ca/css/fancybox/fancybox-1.3.1.css"
+				rel="stylesheet" />
+			<div style="display: none">
+				<div id="accessibility-policy-modal">
+					<h2>Accessibility</h2>
 
-		<div class="legal_poweredby">
-			<span class="powered_product">Property Management Software</span> <span
-				class="powered_by">by</span> <a class="powered_logo"
-				href="http://www.propertyvista.com"
-				title="Property Management Software by PropertyVista"
-				alt="PropertyVista Logo"></a>
-		</div>
+					<p>Greenwin is committed to providing goods and services in a
+						way that respects the dignity and independence of all persons,
+						ensuring that everyone has equal access to people, places and
+						opportunities.</p>
 
-		<script src="http://www.greenwin.ca/js/fancybox/fancybox-1.3.1.js"
-			type="text/javascript"></script>
-		<link type="text/css"
-			href="http://www.greenwin.ca/css/fancybox/fancybox-1.3.1.css"
-			rel="stylesheet" />
-		<div style="display: none">
-			<div id="accessibility-policy-modal">
-				<h2>Accessibility</h2>
+					<a href="http://www.greenwin.ca/files/GreenwinAODAPolicy.pdf"
+						class="read"><span>view our policy</span></a>
 
-				<p>Greenwin is committed to providing goods and services in a
-					way that respects the dignity and independence of all persons,
-					ensuring that everyone has equal access to people, places and
-					opportunities.</p>
+					<p>Feedback regarding the way Greenwin Inc. provides goods and
+						services to people with disabilities can be made in person, by
+						telephone at 416-487-3883, or through email at
+						accessibility@greenwin.ca</p>
 
-				<a href="http://www.greenwin.ca/files/GreenwinAODAPolicy.pdf"
-					class="read"><span>view our policy</span></a>
-
-				<p>Feedback regarding the way Greenwin Inc. provides goods and
-					services to people with disabilities can be made in person, by
-					telephone at 416-487-3883, or through email at
-					accessibility@greenwin.ca</p>
-
-				<p>
-					<br> <a href="javascript:;" onclick="$.fancybox.close();">Close</a>
-				</p>
+					<p>
+						<br> <a href="javascript:;" onclick="$.fancybox.close();">Close</a>
+					</p>
+				</div>
 			</div>
 		</div>
 
 		<script type="text/javascript">
-			jQuery(document).ready(function() {
-				jQuery("a#policy-link").fancybox({});
-			});
 
-			var _gaq = _gaq || [];
-			_gaq.push([ '_setAccount', 'UA-15169301-8' ]);
-			_gaq.push([ '_trackPageview' ]);
+  jQuery(document).ready(function(){
+    jQuery("a#policy-link").fancybox({
+    });
+  });
 
-			(function() {
-				var ga = document.createElement('script');
-				ga.type = 'text/javascript';
-				ga.async = true;
-				ga.src = ('https:' == document.location.protocol ? 'https://ssl'
-						: 'http://www')
-						+ '.google-analytics.com/ga.js';
-				var s = document.getElementsByTagName('script')[0];
-				s.parentNode.insertBefore(ga, s);
-			})();
-		</script>
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-15169301-8']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+
+</script>
 	</div>
 
 </body>
