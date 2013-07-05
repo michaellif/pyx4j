@@ -20,9 +20,8 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecorator;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -41,13 +40,16 @@ public class BoxFolderDecorator<E extends IEntity> extends BaseFolderDecorator<E
     public BoxFolderDecorator(EntityFolderImages images, String title, boolean addable) {
         super(images, title, addable);
 
-        asWidget().setStyleName(EntityFolderBoxDecorator.name());
+        asWidget().setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecorator.name());
 
         add(getContainer());
 
-        if (isAddable()) {
-            add(getAddButton());
-        }
+        SimplePanel addButtonHolder = new SimplePanel(getAddButton());
+        addButtonHolder.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderBoxDecoratorAddButtonHolder.name());
+
+        add(addButtonHolder);
+
+        setAddButtonVisible(addable);
 
         add(getValidationMessageHolder());
     }
