@@ -91,6 +91,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     private final FlexTable containerPanel;
 
+    private final SimplePanel componentHolder;
+
     private final Builder builder;
 
     public WidgetDecorator(CComponent<?, ?> component) {
@@ -142,9 +144,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
 
-        SimplePanel componentHolder = new SimplePanel();
+        componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
-        componentHolder.setWidth(builder.componentWidth);
         componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         componentHolder.add(nativeComponent);
 
@@ -336,7 +337,9 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         if (component.isViewable()) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(false);
+            componentHolder.setWidth("auto");
         } else {
+            componentHolder.setWidth(builder.componentWidth);
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(true);
         }
