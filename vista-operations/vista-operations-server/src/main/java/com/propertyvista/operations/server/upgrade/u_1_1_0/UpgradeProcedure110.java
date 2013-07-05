@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.server.upgrade.u_1_1_0;
 
+import java.util.List;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
@@ -23,11 +24,16 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
+import com.propertyvista.biz.dashboard.GadgetStorageFacade;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -36,6 +42,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.RefferenceDataPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayChangePolicyPreloader;
+import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class UpgradeProcedure110 implements UpgradeProcedure {
@@ -44,7 +51,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -58,6 +65,9 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
             break;
         case 3:
             runAutoPayChangePolicyGeneration();
+            break;
+        case 4:
+            upgradeOldArrearsGadget();
             break;
         default:
             throw new IllegalArgumentException();
@@ -138,6 +148,31 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         EntityQueryCriteria<MaintenanceRequestCategory> criteria = new EntityQueryCriteria<MaintenanceRequestCategory>(MaintenanceRequestCategory.class);
         if (Persistence.service().count(criteria) == 0) {
             new RefferenceDataPreloader().createInternalMaintenancePreload();
+        }
+    }
+
+    private void upgradeOldArrearsGadget() {
+        EntityQueryCriteria<GadgetMetadataHolder> criteria = EntityQueryCriteria.create(GadgetMetadataHolder.class);
+        criteria.eq(criteria.proto().className(), ArrearsStatusGadgetMetadata.class.getSimpleName());
+        List<GadgetMetadataHolder> gadgets = Persistence.service().query(criteria);
+
+        for (GadgetMetadataHolder rawGadgetMetadata : gadgets) {
+            ArrearsStatusGadgetMetadata oldGadgetMetadata = (ArrearsStatusGadgetMetadata) ServerSideFactory.create(GadgetStorageFacade.class).load(
+                    rawGadgetMetadata.identifierKey().getValue());
+            ArrearsSummaryGadgetMetadata upgradedGadgetMetadata = (ArrearsSummaryGadgetMetadata) GadgetMetadataRepository.get().createGadgetMetadata(
+                    EntityFactory.getEntityPrototype(ArrearsSummaryGadgetMetadata.class));
+
+            upgradedGadgetMetadata.gadgetId().setValue(rawGadgetMetadata.identifierKey().getValue());
+            if (!oldGadgetMetadata.category().isNull()) {
+                upgradedGadgetMetadata.customizeCategory().setValue(true);
+                upgradedGadgetMetadata.category().setValue(oldGadgetMetadata.category().getValue());
+            }
+            if (oldGadgetMetadata.customizeDate().isBooleanTrue()) {
+                upgradedGadgetMetadata.customizeDate().setValue(true);
+                upgradedGadgetMetadata.asOf().setValue(oldGadgetMetadata.asOf().getValue());
+            }
+            ServerSideFactory.create(GadgetStorageFacade.class).delete(rawGadgetMetadata.identifierKey().getValue());
+            ServerSideFactory.create(GadgetStorageFacade.class).save(upgradedGadgetMetadata, true);
         }
     }
 
