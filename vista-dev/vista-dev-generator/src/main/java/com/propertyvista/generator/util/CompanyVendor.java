@@ -44,7 +44,7 @@ public class CompanyVendor {
 
         if (!TODO_FIX_BROKEN_MODEL) {
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {
-                company.addresses().add(CommonsGenerator.createAddress());
+                company.addresses().add(CommonsGenerator.createAddressStructured());
             }
 
             for (int i = 0; i < 1 + RandomUtil.randomInt(2); i++) {

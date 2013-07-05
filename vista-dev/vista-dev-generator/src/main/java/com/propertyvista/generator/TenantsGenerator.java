@@ -76,7 +76,7 @@ public class TenantsGenerator {
 
             m.customer().set(customer);
             m.sameAsCurrent().setValue(Boolean.FALSE);
-            m.billingAddress().set(CommonsGenerator.createAddress());
+            m.billingAddress().set(CommonsGenerator.createAddressStructured());
 
             l.add(m);
         }

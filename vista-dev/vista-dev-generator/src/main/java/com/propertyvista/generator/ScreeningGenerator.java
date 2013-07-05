@@ -160,7 +160,7 @@ public class ScreeningGenerator {
     public static IncomeInfoEmployer createEmployer() {
         IncomeInfoEmployer employer = EntityFactory.create(IncomeInfoEmployer.class);
 
-        employer.address().set(CommonsGenerator.createAddress());
+        employer.address().set(CommonsGenerator.createAddressStructured());
 
         employer.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         employer.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());
@@ -180,7 +180,7 @@ public class ScreeningGenerator {
     public static IncomeInfoSelfEmployed createSelfEmployed() {
         IncomeInfoSelfEmployed selfEmpl = EntityFactory.create(IncomeInfoSelfEmployed.class);
 
-        selfEmpl.address().set(CommonsGenerator.createAddress());
+        selfEmpl.address().set(CommonsGenerator.createAddressStructured());
 
         selfEmpl.name().setValue(RandomUtil.random(PreloadData.EMPLOYER_NAMES));
         selfEmpl.supervisorName().setValue("Mr. " + DataGenerator.randomLastName());

@@ -150,7 +150,7 @@ public class LeaseGenerator extends DataGenerator {
 
         m.customer().set(tenant.leaseParticipant().customer());
         m.sameAsCurrent().setValue(Boolean.FALSE);
-        m.billingAddress().set(CommonsGenerator.createAddress());
+        m.billingAddress().set(CommonsGenerator.createAddressStructured());
 
         tenant.leaseParticipant().customer().paymentMethods().add(m);
     }

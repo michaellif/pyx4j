@@ -468,7 +468,7 @@ public class LeaseLifecycleSimulator {
             m.customer().set(tenant.leaseParticipant().customer());
             m.isProfiledMethod().setValue(Boolean.FALSE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
-            m.billingAddress().set(CommonsGenerator.createAddress());
+            m.billingAddress().set(CommonsGenerator.createAddressStructured());
 
             return m;
         }

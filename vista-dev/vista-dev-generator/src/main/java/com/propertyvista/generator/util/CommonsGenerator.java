@@ -25,6 +25,7 @@ import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.RangeGroup;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
@@ -175,7 +176,19 @@ public class CommonsGenerator {
         }
     }
 
-    public static AddressStructured createAddress() {
+    public static AddressSimple createAddressSimple() {
+        loadAddress();
+        AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        address.street1().setValue(addressStructured.streetNumber().getValue() + " " + addressStructured.streetName().getValue());
+        address.city().setValue(addressStructured.city().getValue());
+        address.province().setValue(addressStructured.province().getValue());
+        address.country().setValue(addressStructured.country().getValue());
+        address.postalCode().setValue(addressStructured.postalCode().getValue());
+        return address;
+    }
+
+    public static AddressStructured createAddressStructured() {
         loadAddress();
         AddressStructured addressStructured = adresses.get(DataGenerator.nextInt(adresses.size(), "addresss", 10)).duplicate();
         if (addressStructured.streetType().isNull()) {
@@ -184,9 +197,9 @@ public class CommonsGenerator {
         return addressStructured;
     }
 
-    public static AddressStructured createAddress(String provinceCode) {
+    public static AddressStructured createAddressStructured(String provinceCode) {
         if (provinceCode == null) {
-            return createAddress();
+            return createAddressStructured();
         } else {
             loadAddress();
             List<AddressStructured> adressesFiltered = new ArrayList<AddressStructured>();

@@ -42,7 +42,7 @@ public class CustomerGenerator {
         EmergencyContact contact = EntityFactory.create(EmergencyContact.class);
         contact.set(CommonsGenerator.createPerson().duplicate(EmergencyContact.class));
 
-        contact.address().set(CommonsGenerator.createAddress());
+        contact.address().set(CommonsGenerator.createAddressSimple());
 
         return contact;
     }

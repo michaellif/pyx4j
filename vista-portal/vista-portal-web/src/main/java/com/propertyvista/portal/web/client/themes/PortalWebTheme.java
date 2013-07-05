@@ -69,6 +69,7 @@ public class PortalWebTheme extends Theme {
             }
         });
         addTheme(new DefaultFormFlexPanelTheme() {
+
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;
@@ -78,7 +79,11 @@ public class PortalWebTheme extends Theme {
             protected void initStyles() {
                 super.initStyles();
 
-                Style style = new Style(".", StyleName.FormFlexPanelH1);
+                Style style = new Style(".", StyleName.FormFlexPanel);
+                style.addProperty("text-align", "center");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelH1);
                 style.addProperty("margin", "0");
                 style.addProperty("background-color", "transparent");
                 addStyle(style);

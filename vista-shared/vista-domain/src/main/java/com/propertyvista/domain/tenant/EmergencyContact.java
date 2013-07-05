@@ -22,7 +22,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.person.Person;
 
 public interface EmergencyContact extends Person {
@@ -38,5 +38,5 @@ public interface EmergencyContact extends Person {
     IPrimitive<Integer> orderInCustomer();
 
     @EmbeddedEntity
-    AddressStructured address();
+    AddressSimple address();
 }

@@ -18,7 +18,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CContainer;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.web.client.ui.residents.Edit;
@@ -88,5 +92,17 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements Enti
 
     public CEntityForm<E> getForm() {
         return form;
+    }
+
+    public static void updateDecoratorsLayout(CContainer<?, ?> container, Layout layout) {
+        for (CComponent<?, ?> component : container.getComponents()) {
+            if (component.getDecorator() instanceof WidgetDecorator) {
+                WidgetDecorator decorator = (WidgetDecorator) component.getDecorator();
+                decorator.setLayout(layout);
+            }
+            if (component instanceof CContainer) {
+                updateDecoratorsLayout((CContainer<?, ?>) component, layout);
+            }
+        }
     }
 }

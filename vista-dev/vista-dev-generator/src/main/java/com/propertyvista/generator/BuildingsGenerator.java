@@ -82,7 +82,7 @@ public class BuildingsGenerator {
         String website = "www.property" + (counter + 1) + ".com";
 
         // address
-        AddressStructured address = CommonsGenerator.createAddress(config.provinceCode);
+        AddressStructured address = CommonsGenerator.createAddressStructured(config.provinceCode);
 
         // email
         String email = "building" + (counter + 1) + "@propertyvista.com";
