@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -120,7 +121,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
             }
             tab.setTabVisible(true);
             printWidget.add(new Label(tab.getTabTitle()));
-            printWidget.add(tab.getWidget(0));
+            printWidget.add(new HTML(tab.getWidget(0).getElement().getInnerHTML()));
         }
         StringBuilder html = new StringBuilder();
         //generate styles
