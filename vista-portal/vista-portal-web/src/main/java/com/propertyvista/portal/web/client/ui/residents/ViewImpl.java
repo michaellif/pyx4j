@@ -34,8 +34,8 @@ public class ViewImpl<E extends IEntity> extends EntityViewImpl<E> implements Vi
     }
 
     public ViewImpl(CEntityForm<E> form, boolean noEdit, boolean noBack) {
-        super(form);
-
+        super();
+        setForm(form);
     }
 
 }

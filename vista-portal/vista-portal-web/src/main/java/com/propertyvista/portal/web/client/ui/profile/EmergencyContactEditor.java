@@ -17,18 +17,19 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
-import com.propertyvista.portal.web.client.ui.EntityViewImpl;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
 
-    public EmergencyContactEditor() {
+    private final ProfileViewImpl view;
+
+    public EmergencyContactEditor(ProfileViewImpl view) {
         super(EmergencyContact.class);
+        this.view = view;
     }
 
     @Override
@@ -36,14 +37,14 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "250px").customLabel("").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "250px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "250px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "250px").build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "250px").build());
-        main.setWidget(++row, 0, inject(proto().address(), new AddressEditor()));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel("").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "200px").build());
+        main.setWidget(++row, 0, inject(proto().address(), new AddressEditor(view)));
 
-        EntityViewImpl.updateDecoratorsLayout(this, Layout.vertical);
+        view.updateDecoratorsLayout(this, view.getWidgetLayout());
 
         return main;
     }

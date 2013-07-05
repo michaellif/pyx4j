@@ -26,8 +26,13 @@ import com.propertyvista.domain.tenant.EmergencyContact;
 
 public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
 
-    public EmergencyContactFolder() {
+    private final ProfileViewImpl view;
+
+    public EmergencyContactFolder(ProfileViewImpl view) {
         super(EmergencyContact.class);
+        this.view = view;
+        setOrderable(true);
+        setRemovable(true);
     }
 
     @Override
@@ -44,7 +49,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new EmergencyContactEditor();
+            return new EmergencyContactEditor(view);
         } else {
             return super.create(member);
         }

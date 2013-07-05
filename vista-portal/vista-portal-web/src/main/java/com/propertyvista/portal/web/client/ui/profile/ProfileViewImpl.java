@@ -19,7 +19,8 @@ import com.propertyvista.portal.web.client.ui.EntityViewImpl;
 public class ProfileViewImpl extends EntityViewImpl<ResidentDTO> implements ProfileView {
 
     public ProfileViewImpl() {
-        super(new ProfileForm());
+        super();
+        setForm(new ProfileForm(this));
     }
 
 }

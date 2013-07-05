@@ -14,17 +14,18 @@
 package com.propertyvista.portal.web.client.ui.profile;
 
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.domain.contact.AddressSimple;
-import com.propertyvista.portal.web.client.ui.EntityViewImpl;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class AddressEditor extends CEntityForm<AddressSimple> {
 
-    public AddressEditor() {
+    private final ProfileViewImpl view;
+
+    public AddressEditor(ProfileViewImpl view) {
         super(AddressSimple.class);
+        this.view = view;
     }
 
     @Override
@@ -38,7 +39,7 @@ public class AddressEditor extends CEntityForm<AddressSimple> {
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().country()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().postalCode()), "200px").build());
 
-        EntityViewImpl.updateDecoratorsLayout(this, Layout.vertical);
+        view.updateDecoratorsLayout(this, view.getWidgetLayout());
 
         return main;
     }

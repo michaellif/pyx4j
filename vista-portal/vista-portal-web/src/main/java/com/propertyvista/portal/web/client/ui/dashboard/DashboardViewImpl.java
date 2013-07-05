@@ -19,7 +19,8 @@ import com.propertyvista.portal.web.client.ui.EntityViewImpl;
 public class DashboardViewImpl extends EntityViewImpl<TenantDashboardDTO> implements DashboardView {
 
     public DashboardViewImpl() {
-        super(new DashboardForm_New());
+        super();
+        setForm(new DashboardForm_New());
     }
 
 }

@@ -36,7 +36,8 @@ public class EditImpl<E extends IEntity> extends EntityViewImpl<E> implements Ed
     }
 
     public EditImpl(CEntityForm<E> form) {
-        super(form);
+        super();
+        setForm(form);
 
         submit = new Button(i18n.tr("Submit"));
         submit.getElement().getStyle().setMargin(10, Unit.PX);
