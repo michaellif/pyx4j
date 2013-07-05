@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
-import com.pyx4j.entity.shared.IImageFile;
+import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
@@ -50,7 +50,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImageList<T extends IImageFile> extends NComponent<IList<T>, ImageHolder, CImageList<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
+public class NImageList<T extends IFile> extends NComponent<IList<T>, ImageHolder, CImageList<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
 
     private static final I18n i18n = I18n.get(NImageList.class);
 

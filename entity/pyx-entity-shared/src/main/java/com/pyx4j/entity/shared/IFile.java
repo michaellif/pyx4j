@@ -44,6 +44,10 @@ public interface IFile extends IEntity {
 
     IPrimitive<String> contentMimeType();
 
+    IPrimitive<String> caption();
+
+    IPrimitive<String> description();
+
     /**
      * Used to access just upload files
      */
