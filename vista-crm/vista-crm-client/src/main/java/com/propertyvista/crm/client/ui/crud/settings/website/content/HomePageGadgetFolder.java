@@ -11,7 +11,7 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.website.general;
+package com.propertyvista.crm.client.ui.crud.settings.website.content;
 
 import java.util.ArrayList;
 import java.util.List;

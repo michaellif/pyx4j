@@ -13,27 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.website.content;
 
-import java.util.EnumSet;
-
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CFile;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.ui.dialogs.SelectEnumDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
@@ -41,10 +31,8 @@ import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.website.PortalImageResourceFolder.SiteImageThumbnail;
-import com.propertyvista.crm.client.ui.crud.settings.website.general.HomePageGadgetFolder;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteImageResource;
-import com.propertyvista.domain.site.gadgets.HomePageGadget;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class ContentForm extends CrmEntityForm<SiteDescriptorDTO> {
@@ -118,47 +106,17 @@ public class ContentForm extends CrmEntityForm<SiteDescriptorDTO> {
         thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
     }
 
-    class GadgetSelectorDialog extends SelectEnumDialog<HomePageGadget.GadgetType> {
-        public GadgetSelectorDialog() {
-            super(i18n.tr("Select Gadget Type"), EnumSet.allOf(HomePageGadget.GadgetType.class));
-        }
-
-        @Override
-        public boolean onClickOk() {
-            HomePageGadget.GadgetType type = getSelectedType();
-            if (type == null) {
-                return false;
-            }
-
-            HomePageGadget newItem = EntityFactory.create(HomePageGadget.class);
-            newItem.type().setValue(type);
-            AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class).formNewItemPlace(newItem));
-            return true;
-        }
-    }
-
     private Widget createGadgetPanel() {
         FormFlexPanel gadgetPanel = new FormFlexPanel();
         int row = 0;
 
-        Widget addNewItem = null;
-        if (isEditable()) {
-            addNewItem = new HTML();
-        } else {
-            Anchor addNewItemLink = new Anchor(i18n.tr("Add New Gadget"));
-            addNewItemLink.getElement().getStyle().setProperty("lineHeight", "2em");
-            addNewItemLink.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                    new GadgetSelectorDialog().show();
-                }
-            });
-            addNewItem = addNewItemLink;
-        }
+        gadgetPanel.setH4(row++, 0, 1, i18n.tr("Narrow Page Gadgets:"));
+        gadgetPanel.setWidget(row++, 0, inject(proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable())));
 
-        gadgetPanel.setH1(row++, 0, 2, i18n.tr("Home Page Gadgets"), addNewItem);
-        gadgetPanel.setWidget(row, 0, inject(proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable())));
-        gadgetPanel.setWidget(row, 1, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
+        gadgetPanel.setBR(row++, 0, 1);
+
+        gadgetPanel.setH4(row++, 0, 1, i18n.tr("Wide Page Gadgets:"));
+        gadgetPanel.setWidget(row++, 0, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
 
         return gadgetPanel;
     }
