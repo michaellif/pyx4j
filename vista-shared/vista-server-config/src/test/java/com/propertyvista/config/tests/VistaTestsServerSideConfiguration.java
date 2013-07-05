@@ -55,17 +55,22 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public IPersistenceConfiguration getPersistenceConfiguration() {
-        if (databaseType == DatabaseType.MySQL) {
+        switch (databaseType) {
+        case MySQL:
             return new VistaTestsDBConfigurationMySQL();
-        } else if (databaseType == DatabaseType.PostgreSQL) {
+        case PostgreSQL:
             return new VistaTestsDBConfigurationPostgreSQL();
-        } else {
+        case HSQLDB:
             boolean hsqlFiles = false;
             if (hsqlFiles) {
                 return new VistaTestsDBConfigurationHSQLFile();
             } else {
                 return new VistaTestsDBConfigurationHSQLMemory();
             }
+        case Derby:
+            return new VistaTestsDBConfigurationDerbyMemory();
+        default:
+            throw new Error("Unsupported test DB configuration");
         }
     }
 

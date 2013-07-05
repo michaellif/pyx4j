@@ -55,7 +55,6 @@ public class PmcDataModel extends MockDataModel<Pmc> {
             NamespaceManager.setNamespace(NamespaceManager.getNamespace());
             RDBUtils.ensureNamespace();
             RDBUtils.initAllEntityTables();
-            Persistence.service().commit();
         }
 
         final Pmc pmc = EntityFactory.create(Pmc.class);

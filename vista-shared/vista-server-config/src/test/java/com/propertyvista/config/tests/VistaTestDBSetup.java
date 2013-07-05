@@ -31,6 +31,7 @@ public class VistaTestDBSetup {
         if (initOnce == null) {
             DatabaseType databaseType = DatabaseType.HSQLDB;
             //databaseType = DatabaseType.MySQL;
+            //databaseType = DatabaseType.Derby;
             //databaseType = DatabaseType.PostgreSQL;
 
             // Fail safe if somebody committed the file by mistake 

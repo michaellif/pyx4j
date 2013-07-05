@@ -337,7 +337,7 @@ public class PropertyManager {
     private RTCustomer getRTCustomer(String customerID) {
         RTCustomer rtCustomer = null;
         for (RTCustomer customer : transactions.getProperty().get(0).getRTCustomer()) {
-            if (customer.getCustomerID() == customerID) {
+            if (customer.getCustomerID().equals(customerID)) {
                 rtCustomer = customer;
             }
         }

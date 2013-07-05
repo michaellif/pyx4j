@@ -15,19 +15,14 @@
 package com.propertyvista.integration.yardi;
 
 import java.math.BigDecimal;
-import java.util.List;
-
-import com.yardi.entity.mits.Customerinfo;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -36,18 +31,11 @@ import com.propertyvista.dto.payment.AutoPayReviewDTO;
 import com.propertyvista.dto.payment.AutoPayReviewPreauthorizedPaymentDTO;
 import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
-import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockEventBus;
-import com.propertyvista.test.mock.models.AutoPayChangePolicyDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
-import com.propertyvista.yardi.YardiTestBase;
 import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
 import com.propertyvista.yardi.mock.LeaseChargeUpdater;
-import com.propertyvista.yardi.mock.PropertyUpdateEvent;
-import com.propertyvista.yardi.mock.PropertyUpdater;
-import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
-import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 /**
@@ -55,100 +43,24 @@ import com.propertyvista.yardi.services.YardiResidentTransactionsService;
  * @see com.propertyvista.biz.financial.payment.PreauthorizedPaymentChangeReviewInternalTest
  * 
  */
-public class PreauthorizedPaymentChangeReviewYardiTest extends YardiTestBase {
+public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestBase {
+
+    private Lease lease;
+
+    private LeasePaymentMethod paymentMethod;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        preloadData();
 
-        {
-            // @formatter:off
-            PropertyUpdater updater = new PropertyUpdater("prop123").
-            set(PropertyUpdater.ADDRESS.Address1, "11 prop123 str").
-            set(PropertyUpdater.ADDRESS.Country, "Canada");        
-            // @formatter:on
-            MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
-        }
-
-        //Add RtCustomer, main tenant and Unit
-        {
-            // @formatter:off
-            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111").
-            set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.CURRENT_RESIDENT).
-            set(RtCustomerUpdater.YCUSTOMER.CustomerID, "t000111").
-            set(RtCustomerUpdater.YCUSTOMERNAME.FirstName, "John").
-            set(RtCustomerUpdater.YCUSTOMERNAME.LastName, "Smith").
-            set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1000.00")).
-            set(RtCustomerUpdater.YLEASE.LeaseFromDate, DateUtils.detectDateformat("2010-01-01")).
-            set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("2014-12-31")).
-            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).         
-            set(RtCustomerUpdater.UNITINFO.UnitType, "2bdrm").
-            set(RtCustomerUpdater.UNITINFO.UnitBedrooms, new BigDecimal("2")).
-            set(RtCustomerUpdater.UNITINFO.UnitBathrooms, new BigDecimal("1")).
-            set(RtCustomerUpdater.UNITINFO.UnitRent, new BigDecimal("1000.00")).
-            set(RtCustomerUpdater.UNITINFO.FloorPlanID, "2bdrm").
-            set(RtCustomerUpdater.UNITINFO.FloorplanName, "2 Bedroom");
-            // @formatter:on
-            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
-        }
-
-        {
-            // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
-            set(LeaseChargeUpdater.Name.Description, "Rent").
-            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2010-01-01")).
-            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2014-12-31")).
-            set(LeaseChargeUpdater.Name.ChargeCode, "rrent").
-            set(LeaseChargeUpdater.Name.Amount, "1000.00");        
-            // @formatter:on
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-        }
-
-        {
-            // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "park").
-            set(LeaseChargeUpdater.Name.Description, "Parking").
-            set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2010-01-01")).
-            set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2014-12-31")).
-            set(LeaseChargeUpdater.Name.ChargeCode, "park").
-            set(LeaseChargeUpdater.Name.Amount, "80.00");        
-            // @formatter:on
-            MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
-        }
-    }
-
-    @Override
-    protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
-        List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
-        models.add(CustomerDataModel.class);
-        models.add(LeaseDataModel.class);
-        models.add(AutoPayChangePolicyDataModel.class);
-        return models;
+        setSysDate("2011-01-01");
+        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+        lease = loadLeaseToModel("t000111");
+        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
+        paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
     }
 
     public void testLeaseServiceChanges() throws Exception {
-        setSysDate("2011-01-01");
-
-        // Import all 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
-        //Persistence.service().commit();
-
-        Lease lease;
-        {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
-            lease = Persistence.service().retrieve(criteria);
-            Persistence.ensureRetrieve(lease, AttachLevel.Attached);
-            Persistence.ensureRetrieve(lease.unit(), AttachLevel.Attached);
-            Persistence.ensureRetrieve(lease.unit().building(), AttachLevel.Attached);
-            getDataModel(LeaseDataModel.class).addItem(lease);
-        }
-
-        Persistence.service().retrieveMember(lease.leaseParticipants());
-        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
-        getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
-
         PreauthorizedPayment pap1 = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, new PreauthorizedPaymentBuilder(). //
                 add(lease.currentTerm().version().leaseProducts().serviceItem(), "500.00"). //
                 add(lease.currentTerm().version().leaseProducts().featureItems().get(0), "80.00"). //

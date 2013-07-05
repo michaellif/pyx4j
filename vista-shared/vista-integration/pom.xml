@@ -86,6 +86,21 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-biz-system</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-payment</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
 
 </project>
