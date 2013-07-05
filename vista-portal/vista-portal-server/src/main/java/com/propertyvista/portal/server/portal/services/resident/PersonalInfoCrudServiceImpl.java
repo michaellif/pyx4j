@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -28,7 +26,6 @@ import com.pyx4j.server.contexts.Context;
 
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.tenant.Customer;
-import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -47,13 +44,6 @@ public class PersonalInfoCrudServiceImpl implements PersonalInfoCrudService {
         ResidentDTO dto = EntityFactory.create(ResidentDTO.class);
         dto.setValue(tenant.person().getValue());
         dto.emergencyContacts().addAll(tenant.emergencyContacts());
-        // add current address if any
-        EntityQueryCriteria<CustomerScreening> critAddr = EntityQueryCriteria.create(CustomerScreening.class);
-        critAddr.add(PropertyCriterion.eq(critAddr.proto().screene(), tenant));
-        List<CustomerScreening> result = Persistence.service().query(critAddr);
-        if (result.size() > 0) {
-            dto.currentAddress().set(result.get(0).version().currentAddress());
-        }
 
         callback.onSuccess(dto);
     }

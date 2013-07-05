@@ -18,15 +18,11 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
 @Transient
 public interface ResidentDTO extends Person {
-
-    @Caption(name = "Address")
-    PriorAddress currentAddress();
 
     @Length(3)
     @Caption(name = "Emergency Contacts")
