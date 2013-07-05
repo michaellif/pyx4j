@@ -123,6 +123,9 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements Enti
     }
 
     public void updateDecoratorsLayout(CContainer<?, ?> container, Layout layout) {
+        if (container.getComponents() == null) {
+            return;
+        }
         for (CComponent<?, ?> component : container.getComponents()) {
             if (component.getDecorator() instanceof WidgetDecorator) {
                 WidgetDecorator decorator = (WidgetDecorator) component.getDecorator();
