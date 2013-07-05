@@ -69,15 +69,13 @@ public class HSQLDialect extends Dialect {
         if (sequencesBaseIdentity) {
             return "NEXT VALUE FOR " + sequenceName;
         } else {
-            return super.getSequenceNextValSql(sequenceName);
+            throw new Error("Configuration does not support sequences");
         }
     }
 
     @Override
     public String sqlSequenceMetaData() {
-        StringBuilder sql = new StringBuilder();
-        sql.append("SELECT sequence_name FROM INFORMATION_SCHEMA.SEQUENCES");
-        return sql.toString();
+        return "SELECT sequence_name FROM INFORMATION_SCHEMA.SEQUENCES";
     }
 
     @Override
@@ -92,9 +90,9 @@ public class HSQLDialect extends Dialect {
     @Override
     public String getDropSequenceSql(String sequenceName) {
         if (sequencesBaseIdentity) {
-            return "drop sequence " + sequenceName;
+            return "DROP SEQUENCE " + sequenceName;
         } else {
-            return super.getDropSequenceSql(sequenceName);
+            throw new Error("Configuration does not support sequences");
         }
     }
 
@@ -119,8 +117,8 @@ public class HSQLDialect extends Dialect {
     }
 
     @Override
-    public boolean limitCriteriaIsRelative() {
-        return true;
+    public LimitOffsetSyntax limitCriteriaType() {
+        return LimitOffsetSyntax.Standard;
     }
 
     @Override

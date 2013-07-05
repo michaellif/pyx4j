@@ -121,8 +121,8 @@ public class PostgreSQLDialect extends Dialect {
     }
 
     @Override
-    public boolean limitCriteriaIsRelative() {
-        return true;
+    public LimitOffsetSyntax limitCriteriaType() {
+        return LimitOffsetSyntax.Standard;
     }
 
     @Override

@@ -40,6 +40,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.cfg.Configuration.ConnectionPoolProvider;
 import com.pyx4j.entity.rdb.cfg.ConnectionPoolType;
+import com.pyx4j.entity.rdb.dialect.DerbyDialect;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.dialect.HSQLDialect;
 import com.pyx4j.entity.rdb.dialect.MySQLDialect;
@@ -113,6 +114,9 @@ public class ConnectionProvider {
             break;
         case PostgreSQL:
             dialect = new PostgreSQLDialect(namingConvention, configuration.getMultitenancyType());
+            break;
+        case Derby:
+            dialect = new DerbyDialect(namingConvention, configuration.getMultitenancyType(), configuration.sequencesBaseIdentity());
             break;
         default:
             throw new Error("Unsupported driver Dialect " + configuration.driverClass());

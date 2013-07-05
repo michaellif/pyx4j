@@ -99,7 +99,7 @@ public interface Configuration extends IPersistenceConfiguration {
     }
 
     public enum DatabaseType {
-        Oracle, MySQL, PostgreSQL, HSQLDB, Other
+        Oracle, MySQL, PostgreSQL, HSQLDB, Derby, Other
     };
 
     public enum MultitenancyType {

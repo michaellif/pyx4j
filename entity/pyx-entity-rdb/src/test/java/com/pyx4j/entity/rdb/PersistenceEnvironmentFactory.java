@@ -20,6 +20,7 @@
  */
 package com.pyx4j.entity.rdb;
 
+import com.pyx4j.entity.rdb.derby.TestConfigurationDerby;
 import com.pyx4j.entity.rdb.hsql.TestConfigurationHSQL;
 import com.pyx4j.entity.rdb.mysql.TestConfigurationMySQL;
 import com.pyx4j.entity.rdb.oracle.TestConfigurationOracle;
@@ -42,5 +43,9 @@ public class PersistenceEnvironmentFactory {
 
     public static PersistenceEnvironment getPostgreSQLPersistenceEnvironment() {
         return new RDBDatastorePersistenceEnvironment(new TestConfigurationPostgreSQL());
+    }
+
+    public static PersistenceEnvironment getDerbyPersistenceEnvironment() {
+        return new RDBDatastorePersistenceEnvironment(new TestConfigurationDerby());
     }
 }

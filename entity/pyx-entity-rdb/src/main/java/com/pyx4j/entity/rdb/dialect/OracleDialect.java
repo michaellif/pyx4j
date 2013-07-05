@@ -137,8 +137,8 @@ public class OracleDialect extends Dialect {
     }
 
     @Override
-    public boolean limitCriteriaIsRelative() {
-        return false;
+    public LimitOffsetSyntax limitCriteriaType() {
+        return LimitOffsetSyntax.AbsolutCriteria;
     }
 
     @Override

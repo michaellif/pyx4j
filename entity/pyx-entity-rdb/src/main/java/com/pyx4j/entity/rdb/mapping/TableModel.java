@@ -856,12 +856,18 @@ public class TableModel {
             }
             int parameterIndex = qb.bindParameters(persistenceContext, stmt);
             if (addLimit) {
-                if (dialect.limitCriteriaIsRelative()) {
-                    stmt.setInt(parameterIndex, limit);
-                } else {
+                switch (dialect.limitCriteriaType()) {
+                case AbsolutCriteria:
                     stmt.setInt(parameterIndex, offset + limit);
+                    parameterIndex++;
+                    break;
+                case Standard:
+                    stmt.setInt(parameterIndex, limit);
+                    parameterIndex++;
+                    break;
+                default:
+                    break;
                 }
-                parameterIndex++;
                 stmt.setInt(parameterIndex, offset);
             }
             rs = stmt.executeQuery();
@@ -928,12 +934,18 @@ public class TableModel {
             }
             int parameterIndex = qb.bindParameters(persistenceContext, stmt);
             if (limit > 0) {
-                if (dialect.limitCriteriaIsRelative()) {
+                switch (dialect.limitCriteriaType()) {
+                case AbsolutCriteria:
+                    stmt.setInt(parameterIndex, offset + limit);
+                    parameterIndex++;
+                    break;
+                case Standard:
                     stmt.setInt(parameterIndex, limit);
-                } else {
-                    stmt.setInt(parameterIndex, limit + offset);
+                    parameterIndex++;
+                    break;
+                default:
+                    break;
                 }
-                parameterIndex++;
                 stmt.setInt(parameterIndex, offset);
             }
 
@@ -1086,12 +1098,18 @@ public class TableModel {
             }
             int parameterIndex = qb.bindParameters(persistenceContext, stmt);
             if (limit > 0) {
-                if (dialect.limitCriteriaIsRelative()) {
+                switch (dialect.limitCriteriaType()) {
+                case AbsolutCriteria:
+                    stmt.setInt(parameterIndex, offset + limit);
+                    parameterIndex++;
+                    break;
+                case Standard:
                     stmt.setInt(parameterIndex, limit);
-                } else {
-                    stmt.setInt(parameterIndex, limit + offset);
+                    parameterIndex++;
+                    break;
+                default:
+                    break;
                 }
-                parameterIndex++;
                 stmt.setInt(parameterIndex, offset);
             }
 

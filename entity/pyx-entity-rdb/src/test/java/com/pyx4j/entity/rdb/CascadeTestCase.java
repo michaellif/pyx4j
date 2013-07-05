@@ -121,10 +121,12 @@ public abstract class CascadeTestCase extends AssociationMappingTestCase {
         o.children().get(0).testId().setValue(testId);
         String child0Name = "c0-" + uniqueString();
         o.children().get(0).name().setValue(child0Name);
+        o.children().get(0).orderInParent().setValue(0);
 
         o.children().get(1).testId().setValue(testId);
         String child1Name = "c1-" + uniqueString();
         o.children().get(1).name().setValue(child1Name);
+        o.children().get(1).orderInParent().setValue(1);
 
         // Save owner without children
         srvSave(o, testCaseMethod);

@@ -48,6 +48,15 @@ public abstract class Dialect {
 
     private final boolean multitenantSeparateSchemas;
 
+    public static enum LimitOffsetSyntax {
+
+        Standard,
+
+        AbsolutCriteria,
+
+        OffsetOnly
+    }
+
     protected Dialect(DatabaseType databaseType, NamingConvention namingConvention, MultitenancyType multitenancyType) {
         this.databaseType = databaseType;
         this.namingConvention = namingConvention;
@@ -259,7 +268,7 @@ public abstract class Dialect {
         throw new Error("Dialect does not support limit");
     }
 
-    public boolean limitCriteriaIsRelative() {
+    public LimitOffsetSyntax limitCriteriaType() {
         throw new Error("Dialect does not support limit");
     }
 
