@@ -17,12 +17,10 @@ import java.util.List;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -37,12 +35,10 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
-import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
@@ -124,7 +120,7 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         int row = -1;
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        contentPanel.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"))));
+        contentPanel.setWidget(++row, 0, createDecorator(inject(proto().name(), new CEntityLabel<Name>()), "250px").customLabel("").build());
         contentPanel.setWidget(++row, 0, createDecorator(inject(proto().sex()), "50px").build());
         contentPanel.setWidget(++row, 0, createDecorator(inject(proto().birthDate()), "150px").build());
 
@@ -178,8 +174,6 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
 
         private final String customViewLabel;
 
-        private final CrudAppPlace linkPlace;
-
         public NameEditor() {
             this(null);
         }
@@ -192,27 +186,9 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
             super(Name.class);
             this.customViewLabel = customViewLabel;
 
-            linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
             viewComp = new CEntityLabel<Name>();
             viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
-            if (linkPlace != null) {
-                viewComp.setNavigationCommand(new Command() {
-                    @Override
-                    public void execute() {
-                        if (getLinkKey() != null) {
-                            AppSite.getPlaceController().goTo(linkPlace.formViewerPlace(getLinkKey()));
-                        }
-                    }
-                });
-            }
-        }
-
-        /**
-         * overwrite to supply real entity key for hyperlink
-         */
-        public Key getLinkKey() {
-            return getValue().getPrimaryKey();
         }
 
         @Override
