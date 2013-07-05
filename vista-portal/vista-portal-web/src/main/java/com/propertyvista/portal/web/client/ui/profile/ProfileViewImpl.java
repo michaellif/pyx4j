@@ -21,6 +21,7 @@ public class ProfileViewImpl extends EntityViewImpl<ResidentDTO> implements Prof
     public ProfileViewImpl() {
         super();
         setForm(new ProfileForm(this));
+
     }
 
 }

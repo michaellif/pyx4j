@@ -78,4 +78,11 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void save(PvBillingFinancialSummaryDTO value) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

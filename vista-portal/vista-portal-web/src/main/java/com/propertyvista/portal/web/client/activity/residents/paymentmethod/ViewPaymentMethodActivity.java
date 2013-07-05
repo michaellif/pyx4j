@@ -70,4 +70,10 @@ public class ViewPaymentMethodActivity extends SecurityAwareActivity implements 
     public void back() {
         History.back();
     }
+
+    @Override
+    public void save(LeasePaymentMethod value) {
+        // TODO Auto-generated method stub
+
+    }
 }

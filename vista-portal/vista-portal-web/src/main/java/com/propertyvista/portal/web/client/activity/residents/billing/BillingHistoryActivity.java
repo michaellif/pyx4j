@@ -78,4 +78,11 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void save(BillListDTO value) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

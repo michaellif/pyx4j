@@ -75,4 +75,10 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
     public void back() {
         History.back();
     }
+
+    @Override
+    public void save(BillDTO value) {
+        // TODO Auto-generated method stub
+
+    }
 }

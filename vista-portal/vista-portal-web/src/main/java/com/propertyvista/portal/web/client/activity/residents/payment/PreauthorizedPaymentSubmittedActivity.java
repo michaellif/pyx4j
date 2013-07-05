@@ -70,4 +70,10 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
     public void back() {
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
     }
+
+    @Override
+    public void save(PreauthorizedPaymentDTO value) {
+        // TODO Auto-generated method stub
+
+    }
 }

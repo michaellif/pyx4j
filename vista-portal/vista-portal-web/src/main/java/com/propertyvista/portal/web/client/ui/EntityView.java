@@ -21,6 +21,8 @@ public interface EntityView<E extends IEntity> extends IsWidget {
 
     interface EntityPresenter<E extends IEntity> {
 
+        void save(E value);
+
     }
 
     void setPresenter(EntityPresenter<E> presenter);

@@ -53,4 +53,9 @@ public class ProfileActivity extends SecurityAwareActivity implements ProfilePre
         }, null, AbstractCrudService.RetrieveTarget.View);
     }
 
+    @Override
+    public void save(ResidentDTO value) {
+        System.out.println("++++++++++++++++save");
+    }
+
 }

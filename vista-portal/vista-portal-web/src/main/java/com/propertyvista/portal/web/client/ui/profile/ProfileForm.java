@@ -48,7 +48,6 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         super(ResidentDTO.class, new VistaEditorsComponentFactory());
         this.view = view;
         asWidget().setStyleName(EntityViewTheme.StyleName.EntityView.name());
-        setViewable(true);
     }
 
     public void setPresenter(ProfilePresenter presenter) {

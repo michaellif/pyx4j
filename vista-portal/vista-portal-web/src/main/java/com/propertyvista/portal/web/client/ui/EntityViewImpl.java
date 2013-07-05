@@ -13,6 +13,8 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -43,6 +45,8 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements Enti
 
     private EntityPresenter<E> presenter;
 
+    private final boolean editingInProgress = false;
+
     private Layout widgetLayout = Layout.horisontal;
 
     public EntityViewImpl() {
@@ -67,10 +71,21 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements Enti
         }
     }
 
-    protected void setForm(CEntityForm<E> theForm) {
-        form = theForm;
+    protected void setForm(final CEntityForm<E> form) {
+        this.form = form;
         form.initContent();
         formHolder.setWidget(form.asWidget());
+
+        form.setViewable(true);
+        form.addValueChangeHandler(new ValueChangeHandler<E>() {
+
+            @Override
+            public void onValueChange(ValueChangeEvent<E> event) {
+                if (!editingInProgress) {
+                    presenter.save(form.getValue());
+                }
+            }
+        });
     }
 
     @Deprecated

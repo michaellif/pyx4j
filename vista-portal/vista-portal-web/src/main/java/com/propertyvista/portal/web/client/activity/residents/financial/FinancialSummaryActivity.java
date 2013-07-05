@@ -78,4 +78,10 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
         // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void save(YardiFinancialSummaryDTO value) {
+        // TODO Auto-generated method stub
+
+    }
 }

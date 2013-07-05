@@ -70,4 +70,10 @@ public class PersonalInfoViewActivity extends SecurityAwareActivity implements P
     public void back() {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void save(ResidentDTO value) {
+        // TODO Auto-generated method stub
+
+    }
 }

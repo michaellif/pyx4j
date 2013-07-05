@@ -93,4 +93,10 @@ public class ViewMaintenanceRequestActivity extends SecurityAwareActivity implem
     public void back() {
         History.back();
     }
+
+    @Override
+    public void save(MaintenanceRequestDTO value) {
+        // TODO Auto-generated method stub
+
+    }
 }
