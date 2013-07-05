@@ -14,10 +14,15 @@
 package com.propertyvista.portal.web.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+
+import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
+import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
 import com.propertyvista.portal.web.client.ui.FooterView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
@@ -25,13 +30,22 @@ public class FooterActivity extends AbstractActivity {
 
     private final FooterView view;
 
+    private final FooterContentService service;
+
     public FooterActivity(Place place) {
         view = PortalWebViewFactory.instance(FooterView.class);
+        service = GWT.<FooterContentService> create(FooterContentService.class);
     }
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
+        service.getFooterContent(new DefaultAsyncCallback<PortalFooterContentDTO>() {
+            @Override
+            public void onSuccess(PortalFooterContentDTO footerContent) {
+                view.setContent(footerContent);
+            }
+        });
     }
 
 }

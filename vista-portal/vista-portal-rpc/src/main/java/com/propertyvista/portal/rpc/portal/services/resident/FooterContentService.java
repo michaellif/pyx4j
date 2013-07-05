@@ -7,18 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Apr 1, 2013
- * @author Mykola
+ * Created on 2013-07-05
+ * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui;
+package com.propertyvista.portal.rpc.portal.services.resident;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 
-public interface FooterView extends IsWidget {
+public interface FooterContentService extends IService {
 
-    void setContent(PortalFooterContentDTO content);
+    void getFooterContent(AsyncCallback<PortalFooterContentDTO> callback);
 
 }

@@ -25,6 +25,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
+import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 
@@ -80,6 +81,11 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             }
 
         });
+    }
+
+    @Override
+    public void setContent(PortalFooterContentDTO content) {
+        // TODO Auto-generated method stub       
     }
 
     private void doLayout(LayoutType layoutType) {

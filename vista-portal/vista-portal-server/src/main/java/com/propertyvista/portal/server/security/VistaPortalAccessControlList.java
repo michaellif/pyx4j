@@ -58,6 +58,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
 import com.propertyvista.portal.rpc.portal.services.resident.CommunicationCenterService;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
+import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
@@ -238,6 +239,7 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.TenantPrimary, VistaCustomerBehavior.Tenant);
         grant(VistaCustomerBehavior.TenantSecondary, VistaCustomerBehavior.Tenant);
 
+        grant(new IServiceExecutePermission(FooterContentService.class));
         freeze();
     }
 }
