@@ -56,6 +56,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         Style style = new Style(".", StyleName.WidgetDecorator);
         style.addProperty("border-spacing", "0");
         style.addProperty("padding", "5px");
+        style.addProperty("white-space", "nowrap");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable);
@@ -65,10 +66,23 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("padding-right", "1em");
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorComponent);
+        style.addProperty("white-space", "normal");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.verticalAlign, " .", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("padding-right", "0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorLabelHolder, "-", StyleDependent.labelAlignCenter);
+        style.addProperty("text-align", "center");
+        addStyle(style);
+
+        style = new Style(".", StyleName.WidgetDecoratorLabelHolder, "-", StyleDependent.labelAlignRight);
+        style.addProperty("text-align", "right");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorLabel);

@@ -55,6 +55,7 @@ public class DefaultDataTableTheme extends Theme {
     protected void initStyles() {
 
         Style style = new Style(".", StyleName.DataTable);
+        style.addProperty("border-collapse", "separate");
         addStyle(style);
 
         style = new Style(".", StyleName.DataTableHeader);

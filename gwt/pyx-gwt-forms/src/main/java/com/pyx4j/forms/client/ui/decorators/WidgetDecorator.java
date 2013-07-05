@@ -44,7 +44,6 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
@@ -111,19 +110,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         nativeComponent.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        String caption = builder.customLabel;
-
-        if (caption == null) {
-            caption = component.getTitle();
-        }
-
-        if (caption == null) {
-            caption = "";
-        } else {
-            caption += builder.useLabelSemicolon ? ":" : "";
-        }
-
-        label = new Label(caption);
+        label = new Label();
         label.setStyleName(WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
@@ -140,7 +127,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
         infoImageHolder = new SimplePanel();
-        renderTooltip();
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
@@ -148,46 +134,13 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         if (builder.mandatoryMarker) {
             renderMandatoryStar();
         }
-        label.setVisible(component.isVisible());
-        setVisible(component.isVisible());
-
-        component.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.viewable) {
-                    layout();
-                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
-                    label.setVisible(component.isVisible());
-                    setVisible(component.isVisible());
-                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
-                    label.setText(component.getTitle() + (builder.useLabelSemicolon ? ":" : ""));
-                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
-                    renderTooltip();
-                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
-                    renderNote();
-                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
-                        PropertyName.enabled, PropertyName.editable)) {
-                    renderValidationMessage();
-                    if (builder.mandatoryMarker) {
-                        renderMandatoryStar();
-                    }
-                }
-            }
-        });
 
         labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
 
         labelHolder.setWidth(builder.labelWidth);
-        labelHolder.getElement().getStyle().setProperty("textAlign", builder.labelAlignment.name());
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
-        if (builder.labelAlignment == Alignment.center) {
-            // add the same sized placeholder on the right in for symmetry: 
-            SpaceHolder spaceHolder = new SpaceHolder();
-            spaceHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
-            labelHolder.add(spaceHolder);
-        }
 
         SimplePanel componentHolder = new SimplePanel();
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
@@ -201,21 +154,11 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         noteLabel = new Label();
         noteLabel.setStyleName(DefaultCComponentsTheme.StyleName.NoteLabel.name());
 
-        renderNote();
-
         assistantWidgetHolder = new SimplePanel();
         assistantWidgetHolder.setWidget(builder.assistantWidget);
 
-        switch (builder.layout) {
-        case horisontal:
-            contentPanel = new HorizontalPanel();
-            break;
-        case vertical:
-            contentPanel = new VerticalPanel();
-            break;
-        default:
-            contentPanel = null;
-        }
+        contentPanel = new HorizontalPanel();
+
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
         contentPanel.setWidth(builder.contentWidth);
         contentPanel.add(componentHolder);
@@ -230,7 +173,46 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         add(labelHolder);
         add(containerPanel);
 
-        layout();
+        setLabelAlignment(builder.labelAlignment);
+
+        setLayout(builder.layout);
+
+        updateNote();
+        updateCaption();
+        updateViewable();
+        updateTooltip();
+        updateVisibility();
+
+        component.addPropertyChangeHandler(new PropertyChangeHandler() {
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.getPropertyName() == PropertyChangeEvent.PropertyName.viewable) {
+                    updateViewable();
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.visible) {
+                    updateVisibility();
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.title) {
+                    updateCaption();
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.tooltip) {
+                    updateTooltip();
+                } else if (event.getPropertyName() == PropertyChangeEvent.PropertyName.note) {
+                    updateNote();
+                } else if (event.isEventOfType(PropertyName.valid, PropertyName.visited, PropertyName.showErrorsUnconditional, PropertyName.repopulated,
+                        PropertyName.enabled, PropertyName.editable)) {
+                    renderValidationMessage();
+                    if (builder.mandatoryMarker) {
+                        renderMandatoryStar();
+                    }
+                }
+            }
+        });
+
+        HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
+                : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
+
+        containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
+        containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
+        containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
+
     }
 
     @Override
@@ -253,16 +235,16 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         builder.labelAlignment = alignment;
         switch (alignment) {
         case left:
-            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
             break;
         case center:
-            label.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
             break;
         case right:
-            label.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            label.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
             break;
         }
 
@@ -284,27 +266,6 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
             break;
         }
-    }
-
-    protected void layout() {
-        setLabelAlignment(builder.labelAlignment);
-        setLayout(builder.layout);
-
-        HorizontalAlignmentConstant componentAlignment = builder.componentAlignment == Alignment.right ? HasHorizontalAlignment.ALIGN_RIGHT
-                : builder.componentAlignment == Alignment.left ? HasHorizontalAlignment.ALIGN_LEFT : HasHorizontalAlignment.ALIGN_CENTER;
-
-        containerPanel.getCellFormatter().setHorizontalAlignment(0, 0, componentAlignment);
-        containerPanel.getCellFormatter().setHorizontalAlignment(1, 0, componentAlignment);
-        containerPanel.getCellFormatter().setHorizontalAlignment(2, 0, componentAlignment);
-
-        if (component.isViewable()) {
-            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
-            mandatoryImageHolder.setVisible(false);
-        } else {
-            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
-            mandatoryImageHolder.setVisible(true);
-        }
-
     }
 
     protected void renderMandatoryStar() {
@@ -341,7 +302,11 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     }
 
-    protected void renderTooltip() {
+    private void updateVisibility() {
+        setVisible(component.isVisible());
+    }
+
+    private void updateTooltip() {
         if (component.getTooltip() != null && component.getTooltip().trim().length() > 0) {
             Image infoImage = new Image(ImageFactory.getImages().formTooltipInfo());
             infoImage.setTitle(component.getTooltip());
@@ -355,7 +320,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         }
     }
 
-    protected void renderNote() {
+    private void updateNote() {
         if (component.getNote() != null && component.getNote().trim().length() > 0) {
             noteLabel.setText(component.getNote());
             noteLabel.addStyleDependentName(component.getNoteStyle().getStyle().toString());
@@ -365,6 +330,25 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
                 noteLabel.removeStyleDependentName(style.toString());
             }
         }
+    }
+
+    private void updateViewable() {
+        if (component.isViewable()) {
+            addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            mandatoryImageHolder.setVisible(false);
+        } else {
+            removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
+            mandatoryImageHolder.setVisible(true);
+        }
+    }
+
+    private void updateCaption() {
+        String caption = builder.customLabel;
+        if (caption == null) {
+            caption = component.getTitle();
+        }
+        caption += builder.useLabelSemicolon ? ":" : "";
+        label.setText(caption);
     }
 
     public static class Builder {
