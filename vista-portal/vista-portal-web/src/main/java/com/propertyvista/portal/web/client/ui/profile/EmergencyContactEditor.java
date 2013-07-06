@@ -18,12 +18,15 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
+
+    private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
 
     private final ProfileViewImpl view;
 
@@ -37,7 +40,7 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel("").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name")).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
