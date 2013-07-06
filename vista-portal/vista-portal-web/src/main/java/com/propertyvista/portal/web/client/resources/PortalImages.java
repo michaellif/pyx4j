@@ -76,11 +76,15 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("brand.png")
-    ImageResource brand();
+    ImageResource myCommunityHeaderLogo();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Footer_Logo-myCommunity.png")
-    ImageResource brandFooter();
+    ImageResource myCommunityFooterLogo();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Footer_Logo-PropertyVista.png")
+    ImageResource vistaFooterLogo();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("WriteMessage.png")
@@ -109,6 +113,22 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Dashboard-LocationIcon.png")
     ImageResource marker();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Social-Facebook.png")
+    ImageResource socialFacebook();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Social-Twitter.png")
+    ImageResource socialTwitter();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Social-YouTube.png")
+    ImageResource socialYouTube();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Social-Flickr.png")
+    ImageResource socialFlickr();
 
     DashboardMenuImages dashboardMenu();
 

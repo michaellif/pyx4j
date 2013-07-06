@@ -27,7 +27,7 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 public class PortalWebRootPaneTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        PageHeader, PageFooter,
+        PageHeader, PageFooter, PageFooterFollowUs,
 
         MainToolbar, BrandImage,
 
@@ -227,6 +227,16 @@ public class PortalWebRootPaneTheme extends Theme {
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
         addStyle(style);
+
+        style = new Style(".", StyleName.PageFooterFollowUs, " .", DefaultWidgetsTheme.StyleName.Button);
+        style.addProperty("color", ThemeColor.foreground, 0.01);
+        style.addProperty("background", "transparent");
+        style.addProperty("border", "none");
+        style.addProperty("height", "30px");
+        style.addProperty("line-height", "30px");
+        style.addProperty("display", "block");
+        addStyle(style);
+
     }
 
     private void initExtraGadgetStyles() {
