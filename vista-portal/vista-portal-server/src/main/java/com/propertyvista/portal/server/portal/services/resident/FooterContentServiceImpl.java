@@ -43,8 +43,7 @@ public class FooterContentServiceImpl implements FooterContentService {
         if (portalFooterDto.logo().isNull()) {
             // TODO throw exception logo image for current locale not found???
         }
-        portalFooterDto.content().html()
-                .setValue("<div><h3>Content Content Content<h3><div>Even More Content Content Content Content and some Contact Info Info Info</div></div>");
+        portalFooterDto.content().html().setValue("<div>Property Management<br/>Contact us: 123-456-7777<br/>15 Donald Street</div>");
         portalFooterDto.socialLinks().addAll(siteDescriptor.socialLinks());
 
         callback.onSuccess(portalFooterDto);

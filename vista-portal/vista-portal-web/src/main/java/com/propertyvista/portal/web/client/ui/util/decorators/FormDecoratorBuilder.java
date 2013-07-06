@@ -21,7 +21,7 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     public FormDecoratorBuilder(CComponent<?, ?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
         labelWidth(labelWidth);
-        contentWidth(componentWidth);
+        contentWidth(contentWidth);
         componentWidth(componentWidth);
         labelAlignment(Alignment.left);
         useLabelSemicolon(false);

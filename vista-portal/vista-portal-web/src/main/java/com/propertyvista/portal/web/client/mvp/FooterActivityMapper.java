@@ -26,7 +26,7 @@ public class FooterActivityMapper implements ActivityMapper {
 
     @Override
     public Activity getActivity(Place place) {
-        return new FooterActivity(place);
+        return FooterActivity.instance();
     }
 
 }

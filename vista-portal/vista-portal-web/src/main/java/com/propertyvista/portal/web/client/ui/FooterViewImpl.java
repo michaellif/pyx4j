@@ -16,6 +16,7 @@ package com.propertyvista.portal.web.client.ui;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -23,13 +24,17 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.PopupWindow.PopupWindowHandle;
 
+import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
@@ -40,16 +45,18 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
     private final BrandPanel brandPanel;
 
-    private final SimplePanel pmcInfoPanel;
+    private final PmcInfoPanel pmcInfoPanel;
 
     private final FlowPanel actionsPanel;
+
+    private final FollowUsPanel followUsPanel;
 
     public FooterViewImpl() {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageFooter.name());
         getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 
-        pmcInfoPanel = new SimplePanel(new HTML("PMC Info"));
+        pmcInfoPanel = new PmcInfoPanel();
         pmcInfoPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         pmcInfoPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         pmcInfoPanel.setWidth("50%");
@@ -65,13 +72,14 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
         linksPanel.getElement().getStyle().setProperty("textAlign", "center");
         linksPanel.setWidth("100%");
 
-        SimplePanel langSelectorPanel = new SimplePanel(new HTML("Languages"));
+        SimplePanel langSelectorPanel = new SimplePanel(new HTML("Eng(US) - Eng(Ca) - Fr(Ca)"));
         langSelectorPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         langSelectorPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
         langSelectorPanel.getElement().getStyle().setProperty("textAlign", "center");
         langSelectorPanel.setWidth("100%");
 
-        FollowUsPanel followUsPanel = new FollowUsPanel();
+        followUsPanel = new FollowUsPanel();
+        followUsPanel.setVisible(false);
         followUsPanel.getElement().getStyle().setFloat(Float.LEFT);
         followUsPanel.setWidth("60%");
 
@@ -100,7 +108,11 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
     @Override
     public void setContent(PortalFooterContentDTO content) {
-        // TODO Auto-generated method stub       
+        pmcInfoPanel.setPmcInfo(content.content().html().getValue());
+        pmcInfoPanel.setPmcLogo(MediaUtils.createSiteImageResourceUrl(content.logo()));
+
+        followUsPanel.setSocialLinks(content.socialLinks());
+
     }
 
     private void doLayout(LayoutType layoutType) {
@@ -158,47 +170,92 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
     }
 
     class FollowUsPanel extends SimplePanel {
+
+        private final FlowPanel contentPanel;
+
         public FollowUsPanel() {
             setStyleName(PortalWebRootPaneTheme.StyleName.PageFooterFollowUs.name());
 
-            FlowPanel contentPanel = new FlowPanel();
+            contentPanel = new FlowPanel();
             contentPanel.setWidth("10em");
             contentPanel.getElement().getStyle().setProperty("margin", "0 auto");
             setWidget(contentPanel);
 
-            contentPanel.add(new HTML(i18n.tr("FOLLOW US")));
-            contentPanel.add(new Button(PortalImages.INSTANCE.socialFacebook(), i18n.tr("Facebook"), new Command() {
+        }
 
-                @Override
-                public void execute() {
-                    // TODO Auto-generated method stub
+        void setSocialLinks(IList<SocialLink> links) {
+            if (links.size() > 0) {
+                followUsPanel.setVisible(true);
+                contentPanel.add(new HTML(i18n.tr("FOLLOW US")));
+            }
+            for (final SocialLink socialLink : links) {
 
-                }
-            }));
-            contentPanel.add(new Button(PortalImages.INSTANCE.socialTwitter(), i18n.tr("Twitter"), new Command() {
-
-                @Override
-                public void execute() {
-                    // TODO Auto-generated method stub
-
-                }
-            }));
-            contentPanel.add(new Button(PortalImages.INSTANCE.socialYouTube(), i18n.tr("YouTube"), new Command() {
-
-                @Override
-                public void execute() {
-                    // TODO Auto-generated method stub
-
-                }
-            }));
-            contentPanel.add(new Button(PortalImages.INSTANCE.socialFlickr(), i18n.tr("Flickr"), new Command() {
-
-                @Override
-                public void execute() {
-                    // TODO Auto-generated method stub
+                ImageResource resource = null;
+                switch (socialLink.socialSite().getValue()) {
+                case Facebook:
+                    resource = PortalImages.INSTANCE.socialFacebook();
+                    break;
+                case Twitter:
+                    resource = PortalImages.INSTANCE.socialTwitter();
+                    break;
+                case Youtube:
+                    resource = PortalImages.INSTANCE.socialYouTube();
+                    break;
+                case Flickr:
+                    resource = PortalImages.INSTANCE.socialFlickr();
+                    break;
 
                 }
-            }));
+
+                contentPanel.add(new Button(resource, socialLink.socialSite().getStringView(), new Command() {
+
+                    @Override
+                    public void execute() {
+                        openLink(socialLink.siteUrl().getValue());
+                    }
+                }));
+            }
+
+        }
+
+        public native PopupWindowHandle openLink(String url) /*-{
+			return $wnd.open(url);
+        }-*/;
+    }
+
+    class PmcInfoPanel extends SimplePanel {
+
+        private final HTML pmcTextPanel;
+
+        private final Image pmcLogoImage;
+
+        public PmcInfoPanel() {
+            setStyleName(PortalWebRootPaneTheme.StyleName.PageFooterPmcInfo.name());
+
+            FlowPanel contentPanel = new FlowPanel();
+            contentPanel.setStyleName(PortalWebRootPaneTheme.StyleName.PageFooterPmcInfoContent.name());
+            contentPanel.getElement().getStyle().setProperty("margin", "0 auto");
+            setWidget(contentPanel);
+
+            pmcLogoImage = new Image();
+            pmcLogoImage.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            pmcLogoImage.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            contentPanel.add(pmcLogoImage);
+
+            pmcTextPanel = new HTML();
+            pmcTextPanel.setStyleName(PortalWebRootPaneTheme.StyleName.PageFooterPmcInfoText.name());
+            pmcTextPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            pmcTextPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            contentPanel.add(pmcTextPanel);
+        }
+
+        public void setPmcLogo(String url) {
+            pmcLogoImage.setUrl(url);
+
+        }
+
+        void setPmcInfo(String content) {
+            pmcTextPanel.setHTML(content);
         }
     }
 
