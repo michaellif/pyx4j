@@ -45,7 +45,11 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "200px").build());
-        main.setWidget(++row, 0, inject(proto().address(), new AddressEditor(view)));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().street1()), "200px").customLabel("Address").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().city()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().province()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().country()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), "200px").build());
 
         view.updateDecoratorsLayout(this, view.getWidgetLayout());
 
