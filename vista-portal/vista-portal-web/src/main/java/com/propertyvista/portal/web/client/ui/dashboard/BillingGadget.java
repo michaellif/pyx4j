@@ -13,20 +13,31 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantBillingDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
+
+    private BillingViewer billingViewer;
 
     BillingGadget(DashboardForm_New form) {
         super(form, PortalImages.INSTANCE.billingIcon(), "My Billing Summary", ThemeColor.contrast4);
@@ -35,15 +46,20 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
     @Override
     public IsWidget createContent() {
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel
-                .add(new HTML(
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+
+        billingViewer = new BillingViewer();
+        billingViewer.setViewable(true);
+        billingViewer.initContent();
+
+        SimplePanel contentPanel = new SimplePanel(billingViewer.asWidget());
+        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
         return contentPanel;
     }
 
     @Override
     protected void setComponentsValue(TenantBillingDTO value, boolean fireEvent, boolean populate) {
+        billingViewer.populate(value);
     }
 
     class BillingToolbar extends Toolbar {
@@ -67,6 +83,42 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
             });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.6));
             add(autoPayButton);
+        }
+    }
+
+    class BillingViewer extends CEntityForm<TenantBillingDTO> {
+
+        public BillingViewer() {
+            super(TenantBillingDTO.class);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FlowPanel contentPanel = new FlowPanel();
+
+            FormFlexPanel mainPanel = new FormFlexPanel();
+            mainPanel.setWidth("auto");
+            mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "120px", "100px", "200px").build());
+            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "120px", "100px", "200px").build());
+            contentPanel.add(mainPanel);
+
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
+
+                    @Override
+                    public void execute() {
+                        getForm().getPresenter().viewCurrentBill();
+                    }
+                });
+                viewBillAnchor.getElement().getStyle().setMarginTop(10, Unit.PX);
+                viewBillAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                viewBillAnchor.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                contentPanel.add(viewBillAnchor);
+            }
+
+            return contentPanel;
         }
     }
 }

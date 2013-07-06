@@ -98,6 +98,7 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
             mainPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
 
             FlowPanel containerPanel = new FlowPanel();
+            containerPanel.setWidth("100%");
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
             if (imageResource != null && title != null) {

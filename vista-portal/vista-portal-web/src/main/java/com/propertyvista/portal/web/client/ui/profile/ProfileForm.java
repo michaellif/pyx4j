@@ -60,7 +60,8 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         int row = -1;
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel("").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name"))
+                .build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), "50px").build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), "150px").build());
 

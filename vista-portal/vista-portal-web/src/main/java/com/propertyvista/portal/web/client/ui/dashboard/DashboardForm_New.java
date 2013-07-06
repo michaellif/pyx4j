@@ -28,6 +28,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.web.client.ui.dashboard.DashboardView.DashboardPresenter;
 
 public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
 
@@ -45,8 +46,11 @@ public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
 
     private ResidentServicesGadget residentServicesGadget;
 
-    public DashboardForm_New() {
+    private final DashboardViewImpl view;
+
+    public DashboardForm_New(DashboardViewImpl view) {
         super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
+        this.view = view;
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
             @Override
@@ -86,12 +90,8 @@ public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
 
     }
 
-    public void setPresenter(DashboardView.DashboardPresenter presenter) {
-        this.presenter = presenter;
-    }
-
     protected DashboardView.DashboardPresenter getPresenter() {
-        return presenter;
+        return (DashboardPresenter) view.getPresenter();
     }
 
     @Override

@@ -47,6 +47,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
+        view.setPresenter(this);
 
         srv.retrieveTenantDashboard(new DefaultAsyncCallback<TenantDashboardDTO>() {
             @Override

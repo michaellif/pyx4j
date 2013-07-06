@@ -20,7 +20,7 @@ public class DashboardViewImpl extends EntityViewImpl<TenantDashboardDTO> implem
 
     public DashboardViewImpl() {
         super();
-        setForm(new DashboardForm_New());
+        setForm(new DashboardForm_New(this));
     }
 
 }
