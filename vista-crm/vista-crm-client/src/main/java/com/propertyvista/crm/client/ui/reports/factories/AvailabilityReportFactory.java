@@ -44,6 +44,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
+import com.propertyvista.crm.client.ui.reports.components.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.components.NotEmptySetValidator;
 import com.propertyvista.crm.rpc.dto.reports.AvailabilityReportDataDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
@@ -179,6 +180,10 @@ public class AvailabilityReportFactory implements HasAdvancedModeReportFactory<A
             public void setData(Object data) {
                 reportPanel.clear();
                 AvailabilityReportDataDTO reportData = (AvailabilityReportDataDTO) data;
+                if (reportData.unitStatuses.isEmpty()) {
+                    reportPanel.add(new HTML(NoResultsHtml.get()));
+                    return;
+                }
                 SafeHtmlBuilder bb = new SafeHtmlBuilder();
                 bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt; line-height: 22pt;\">");
                 bb.appendEscaped(i18n.tr("Unit Availability Report"));

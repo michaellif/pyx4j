@@ -47,6 +47,7 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.components.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.factories.ScrollBarPositionMemento;
 import com.propertyvista.crm.client.ui.reports.factories.eft.SelectedBuildingsFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -192,6 +193,12 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
 
             @Override
             public void setData(Object data) {
+                Vector<AutoPayReviewDTO> autoPayReviews = (Vector<AutoPayReviewDTO>) data;
+                if (autoPayReviews.isEmpty()) {
+                    reportHtml.setHTML(NoResultsHtml.get());
+                    return;
+                }
+
                 ColumnGroup autoPaySuspended = new ColumnGroup(i18n.tr("Auto Pay - Suspended"), null);
                 ColumnGroup autoPaySuggested = new ColumnGroup(i18n.tr("Auto Pay - Suggested"), null);
 
@@ -270,7 +277,6 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
 
                 // rows
                 builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
-                Vector<AutoPayReviewDTO> autoPayReviews = (Vector<AutoPayReviewDTO>) data;
                 for (AutoPayReviewDTO reviewCase : autoPayReviews) {
                     int numOfCaseRows = caseRows(reviewCase);
                     boolean isFirstLine = true;

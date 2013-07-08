@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.crm.client.ui.reports.components.NoResultsHtml;
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
@@ -111,6 +112,10 @@ public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerC
             @Override
             public void setData(Object data) {
                 CustomerCreditCheckReportDataDTO reportData = (CustomerCreditCheckReportDataDTO) data;
+                if (reportData.unitStatuses.isEmpty()) {
+                    reportHtml.setHTML(NoResultsHtml.get());
+                    return;
+                }
                 SafeHtmlBuilder bb = new SafeHtmlBuilder();
                 bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
                 bb.appendEscaped(i18n.tr("Customer Credit Check Report"));
