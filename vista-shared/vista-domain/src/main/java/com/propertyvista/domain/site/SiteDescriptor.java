@@ -120,7 +120,7 @@ public interface SiteDescriptor extends Descriptor {
     IList<SiteTitles> siteTitles();
 
     @Owned
-    IList<PortalImageResource> logo();
+    IList<PortalLogoImageResource> logo();
 
     @Owned
     IList<HtmlContent> slogan();

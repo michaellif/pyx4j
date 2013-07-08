@@ -33,7 +33,7 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
         setStyleName(PortalWebRootPaneTheme.StyleName.PageHeader.name());
 
-        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
+        Image logoImage = new Image(MediaUtils.createSiteLargeLogoUrl());
         logoImage.addLoadHandler(new LoadHandler() {
 
             @Override

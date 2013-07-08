@@ -37,7 +37,7 @@ import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteTitles;
 import com.propertyvista.domain.site.Testimonial;
@@ -153,9 +153,9 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
                 itTitles.remove();
             }
         }
-        Iterator<PortalImageResource> itLogos = site.logo().iterator();
+        Iterator<PortalLogoImageResource> itLogos = site.logo().iterator();
         while (itLogos.hasNext()) {
-            PortalImageResource item = itLogos.next();
+            PortalLogoImageResource item = itLogos.next();
             if (item.locale().isEmpty() || item.locale().businessEquals(locale)) {
                 itLogos.remove();
             }

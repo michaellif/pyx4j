@@ -25,7 +25,7 @@ public class HeaderViewImpl extends SimplePanel implements HeaderView {
 
         setStyleName(FieldTheme.StyleName.PageHeader.name());
 
-        Image logoImage = new Image(MediaUtils.createSiteLogoUrl());
+        Image logoImage = new Image(MediaUtils.createSiteLargeLogoUrl());
         logoImage.addStyleName(FieldTheme.StyleName.VistaLogo.name());
         setWidget(logoImage);
 

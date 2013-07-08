@@ -16,10 +16,12 @@ package com.propertyvista.domain.site;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 
-public interface PortalImageResource extends IEntity {
+public interface PortalLogoImageResource extends IEntity {
 
     @NotNull
     AvailableLocale locale();
 
-    SiteImageResource imageResource();
+    SiteImageResource small();
+    
+    SiteImageResource large();
 }

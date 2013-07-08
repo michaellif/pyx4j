@@ -53,9 +53,6 @@ public interface PageContent extends IEntity {
     //TODO Blob
     IPrimitive<String> content();
 
-    // Image for landing page and for static
-    PortalImageResource image();
-
     // =========================
 
     @Transient

@@ -58,8 +58,12 @@ public class MediaUtils {
                 + DeploymentConsts.siteImageResourceServletMapping;
     }
 
-    public static String createSiteLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/logo.png" + DeploymentConsts.siteImageResourceServletMapping;
+    public static String createSiteSmallLogoUrl() {
+        return ClientNavigUtils.getDeploymentBaseURL() + "/logo-small.png" + DeploymentConsts.siteImageResourceServletMapping;
+    }
+
+    public static String createSiteLargeLogoUrl() {
+        return ClientNavigUtils.getDeploymentBaseURL() + "/logo-large.png" + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createCrmLogoUrl() {

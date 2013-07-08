@@ -30,7 +30,7 @@ import com.pyx4j.widgets.client.dialog.OkDialog;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.settings.website.PortalImageResourceFolder.SiteImageThumbnail;
+import com.propertyvista.crm.client.ui.crud.settings.website.SiteImageThumbnail;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.dto.SiteDescriptorDTO;

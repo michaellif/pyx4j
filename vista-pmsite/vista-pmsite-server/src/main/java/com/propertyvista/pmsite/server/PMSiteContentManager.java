@@ -42,12 +42,12 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
@@ -512,17 +512,17 @@ public class PMSiteContentManager implements Serializable {
         return siteDescriptor;
     }
 
-    public SiteImageResource getSiteLogo(AvailableLocale locale) {
-        SiteImageResource logo = null;
+    public PortalLogoImageResource getSiteLogo(AvailableLocale locale) {
+        PortalLogoImageResource logo = null;
         String lang = locale.lang().getValue().name();
-        IList<PortalImageResource> allLogos = getSiteDescriptor().logo();
-        for (PortalImageResource logoRc : allLogos) {
+        IList<PortalLogoImageResource> allLogos = getSiteDescriptor().logo();
+        for (PortalLogoImageResource logoRc : allLogos) {
             if (logoRc.locale().lang().getValue().name().equals(lang)) {
-                logo = logoRc.imageResource();
+                logo = logoRc;
             }
         }
         if (logo == null && allLogos.size() > 0) {
-            logo = allLogos.get(0).imageResource();
+            logo = allLogos.get(0);
         }
         return logo;
     }

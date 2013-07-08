@@ -31,7 +31,7 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 
-import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteImageResource;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -68,7 +68,7 @@ public class SiteImageResourceServlet extends HttpServlet {
         }
         Key key = null;
         // check if logo was requested
-        if (segments[1].startsWith("logo.")) {
+        if (segments[1].startsWith("logo-small.")) {
             // portal logo
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.logo().size() == 0) {
@@ -79,9 +79,9 @@ public class SiteImageResourceServlet extends HttpServlet {
             // see if locale is given
             String locale = request.getParameter("locale");
             if (locale != null && locale.length() > 0) {
-                for (PortalImageResource logo : descriptor.logo()) {
+                for (PortalLogoImageResource logo : descriptor.logo()) {
                     if (logo.locale().lang().getValue().name().equals(locale)) {
-                        key = logo.imageResource().getPrimaryKey();
+                        key = logo.small().getPrimaryKey();
                         break;
                     }
                 }
@@ -89,7 +89,30 @@ public class SiteImageResourceServlet extends HttpServlet {
             // if still no logo found, get default
             if (key == null) {
                 // TODO define default locale per PMC; use first one for now
-                key = descriptor.logo().get(0).imageResource().getPrimaryKey();
+                key = descriptor.logo().get(0).small().getPrimaryKey();
+            }
+        } else if (segments[1].startsWith("logo-large.")) {
+            // portal logo
+            SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
+            if (descriptor.logo().size() == 0) {
+                log.debug("descriptor has no logos");
+                response.setStatus(HttpServletResponse.SC_GONE);
+                return;
+            }
+            // see if locale is given
+            String locale = request.getParameter("locale");
+            if (locale != null && locale.length() > 0) {
+                for (PortalLogoImageResource logo : descriptor.logo()) {
+                    if (logo.locale().lang().getValue().name().equals(locale)) {
+                        key = logo.large().getPrimaryKey();
+                        break;
+                    }
+                }
+            }
+            // if still no logo found, get default
+            if (key == null) {
+                // TODO define default locale per PMC; use first one for now
+                key = descriptor.logo().get(0).large().getPrimaryKey();
             }
         } else if (segments[1].startsWith("logo-crm.")) {
             // crm logo

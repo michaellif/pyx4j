@@ -18,8 +18,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
-import com.propertyvista.crm.client.ui.crud.settings.website.PortalImageResourceFolder;
-import com.propertyvista.crm.client.ui.crud.settings.website.PortalImageSetFolder;
 import com.propertyvista.crm.client.ui.crud.settings.website.RichTextContentFolder;
 import com.propertyvista.dto.SiteDescriptorDTO;
 

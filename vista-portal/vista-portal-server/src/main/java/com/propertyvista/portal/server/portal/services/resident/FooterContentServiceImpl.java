@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.i18n.server.I18nManager;
 
-import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
@@ -34,9 +34,9 @@ public class FooterContentServiceImpl implements FooterContentService {
         PortalFooterContentDTO portalFooterDto = EntityFactory.create(PortalFooterContentDTO.class);
 
         SiteDescriptor siteDescriptor = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
-        for (PortalImageResource logo : siteDescriptor.logo()) {
+        for (PortalLogoImageResource logo : siteDescriptor.logo()) {
             if (new Locale(logo.locale().lang().getValue().name()).getLanguage().equals(I18nManager.getThreadLocale().getLanguage())) {
-                portalFooterDto.logo().set(siteDescriptor.logo().get(0).imageResource().duplicate());
+                portalFooterDto.logo().set(siteDescriptor.logo().get(0).small().duplicate());
                 break;
             }
         }

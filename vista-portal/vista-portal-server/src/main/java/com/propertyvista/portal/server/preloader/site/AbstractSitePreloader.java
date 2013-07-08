@@ -39,12 +39,12 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
-import com.propertyvista.domain.site.PortalImageResource;
 import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.ResidentPortalSettings;
 import com.propertyvista.domain.site.SiteDescriptor;
@@ -557,14 +557,14 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     private void createLogo(SiteDescriptor site, List<LocaleInfo> siteLocale) {
         String cType = "image/png";
-        String fileName = "logo.png";
-        SiteImageResource siteImage = makeSiteImage(fileName, cType);
-        if (siteImage != null) {
+        SiteImageResource logoSmall = makeSiteImage("logo-small.png", cType);
+        SiteImageResource logoLarge = makeSiteImage("logo-large.png", cType);
+        if (logoSmall != null || logoLarge != null) {
             for (LocaleInfo li : siteLocale) {
-                // logo
-                PortalImageResource res = site.logo().$();
+                PortalLogoImageResource res = site.logo().$();
                 res.locale().set(li.aLocale);
-                res.imageResource().set(siteImage);
+                res.small().set(logoSmall);
+                res.large().set(logoLarge);
                 site.logo().add(res);
             }
         }
@@ -586,8 +586,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
             }
         }
         // slogan image
-        fileName = "slogan.png";
-        siteImage = makeSiteImage(fileName, cType);
+        String fileName = "slogan.png";
+        SiteImageResource siteImage = makeSiteImage(fileName, cType);
         if (siteImage != null) {
             String sloganHtml = "<img style=\"vertical-align:top; margin-top:38px\" src=\"./" + siteImage.getPrimaryKey().toString() + "/slogan.png"
                     + DeploymentConsts.siteImageResourceServletMapping + "\">";

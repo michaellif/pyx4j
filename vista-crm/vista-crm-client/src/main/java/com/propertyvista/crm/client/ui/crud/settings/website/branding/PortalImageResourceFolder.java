@@ -11,17 +11,17 @@
  * @author stanp
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.crud.settings.website;
+package com.propertyvista.crm.client.ui.crud.settings.website.branding;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.gwt.event.dom.client.LoadEvent;
-import com.google.gwt.event.dom.client.LoadHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -36,26 +36,28 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
+import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
+import com.propertyvista.crm.client.ui.crud.settings.website.SiteImageThumbnail;
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.File;
 import com.propertyvista.domain.site.AvailableLocale;
-import com.propertyvista.domain.site.PortalImageResource;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteImageResource;
 
-public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResource> {
+public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageResource> {
     private static final I18n i18n = I18n.get(PortalImageResourceFolder.class);
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
     public PortalImageResourceFolder(boolean editable) {
-        super(PortalImageResource.class, editable);
-        this.addValueChangeHandler(new ValueChangeHandler<IList<PortalImageResource>>() {
+        super(PortalLogoImageResource.class, editable);
+        this.addValueChangeHandler(new ValueChangeHandler<IList<PortalLogoImageResource>>() {
             @Override
-            public void onValueChange(ValueChangeEvent<IList<PortalImageResource>> event) {
+            public void onValueChange(ValueChangeEvent<IList<PortalLogoImageResource>> event) {
                 updateUsedLocales();
             }
         });
@@ -63,7 +65,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
 
     private void updateUsedLocales() {
         usedLocales.clear();
-        for (PortalImageResource items : getValue()) {
+        for (PortalLogoImageResource items : getValue()) {
             usedLocales.add(items.locale());
         }
     }
@@ -80,7 +82,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
         new AvailableLocaleSelectorDialog(usedLocales, new ValueChangeHandler<AvailableLocale>() {
             @Override
             public void onValueChange(ValueChangeEvent<AvailableLocale> event) {
-                PortalImageResource item = EntityFactory.create(PortalImageResource.class);
+                PortalLogoImageResource item = EntityFactory.create(PortalLogoImageResource.class);
                 item.locale().set(event.getValue());
                 PortalImageResourceFolder.super.addItem(item);
             }
@@ -89,18 +91,20 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
 
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
-        if (member instanceof PortalImageResource) {
+        if (member instanceof PortalLogoImageResource) {
             return new PortalImageResourceEditor();
         }
         return super.create(member);
     }
 
-    class PortalImageResourceEditor extends CEntityDecoratableForm<PortalImageResource> {
+    class PortalImageResourceEditor extends CEntityDecoratableForm<PortalLogoImageResource> {
 
-        private final SiteImageThumbnail thumb = new SiteImageThumbnail();
+        private final SiteImageThumbnail smallThumb = new SiteImageThumbnail(60);
+
+        private final SiteImageThumbnail largeThumb = new SiteImageThumbnail(180);
 
         public PortalImageResourceEditor() {
-            super(PortalImageResource.class);
+            super(PortalLogoImageResource.class);
         }
 
         @Override
@@ -111,43 +115,17 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().small(), new LogoLink(smallThumb)), 20).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().large(), new LogoLink(largeThumb)), 20).build());
 
-            CFile<File> link = new CFile<File>(new Command() {
-                @Override
-                public void execute() {
-                    OkDialog dialog = new OkDialog(getValue().imageResource().fileName().getValue()) {
-                        @Override
-                        public boolean onClickOk() {
-                            return true;
-                        }
-                    };
-                    dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl(getValue().imageResource())));
-                    dialog.center();
-                }
-            }) {
-
-                @Override
-                public void showFileSelectionDialog() {
-                    SiteImageResourceProvider provider = new SiteImageResourceProvider();
-                    provider.selectResource(new AsyncCallback<SiteImageResource>() {
-                        @Override
-                        public void onFailure(Throwable caught) {
-                            MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
-                        }
-
-                        @Override
-                        public void onSuccess(SiteImageResource rc) {
-                            setValue(rc);
-                            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(PortalImageResourceEditor.this.getValue().imageResource()));
-                        }
-                    });
-                }
-            };
-
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageResource(), link), 20).build());
-
-            main.setWidget(0, 1, thumb);
+            HorizontalPanel thumbsPanel = new HorizontalPanel();
+            thumbsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
+            thumbsPanel.add(smallThumb);
+            thumbsPanel.add(largeThumb);
+            main.setWidget(0, 1, thumbsPanel);
             main.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
+
+            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             return main;
         }
@@ -156,42 +134,48 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalImageResourc
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
 
-            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().imageResource()));
-        }
-    }
-
-    public static class SiteImageThumbnail extends Image {
-        private double thumbSize = 80;
-
-        public SiteImageThumbnail() {
+            smallThumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().small()));
+            largeThumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().large()));
         }
 
-        public SiteImageThumbnail(double size) {
-            thumbSize = size;
-        }
+        class LogoLink extends CFile<File> {
 
-        @Override
-        public void setUrl(String url) {
-            super.setUrl(url);
-            if (getWidth() > 0 && getHeight() > 0) {
-                scaleToFit();
-            } else {
-                setVisible(false);
-                addLoadHandler(new LoadHandler() {
+            private SiteImageThumbnail thumb;
+
+            public LogoLink(SiteImageThumbnail thumb) {
+                setCommand(new Command() {
                     @Override
-                    public void onLoad(LoadEvent event) {
-                        scaleToFit();
-                        setVisible(true);
+                    public void execute() {
+                        OkDialog dialog = new OkDialog(getValue().fileName().getValue()) {
+                            @Override
+                            public boolean onClickOk() {
+                                return true;
+                            }
+                        };
+                        dialog.setBody(new Image(MediaUtils.createSiteImageResourceUrl((SiteImageResource) getValue())));
+                        dialog.center();
                     }
                 });
-            }
-        }
 
-        private void scaleToFit() {
-            if (1.0 * getWidth() / getHeight() > 1) {
-                setWidth(thumbSize + "px");
-            } else {
-                setHeight(thumbSize + "px");
+                this.thumb = thumb;
+            }
+
+            @Override
+            public void showFileSelectionDialog() {
+                new SiteImageResourceProvider().selectResource(new AsyncCallback<SiteImageResource>() {
+                    @Override
+                    public void onFailure(Throwable caught) {
+                        MessageDialog.error(i18n.tr("Action Failed"), caught.getMessage());
+                    }
+
+                    @Override
+                    public void onSuccess(SiteImageResource rc) {
+                        if (rc != null) {
+                            setValue(rc);
+                            thumb.setUrl(MediaUtils.createSiteImageResourceUrl(rc));
+                        }
+                    }
+                });
             }
         }
 
