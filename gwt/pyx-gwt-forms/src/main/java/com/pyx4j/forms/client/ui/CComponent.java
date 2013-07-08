@@ -124,7 +124,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     // Have been changed after population
     private boolean visited = false;
 
-    private boolean editing = false;
+    private boolean editingInProgress = false;
 
     private ValidationError validationError;
 
@@ -760,20 +760,20 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         }
     }
 
-    public boolean isEditing() {
-        return editing;
+    public boolean isEditingInProgress() {
+        return editingInProgress;
     }
 
     public void onEditingStart() {
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
-            editing = true;
+            editingInProgress = true;
         }
     }
 
     public void onEditingStop() {
         if (isEnabled() && isVisible() && isEditable() && !isViewable()) {
             boolean isOrigEmpty = isValueEmpty();
-            editing = false;
+            editingInProgress = false;
             try {
                 update(widget.getNativeValue());
             } catch (ParseException e) {

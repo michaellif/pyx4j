@@ -239,7 +239,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
         return null;
     }
 
-    public E getOrigValue() {
+    private E getOrigValue() {
         if (isAttached()) {
             throw new Error("Editor is bound. Only isChanged() method of root editor can be called.");
         }
