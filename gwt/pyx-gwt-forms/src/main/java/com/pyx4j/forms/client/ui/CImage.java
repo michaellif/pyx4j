@@ -11,7 +11,7 @@ import com.pyx4j.gwt.shared.FileURLBuilder;
 /*
  * CImage allows to display and edit a single image or a set of images (using sequential navigation)  
  */
-public class CImage<E extends IFile> extends CComponent<List<E>, NImage<E>> {
+public class CImage<E extends IFile> extends CField<List<E>, NImage<E>> {
 
     public enum Type {
         single, multiple

@@ -22,7 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
-public class CHyperlink<E> extends CComponent<E, INativeHyperlink<E>> {
+public class CHyperlink<E> extends CField<E, INativeHyperlink<E>> {
 
     private IFormat<E> format;
 

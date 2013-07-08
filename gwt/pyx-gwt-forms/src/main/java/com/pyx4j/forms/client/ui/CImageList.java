@@ -12,7 +12,7 @@ import com.pyx4j.gwt.shared.FileURLBuilder;
 /*
  * CImage allows to display and edit a single image or a set of images (using sequential navigation)  
  */
-public abstract class CImageList<E extends IFile> extends CComponent<IList<E>, NImageList<E>> {
+public abstract class CImageList<E extends IFile> extends CField<IList<E>, NImageList<E>> {
 
     private Image placeholder;
 

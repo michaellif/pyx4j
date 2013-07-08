@@ -25,7 +25,7 @@ import com.google.gwt.event.dom.client.BlurHandler;
 import com.google.gwt.event.dom.client.FocusEvent;
 import com.google.gwt.event.dom.client.FocusHandler;
 
-public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CComponent<DATA, WIDGET> {
+public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent<DATA>> extends CField<DATA, WIDGET> {
 
     private int tabIndex = 0;
 
