@@ -17,6 +17,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.decorators.EditableEntityDecorator;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
@@ -57,7 +59,12 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
     @Override
     public CComponent<?, ?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new EmergencyContactEditor(view);
+            return new EmergencyContactEditor(view) {
+                @Override
+                protected IDecorator<?> createDecorator() {
+                    return new EditableEntityDecorator<EmergencyContact>();
+                }
+            };
         } else {
             return super.create(member);
         }
