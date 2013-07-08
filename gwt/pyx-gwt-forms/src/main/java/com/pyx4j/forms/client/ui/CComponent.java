@@ -646,7 +646,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     }
 
     public final void refresh(boolean fireEvent) {
-        this.value = preprocessValue(value, fireEvent, false);
+        this.value = preprocessValue(this.value, fireEvent, false);
         setNativeValue(this.value);
         revalidate();
         if (getParent() != null) {
