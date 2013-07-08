@@ -81,7 +81,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         setExpended(false);
     }
 
-    public void setExpended(boolean expended) {
+    private void setExpended(boolean expended) {
         ((BasicCollapsableDecorator<?>) getDecorator()).setExpended(expended);
     }
 
@@ -91,7 +91,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         expandedPanel.setVisible(event.isToggleOn());
     }
 
-    public IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
+    private IsWidget createCollapsedContent(InvoiceLineItemGroupDTO value) {
         FlexTable content = new FlexTable();
 
         content.getColumnFormatter().setWidth(0, "80%"); //overrides FlexTable's width auto-management for cells
@@ -112,7 +112,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         return content;
     }
 
-    public IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
+    private IsWidget createExpandedContent(InvoiceLineItemGroupDTO value) {
 
         FlexTable content = new FlexTable();
 
@@ -177,7 +177,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
 
     }
 
-    public static String formatDays(InvoiceLineItem lineItem) {
+    private static String formatDays(InvoiceLineItem lineItem) {
         if (lineItem instanceof InvoiceProductCharge) {
             return formatDays(((InvoiceProductCharge) lineItem).fromDate().getValue(), ((InvoiceProductCharge) lineItem).toDate().getValue());
         } else if (lineItem instanceof InvoiceAccountCredit) {
@@ -189,7 +189,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
         }
     }
 
-    public static String formatDays(LogicalDate fromDate, LogicalDate toDate) {
+    private static String formatDays(LogicalDate fromDate, LogicalDate toDate) {
         DateTimeFormat formatter = DateTimeFormat.getFormat("MMM dd");
         if (fromDate != null) {
             if (toDate != null) {
