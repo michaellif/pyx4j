@@ -30,8 +30,8 @@ public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().cityName()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().province()), 10).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().cityName()), 25).build());
+        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().province()), 25).build());
 
         main.setH1(row++, 0, 1, i18n.tr("Page Content"));
         main.setWidget(row++, 0, inject(proto().content(), new RichTextContentFolder(isEditable())));

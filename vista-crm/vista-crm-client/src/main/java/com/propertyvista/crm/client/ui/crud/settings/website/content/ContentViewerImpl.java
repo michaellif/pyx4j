@@ -48,6 +48,12 @@ public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> 
                 }
             }
         }));
+        addAction(new MenuItem(i18n.tr("Add Home Page Gadget"), new Command() {
+            @Override
+            public void execute() {
+                new GadgetSelectorDialog().show();
+            }
+        }));
         addAction(new MenuItem(i18n.tr("Add City Page"), new Command() {
             @Override
             public void execute() {
@@ -55,12 +61,6 @@ public class ContentViewerImpl extends CrmViewerViewImplBase<SiteDescriptorDTO> 
                 if (parentId != null) {
                     ((ContentViewer.Presenter) getPresenter()).editNew(parentId, Website.Content.CityIntroPage.class);
                 }
-            }
-        }));
-        addAction(new MenuItem(i18n.tr("Add Home Page Gadget"), new Command() {
-            @Override
-            public void execute() {
-                new GadgetSelectorDialog().show();
             }
         }));
     }
