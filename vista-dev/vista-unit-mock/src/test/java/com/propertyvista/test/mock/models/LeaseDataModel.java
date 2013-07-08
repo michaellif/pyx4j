@@ -123,6 +123,24 @@ public class LeaseDataModel extends MockDataModel<Lease> {
         return lease;
     }
 
+    public LeasePaymentMethod getPaymentMethod(Lease lease, PaymentType type) {
+        Persistence.service().retrieveMember(lease.leaseParticipants());
+        // Get first tenant
+        Tenant tenant = lease.leaseParticipants().iterator().next().cast();
+        List<LeasePaymentMethod> profileMethods = getDataModel(CustomerDataModel.class).retrieveSerializableProfilePaymentMethods(tenant.customer());
+
+        for (LeasePaymentMethod paymentMethod : profileMethods) {
+            if (paymentMethod.type().getValue() == type) {
+                return paymentMethod;
+            }
+        }
+        throw new Error("PaymentMethod not found");
+    }
+
+    public PaymentRecord createPaymentRecord(Lease lease, PaymentType type, String amount) {
+        return createPaymentRecord(lease, getPaymentMethod(lease, type), amount);
+    }
+
     public PaymentRecord createPaymentRecord(Lease lease, LeasePaymentMethod paymentMethod, String amount) {
         // Just use the first tenant
         LeaseTermParticipant<?> leaseParticipant = lease.currentTerm().version().tenants().get(0);

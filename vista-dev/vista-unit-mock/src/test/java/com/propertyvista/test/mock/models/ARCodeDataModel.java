@@ -97,6 +97,8 @@ public class ARCodeDataModel extends MockDataModel<ARCode> {
         generateARCode("Carry Forward Charge", ARCode.Type.CarryForwardCredit, 0, 1, true);
         generateARCode("Carry Forward Charge", ARCode.Type.CarryForwardCharge, 0, 1, true);
 
+        generateARCode("Payment", ARCode.Type.Payment, 0, 1, true);
+
         //rlmrint rintpay rlmr rbaddebt rsuper rfree
     }
 

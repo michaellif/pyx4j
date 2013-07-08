@@ -16,7 +16,9 @@ package com.propertyvista.yardi.mock;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
+import com.yardi.entity.resident.Transactions;
 
 import com.propertyvista.test.mock.MockEventBus;
 
@@ -32,12 +34,15 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
 
     private final Map<String, PropertyManager> propertyManagers;
 
+    private final Map<Long, PaymentBatchManager> openBatches;
+
     public static YardiMockServer instance() {
         return threadLocalContext.get();
     }
 
     private YardiMockServer() {
         propertyManagers = new HashMap<String, PropertyManager>();
+        openBatches = new HashMap<Long, PaymentBatchManager>();
         MockEventBus.addHandler(PropertyUpdateEvent.class, this);
         MockEventBus.addHandler(TransactionChargeUpdateEvent.class, this);
         MockEventBus.addHandler(RtCustomerUpdateEvent.class, this);
@@ -49,32 +54,65 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         propertyManagers.clear();
     }
 
-    public ResidentTransactions getAllResidentTransactions(String propertyId) {
-        if (!propertyManagers.containsKey(propertyId)) {
-            throw new Error(propertyId + " not found");
+    PropertyManager getExistingPropertyManager(String propertyId) {
+        PropertyManager propertyManager = propertyManagers.get(propertyId);
+        if (propertyManager == null) {
+            throw new RuntimeException("Property " + propertyId + " not found");
         }
-        return propertyManagers.get(propertyId).getAllResidentTransactions();
+        return propertyManager;
+    }
+
+    public ResidentTransactions getAllResidentTransactions(String propertyId) {
+        return getExistingPropertyManager(propertyId).getAllResidentTransactions();
     }
 
     public ResidentTransactions getResidentTransactionsForTenant(String propertyId, String tenantId) {
-        if (!propertyManagers.containsKey(propertyId)) {
-            throw new Error(propertyId + " not found");
-        }
-        return propertyManagers.get(propertyId).getResidentTransactionsForTenant(tenantId);
+        return getExistingPropertyManager(propertyId).getResidentTransactionsForTenant(tenantId);
     }
 
     public ResidentTransactions getAllLeaseCharges(String propertyId) {
-        if (!propertyManagers.containsKey(propertyId)) {
-            throw new Error(propertyId + " not found");
-        }
-        return propertyManagers.get(propertyId).getAllLeaseCharges();
+        return getExistingPropertyManager(propertyId).getAllLeaseCharges();
     }
 
     public ResidentTransactions getLeaseChargesForTenant(String propertyId, String tenantId) {
-        if (!propertyManagers.containsKey(propertyId)) {
-            throw new Error(propertyId + " not found");
+        return getExistingPropertyManager(propertyId).getLeaseChargesForTenant(tenantId);
+    }
+
+    public long openReceiptBatch(String propertyId) {
+        PaymentBatchManager b = new PaymentBatchManager(getExistingPropertyManager(propertyId));
+        openBatches.put(b.getId(), b);
+        return b.getId();
+    }
+
+    PaymentBatchManager getBatch(long batchId) {
+        if (!openBatches.containsKey(batchId)) {
+            throw new Error(batchId + " batch not found");
         }
-        return propertyManagers.get(propertyId).getLeaseChargesForTenant(tenantId);
+        return openBatches.get(batchId);
+    }
+
+    public void addReceiptsToBatch(long batchId, ResidentTransactions residentTransactions) {
+        getBatch(batchId).addReceiptsToBatch(residentTransactions);
+    }
+
+    public void postReceiptBatch(long batchId) {
+        getBatch(batchId).postReceiptBatch();
+    }
+
+    public void cancelReceiptBatch(long batchId) {
+        getBatch(batchId).cancelReceiptBatch();
+        openBatches.remove(batchId);
+    }
+
+    public void importResidentTransactions(ResidentTransactions reversalTransactions) {
+        for (com.yardi.entity.resident.Property rtProperty : reversalTransactions.getProperty()) {
+            for (RTCustomer rtCustomer : rtProperty.getRTCustomer()) {
+                for (Transactions transaction : rtCustomer.getRTServiceTransactions().getTransactions()) {
+                    getExistingPropertyManager(transaction.getPayment().getDetail().getPropertyPrimaryID())
+                            .importResidentTransactions(transaction.getPayment());
+                }
+            }
+        }
     }
 
     @Override
@@ -91,50 +129,31 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     @Override
     public void addOrUpdateTransactionCharge(TransactionChargeUpdateEvent event) {
         TransactionChargeUpdater updater = event.getUpdater();
-        String propertyId = updater.getPropertyID();
-        if (!propertyManagers.containsKey(updater.getPropertyID())) {
-            throw new Error(propertyId + " not found");
-        }
-        propertyManagers.get(propertyId).addOrUpdateTransactionCharge(updater);
+        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateTransactionCharge(updater);
     }
 
     @Override
     public void addOrUpdateRtCustomer(RtCustomerUpdateEvent event) {
         RtCustomerUpdater updater = event.getUpdater();
-        String propertyId = updater.getPropertyID();
-        if (!propertyManagers.containsKey(updater.getPropertyID())) {
-            throw new Error(propertyId + " not found");
-        }
-        propertyManagers.get(propertyId).addOrUpdateRtCustomer(updater);
+        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateRtCustomer(updater);
     }
 
     @Override
     public void addOrUpdateCoTenant(CoTenantUpdateEvent event) {
         CoTenantUpdater updater = event.getUpdater();
-        String propertyId = updater.getPropertyID();
-        if (!propertyManagers.containsKey(updater.getPropertyID())) {
-            throw new Error(propertyId + " not found");
-        }
-        propertyManagers.get(propertyId).addOrUpdateCoTenant(updater);
+        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateCoTenant(updater);
     }
 
     @Override
     public void addOrUpdateLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        String propertyId = updater.getPropertyID();
-        if (!propertyManagers.containsKey(updater.getPropertyID())) {
-            throw new Error(propertyId + " not found");
-        }
-        propertyManagers.get(propertyId).addOrUpdateLeaseCharge(updater);
+        getExistingPropertyManager(updater.getPropertyID()).addOrUpdateLeaseCharge(updater);
     }
 
     @Override
     public void removeLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
-        String propertyId = updater.getPropertyID();
-        if (!propertyManagers.containsKey(updater.getPropertyID())) {
-            throw new Error(propertyId + " not found");
-        }
-        propertyManagers.get(propertyId).removeLeaseCharge(updater);
+        getExistingPropertyManager(updater.getPropertyID()).removeLeaseCharge(updater);
     }
+
 }

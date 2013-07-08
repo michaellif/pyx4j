@@ -22,9 +22,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
@@ -47,21 +45,19 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
 
     private Lease lease;
 
-    private LeasePaymentMethod paymentMethod;
-
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-
+        createYardiLease("prop123", "t000111");
         setSysDate("2011-01-01");
         YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
         lease = loadLeaseToModel("t000111");
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();
-        paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
+        getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
     }
 
     public void testLeaseServiceChanges() throws Exception {
-        PreauthorizedPayment pap1 = getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, new PreauthorizedPaymentBuilder(). //
+        getDataModel(LeaseDataModel.class).createPreauthorizedPayment(lease, new PreauthorizedPaymentBuilder(). //
                 add(lease.currentTerm().version().leaseProducts().serviceItem(), "500.00"). //
                 add(lease.currentTerm().version().leaseProducts().featureItems().get(0), "80.00"). //
                 build());

@@ -19,32 +19,30 @@ import com.yardi.entity.resident.ResidentTransactions;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
+import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
 
 public class YardiMockSystemBatchesStubImpl implements YardiSystemBatchesStub {
 
     @Override
     public long openReceiptBatch(PmcYardiCredential yc, String propertyCode) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-        return 0;
+        return YardiMockServer.instance().openReceiptBatch(propertyCode);
     }
 
     @Override
     public void addReceiptsToBatch(PmcYardiCredential yc, long batchId, ResidentTransactions residentTransactions) throws YardiServiceException,
             RemoteException {
-        // TODO Auto-generated method stub
-
+        YardiMockServer.instance().addReceiptsToBatch(batchId, residentTransactions);
     }
 
     @Override
     public void postReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
-
+        YardiMockServer.instance().postReceiptBatch(batchId);
     }
 
     @Override
     public void cancelReceiptBatch(PmcYardiCredential yc, long batchId) throws YardiServiceException, RemoteException {
-        // TODO Auto-generated method stub
+        YardiMockServer.instance().cancelReceiptBatch(batchId);
 
     }
 

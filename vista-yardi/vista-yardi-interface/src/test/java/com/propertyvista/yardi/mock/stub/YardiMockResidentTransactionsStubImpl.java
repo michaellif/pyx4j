@@ -20,6 +20,7 @@ import org.apache.axis2.AxisFault;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -52,7 +53,10 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
 
     @Override
     public void importResidentTransactions(PmcYardiCredential yc, ResidentTransactions reversalTransactions) throws YardiServiceException {
-        // TODO Auto-generated method stub
+        // HQSL transactions testing hack
+        Persistence.service().commit();
+
+        YardiMockServer.instance().importResidentTransactions(reversalTransactions);
 
     }
 

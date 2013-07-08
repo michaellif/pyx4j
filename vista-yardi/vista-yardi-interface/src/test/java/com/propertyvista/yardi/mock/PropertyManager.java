@@ -31,6 +31,7 @@ import com.yardi.entity.mits.YardiCustomers;
 import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.Charge;
 import com.yardi.entity.resident.ChargeDetail;
+import com.yardi.entity.resident.Payment;
 import com.yardi.entity.resident.PropertyID;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.RTServiceTransactions;
@@ -59,6 +60,10 @@ public class PropertyManager {
         transactions.getProperty().add(new com.yardi.entity.resident.Property());
     }
 
+    public String getPropertyId() {
+        return propertyId;
+    }
+
     public ResidentTransactions getAllResidentTransactions() {
         try {
             return (ResidentTransactions) SerializationUtils.clone(transactions);
@@ -68,9 +73,7 @@ public class PropertyManager {
     }
 
     public ResidentTransactions getResidentTransactionsForTenant(String tenantId) {
-        if (getRTCustomer(tenantId) == null) {
-            throw new RuntimeException("rtCustomer with tenantId " + tenantId + " not found");
-        }
+        getExistingRTCustomer(tenantId);
 
         ResidentTransactions transaction = null;
         try {
@@ -234,11 +237,49 @@ public class PropertyManager {
 
     }
 
-    public void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
-        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
-
+    void addTransaction(Transactions transaction) {
+        RTCustomer rtCustomer = getExistingRTCustomer(transaction.getPayment().getDetail().getCustomerID());
         {
-            RTServiceTransactions rtServiceTransactions = new RTServiceTransactions();
+            RTServiceTransactions rtServiceTransactions = rtCustomer.getRTServiceTransactions();
+            if (rtServiceTransactions == null) {
+                rtServiceTransactions = new RTServiceTransactions();
+                rtCustomer.setRTServiceTransactions(rtServiceTransactions);
+            }
+            rtServiceTransactions.getTransactions().add(transaction);
+        }
+    }
+
+    public void importResidentTransactions(Payment payment) {
+        RTCustomer rtCustomer = getExistingRTCustomer(payment.getDetail().getCustomerID());
+        Transactions origTransaction = getPaymentTransaction(rtCustomer, payment.getDetail().getDocumentNumber());
+        if ("Reverse".equals(payment.getDetail().getReversal().getType())) {
+            rtCustomer.getRTServiceTransactions().getTransactions().remove(origTransaction);
+        } else {
+            // TODO, Generate NSF when yardi will do this
+            rtCustomer.getRTServiceTransactions().getTransactions().remove(origTransaction);
+        }
+    }
+
+    private Transactions getPaymentTransaction(RTCustomer rtCustomer, String documentNumber) {
+        for (Transactions transaction : rtCustomer.getRTServiceTransactions().getTransactions()) {
+            if (transaction.getPayment() == null) {
+                continue;
+            }
+            if (documentNumber.equals(transaction.getPayment().getDetail().getDocumentNumber())) {
+                return transaction;
+            }
+        }
+        throw new RuntimeException("Transaction " + documentNumber + " for Lease Id " + rtCustomer.getLeaseID() + " not found");
+    }
+
+    public void addOrUpdateTransactionCharge(TransactionChargeUpdater updater) {
+        RTCustomer rtCustomer = getExistingRTCustomer(updater.getCustomerID());
+        {
+            RTServiceTransactions rtServiceTransactions = rtCustomer.getRTServiceTransactions();
+            if (rtServiceTransactions == null) {
+                rtServiceTransactions = new RTServiceTransactions();
+                rtCustomer.setRTServiceTransactions(rtServiceTransactions);
+            }
             Transactions transactions = new Transactions();
             rtServiceTransactions.getTransactions().add(transactions);
 
@@ -254,16 +295,11 @@ public class PropertyManager {
             detail.setUnitID(rtCustomer.getRTUnit().getUnitID());
             charge.setDetail(detail);
 
-            rtCustomer.setRTServiceTransactions(rtServiceTransactions);
         }
-
     }
 
     public void addOrUpdateCoTenant(CoTenantUpdater updater) {
-        RTCustomer rtCustomer = getRTCustomer(updater.getCustomerID());
-        if (rtCustomer == null) {
-            throw new RuntimeException("rtCustomer with customerID " + updater.getCustomerID() + " not found");
-        }
+        RTCustomer rtCustomer = getExistingRTCustomer(updater.getCustomerID());
 
         YardiCustomer coTenant = null;
         for (int i = 1; i < rtCustomer.getCustomers().getCustomer().size(); i++) {
@@ -332,6 +368,14 @@ public class PropertyManager {
     public void removeLeaseCharge(LeaseChargeUpdater updater) {
         Map<String, Charge> charges = leaseCharges.get(updater.getCustomerID());
         charges.remove(updater.getLeaseChargeID());
+    }
+
+    RTCustomer getExistingRTCustomer(String customerID) {
+        RTCustomer rtCustomer = getRTCustomer(customerID);
+        if (rtCustomer == null) {
+            throw new RuntimeException("rtCustomer with customerID " + customerID + " not found");
+        }
+        return rtCustomer;
     }
 
     private RTCustomer getRTCustomer(String customerID) {

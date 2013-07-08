@@ -46,6 +46,7 @@ import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
+import com.propertyvista.yardi.mock.TransactionChargeUpdateEvent;
 import com.propertyvista.yardi.mock.TransactionChargeUpdater;
 
 public abstract class PaymentYardiTestBase extends YardiTestBase {
@@ -69,12 +70,15 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
 
+    }
+
+    protected void createYardiLease(String propertyId, String leaseId) {
         //Add RtCustomer, main tenant and Unit
         {
             // @formatter:off
-            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111").
+            RtCustomerUpdater updater = new RtCustomerUpdater(propertyId, leaseId).
             set(RtCustomerUpdater.YCUSTOMER.Type, Customerinfo.CURRENT_RESIDENT).
-            set(RtCustomerUpdater.YCUSTOMER.CustomerID, "t000111").
+            set(RtCustomerUpdater.YCUSTOMER.CustomerID, leaseId).
             set(RtCustomerUpdater.YCUSTOMERNAME.FirstName, "John").
             set(RtCustomerUpdater.YCUSTOMERNAME.LastName, "Smith").
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1000.00")).
@@ -93,7 +97,7 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "rent").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(propertyId, leaseId, "rent").
             set(LeaseChargeUpdater.Name.Description, "Rent").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2010-01-01")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2014-12-31")).
@@ -105,7 +109,7 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
 
         {
             // @formatter:off
-            LeaseChargeUpdater updater = new LeaseChargeUpdater("prop123", "t000111", "park").
+            LeaseChargeUpdater updater = new LeaseChargeUpdater(propertyId, leaseId, "park").
             set(LeaseChargeUpdater.Name.Description, "Parking").
             set(LeaseChargeUpdater.Name.ServiceFromDate, DateUtils.detectDateformat("2010-01-01")).
             set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("2014-12-31")).
@@ -117,18 +121,18 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
 
         {
             // @formatter:off
-            TransactionChargeUpdater updater = new TransactionChargeUpdater("prop123", "t000111").
+            TransactionChargeUpdater updater = new TransactionChargeUpdater(propertyId, leaseId).
             set(TransactionChargeUpdater.Name.Description, "Rent").
             set(TransactionChargeUpdater.Name.TransactionDate, DateUtils.detectDateformat("2010-01-01")).
             set(TransactionChargeUpdater.Name.TransactionID, "1").
             set(TransactionChargeUpdater.Name.ChargeCode, "rrent").
-            set(TransactionChargeUpdater.Name.CustomerID, "t000111").
+            set(TransactionChargeUpdater.Name.CustomerID, leaseId).
             set(TransactionChargeUpdater.Name.AmountPaid, "1.00").
             set(TransactionChargeUpdater.Name.BalanceDue, "0.0").
             set(TransactionChargeUpdater.Name.Amount, "1.00").
             set(TransactionChargeUpdater.Name.Comment, "Rent (01/2010)");        
             // @formatter:on
-            // MockEventBus.fireEvent(new TransactionChargeUpdateEvent(updater));
+            MockEventBus.fireEvent(new TransactionChargeUpdateEvent(updater));
         }
     }
 
