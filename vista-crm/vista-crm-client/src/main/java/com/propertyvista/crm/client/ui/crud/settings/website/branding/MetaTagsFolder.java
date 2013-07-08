@@ -94,9 +94,9 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().keywords()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().keywords()), 35).build());
             return main;
         }
     }

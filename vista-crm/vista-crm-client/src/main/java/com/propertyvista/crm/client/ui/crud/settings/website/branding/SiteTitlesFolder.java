@@ -94,11 +94,11 @@ class SiteTitlesFolder extends VistaBoxFolder<SiteTitles> {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().crmHeader()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalTitle()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalTitle()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalPromotions()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().copyright()), 25).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().crmHeader()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalTitle()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalTitle()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalPromotions()), 35).build());
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().copyright()), 35).build());
             return main;
         }
     }
