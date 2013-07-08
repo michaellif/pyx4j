@@ -392,39 +392,26 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     @Override
     protected final <T> void updateContainer(CComponent<T, ?> component) {
         T value = component.getValue();
-        if (component instanceof CEntityContainer) {
-            Path memberPath = binding.get(component);
-            if ((memberPath != null) && (getValue() != null)) {
-                if (value instanceof IEntity) {
-                    // Process on the object level to avoid Polymorphic problems
-                    ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
-                } else if (value instanceof ICollection) {
-                    // Process on the object level to avoid Polymorphic problems
-                    ((ICollection<?, ?>) getValue().getMember(memberPath)).set((ICollection) value);
-                }
-            }
-        } else {
-            Path memberPath = binding.get(component);
-            if ((memberPath != null) && (getValue() != null)) {
-                if (value instanceof IEntity) {
-                    // Process on the object level to avoid Polymorphic problems
-                    ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
-                } else if (value instanceof ICollection) {
-                    ((ICollection<?, ?>) getValue().getMember(memberPath)).set((ICollection) value);
-                } else {
-                    if (value instanceof Date) {
-                        // Synchronize the value in Editor with model
-                        Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
-                        if (cls.equals(LogicalDate.class)) {
-                            value = (T) new LogicalDate((Date) value);
-                        } else if (cls.equals(java.sql.Date.class)) {
-                            value = (T) new java.sql.Date(((Date) value).getTime());
-                        }
+        Path memberPath = binding.get(component);
+        if ((memberPath != null) && (getValue() != null)) {
+            if (value instanceof IEntity) {
+                // Process on the object level to avoid Polymorphic problems
+                ((IEntity) getValue().getMember(memberPath)).set((IEntity) value);
+            } else if (value instanceof ICollection) {
+                ((ICollection<?, ?>) getValue().getMember(memberPath)).set((ICollection) value);
+            } else if (!(component instanceof CEntityContainer)) {
+                if (value instanceof Date) {
+                    // Synchronize the value in Editor with model
+                    Class<?> cls = getValue().getEntityMeta().getMemberMeta(memberPath).getValueClass();
+                    if (cls.equals(LogicalDate.class)) {
+                        value = (T) new LogicalDate((Date) value);
+                    } else if (cls.equals(java.sql.Date.class)) {
+                        value = (T) new java.sql.Date(((Date) value).getTime());
                     }
-                    getValue().setValue(memberPath, (Serializable) value);
                 }
-                log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
+                getValue().setValue(memberPath, (Serializable) value);
             }
+            log.trace("CEntityEditor {} model updated {}", shortDebugInfo(), memberPath);
         }
     }
 }
