@@ -27,9 +27,9 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
@@ -69,36 +69,36 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         int row = 0;
 
         final CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
-        left.setWidget(row++, 0, new DecoratorBuilder(country, 20).build());
+        left.setWidget(row++, 0, new DecoratorBuilder(country, "150px").build());
 
         final CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
-        left.setWidget(row++, 0, new DecoratorBuilder(province, 20).build());
+        left.setWidget(row++, 0, new DecoratorBuilder(province, "150px").build());
 
         final VerticalPanel county = new VerticalPanel();
-        county.add(new DecoratorBuilder(inject(proto().county()), 20).build());
+        county.add(new DecoratorBuilder(inject(proto().county()), "150px").build());
         left.setWidget(row++, 0, county);
 
-        left.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), 20).build());
+        left.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), "150px").build());
 
         final CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
 
-        left.setWidget(row++, 0, new DecoratorBuilder(postalCode, 7).build());
+        left.setWidget(row++, 0, new DecoratorBuilder(postalCode, "100px").build());
 
         FormFlexPanel right = new FormFlexPanel();
         row = 0;
 
         if (showUnit) {
-            right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().suiteNumber()), 5).build());
+            right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().suiteNumber()), "100px").build());
         }
 
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumber()), 5).build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumberSuffix()), 5).build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetName()), 20).build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetType()), 10).build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetDirection()), 10).build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumber()), "100px").build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumberSuffix()), "100px").build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetName()), "200px").build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetType()), "100px").build());
+        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetDirection()), "100px").build());
 
         attachFilters(proto(), province, country, postalCode);
 
@@ -117,8 +117,6 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
             main.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
             main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
         } else {
             main.setWidget(1, 0, right);
         }
@@ -196,5 +194,23 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         get(proto().streetName()).setValue("King");
         get(proto().streetType()).setValue(StreetType.street);
         get(proto().streetDirection()).setValue(StreetDirection.west);
+    }
+
+    // this decorator was made so that address form will look well on print
+    class DecoratorBuilder extends WidgetDecorator.Builder {
+
+        public DecoratorBuilder(CComponent<?, ?> component, String labelWidth, String componentWidth, String contentWidth) {
+            super(component);
+            labelWidth(labelWidth);
+            contentWidth(contentWidth);
+            componentWidth(componentWidth);
+            labelAlignment(Alignment.right);
+            useLabelSemicolon(true);
+
+        }
+
+        public DecoratorBuilder(CComponent<?, ?> component, String componentWidth) {
+            this(component, "120px", componentWidth, "220px");
+        }
     }
 }

@@ -48,7 +48,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -148,21 +147,22 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     @SuppressWarnings("unchecked")
     private IsWidget createDetailsPanel() {
+
         FormFlexPanel left = new FormFlexPanel();
         int row = -1;
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 15).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitNumber()), 15).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseStatus()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber())).build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), "100px").build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().propertyCode()), "100px").build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().unitNumber()), "100px").build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().leaseId()), "100px").build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().leaseStatus()), "100px").build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().billingAccount().accountNumber()), "100px").build());
         get(proto().billingAccount().accountNumber()).setViewable(true);
 
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().leaseTermParticipant(),
+                new PaymentFormDecoratorBuilder(inject(proto().leaseTermParticipant(),
                         new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                             @Override
                             protected AppPlace getTargetPlace() {
@@ -187,31 +187,31 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                                     }
                                 };
                             }
-                        }), 25).build());
+                        }), "200px").build());
 
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(
-                        PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), 20).build());
+                new PaymentFormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(
+                        PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), "200px").labelWidth("20em").build());
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), "200px").build());
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).labelWidth(20).build());
+        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), "30px").labelWidth("20em").build());
 
         FormFlexPanel right = new FormFlexPanel();
         row = -1;
 
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().createdDate()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().finalizeDate()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().paymentStatus()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().transactionErrorMessage()), 20).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().notes()), 25).build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().amount()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().createdDate()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().receivedDate()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().targetDate()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().finalizeDate()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().paymentStatus()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().lastStatusChangeDate()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().transactionAuthorizationNumber()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().transactionErrorMessage()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().notes()), "100px").build());
 
         // tweak UI:
         get(proto().id()).setViewable(true);
@@ -295,17 +295,14 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        FormFlexPanel panel = new FormFlexPanel();
+        FormFlexPanel formPanel = new FormFlexPanel();
 
-        panel.setWidget(0, 0, left);
-        panel.setWidget(0, 1, right);
-        panel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-        panel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+        formPanel.setWidget(0, 0, left);
+        formPanel.setWidget(0, 1, right);
+        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
-        panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-        left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
-
-        return panel;
+        return formPanel;
     }
 
     @Override
