@@ -56,12 +56,16 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
 
     @Override
     public void postBatch() throws ARException {
-        try {
-            YardiSystemBatchesService.getInstance().postBatch(yc, this);
-        } catch (RemoteException e) {
-            throw new ARException("Posting Batch to Yardi failed due to communication failure", e);
-        } catch (YardiServiceException e) {
-            throw new ARException("Posting Batch to Yardi failed", e);
+        if (recordCount == 0) {
+            cancelBatch();
+        } else {
+            try {
+                YardiSystemBatchesService.getInstance().postBatch(yc, this);
+            } catch (RemoteException e) {
+                throw new ARException("Posting Batch to Yardi failed due to communication failure", e);
+            } catch (YardiServiceException e) {
+                throw new ARException("Posting Batch to Yardi failed", e);
+            }
         }
     }
 
@@ -70,9 +74,9 @@ public class YardiPaymentBatchContext implements PaymentBatchContext {
         try {
             YardiSystemBatchesService.getInstance().cancelBatch(yc, this);
         } catch (RemoteException e) {
-            throw new ARException("Posting Batch to Yardi failed due to communication failure", e);
+            throw new ARException("Cancel Yardi Batch failed due to communication failure", e);
         } catch (YardiServiceException e) {
-            throw new ARException("Posting Batch to Yardi failed", e);
+            throw new ARException("Cancel Yardi Batch failed", e);
         }
     }
 
