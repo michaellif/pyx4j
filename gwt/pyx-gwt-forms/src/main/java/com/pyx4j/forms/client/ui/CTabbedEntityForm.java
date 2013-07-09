@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -78,8 +79,9 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
 
     public Tab addTab(Widget content, String tabTitle) {
         Tab tab = null;
-        ScrollPanel scroll = new ScrollPanel(content);
-        scroll.setStyleName(DefaultCComponentsTheme.StyleName.TabbedFormTab.name());
+        SimplePanel containerPanel = new SimplePanel(content);
+        containerPanel.setStyleName(DefaultCComponentsTheme.StyleName.TabbedFormTab.name());
+        ScrollPanel scroll = new ScrollPanel(containerPanel);
         tab = new Tab(scroll, tabTitle, null, false);
         tabPanel.addTab(tab);
         return tab;
