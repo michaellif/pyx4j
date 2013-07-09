@@ -54,7 +54,7 @@ public class MerchantAccountDataModel extends MockDataModel<MerchantAccount> {
                 assert (caledonId <= 5);
                 createMerchantAccount.merchantTerminalId().setValue("BIRCHTT" + (++caledonId));
             } else {
-                createMerchantAccount.merchantTerminalId().setValue(DataGenerator.randomLetters(8 - 2) + (++id));
+                createMerchantAccount.merchantTerminalId().setValue(DataGenerator.randomLetters(6 - 2) + (++id));
             }
             createMerchantAccount.bankId().setValue("109");
             createMerchantAccount.branchTransitNumber().setValue("54685");
