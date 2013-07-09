@@ -131,10 +131,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20, 22).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), true).labelWidth("20em").build());
 
-        main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+        main.setH3(++row, 0, 2, proto().preauthorizedPayments().getMeta().getCaption());
+        main.setWidget(++row, 0, 2, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
 
         return main;
     }
@@ -143,15 +143,15 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         FormFlexPanel tabPanel = new FormFlexPanel(title);
         int row = -1;
         tabPanel.setH1(++row, 0, 1, i18n.tr("Requirements"));
-        tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), 15).build());
-        get(proto().minimumRequiredLiability()).setViewable(true);
+        tabPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), true).build());
+        get(proto().minimumRequiredLiability()).setEditable(false);
 
         noRequirementsLabel = new Label(i18n.tr("None"));
         noRequirementsLabel.setVisible(false);
-        tabPanel.setWidget(++row, 0, noRequirementsLabel);
+        tabPanel.setWidget(++row, 0, 2, noRequirementsLabel);
 
         tabPanel.setH1(++row, 0, 1, i18n.tr("Insurance Certificates"));
-        tabPanel.setWidget(++row, 0, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
+        tabPanel.setWidget(++row, 0, 2, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
         return tabPanel;
     }
 
@@ -219,9 +219,9 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, expirationWarning);
+                content.setWidget(++row, 0, 2, expirationWarning);
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, TenantForm.this.getValue()
@@ -233,11 +233,11 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                }), 38, 10, 12).build());
+                }), true).build());
 
-                content.setBR(++row, 0, 1);
+                content.setBR(++row, 0, 2);
 
-                content.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
+                content.setWidget(++row, 0, 2, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
 
                 return content;
             }

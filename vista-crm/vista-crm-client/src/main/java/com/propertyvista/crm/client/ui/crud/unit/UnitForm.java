@@ -103,9 +103,8 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         left.setWidget(
                 ++row,
                 0,
-                new FormDecoratorBuilder(inject(proto().lease(),
-                        isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 20)
-                        .build());
+                new FormDecoratorBuilder(inject(proto().lease(), isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(
+                        AppPlaceEntityMapper.resolvePlace(Lease.class))), 20).build());
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._availableForRent()), 9).build());
         left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
 
@@ -135,8 +134,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         if (VistaFeatures.instance().productCatalog()) {
             get(proto().financial()._unitRent()).setViewable(true);
         }
-        get(proto().info()._bedrooms()).setViewable(true);
-        get(proto().info()._bathrooms()).setViewable(true);
 
         // form main panel from those two:
         FormFlexPanel main = new FormFlexPanel(title);

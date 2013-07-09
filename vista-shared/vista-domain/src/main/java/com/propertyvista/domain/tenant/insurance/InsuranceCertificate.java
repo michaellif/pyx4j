@@ -65,6 +65,7 @@ public interface InsuranceCertificate extends ApplicationDocumentHolder<Insuranc
 
     @NotNull
     @ToString(index = 1)
+    @Caption(name = "Certificate Number")
     IPrimitive<String> insuranceCertificateNumber();
 
     @Editor(type = EditorType.money)

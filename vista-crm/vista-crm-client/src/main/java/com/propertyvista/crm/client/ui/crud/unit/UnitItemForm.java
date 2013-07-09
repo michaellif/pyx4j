@@ -29,33 +29,30 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
     public UnitItemForm(IForm<AptUnitItem> view) {
         super(AptUnitItem.class, view);
 
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("General"));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 35).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().conditionNotes()), 40).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().conditionNotes()), true).build());
 
-        FormFlexPanel details = new FormFlexPanel();
-
-        int detailsRow = -1;
-        details.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().wallColor()), 10).build());
-        details.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().flooringType()), 10).build());
-        details.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
-        details.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().flooringValue()), 9).build());
-        details.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().counterTopType()), 10).build());
-
-        detailsRow = -1;
-        details.setWidget(++detailsRow, 1, new FormDecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
-        details.setWidget(++detailsRow, 1, new FormDecoratorBuilder(inject(proto().counterTopValue()), 9).build());
-        details.setWidget(++detailsRow, 1, new FormDecoratorBuilder(inject(proto().cabinetsType()), 10).build());
-        details.setWidget(++detailsRow, 1, new FormDecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
-        details.setWidget(++detailsRow, 1, new FormDecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
-
-        // add details to main:
+        row = 3;
         main.setH1(++row, 0, 2, i18n.tr("Details"));
-        main.setWidget(++row, 0, details);
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().wallColor()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().flooringType()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().flooringInstallDate()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().flooringValue()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().counterTopType()), 10).build());
 
+        row = 4;
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().counterTopInstallDate()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().counterTopValue()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().cabinetsType()), 10).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().cabinetsInstallDate()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().cabinetsValue()), 9).build());
+
+        setTabBarVisible(false);
         selectTab(addTab(main));
     }
 

@@ -75,9 +75,11 @@ public interface AptUnitInfo extends IEntity {
 
     // This values are populated from floorplan and should not be editable
     @Caption(name = "Beds")
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Integer> _bedrooms();
 
     // This values are populated from floorplan and should not be editable
     @Caption(name = "Baths")
+    @Editor(type = Editor.EditorType.label)
     IPrimitive<Integer> _bathrooms();
 }
