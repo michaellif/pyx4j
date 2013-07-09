@@ -146,6 +146,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("margin", "6px 0px");
         style.addProperty("border", "dotted 1px");
         style.addProperty("border-color", getBackgroundColor());
+        style.addProperty("min-height", "22px");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityContainerDecorator, ":hover");

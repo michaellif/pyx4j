@@ -181,7 +181,7 @@ public abstract class CEntityForm<E extends IEntity> extends CEntityContainer<E>
     @SuppressWarnings("unchecked")
     protected void onValuePropagation(E value, boolean fireEvent, boolean populate) {
         assert (value == null) || proto().isAssignableFrom(value.getInstanceValueClass()) : "Trying to set value of a wrong type, expected "
-                + proto().getValueClass() + ", got " + value.getInstanceValueClass();
+                + proto().getValueClass() + ", got " + value.getInstanceValueClass() + " in form " + getTitle();
         if (populate) {
             assert value != null : "Entity Editor should not be populated with null. Use discard() instead";
             if (!isAttached()) {

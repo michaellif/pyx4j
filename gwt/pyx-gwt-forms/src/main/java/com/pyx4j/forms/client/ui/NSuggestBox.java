@@ -53,7 +53,7 @@ public class NSuggestBox<E> extends NTextFieldBase<E, SuggestBox, CAbstractSugge
 
     public void refreshOptions() {
 
-        if (getEditor() != null) {
+        if (!isViewable()) {
             E currentSelection = getCComponent().getValue();
             ((MultiWordSuggestOracle) getEditor().getSuggestOracle()).clear();
             if (getCComponent().getOptions() != null) {

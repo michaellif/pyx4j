@@ -65,6 +65,7 @@ public class EntityContainerDecoratorToolbar extends HorizontalPanel {
         captionHolder = new HorizontalPanel();
         captionHolder.getElement().getStyle().setMarginLeft(50, Unit.PX);
         captionHolder.getElement().getStyle().setMarginRight(5, Unit.PX);
+        captionHolder.getElement().getStyle().setLineHeight(2, Unit.EM);
 
         caption = new Label("");
         caption.setStyleName(DefaultWidgetDecoratorTheme.StyleName.EntityContainerDecoratorCollapsedCaption.name());
