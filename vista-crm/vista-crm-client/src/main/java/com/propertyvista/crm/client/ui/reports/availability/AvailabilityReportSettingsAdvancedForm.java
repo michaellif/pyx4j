@@ -22,6 +22,7 @@ import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
@@ -35,7 +36,7 @@ public class AvailabilityReportSettingsAdvancedForm extends CEntityDecoratableFo
     public IsWidget createContent() {
         int row = -1;
         FormFlexPanel panel = new FormFlexPanel();
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
         panel.setWidget(
                 ++row,
                 0,
