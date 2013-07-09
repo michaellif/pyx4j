@@ -76,8 +76,6 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
 
         Persistence.service().retrieve(dto.customer().emergencyContacts());
-        dto.customer().emergencyContacts().clear();
-
         Persistence.service().retrieve(dto.lease().unit().building());
 
         fillPreauthorizedPayments(dto);
