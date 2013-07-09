@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.user.client.ui.HTML;
@@ -69,6 +70,8 @@ public class TableFolderDecorator<E extends IEntity> extends BaseFolderDecorator
         super(images, title, addable);
 
         asWidget().setStyleName(EntityFolderTableDecorator.name());
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         header = new HorizontalPanel();
         header.setStyleName(EntityFolderTableHeader.name());

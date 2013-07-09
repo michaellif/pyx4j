@@ -245,7 +245,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
         public EditorPanel() {
             super();
-            setStyleName(DefaultCComponentsTheme.StyleName.EditorPanel.name());
+            setStyleName(DefaultCComponentsTheme.StyleName.FieldEditorPanel.name());
             getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
@@ -355,7 +355,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         public ViewerPanel() {
             super();
 
-            setStyleName(DefaultCComponentsTheme.StyleName.ViewerPanel.name());
+            setStyleName(DefaultCComponentsTheme.StyleName.FieldViewerPanel.name());
             getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 

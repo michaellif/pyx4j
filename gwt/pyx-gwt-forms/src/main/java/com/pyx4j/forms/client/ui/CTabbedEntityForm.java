@@ -79,6 +79,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
     public Tab addTab(Widget content, String tabTitle) {
         Tab tab = null;
         ScrollPanel scroll = new ScrollPanel(content);
+        scroll.setStyleName(DefaultCComponentsTheme.StyleName.TabbedFormTab.name());
         tab = new Tab(scroll, tabTitle, null, false);
         tabPanel.addTab(tab);
         return tab;

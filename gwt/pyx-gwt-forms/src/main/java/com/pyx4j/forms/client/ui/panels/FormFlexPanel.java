@@ -137,6 +137,16 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         locateCComponents(widget);
         super.setWidget(row, column, widget);
         getFlexCellFormatter().setColSpan(row, column, span);
+        if (span == 1) {
+            if (column == 0) {
+                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftRow.name());
+            } else if (column == 1) {
+                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightRow.name());
+            }
+        } else if (span == 2) {
+            getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelTwoRows.name());
+        }
+
     }
 
     @Override

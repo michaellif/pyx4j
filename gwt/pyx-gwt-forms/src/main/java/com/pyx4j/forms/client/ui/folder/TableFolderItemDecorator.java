@@ -24,6 +24,7 @@ import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleNam
 
 import java.util.ArrayList;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -73,6 +74,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
         super(images);
 
         setStyleName(EntityFolderRowItemDecorator.name());
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         DockPanel mainPanel = new DockPanel();
         setWidget(mainPanel);

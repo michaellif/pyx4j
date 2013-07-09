@@ -32,7 +32,9 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        EditorPanel, ViewerPanel, ValidationLabel, NoteLabel
+        FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel,
+
+        TabbedFormTab
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -54,6 +56,7 @@ public class DefaultCComponentsTheme extends Theme {
         initTriggerButtonStyle();
         initValidationLabelStyle();
         initNoteStyle();
+        initTabbedFormStyle();
     }
 
     protected void initTextBoxStyle() {
@@ -89,14 +92,14 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initTriggerButtonStyle() {
 
-        Style style = new Style(".", StyleName.EditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        Style style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");
         style.addProperty("height", "19px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ViewerPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        style = new Style(".", StyleName.FieldViewerPanel, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");
@@ -108,6 +111,8 @@ public class DefaultCComponentsTheme extends Theme {
     protected void initValidationLabelStyle() {
         Style style = new Style(".", StyleName.ValidationLabel);
         style.addProperty("color", "red");
+        style.addProperty("text-align", "left");
+        style.addProperty("white-space", "normal");
         addStyle(style);
     }
 
@@ -115,6 +120,8 @@ public class DefaultCComponentsTheme extends Theme {
         Style style = new Style(".", StyleName.NoteLabel);
         style.addProperty("font-weight", "normal");
         style.addProperty("font-style", "italic");
+        style.addProperty("text-align", "left");
+        style.addProperty("white-space", "normal");
         addStyle(style);
 
         style = new Style(".", StyleName.NoteLabel, "-", StyleDependent.info);
@@ -126,4 +133,11 @@ public class DefaultCComponentsTheme extends Theme {
         addStyle(style);
 
     }
+
+    protected void initTabbedFormStyle() {
+        Style style = new Style(".", StyleName.TabbedFormTab);
+        style.addProperty("margin", "6px");
+        addStyle(style);
+    }
+
 }

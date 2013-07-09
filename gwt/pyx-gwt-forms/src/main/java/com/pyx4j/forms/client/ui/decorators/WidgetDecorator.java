@@ -33,13 +33,11 @@ import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.ui.CellPanel;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment.HorizontalAlignmentConstant;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -86,7 +84,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     private final FlowPanel labelHolder;
 
-    private final CellPanel contentPanel;
+    private final FlowPanel contentPanel;
 
     private final FlexTable containerPanel;
 
@@ -112,6 +110,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         nativeComponent.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         label = new Label();
+        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
         label.setStyleName(WidgetDecoratorLabel.name());
 
         Cursor.setDefault(label.getElement());
@@ -128,6 +127,8 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         label.ensureDebugId(CompositeDebugId.debugId(component.getDebugId(), DebugIds.Label));
 
         infoImageHolder = new SimplePanel();
+        infoImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        infoImageHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         mandatoryImageHolder = new SpaceHolder();
         mandatoryImageHolder.setStyleName(WidgetDecoratorMandatoryImage.name());
@@ -138,34 +139,46 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
+        labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
 
         labelHolder.setWidth(builder.labelWidth);
         labelHolder.add(mandatoryImageHolder);
         labelHolder.add(label);
 
         componentHolder = new SimplePanel();
+        componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         componentHolder.setStyleName(WidgetDecoratorComponentHolder.name());
         componentHolder.getElement().getStyle().setProperty("textAlign", builder.componentAlignment.name());
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
+        validationLabel.setWidth(builder.contentWidth);
         validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
 
         noteLabel = new Label();
+        noteLabel.setWidth(builder.contentWidth);
         noteLabel.setStyleName(DefaultCComponentsTheme.StyleName.NoteLabel.name());
 
         assistantWidgetHolder = new SimplePanel();
+        assistantWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        assistantWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         assistantWidgetHolder.setWidget(builder.assistantWidget);
 
-        contentPanel = new HorizontalPanel();
+        contentPanel = new FlowPanel();
 
         contentPanel.setStyleName(WidgetDecoratorContentPanel.name());
+        contentPanel.getElement().getStyle().setProperty("textAlign", "left");
         contentPanel.setWidth(builder.contentWidth);
         contentPanel.add(componentHolder);
         contentPanel.add(assistantWidgetHolder);
         contentPanel.add(infoImageHolder);
 
         containerPanel = new FlexTable();
+        containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+
         containerPanel.setWidget(0, 1, contentPanel);
         containerPanel.setWidget(1, 1, validationLabel);
         containerPanel.setWidget(2, 1, noteLabel);
