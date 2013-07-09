@@ -26,6 +26,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 import com.propertyvista.domain.policy.policies.domain.IdentificationDocumentType;
@@ -48,7 +49,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         int row = -1;
         content.setH3(++row, 0, 1, proto().allowedIDs().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRequiredIDs())).componentWidth(3).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfRequiredIDs()), 3).build());
         return content;
     }
 

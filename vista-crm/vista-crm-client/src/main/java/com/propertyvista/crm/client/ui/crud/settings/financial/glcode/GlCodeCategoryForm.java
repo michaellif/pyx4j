@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
@@ -29,8 +30,8 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
 
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = 0;
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().categoryId()), 7).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().categoryId()), 7).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
 
         content.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
         content.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));

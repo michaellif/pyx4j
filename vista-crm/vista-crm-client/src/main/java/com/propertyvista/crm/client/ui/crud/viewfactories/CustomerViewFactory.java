@@ -18,14 +18,14 @@ import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.crm.client.ui.crud.customer.creditcheck.CustomerCreditCheckLongReportViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.creditcheck.CustomerCreditCheckLongReportViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerView;
+import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorEditorView;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerView;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerViewImpl;
-import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerView;
-import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorView;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningEditorViewImpl;
 import com.propertyvista.crm.client.ui.crud.customer.screening.CustomerScreeningViewerView;

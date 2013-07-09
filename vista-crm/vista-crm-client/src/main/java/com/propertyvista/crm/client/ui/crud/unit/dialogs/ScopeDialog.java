@@ -29,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 import com.propertyvista.crm.client.ui.crud.unit.dialogs.ScopingResultDTO.ScopingResult;
 
@@ -49,7 +50,7 @@ public class ScopeDialog extends OkCancelDialog {
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scopingResult()), 10).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scopingResult()), 10).build());
                 get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<ScopingResult> event) {
@@ -71,7 +72,7 @@ public class ScopeDialog extends OkCancelDialog {
                 }
                 combo.setOptions(options);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn()), 10).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().renovationEndsOn()), 10).build());
                 get(proto().renovationEndsOn()).setVisible(false);
                 get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
@@ -83,7 +84,7 @@ public class ScopeDialog extends OkCancelDialog {
                         }
                     }
                 });
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarketType()), 10).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().offMarketType()), 10).build());
                 get(proto().offMarketType()).setVisible(false);
 
                 return content;

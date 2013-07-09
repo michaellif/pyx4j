@@ -41,6 +41,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
@@ -70,7 +71,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
         main.getWidget(row, 0).setWidth("30em");
 
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20, 22).build());
 
         main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -149,7 +150,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
                 content.setWidget(++row, 0, expirationWarning);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, PreauthorizedPaymentsForm.this
@@ -161,7 +162,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                             }
                         };
                     }
-                }), 38, 10).build());
+                }), 38, 10, 12).build());
 
                 content.setBR(++row, 0, 1);
 

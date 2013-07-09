@@ -20,7 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.LockerAreaDTO;
 
@@ -43,17 +43,15 @@ public class LockerAreaForm extends CrmEntityForm<LockerAreaDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().levels()), 3).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().levels()), 3).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().totalLockers()), 3).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().regularLockers()), 3).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().largeLockers()), 3).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().smallLockers()), 3).build());
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().totalLockers()), 3).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().regularLockers()), 3).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().largeLockers()), 3).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().smallLockers()), 3).build());
 
         return main;
     }

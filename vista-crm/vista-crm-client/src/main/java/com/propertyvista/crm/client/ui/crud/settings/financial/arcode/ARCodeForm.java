@@ -21,6 +21,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.GlCodeSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
@@ -38,9 +39,9 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().glCode(), new CEntitySelectorHyperlink<GlCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(GlCode.class).formViewerPlace(getValue().glCodeCategory().getPrimaryKey());

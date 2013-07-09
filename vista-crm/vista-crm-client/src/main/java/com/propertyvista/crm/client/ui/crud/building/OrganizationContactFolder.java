@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.OrganizationContact;
 
@@ -51,12 +52,15 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person()), 35).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 35).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person())).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email())).build());
+
+            row = -1;
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().workPhone())).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().mobilePhone())).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().homePhone())).build());
+
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
 
             // repopulate related fields from selected employee:
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {

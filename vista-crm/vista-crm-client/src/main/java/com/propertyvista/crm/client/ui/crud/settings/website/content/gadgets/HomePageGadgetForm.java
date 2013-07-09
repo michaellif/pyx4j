@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.website.RichTextContentEditor;
 import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
@@ -58,9 +59,9 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
         int row = 0;
         generalPanel.setH1(row++, 0, 1, i18n.tr("General"));
-        generalPanel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().name()), 10).build());
-        generalPanel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().area()), 10).build());
-        generalPanel.setWidget(row++, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
+        generalPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().name()), 10).build());
+        generalPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().area()), 10).build());
+        generalPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
         generalPanel.setWidget(row++, 0, mainPanel);
 
         selectTab(addTab(generalPanel));

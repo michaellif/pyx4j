@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.gadgets.components.details;
 import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 

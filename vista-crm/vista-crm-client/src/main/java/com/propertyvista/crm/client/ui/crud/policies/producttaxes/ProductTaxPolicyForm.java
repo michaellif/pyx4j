@@ -34,6 +34,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxFolder;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
@@ -103,7 +104,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
                 FormFlexPanel content = new FormFlexPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCode())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode())).build());
                 get(proto().productCode()).setViewable(true);
 
                 content.setH3(++row, 0, 1, proto().taxes().getMeta().getCaption());

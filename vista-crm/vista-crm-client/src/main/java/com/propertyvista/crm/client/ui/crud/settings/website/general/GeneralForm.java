@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.site.ResidentPortalSettings;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
@@ -51,11 +52,11 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setH1(row++, 0, 2, i18n.tr("Web Skin"));
 
         CComponent<?> skinComp;
-        content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().contrast1()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().sitePalette().contrast2()), 10).build());
         if (skinComp instanceof CComboBox) {
             ((CComboBox<Skin>) skinComp).setOptions(EnumSet.of(Skin.skin2, Skin.skin3, Skin.skin4, Skin.skin5, Skin.skin6));
         }
@@ -63,7 +64,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         // ---------------------------------------------------------------------------------------------------------------
 
         content.setH1(row++, 0, 2, i18n.tr("Website"));
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().enabled(), publicPortalSwitch), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().enabled(), publicPortalSwitch), 10).build());
         publicPortalSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -95,13 +96,13 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
                 }
             }
         });
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableMapView()), 10).build());
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().disableMapView()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().disableBuildingDetails()), 10).build());
 
         // --------------------------------------------------------------------------------------------------------------------
 
         content.setH1(row++, 0, 2, i18n.tr("Resident Portal"));
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().enabled()), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().residentPortalSettings().enabled()), 10).build());
         residentSkinSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -109,7 +110,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
                 contentFolder.setEnabled(customSkin != null && customSkin);
             }
         });
-        content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml(), residentSkinSwitch), 10).build());
+        content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml(), residentSkinSwitch), 10).build());
 
         content.setH3(row++, 0, 2, i18n.tr("Resident Portal Custom Content"));
         content.setWidget(row++, 0, inject(proto().residentPortalSettings().customHtml(), contentFolder));

@@ -28,8 +28,8 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.GeoLocation;
 import com.propertyvista.domain.GeoLocation.LatitudeType;
 import com.propertyvista.domain.GeoLocation.LongitudeType;
@@ -47,13 +47,12 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().latitude()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().latitudeType()), 6).customLabel("Latitude Direction").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().latitude()), 10).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().latitudeType()), 6).customLabel("Latitude Direction").build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().longitude()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().longitudeType()), 6).customLabel("Longitude Direction").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().longitude()), 10).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().longitudeType()), 6).customLabel("Longitude Direction").build());
 
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         return main;
     }
 

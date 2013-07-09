@@ -24,8 +24,8 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.website.RichTextContentFolder;
@@ -82,7 +82,7 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
     private FormFlexPanel createCrmLogoTab() {
         FormFlexPanel content = new FormFlexPanel(proto().crmLogo().getMeta().getCaption());
 
-        content.setWidget(0, 0, new DecoratorBuilder(inject(proto().crmLogo(), new CFile<File>(new Command() {
+        content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), new CFile<File>(new Command() {
             @Override
             public void execute() {
                 OkDialog dialog = new OkDialog(getValue().crmLogo().fileName().getValue()) {
@@ -116,8 +116,6 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
         }), 20).build());
 
         content.setWidget(0, 1, thumb);
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return content;
     }

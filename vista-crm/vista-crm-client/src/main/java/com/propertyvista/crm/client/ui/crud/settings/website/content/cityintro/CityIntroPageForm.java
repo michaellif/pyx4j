@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.settings.website.RichTextContentFolder;
 import com.propertyvista.domain.site.CityIntroPage;
@@ -30,8 +31,8 @@ public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
         FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
 
         int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().cityName()), 25).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().province()), 25).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().cityName()), 25).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().province()), 25).build());
 
         main.setH1(row++, 0, 1, i18n.tr("Page Content"));
         main.setWidget(row++, 0, inject(proto().content(), new RichTextContentFolder(isEditable())));

@@ -151,7 +151,7 @@ public class ClientPolicyManager {
 
     public static void setIdComponentEditabilityByPolicy(final IdTarget idTarget, final CComponent<String> idComp, final Key entityKey) {
         idComp.setVisible(true);
-        idComp.setViewable(false);
+        idComp.setEditable(true);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,
                 new DefaultAsyncCallback<IdAssignmentPolicy>() {
                     @Override
@@ -168,14 +168,14 @@ public class ClientPolicyManager {
                             switch (targetItem.type().getValue()) {
                             case generatedAlphaNumeric:
                             case generatedNumber:
-                                idComp.setViewable(true);
+                                idComp.setEditable(false);
                                 idComp.setVisible(entityKey != null);
                                 break;
                             case userEditable:
-                                idComp.setViewable(false);
+                                idComp.setEditable(true);
                                 break;
                             case userAssigned:
-                                idComp.setViewable(entityKey != null);
+                                idComp.setEditable(entityKey == null);
                                 break;
                             }
                         }

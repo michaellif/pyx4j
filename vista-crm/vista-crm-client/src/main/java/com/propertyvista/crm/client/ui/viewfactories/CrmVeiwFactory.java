@@ -16,8 +16,6 @@ package com.propertyvista.crm.client.ui.viewfactories;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
-import com.propertyvista.crm.client.ui.NotificationsView;
-import com.propertyvista.crm.client.ui.NotificationsViewImpl;
 import com.propertyvista.crm.client.ui.FooterView;
 import com.propertyvista.crm.client.ui.FooterViewImpl;
 import com.propertyvista.crm.client.ui.HeaderView;
@@ -26,6 +24,8 @@ import com.propertyvista.crm.client.ui.MessageView;
 import com.propertyvista.crm.client.ui.MessageViewImpl;
 import com.propertyvista.crm.client.ui.NavigView;
 import com.propertyvista.crm.client.ui.NavigViewImpl;
+import com.propertyvista.crm.client.ui.NotificationsView;
+import com.propertyvista.crm.client.ui.NotificationsViewImpl;
 import com.propertyvista.crm.client.ui.RuntimeErrorView;
 import com.propertyvista.crm.client.ui.RuntimeErrorViewImpl;
 import com.propertyvista.crm.client.ui.ShortCutsView;

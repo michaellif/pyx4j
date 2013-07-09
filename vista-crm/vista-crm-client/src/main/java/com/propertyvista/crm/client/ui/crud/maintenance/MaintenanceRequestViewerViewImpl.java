@@ -28,6 +28,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -160,8 +161,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 public IsWidget createContent() {
                     FormFlexPanel main = new FormFlexPanel();
 
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
-                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
+                    main.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
 
                     return main;
                 }
@@ -201,8 +202,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 public IsWidget createContent() {
                     FormFlexPanel main = new FormFlexPanel();
 
-                    main.setWidget(0, 0, new DecoratorBuilder(inject(proto().rating()), 3).labelWidth(7).build());
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().description()), 20).labelWidth(7).build());
+                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().rating()), 3).labelWidth(7).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 20).labelWidth(7).build());
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));

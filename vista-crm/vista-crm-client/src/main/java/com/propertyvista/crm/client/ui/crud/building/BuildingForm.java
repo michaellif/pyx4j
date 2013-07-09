@@ -43,10 +43,10 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -179,37 +179,39 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 12).build());
-        if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().propertyCode()).setViewable(true);
-        }
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().shape()), 7).build());
+        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyCode()), 12).build());
 
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().info().name()), 15).build());
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().totalStoreys()), 5).build());
+        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().shape()), 7).build());
 
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().info().type()), 12).build());
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
+        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().info().name()), 15).build());
+        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().totalStoreys()), 5).build());
 
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().propertyManager()), 20).build());
+        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().info().type()), 12).build());
+        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
+
+        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyManager()), 16).build());
         main.setBR(row++, 1, 1);
 
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().externalId()), 15).build());
+        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().externalId()), 15).build());
 
         if (isEditable()) {
-            main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
+            main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
         } else {
-            main.setWidget(row++, 1,
-                    new DecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
+            main.setWidget(
+                    row++,
+                    1,
+                    new FormDecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
                             .build());
         }
 
-        main.setWidget(row++, 1,
-                new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlaceClass(Floorplan.class))),
-                        15).build());
+        main.setWidget(
+                row++,
+                1,
+                new FormDecoratorBuilder(inject(proto().floorplans(),
+                        new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlaceClass(Floorplan.class))), 15).build());
 
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
+        main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
@@ -219,11 +221,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 //        if (isEditable()) {
         main.setWidget(row, 0, inject(proto().geoLocation()));
 //        } else {
-//            main.setWidget(row, 0, new DecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
+//            main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
 //        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }
@@ -233,21 +233,21 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().structureType()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().structureBuildYear()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().constructionType()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().foundationType()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().floorType()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().structureType()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().structureBuildYear()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().constructionType()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().foundationType()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().floorType()), 15).build());
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().landArea()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralAir()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().centralHeat()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().landArea()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().centralAir()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().centralHeat()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().contacts().website()), 40, true).build());
         get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String> component, String url) {
@@ -276,17 +276,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             }
 
         });
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.setH1(row++, 0, 2, proto().amenities().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().amenities(), new BuildingAmenityFolder()));
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
+        main.setH1(++row, 0, 2, proto().amenities().getMeta().getCaption());
+        main.setWidget(++row, 0, 2, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
 
-        main.setH1(row++, 0, 2, proto().utilities().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().utilities(), new BuildingUtilityFolder()));
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        main.setH1(++row, 0, 2, proto().utilities().getMeta().getCaption());
+        main.setWidget(++row, 0, 2, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
 
         return main;
     }
@@ -296,18 +291,16 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = 0;
         main.setBR(row++, 0, 2);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
         main.setBR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().merchantAccount()), 15).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().merchantAccount()), 15).build());
 
         row = 1;
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
-        main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
+        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
+        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
@@ -323,17 +316,16 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     private FormFlexPanel createMarketingTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Marketing Summary"));
+        int row = -1;
+        main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
         main.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
 
         main.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()).asWidget());
 
         main.setH1(++row, 0, 2, i18n.tr("Media"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.getFlexCellFormatter().setColSpan(++row, 0, 2);
 
         return main;
     }

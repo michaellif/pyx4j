@@ -23,6 +23,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
@@ -133,13 +134,13 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                 public IsWidget createContent() {
                     FormFlexPanel panel = new FormFlexPanel();
                     int row = -1;
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address())).build());
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cityZip())).build());
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit())).build());
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().middleName())).build());
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).build());
-                    panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().portalRegistrationToken())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cityZip())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().middleName())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName())).build());
+                    panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().portalRegistrationToken())).build());
                     return panel;
                 }
             };

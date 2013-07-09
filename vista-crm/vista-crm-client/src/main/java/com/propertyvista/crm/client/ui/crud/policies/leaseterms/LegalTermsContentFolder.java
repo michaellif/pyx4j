@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 import com.propertyvista.domain.policy.policies.domain.LegalTermsDescriptor;
@@ -78,8 +79,8 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
             FormFlexPanel contentPanel = new FormFlexPanel();
 
             int row = -1;
-            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).labelWidth(10).build());
-            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().localizedCaption()), 20).labelWidth(10).build());
+            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).labelWidth(10).build());
+            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().localizedCaption()), 20).labelWidth(10).build());
 
             CComponent<?> termsContentComp = null;
             if (isEditable()) {
@@ -89,7 +90,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
             } else {
                 termsContentComp = inject(proto().content(), new CLabel<String>());
             }
-            contentPanel.setWidget(++row, 0, new DecoratorBuilder(termsContentComp, 45).labelWidth(10).build());
+            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(termsContentComp, 45).labelWidth(10).build());
 
             return contentPanel;
         }

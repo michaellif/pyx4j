@@ -23,10 +23,10 @@ import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.tenant.lead.Guest;
 
 public class GuestFolder extends VistaBoxFolder<Guest> {
@@ -84,14 +84,12 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 25).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
             main.setWidget(0, 1, right);
-
-            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             return main;
         }

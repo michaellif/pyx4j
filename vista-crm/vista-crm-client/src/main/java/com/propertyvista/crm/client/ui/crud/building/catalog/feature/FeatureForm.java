@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Feature;
 
@@ -34,10 +34,10 @@ public class FeatureForm extends CrmEntityForm<Feature> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().name()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
         content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 55).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         content.setH1(++row, 0, 2, i18n.tr("Items"));
@@ -46,10 +46,8 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = 0;
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().mandatory()), 4).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().recurring()), 4).build());
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().mandatory()), 4).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().recurring()), 4).build());
 
         selectTab(addTab(content));
     }

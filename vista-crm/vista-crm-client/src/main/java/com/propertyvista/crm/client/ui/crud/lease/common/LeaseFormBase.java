@@ -26,9 +26,9 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.TenantInsuranceCertificateForm.TenantOwnerClickHandler;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.GuarantorInLeaseFolder;
@@ -123,42 +123,39 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         int detailsRow = -1; // first column:
 
         detailsLeft.setWidget(++detailsRow, 0,
-                new DecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 25).build());
+                new FormDecoratorBuilder(inject(proto().unit(), new CEntityCrudHyperlink<AptUnit>(AppPlaceEntityMapper.resolvePlace(AptUnit.class))), 25).build());
         detailsLeft.setWidget(++detailsRow, 0,
-                new DecoratorBuilder(
+                new FormDecoratorBuilder(
                         inject(proto().unit().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))), 25)
                         .build());
         detailsLeft.setWidget(++detailsRow, 0,
-                new DecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
+                new FormDecoratorBuilder(inject(proto().unit().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
                         25).build());
         detailsLeft
                 .setWidget(
                         ++detailsRow,
                         0,
-                        new DecoratorBuilder(inject(proto().currentTerm(),
+                        new FormDecoratorBuilder(inject(proto().currentTerm(),
                                 new CEntityCrudHyperlink<LeaseTerm>(AppPlaceEntityMapper.resolvePlace(LeaseTerm.class))), 25).build());
 
-        detailsLeft.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
+        detailsLeft.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().carryforwardBalance()), 10).build());
 
         FormFlexPanel detailsRight = new FormFlexPanel();
 
         detailsRow = -1; // second column:
 
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().leaseId()), 10).build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().billingPeriod(), new CEnumLabel()), 15).build());
-        detailsRight.setWidget(++detailsRow, 0, new DecoratorBuilder(inject(proto().billingAccount().paymentAccepted(), new CEnumLabel()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().billingAccount().accountNumber()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEnumLabel()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().completion(), new CEnumLabel()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().billingAccount().billingPeriod(), new CEnumLabel()), 15).build());
+        detailsRight.setWidget(++detailsRow, 0, new FormDecoratorBuilder(inject(proto().billingAccount().paymentAccepted(), new CEnumLabel()), 15).build());
 
         FormFlexPanel detailsPanel = new FormFlexPanel();
 
         detailsPanel.setWidget(0, 0, detailsLeft);
         detailsPanel.setWidget(0, 1, detailsRight);
-
-        detailsPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-        detailsLeft.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
         FormFlexPanel main = new FormFlexPanel(title);
 
@@ -170,38 +167,35 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         FormFlexPanel datesPanel = new FormFlexPanel();
 
         int datesRow = -1; // first column:
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().leaseTo()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().leaseFrom()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().leaseTo()), 9).build());
 
         datesRow = -1; // second column:
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().expectedMoveIn()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
-        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         main.setWidget(++row, 0, datesPanel);
 
         // Move dates: ------------------------------------------------------------------------------------------------------------------------------
         datesPanel = new FormFlexPanel();
 
         datesRow = -1; // first column:
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().terminationLeaseTo()), 9).build());
-        datesPanel.setWidget(++datesRow, 0, new DecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().terminationLeaseTo()), 9).build());
+        datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).build());
 
         datesRow = -1; // second column:
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
-        datesPanel.setWidget(++datesRow, 1, new DecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().actualMoveIn()), 9).build());
+        datesPanel.setWidget(++datesRow, 1, new FormDecoratorBuilder(inject(proto().actualMoveOut()), 9).build());
 
-        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         main.setWidget(++row, 0, datesPanel);
 
         // Other dates: -----------------------------------------------------------------------------------------------------------------------------
         main.setBR(++row, 0, 1);
         datesPanel = new FormFlexPanel();
 
-        datesPanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().creationDate()), 9).build());
-        datesPanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().approvalDate()), 9).build());
+        datesPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
+        datesPanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().approvalDate()), 9).build());
 
-        datesPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
         main.setWidget(++row, 0, datesPanel);
 
         // Products: --------------------------------------------------------------------------------------------------------------------------------

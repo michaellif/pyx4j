@@ -15,8 +15,6 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.config.shared.ApplicationMode;
@@ -31,6 +29,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -43,62 +42,48 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
 
     private final boolean showUnit;
 
-    private final boolean twoColumns;
-
     public AddressStructuredEditorImpl(Class<A> clazz) {
         this(clazz, true);
     }
 
-    public AddressStructuredEditorImpl(Class<A> clazz, boolean twoColumns) {
-        this(clazz, twoColumns, true);
-    }
-
-    public AddressStructuredEditorImpl(Class<A> clazz, boolean twoColumns, boolean showUnit) {
+    public AddressStructuredEditorImpl(Class<A> clazz, boolean showUnit) {
         super(clazz);
-        this.twoColumns = twoColumns;
         this.showUnit = showUnit;
-    }
-
-    protected boolean isTwoColumns() {
-        return twoColumns;
     }
 
     @SuppressWarnings("unchecked")
     protected FormFlexPanel internalCreateContent() {
-        FormFlexPanel left = new FormFlexPanel();
-        int row = 0;
+        FormFlexPanel main = new FormFlexPanel();
+        int row = -1;
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
-        left.setWidget(row++, 0, new DecoratorBuilder(country, "150px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(country, 15).build());
 
         final CComponent<Province> province = (CComponent<Province>) inject(proto().province());
-        left.setWidget(row++, 0, new DecoratorBuilder(province, "150px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(province, 15).build());
 
-        final VerticalPanel county = new VerticalPanel();
-        county.add(new DecoratorBuilder(inject(proto().county()), "150px").build());
-        left.setWidget(row++, 0, county);
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().county()), 15).build());
 
-        left.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), "150px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city()), 15).build());
 
         final CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
 
-        left.setWidget(row++, 0, new DecoratorBuilder(postalCode, "100px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(postalCode, 10).build());
 
-        FormFlexPanel right = new FormFlexPanel();
-        row = 0;
+        row = -1;
 
         if (showUnit) {
-            right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().suiteNumber()), "100px").build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().suiteNumber()), 10).build());
         }
 
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumber()), "100px").build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetNumberSuffix()), "100px").build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetName()), "200px").build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetType()), "100px").build());
-        right.setWidget(row++, 0, new DecoratorBuilder(inject(proto().streetDirection()), "100px").build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().streetNumber()), 10).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().streetNumberSuffix()), 10).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().streetName()), 16).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().streetType()), 10).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().streetDirection()), 10).build());
 
         attachFilters(proto(), province, country, postalCode);
 
@@ -109,17 +94,6 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
             }
         });
 
-        FormFlexPanel main = new FormFlexPanel();
-        main.setWidget(0, 0, left);
-        if (twoColumns) {
-            main.setWidget(0, 1, right);
-
-            main.getCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
-            main.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
-        } else {
-            main.setWidget(1, 0, right);
-        }
         return main;
     }
 

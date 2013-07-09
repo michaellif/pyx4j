@@ -31,6 +31,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -93,13 +94,13 @@ public class ResidentCustomContentFolder extends VistaBoxFolder<HtmlContent> {
 
             int row = -1;
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
             if (isEditable()) {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), new CTextArea()), 60).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().html(), new CTextArea()), 60).build());
             } else {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
             }
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().updated()), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated()), 10).build());
             return main;
         }
 

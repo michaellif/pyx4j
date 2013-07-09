@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.base.CounterGadgetBaseMetadata;
 
 public class CounterGadgetSetupForm<E extends CounterGadgetBaseMetadata> extends CEntityDecoratableForm<E> {
@@ -30,7 +31,7 @@ public class CounterGadgetSetupForm<E extends CounterGadgetBaseMetadata> extends
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
         return content;
     }
 

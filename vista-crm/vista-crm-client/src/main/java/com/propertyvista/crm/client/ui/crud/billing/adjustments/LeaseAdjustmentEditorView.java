@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.billing.adjustments;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
-import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.domain.tenant.lease.LeaseAdjustment;
 

@@ -34,7 +34,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -55,7 +55,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         FormFlexPanel left = new FormFlexPanel();
         int row = -1;
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().code(), new CEntitySelectorHyperlink<ARCode>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(ARCode.class, getValue().getPrimaryKey());
@@ -75,21 +75,21 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
                 };
             }
         }), 25).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().executionType()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetDate()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().receivedDate()), 10).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionType()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetDate()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().receivedDate()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
 
         FormFlexPanel right = new FormFlexPanel();
         row = -1;
-        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().overwriteDefaultTax()), 5).build());
+        right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().overwriteDefaultTax()), 5).build());
         right.setWidget(++row, 0, taxHolder);
-        right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().taxType()), 10).build());
+        right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().taxType()), 10).build());
         if (!isEditable()) {
             right.setBR(++row, 0, 2);
             right.setBR(++row, 0, 2);
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._total()), 10).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._total()), 10).build());
         }
 
         // tweak:
@@ -129,14 +129,12 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         if (!isEditable()) {
             row = 0;
             content.setHR(++row, 0, 2);
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created()), 10).build());
-            content.setWidget(row, 1, new DecoratorBuilder(inject(proto().updated()), 10).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created()), 10).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().updated()), 10).build());
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createdBy()), 25).build());
-            content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 10).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().createdBy()), 25).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().status()), 10).build());
         }
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         selectTab(addTab(content));
     }
@@ -172,7 +170,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
         unbind(proto().tax());
 
         if (comp != null) {
-            taxHolder.setWidget(new DecoratorBuilder(inject(proto().tax(), comp), 10).build());
+            taxHolder.setWidget(new FormDecoratorBuilder(inject(proto().tax(), comp), 10).build());
 
             if (repopulate) {
                 get(proto().tax()).populate(getValue().tax().getValue(BigDecimal.ZERO));

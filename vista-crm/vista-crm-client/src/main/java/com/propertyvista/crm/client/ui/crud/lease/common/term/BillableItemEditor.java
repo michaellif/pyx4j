@@ -44,12 +44,12 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
@@ -98,7 +98,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
             @Override
             protected AppPlace getTargetPlace() {
                 if (getValue().product().isInstanceOf(Service.ServiceV.class)) {
@@ -131,11 +131,11 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             }
         }), 20).build());
 
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate()), 9).build());
-        main.setWidget(row, 1, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate()), 9).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate()), 9).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 51).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 51).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setWidget(++row, 0, extraDataPanel);
@@ -146,8 +146,6 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
         main.setWidget(++row, 0, depositPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));

@@ -14,8 +14,6 @@
 package com.propertyvista.crm.client.ui.crud;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.form.PrimeEntityForm;
 
@@ -27,23 +25,4 @@ public abstract class CrmEntityForm<E extends IEntity> extends PrimeEntityForm<E
         super(rootClass, new VistaEditorsComponentFactory(), view);
     }
 
-    // decoration stuff:
-    protected class DecoratorBuilder extends WidgetDecorator.Builder {
-
-        public DecoratorBuilder(CComponent<?> component) {
-            super(component);
-        }
-
-        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
-            super(component);
-            componentWidth(componentWidth);
-        }
-
-        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
-            super(component);
-            componentWidth(componentWidth);
-            labelWidth(labelWidth);
-        }
-
-    }
 }

@@ -47,6 +47,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
@@ -130,7 +131,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20, 22).build());
 
         main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
@@ -142,7 +143,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         FormFlexPanel tabPanel = new FormFlexPanel(title);
         int row = -1;
         tabPanel.setH1(++row, 0, 1, i18n.tr("Requirements"));
-        tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 15).build());
+        tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), 15).build());
         get(proto().minimumRequiredLiability()).setViewable(true);
 
         noRequirementsLabel = new Label(i18n.tr("None"));
@@ -220,7 +221,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
                 content.setWidget(++row, 0, expirationWarning);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, TenantForm.this.getValue()
@@ -232,7 +233,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                }), 38, 10).build());
+                }), 38, 10, 12).build());
 
                 content.setBR(++row, 0, 1);
 

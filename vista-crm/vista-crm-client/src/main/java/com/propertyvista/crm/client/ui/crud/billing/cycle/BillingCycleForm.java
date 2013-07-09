@@ -25,7 +25,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
@@ -40,38 +40,36 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingType())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleEndDate())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetBillExecutionDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingType())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleEndDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetBillExecutionDate())).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().failed())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().failed())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Failed));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().rejected())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().rejected())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Rejected));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().notConfirmed())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().notConfirmed())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Finished));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().stats().confirmed())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().stats().confirmed())).build());
         content.setWidget(row, 1, new ViewBillsLink(Bill.BillStatus.Confirmed));
 
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total())).build());
         content.setWidget(row, 1, new ViewLeasesLink(false));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notRun())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notRun())).build());
         content.setWidget(row, 1, new ViewLeasesLink(true));
 
         content.setH2(++row, 0, 2, i18n.tr("PAD"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetPadGenerationDate())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().actualPadGenerationDate())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().targetPadExecutionDate())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pads())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetPadGenerationDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().actualPadGenerationDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetPadExecutionDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pads())).build());
         content.setWidget(row, 1, new ViewPadLink());
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         selectTab(addTab(content));
     }

@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
@@ -45,10 +46,10 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Policy"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().bankruptcy()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().judgment()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().collection()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().chargeOff()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().bankruptcy()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().judgment()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().collection()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().chargeOff()), 5).build());
 
         panel.setH3(++row, 0, 1, i18n.tr("Help"));
         panel.setWidget(++row, 0, new HTML(CrmResources.INSTANCE.backgroundCheckHelp().getText()));

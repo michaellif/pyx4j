@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView;
 import com.propertyvista.crm.client.ui.crud.unit.UnitViewerView.Presenter;
 
@@ -47,7 +48,7 @@ public class MakePendingDialog extends OkCancelDialog {
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
-                content.setWidget(0, 0, new DecoratorBuilder(inject(proto().pendingStartDay()), 9).build());
+                content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().pendingStartDay()), 9).build());
 
                 if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
                     get(proto().pendingStartDay()).setViewable(true);

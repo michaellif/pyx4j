@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
 
 public class BuildingListerGadgetMetadataForm extends CEntityDecoratableForm<BuildingListerGadgetMetadata> {
@@ -30,8 +31,8 @@ public class BuildingListerGadgetMetadataForm extends CEntityDecoratableForm<Bui
     public IsWidget createContent() {
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().buildingListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().buildingListerSettings().pageSize())).build());
         return p;
     }
 

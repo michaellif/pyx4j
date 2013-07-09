@@ -25,6 +25,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.marketing.AdvertisingBlurb;
 import com.propertyvista.domain.marketing.Marketing;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -41,12 +42,15 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
         main.setWidth("100%");
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 30).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 16).build());
         if (VistaFeatures.instance().yardiIntegration()) {
-            get(proto().name()).setViewable(true);
+            get(proto().name()).setEditable(false);
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().visibility()), 30).build());
+
+        row = -1;
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().visibility()), 10).build());
+
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
 
         main.setH1(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {

@@ -27,6 +27,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.TenantInsurancePolicyDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -50,14 +51,14 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     private FormFlexPanel createInsuranceRequirementsTab() {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Insurance Requirements"));
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireMinimumLiability()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireMinimumLiability()), 5).build());
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().minimumRequiredLiability()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), 20).build());
         get(proto().minimumRequiredLiability()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
@@ -80,9 +81,9 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     private FormFlexPanel createPortalConfigurationTab() {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Portal Configuration"));
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50).build());
         if (VistaFeatures.instance().tenantSure()) {
-            panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50).build());
+            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50).build());
         }
         return panel;
     }

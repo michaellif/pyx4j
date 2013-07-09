@@ -50,6 +50,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
@@ -197,30 +198,30 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
             left.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                 }
             }));
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().role()), 15).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().role()), 15).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().effectiveScreening(),
+                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
@@ -254,9 +255,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             main.setWidget(0, 1, right);
             main.setWidget(1, 0, preauthorizedPaymentsPanel);
             main.getFlexCellFormatter().setColSpan(1, 0, 2);
-
-            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width!
 
             return main;
         }
@@ -351,7 +349,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 expirationWarning.setBR(2, 0, 1);
 
                 content.setWidget(++row, 0, expirationWarning);
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod()), 40, 10).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod()), 40, 10, 12).build());
                 content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;

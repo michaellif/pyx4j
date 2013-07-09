@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 
@@ -37,8 +38,8 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityDecoratableForm
     public IsWidget createContent() {
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearsToCompare())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yearsToCompare())).build());
         get(proto().yearsToCompare()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
             public ValidationError isValid(CComponent<Integer> component, Integer value) {

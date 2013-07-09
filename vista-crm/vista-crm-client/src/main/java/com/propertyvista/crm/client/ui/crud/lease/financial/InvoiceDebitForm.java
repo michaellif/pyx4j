@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceDebitDTO;
 
@@ -29,10 +30,10 @@ public class InvoiceDebitForm extends CrmEntityForm<InvoiceDebitDTO> {
 
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().totalAmount())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().outstandingDebit())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAmount())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingDebit())).build());
         panel.setH2(++row, 0, 1, i18n.tr("Links"));
         panel.setWidget(++row, 0, inject(proto().debitCreditLinks(), new DebitCreditLinkFolder()));
         selectTab(addTab(panel));

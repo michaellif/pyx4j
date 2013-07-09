@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMetadata;
 
 public class UnitAvailabilityGadgetMetatadaForm extends CEntityDecoratableForm<UnitAvailabilityGadgetMetadata> {
@@ -33,10 +34,10 @@ public class UnitAvailabilityGadgetMetatadaForm extends CEntityDecoratableForm<U
         // TODO Auto-generated method stub
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitStatusListerSettings().pageSize())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterPreset())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unitStatusListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterPreset())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -45,7 +46,7 @@ public class UnitAvailabilityGadgetMetatadaForm extends CEntityDecoratableForm<U
                 }
             }
         });
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
         get(proto().asOf()).setVisible(false);
         return p;
     }

@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.reports.Report;
 import com.pyx4j.site.client.ui.reports.ReportFactory;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.reports.components.NoResultsHtml;
 import com.propertyvista.crm.rpc.dto.reports.CustomerCreditCheckReportDataDTO;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
@@ -74,11 +75,11 @@ public class CustomerCreditCheckReportFactory implements ReportFactory<CustomerC
             public IsWidget createContent() {
 
                 FormFlexPanel panel = new FormFlexPanel();
-                panel.setWidget(0, 0, new DecoratorBuilder(inject(proto().minAmountChecked())).labelWidth(10).componentWidth(10).build());
-                panel.setWidget(1, 0, new DecoratorBuilder(inject(proto().maxAmountChecked())).labelWidth(10).componentWidth(10).build());
+                panel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().minAmountChecked())).labelWidth(10).componentWidth(10).build());
+                panel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().maxAmountChecked())).labelWidth(10).componentWidth(10).build());
 
-                panel.setWidget(0, 1, new DecoratorBuilder(inject(proto().minCreditCheckDate())).labelWidth(10).componentWidth(10).build());
-                panel.setWidget(1, 1, new DecoratorBuilder(inject(proto().maxCreditCheckDate())).labelWidth(10).componentWidth(10).build());
+                panel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().minCreditCheckDate())).labelWidth(10).componentWidth(10).build());
+                panel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().maxCreditCheckDate())).labelWidth(10).componentWidth(10).build());
 
                 return panel;
             }

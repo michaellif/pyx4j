@@ -52,6 +52,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.DateInPeriodValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseTermSelectorDialog;
@@ -549,12 +550,12 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
                     FormFlexPanel main = new FormFlexPanel();
 
                     main.setWidget(0, 0,
-                            new DecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))
+                            new FormDecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))
                                     .build());
-                    main.setWidget(1, 0, new DecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
+                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().expectedMoveOut()), 9).build());
 
                     if (showTermination) {
-                        main.setWidget(2, 0, new DecoratorBuilder(inject(proto().terminationLeaseTo()), 9).customLabel(i18n.tr("Lease Termination Date"))
+                        main.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().terminationLeaseTo()), 9).customLabel(i18n.tr("Lease Termination Date"))
                                 .build());
                     }
 

@@ -39,9 +39,9 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdFormat;
 import com.propertyvista.common.client.ui.validators.YouTubeVideoIdValidator;
 import com.propertyvista.crm.client.ui.components.cms.FileUploadHyperlink;
@@ -95,14 +95,14 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15, 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
 
             CTextField utubeEditor = null;
-            main.setWidget(++row, 0, new DecoratorBuilder(utubeEditor = (CTextField) inject(proto().youTubeVideoID()), 25, 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(utubeEditor = (CTextField) inject(proto().youTubeVideoID()), 15).build());
             utubeEditor.addValueValidator(new YouTubeVideoIdValidator());
             utubeEditor.setFormat(new YouTubeVideoIdFormat());
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().url()), 25, 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().url()), 15).build());
             Command showMediaCommand = new Command() {
                 @Override
                 public void execute() {
@@ -112,19 +112,17 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             ((CField) get(proto().youTubeVideoID())).setNavigationCommand(showMediaCommand);
             ((CField) get(proto().url())).setNavigationCommand(showMediaCommand);
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(imageTarget, new Command() {
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(imageTarget, new Command() {
                 @Override
                 public void execute() {
                     showMedia();
                 }
-            })), 25, 10).build());
+            })), 15).build());
 
             row = -1;
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().caption()), 15, 10).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().visibility()), 7, 10).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().caption()), 15).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().visibility()), 7).build());
             main.getFlexCellFormatter().setRowSpan(row, 1, 3);
-
-            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             SimplePanel thumbnailWrap = new SimplePanel();
             thumbnailWrap.setWidget(thumbnail = new Image());

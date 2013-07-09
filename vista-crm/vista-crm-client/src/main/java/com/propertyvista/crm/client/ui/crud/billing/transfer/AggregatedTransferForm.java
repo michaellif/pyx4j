@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 
@@ -33,29 +34,29 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentDate()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentDate()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount()), 20).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().netAmount()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().adjustments()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().previousBalance()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantBalance()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundsReleased()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().netAmount()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().adjustments()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().previousBalance()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantBalance()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fundsReleased()), 10).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossPaymentAmount()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossPaymentFee()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().grossPaymentCount()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentAmount()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentFee()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentCount()), 10).build());
 
         FormFlexPanel amount = new FormFlexPanel();
         int row2 = -1;
-        amount.setWidget(++row2, 0, new DecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
-        amount.setWidget(++row2, 0, new DecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
-        amount.setWidget(++row2, 0, new DecoratorBuilder(inject(proto().rejectItemsCount()), 5).build());
+        amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
+        amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
+        amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsCount()), 5).build());
         row2 = -1;
-        amount.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
-        amount.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
-        amount.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().returnItemsCount()), 5).build());
+        amount.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
+        amount.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
+        amount.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().returnItemsCount()), 5).build());
 
         content.setWidget(++row, 0, amount);
 

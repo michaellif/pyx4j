@@ -40,7 +40,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
@@ -95,10 +95,10 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 0, inject(proto().guests(), new GuestFolder(isEditable())));
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refSource()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refSource()), 20).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().comments()), 50).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().comments()), 50).build());
 
         return main;
     }
@@ -107,20 +107,20 @@ public class LeadForm extends CrmEntityForm<Lead> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leadId()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseType()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTerm()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leadId()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseType()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().moveInDate()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTerm()), 9).build());
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan().building(), new CEntityLabel<Building>()), 20).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().floorplan().building(), new CEntityLabel<Building>()), 20).build());
         } else {
             main.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().floorplan().building(),
+                    new FormDecoratorBuilder(inject(proto().floorplan().building(),
                             new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new CEntitySelectorHyperlink<Floorplan>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(Floorplan.class).formViewerPlace(getValue().getPrimaryKey());
@@ -144,27 +144,25 @@ public class LeadForm extends CrmEntityForm<Lead> {
             }
         }), 20).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().agent()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().createDate()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().agent()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().createDate()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
 
         if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>()), 40).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>()), 40).build());
         } else {
             main.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 40).build());
+                    new FormDecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 40).build());
             main.getFlexCellFormatter().setColSpan(row, 0, 2);
         }
 
         row = -1;
         main.setH4(++row, 1, 1, i18n.tr("Preferred Appointment Times") + ":");
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate1()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime1()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().appointmentDate1()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().appointmentTime1()), 9).build());
         main.setBR(++row, 1, 1);
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentDate2()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().appointmentTime2()), 9).build());
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().appointmentDate2()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().appointmentTime2()), 9).build());
 
         get(proto().status()).setViewable(true);
         get(proto().createDate()).setViewable(true);

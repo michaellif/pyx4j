@@ -39,6 +39,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.person.Name;
@@ -84,9 +85,9 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
         public IsWidget createContent() {
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
             left.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()), 20)
+                    new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()), 20)
                             .build());
             ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
@@ -103,14 +104,14 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                 }
             });
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().role()), 15).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().role()), 15).build());
 
             left.setBR(++row, 0, 1);
 
             left.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().screening(),
+                    new FormDecoratorBuilder(inject(proto().screening(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 10).build());
 
             creditCheckResultPanel = createCreditCheckResultPanel();
@@ -137,13 +138,13 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             FormFlexPanel left = new FormFlexPanel();
 
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().reason()), 10).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().reason()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().amountApproved()), 10).build());
 
             left.setHR(++row, 0, 1);
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckDate()), 10).build());
 
             CLabel<Key> creditCheckReport = new CLabel<Key>(i18n.tr("View Full Report"));
             creditCheckReport.setFormat(new IFormat<Key>() {
@@ -176,7 +177,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
                             });
                 }
             });
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), creditCheckReport), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), creditCheckReport), 10).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
@@ -185,10 +186,10 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             right.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.NORMAL);
             right.getWidget(row, 0).getElement().getStyle().setMarginLeft(2, Unit.EM);
 
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy()), 5).labelWidth(10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().judgment()), 5).labelWidth(10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().collection()), 5).labelWidth(10).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().chargeOff()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().bankruptcy()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().judgment()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().collection()), 5).labelWidth(10).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().backgroundCheckPolicy().chargeOff()), 5).labelWidth(10).build());
 
             // assemble main panel:
             panel.setWidget(0, 0, left);

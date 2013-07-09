@@ -40,6 +40,7 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.site.SocialLink;
 import com.propertyvista.domain.site.SocialLink.SocialSite;
 
@@ -134,8 +135,8 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             int row = -1;
             CLabel site = new CLabel();
             site.setEditable(false);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().socialSite(), site), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().siteUrl()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().socialSite(), site), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().siteUrl()), 35).build());
             get(proto().siteUrl()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
                 public ValidationError isValid(CComponent<String> component, String url) {

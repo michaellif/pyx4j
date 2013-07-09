@@ -26,6 +26,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
@@ -50,22 +51,22 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         accepted.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_LEFT, HasVerticalAlignment.ALIGN_MIDDLE);
 
         accepted.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().acceptedCash()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().acceptedCash()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
         accepted.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().acceptedCheck()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().acceptedCheck()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
         accepted.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().acceptedEcheck()), 6).labelWidth(6).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().acceptedEcheck()), 6).labelWidth(6).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
         accepted.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().acceptedEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().acceptedEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
         accepted.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().acceptedCreditCard()), 7).labelWidth(7).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().acceptedCreditCard()), 7).labelWidth(7).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
         accepted.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().acceptedInterac()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().acceptedInterac()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
 
         FormFlexPanel residentPortal = new FormFlexPanel();
@@ -79,14 +80,14 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.setWidget(0, ++col, new HTML());
         residentPortal.getWidget(0, col).setWidth("5em");
 
-        residentPortal.setWidget(0, ++col, new DecoratorBuilder(inject(proto().residentPortalEcheck()), 6).labelWidth(6).layout(Layout.vertical)
+        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalEcheck()), 6).labelWidth(6).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
         residentPortal.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().residentPortalEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().residentPortalEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
-        residentPortal.setWidget(0, ++col, new DecoratorBuilder(inject(proto().residentPortalCreditCard()), 7).labelWidth(7).layout(Layout.vertical)
+        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalCreditCard()), 7).labelWidth(7).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
-        residentPortal.setWidget(0, ++col, new DecoratorBuilder(inject(proto().residentPortalInterac()), 5).labelWidth(5).layout(Layout.vertical)
+        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalInterac()), 5).labelWidth(5).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
 
         FormFlexPanel cashEquivalent = new FormFlexPanel();
@@ -96,19 +97,19 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         cashEquivalent.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_LEFT, HasVerticalAlignment.ALIGN_MIDDLE);
 
         cashEquivalent.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().cashEquivalentCash()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().cashEquivalentCash()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
         cashEquivalent.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().cashEquivalentCheck()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().cashEquivalentCheck()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col, new DecoratorBuilder(inject(proto().cashEquivalentEcheck()), 6).labelWidth(6).layout(Layout.vertical)
+        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentEcheck()), 6).labelWidth(6).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
         cashEquivalent.setWidget(0, ++col,
-                new DecoratorBuilder(inject(proto().cashEquivalentEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
+                new FormDecoratorBuilder(inject(proto().cashEquivalentEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col, new DecoratorBuilder(inject(proto().cashEquivalentCreditCard()), 7).labelWidth(7).layout(Layout.vertical)
+        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentCreditCard()), 7).labelWidth(7).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col, new DecoratorBuilder(inject(proto().cashEquivalentInterac()), 5).labelWidth(5).layout(Layout.vertical)
+        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentInterac()), 5).labelWidth(5).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
 
         // put all together:

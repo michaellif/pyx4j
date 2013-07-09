@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
 
@@ -39,7 +40,7 @@ public class AutoPayChangePolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayC
     private FormFlexPanel createPolicyEditorPanel() {
         FormFlexPanel panel = new FormFlexPanel("Settings");
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().rule())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rule())).build());
         return panel;
     }
 

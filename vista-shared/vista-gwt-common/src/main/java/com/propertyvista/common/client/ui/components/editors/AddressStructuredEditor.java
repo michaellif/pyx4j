@@ -23,12 +23,8 @@ public class AddressStructuredEditor extends AddressStructuredEditorImpl<Address
         super(AddressStructured.class);
     }
 
-    public AddressStructuredEditor(boolean twoColumns) {
-        super(AddressStructured.class, twoColumns);
-    }
-
-    public AddressStructuredEditor(boolean twoColumns, boolean showUnit) {
-        super(AddressStructured.class, twoColumns, showUnit);
+    public AddressStructuredEditor(boolean showUnit) {
+        super(AddressStructured.class, showUnit);
     }
 
     @Override

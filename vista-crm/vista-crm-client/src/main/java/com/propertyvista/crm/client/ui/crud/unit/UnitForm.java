@@ -42,7 +42,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.selections.SelectFloorplanListService;
 import com.propertyvista.domain.property.asset.Floorplan;
@@ -92,41 +92,41 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().building(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
+                new FormDecoratorBuilder(inject(proto().building(), isEditable() ? new CEntityLabel<Building>() : new CEntityCrudHyperlink<Building>(
                         AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
 
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new FloorplanSelectorHyperlink()), 20).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new FloorplanSelectorHyperlink()), 20).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().economicStatus()), 20).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().economicStatusDescription()), 20).build());
 
         left.setBR(++row, 0, 1);
         left.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().lease(),
+                new FormDecoratorBuilder(inject(proto().lease(),
                         isEditable() ? new CEntityLabel<Lease>() : new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 20)
                         .build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto()._availableForRent()), 9).build());
-        left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto()._availableForRent()), 9).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._unitRent()), 7).build());
 
         if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().defaultProductCatalog() && !VistaFeatures.instance().yardiIntegration()) {
             left.setBR(++row, 0, 1);
             left.setH1(++row, 0, 1, proto().marketPrices().getMeta().getCaption());
             left.setWidget(++row, 0, inject(proto().marketPrices(), new UnitServicePriceFolder()));
         } else {
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().financial()._marketRent()), 10).build());
         }
 
         row = -1;
         FormFlexPanel right = new FormFlexPanel();
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().floor()), 5).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().number()), 5).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().floor()), 5).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().number()), 5).build());
 
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bedrooms()), 5).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info()._bathrooms()), 5).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info()._bedrooms()), 5).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info()._bathrooms()), 5).build());
 
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().area()), 8).build());
-        right.setWidget(++row, 1, new DecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().area()), 8).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().areaUnits()), 8).build());
 
         // tweak UI:
         if (VistaFeatures.instance().occupancyModel()) {
@@ -146,9 +146,6 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         main.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         main.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-        left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
         return main;
     }

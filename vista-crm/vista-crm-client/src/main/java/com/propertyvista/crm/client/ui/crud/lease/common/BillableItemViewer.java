@@ -38,12 +38,12 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
 import com.propertyvista.common.client.ui.components.editors.YardiDataEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Product;
@@ -80,7 +80,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         FormFlexPanel main = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 25).build());
         ((CField) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -100,11 +100,11 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
             }
         });
 
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().effectiveDate()), 9).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().expirationDate()), 9).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().effectiveDate()), 9).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 51).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 51).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setWidget(++row, 0, extraDataPanel);
@@ -115,8 +115,6 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
 
         main.setWidget(++row, 0, depositPanel);
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));

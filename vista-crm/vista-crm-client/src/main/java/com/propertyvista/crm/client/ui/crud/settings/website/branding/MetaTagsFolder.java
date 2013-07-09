@@ -29,6 +29,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageMetaTags;
@@ -93,10 +94,10 @@ class MetaTagsFolder extends VistaBoxFolder<PageMetaTags> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 35).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 35).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().keywords()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().keywords()), 35).build());
             return main;
         }
     }

@@ -33,6 +33,7 @@ import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
@@ -164,26 +165,30 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = 0;
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 35, 40).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 10, 45).labelAlignment(Alignment.left)
+        main.setWidget(row++, 0,
+                new FormDecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 10, 35, 40).labelAlignment(Alignment.left)
+                        .useLabelSemicolon(false).build());
+        main.setHR(row++, 0, 1);
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 35, 40).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 45).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
+        main.setWidget(row++, 0,
+                new FormDecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 10, 35, 40).labelAlignment(Alignment.left)
+                        .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 10, 45).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
+        main.setWidget(row++, 0,
+                new FormDecoratorBuilder(inject(proto().version().legalQuestions().convictedOfFelony()), 10, 35, 40).labelAlignment(Alignment.left)
+                        .useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().convictedOfFelony()), 10, 45).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
+        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().legalTroubles()), 10, 35, 40)
+                .labelAlignment(Alignment.left).useLabelSemicolon(false).build());
         main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().legalTroubles()), 10, 45).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
-        main.setHR(row++, 0, 1);
-        main.setWidget(row++, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().filedBankruptcy()), 10, 45).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
+        main.setWidget(row++, 0,
+                new FormDecoratorBuilder(inject(proto().version().legalQuestions().filedBankruptcy()), 10, 35, 40).labelAlignment(Alignment.left)
+                        .useLabelSemicolon(false).build());
 
         return main;
     }

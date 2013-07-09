@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.unit.occupancy.AptUnitOccupancySegment;
@@ -35,12 +36,12 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateFrom()), 9).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateTo()), 9).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().offMarket()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lease()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateFrom()), 9).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateTo()), 9).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().offMarket()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lease()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 50).build());
 
         get(proto().status()).addValueChangeHandler(new ValueChangeHandler<AptUnitOccupancySegment.Status>() {
             @Override

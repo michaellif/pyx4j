@@ -46,6 +46,7 @@ import com.pyx4j.site.client.ui.reports.ReportFactory;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
 import com.propertyvista.crm.client.ui.reports.components.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.factories.ScrollBarPositionMemento;
@@ -129,8 +130,8 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
             public IsWidget createContent() {
                 FormFlexPanel panel = new FormFlexPanel();
                 int row = -1;
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leasesOnNoticeOnly())).build());
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
+                panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leasesOnNoticeOnly())).build());
+                panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByBuildings())).build());
                 get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -139,7 +140,7 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                 });
                 panel.setWidget(++row, 0, inject(proto().buildings(), new SelectedBuildingsFolder()));
 
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
+                panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
                 get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -147,8 +148,8 @@ public class AutoPayChangesReportFactory implements ReportFactory<AutoPayChanges
                         get(proto().maximum()).setVisible(event.getValue() == true);
                     }
                 });
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimum())).build());
-                panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maximum())).build());
+                panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().minimum())).build());
+                panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maximum())).build());
                 return panel;
             }
 

@@ -17,6 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.ApplicationsGadgetDataDTO;
 
@@ -31,11 +32,11 @@ public class ApplicationsGadgetSummaryForm extends ZoomableViewForm<Applications
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().applications())).componentWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pending())).componentWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().approved())).componentWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().declined())).componentWidth(10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cancelled())).componentWidth(10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applications()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pending()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().approved()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().declined()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cancelled()), 10).build());
 
         return content;
     }

@@ -34,6 +34,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.security.UserAuditingConfigurationForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
@@ -112,24 +113,24 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().employeeId()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employeeId()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 20).build());
 
         main.setBR(++row, 0, 1);
 
         main.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Employee"))));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 25).build());
         get(proto().email()).setMandatory(true);
 
         main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 50).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 50).build());
 
         return main;
     }
@@ -147,19 +148,19 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("Information"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().password()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
         content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enabled()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isSecurityQuestionSet()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enabled()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isSecurityQuestionSet()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Roles"));
         content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));
 
         content.setH1(++row, 0, 1, i18n.tr("Buildings Access"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsOrPortfolio()), 5).labelWidth(30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsOrPortfolio()), 5).labelWidth(30).build());
         content.setWidget(++row, 0, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
 
         content.setH1(++row, 0, 1, i18n.tr("Portfolios"));
@@ -226,7 +227,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
                 int row = -1;
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type(), new CEnumLabel()), 25).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 25).build());
 
                 content.setH3(++row, 0, 1, proto().buildings().getMeta().getCaption());
                 content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable())));

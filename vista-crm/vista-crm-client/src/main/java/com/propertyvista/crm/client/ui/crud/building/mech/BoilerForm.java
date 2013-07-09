@@ -17,8 +17,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.dto.BoilerDTO;
 
@@ -36,21 +36,19 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 15).build());
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().build()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().build()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().description()), 20).build());
         main.getFlexCellFormatter().setRowSpan(row, 1, 3);
 
         row += 2;
         main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

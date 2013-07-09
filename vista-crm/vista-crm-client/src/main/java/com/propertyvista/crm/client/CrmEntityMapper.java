@@ -22,7 +22,6 @@ import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website.Content;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckDTO;
 import com.propertyvista.crm.rpc.dto.tenant.CustomerCreditCheckLongReportDTO;

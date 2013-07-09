@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.resources.CrmResources;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.ARPolicyDTO;
@@ -42,7 +43,7 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
     private FormFlexPanel createARPoliciesTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("AR Settings"));
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().creditDebitRule()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditDebitRule()), 25).build());
 
         content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));

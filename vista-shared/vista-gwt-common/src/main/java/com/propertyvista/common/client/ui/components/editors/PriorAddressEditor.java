@@ -42,7 +42,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         int row0 = main.getRowCount();
 
         int row1 = row0 + 1;
-        main.setHR(++row0, 0, (isTwoColumns() ? 2 : 1));
+        main.setHR(++row0, 0, 2);
 
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveInDate()), "9em").build());
         main.setWidget(++row0, 0, new DecoratorBuilder(inject(proto().moveOutDate()), "9em").build());
@@ -56,10 +56,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
         });
 
         int col = 1;
-        if (!isTwoColumns()) {
-            row1 = row0;
-            col = 0;
-        }
+
         main.setWidget(++row1, col, new DecoratorBuilder(rentedComponent, "15em").build());
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().payment()), "8em").build());
         main.setWidget(++row1, col, new DecoratorBuilder(inject(proto().propertyCompany()), "20em").build());

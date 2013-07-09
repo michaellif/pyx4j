@@ -38,9 +38,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.crm.rpc.services.selections.SelectProductCodeListService;
 import com.propertyvista.domain.financial.ARCode;
@@ -99,16 +99,16 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 FormFlexPanel content = new FormFlexPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositType()), 20).build());
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().productCode()), 20).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType()), 20).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode()), 20).build());
                 get(proto().productCode()).inheritViewable(false);
                 get(proto().productCode()).setViewable(true);
 
-                content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().valueType()), 10).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().valueType()), 10).build());
                 content.setWidget(++row, 0, valueHolder);
 
                 row = -1;
-                content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
+                content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().description()), 20).build());
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override
@@ -116,8 +116,6 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                         bindValueEditor(event.getValue(), false);
                     }
                 });
-
-                content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
                 return content;
             }
@@ -146,7 +144,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 unbind(proto().value());
 
                 if (comp != null) {
-                    valueHolder.setWidget(new DecoratorBuilder(inject(proto().value(), comp), 6).build());
+                    valueHolder.setWidget(new FormDecoratorBuilder(inject(proto().value(), comp), 6).build());
 
                     if (repopulatevalue) {
                         get(proto().value()).populate(getValue().value().getValue(BigDecimal.ZERO));

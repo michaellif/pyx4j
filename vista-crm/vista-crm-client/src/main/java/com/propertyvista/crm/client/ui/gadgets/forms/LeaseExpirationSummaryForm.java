@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
 import com.propertyvista.crm.rpc.dto.gadgets.LeaseExpirationGadgetDataDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -41,7 +42,7 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
         if (!VistaFeatures.instance().yardiIntegration()) {
             content.setH2(++row, 0, 1, i18n.tr("Occupancy:"));
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupiedUnits(), new CLabel<Integer>())).componentWidth(15).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().occupiedUnits(), new CLabel<Integer>())).componentWidth(15).build());
             ((CLabel<Integer>) get(proto().occupiedUnits())).setFormat(new IFormat<Integer>() {
 
                 @Override
@@ -60,17 +61,17 @@ public final class LeaseExpirationSummaryForm extends ZoomableViewForm<LeaseExpi
         }
 
         content.setH2(++row, 0, 1, i18n.tr("Leases on Month to Month:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5)
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numOfLeasesOnMonthToMonth())).customLabel("").componentWidth(5)
                 .useLabelSemicolon(false).build());
 
         content.setH2(++row, 0, 1, i18n.tr("Leases Ending:"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5)
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numOfLeasesEndingThisMonth())).customLabel(i18n.tr("This Month")).componentWidth(5)
                 .build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingNextMonth())).customLabel(i18n.tr("Next Month")).componentWidth(5)
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numOfLeasesEndingNextMonth())).customLabel(i18n.tr("Next Month")).componentWidth(5)
                 .build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEnding60to90Days())).customLabel(i18n.tr("60 to 90 Days")).componentWidth(5)
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numOfLeasesEnding60to90Days())).customLabel(i18n.tr("60 to 90 Days")).componentWidth(5)
                 .build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numOfLeasesEndingOver90Days())).customLabel(i18n.tr("90+ Days")).componentWidth(5)
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numOfLeasesEndingOver90Days())).customLabel(i18n.tr("90+ Days")).componentWidth(5)
                 .build());
 
         return content;

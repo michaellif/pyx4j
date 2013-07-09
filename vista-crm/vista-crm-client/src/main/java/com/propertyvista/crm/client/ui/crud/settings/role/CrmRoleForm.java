@@ -31,6 +31,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.activity.crud.settings.role.CrmRoleBehaviorDTOListServiceImpl;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.security.CrmRole;
@@ -49,9 +50,9 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).labelWidth(10).componentWidth(20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(10).componentWidth(20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requireTwoStepVerificationOnLogin())).labelWidth(10).componentWidth(3).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).labelWidth(10).componentWidth(20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).labelWidth(10).componentWidth(20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireTwoStepVerificationOnLogin())).labelWidth(10).componentWidth(3).build());
         content.setH1(++row, 0, 1, proto().permissions().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().permissions(), new CrmRolePermissionsFolder()));
         get(proto().permissions()).addValueChangeHandler(new ValueChangeHandler<List<VistaCrmBehaviorDTO>>() {

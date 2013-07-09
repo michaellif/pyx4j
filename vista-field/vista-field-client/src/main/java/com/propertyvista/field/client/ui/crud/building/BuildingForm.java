@@ -42,7 +42,6 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -204,7 +203,7 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
                         15).build());
 
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(true, false)));
+        main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
@@ -217,8 +216,6 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
 //            main.setWidget(row, 0, new DecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
 //        }
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }
@@ -285,8 +282,6 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         main.setWidget(row, 0, inject(proto().utilities(), new BuildingUtilityFolder()));
         main.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-
         return main;
     }
 
@@ -305,8 +300,6 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
         main.setWidget(row++, 1, new DecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

@@ -17,8 +17,8 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.dto.ElevatorDTO;
 
@@ -36,16 +36,14 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
         FormFlexPanel info = new FormFlexPanel();
 
         int row = -1;
-        info.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
-        info.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 15).build());
-        info.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 15).build());
+        info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
+        info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 15).build());
+        info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 15).build());
 
         row = 0;
-        info.setWidget(++row, 1, new DecoratorBuilder(inject(proto().build()), 9).build());
-        info.setWidget(++row, 1, new DecoratorBuilder(inject(proto().description()), 20).build());
-        info.setWidget(++row, 1, new DecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
-
-        info.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().build()), 9).build());
+        info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().description()), 20).build());
+        info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
 
         // form main panel:
         FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));

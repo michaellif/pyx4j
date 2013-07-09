@@ -19,6 +19,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.vendor.Vendor;
 
@@ -32,9 +33,9 @@ public class VendorForm extends CrmEntityForm<Vendor> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().website()), 35).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().website()), 35).build());
         content.setH1(++row, 0, 2, i18n.tr("Phone Numbers"));
         content.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
         content.setH1(++row, 0, 2, i18n.tr("Emails"));

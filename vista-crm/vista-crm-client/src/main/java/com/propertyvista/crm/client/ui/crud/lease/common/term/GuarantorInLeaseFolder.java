@@ -39,9 +39,9 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -137,15 +137,15 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
 
             FormFlexPanel left = new FormFlexPanel();
             int row = -1;
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
             left.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Guarantor"), Guarantor.class) {
                 @Override
                 public Key getLinkKey() {
                     return GuarantorInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                 }
             }));
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
             get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                 @Override
                 public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
@@ -159,33 +159,30 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
                 }
             });
             if (isEditable()) {
-                left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
+                left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
             } else {
                 left.setWidget(++row, 0,
-                        new DecoratorBuilder(inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))))
+                        new FormDecoratorBuilder(inject(proto().tenant(), new CEntityCrudHyperlink<Tenant>(AppPlaceEntityMapper.resolvePlace(Tenant.class))))
                                 .build());
             }
 
-            left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().relationship()), 15).build());
+            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
             left.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().effectiveScreening(),
+                    new FormDecoratorBuilder(inject(proto().effectiveScreening(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
 
             FormFlexPanel right = new FormFlexPanel();
             row = -1;
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
 
             // assemble main panel:
             main.setWidget(0, 0, left);
             main.setWidget(0, 1, right);
-
-            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
-            left.setWidth(VistaTheme.columnWidth); // necessary for inner table columns to maintain fixed column width! 
 
             return main;
         }

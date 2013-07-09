@@ -32,7 +32,6 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.ProofOfEmploymentUploaderFolder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -173,7 +172,6 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeni
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().starts()), 9).build());
                 main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ends()), 9).build());
 
-                main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
                 return main;
             }
 

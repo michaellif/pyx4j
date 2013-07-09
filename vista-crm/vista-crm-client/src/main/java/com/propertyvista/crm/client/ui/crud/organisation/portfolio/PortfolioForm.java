@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.organisation.common.BuildingFolder;
 import com.propertyvista.domain.company.Portfolio;
@@ -32,8 +33,8 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 20).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 40).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 40).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
         content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable())));

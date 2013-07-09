@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
 import com.propertyvista.domain.policy.dto.RestrictionsPolicyDTO;
 
@@ -42,25 +43,25 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
     private FormFlexPanel createMiscPoliciesTab() {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("Restrictions"));
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxLockers())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maxPets())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxLockers())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxPets())).labelWidth(20).componentWidth(3).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(2).build());
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enforceAgeOfMajority())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enforceAgeOfMajority())).labelWidth(20).componentWidth(2).build());
         get(proto().enforceAgeOfMajority()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().ageOfMajority()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().ageOfMajority())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ageOfMajority())).labelWidth(20).componentWidth(2).build());
 
         return content;
     }

@@ -25,9 +25,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.dto.LeaseTermDTO;
 
@@ -64,21 +64,19 @@ public class ConcessionFolder extends VistaBoxFolder<Concession> {
             FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().type()), 12).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().value()), 7).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().term()), 12).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().condition()), 10).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().mixable()), 5).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().type()), 12).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().value()), 7).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().term()), 12).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().condition()), 10).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().mixable()), 5).build());
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().description()), 60).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 60).build());
             content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
             row = -1;
-            content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
-            content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
-            content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().updated()), 9).build());
-
-            content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().effectiveDate()), 9).build());
+            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().expirationDate()), 9).build());
+            content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().updated()), 9).build());
 
             return content;
         }

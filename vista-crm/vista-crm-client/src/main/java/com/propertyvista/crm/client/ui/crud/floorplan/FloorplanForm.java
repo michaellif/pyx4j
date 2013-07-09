@@ -23,8 +23,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.media.CrmMediaFolder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.FloorplanAmenity;
@@ -73,9 +73,9 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Floorplan Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().marketingName()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 30).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().marketingName()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 30).build());
         main.getFlexCellFormatter().setRowSpan(row, 0, 3);
 
         row += 4; // leave space for right column items...
@@ -84,18 +84,16 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         row = 0;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().floorCount()), 3).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().bedrooms()), 3).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().dens()), 3).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().floorCount()), 3).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().bedrooms()), 3).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().dens()), 3).build());
 
         // shift one column left because description field RowSpan:
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bathrooms()), 3).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().halfBath()), 3).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bathrooms()), 3).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().halfBath()), 3).build());
 
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().area()), 8).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().areaUnits()), 8).build());
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().area()), 8).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().areaUnits()), 8).build());
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().name()).setViewable(true);

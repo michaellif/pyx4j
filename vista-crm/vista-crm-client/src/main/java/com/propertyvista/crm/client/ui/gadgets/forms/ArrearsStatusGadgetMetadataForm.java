@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 
 public class ArrearsStatusGadgetMetadataForm extends CEntityDecoratableForm<ArrearsStatusGadgetMetadata> {
@@ -32,9 +33,9 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityDecoratableForm<Arre
     public IsWidget createContent() {
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().arrearsStatusListerSettings().pageSize())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByCategory())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().arrearsStatusListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByCategory())).build());
         get(proto().filterByCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -44,8 +45,8 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityDecoratableForm<Arre
                 }
             }
         });
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().category())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -55,7 +56,7 @@ public class ArrearsStatusGadgetMetadataForm extends CEntityDecoratableForm<Arre
                 }
             }
         });
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
         get(proto().category()).setVisible(false);
         get(proto().asOf()).setVisible(false);
         return p;

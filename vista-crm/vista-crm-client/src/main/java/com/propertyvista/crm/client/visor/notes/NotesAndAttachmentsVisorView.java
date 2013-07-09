@@ -49,6 +49,7 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.domain.File;
@@ -203,21 +204,21 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     FormFlexPanel content = new FormFlexPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
-                    content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().note())).componentWidth(40).build());
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().note())).componentWidth(40).build());
 
                     CComponent<?> comp = inject(proto().created());
                     comp.inheritViewable(false);
                     comp.setViewable(true);
-                    content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(comp).build());
                     comp = inject(proto().updated());
                     comp.inheritViewable(false);
                     comp.setViewable(true);
-                    content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(comp).build());
                     comp = inject(proto().user().name());
                     comp.inheritViewable(false);
                     comp.setViewable(true);
-                    content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(comp).build());
 
                     // TODO Removed for 1.05
                     if (!VistaTODO.VISTA_2127_Attachments_For_Notes) {
@@ -373,8 +374,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         FormFlexPanel content = new FormFlexPanel();
                         int row = -1;
 
-                        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).build());
-                        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file())).build());
+                        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).build());
+                        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().file())).build());
 
                         return content;
                     }

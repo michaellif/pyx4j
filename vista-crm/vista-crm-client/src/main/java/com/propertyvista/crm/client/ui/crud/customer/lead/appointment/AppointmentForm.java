@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
@@ -39,23 +39,21 @@ public class AppointmentForm extends CrmEntityForm<Appointment> {
         FormFlexPanel main = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().date()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().time()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 9).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().closeReason()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().time()), 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().closeReason()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes()), 25).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().agent()), 20).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().phone()), 20).customLabel(i18n.tr("Agent Phone")).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().email()), 20).customLabel(i18n.tr("Agent Email")).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().agent()), 20).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().phone()), 20).customLabel(i18n.tr("Agent Phone")).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().email()), 20).customLabel(i18n.tr("Agent Email")).build());
 
         // tweak UI:
         get(proto().status()).setViewable(true);
         get(proto().closeReason()).setViewable(true);
-
-        main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return main;
     }

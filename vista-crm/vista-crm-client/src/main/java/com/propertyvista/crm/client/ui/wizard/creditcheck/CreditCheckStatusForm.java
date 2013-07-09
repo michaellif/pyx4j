@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Label;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.admin.CreditCheckStatusDTO;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -53,12 +54,12 @@ public class CreditCheckStatusForm extends CrmEntityForm<CreditCheckStatusDTO> {
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setFontSize(1.3, Unit.EM);
         contentPanel.setWidget(++row, 0, new HTML("&nbsp;"));
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportType())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportType())).build());
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().setupFee())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().setupFee())).build());
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().perApplicantFee())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().perApplicantFee())).build());
         contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         selectTab(addTab(contentPanel));

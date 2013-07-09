@@ -30,6 +30,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.c.CEnumSubsetSelector;
 import com.propertyvista.common.client.ui.components.c.SubsetSelector.Layout;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 
@@ -46,11 +47,11 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
         FormFlexPanel p = new FormFlexPanel();
         int row = -1;
 
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentsSummaryListerSettings().pageSize())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentsSummaryListerSettings().pageSize())).build());
         p.setWidget(++row, 0, new HTML("&nbsp"));
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
         p.setWidget(++row, 0, new HTML("&nbsp"));
         get(proto().asOf()).setVisible(false);
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -74,7 +75,7 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
                 }
             }
         });
-        p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentStatus(), paymentStatusSelector), 50).build());
+        p.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentStatus(), paymentStatusSelector), 50).build());
         return p;
     }
 

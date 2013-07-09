@@ -25,7 +25,6 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.BillingTheme;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.financial.billing.Bill.BillStatus;
 import com.propertyvista.dto.BillDTO;
@@ -112,8 +111,6 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         Widget grandTotal = new DecoratorBuilder(inject(proto().totalDueAmount(), new CMoneyField())).build();
         grandTotal.addStyleName(BillingTheme.StyleName.BillingBillTotal.name());
         billPanel.setWidget(++row, 0, grandTotal);
-
-        billPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         // form main panel:
         FormFlexPanel main = new FormFlexPanel();

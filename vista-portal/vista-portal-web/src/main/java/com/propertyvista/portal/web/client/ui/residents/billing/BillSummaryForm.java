@@ -28,7 +28,6 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -81,8 +80,6 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         // tweak UI:
         payButton.getElement().getStyle().setFloat(Float.NONE);

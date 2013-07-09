@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.Vector;
 
@@ -36,6 +35,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
@@ -110,29 +110,29 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().participantId()), 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());
         main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(participant)));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
         main.setBR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customer().person().email()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().email()), 25).build());
 
         if (!isEditable()) {
             main.setBR(++row, 0, 1);
 
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 35).build());
             if (rootClass.equals(TenantDTO.class)) {
-                main.setWidget(++row, 0, new DecoratorBuilder(inject(((TenantDTO) proto()).role()), 10).build());
+                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role()), 10).build());
             }
             main.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().customer().personScreening(),
+                    new FormDecoratorBuilder(inject(proto().customer().personScreening(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 15).build());
         }
 

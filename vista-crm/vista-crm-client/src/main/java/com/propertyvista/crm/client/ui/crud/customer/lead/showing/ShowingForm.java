@@ -33,7 +33,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.dto.tenant.ShowingDTO;
@@ -58,42 +58,42 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
         content.setH4(++row, 0, 1, i18n.tr("Desired:"));
 
         if (isEditable()) {
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
         } else {
             content.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
+                    new FormDecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
                             .build());
         }
         if (isEditable()) {
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
         } else {
             content.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))),
+                    new FormDecoratorBuilder(inject(proto().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))),
                             20).build());
         }
 
         content.setH3(++row, 0, 2, i18n.tr("Suggested:"));
 
         if (isEditable()) {
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit().building(), new CEntityLabel<Building>()), 20).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit().building(), new CEntityLabel<Building>()), 20).build());
         } else {
             content.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().unit().building(),
+                    new FormDecoratorBuilder(inject(proto().unit().building(),
                             new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20).build());
         }
         if (isEditable()) {
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
         } else {
             content.setWidget(
                     ++row,
                     0,
-                    new DecoratorBuilder(inject(proto().unit().floorplan(),
+                    new FormDecoratorBuilder(inject(proto().unit().floorplan(),
                             new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))), 20).build());
         }
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
@@ -135,9 +135,9 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
         }), 20).build());
 
         row = 3;
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().status()), 12).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().result()), 12).build());
-        content.setWidget(++row, 1, new DecoratorBuilder(inject(proto().reason()), 12).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().status()), 12).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().result()), 12).build());
+        content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().reason()), 12).build());
 
         // tweak UI:
         get(proto().status()).setViewable(true);
@@ -147,8 +147,6 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
                 get(proto().reason()).setVisible(Showing.Result.notInterested.equals(event.getValue()));
             }
         });
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         Tab tab = addTab(content);
         selectTab(tab);

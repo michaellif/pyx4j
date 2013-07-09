@@ -34,6 +34,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalImageSet;
@@ -101,8 +102,8 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().imageSet(), new CImage<SiteImageResource>(Type.multiple) {
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().imageSet(), new CImage<SiteImageResource>(Type.multiple) {
 
                 @Override
                 public String getImageUrl(SiteImageResource file) {

@@ -36,10 +36,10 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.crm.client.ui.crud.settings.website.SiteImageThumbnail;
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
@@ -114,9 +114,9 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().small(), new LogoLink(smallThumb)), 20).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().large(), new LogoLink(largeThumb)), 20).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().small(), new LogoLink(smallThumb)), 20).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().large(), new LogoLink(largeThumb)), 20).build());
 
             HorizontalPanel thumbsPanel = new HorizontalPanel();
             thumbsPanel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
@@ -124,8 +124,6 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
             thumbsPanel.add(largeThumb);
             main.setWidget(0, 1, thumbsPanel);
             main.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
-
-            main.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
             return main;
         }

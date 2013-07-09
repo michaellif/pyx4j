@@ -36,8 +36,8 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
@@ -100,9 +100,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int row = -1;
 
         VerticalPanel left = new VerticalPanel();
-        left.add(new DecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());
+        left.add(new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());
         left.add(new HTML("&nbsp"));
-        left.add(new DecoratorBuilder(inject(proto().building(), buildingSelector), 25).build());
+        left.add(new FormDecoratorBuilder(inject(proto().building(), buildingSelector), 25).build());
         buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
             @Override
             public void onValueChange(ValueChangeEvent<Building> event) {
@@ -110,17 +110,17 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 reporterSelector.setValue(null);
             }
         });
-        left.add(new DecoratorBuilder(inject(proto().unit(), unitSelector), 25).build());
-        left.add(new DecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
+        left.add(new FormDecoratorBuilder(inject(proto().unit(), unitSelector), 25).build());
+        left.add(new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 25).build());
 
         // --------------------------------------------------------------------------------------------------------------------
         VerticalPanel right = new VerticalPanel();
         categoryPanel = new VerticalPanel();
         right.add(categoryPanel);
         right.add(new HTML("&nbsp"));
-        right.add(new DecoratorBuilder(inject(proto().summary()), 25).build());
-        right.add(new DecoratorBuilder(inject(proto().description()), 25).build());
-        right.add(new DecoratorBuilder(inject(proto().priority(), prioritySelector), 25).build());
+        right.add(new FormDecoratorBuilder(inject(proto().summary()), 25).build());
+        right.add(new FormDecoratorBuilder(inject(proto().description()), 25).build());
+        right.add(new FormDecoratorBuilder(inject(proto().priority(), prioritySelector), 25).build());
 
         // --------------------------------------------------------------------------------------------------------------------
 
@@ -133,7 +133,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // --------------------------------------------------------------------------------------------------------------------
 
         panel.setH1(++row, 0, 2, i18n.tr("Unit Access"));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
         get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
@@ -146,22 +146,20 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         VerticalPanel permissionPanel = new VerticalPanel();
 
-        permissionPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 25).build());
+        permissionPanel.add(new FormDecoratorBuilder(inject(proto().petInstructions()), 25).build());
         get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
         // --------------------------------------------------------------------------------------------------------------------
         VerticalPanel schedulePanel = new VerticalPanel();
 
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate1()), 10).build());
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredTime1()), 10).build());
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate2()), 10).build());
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredTime2()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredDate1()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredTime1()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
         // --------------------------------------------------------------------------------------------------------------------
         accessPanel = new FormFlexPanel();
 
         accessPanel.setWidget(1, 0, permissionPanel);
         accessPanel.setWidget(1, 1, schedulePanel);
-
-        accessPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         panel.setWidget(++row, 0, accessPanel);
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -172,15 +170,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int innerRow = -1;
 
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), statusSelector), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().status(), statusSelector), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
 
         innerRow = 0;
-        statusPanel.setWidget(++innerRow, 1, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 1, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
-
-        statusPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
 
         panel.setWidget(++row, 0, statusPanel);
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -192,17 +188,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         surveyPanel = new FormFlexPanel();
 
         surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
-        surveyPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
-        surveyPanel.setWidget(innerRow, 1, new DecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
-
-        surveyPanel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
+        surveyPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());
+        surveyPanel.setWidget(innerRow, 1, new FormDecoratorBuilder(inject(proto().surveyResponse().description(), new CLabel<String>()), 10).build());
 
         panel.setWidget(++row, 0, surveyPanel);
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         // --------------------------------------------------------------------------------------------------------------------
-
-        panel.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         return panel;
     }
@@ -221,10 +213,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
             String choiceLabel = EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue());
             if (i == 0) {
-                categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 25).customLabel(choiceLabel).build(), 0);
+                categoryPanel.insert(new FormDecoratorBuilder(inject(proto().category(), choice), 25).customLabel(choiceLabel).build(), 0);
                 mrCategory = choice;
             } else {
-                categoryPanel.insert(new DecoratorBuilder(choice, 25).customLabel(choiceLabel).build(), 0);
+                categoryPanel.insert(new FormDecoratorBuilder(choice, 25).customLabel(choiceLabel).build(), 0);
             }
             if (child != null) {
                 child.assignParent(choice);

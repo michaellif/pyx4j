@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.cms.SiteImageResourceProvider;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
@@ -54,18 +55,18 @@ public class RichTextContentEditor extends CEntityDecoratableForm<HtmlContent> {
         int row = -1;
         if (selectableLocale) {
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
         } else {
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale(), locale), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
         }
         if (isEditable()) {
             CRichTextArea editor = new CRichTextArea();
             editor.setImageProvider(new SiteImageResourceProvider());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), editor), 60).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().html(), editor), 60).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().html(), new CLabel<String>()), 60).build());
         }
 
         return main;

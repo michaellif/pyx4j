@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.site.Testimonial;
 
 public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
@@ -48,9 +49,9 @@ public class TestimonialFolder extends VistaBoxFolder<Testimonial> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content()), 50).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().author()), 20).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content()), 50).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().author()), 20).build());
 
             return main;
         }

@@ -17,7 +17,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.common.client.theme.VistaTheme;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
@@ -31,19 +31,19 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().type()), 12).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().status()), 9).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().type()), 12).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().status()), 9).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().amount()), 7).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().currentAmount()), 7).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().amount()), 7).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().currentAmount()), 7).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositDate()), 9).build());
-        content.setWidget(row, 1, new DecoratorBuilder(inject(proto().refundDate()), 9).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositDate()), 9).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().refundDate()), 9).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deposit().description()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().description()), 30).build());
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         content.setBR(++row, 0, 2);
@@ -61,8 +61,6 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         get(proto().depositDate()).setViewable(true);
         get(proto().refundDate()).setViewable(true);
         get(proto().currentAmount()).setViewable(true);
-
-        content.getColumnFormatter().setWidth(0, VistaTheme.columnWidth);
 
         selectTab(addTab(content));
     }

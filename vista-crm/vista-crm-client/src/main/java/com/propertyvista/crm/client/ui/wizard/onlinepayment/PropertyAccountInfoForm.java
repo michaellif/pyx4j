@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO.PropertyAccountInfo;
 
@@ -35,14 +36,14 @@ public class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymen
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().averageMonthlyRent())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfRentedUnits())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().averageMonthlyRent())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfRentedUnits())).build());
         panel.setWidget(++row, 0, new HTML("&nbsp;"));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transitNumber())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transitNumber())).build());
 
         int irow = row; // save the row that will hold the image with the cheque guide
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().institutionNumber())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().institutionNumber())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
 
         panel.setWidget(irow, 1, new Image(VistaImages.INSTANCE.canadianChequeGuide()));
         panel.getFlexCellFormatter().setRowSpan(irow, 1, 3);

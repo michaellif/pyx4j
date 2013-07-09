@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 
 public class ArrearsGadgetSummaryMetadataForm extends CEntityDecoratableForm<ArrearsSummaryGadgetMetadata> {
@@ -32,24 +33,24 @@ public class ArrearsGadgetSummaryMetadataForm extends CEntityDecoratableForm<Arr
     public IsWidget createContent() {
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().refreshInterval())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refreshInterval())).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeCategory())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeCategory())).build());
         get(proto().customizeCategory()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().category()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().category())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().customizeDate())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().category())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customizeDate())).build());
         get(proto().customizeDate()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().asOf()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().asOf())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).build());
         return content;
     }
 
