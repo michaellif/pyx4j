@@ -120,7 +120,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
         @Override
         protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentDTO> item) {
-            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Preauthorized Payment?"), new Command() {
+            MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
                 @Override
                 public void execute() {
                     PreauthorizedPaymentFolder.super.removeItem(item);
@@ -135,7 +135,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
 
-                Widget expirationWarningLabel = new HTML(i18n.tr("This Preauthorized Payment is expired - needs to be replaced with new one!"));
+                Widget expirationWarningLabel = new HTML(i18n.tr("This Pre-Authorized Payment is expired - needs to be replaced with new one!"));
                 expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
                 expirationWarning.setWidget(0, 0, expirationWarningLabel);
                 expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);

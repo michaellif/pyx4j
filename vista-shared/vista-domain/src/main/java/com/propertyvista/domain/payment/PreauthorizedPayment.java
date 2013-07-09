@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
@@ -38,6 +39,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
+@Caption(name = "Pre-Authorized Payment")
 public interface PreauthorizedPayment extends IEntity {
 
     public interface PreauthorizedPaymentCoveredItem extends IEntity {

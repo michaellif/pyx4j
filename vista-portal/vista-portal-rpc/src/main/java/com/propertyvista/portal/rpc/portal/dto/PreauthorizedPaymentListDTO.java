@@ -29,6 +29,7 @@ public interface PreauthorizedPaymentListDTO extends IEntity {
     public interface ListItemDTO extends PreauthorizedPayment {
     }
 
+    @Caption(name = "Pre-Authorized Payments")
     IList<ListItemDTO> preauthorizedPayments();
 
     @Caption(name = "Your next automated payment is scheduled for")

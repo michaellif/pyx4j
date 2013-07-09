@@ -14,6 +14,7 @@
 package com.propertyvista.crm.rpc.dto.tenant;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.annotations.Transient;
@@ -45,6 +46,7 @@ public interface PreauthorizedPaymentsDTO extends IEntity {
 
     TenantInfo tenantInfo();
 
+    @Caption(name = "Pre-Authorized Payments")
     IList<PreauthorizedPaymentDTO> preauthorizedPayments();
 
     IList<LeasePaymentMethod> availablePaymentMethods();
