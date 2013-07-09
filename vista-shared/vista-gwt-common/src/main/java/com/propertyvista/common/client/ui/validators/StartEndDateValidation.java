@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.util.Date;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -42,7 +40,7 @@ public class StartEndDateValidation {
                 if (value1.getValue() == null || value2.getValue() == null) {
                     return null;
                 }
-                Date end = value2.getValue();
+                LogicalDate end = value2.getValue();
                 return (value != null) && !value.after(end) ? null : new ValidationError(component, msg);
             }
 
@@ -54,7 +52,7 @@ public class StartEndDateValidation {
                 if (value1.getValue() == null || value2.getValue() == null) {
                     return null;
                 }
-                Date start = value1.getValue();
+                LogicalDate start = value1.getValue();
                 return (value != null) && !value.before(start) ? null : new ValidationError(component, msg);
             }
 

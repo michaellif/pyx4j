@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.util.Date;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -30,7 +28,7 @@ public class BirthdayDateValidator implements EditableValueValidator<LogicalDate
         if (value == null) {
             return null;
         }
-        return value.before(new Date()) ? null : new ValidationError(component, i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
+        return value.before(new LogicalDate()) ? null : new ValidationError(component, i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
     }
 
 }
