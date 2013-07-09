@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
 
 public class MonthSelectorMultiple extends MonthSelectorExtended {
@@ -47,7 +48,7 @@ public class MonthSelectorMultiple extends MonthSelectorExtended {
 
     private final int nextColumn = 2;
 
-    public MonthSelectorMultiple(Date minDate, Date maxDate) {
+    public MonthSelectorMultiple(LogicalDate minDate, LogicalDate maxDate) {
         super(minDate, maxDate);
     }
 

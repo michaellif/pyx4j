@@ -22,8 +22,6 @@
 
 package com.pyx4j.widgets.client.datepicker;
 
-import java.util.Date;
-
 import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
@@ -33,11 +31,13 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.DateTimeFormat.PredefinedFormat;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.LogicalDate;
+
 public class DateCell extends Label {
 
     private boolean enabled = true;
 
-    private Date date;
+    private LogicalDate date;
 
     private DateGrid parent;
 
@@ -74,12 +74,12 @@ public class DateCell extends Label {
         this.parent = parent;
     }
 
-    public Date getDate() {
+    public LogicalDate getDate() {
         return this.date;
     }
 
-    public void setDate(Date date) {
-        this.date = new Date(date.getTime());
+    public void setDate(LogicalDate date) {
+        this.date = new LogicalDate(date.getTime());
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.empty.name(), false);
         redraw();
     }

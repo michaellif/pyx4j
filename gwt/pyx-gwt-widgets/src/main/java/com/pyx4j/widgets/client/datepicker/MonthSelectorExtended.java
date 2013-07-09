@@ -31,6 +31,8 @@ import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.MonthSelector;
 
+import com.pyx4j.commons.LogicalDate;
+
 @SuppressWarnings("deprecation")
 public abstract class MonthSelectorExtended extends MonthSelector {
 
@@ -40,13 +42,13 @@ public abstract class MonthSelectorExtended extends MonthSelector {
 
     protected DatePickerComposite parent;
 
-    protected Date minDate;
+    protected LogicalDate minDate;
 
-    protected Date maxDate;
+    protected LogicalDate maxDate;
 
     protected Grid grid;
 
-    public MonthSelectorExtended(Date minDate, Date maxDate) {
+    public MonthSelectorExtended(LogicalDate minDate, LogicalDate maxDate) {
         this.minDate = minDate;
         this.maxDate = maxDate;
     }
@@ -59,11 +61,11 @@ public abstract class MonthSelectorExtended extends MonthSelector {
         return DateTimeFormat.getFormat(PredefinedFormat.YEAR);
     }
 
-    public Date getMinDate() {
+    public LogicalDate getMinDate() {
         return minDate;
     }
 
-    public Date getMaxDate() {
+    public LogicalDate getMaxDate() {
         return maxDate;
     }
 

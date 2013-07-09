@@ -39,19 +39,20 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.MonthSelector;
 
 import com.pyx4j.commons.CompositeDebugId;
+import com.pyx4j.commons.LogicalDate;
 
 public class DatePickerComposite extends Composite implements HasHandlers {
 
     public static final Type<DateChosenEventHandler> TYPE = new Type<DateChosenEventHandler>();
 
     public class DateChosenEvent extends GwtEvent<DateChosenEventHandler> {
-        private final Date date;
+        private final LogicalDate date;
 
-        public DateChosenEvent(Date date) {
+        public DateChosenEvent(LogicalDate date) {
             this.date = date;
         }
 
-        public Date getChosenDate() {
+        public LogicalDate getChosenDate() {
             return this.date;
         }
 
@@ -76,21 +77,21 @@ public class DatePickerComposite extends Composite implements HasHandlers {
 
     ArrayList<DatePickerExtended> pickers = new ArrayList<DatePickerExtended>();
 
-    ArrayList<Date> disabledDates;
+    ArrayList<LogicalDate> disabledDates;
 
-    public Date selectedField;
+    public LogicalDate selectedField;
 
     public DatePickerComposite() {
-        Date todayDate = new Date();
+        LogicalDate todayDate = new LogicalDate();
 
-        this.init(1, todayDate, null, null, new ArrayList<Date>());
+        this.init(1, todayDate, null, null, new ArrayList<LogicalDate>());
     }
 
-    public DatePickerComposite(int numberOfMonths, Date starting, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
+    public DatePickerComposite(int numberOfMonths, LogicalDate starting, LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates) {
         this.init(numberOfMonths, starting, minDate, maxDate, disabledDates);
     }
 
-    private void init(int numberOfMonths, Date starting, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
+    private void init(int numberOfMonths, LogicalDate starting, LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates) {
         DatePickerExtended picker;
         this.disabledDates = disabledDates;
         handlerManager = new HandlerManager(this);
@@ -131,7 +132,7 @@ public class DatePickerComposite extends Composite implements HasHandlers {
                 eachPicker.clearSelection();
             }
         }
-        selectedField = event.getValue();
+        selectedField = new LogicalDate(event.getValue());
         DateChosenEvent dateChosen = new DateChosenEvent(selectedField);
         fireEvent(dateChosen);
     }
@@ -163,10 +164,10 @@ public class DatePickerComposite extends Composite implements HasHandlers {
     }
 
     public void setDate(Date selectedDate) {
-        Date tempDate = new Date(selectedDate.getTime());
+        LogicalDate tempDate = new LogicalDate(selectedDate.getTime());
         pickers.get(0).setSelectedDate(tempDate);
         for (DatePickerExtended picker : pickers) {
-            tempDate = new Date(selectedDate.getTime());
+            tempDate = new LogicalDate(selectedDate.getTime());
             picker.setCurrentMonth(tempDate);
             CalendarUtil.addMonthsToDate(selectedDate, 1);
         }

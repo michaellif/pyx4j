@@ -24,9 +24,11 @@ package com.pyx4j.widgets.client.datepicker;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
+
 public class DatePickerSingle extends DatePickerExtended {
 
-    public DatePickerSingle(Date current, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
+    public DatePickerSingle(Date current, LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates) {
         super(new MonthSelectorSingle(minDate, maxDate), disabledDates);
         monthSelector.setPicker(this);
         monthSelector.setModel(this.getModel());

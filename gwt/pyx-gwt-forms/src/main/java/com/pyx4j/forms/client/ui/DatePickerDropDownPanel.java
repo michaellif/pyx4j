@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Focusable;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker.DateFormat;
 import com.pyx4j.widgets.client.DropDownPanel;
 import com.pyx4j.widgets.client.datepicker.DatePickerComposite;
@@ -69,9 +70,9 @@ public class DatePickerDropDownPanel extends DropDownPanel implements Focusable 
 
             @Override
             public void onDateChosen(DatePickerComposite.DateChosenEvent event) {
-                Date value = event.getChosenDate();
+                LogicalDate value = event.getChosenDate();
                 if (value != null) { // Clone without time component!
-                    value = new Date(value.getYear(), value.getMonth(), value.getDate());
+                    value = new LogicalDate(value.getYear(), value.getMonth(), value.getDate());
                 }
 
                 nativeDatePicker.setNativeValue(value);

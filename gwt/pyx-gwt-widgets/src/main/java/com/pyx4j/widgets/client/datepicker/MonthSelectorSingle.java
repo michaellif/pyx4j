@@ -31,6 +31,7 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEvent;
 import com.pyx4j.widgets.client.datepicker.HoldableImage.HoldElapsedEventHandler;
 import com.pyx4j.widgets.client.datepicker.images.DatePickerImages;
@@ -63,7 +64,7 @@ public class MonthSelectorSingle extends MonthSelectorExtended {
 
     private final int previousYearRow = 1;
 
-    public MonthSelectorSingle(Date minDate, Date maxDate) {
+    public MonthSelectorSingle(LogicalDate minDate, LogicalDate maxDate) {
         super(minDate, maxDate);
     }
 

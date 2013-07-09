@@ -22,7 +22,6 @@ package com.pyx4j.tester.client.view.widget;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.BorderStyle;
@@ -33,6 +32,7 @@ import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -56,9 +56,9 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
-        Date starting = new Date();
-        Date minDate = new Date(110, 1, 1);
-        Date maxDate = new Date(112, 12, 31);
+        LogicalDate starting = new LogicalDate();
+        LogicalDate minDate = new LogicalDate(110, 1, 1);
+        LogicalDate maxDate = new LogicalDate(112, 12, 31);
 
         final TextBox textBox = new TextBox();
 
@@ -80,7 +80,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
 
         main.setHR(++row, 0, 1);
 
-        DatePickerComposite datePickerMulti = new DatePickerComposite(3, starting, minDate, maxDate, new ArrayList<Date>());
+        DatePickerComposite datePickerMulti = new DatePickerComposite(3, starting, minDate, maxDate, new ArrayList<LogicalDate>());
         main.setWidget(++row, 0, datePickerMulti);
 
         main.setHR(++row, 0, 1);

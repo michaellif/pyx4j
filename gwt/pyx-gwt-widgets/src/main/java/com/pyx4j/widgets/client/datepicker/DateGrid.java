@@ -33,18 +33,20 @@ import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 
+import com.pyx4j.commons.LogicalDate;
+
 @SuppressWarnings("deprecation")
 public class DateGrid extends Grid {
 
     private DateCell selectedCell;
 
-    private Date selectedDate;
+    private LogicalDate selectedDate;
 
-    private final Date minDate;
+    private final LogicalDate minDate;
 
-    private final Date maxDate;
+    private final LogicalDate maxDate;
 
-    private final ArrayList<Date> disabledDates;
+    private final ArrayList<LogicalDate> disabledDates;
 
     private final ArrayList<DateCell> cellList = new ArrayList<DateCell>();
 
@@ -52,7 +54,7 @@ public class DateGrid extends Grid {
 
     private final boolean inMultiple;
 
-    protected DateGrid(Date minDate, Date maxDate, ArrayList<Date> disabledDates, boolean inMultiple) {
+    protected DateGrid(LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates, boolean inMultiple) {
         setCellPadding(0);
         setCellSpacing(0);
         setBorderWidth(0);
@@ -90,9 +92,9 @@ public class DateGrid extends Grid {
         }
     }
 
-    public void redraw(Date firstDisplayed) {
-        Date lastDisplayed = new Date();
-        Date enabledDate;
+    public void redraw(LogicalDate firstDisplayed) {
+        LogicalDate lastDisplayed = new LogicalDate();
+        LogicalDate enabledDate;
         int displayedMonth;
 
         if (selectedCell != null) {
@@ -206,7 +208,7 @@ public class DateGrid extends Grid {
         selectedDate = null;
     }
 
-    public void setSelectedDate(Date selectedDate) {
+    public void setSelectedDate(LogicalDate selectedDate) {
         this.selectedDate = selectedDate;
     }
 }

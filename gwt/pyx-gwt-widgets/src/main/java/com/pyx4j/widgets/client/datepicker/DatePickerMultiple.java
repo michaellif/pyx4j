@@ -25,9 +25,11 @@ package com.pyx4j.widgets.client.datepicker;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.pyx4j.commons.LogicalDate;
+
 public class DatePickerMultiple extends DatePickerExtended {
 
-    public DatePickerMultiple(Date current, Date minDate, Date maxDate, ArrayList<Date> disabledDates) {
+    public DatePickerMultiple(Date current, LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates) {
         super(new MonthSelectorMultiple(minDate, maxDate), disabledDates);
         this.setCurrentMonth(current);
         this.setStyleDependentName(DefaultDatePickerTheme.StyleDependent.multiple.name(), true);

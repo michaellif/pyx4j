@@ -26,12 +26,13 @@ import java.util.Date;
 import com.google.gwt.i18n.client.DateTimeFormat;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
-public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
+public class CDatePicker extends CTextFieldBase<LogicalDate, NDatePicker> {
 
     private static final I18n i18n = I18n.get(CDatePicker.class);
 
@@ -50,7 +51,7 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
     public CDatePicker(String title) {
         super(title);
         setFormat(new DateFormat(defaultDateFormat));
-        addValueValidator(new TextBoxParserValidator<Date>());
+        addValueValidator(new TextBoxParserValidator<LogicalDate>());
         setNativeWidget(new NDatePicker(this));
         asWidget().setWidth("100%");
     }
@@ -77,7 +78,7 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
     }
 
-    class PastDateSelectionAllowedValidator implements EditableValueValidator<Date> {
+    class PastDateSelectionAllowedValidator implements EditableValueValidator<LogicalDate> {
 
         private String getValidationMessage() {
             if (dateConditionValidationMessage == null) {
@@ -89,8 +90,8 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public ValidationError isValid(CComponent<Date> component, Date value) {
-            Date selectedDate = getValue();
+        public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+            LogicalDate selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();
                 Date today = new Date(now.getYear(), now.getMonth(), now.getDate());
@@ -102,7 +103,7 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
     }
 
-    static class DateFormat implements IFormat<Date> {
+    static class DateFormat implements IFormat<LogicalDate> {
 
         private final DateTimeFormat parser;
 
@@ -114,17 +115,17 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
         }
 
         @Override
-        public String format(Date value) {
+        public String format(LogicalDate value) {
             return formatter.format(value);
         }
 
         @Override
-        public Date parse(String string) throws ParseException {
+        public LogicalDate parse(String string) throws ParseException {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
             try {
-                return parser.parseStrict(string.replace('-', '/'));
+                return new LogicalDate(parser.parseStrict(string.replace('-', '/')));
             } catch (IllegalArgumentException e) {
                 throw new ParseException(i18n.tr("Invalid date format. Use MM/DD/YYYY format"), 0);
             }

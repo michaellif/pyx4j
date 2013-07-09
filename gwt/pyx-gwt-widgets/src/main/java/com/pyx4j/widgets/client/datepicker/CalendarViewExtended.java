@@ -36,11 +36,13 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.CalendarView;
 import com.google.gwt.user.datepicker.client.DatePicker;
 
+import com.pyx4j.commons.LogicalDate;
+
 public class CalendarViewExtended extends CalendarView {
 
-    private Date firstDisplayed;
+    private LogicalDate firstDisplayed;
 
-    private final Date lastDisplayed = new Date();
+    private final LogicalDate lastDisplayed = new LogicalDate();
 
     private final DateGrid grid;
 
@@ -48,7 +50,7 @@ public class CalendarViewExtended extends CalendarView {
 
     private final String[] daysOfWeek = new String[7];
 
-    public CalendarViewExtended(Date minDate, Date maxDate, ArrayList<Date> disabledDates, boolean inMultiple) {
+    public CalendarViewExtended(LogicalDate minDate, LogicalDate maxDate, ArrayList<LogicalDate> disabledDates, boolean inMultiple) {
         grid = new DateGrid(minDate, maxDate, disabledDates, inMultiple);
         grid.addClickHandler(new ClickHandler() {
 
@@ -88,7 +90,7 @@ public class CalendarViewExtended extends CalendarView {
     }
 
     @Override
-    public Date getFirstDate() {
+    public LogicalDate getFirstDate() {
         return firstDisplayed;
     }
 
@@ -113,12 +115,12 @@ public class CalendarViewExtended extends CalendarView {
 
     @Override
     protected void refresh() {
-        firstDisplayed = getModel().getCurrentFirstDayOfFirstWeek();
+        firstDisplayed = new LogicalDate(getModel().getCurrentFirstDayOfFirstWeek());
         grid.redraw(firstDisplayed);
     }
 
     private void setDaysOfWeek() {
-        Date date = new Date();
+        LogicalDate date = new LogicalDate();
 
         for (int i = 1; i <= 7; i++) {
             date.setDate(i);
@@ -150,7 +152,7 @@ public class CalendarViewExtended extends CalendarView {
         initWidget(grid);
     }
 
-    public void setSelectedDate(Date selectedDate) {
+    public void setSelectedDate(LogicalDate selectedDate) {
         this.grid.setSelectedDate(selectedDate);
     }
 }

@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Date;
-
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.logical.shared.CloseEvent;
@@ -29,10 +27,11 @@ import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.PopupPanel;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.widgets.client.Button;
 
-public class NDatePicker extends NTextBox<Date> implements INativeTextComponent<Date> {
+public class NDatePicker extends NTextBox<LogicalDate> implements INativeTextComponent<LogicalDate> {
 
     private DatePickerDropDownPanel datePickerDropDown;
 

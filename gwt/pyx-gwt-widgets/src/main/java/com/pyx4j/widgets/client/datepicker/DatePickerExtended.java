@@ -23,10 +23,11 @@
 package com.pyx4j.widgets.client.datepicker;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.google.gwt.user.datepicker.client.CalendarModel;
 import com.google.gwt.user.datepicker.client.DatePicker;
+
+import com.pyx4j.commons.LogicalDate;
 
 public abstract class DatePickerExtended extends DatePicker {
 
@@ -34,18 +35,18 @@ public abstract class DatePickerExtended extends DatePicker {
 
     protected CalendarViewExtended calendarView;
 
-    protected Date minDate;
+    protected LogicalDate minDate;
 
-    protected Date maxDate;
+    protected LogicalDate maxDate;
 
-    protected ArrayList<Date> disabledDates;
+    protected ArrayList<LogicalDate> disabledDates;
 
     public DatePickerExtended() {
         super();
         // TODO Auto-generated constructor stub
     }
 
-    public DatePickerExtended(MonthSelectorExtended selector, ArrayList<Date> disabledDates) {
+    public DatePickerExtended(MonthSelectorExtended selector, ArrayList<LogicalDate> disabledDates) {
         super(selector, new CalendarViewExtended(selector.getMinDate(), selector.getMaxDate(), disabledDates, selector instanceof MonthSelectorMultiple),
                 new CalendarModel());
         this.minDate = selector.getMinDate();
@@ -87,7 +88,7 @@ public abstract class DatePickerExtended extends DatePicker {
         getMyView().clearSelection();
     }
 
-    public void setSelectedDate(Date selectedDate) {
+    public void setSelectedDate(LogicalDate selectedDate) {
         getMyView().setSelectedDate(selectedDate);
     }
 }

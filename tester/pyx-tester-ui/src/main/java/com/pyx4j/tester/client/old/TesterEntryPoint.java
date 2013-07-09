@@ -21,7 +21,6 @@
 package com.pyx4j.tester.client.old;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +42,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.site.client.AppSite;
@@ -125,15 +125,15 @@ public class TesterEntryPoint implements EntryPoint {
 
         {
             final TextBox textBox = new TextBox();
-            Date minDate = new Date(0, 1, 15);
-            Date maxDate = new Date(111, 3, 3);
-            Date starting = new Date(110, 2, 10);
-            ArrayList<Date> disabledDates = new ArrayList<Date>();
-            disabledDates.add(new Date(103, 1, 1));
-            disabledDates.add(new Date(103, 1, 2));
-            disabledDates.add(new Date(103, 1, 3));
-            disabledDates.add(new Date(103, 1, 4));
-            disabledDates.add(new Date(103, 1, 5));
+            LogicalDate minDate = new LogicalDate(0, 1, 15);
+            LogicalDate maxDate = new LogicalDate(111, 3, 3);
+            LogicalDate starting = new LogicalDate(110, 2, 10);
+            ArrayList<LogicalDate> disabledDates = new ArrayList<LogicalDate>();
+            disabledDates.add(new LogicalDate(103, 1, 1));
+            disabledDates.add(new LogicalDate(103, 1, 2));
+            disabledDates.add(new LogicalDate(103, 1, 3));
+            disabledDates.add(new LogicalDate(103, 1, 4));
+            disabledDates.add(new LogicalDate(103, 1, 5));
 
             DatePickerComposite datePicker = new DatePickerComposite(1, starting, minDate, maxDate, disabledDates);
             datePicker.addDateChosenEventHandler(new DatePickerComposite.DateChosenEventHandler() {
