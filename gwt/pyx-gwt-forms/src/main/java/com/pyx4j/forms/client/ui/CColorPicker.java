@@ -30,17 +30,11 @@ public class CColorPicker extends CFocusComponent<Integer, NColorPicker> {
 
     public CColorPicker(boolean hueOnly) {
         this.hueOnly = hueOnly;
-    }
-
-    @Override
-    protected NColorPicker createWidget() {
-        return new NColorPicker(this);
+        setNativeWidget(new NColorPicker(this));
     }
 
     public boolean isHueOnly() {
         return hueOnly;
     }
-    
-    
 
 }

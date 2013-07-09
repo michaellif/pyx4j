@@ -35,7 +35,7 @@ public class ValidationResults {
     public ValidationResults() {
     }
 
-    public void appendValidationError(CComponent<?, ?> component, String message, String location) {
+    public void appendValidationError(CComponent<?> component, String message, String location) {
         validationErrors.add(new ValidationError(component, message, location));
     }
 
@@ -53,7 +53,7 @@ public class ValidationResults {
         return validationErrors;
     }
 
-    public ValidationResults getValidationResultsByOriginator(CComponent<?, ?> component) {
+    public ValidationResults getValidationResultsByOriginator(CComponent<?> component) {
         ValidationResults results = new ValidationResults();
         for (ValidationError validationError : validationErrors) {
             if (component == validationError.getOriginator()) {

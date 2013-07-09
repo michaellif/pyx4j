@@ -56,7 +56,6 @@ public class NTextArea extends NTextComponent<String, TextArea, CTextComponent<S
                 getEditor().setText(newValue);
             }
         }
-
     }
 
     @Override

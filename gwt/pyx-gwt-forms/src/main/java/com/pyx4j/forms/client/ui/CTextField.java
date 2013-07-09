@@ -31,20 +31,16 @@ public class CTextField extends CTextFieldBase<String, NTextBox<String>> {
         this(null);
     }
 
-    public CTextField(String title) {
-        super(title);
-        setFormat(new StringFormat());
-
-    }
-
     public CTextField(String title, boolean mandatory) {
         this(title);
         this.setMandatory(mandatory);
     }
 
-    @Override
-    protected NTextBox<String> createWidget() {
-        return new NTextBox<String>(this);
+    public CTextField(String title) {
+        super(title);
+        setFormat(new StringFormat());
+        setNativeWidget(new NTextBox<String>(this));
+        asWidget().setWidth("100%");
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.ListBox;
 /**
  *
  */
-public class NComboBox<E> extends NFocusComponent<E, ListBox, CComboBox<E>, HTML> implements INativeFocusComponent<E> {
+public class NComboBox<E> extends NFocusField<E, ListBox, CComboBox<E>, HTML> implements INativeFocusComponent<E> {
 
     private E value;
 

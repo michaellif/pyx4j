@@ -30,7 +30,7 @@ public abstract class CFile<E extends IFile> extends CEntityHyperlink<E> {
     private static final I18n i18n = I18n.get(CFile.class);
 
     public CFile() {
-        super("");
+        this(null);
     }
 
     public CFile(Command command) {
@@ -47,11 +47,8 @@ public abstract class CFile<E extends IFile> extends CEntityHyperlink<E> {
                 return getValue();
             }
         });
-    }
 
-    @Override
-    protected NFile<E> createWidget() {
-        return new NFile<E>(this);
+        setNativeWidget(new NFile<E>(this));
     }
 
     public abstract void showFileSelectionDialog();

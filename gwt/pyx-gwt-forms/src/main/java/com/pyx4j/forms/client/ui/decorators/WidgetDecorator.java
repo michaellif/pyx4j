@@ -57,7 +57,7 @@ import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 
-public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<?, ?>> {
+public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<?>> {
 
     public enum DebugIds implements IDebugId {
         Label, InfoImageHolder, InfoImage, MandatoryImage, ValidationLabel;
@@ -68,7 +68,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         }
     }
 
-    private CComponent<?, ?> component;
+    private CComponent<?> component;
 
     private final Label label;
 
@@ -94,7 +94,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     private final Builder builder;
 
-    public WidgetDecorator(CComponent<?, ?> component) {
+    public WidgetDecorator(CComponent<?> component) {
         this(new Builder(component));
     }
 
@@ -227,7 +227,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         return label;
     }
 
-    public CComponent<?, ?> getComnponent() {
+    public CComponent<?> getComnponent() {
         return component;
     }
 
@@ -270,7 +270,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     protected void renderMandatoryStar() {
         if (mandatoryImageHolder != null) {
-            if (!((CComponent<?, ?>) component).isMandatoryConditionMet()) {
+            if (!((CComponent<?>) component).isMandatoryConditionMet()) {
                 if (mandatoryImage == null) {
                     mandatoryImage = new Image();
                     mandatoryImage.setResource(ImageFactory.getImages().mandatory());
@@ -363,7 +363,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             horisontal, vertical
         }
 
-        private final CComponent<?, ?> component;
+        private final CComponent<?> component;
 
         private String labelWidth;
 
@@ -385,7 +385,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         private Layout layout = Layout.horisontal;
 
-        public Builder(final CComponent<?, ?> component) {
+        public Builder(final CComponent<?> component) {
             this.component = component;
             labelWidth = "15em";
             componentWidth = "25em";
@@ -396,7 +396,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
             return new WidgetDecorator(this);
         }
 
-        public CComponent<?, ?> getComponent() {
+        public CComponent<?> getComponent() {
             return component;
         }
 
@@ -465,17 +465,17 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     }
 
     @Deprecated
-    public static WidgetDecorator build(CComponent<?, ?> component, double componentWidth) {
+    public static WidgetDecorator build(CComponent<?> component, double componentWidth) {
         return new WidgetDecorator.Builder(component).componentWidth(componentWidth).build();
     }
 
     @Deprecated
-    public static WidgetDecorator build(CComponent<?, ?> component, double labelWidth, double componentWidth) {
+    public static WidgetDecorator build(CComponent<?> component, double labelWidth, double componentWidth) {
         return new WidgetDecorator.Builder(component).labelWidth(labelWidth).componentWidth(componentWidth).build();
     }
 
     @Override
-    public void setComponent(CComponent<?, ?> component) {
+    public void setComponent(CComponent<?> component) {
         this.component = component;
 
     }

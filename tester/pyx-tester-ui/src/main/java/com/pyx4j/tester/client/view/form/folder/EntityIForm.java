@@ -57,7 +57,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof EntityIII) {
             return new EntityIIIEditor();
         } else if (member instanceof EntityII) {
@@ -107,7 +107,7 @@ public class EntityIForm extends CEntityForm<EntityI> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof EntityII) {
                 return new EntityIIEditor();
             } else {

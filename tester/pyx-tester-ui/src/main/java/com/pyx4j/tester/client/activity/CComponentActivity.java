@@ -50,7 +50,7 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
             @Override
             public void onBrowseEntity(CComponentBrowserEvent event) {
 
-                final CComponent<?, ?> component = event.getComponent();
+                final CComponent<?> component = event.getComponent();
                 view.show(event.getComponent());
 
                 component.addPropertyChangeHandler(new PropertyChangeHandler() {
@@ -61,7 +61,7 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
                 });
 
                 if (component instanceof CComponent) {
-                    CComponent<?, ?> editableComponent = component;
+                    CComponent<?> editableComponent = component;
                     editableComponent.addValueChangeHandler(new ValueChangeHandler() {
                         @Override
                         public void onValueChange(ValueChangeEvent event) {

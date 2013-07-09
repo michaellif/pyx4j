@@ -94,7 +94,7 @@ public abstract class ListSelectionPopup<E> extends Dialog {
         }
 
         @Override
-        public CComponent<?, ?> getCComponent() {
+        public CComponent<?> getCComponent() {
             return null;
         }
 

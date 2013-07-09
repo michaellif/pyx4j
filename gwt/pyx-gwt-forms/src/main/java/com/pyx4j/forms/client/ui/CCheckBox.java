@@ -28,7 +28,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     private IFormat<Boolean> format;
 
-    private Alignment alignment = Alignment.left;
+    private Alignment alignment;
 
     public enum Alignment {
         left, center, right
@@ -40,6 +40,7 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
 
     public CCheckBox(String title) {
         super(title);
+        alignment = Alignment.left;
         populate(false);
         setFormat(new IFormat<Boolean>() {
             @Override
@@ -56,6 +57,8 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
                 return null;
             }
         });
+
+        setNativeWidget(new NCheckBox(this));
     }
 
     public IFormat<Boolean> getFormat() {
@@ -66,16 +69,9 @@ public class CCheckBox extends CFocusComponent<Boolean, NCheckBox> {
         this.format = format;
     }
 
-    @Override
-    protected NCheckBox createWidget() {
-        return new NCheckBox(this);
-    }
-
     public void setAlignmet(Alignment alignment) {
         this.alignment = alignment;
-        if (isWidgetCreated()) {
-            getWidget().setAlignmet(alignment);
-        }
+        getWidget().setAlignmet(alignment);
     }
 
     public Alignment getAlignmet() {

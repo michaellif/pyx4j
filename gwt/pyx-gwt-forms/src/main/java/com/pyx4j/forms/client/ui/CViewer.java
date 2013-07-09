@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2008-2011 pyx4j.com.
+ * Copyright (C) 2008-2010 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,18 +14,25 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on Dec 10, 2011
- * @author michaellif
+ * Created on Jan 11, 2010
+ * @author Michael
  * @version $Id$
  */
-package com.pyx4j.forms.client.validators;
+package com.pyx4j.forms.client.ui;
 
-import com.pyx4j.forms.client.ui.CComponent;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public class MandatoryValidationFailure extends ValidationError {
+public abstract class CViewer<E> extends CField<E, NViewer<E>> {
 
-    public MandatoryValidationFailure(CComponent<?> component, String message) {
-        super(component, message);
+    public CViewer() {
+        this(null);
     }
+
+    public CViewer(String title) {
+        super(title);
+        setNativeWidget(new NViewer<E>(this));
+    }
+
+    public abstract IsWidget createContent(E value);
 
 }

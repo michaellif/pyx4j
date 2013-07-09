@@ -27,19 +27,19 @@ public class ValidationError {
 
     private static final I18n i18n = I18n.get(ValidationError.class);
 
-    private final CComponent<?, ?> originator;
+    private final CComponent<?> originator;
 
     private String message;
 
     private String locationHint;
 
-    public ValidationError(CComponent<?, ?> originator, String message, String locationHint) {
+    public ValidationError(CComponent<?> originator, String message, String locationHint) {
         this.originator = originator;
         this.message = message;
         this.locationHint = locationHint;
     }
 
-    public ValidationError(CComponent<?, ?> component, String message) {
+    public ValidationError(CComponent<?> component, String message) {
         this(component, message, null);
     }
 
@@ -81,7 +81,7 @@ public class ValidationError {
         return locationHint;
     }
 
-    public CComponent<?, ?> getOriginator() {
+    public CComponent<?> getOriginator() {
         return originator;
     }
 }

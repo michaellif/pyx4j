@@ -38,9 +38,7 @@ import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.event.shared.HasHandlers;
 import com.google.gwt.event.shared.SimpleEventBus;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CompositeDebugId;
 import com.pyx4j.commons.GWTJava5Helper;
@@ -56,11 +54,9 @@ import com.pyx4j.forms.client.validators.MandatoryValidationFailure;
 import com.pyx4j.forms.client.validators.MandatoryValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> implements HasHandlers, HasPropertyChangeHandlers, IsWidget,
-        HasValueChangeHandlers<DATA_TYPE> {
+public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyChangeHandlers, IsWidget, HasValueChangeHandlers<DATA_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CComponent.class);
 
@@ -93,7 +89,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private NoteStyle noteStyle;
 
-    private CContainer<?, ?> parent;
+    private CContainer<?> parent;
 
     private CLayoutConstraints constraints;
 
@@ -103,13 +99,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private ContainerAccessAdapter containerAccessAdapter;
 
-    private WIDGET_TYPE widget;
-
     private EventBus eventBus;
-
-    private String width = "auto";
-
-    private String height = "auto";
 
     private IDebugId debugId;
 
@@ -119,7 +109,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     private DATA_TYPE value = null;
 
-    private List<EditableValueValidator<? super DATA_TYPE>> validators;
+    private List<EditableValueValidator<DATA_TYPE>> validators;
 
     // Have been changed after population
     private boolean visited = false;
@@ -131,8 +121,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     private IDecorator decorator;
 
     private boolean unconditionalValidationErrorRendering;
-
-    private Command navigationCommand;
 
     public CComponent() {
         this(null);
@@ -149,7 +137,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
     /**
      * Basic information would be available in server log
      */
-    public static String runtimeCrashInfo(CComponent<?, ?> component) {
+    public static String runtimeCrashInfo(CComponent<?> component) {
         if (component == null) {
             return "n/a";
         }
@@ -174,36 +162,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.locationHint);
     }
 
-    public String getWidth() {
-        return width;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
-        if (isWidgetCreated()) {
-            asWidget().setWidth(width);
-        }
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-        if (isWidgetCreated()) {
-            asWidget().setHeight(height);
-        }
-    }
-
-    public void setNavigationCommand(Command navigationCommand) {
-        this.navigationCommand = navigationCommand;
-        if (isWidgetCreated()) {
-            widget.setNavigationCommand(navigationCommand);
-        }
-    }
-
-    public CContainer<?, ?> getParent() {
+    public CContainer<?> getParent() {
         return parent;
     }
 
@@ -211,7 +170,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return parent != null;
     }
 
-    public void onAdopt(CContainer<?, ?> parent) {
+    public void onAdopt(CContainer<?> parent) {
         assert (this.parent == null) : "Component " + this.getClass().getName() + " is already bound to " + this.parent;
         this.parent = parent;
         setContainerAccessRules(true);
@@ -352,7 +311,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         if (validators == null) {
             return false;
         }
-        for (EditableValueValidator<?> validator : validators) {
+        for (EditableValueValidator<DATA_TYPE> validator : validators) {
             if (validator instanceof MandatoryValidator) {
                 return true;
             }
@@ -365,8 +324,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             if (mandatory) {
                 addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
             } else {
-                EditableValueValidator<? super DATA_TYPE> mandatoryValidator = null;
-                for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
+                EditableValueValidator<DATA_TYPE> mandatoryValidator = null;
+                for (EditableValueValidator<DATA_TYPE> validator : validators) {
                     if (validator instanceof MandatoryValidator) {
                         mandatoryValidator = validator;
                     }
@@ -389,12 +348,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public void addAccessAdapter(IAccessAdapter adapter) {
         accessAdapters.add(adapter);
-        applyAccessibilityRules();
     }
 
     public void removeAccessAdapter(IAccessAdapter adapter) {
         accessAdapters.remove(adapter);
-        applyAccessibilityRules();
     }
 
     public boolean containsAccessAdapter(IAccessAdapter adapter) {
@@ -428,44 +385,6 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         setNote(note, NoteStyle.Info);
     }
 
-    protected abstract WIDGET_TYPE createWidget();
-
-    protected void onWidgetCreated() {
-        widget.setViewable(isViewable());
-        applyAccessibilityRules();
-        widget.setWidth(getWidth());
-        widget.setHeight(getHeight());
-        widget.setNavigationCommand(navigationCommand);
-
-        setNativeValue(getValue());
-
-        if (debugId != null) {
-            widget.setDebugId(debugId);
-        }
-
-    }
-
-    public boolean isWidgetCreated() {
-        return widget != null;
-    }
-
-    @Override
-    public Widget asWidget() {
-        if (widget == null) {
-            try {
-                widget = createWidget();
-            } catch (Throwable e) {
-                throw new UnrecoverableClientError("Widget could not be initialized", e);
-            }
-            onWidgetCreated();
-        }
-        return widget.asWidget();
-    }
-
-    public final WIDGET_TYPE getWidget() {
-        return widget;
-    }
-
     public IDebugId getDebugId() {
         return debugId;
     }
@@ -481,55 +400,34 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         } else {
             debugId = null;
         }
-        if (isWidgetCreated()) {
-            widget.setDebugId(debugId);
-        }
+        setDebugId(debugId);
         PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.debugId);
 
     }
 
+    protected abstract void setDebugId(IDebugId debugId);
+
     public void applyVisibilityRules() {
-        boolean visible = isVisible();
-        if (!visible) {
+        if (!isVisible()) {
             setVisited(false);
-        }
-        if (isWidgetCreated() && asWidget().isVisible() != visible) {
-            asWidget().setVisible(visible);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.visible);
         }
     }
 
     public void applyEnablingRules() {
-        boolean enabled = isEnabled();
-        if (!enabled) {
+        if (!isEnabled()) {
             setVisited(false);
-        }
-        if (isWidgetCreated() && widget.isEnabled() != enabled) {
-            widget.setEnabled(enabled);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.enabled);
         }
     }
 
     public void applyEditabilityRules() {
-        boolean editable = isEditable();
-        if (!editable) {
+        if (!isEditable()) {
             setVisited(false);
         }
-        if (isWidgetCreated() && widget.isEditable() != editable) {
-            widget.setEditable(editable);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.editable);
-        }
-
     }
 
     public void applyViewabilityRules() {
-        boolean viewable = isViewable();
-        if (!viewable) {
+        if (!isViewable()) {
             setVisited(false);
-        }
-        if (isWidgetCreated() && widget.isViewable() != viewable) {
-            widget.setViewable(viewable);
-            PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.viewable);
         }
     }
 
@@ -559,8 +457,8 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         if (isVisible() && isEditable() && isEnabled() && !isViewable()) {
 
             if (validators != null) {
-                for (EditableValueValidator<? super DATA_TYPE> validator : validators) {
-                    ValidationError ve = validator.isValid((CComponent) this, getValue());
+                for (EditableValueValidator<DATA_TYPE> validator : validators) {
+                    ValidationError ve = validator.isValid(this, getValue());
                     if (ve != null) {
                         ve.setLocationHint(getLocationHint());
                         newValidationError = ve;
@@ -580,7 +478,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public final void reset() {
         this.value = null;
-        setNativeValue(null);
+        setEditorValue(null);
         if (getParent() != null) {
             getParent().updateContainer(this);
         }
@@ -595,7 +493,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             revalidate();
             //Overwrite native value with the value that has been formatted by getNativeValue()
             if (isValid()) {
-                setNativeValue(value);
+                setEditorValue(value);
             }
             if (getParent() != null) {
                 getParent().updateContainer(this);
@@ -608,7 +506,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         //In case of CComponent model represented by IEntity, disable check for equality because value may be the same instance that is returned by getValue()
         if (value instanceof IEntity || !isValuesEquals(getValue(), value)) {
             this.value = preprocessValue(value, fireEvent, populate);
-            setNativeValue(this.value);
+            setEditorValue(this.value);
             revalidate();
             if (getParent() != null) {
                 getParent().updateContainer(this);
@@ -647,7 +545,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
     public final void refresh(boolean fireEvent) {
         this.value = preprocessValue(this.value, fireEvent, false);
-        setNativeValue(this.value);
+        setEditorValue(this.value);
         revalidate();
         if (getParent() != null) {
             getParent().updateContainer(this);
@@ -715,14 +613,14 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
         return addHandler(handler, ValueChangeEvent.getType());
     }
 
-    public void addValueValidator(EditableValueValidator<? super DATA_TYPE> validator) {
+    public void addValueValidator(EditableValueValidator<DATA_TYPE> validator) {
         if (validators == null) {
-            validators = new Vector<EditableValueValidator<? super DATA_TYPE>>();
+            validators = new Vector<EditableValueValidator<DATA_TYPE>>();
         }
         validators.add(validator);
     }
 
-    public boolean removeValueValidator(EditableValueValidator<? super DATA_TYPE> validator) {
+    public boolean removeValueValidator(EditableValueValidator<DATA_TYPE> validator) {
         if (validators != null) {
             return validators.remove(validator);
         } else {
@@ -747,17 +645,11 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
 
         return "Type:" + this.getClass() + ";\n Title: " + getTitle() + ";\n value:" + getValue() + "; isMandatory=" + isMandatory() + ";\n isEnabled="
                 + isEnabled() + "; isEditable=" + isEditable() + "; isVisible=" + isVisible() + "; isVisited=" + isVisited() + "; isValid=" + isValid()
-                + "; toolTip=" + getTooltip() + "; size=" + getWidth() + ":" + getHeight() + "; adapters=[" + adaptersReport.toString() + "]";
+                + "; toolTip=" + getTooltip() + "; adapters=[" + adaptersReport.toString() + "]";
     }
 
     public String shortDebugInfo() {
         return GWTJava5Helper.getSimpleName(this.getClass()) + ((debugId != null) ? " " + debugId : "");
-    }
-
-    protected void setNativeValue(DATA_TYPE value) {
-        if (isWidgetCreated()) {
-            widget.setNativeValue(value);
-        }
     }
 
     public boolean isEditingInProgress() {
@@ -775,7 +667,7 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             boolean isOrigEmpty = isValueEmpty();
             editingInProgress = false;
             try {
-                update(widget.getNativeValue());
+                update(getEditorValue());
             } catch (ParseException e) {
                 update(null);
             }
@@ -785,6 +677,10 @@ public abstract class CComponent<DATA_TYPE, WIDGET_TYPE extends INativeComponent
             }
         }
     }
+
+    protected abstract void setEditorValue(DATA_TYPE value);
+
+    protected abstract DATA_TYPE getEditorValue() throws ParseException;
 
     public IDecorator getDecorator() {
         return decorator;

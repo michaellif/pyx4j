@@ -94,6 +94,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public CEntityComboBox(String title, Class<E> entityClass, NotInOptionsPolicy policy) {
         super(title, policy);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
+        retriveOptions(null);
     }
 
     public E proto() {
@@ -164,18 +165,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public void refreshOptions() {
         resetOptions();
         retriveOptions(null);
-        if (isWidgetCreated()) {
-            getWidget().refreshOptions();
-        }
-    }
-
-    /**
-     * Should fire when component is displayed ?
-     */
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
-        retriveOptions(null);
+        getWidget().refreshOptions();
     }
 
     private class TerminableHandlingCallback implements AsyncCallback<List<E>> {
@@ -220,7 +210,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
                 unavailableValidator = new EditableValueValidator<E>() {
 
                     @Override
-                    public ValidationError isValid(CComponent<E, ?> component, E value) {
+                    public ValidationError isValid(CComponent<E> component, E value) {
                         return !isUnavailable ? null : new ValidationError(component, i18n.tr("Reference data unavailable"));
                     }
                 };

@@ -67,12 +67,14 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         this.entityClass = entityClass;
         setMandatory(mandatory);
         setPersonalIdentityFormat(pattern == null ? "" : pattern);
+        setNativeWidget(new NPersonalIdentityField<T>(this));
+        asWidget().setWidth("100%");
     }
 
     // Possible formats - 'XXX-XXX-xxx', 'XXXX XXXX XXXX xxxx', 'xxx XXX XXX xxx'
     public void setPersonalIdentityFormat(String pattern) {
         setFormat(new PersonalIdentityFormat<T>(this, pattern));
-        addValueValidator(new TextBoxParserValidator<IPersonalIdentity>());
+        addValueValidator(new TextBoxParserValidator<T>());
     }
 
     @Override
@@ -81,13 +83,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
         super.setFormat(format);
     }
 
-    @Override
-    protected NPersonalIdentityField<T> createWidget() {
-        return new NPersonalIdentityField<T>(this);
-    }
-
     public void addRegexValidator(String regex, String regexValidationMessage) {
-        this.addValueValidator(new RegexValidator<IPersonalIdentity>(regex, regexValidationMessage));
+        this.addValueValidator(new RegexValidator<T>(regex, regexValidationMessage));
     }
 
     @Override

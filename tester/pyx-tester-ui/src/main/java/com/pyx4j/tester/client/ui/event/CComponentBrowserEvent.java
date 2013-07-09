@@ -28,9 +28,9 @@ public class CComponentBrowserEvent extends GwtEvent<CComponentBrowserHandler> {
 
     private static Type<CComponentBrowserHandler> TYPE;
 
-    private final CComponent<?, ?> component;
+    private final CComponent<?> component;
 
-    public CComponentBrowserEvent(CComponent<?, ?> component) {
+    public CComponentBrowserEvent(CComponent<?> component) {
         this.component = component;
     }
 
@@ -51,7 +51,7 @@ public class CComponentBrowserEvent extends GwtEvent<CComponentBrowserHandler> {
         handler.onBrowseEntity(this);
     }
 
-    public CComponent<?, ?> getComponent() {
+    public CComponent<?> getComponent() {
         return component;
     }
 

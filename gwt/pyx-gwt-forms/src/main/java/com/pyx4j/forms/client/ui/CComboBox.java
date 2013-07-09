@@ -62,19 +62,16 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     public CComboBox(String title, NotInOptionsPolicy policy) {
         super(title);
-        setWidth("100%");
         if (policy == null) {
             this.policy = NotInOptionsPolicy.KEEP;
         } else {
             this.policy = policy;
         }
-    }
 
-    @Override
-    protected NComboBox<E> createWidget() {
         NComboBox<E> nativeComboBox = new NComboBox<E>(this);
         nativeComboBox.refreshOptions();
-        return nativeComboBox;
+        setNativeWidget(nativeComboBox);
+        asWidget().setWidth("100%");
     }
 
     @Override
@@ -106,9 +103,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
         if (opt != null) {
             options.addAll(opt);
         }
-        if (isWidgetCreated()) {
-            getWidget().refreshOptions();
-        }
+        getWidget().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 
@@ -129,7 +124,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     public void removeOption(E opt) {
-        if (isWidgetCreated() && (options.contains(opt))) {
+        if (options.contains(opt)) {
             getWidget().removeOption(opt);
         }
         options.remove(opt);
@@ -143,21 +138,15 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             options = createOptionsImpl();
         }
         if (options.contains(opt)) {
-            if (isWidgetCreated()) {
-                getWidget().refreshOption(opt);
-            }
+            getWidget().refreshOption(opt);
         } else {
             options.add(opt);
-            if (isWidgetCreated()) {
-                getWidget().refreshOptions();
-            }
+            getWidget().refreshOptions();
         }
     }
 
     public void refreshOption(E opt) {
-        if (isWidgetCreated()) {
-            getWidget().refreshOption(opt);
-        }
+        getWidget().refreshOption(opt);
     }
 
     public String getItemName(E o) {
@@ -172,9 +161,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     public void setMandatory(boolean mandatory) {
         if (isMandatory() != mandatory) {
             super.setMandatory(mandatory);
-            if (isWidgetCreated()) {
-                getWidget().refreshOptions();
-            }
+            getWidget().refreshOptions();
         }
     }
 
@@ -184,9 +171,7 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     public void setNoSelectionText(String noSelectionText) {
         this.noSelectionText = noSelectionText;
-        if (isWidgetCreated()) {
-            getWidget().refreshOptions();
-        }
+        getWidget().refreshOptions();
     }
 
     public NotInOptionsPolicy getPolicy() {

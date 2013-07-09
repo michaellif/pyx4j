@@ -60,7 +60,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
 
     private final String title;
 
-    private final List<CComponent<?, ?>> components = new ArrayList<CComponent<?, ?>>();
+    private final List<CComponent<?>> components = new ArrayList<CComponent<?>>();
 
     public FormFlexPanel(String title) {
         this.title = title;
@@ -151,7 +151,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
 
     private void locateCComponents(Widget widget) {
         if (widget instanceof INativeComponent) {
-            CComponent<?, ?> comp = ((INativeComponent<?>) widget).getCComponent();
+            CComponent<?> comp = ((INativeComponent<?>) widget).getCComponent();
             components.add(comp);
             comp.addPropertyChangeHandler(this);
             comp.setLocationHint(title);
@@ -180,13 +180,13 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
     @Override
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        for (CComponent<?, ?> component : components) {
+        for (CComponent<?> component : components) {
             if (component.isUnconditionalValidationErrorRendering()) {
                 results.appendValidationErrors(component.getValidationResults());
             } else {
                 ArrayList<ValidationError> errors = component.getValidationResults().getValidationErrors();
                 for (ValidationError validationError : errors) {
-                    CComponent<?, ?> originator = validationError.getOriginator();
+                    CComponent<?> originator = validationError.getOriginator();
                     if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
                         results.appendValidationError(validationError);
                     }
@@ -198,7 +198,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
 
     @Override
     public void showErrors(boolean show) {
-        for (CComponent<?, ?> component : components) {
+        for (CComponent<?> component : components) {
             component.setUnconditionalValidationErrorRendering(show);
         }
     }

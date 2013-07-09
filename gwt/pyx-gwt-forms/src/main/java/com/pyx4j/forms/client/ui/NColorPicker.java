@@ -36,7 +36,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.IFocusWidget;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public class NColorPicker extends NFocusComponent<Integer, ColorButton, CColorPicker, ColorButton> implements INativeFocusComponent<Integer> {
+public class NColorPicker extends NFocusField<Integer, ColorButton, CColorPicker, ColorButton> implements INativeFocusComponent<Integer> {
 
     // value is rgb integer or hue degrees depending on the value of CColorPicker.isHueOnly()
     private Integer nativeValue;

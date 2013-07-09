@@ -60,19 +60,19 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
     public IsWidget createContent() {
         HorizontalPanel main = new HorizontalPanel();
         for (EntityFolderColumnDescriptor column : columns) {
-            CComponent<?, ?> component = createCell(column);
+            CComponent<?> component = createCell(column);
             if (column.isReadOnly()) {
                 component.setViewable(true);
             }
-            component.setWidth("100%");
+            component.asWidget().setWidth("100%");
             component.setDecorator(new CellDecorator(column.getWidth()));
             main.add(component.getDecorator());
         }
         return main;
     }
 
-    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-        CComponent<?, ?> comp = inject(column.getObject());
+    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+        CComponent<?> comp = inject(column.getObject());
 
         // Special TableFolder customization
         if (comp instanceof CCheckBox) {
@@ -82,9 +82,9 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         return comp;
     }
 
-    class CellDecorator extends SimplePanel implements IDecorator<CComponent<?, ?>> {
+    class CellDecorator extends SimplePanel implements IDecorator<CComponent<?>> {
 
-        private CComponent<?, ?> component;
+        private CComponent<?> component;
 
         protected CellDecorator(String width) {
 
@@ -98,7 +98,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
         }
 
         @Override
-        public void setComponent(final CComponent<?, ?> component) {
+        public void setComponent(final CComponent<?> component) {
             this.component = component;
             setWidget(component);
             final Widget nativeComponent = component.asWidget();
@@ -120,7 +120,7 @@ public class CEntityFolderRowEditor<E extends IEntity> extends CEntityForm<E> {
 
         }
 
-        public CComponent<?, ?> getComnponent() {
+        public CComponent<?> getComnponent() {
             return component;
         }
 

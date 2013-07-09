@@ -37,9 +37,9 @@ public abstract class CEntitySelectorHyperlink<E extends IEntity> extends CTextF
 
     protected abstract AbstractEntitySelectorDialog<E> getSelectorDialog();
 
-    @Override
-    protected NEntitySelectorHyperlink<E> createWidget() {
-        return new NEntitySelectorHyperlink<E>(this);
+    public CEntitySelectorHyperlink() {
+        setNativeWidget(new NEntitySelectorHyperlink<E>(this));
+        asWidget().setWidth("100%");
     }
 
     @Override

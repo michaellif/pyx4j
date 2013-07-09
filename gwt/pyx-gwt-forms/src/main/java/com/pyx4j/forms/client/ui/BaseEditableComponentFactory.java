@@ -35,7 +35,7 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         EditorType editorType = mm.getEditorType();
         if (editorType != null) {

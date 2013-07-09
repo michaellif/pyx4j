@@ -28,8 +28,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.widgets.client.ITextWidget;
 import com.pyx4j.widgets.client.WatermarkComponent;
 
-public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends
-        NFocusComponent<DATA, WIDGET, CCOMP, HTML> implements INativeTextComponent<DATA>, WatermarkComponent {
+public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP extends CTextComponent<DATA, ?>> extends NFocusField<DATA, WIDGET, CCOMP, HTML>
+        implements INativeTextComponent<DATA>, WatermarkComponent {
 
     public NTextComponent(CCOMP cComponent) {
         super(cComponent);
@@ -57,10 +57,11 @@ public abstract class NTextComponent<DATA, WIDGET extends ITextWidget, CCOMP ext
 
     @Override
     public String getNativeText() {
-        if (!isViewable()) {
-            return getEditor().getText();
-        } else {
+        if (isViewable()) {
+            assert false : "getNativeText() shouldn't be called in viewable mode";
             return null;
+        } else {
+            return getEditor().getText();
         }
     }
 

@@ -26,11 +26,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.forms.client.ui.INativeTextComponent;
-import com.pyx4j.forms.client.ui.NFocusComponent;
+import com.pyx4j.forms.client.ui.NFocusField;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.TextBox;
 
-class NEntitySelectorLabel<E extends IEntity> extends NFocusComponent<E, TextBox, CEntitySelectorLabel<E>, HTML> implements INativeTextComponent<E> {
+class NEntitySelectorLabel<E extends IEntity> extends NFocusField<E, TextBox, CEntitySelectorLabel<E>, HTML> implements INativeTextComponent<E> {
 
     public NEntitySelectorLabel(CEntitySelectorLabel<E> cComponent) {
         super(cComponent);

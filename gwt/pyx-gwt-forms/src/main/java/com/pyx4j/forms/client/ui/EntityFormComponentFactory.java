@@ -32,9 +32,9 @@ public class EntityFormComponentFactory extends BaseEditableComponentFactory {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CComponent<?, ?> comp = null;
+        CComponent<?> comp = null;
         if (mm.isOwnedRelationships() && mm.getObjectClassType() == ObjectClassType.EntityList) {
             comp = createMemberFolderEditor(member);
         } else if (mm.isOwnedRelationships() && mm.isEntity()) {

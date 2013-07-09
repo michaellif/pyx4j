@@ -29,15 +29,12 @@ public class CRichTextArea extends CTextComponent<String, NRichTextArea> {
 
     private RichTextImageProvider imageProvider;
 
-    @Override
-    protected NRichTextArea createWidget() {
-        return new NRichTextArea(this);
+    public CRichTextArea() {
+        setNativeWidget(new NRichTextArea(this));
     }
 
     public void scrollToBottom() {
-        if (isWidgetCreated()) {
-            getWidget().scrollToBottom();
-        }
+        getWidget().scrollToBottom();
     }
 
     public void setTidy(IRichTextTidy tidy) {

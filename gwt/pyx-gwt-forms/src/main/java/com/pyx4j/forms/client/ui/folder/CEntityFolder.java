@@ -252,8 +252,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
         itemsList.add(indexAfter, item);
         container.insert(item, indexAfter);
 
-        setNativeValue(getValue());
-
         revalidate();
         ValueChangeEvent.fire(CEntityFolder.this, getValue());
         return;
@@ -315,7 +313,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void adopt(final CComponent<?, ?> component) {
+    public void adopt(final CComponent<?> component) {
         itemsList.add((CEntityFolderItem<E>) component);
         container.add(component);
 
@@ -328,18 +326,17 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     }
 
     @Override
-    public void abandon(final CComponent<?, ?> component) {
+    public void abandon(final CComponent<?> component) {
         super.abandon(component);
         container.remove(component);
         itemsList.remove(component);
     }
 
     @Override
-    public Collection<? extends CComponent<?, ?>> getComponents() {
+    public Collection<? extends CComponent<?>> getComponents() {
         return itemsList;
     }
 
-    @Override
     public FlowPanel getContainer() {
         return container;
     }
@@ -362,7 +359,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     protected void onReset() {
-        for (CComponent<?, ?> component : new ArrayList<CComponent<?, ?>>(getComponents())) {
+        for (CComponent<?> component : new ArrayList<CComponent<?>>(getComponents())) {
             abandon(component);
         }
         container.clear();

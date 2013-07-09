@@ -26,6 +26,7 @@ public abstract class CImageList<E extends IFile> extends CField<IList<E>, NImag
 
     public CImageList(Class<E> imgClass) {
         this.imgClass = imgClass;
+        setNativeWidget(new NImageList<E>(this));
     }
 
     public Class<E> getImgClass() {
@@ -40,11 +41,6 @@ public abstract class CImageList<E extends IFile> extends CField<IList<E>, NImag
 
     public void setPlaceholderImage(Image placeholder) {
         this.placeholder = placeholder;
-    }
-
-    @Override
-    protected NImageList<E> createWidget() {
-        return new NImageList<E>(this);
     }
 
     public void setImageFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {

@@ -46,11 +46,8 @@ public class CLocationCriteriaTextField extends CTextFieldBase<GeoCriteria, NTex
     public CLocationCriteriaTextField(String title) {
         super(title);
         setFormat(new GeoCriteriaFormat());
-    }
-
-    @Override
-    protected NTextBox<GeoCriteria> createWidget() {
-        return new NTextBox<GeoCriteria>(this);
+        setNativeWidget(new NTextBox<GeoCriteria>(this));
+        asWidget().setWidth("100%");
     }
 
     @Override

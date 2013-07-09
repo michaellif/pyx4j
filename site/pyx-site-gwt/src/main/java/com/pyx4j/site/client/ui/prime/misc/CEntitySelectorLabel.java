@@ -33,9 +33,9 @@ public abstract class CEntitySelectorLabel<E extends IEntity> extends CTextField
 
     protected abstract AbstractEntitySelectorDialog<E> getSelectorDialog();
 
-    @Override
-    protected NEntitySelectorLabel<E> createWidget() {
-        return new NEntitySelectorLabel<E>(this);
+    public CEntitySelectorLabel() {
+        setNativeWidget(new NEntitySelectorLabel<E>(this));
+        asWidget().setWidth("100%");
     }
 
     @Override

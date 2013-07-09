@@ -67,6 +67,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("padding-right", "1em");
         style.addProperty("text-align", "left");
+        style.addProperty("white-space", "normal");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponent);

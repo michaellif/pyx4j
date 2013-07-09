@@ -21,17 +21,18 @@ public class TextBoxParserValidator<E> implements EditableValueValidator<E> {
     public TextBoxParserValidator() {
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    public ValidationError isValid(CComponent<E, ?> component, E value) {
+    public ValidationError isValid(CComponent<E> component, E value) {
         if (component instanceof CTextFieldBase) {
-            if (component.isWidgetCreated()) {
-                try {
-                    component.getWidget().getNativeValue();
-                } catch (ParseException e) {
-                    return new ValidationError(component, e.getMessage());
-                }
+            CTextFieldBase<E, ?> field = (CTextFieldBase) component;
+            try {
+                field.getWidget().getNativeValue();
+            } catch (ParseException e) {
+                return new ValidationError(component, e.getMessage());
             }
         }
         return null;
     }
+
 }

@@ -50,7 +50,7 @@ import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImageList<T extends IFile> extends NComponent<IList<T>, ImageHolder, CImageList<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
+public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, CImageList<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
 
     private static final I18n i18n = I18n.get(NImageList.class);
 
@@ -151,7 +151,7 @@ public class NImageList<T extends IFile> extends NComponent<IList<T>, ImageHolde
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
                 return new CEntityForm<T>(imgClass) {
                     private final ImageViewport thumb = new ImageViewport(new Dimension(70, 70));

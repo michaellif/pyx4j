@@ -39,11 +39,8 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         numberFormat = NumberFormat.getDecimalFormat();
         validator = new TextBoxParserValidator<E>();
         addValueValidator(validator);
-    }
-
-    @Override
-    protected NTextBox<E> createWidget() {
-        return new NTextBox<E>(this);
+        setNativeWidget(new NTextBox<E>(this));
+        asWidget().setWidth("100%");
     }
 
     public void setRange(E from, E to) {
@@ -69,7 +66,7 @@ public abstract class CNumberField<E extends Number> extends CTextFieldBase<E, N
         }
 
         @Override
-        public ValidationError isValid(CComponent<E, ?> component, E value) {
+        public ValidationError isValid(CComponent<E> component, E value) {
             ValidationError failure = super.isValid(component, value);
             if (failure == null) {
                 if (value == null) {

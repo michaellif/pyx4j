@@ -25,9 +25,9 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
 
-    private final CComponent<?, ?> targetComponent;
+    private final CComponent<?> targetComponent;
 
-    public RevalidationTrigger(CComponent<?, ?> targetComponent) {
+    public RevalidationTrigger(CComponent<?> targetComponent) {
         this.targetComponent = targetComponent;
     }
 

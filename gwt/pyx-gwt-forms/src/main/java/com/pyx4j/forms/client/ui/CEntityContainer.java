@@ -20,24 +20,62 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Panel;
+import com.google.gwt.user.client.ui.ProvidesResize;
+import com.google.gwt.user.client.ui.RequiresResize;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
+import com.pyx4j.widgets.client.Button;
 
-public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E, NEntityContainer<E>> implements IEditableComponentFactory {
+public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<E> implements IEditableComponentFactory {
+
+    private static final Logger log = LoggerFactory.getLogger(CEntityContainer.class);
 
     private ImageResource icon;
 
     private boolean initiated = false;
 
+    private final SimplePanel contentHolder;
+
+    private final FlowPanel containerPanel;
+
     public CEntityContainer() {
+        containerPanel = new FlowPanel();
+        if (false) {
+            Button debugButton = new Button("Debug", new Command() {
+
+                @Override
+                public void execute() {
+                    log.info(CEntityContainer.this.getValue().toString());
+                    new EntityViewerDialog(CEntityContainer.this.getValue()).show();
+                }
+            });
+            debugButton.getElement().getStyle().setProperty("display", "inline-block");
+            containerPanel.add(debugButton);
+            containerPanel.getElement().getStyle().setProperty("border", "red solid 1px");
+        }
+
+        contentHolder = new SimplePanel();
+        contentHolder.getElement().getStyle().setProperty("display", "inline");
+        containerPanel.add(contentHolder);
+    }
+
+    @Override
+    public Widget asWidget() {
+        return containerPanel;
     }
 
     public abstract IsWidget createContent();
@@ -51,29 +89,20 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         throw new Error("Use createDecorator() instead");
     }
 
-    public Panel getContainer() {
-        return getWidget();
-    }
-
-    @Override
-    protected NEntityContainer<E> createWidget() {
-        return new NEntityContainer<E>(this);
-    }
-
     public final void initContent() {
         assert initiated == false;
         if (!initiated) {
             asWidget();
             IDecorator<?> decorator = createDecorator();
             if (decorator == null) {
-                getWidget().setWidget(createContent());
+                contentHolder.setWidget(createContent());
             } else {
                 super.setDecorator(decorator);
-                getWidget().setWidget(getDecorator());
+                contentHolder.setWidget(getDecorator());
             }
             addValidations();
             if (ApplicationMode.isDevelopment()) {
-                DevelopmentShortcutUtil.attachDevelopmentShortcuts(getWidget(), this);
+                DevelopmentShortcutUtil.attachDevelopmentShortcuts(asWidget(), this);
             }
             initiated = true;
         }
@@ -93,13 +122,13 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         assert (getParent() != null) : "Flex Component " + this.getClass().getName() + "is not bound";
         return ((CEntityContainer<?>) getParent()).create(member);
     }
 
     @Override
-    public void onAdopt(CContainer<?, ?> parent) {
+    public void onAdopt(CContainer<?> parent) {
         super.onAdopt(parent);
         if (!initiated) {
             initContent();
@@ -117,6 +146,19 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     public final HandlerRegistration addDevShortcutHandler(DevShortcutHandler handler) {
         return addHandler(handler, DevShortcutEvent.getType());
+    }
+
+    class ContainerPanel implements RequiresResize, ProvidesResize {
+
+        public ContainerPanel() {
+        }
+
+        @Override
+        public void onResize() {
+            if (contentHolder.getWidget() instanceof RequiresResize) {
+                ((RequiresResize) contentHolder.getWidget()).onResize();
+            }
+        }
     }
 
 }

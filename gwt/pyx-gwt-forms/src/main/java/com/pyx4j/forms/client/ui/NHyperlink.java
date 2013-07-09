@@ -28,7 +28,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Label;
 
-public class NHyperlink<E> extends NComponent<E, Label, CHyperlink<E>, Anchor> implements INativeHyperlink<E> {
+public class NHyperlink<E> extends NField<E, Label, CHyperlink<E>, Anchor> implements INativeHyperlink<E> {
 
     public NHyperlink(final CHyperlink<E> hyperlink) {
         super(hyperlink);

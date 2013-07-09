@@ -103,7 +103,7 @@ public class TableFolderItemDecorator<E extends IEntity> extends BaseFolderItemD
                         ArrayList<ValidationError> errors = folderItem.getValidationResults().getValidationErrors();
                         ValidationResults results = new ValidationResults();
                         for (ValidationError validationError : errors) {
-                            CComponent<?, ?> component = validationError.getOriginator();
+                            CComponent<?> component = validationError.getOriginator();
                             if ((component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
                                 results.appendValidationError(validationError);
                             }

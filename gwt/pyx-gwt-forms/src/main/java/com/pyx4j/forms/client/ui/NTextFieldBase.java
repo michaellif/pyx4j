@@ -68,15 +68,15 @@ public abstract class NTextFieldBase<DATA, WIDGET extends ITextWidget, CCOMP ext
 
     @Override
     public DATA getNativeValue() throws ParseException {
-        if (!isViewable()) {
+        if (isViewable()) {
+            assert false : "getNativeValue() shouldn't be called in viewable mode";
+            return null;
+        } else {
             try {
                 return getCComponent().getFormat().parse(getEditor().getText());
             } catch (ParseException e) {
                 throw e;
             }
-        } else {
-            assert false : "getNativeValue() shouldn't be called in viewable mode";
-            return null;
         }
     }
 

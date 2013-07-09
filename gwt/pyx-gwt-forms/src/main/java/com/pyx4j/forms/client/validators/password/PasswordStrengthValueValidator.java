@@ -47,7 +47,7 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
     }
 
     @Override
-    public ValidationError isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String> component, String value) {
         PasswordStrengthVerdict verdict = rule.getPasswordVerdict(value);
         if (acceptVerdict.contains(verdict)) {
             return null;

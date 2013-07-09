@@ -29,6 +29,7 @@ public class CImage<E extends IFile> extends CField<List<E>, NImage<E>> {
 
     public CImage(Type type) {
         this.type = type;
+        setNativeWidget(new NImage<E>(this));
     }
 
     public String getImageUrl(E file) {
@@ -42,11 +43,6 @@ public class CImage<E extends IFile> extends CField<List<E>, NImage<E>> {
 
     public void setPlaceholderImage(Image placeholder) {
         this.placeholder = placeholder;
-    }
-
-    @Override
-    protected NImage<E> createWidget() {
-        return new NImage<E>(this);
     }
 
     public void setImageFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {

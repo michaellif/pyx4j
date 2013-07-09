@@ -30,7 +30,7 @@ import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 
 public class TesterWidgetDecorator extends WidgetDecorator {
 
-    public TesterWidgetDecorator(CComponent<?, ?> component) {
+    public TesterWidgetDecorator(CComponent<?> component) {
         this(new Builder(component));
     }
 
@@ -49,7 +49,7 @@ public class TesterWidgetDecorator extends WidgetDecorator {
 
     public static class Builder extends WidgetDecorator.Builder {
 
-        public Builder(CComponent<?, ?> component) {
+        public Builder(CComponent<?> component) {
             super(component);
         }
 

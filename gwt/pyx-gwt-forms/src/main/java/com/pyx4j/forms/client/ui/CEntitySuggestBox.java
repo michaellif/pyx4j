@@ -81,6 +81,7 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
         this.entityClass = entityClass;
         this.criteria = new EntityQueryCriteria<E>(entityClass);
         setFormat(new EntitySuggestFormat());
+        retriveOptions(null);
     }
 
     public EntityQueryCriteria<E> addCriterion(Criterion criterion) {
@@ -135,17 +136,6 @@ public class CEntitySuggestBox<E extends IEntity> extends CAbstractSuggestBox<E>
     public void resetOptions() {
         if ((optionsLoaded) || (criteria != null)) {
             optionsLoaded = false;
-        }
-    }
-
-    /**
-     * Should fire when component is displayed ?
-     */
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
-        if ((criteria != null) && (!isViewable())) {
-            retriveOptions(null);
         }
     }
 

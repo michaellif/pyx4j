@@ -37,36 +37,11 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
         super(title);
     }
 
-    public int getTabIndex() {
-        return tabIndex;
-    }
-
-    public void setTabIndex(int tabIndex) {
-        this.tabIndex = tabIndex;
-        if (isWidgetCreated()) {
-            getWidget().setTabIndex(tabIndex);
-        }
-    }
-
-    public void setFocus(boolean focused) {
-        if (isWidgetCreated()) {
-            getWidget().setFocus(focused);
-        }
-    }
-
     @Override
-    public void applyAccessibilityRules() {
-        super.applyAccessibilityRules();
-        setTabIndex((isEnabled() && isEditable()) ? 0 : -2); // enable/disable focus navigation
-    }
-
-    @Override
-    @Deprecated
-    //TDOD !!!! Remove after all TEXT components migrated
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
-        WIDGET widget = super.getWidget();
-        if (!(widget instanceof NFocusComponent)) {
+    protected void setNativeWidget(WIDGET widget) {
+        super.setNativeWidget(widget);
+        //TDOD !!!! Remove after all TEXT components migrated
+        if (!(widget instanceof NFocusField)) {
             widget.addFocusHandler(new FocusHandler() {
 
                 @Override
@@ -84,4 +59,24 @@ public abstract class CFocusComponent<DATA, WIDGET extends INativeFocusComponent
             });
         }
     }
+
+    public int getTabIndex() {
+        return tabIndex;
+    }
+
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
+        getWidget().setTabIndex(tabIndex);
+    }
+
+    public void setFocus(boolean focused) {
+        getWidget().setFocus(focused);
+    }
+
+    @Override
+    public void applyAccessibilityRules() {
+        super.applyAccessibilityRules();
+        setTabIndex((isEnabled() && isEditable()) ? 0 : -2); // enable/disable focus navigation
+    }
+
 }

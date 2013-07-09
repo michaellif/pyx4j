@@ -30,7 +30,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
@@ -48,8 +47,6 @@ import com.pyx4j.widgets.client.images.ButtonImages;
 public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContainer<E> {
 
     private static final I18n i18n = I18n.get(CEntityFolderItem.class);
-
-    private final SimplePanel container;
 
     private boolean first;
 
@@ -74,7 +71,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     public CEntityFolderItem(Class<E> clazz, boolean movable, boolean removable) {
         super();
         this.clazz = clazz;
-        container = new SimplePanel();
         this.movable = movable;
         this.removable = removable;
 
@@ -128,11 +124,6 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public SimplePanel getContainer() {
-        return container;
-    }
-
-    @Override
     public IsWidget createContent() {
         ((IFolderItemDecorator) getDecorator()).adoptItemActionsBar();
         editor = (CEntityForm<E>) create(EntityFactory.getEntityPrototype(clazz));
@@ -180,7 +171,7 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public void onAdopt(final CContainer<?, ?> parent) {
+    public void onAdopt(final CContainer<?> parent) {
         super.onAdopt(parent);
 
         final CEntityFolder<E> folder = (CEntityFolder<E>) parent;
@@ -246,11 +237,11 @@ public abstract class CEntityFolderItem<E extends IEntity> extends CEntityContai
     }
 
     @Override
-    public Collection<CComponent<?, ?>> getComponents() {
+    public Collection<CComponent<?>> getComponents() {
         if (editor == null) {
             return null;
         }
-        return Arrays.asList(new CComponent<?, ?>[] { editor });
+        return Arrays.asList(new CComponent<?>[] { editor });
     }
 
 }

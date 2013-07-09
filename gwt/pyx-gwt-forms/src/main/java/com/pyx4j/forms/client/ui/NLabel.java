@@ -24,7 +24,7 @@ import java.text.ParseException;
 
 import com.pyx4j.widgets.client.Label;
 
-public class NLabel<DATA> extends NComponent<DATA, Label, CLabel<DATA>, Label> {
+public class NLabel<DATA> extends NField<DATA, Label, CLabel<DATA>, Label> {
 
     public NLabel(CLabel<DATA> cComponent) {
         super(cComponent);

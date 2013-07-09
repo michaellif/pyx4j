@@ -47,9 +47,9 @@ public class CriteriaEditableComponentFactory implements IEditableComponentFacto
 
     @Override
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
-        CComponent<?, ?> comp;
+        CComponent<?> comp;
         if (mm.isEntity()) {
             comp = new CEntityComboBox(mm.getCaption(), mm.getObjectClass());
             ((CEntityComboBox) comp).setOptionsComparator(EntityComparatorFactory.createStringViewComparator());

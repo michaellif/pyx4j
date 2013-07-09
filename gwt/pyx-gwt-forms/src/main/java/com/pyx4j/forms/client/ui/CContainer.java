@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -30,23 +31,23 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE, WIDGET_TYPE> {
+public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
 
     private static final I18n i18n = I18n.get(CContainer.class);
 
-    private final HashMap<CComponent<?, ?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?>, HandlerRegistration>();
 
-    private final HashMap<CComponent<?, ?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?, ?>, HandlerRegistration>();
+    private final HashMap<CComponent<?>, HandlerRegistration> valueChangeHandlerRegistrations = new HashMap<CComponent<?>, HandlerRegistration>();
 
     public CContainer() {
         this(null);
@@ -54,9 +55,10 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     public CContainer(String title) {
         super(title);
+        applyAccessibilityRules();
     }
 
-    public abstract Collection<? extends CComponent<?, ?>> getComponents();
+    public abstract Collection<? extends CComponent<?>> getComponents();
 
     protected abstract void setComponentsValue(DATA_TYPE value, boolean fireEvent, boolean populate);
 
@@ -66,12 +68,22 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         setComponentsValue(value, fireEvent, populate);
     }
 
-    protected <T> void updateContainer(CComponent<T, ?> component) {
+    @Override
+    protected void setEditorValue(DATA_TYPE value) {
+
+    }
+
+    @Override
+    protected DATA_TYPE getEditorValue() throws ParseException {
+        return null;
+    }
+
+    protected <T> void updateContainer(CComponent<T> component) {
 
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public void adopt(final CComponent<?, ?> component) {
+    public void adopt(final CComponent<?> component) {
 
         propertyChangeHandlerRegistrations.put(component, component.addPropertyChangeHandler(new PropertyChangeHandler() {
             boolean sheduled = false;
@@ -119,7 +131,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
         component.onAdopt(this);
     }
 
-    public void abandon(CComponent<?, ?> component) {
+    public void abandon(CComponent<?> component) {
         propertyChangeHandlerRegistrations.remove(component).removeHandler();
         valueChangeHandlerRegistrations.remove(component).removeHandler();
         component.onAbandon();
@@ -129,8 +141,8 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void setVisited(boolean visited) {
         super.setVisited(visited);
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
-                ((CComponent<?, ?>) ccomponent).setVisited(visited);
+            for (CComponent<?> ccomponent : getComponents()) {
+                ((CComponent<?>) ccomponent).setVisited(visited);
             }
         }
     }
@@ -139,8 +151,8 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void setUnconditionalValidationErrorRendering(boolean flag) {
         super.setUnconditionalValidationErrorRendering(flag);
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
-                ((CComponent<?, ?>) ccomponent).setUnconditionalValidationErrorRendering(flag);
+            for (CComponent<?> ccomponent : getComponents()) {
+                ((CComponent<?>) ccomponent).setUnconditionalValidationErrorRendering(flag);
             }
         }
     }
@@ -148,7 +160,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     @Override
     public boolean isValid() {
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?> ccomponent : getComponents()) {
                 if (!ccomponent.isValid()) {
                     return false;
                 }
@@ -160,7 +172,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     @Override
     protected void onReset() {
         if (getComponents() != null) {
-            for (CComponent<?, ?> ccomponent : getComponents()) {
+            for (CComponent<?> ccomponent : getComponents()) {
                 ccomponent.reset();
             }
         }
@@ -171,7 +183,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public ValidationResults getValidationResults() {
         ValidationResults validationResults = super.getValidationResults();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : this.getComponents()) {
+            for (CComponent<?> component : this.getComponents()) {
                 if (!component.isValid()) {
                     validationResults.appendValidationErrors(component.getValidationResults());
                 }
@@ -184,7 +196,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void applyVisibilityRules() {
         super.applyVisibilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyVisibilityRules();
             }
         }
@@ -194,7 +206,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void applyViewabilityRules() {
         super.applyViewabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyViewabilityRules();
             }
         }
@@ -204,7 +216,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void applyEnablingRules() {
         super.applyEnablingRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyEnablingRules();
             }
         }
@@ -214,7 +226,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     public void applyEditabilityRules() {
         super.applyEditabilityRules();
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.applyEditabilityRules();
             }
         }
@@ -223,7 +235,7 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
     @Override
     public void revalidate() {
         if (getComponents() != null) {
-            for (CComponent<?, ?> component : getComponents()) {
+            for (CComponent<?> component : getComponents()) {
                 component.revalidate();
             }
         }
@@ -232,5 +244,11 @@ public abstract class CContainer<DATA_TYPE, WIDGET_TYPE extends Widget & INative
 
     private void revalidateContainerOnly() {
         super.revalidate();
+    }
+
+    @Override
+    protected void setDebugId(IDebugId debugId) {
+        asWidget().ensureDebugId(debugId == null ? null : debugId.debugId());
+
     }
 }

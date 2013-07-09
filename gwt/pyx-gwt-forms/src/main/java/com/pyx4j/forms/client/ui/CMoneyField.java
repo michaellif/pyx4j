@@ -40,11 +40,8 @@ public class CMoneyField extends CTextFieldBase<BigDecimal, NTextBox<BigDecimal>
         super();
         setFormat(new MoneyFormat());
         addValueValidator(new TextBoxParserValidator<BigDecimal>());
-    }
-
-    @Override
-    protected NTextBox<BigDecimal> createWidget() {
-        return new NTextBox<BigDecimal>(this);
+        setNativeWidget(new NTextBox<BigDecimal>(this));
+        asWidget().setWidth("100%");
     }
 
     class MoneyFormat implements IFormat<BigDecimal> {

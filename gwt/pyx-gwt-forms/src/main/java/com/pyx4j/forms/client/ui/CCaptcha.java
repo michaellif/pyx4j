@@ -30,33 +30,27 @@ public class CCaptcha extends CField<Pair<String, String>, NativeCaptcha> {
 
     public CCaptcha() {
         setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
+        setNativeWidget(new NativeCaptcha(this));
     }
 
     public void retrieveValue() {
         //TODO validate if that code is needed
-        if (isWidgetCreated() && isVisible()) {
+        if (isVisible()) {
             setValue(getWidget().getNativeValue());
         }
     }
 
     @Override
     public boolean isValueEmpty() {
-        if (isWidgetCreated() && isVisible()) {
+        if (isVisible()) {
             return CommonsStringUtils.isEmpty(getWidget().getValueResponse());
         } else {
             return true;
         }
     }
 
-    @Override
-    protected NativeCaptcha createWidget() {
-        return new NativeCaptcha(this);
-    }
-
     public void createNewChallenge() {
-        if (isWidgetCreated()) {
-            getWidget().createNewChallenge();
-        }
+        getWidget().createNewChallenge();
     }
 
 }

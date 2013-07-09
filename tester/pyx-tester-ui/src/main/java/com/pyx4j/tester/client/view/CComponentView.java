@@ -28,7 +28,7 @@ public interface CComponentView extends IsWidget {
 
     public void setPresenter(ConsolePresenter presenter);
 
-    public void show(CComponent<?, ?> cComponent);
+    public void show(CComponent<?> cComponent);
 
     public interface ConsolePresenter {
 

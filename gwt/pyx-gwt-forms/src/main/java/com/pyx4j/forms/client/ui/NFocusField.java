@@ -31,10 +31,10 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.widgets.client.IFocusWidget;
 
-public abstract class NFocusComponent<DATA, WIDGET extends IFocusWidget, CCOMP extends CFocusComponent<DATA, ?>, VIEWER extends Widget> extends
-        NComponent<DATA, WIDGET, CCOMP, VIEWER> implements INativeFocusComponent<DATA> {
+public abstract class NFocusField<DATA, WIDGET extends IFocusWidget, CCOMP extends CFocusComponent<DATA, ?>, VIEWER extends Widget> extends
+        NField<DATA, WIDGET, CCOMP, VIEWER> implements INativeFocusComponent<DATA> {
 
-    public NFocusComponent(CCOMP cComponent) {
+    public NFocusField(CCOMP cComponent) {
         super(cComponent);
 
     }

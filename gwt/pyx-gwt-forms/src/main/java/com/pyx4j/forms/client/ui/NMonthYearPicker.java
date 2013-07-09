@@ -31,7 +31,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
-public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusComponent<Date> {
+public class NMonthYearPicker extends NFocusField<Date, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusComponent<Date> {
 
     private static final I18n i18n = I18n.get(NMonthYearPicker.class);
 
@@ -77,11 +77,11 @@ public class NMonthYearPicker extends NFocusComponent<Date, MonthYearPicker, CMo
 
     @Override
     public Date getNativeValue() {
-        if (!isViewable()) {
-            return getEditor().getDate();
-        } else {
+        if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
+        } else {
+            return getEditor().getDate();
         }
     }
 

@@ -95,7 +95,14 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
         super(title);
         this.layout = layout;
         this.displayProperties = new ListBoxDisplayProperties();
-        setWidth("100%");
+
+        NativeListBox<E> nativeListBox = new NativeListBox<E>(this, displayProperties);
+        if (layout == Layout.PLAIN) {
+            (nativeListBox).setTrigger(false);
+        }
+        setNativeWidget(nativeListBox);
+        asWidget().setWidth("100%");
+
     }
 
     /**
@@ -116,15 +123,6 @@ public class CListBox<E> extends CFocusComponent<List<E>, NativeListBox<E>> impl
         if (nativeListBox != null) {
             nativeListBox.setDisplayProperties(displayProperties);
         }
-    }
-
-    @Override
-    protected NativeListBox<E> createWidget() {
-        NativeListBox<E> nativeListBox = new NativeListBox<E>(this, displayProperties);
-        if (layout == Layout.PLAIN) {
-            (nativeListBox).setTrigger(false);
-        }
-        return nativeListBox;
     }
 
     @Override

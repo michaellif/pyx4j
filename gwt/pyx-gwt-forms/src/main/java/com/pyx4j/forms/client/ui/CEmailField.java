@@ -48,11 +48,8 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
         this.setMandatory(mandatory);
         setFormat(new EmailFormat());
         addValueValidator(new TextBoxParserValidator<String>());
-    }
-
-    @Override
-    protected NTextBox<String> createWidget() {
-        return new NTextBox<String>(this);
+        setNativeWidget(new NTextBox<String>(this));
+        asWidget().setWidth("100%");
     }
 
     public static class EmailFormat implements IFormat<String> {

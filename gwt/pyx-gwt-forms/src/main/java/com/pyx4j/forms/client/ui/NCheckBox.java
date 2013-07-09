@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.forms.client.ui.CCheckBox.Alignment;
 import com.pyx4j.widgets.client.CheckBox;
 
-public class NCheckBox extends NFocusComponent<Boolean, CheckBox, CCheckBox, HTML> implements INativeFocusComponent<Boolean> {
+public class NCheckBox extends NFocusField<Boolean, CheckBox, CCheckBox, HTML> implements INativeFocusComponent<Boolean> {
 
     public NCheckBox(final CCheckBox checkBox) {
         super(checkBox);

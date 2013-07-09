@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
@@ -133,9 +132,9 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 
         asWidget();
 
-        getWidget().setWidget(decorator);
-
-        decorator.setEditor(this);
+//        getWidget().setWidget(decorator);
+//
+//        decorator.setEditor(this);
 
 //        //TODO use components inheritance
 //        if (this.getCompositeDebugId() != null) {
@@ -286,7 +285,7 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 //    }
 
     @Override
-    public Set<? extends CComponent<?, ?>> getComponents() {
+    public Set<? extends CComponent<?>> getComponents() {
 //        if (itemsMap != null) {
 //            return itemsMap.values();
 //        } else {
@@ -294,9 +293,9 @@ public abstract class CPolymorphicEntityEditor<E extends IEntity> extends CEntit
 //        }
     }
 
-    @Override
-    public Panel getContainer() {
-        return container;
-    }
+//    @Override
+//    public Panel getContainer() {
+//        return container;
+//    }
 
 }

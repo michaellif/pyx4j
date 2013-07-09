@@ -184,7 +184,7 @@ public class EntityIFormWithoutLists extends CEntityForm<EntityI> {
         EditableValueValidator<String> passwordConfirmValidator = new EditableValueValidator<String>() {
 
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 return CommonsStringUtils.equals(get(proto().enterPassword()).getValue(), get(proto().confirmPassword()).getValue()) ? null
                         : new ValidationError(component, "Passwords do not match.");
             }

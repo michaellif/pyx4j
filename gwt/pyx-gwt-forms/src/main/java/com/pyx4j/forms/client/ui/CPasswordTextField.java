@@ -27,23 +27,20 @@ import com.pyx4j.forms.client.validators.RegexValidator;
 
 public class CPasswordTextField extends CTextFieldBase<String, NPasswordTextBox> {
 
-    public CPasswordTextField() {
-        this(null);
-    }
-
     public CPasswordTextField(String title) {
         super(title);
         setFormat(new StringFormat());
+        setNativeWidget(new NPasswordTextBox(this));
+        asWidget().setWidth("100%");
+    }
+
+    public CPasswordTextField() {
+        this(null);
     }
 
     public CPasswordTextField(String title, boolean mandatory) {
         this(title);
         this.setMandatory(mandatory);
-    }
-
-    @Override
-    protected NPasswordTextBox createWidget() {
-        return new NPasswordTextBox(this);
     }
 
     public void addRegexValidator(String regex, String regexValidationMessage) {

@@ -46,7 +46,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
 
     public void setWatermark(String watermark) {
         this.watermark = watermark;
-        if (isWidgetCreated() && asWidget() instanceof WatermarkComponent) {
+        if (asWidget() instanceof WatermarkComponent) {
             ((WatermarkComponent) asWidget()).setWatermark(watermark);
         }
     }
@@ -67,7 +67,7 @@ public abstract class CTextComponent<DATA, WIDGET extends INativeFocusComponent<
         }
 
         @Override
-        public ValidationError isValid(CComponent<DATA, ?> component, DATA value) {
+        public ValidationError isValid(CComponent<DATA> component, DATA value) {
             if (value == null) {
                 return null;
             }

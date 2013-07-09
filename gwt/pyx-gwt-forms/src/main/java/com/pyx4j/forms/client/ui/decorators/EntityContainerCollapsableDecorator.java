@@ -106,7 +106,7 @@ public class EntityContainerCollapsableDecorator<E extends IEntity> extends Coll
                         ArrayList<ValidationError> errors = entityContainer.getValidationResults().getValidationErrors();
                         ValidationResults results = new ValidationResults();
                         for (ValidationError validationError : errors) {
-                            CComponent<?, ?> originator = validationError.getOriginator();
+                            CComponent<?> originator = validationError.getOriginator();
                             if ((originator.isUnconditionalValidationErrorRendering() || originator.isVisited()) && !originator.isValid()) {
                                 results.appendValidationError(validationError);
                             }

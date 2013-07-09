@@ -103,10 +103,10 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
     }
 
     @Override
-    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
 
         if (column == proto().path()) {
-            CComponent<?, ?> comp = super.createCell(column);
+            CComponent<?> comp = super.createCell(column);
             comp.setViewable(true);
             return comp;
         } else if (column == proto().restriction()) {
@@ -123,7 +123,7 @@ public class PropertyCriterionEditor extends CEntityFolderRowEditor<PropertyCrit
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
         if (tableProto != null) {
-            CComponent<?, ?> comp = get(proto().restriction());
+            CComponent<?> comp = get(proto().restriction());
             if (comp instanceof CComboBox) {
                 CComboBox<PropertyCriterion.Restriction> comboBox = (CComboBox<PropertyCriterion.Restriction>) comp;
                 IObject<?> member = tableProto.getMember(new Path(getValue().path().getValue()));

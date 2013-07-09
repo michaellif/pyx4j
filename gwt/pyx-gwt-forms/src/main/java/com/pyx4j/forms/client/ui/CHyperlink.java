@@ -29,7 +29,7 @@ public class CHyperlink<E> extends CField<E, INativeHyperlink<E>> {
     private Command command;
 
     public CHyperlink(String title) {
-        super(title);
+        this(title, null);
     }
 
     public CHyperlink(Command command) {
@@ -39,6 +39,7 @@ public class CHyperlink<E> extends CField<E, INativeHyperlink<E>> {
     public CHyperlink(String title, Command command) {
         super(title);
         this.command = command;
+        setNativeWidget(new NHyperlink<E>(this));
     }
 
     public void setCommand(Command command) {
@@ -47,12 +48,6 @@ public class CHyperlink<E> extends CField<E, INativeHyperlink<E>> {
 
     public Command getCommand() {
         return command;
-    }
-
-    @Override
-    protected INativeHyperlink<E> createWidget() {
-        NHyperlink<E> widget = new NHyperlink<E>(this);
-        return widget;
     }
 
     public void setFormat(IFormat<E> format) {

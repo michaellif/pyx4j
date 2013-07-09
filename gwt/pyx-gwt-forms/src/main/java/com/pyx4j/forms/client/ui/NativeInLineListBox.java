@@ -43,11 +43,10 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
             }
         });
 
-        setListBoxHeight(cListBox.getHeight());
     }
 
     @Override
-    public CComponent<?, ?> getCComponent() {
+    public CComponent<?> getCComponent() {
         return cListBox;
     }
 

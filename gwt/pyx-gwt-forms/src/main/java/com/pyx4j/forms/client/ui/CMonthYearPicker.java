@@ -33,11 +33,7 @@ public class CMonthYearPicker extends CFocusComponent<Date, NMonthYearPicker> {
 
     public CMonthYearPicker(boolean yearOnly) {
         this.yearOnly = yearOnly;
-    }
-
-    @Override
-    protected NMonthYearPicker createWidget() {
-        return new NMonthYearPicker(this);
+        setNativeWidget(new NMonthYearPicker(this));
     }
 
     public boolean isYearOnly() {
@@ -46,9 +42,7 @@ public class CMonthYearPicker extends CFocusComponent<Date, NMonthYearPicker> {
 
     public void setYearRange(Range yearRange) {
         this.yearRange = yearRange;
-        if (isWidgetCreated()) {
-            getWidget().setYearRange(yearRange);
-        }
+        getWidget().setYearRange(yearRange);
     }
 
     public Range getYearRange() {

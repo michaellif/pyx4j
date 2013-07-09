@@ -51,15 +51,12 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
         super(title);
         setFormat(new DateFormat(defaultDateFormat));
         addValueValidator(new TextBoxParserValidator<Date>());
+        setNativeWidget(new NDatePicker(this));
+        asWidget().setWidth("100%");
     }
 
     public void setDateFormat(String pattern) {
         setFormat(new DateFormat(pattern));
-    }
-
-    @Override
-    protected NDatePicker createWidget() {
-        return new NDatePicker(this);
     }
 
     public void setDateConditionValidationMessage(String dateConditionValidationMessage) {
@@ -92,7 +89,7 @@ public class CDatePicker extends CTextFieldBase<Date, NDatePicker> {
 
         @Override
         @SuppressWarnings("deprecation")
-        public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+        public ValidationError isValid(CComponent<Date> component, Date value) {
             Date selectedDate = getValue();
             if (selectedDate != null && !pastDateSelectionAllowed) {
                 Date now = new Date();

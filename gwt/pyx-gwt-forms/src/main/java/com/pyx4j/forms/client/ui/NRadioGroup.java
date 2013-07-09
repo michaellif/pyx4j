@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.widgets.client.RadioGroup;
 
-public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGroup<E>, HTML> {
+public class NRadioGroup<E> extends NFocusField<E, RadioGroup<E>, CRadioGroup<E>, HTML> {
 
     public NRadioGroup(CRadioGroup<E> cComponent) {
         super(cComponent);
@@ -82,11 +82,11 @@ public class NRadioGroup<E> extends NFocusComponent<E, RadioGroup<E>, CRadioGrou
 
     @Override
     public E getNativeValue() {
-        if (!isViewable()) {
-            return getEditor().getValue();
-        } else {
+        if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
+        } else {
+            return getEditor().getValue();
         }
     }
 

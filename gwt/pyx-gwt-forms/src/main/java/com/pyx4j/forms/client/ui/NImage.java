@@ -30,7 +30,7 @@ import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageHolder;
 
-public class NImage<T extends IFile> extends NComponent<List<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
+public class NImage<T extends IFile> extends NField<List<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
 
     private static final I18n i18n = I18n.get(NImage.class);
 

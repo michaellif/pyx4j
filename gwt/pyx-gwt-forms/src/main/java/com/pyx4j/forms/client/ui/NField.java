@@ -48,16 +48,16 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.GroupFocusHandler;
 import com.pyx4j.widgets.client.IWidget;
 
-public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CComponent<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
+public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<DATA, ?>, VIEWER extends Widget> extends SimplePanel implements
         INativeComponent<DATA> {
 
-    private WIDGET editor;
+    private EDITOR editor;
 
     private VIEWER viewer;
 
-    private final CCOMP cComponent;
-
     private boolean viewable;
+
+    private final CCOMP cComponent;
 
     private EditorPanel editorPanel;
 
@@ -69,13 +69,13 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
     private Command navigationCommand;
 
-    public NComponent(CCOMP cComponent) {
+    public NField(CCOMP cComponent) {
         super();
         this.cComponent = cComponent;
-        setWidth(cComponent.getWidth());
+        setViewable(true);
     }
 
-    public final WIDGET getEditor() {
+    public final EDITOR getEditor() {
         return editor;
     }
 
@@ -110,7 +110,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
         return cComponent;
     }
 
-    protected abstract WIDGET createEditor();
+    protected abstract EDITOR createEditor();
 
     protected abstract VIEWER createViewer();
 
@@ -257,9 +257,9 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
 
             focusHandlerManager = new GroupFocusHandler(this);
 
-            if (editor instanceof NFocusComponent) {
-                ((NFocusComponent<?, ?, ?, ?>) editor).addFocusHandler(focusHandlerManager);
-                ((NFocusComponent<?, ?, ?, ?>) editor).addBlurHandler(focusHandlerManager);
+            if (editor instanceof NFocusField) {
+                ((NFocusField<?, ?, ?, ?>) editor).addFocusHandler(focusHandlerManager);
+                ((NFocusField<?, ?, ?, ?>) editor).addBlurHandler(focusHandlerManager);
             }
 
             triggerButtonHolder = new SimplePanel();
@@ -312,7 +312,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
                 triggerButtonHandlerRegistrations.add(this.addDoubleClickHandler(new DoubleClickHandler() {
                     @Override
                     public void onDoubleClick(DoubleClickEvent event) {
-                        if (NComponent.this.isEditable() && NComponent.this.isEnabled()) {
+                        if (NField.this.isEditable() && NField.this.isEnabled()) {
                             if (!triggerButton.isActive()) {
                                 triggerButton.toggleActive();
                             }
@@ -384,7 +384,7 @@ public abstract class NComponent<DATA, WIDGET extends IWidget, CCOMP extends CCo
             if (navigationCommandHandlerRegistration != null) {
                 navigationCommandHandlerRegistration.removeHandler();
             }
-            NComponent.this.getViewer().sinkEvents(Event.ONCLICK);
+            NField.this.getViewer().sinkEvents(Event.ONCLICK);
 
             if (navigationCommand != null) {
                 navigationCommandHandlerRegistration = addDomHandler(new ClickHandler() {

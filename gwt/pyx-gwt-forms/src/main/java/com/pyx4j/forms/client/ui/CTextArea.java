@@ -27,19 +27,16 @@ public class CTextArea extends CTextComponent<String, NTextArea> {
     private int rows = 4;
 
     public CTextArea() {
-        super();
-        setWidth("100%");
+        this(null);
+
     }
 
     public CTextArea(String title) {
         super(title);
-    }
-
-    @Override
-    protected NTextArea createWidget() {
         NTextArea nativeTextArea = new NTextArea(this);
         nativeTextArea.setVisibleLines(getRows());
-        return nativeTextArea;
+        nativeTextArea.setWidth("100%");
+        setNativeWidget(nativeTextArea);
     }
 
     @Override
@@ -48,16 +45,12 @@ public class CTextArea extends CTextComponent<String, NTextArea> {
     }
 
     public void scrollToBottom() {
-        if (isWidgetCreated()) {
-            getWidget().scrollToBottom();
-        }
+        getWidget().scrollToBottom();
     }
 
     public void setRows(int rows) {
         this.rows = rows;
-        if (isWidgetCreated()) {
-            getWidget().setVisibleLines(rows);
-        }
+        getWidget().setVisibleLines(rows);
     }
 
     public int getRows() {

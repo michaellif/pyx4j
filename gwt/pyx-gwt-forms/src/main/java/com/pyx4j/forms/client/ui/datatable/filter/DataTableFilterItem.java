@@ -190,13 +190,13 @@ public class DataTableFilterItem<E extends IEntity> extends HorizontalPanel {
                 setValueHolder(event.getValue().getPath());
             }
         });
-        fieldsList.setWidth("100%");
+        fieldsList.asWidget().setWidth("100%");
 
         add(fieldsList);
 
         setCellWidth(fieldsList, "35%");
 
-        operandsList.setWidth("100%");
+        operandsList.asWidget().setWidth("100%");
 
         add(operandsList);
 

@@ -39,7 +39,6 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
 
     public CTextFieldBase(String title) {
         super(title);
-        setWidth("100%");
     }
 
     public CTextFieldBase() {
@@ -77,25 +76,21 @@ public abstract class CTextFieldBase<DATA, WIDGET extends INativeTextComponent<D
     }
 
     public void requestFocus() {
-        if (isWidgetCreated()) {
-            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                @Override
-                public void execute() {
-                    INativeComponent<DATA> impl = getWidget();
-                    if (impl instanceof FocusWidget) {
-                        ((FocusWidget) impl).setFocus(true);
-                    }
+        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+            @Override
+            public void execute() {
+                INativeComponent<DATA> impl = getWidget();
+                if (impl instanceof FocusWidget) {
+                    ((FocusWidget) impl).setFocus(true);
                 }
-            });
-        }
+            }
+        });
     }
 
     @Override
     public boolean isValueEmpty() {
-        if (isWidgetCreated()) {
-            if (!CommonsStringUtils.isEmpty(getWidget().getNativeText())) {
-                return false;
-            }
+        if (!CommonsStringUtils.isEmpty(getWidget().getNativeText())) {
+            return false;
         }
         return super.isValueEmpty() || ((getValue() instanceof String) && CommonsStringUtils.isEmpty((String) getValue()));
     }

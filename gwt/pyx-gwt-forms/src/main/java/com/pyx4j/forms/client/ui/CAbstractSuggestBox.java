@@ -40,14 +40,11 @@ public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestB
 
     public CAbstractSuggestBox(String title) {
         super(title);
-        setWidth("100%");
-    }
 
-    @Override
-    protected NSuggestBox<E> createWidget() {
         NSuggestBox<E> nativeTextField = new NSuggestBox<E>(this);
+        setNativeWidget(nativeTextField);
         setOptions(options);
-        return nativeTextField;
+        asWidget().setWidth("100%");
     }
 
     @Override
@@ -58,9 +55,7 @@ public abstract class CAbstractSuggestBox<E> extends CTextFieldBase<E, NSuggestB
     public void setOptions(Collection<E> opt) {
         this.options = new ArrayList<E>();
         this.options.addAll(opt);
-        if (isWidgetCreated()) {
-            getWidget().refreshOptions();
-        }
+        getWidget().refreshOptions();
         OptionsChangeEvent.fire(this, getOptions());
     }
 

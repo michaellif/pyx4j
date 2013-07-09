@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, CRichTextArea> {
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
-        textArea.setWidth("100%");
+        textArea.asWidget().setWidth("100%");
 
         getElement().getStyle().setProperty("resize", "none");
         sinkEvents(Event.ONMOUSEOVER);
@@ -70,27 +70,19 @@ public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, 
     @Override
     public void setNativeValue(String value) {
         if (isViewable()) {
-            if (getViewer() != null) {
-                getViewer().setHTML(value);
-            }
+            getViewer().setHTML(value);
         } else {
-            if (getEditor() != null) {
-                getEditor().setText(value);
-            }
+            getEditor().setText(value);
         }
     }
 
     @Override
     public String getNativeValue() {
-        if (!isViewable()) {
-            if (getEditor() != null) {
-                return getEditor().getText();
-            } else {
-                return "";
-            }
-        } else {
+        if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
+        } else {
+            return getEditor().getText();
         }
     }
 
