@@ -22,7 +22,12 @@ package com.pyx4j.config.server;
 
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class SystemDateManager {
+
+    private static final Logger log = LoggerFactory.getLogger(SystemDateManager.class);
 
     private static class DateContext {
 
@@ -58,6 +63,7 @@ public class SystemDateManager {
         }
         dateContext.timedelta = date.getTime() - System.currentTimeMillis();
         threadLocale.set(dateContext);
+        log.debug("System Date set to {}", date);
     }
 
     public static void advanceDate(Date date) {
