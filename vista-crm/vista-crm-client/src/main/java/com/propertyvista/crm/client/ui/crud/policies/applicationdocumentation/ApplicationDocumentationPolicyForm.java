@@ -58,7 +58,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
 
         get(proto().numberOfRequiredIDs()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
-            public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
+            public ValidationError isValid(CComponent<Integer> component, Integer value) {
                 if (value == null || value == 0) {
                     return new ValidationError(component, i18n.tr("At least one ID is required"));
                 } else if (getValue() != null && (getValue().allowedIDs().isEmpty() || value > getValue().allowedIDs().size())) {
@@ -96,7 +96,7 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
         }
 //
 //        @Override
-//        public CComponent<?, ?> create(IObject<?> member) {
+//        public CComponent<?> create(IObject<?> member) {
 //            if (member instanceof IdentificationDocument) {
 //                return new IdentificationDocumentEditor();
 //            } else {

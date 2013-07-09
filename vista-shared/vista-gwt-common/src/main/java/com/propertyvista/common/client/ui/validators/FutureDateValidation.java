@@ -18,11 +18,11 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class FutureDateValidation {
 
-    public FutureDateValidation(CComponent<LogicalDate, ?> value) {
+    public FutureDateValidation(CComponent<LogicalDate> value) {
         value.addValueValidator(new FutureDateValidator());
     }
 
-    public FutureDateValidation(CComponent<LogicalDate, ?> value, final String message) {
+    public FutureDateValidation(CComponent<LogicalDate> value, final String message) {
         value.addValueValidator(new FutureDateValidator(message));
     }
 }

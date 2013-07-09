@@ -27,7 +27,7 @@ public class PropertyAccountInfoFolder extends VistaBoxFolder<OnlinePaymentSetup
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PropertyAccountInfo) {
             return new PropertyAccountInfoForm();
         }

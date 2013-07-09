@@ -52,7 +52,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
         this.addValueValidator(new EditableValueValidator<IList<Guest>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<Guest>, ?> component, IList<Guest> value) {
+            public ValidationError isValid(CComponent<IList<Guest>> component, IList<Guest> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one guest data should be entered")) : null);
                 }
@@ -62,7 +62,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof Guest) {
             return new GuestEditor();
         }

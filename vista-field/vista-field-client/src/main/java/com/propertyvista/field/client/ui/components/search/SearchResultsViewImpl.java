@@ -25,8 +25,8 @@ public class SearchResultsViewImpl extends FlowPanel implements SearchResultsVie
         setSize("100%", "100%");
 
         searchPanel = new CTextArea();
-        searchPanel.setHeight("100%");
-        searchPanel.setWidth("70%");
+        searchPanel.asWidget().setHeight("100%");
+        searchPanel.asWidget().setWidth("70%");
         searchPanel.setTitle("Search Results");
 
         add(searchPanel);

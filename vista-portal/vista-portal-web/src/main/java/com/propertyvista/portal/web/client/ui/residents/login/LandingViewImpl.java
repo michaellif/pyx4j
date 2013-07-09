@@ -81,11 +81,11 @@ public class LandingViewImpl extends Composite implements LandingView {
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
 
-            CTextField emailField = (CTextField) inject(proto().email(), new CTextField());
+            CTextField emailField = inject(proto().email(), new CTextField());
             contentPanel.add(center(new LoginDecoratorBuilder(emailField, true).watermark(i18n.tr("Email")).build()));
             setMandatoryValidationMessage(emailField, i18n.tr("Enter your email address"));
 
-            CPasswordTextField passwordField = (CPasswordTextField) inject(proto().password(), new CPasswordTextField());
+            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
             contentPanel.add(center(new LoginDecoratorBuilder(passwordField, true).watermark(i18n.tr("Password")).build()));
             setMandatoryValidationMessage(passwordField, i18n.tr("Enter your password"));
 
@@ -94,7 +94,7 @@ public class LandingViewImpl extends Composite implements LandingView {
                     .add(center((new DecoratorBuilder(captchaField).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build())));
             setEnableCaptcha(false);
 
-            contentPanel.add(center(new CheckBoxDecorator((CCheckBox) inject(proto().rememberID(), new CCheckBox()))));
+            contentPanel.add(center(new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox()))));
 
             return contentPanel;
         }
@@ -113,11 +113,11 @@ public class LandingViewImpl extends Composite implements LandingView {
 
         @Deprecated
         // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough)        
-        private <C extends CTextFieldBase<?, ?>> void setMandatoryValidationMessage(C c, final String message) {
+        private <E, C extends CTextFieldBase<E, ?>> void setMandatoryValidationMessage(C c, final String message) {
             c.setMandatory(false);
-            c.addValueValidator(new EditableValueValidator<Object>() {
+            c.addValueValidator(new EditableValueValidator<E>() {
                 @Override
-                public ValidationError isValid(CComponent<Object, ?> component, Object value) {
+                public ValidationError isValid(CComponent<E> component, E value) {
                     if (value == null || ((value instanceof String) && CommonsStringUtils.isEmpty((String) value))) {
                         return new ValidationError(component, message);
                     } else {

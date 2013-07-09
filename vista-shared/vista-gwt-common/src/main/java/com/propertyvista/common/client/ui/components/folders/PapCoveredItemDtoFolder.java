@@ -53,7 +53,7 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PreauthorizedPaymentCoveredItemDTO) {
             return new CoveredItemEditor();
         }
@@ -68,8 +68,8 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
 
         @SuppressWarnings("unchecked")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp;
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?> comp;
 
             if (column.getObject() == proto().billableItem()) {
                 comp = inject(column.getObject(), new PapBillableItemLabel());
@@ -79,7 +79,7 @@ public class PapCoveredItemDtoFolder extends VistaTableFolder<PreauthorizedPayme
 
             // handle value changes: 
             if (column.getObject() == proto().amount()) {
-                ((CComponent<BigDecimal, ?>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
+                ((CComponent<BigDecimal>) comp).addValueChangeHandler(new ValueChangeHandler<BigDecimal>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<BigDecimal> event) {
                         BigDecimal percent = BigDecimal.ONE;

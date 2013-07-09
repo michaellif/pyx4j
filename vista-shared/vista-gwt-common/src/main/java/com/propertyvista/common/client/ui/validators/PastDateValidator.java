@@ -13,8 +13,6 @@
  */
 package com.propertyvista.common.client.ui.validators;
 
-import java.util.Date;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -22,7 +20,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-public class PastDateValidator implements EditableValueValidator<Date> {
+public class PastDateValidator implements EditableValueValidator<LogicalDate> {
 
     private static final I18n i18n = I18n.get(PastDateValidator.class);
 
@@ -37,7 +35,7 @@ public class PastDateValidator implements EditableValueValidator<Date> {
     }
 
     @Override
-    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
         return (value == null) || !value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
     }
 }

@@ -57,8 +57,8 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
 
-        final CComponent<Boolean, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
-        final CComponent<Boolean, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
+        final CComponent<Boolean> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
+        final CComponent<Boolean> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
         yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

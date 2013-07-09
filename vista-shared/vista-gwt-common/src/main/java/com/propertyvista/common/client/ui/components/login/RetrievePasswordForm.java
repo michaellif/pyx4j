@@ -42,13 +42,7 @@ public class RetrievePasswordForm extends CEntityForm<PasswordRetrievalRequest> 
         super(PasswordRetrievalRequest.class);
         this.onSubmitCommand = onSubmitCommand;
         this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password. Check that email and captcha you provided are correct."));
-        setWidth("30em");
-
-    }
-
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
+        asWidget().setWidth("30em");
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
         asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
         asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);

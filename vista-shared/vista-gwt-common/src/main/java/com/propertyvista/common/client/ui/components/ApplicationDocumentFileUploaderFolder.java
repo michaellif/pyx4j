@@ -57,7 +57,7 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof ApplicationDocumentFile) {
             return new ApplicationDocumentEditor();
         }
@@ -86,7 +86,7 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().fileName()) {
                 CTextField comp = (CTextField) inject(column.getObject(), new CTextField());
                 comp.setViewable(true);
@@ -114,7 +114,7 @@ public class ApplicationDocumentFileUploaderFolder extends VistaTableFolder<Appl
                 return comp;
 
             } else {
-                CComponent<?, ?> comp = inject(column.getObject());
+                CComponent<?> comp = inject(column.getObject());
                 comp.setViewable(true);
                 return comp;
             }

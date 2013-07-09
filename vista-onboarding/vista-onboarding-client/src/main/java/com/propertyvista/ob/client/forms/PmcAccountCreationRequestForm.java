@@ -117,7 +117,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         });
         get(proto().dnsName()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 if (value != null && !isDnsAvailable && isDnsCheckResponseRecieved) {
                     return new ValidationError(component, i18n.tr("DNS is not available"));
                 } else {
@@ -147,7 +147,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
                 .mandatoryMarker(false).build());
         get(proto().confirmEmail()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String emailConfirmationValue) {
+            public ValidationError isValid(CComponent<String> component, String emailConfirmationValue) {
                 String email = get(proto().email()).getValue();
                 if (email != null && !email.equals(emailConfirmationValue)) {
                     return new ValidationError(component, i18n.tr("Email and Email Confirmation don't match"));
@@ -164,7 +164,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
                 .mandatoryMarker(false).build());
         get(proto().confirmPassword()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String passwordConfirmationValue) {
+            public ValidationError isValid(CComponent<String> component, String passwordConfirmationValue) {
                 String password = get(proto().password()).getValue();
                 if (password != null && !password.equals(passwordConfirmationValue)) {
                     return new ValidationError(component, i18n.tr("Password and Password Confirmation don't match"));

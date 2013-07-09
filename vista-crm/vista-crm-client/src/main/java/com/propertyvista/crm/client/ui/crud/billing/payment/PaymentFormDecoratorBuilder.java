@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 // this decorator was made so that the payment form will work in print layout
 class PaymentFormDecoratorBuilder extends WidgetDecorator.Builder {
 
-    public PaymentFormDecoratorBuilder(CComponent<?, ?> component, String labelWidth, String componentWidth, String contentWidth) {
+    public PaymentFormDecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
         super(component);
         labelWidth(labelWidth);
         contentWidth(contentWidth);
@@ -29,7 +29,7 @@ class PaymentFormDecoratorBuilder extends WidgetDecorator.Builder {
 
     }
 
-    public PaymentFormDecoratorBuilder(CComponent<?, ?> component, String componentWidth) {
+    public PaymentFormDecoratorBuilder(CComponent<?> component, String componentWidth) {
         this(component, "160px", componentWidth, "220px");
     }
 }

@@ -26,7 +26,6 @@ public class LegalTermsDialog extends OkDialog {
     public LegalTermsDialog(AbstractLegalTermsService service, String width, String height, String caption) {
         super(caption);
         final LegalTermsContentViewer termsViewer = new LegalTermsContentViewer(height);
-        termsViewer.initContent();
         setBody(termsViewer);
         setSize(width, height);
         service.retrieveLegalTerms(new DefaultAsyncCallback<LegalTermsContent>() {

@@ -62,7 +62,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         super.addValidations();
         get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 if (value.equals(get(proto().password()).getValue())) {
                     return null;
                 } else {
@@ -208,7 +208,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof Notification) {
                 return new NotificationEditor();
             }

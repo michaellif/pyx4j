@@ -36,7 +36,7 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof TenantInLeaseDTO) {
             return new TenantViewer();
         }
@@ -63,8 +63,8 @@ public class TenantViewFolder extends VistaTableFolder<TenantInLeaseDTO> {
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = null;
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?> comp = null;
             if (proto().leaseParticipant().customer().person().name() == column.getObject()) {
                 comp = inject(column.getObject(), new CEntityLabel<Name>());
             } else {

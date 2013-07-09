@@ -39,7 +39,7 @@ public abstract class ReasonBox extends OkCancelDialog {
         content.add(new HTML(i18n.tr("Please fill the reason") + ":"));
         content.add(reason);
 
-        reason.setWidth("100%");
+        reason.asWidget().setWidth("100%");
         content.setWidth("100%");
         return content.asWidget();
     }

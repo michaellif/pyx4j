@@ -86,16 +86,10 @@ public class LoginForm extends CEntityForm<AuthenticationRequest> {
         } else {
             this.devLoginValues = null;
         }
-        setWidth("30em");
-    }
-
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
+        asWidget().setWidth("30em");
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
         asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
         asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
-
     }
 
     @Override

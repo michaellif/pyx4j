@@ -60,7 +60,7 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().minimumRequiredLiability()), 20).build());
         get(proto().minimumRequiredLiability()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 // HARD CODED by request form Leonard and due to TenantSure max possible liability which is $5,000,000
                 // if we do it like that, we don't have to worry about what to do with TenantSure in portal if the policy sets the min liability is over 5 million                
                 final BigDecimal MAX_FLOOR = new BigDecimal("5000000.00");

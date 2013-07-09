@@ -94,7 +94,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         }
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
                 ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
@@ -257,7 +257,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
                 @Override
                 public void onSuccess(PreauthorizedPayment result) {
-                    ((CComponent<List<PreauthorizedPayment.PreauthorizedPaymentCoveredItem>, ?>) get(proto().coveredItems())).populate(result.coveredItems());
+                    get(proto().coveredItems()).populate(result.coveredItems());
                     confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
                 }
             }, getValue());

@@ -46,7 +46,7 @@ public class ProvinceContryFilters {
     /**
      * Add proper dependencies between shown list of countries and provinces/states
      */
-    public static void attachFilters(CComponent<Province, ?> province, final CComponent<Country, ?> country, OptionsFilter<Province> provinceFilter) {
+    public static void attachFilters(CComponent<Province> province, final CComponent<Country> country, OptionsFilter<Province> provinceFilter) {
         if ((!(province instanceof CEntityComboBox)) || (!(country instanceof IAcceptText))) {
             return;
         }

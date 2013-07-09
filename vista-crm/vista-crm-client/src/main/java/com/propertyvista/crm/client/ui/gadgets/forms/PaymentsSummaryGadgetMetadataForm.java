@@ -61,12 +61,12 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
                 }
             }
         });
-        CComponent<Set<PaymentStatus>, ?> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.copyOf(PaymentStatus.processed()),
+        CComponent<Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.copyOf(PaymentStatus.processed()),
                 Layout.Horizontal);
         paymentStatusSelector.addValueValidator(new EditableValueValidator<Set<PaymentStatus>>() {
 
             @Override
-            public ValidationError isValid(CComponent<Set<PaymentStatus>, ?> component, Set<PaymentStatus> value) {
+            public ValidationError isValid(CComponent<Set<PaymentStatus>> component, Set<PaymentStatus> value) {
                 if (value != null && value.isEmpty()) {
                     return new ValidationError(component, i18n.tr("Please select at least one payment status option"));
                 } else {

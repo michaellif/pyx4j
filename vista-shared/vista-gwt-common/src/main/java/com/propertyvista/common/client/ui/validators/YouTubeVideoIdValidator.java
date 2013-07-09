@@ -23,7 +23,7 @@ public class YouTubeVideoIdValidator implements EditableValueValidator<String> {
     private static final I18n i18n = I18n.get(YouTubeVideoIdValidator.class);
 
     @Override
-    public ValidationError isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String> component, String value) {
         if (value == null) {
             return null;
         }

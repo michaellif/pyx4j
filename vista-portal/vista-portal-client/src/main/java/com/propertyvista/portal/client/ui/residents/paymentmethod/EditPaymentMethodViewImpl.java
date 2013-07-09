@@ -36,7 +36,7 @@ public class EditPaymentMethodViewImpl extends EditImpl<LeasePaymentMethod> impl
             }
 
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
                 if (set) {
                     assert (getPresenter() != null);
                     ((EditPaymentMethodView.Presenter) getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {

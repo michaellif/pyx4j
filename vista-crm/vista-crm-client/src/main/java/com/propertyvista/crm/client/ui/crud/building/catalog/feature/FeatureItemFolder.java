@@ -20,6 +20,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.events.OptionsChangeEvent;
@@ -67,7 +68,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof ProductItem) {
             return new FeatureItemEditor();
         }
@@ -82,7 +83,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
 
         @SuppressWarnings({ "unchecked", "rawtypes" })
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             Class<? extends IEntity> buildingElementClass = null;
             switch (parent.getValue().type().getValue()) {
             case Parking:
@@ -93,7 +94,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 break;
             }
 
-            CComponent<?, ?> comp;
+            CComponent<?> comp;
             if (column.getObject() == proto().element()) {
                 if (buildingElementClass != null) {
                     if (parent.isEditable()) {
@@ -142,7 +143,7 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue() != null && event.getValue().booleanValue()) {
                         for (int i = 0; i < FeatureItemFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?> comp : FeatureItemFolder.this.getItem(i).getComponents()) {
+                            for (CComponent<?> comp : FeatureItemFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof FeatureItemEditor && !comp.equals(FeatureItemEditor.this)) {
                                     ((FeatureItemEditor) comp).get(proto().isDefault()).setValue(false);
                                 }
@@ -158,11 +159,11 @@ class FeatureItemFolder extends VistaTableFolder<ProductItem> {
     public void addValidations() {
         super.addValidations();
 
-        this.addValueValidator(new EditableValueValidator<List<ProductItem>>() {
+        this.addValueValidator(new EditableValueValidator<IList<ProductItem>>() {
             @Override
-            public ValidationError isValid(CComponent<List<ProductItem>, ?> component, List<ProductItem> value) {
+            public ValidationError isValid(CComponent<IList<ProductItem>> component, IList<ProductItem> value) {
                 if (value != null && !value.isEmpty()) {
-                    CComponent<Boolean, ?> comp = parent.get(parent.proto().version().mandatory());
+                    CComponent<Boolean> comp = parent.get(parent.proto().version().mandatory());
                     if (comp != null && comp.getValue() != null && comp.getValue()) {
                         boolean defaultFound = false;
                         for (ProductItem item : value) {

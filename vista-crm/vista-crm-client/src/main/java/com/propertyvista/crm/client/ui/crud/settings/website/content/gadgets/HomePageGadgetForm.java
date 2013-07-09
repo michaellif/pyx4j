@@ -42,7 +42,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
 
     private final SimplePanel mainPanel;
 
-    private final Map<GadgetType, CComponent<?, ?>> panelMap = new HashMap<GadgetType, CComponent<?, ?>>();
+    private final Map<GadgetType, CComponent<?>> panelMap = new HashMap<GadgetType, CComponent<?>>();
 
     public HomePageGadgetForm(IForm<HomePageGadget> view) {
         super(HomePageGadget.class, view);
@@ -78,7 +78,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
                 // this should never happen...
                 gadget.content().set(EntityFactory.create(contentClass));
             }
-            CComponent<?, ?> editor = panelMap.get(type);
+            CComponent<?> editor = panelMap.get(type);
             if (editor != null) {
                 if (contains(proto().content())) {
                     if (!editor.equals(get(proto().content()))) {
@@ -93,7 +93,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         super.onValuePropagation(value, fireEvent, populate);
     }
 
-    private CComponent<?, ?> getCustomContentEditor() {
+    private CComponent<?> getCustomContentEditor() {
         CEntityDecoratableForm<CustomGadgetContent> editor = new CEntityDecoratableForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
             public IsWidget createContent() {
@@ -107,7 +107,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         return editor;
     }
 
-    private CComponent<?, ?> getNewsContentEditor() {
+    private CComponent<?> getNewsContentEditor() {
         CEntityDecoratableForm<NewsGadgetContent> editor = new CEntityDecoratableForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
             public IsWidget createContent() {
@@ -121,7 +121,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         return editor;
     }
 
-    private CComponent<?, ?> getTestimContentEditor() {
+    private CComponent<?> getTestimContentEditor() {
         CEntityDecoratableForm<TestimonialsGadgetContent> editor = new CEntityDecoratableForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
             public IsWidget createContent() {
@@ -135,7 +135,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         return editor;
     }
 
-    private CComponent<?, ?> getPromoContentEditor() {
+    private CComponent<?> getPromoContentEditor() {
         CEntityDecoratableForm<PromoGadgetContent> editor = new CEntityDecoratableForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
             public IsWidget createContent() {

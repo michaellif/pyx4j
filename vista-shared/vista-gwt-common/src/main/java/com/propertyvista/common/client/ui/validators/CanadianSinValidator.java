@@ -26,7 +26,7 @@ public class CanadianSinValidator implements EditableValueValidator<String> {
     private static final I18n i18n = I18n.get(CanadianSinValidator.class);
 
     @Override
-    public ValidationError isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String> component, String value) {
         if (CommonsStringUtils.isStringSet(value)) {
             return ValidationUtils.isSinValid(value.trim().replaceAll(" ", "")) ? null : new ValidationError(component, i18n.tr("Invalid SIN"));
         } else {

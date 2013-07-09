@@ -17,12 +17,12 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 
-public class OtherProviderTenantInsuranceStatusViewer extends CEntityViewer<OtherProviderTenantInsuranceStatusDTO> {
+public class OtherProviderTenantInsuranceStatusViewer extends CViewer<OtherProviderTenantInsuranceStatusDTO> {
 
     private static final I18n i18n = I18n.get(OtherProviderTenantInsuranceStatusViewer.class);
 

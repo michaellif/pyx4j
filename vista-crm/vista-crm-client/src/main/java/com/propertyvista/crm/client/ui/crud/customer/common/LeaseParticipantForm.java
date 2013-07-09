@@ -19,6 +19,7 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -82,9 +83,9 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     @Override
     public void addValidations() {
         new PastDateValidation(get(proto().customer().person().birthDate()));
-        get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && !getValue().ageOfMajority().isNull()) {
                     if (!TimeUtils.isOlderThan(value, getValue().ageOfMajority().getValue() - 1)) {
                         return new ValidationError(component, i18n.tr("this lease participant is too young: the minimum age required is {0}.", getValue()
@@ -148,7 +149,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
-            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
                 if (set) {
                     ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
                             .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {

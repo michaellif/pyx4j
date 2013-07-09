@@ -52,7 +52,7 @@ public class AgreementForm extends CEntityDecoratableForm<AgreementDTO> {
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(20, Unit.PX);
         get(proto().isAgreed()).addValueValidator(new EditableValueValidator<Boolean>() {
             @Override
-            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+            public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
                 if (value != null && !value) {
                     return new ValidationError(component, i18n.tr("You must agree with the above terms to continue."));
                 } else {

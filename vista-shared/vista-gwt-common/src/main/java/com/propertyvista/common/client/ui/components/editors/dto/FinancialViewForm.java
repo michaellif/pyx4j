@@ -85,7 +85,7 @@ public class FinancialViewForm extends CEntityDecoratableForm<TenantFinancialDTO
         this.addValueValidator(new EditableValueValidator<TenantFinancialDTO>() {
 
             @Override
-            public ValidationError isValid(CComponent<TenantFinancialDTO, ?> component, TenantFinancialDTO value) {
+            public ValidationError isValid(CComponent<TenantFinancialDTO> component, TenantFinancialDTO value) {
                 return (value.assets().size() > 0) || (value.incomes().size() > 0) ? null : new ValidationError(component, i18n
                         .tr("At least one source of income or one asset is required"));
             }

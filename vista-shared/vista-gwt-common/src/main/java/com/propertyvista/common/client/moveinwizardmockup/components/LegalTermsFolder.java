@@ -59,7 +59,7 @@ public class LegalTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof LegalTermsDescriptorDTO) {
             return new LegalTermsEditor();
         }

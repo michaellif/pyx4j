@@ -36,7 +36,7 @@ import com.propertyvista.domain.ref.Province;
 public class VistaViewersComponentFactory extends EntityFormComponentFactory {
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         MemberMeta mm = member.getMeta();
         if (mm.getObjectClassType() == ObjectClassType.Primitive) {
             if (mm.getValueClass().equals(String.class)) {

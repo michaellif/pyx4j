@@ -41,7 +41,7 @@ public class ArrearsYoyAnalysisGadgetMetadataForm extends CEntityDecoratableForm
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().yearsToCompare())).build());
         get(proto().yearsToCompare()).addValueValidator(new EditableValueValidator<Integer>() {
             @Override
-            public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
+            public ValidationError isValid(CComponent<Integer> component, Integer value) {
                 if (value != null & value >= 0) {
                     if (value > ArrearsReportService.YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
                         return new ValidationError(component, i18n.tr("Please enter a value between 0 and {0}",

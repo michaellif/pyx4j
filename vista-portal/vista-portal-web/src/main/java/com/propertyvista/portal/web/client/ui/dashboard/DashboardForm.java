@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
@@ -89,7 +89,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         leftPanel.setH1(++row, 0, 1, i18n.tr("RENT BALANCE"));
         leftPanel.setWidget(++row, 0, inject(proto().billSummary(), new FinancialSummaryViewer()));
         get(proto().billSummary()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-        get(proto().billSummary()).setHeight("");
+        get(proto().billSummary()).asWidget().setHeight("");
 
         // =============================================================================================
 
@@ -115,13 +115,13 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         rightPanel.setH1(++row, 0, 1, i18n.tr("MAINTENANCE"), newTicket);
         rightPanel.setWidget(++row, 0, inject(proto().maintanances(), new MaintananceViewer()));
         get(proto().maintanances()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-        get(proto().maintanances()).setHeight("");
+        get(proto().maintanances()).asWidget().setHeight("");
 
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             rightPanel.setH1(++row, 0, 1, i18n.tr("TENANT INSURANCE"));
             rightPanel.setWidget(++row, 0, inject(proto().tenantInsuranceStatus(), new TenantInsuranceStatusViewer()));
             get(proto().tenantInsuranceStatus()).asWidget().addStyleName(TenantDashboardTheme.StyleName.TenantDashboardSection.name());
-            get(proto().tenantInsuranceStatus()).setHeight("");
+            get(proto().tenantInsuranceStatus()).asWidget().setHeight("");
         }
         return container;
     }
@@ -132,7 +132,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
     }
 
-    class FinancialSummaryViewer extends CEntityViewer<FinancialSummaryDTO> {
+    class FinancialSummaryViewer extends CViewer<FinancialSummaryDTO> {
 
         private final CurrentBalanceFormat currentBalanceFormat = new CurrentBalanceFormat();
 
@@ -197,7 +197,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
     }
 
-    class MaintananceViewer extends CEntityViewer<IList<MaintenanceRequestDTO>> {
+    class MaintananceViewer extends CViewer<IList<MaintenanceRequestDTO>> {
         @Override
         public IsWidget createContent(IList<MaintenanceRequestDTO> value) {
             FlexTable container = new FlexTable();

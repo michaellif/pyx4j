@@ -78,7 +78,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof DepositPolicyItem) {
                 return new DepositPolicyItemEditor();
             } else {
@@ -133,7 +133,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 if (valueType == null)
                     return; // New item
 
-                CComponent<?, ?> comp = null;
+                CComponent<?> comp = null;
                 switch (valueType) {
                 case Monetary:
                     comp = new CMoneyField();

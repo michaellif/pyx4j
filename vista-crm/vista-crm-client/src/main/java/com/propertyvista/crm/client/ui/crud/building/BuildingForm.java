@@ -27,6 +27,7 @@ import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -147,7 +148,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                         @Override
                         public void onSuccess(DatesPolicy result) {
                             // set build year date picker range: 
-                            CComponent<?, ?> comp = get(proto().info().structureBuildYear());
+                            CComponent<?> comp = get(proto().info().structureBuildYear());
                             if (comp instanceof CMonthYearPicker) {
                                 int rangeStart = 1900 + result.yearRangeStart().getValue().getYear();
                                 ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 + ClientContext.getServerDate().getYear())
@@ -249,7 +250,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
         get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String url) {
+            public ValidationError isValid(CComponent<String> component, String url) {
                 if (url != null) {
                     if (ValidationUtils.isSimpleUrl(url)) {
                         return null;
@@ -260,7 +261,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                 return null;
             }
         });
-        get(proto().contacts().website()).setNavigationCommand(new Command() {
+        ((CField) get(proto().contacts().website())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().contacts().website().getValue();

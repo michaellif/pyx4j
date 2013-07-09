@@ -42,13 +42,13 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street2()), 25).build());
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().city()), 15).build());
 
-        CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
+        CComponent<Province> province = (CComponent<Province>) inject(proto().province());
         main.setWidget(++row, 0, new DecoratorBuilder(province, 17).build());
 
-        final CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
+        final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
         main.setWidget(++row, 0, new DecoratorBuilder(country, 15).build());
 
-        CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
+        CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
@@ -68,7 +68,7 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         }
     }
 
-    private void attachFilters(final AddressSimple proto, CComponent<Province, ?> province, CComponent<Country, ?> country, CComponent<String, ?> postalCode) {
+    private void attachFilters(final AddressSimple proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 

@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
@@ -36,7 +36,7 @@ import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 
-public class TenantSureQuoteViewer extends CEntityViewer<TenantSureQuoteDTO> {
+public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
 
     private static final I18n i18n = I18n.get(TenantSureQuoteViewer.class);
 

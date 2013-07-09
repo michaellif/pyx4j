@@ -30,7 +30,7 @@ public class DateInPeriodValidation {
      * outputs default error message
      */
 
-    public DateInPeriodValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final CComponent<LogicalDate, ?> value3) {
+    public DateInPeriodValidation(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final CComponent<LogicalDate> value3) {
         this(value1, value2, value3, null);
     }
 
@@ -39,16 +39,16 @@ public class DateInPeriodValidation {
      * outputs provided String <code>message</code>
      */
 
-    public DateInPeriodValidation(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final CComponent<LogicalDate, ?> value3,
+    public DateInPeriodValidation(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final CComponent<LogicalDate> value3,
             String message) {
         if (message == null) {
             message = i18n.tr("The date entered is not within the range specified");
         }
         final String msg = message;
 
-        value2.addValueValidator(new EditableValueValidator<Date>() {
+        value2.addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value2.getValue() == null || value3.getValue() == null) {
                     return null;
                 }
@@ -58,9 +58,9 @@ public class DateInPeriodValidation {
 
         });
 
-        value2.addValueValidator(new EditableValueValidator<Date>() {
+        value2.addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value1.getValue() == null || value2.getValue() == null) {
                     return null;
                 }

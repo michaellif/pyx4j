@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -74,9 +73,9 @@ public class ScopeDialog extends OkCancelDialog {
 
                 content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().renovationEndsOn()), 10).build());
                 get(proto().renovationEndsOn()).setVisible(false);
-                get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<Date>() {
+                get(proto().renovationEndsOn()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
-                    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                         if (value.before(minRenoEndDay)) {
                             return new ValidationError(component, i18n.tr("The minimal acceptable renovation date is {0}", minRenoEndDay));
                         } else {

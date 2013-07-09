@@ -78,13 +78,13 @@ public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
         case phonePortrait:
         case phoneLandscape:
         case tabletPortrait:
-            billingGadget.setWidth("100%");
-            maintenanceGadget.setWidth("100%");
+            billingGadget.asWidget().setWidth("100%");
+            maintenanceGadget.asWidget().setWidth("100%");
             break;
 
         default:
-            billingGadget.setWidth("50%");
-            maintenanceGadget.setWidth("50%");
+            billingGadget.asWidget().setWidth("50%");
+            maintenanceGadget.asWidget().setWidth("50%");
             break;
         }
 
@@ -102,19 +102,19 @@ public class DashboardForm_New extends CEntityForm<TenantDashboardDTO> {
 
         profileGadget = new ProfileGadget(this);
         inject(proto().profileInfo(), profileGadget);
-        profileGadget.setWidth("100%");
+        profileGadget.asWidget().setWidth("100%");
 
         billingGadget = new BillingGadget(this);
         inject(proto().billingInfo(), billingGadget);
-        billingGadget.setWidth("50%");
+        billingGadget.asWidget().setWidth("50%");
 
         maintenanceGadget = new MaintenanceGadget(this);
         inject(proto().maintenanceInfo(), maintenanceGadget);
-        maintenanceGadget.setWidth("50%");
+        maintenanceGadget.asWidget().setWidth("50%");
 
         residentServicesGadget = new ResidentServicesGadget(this);
         inject(proto().residentServicesInfo(), residentServicesGadget);
-        residentServicesGadget.setWidth("100%");
+        residentServicesGadget.asWidget().setWidth("100%");
 
         contentPanel.add(profileGadget);
         contentPanel.add(billingGadget);

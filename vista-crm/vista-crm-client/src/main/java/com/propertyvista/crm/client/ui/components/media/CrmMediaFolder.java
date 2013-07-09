@@ -33,6 +33,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -72,7 +73,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof Media) {
             return new CrmMediaEditor();
         } else {
@@ -88,6 +89,7 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             super(Media.class);
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
         public IsWidget createContent() {
             FormFlexPanel main = new FormFlexPanel();
@@ -107,8 +109,8 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
                     showMedia();
                 }
             };
-            get(proto().youTubeVideoID()).setNavigationCommand(showMediaCommand);
-            get(proto().url()).setNavigationCommand(showMediaCommand);
+            ((CField) get(proto().youTubeVideoID())).setNavigationCommand(showMediaCommand);
+            ((CField) get(proto().url())).setNavigationCommand(showMediaCommand);
 
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().file(), new FileUploadHyperlink(imageTarget, new Command() {
                 @Override

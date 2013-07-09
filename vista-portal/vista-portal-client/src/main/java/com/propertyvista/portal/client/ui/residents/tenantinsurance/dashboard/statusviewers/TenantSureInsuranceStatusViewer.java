@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -33,7 +33,7 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.r
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 
-public class TenantSureInsuranceStatusViewer extends CEntityViewer<TenantSureTenantInsuranceStatusShortDTO> {
+public class TenantSureInsuranceStatusViewer extends CViewer<TenantSureTenantInsuranceStatusShortDTO> {
 
     public static final String STYLE_PREFIX = "-vista-TenantSureStatusViewer";
 

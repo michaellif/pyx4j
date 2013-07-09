@@ -89,7 +89,6 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
         viewPanel.add(tenantInsuranceRequirementsMessage);
 
         insuranceStatusViewer = new OtherProviderTenantInsuranceStatusViewer();
-        insuranceStatusViewer.initContent();
         insuranceStatusViewer.asWidget().setStyleName(Styles.ProvideTIInsuranceStatus.name());
         viewPanel.add(insuranceStatusViewer);
 

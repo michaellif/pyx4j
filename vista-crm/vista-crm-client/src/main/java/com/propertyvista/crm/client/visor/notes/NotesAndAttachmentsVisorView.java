@@ -118,7 +118,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
             }
 
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
+            public CComponent<?> create(IObject<?> member) {
                 if (member instanceof NotesAndAttachments) {
                     return new NoteEditor(true);
                 } else {
@@ -206,7 +206,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
                     content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().note())).componentWidth(40).build());
 
-                    CComponent<?, ?> comp = inject(proto().created());
+                    CComponent<?> comp = inject(proto().created());
                     comp.inheritViewable(false);
                     comp.setViewable(true);
                     content.setWidget(++row, 0, new DecoratorBuilder(comp).build());
@@ -330,7 +330,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
 
                 @Override
-                public CComponent<?, ?> create(IObject<?> member) {
+                public CComponent<?> create(IObject<?> member) {
                     if (member instanceof NoteAttachment) {
                         return new AttachmentEditor();
                     } else {

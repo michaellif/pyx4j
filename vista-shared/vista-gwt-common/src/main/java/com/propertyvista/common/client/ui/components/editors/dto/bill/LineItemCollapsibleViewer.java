@@ -48,7 +48,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     private final SimplePanel expandedPanel = new SimplePanel();
 
     public LineItemCollapsibleViewer() {
-        setWidth("46em");
+        asWidget().setWidth("46em");
     }
 
     @Override
@@ -69,7 +69,7 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     }
 
     @Override
-    public Collection<? extends CComponent<?, ?>> getComponents() {
+    public Collection<? extends CComponent<?>> getComponents() {
         // TODO Auto-generated method stub
         return null;
     }

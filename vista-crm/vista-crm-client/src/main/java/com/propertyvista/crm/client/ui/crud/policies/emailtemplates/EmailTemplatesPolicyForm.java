@@ -112,7 +112,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof EmailTemplate) {
                 return new EmailTemplateEditor();
             } else {
@@ -164,7 +164,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                         }
                     });
                     // change template object list when template type selection changes
-                    final CComponent<EmailTemplateType, ?> comp = get(proto().type());
+                    final CComponent<EmailTemplateType> comp = get(proto().type());
                     comp.addValueChangeHandler(new ValueChangeHandler<EmailTemplateType>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<EmailTemplateType> event) {

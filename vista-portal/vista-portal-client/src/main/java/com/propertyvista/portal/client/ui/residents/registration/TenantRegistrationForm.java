@@ -101,7 +101,7 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
 
         get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String confirmPassword) {
+            public ValidationError isValid(CComponent<String> component, String confirmPassword) {
                 String password = (get(proto().password())).getValue();
                 if ((password == null & confirmPassword != null) | (password != null & confirmPassword == null) || (!password.equals(confirmPassword))) {
                     return new ValidationError(component, i18n.tr("Passwords don't match"));
@@ -113,7 +113,7 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
 
         for (String memberName : proto().getEntityMeta().getMemberNames()) {
             final IObject<?> member = proto().getMember(memberName);
-            CComponent<?, ?> boundMember = null;
+            CComponent<?> boundMember = null;
             try {
                 boundMember = get(member);
             } catch (Throwable e) {

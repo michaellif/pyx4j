@@ -69,7 +69,7 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PmcBusinessInfoDocument) {
             return new PmcBusinessInformationDocumentForm();
         }

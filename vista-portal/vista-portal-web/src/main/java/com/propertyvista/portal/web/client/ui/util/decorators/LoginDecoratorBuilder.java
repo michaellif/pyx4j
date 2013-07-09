@@ -25,7 +25,7 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
 
     private final boolean useWatermark;
 
-    public LoginDecoratorBuilder(CComponent<?, ?> component, boolean useWatermark) {
+    public LoginDecoratorBuilder(CComponent<?> component, boolean useWatermark) {
         super(component);
         this.useWatermark = useWatermark;
     }

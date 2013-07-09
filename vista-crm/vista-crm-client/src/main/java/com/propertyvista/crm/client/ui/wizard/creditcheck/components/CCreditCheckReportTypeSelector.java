@@ -25,15 +25,11 @@ public class CCreditCheckReportTypeSelector extends CFocusComponent<CreditCheckR
 
     public CCreditCheckReportTypeSelector(ReportTypeDetailsResources reportDetailsResources) {
         this.reportDetailsResources = reportDetailsResources;
+        setNativeWidget(new NCreditCheckReportTypeSelector(this, reportDetailsResources));
     }
 
     public void setFees(CreditCheckReportType reportType, BigDecimal setupFee, BigDecimal perApplicantFee) {
         getWidget().setFees(reportType, setupFee, perApplicantFee);
-    }
-
-    @Override
-    protected NCreditCheckReportTypeSelector createWidget() {
-        return new NCreditCheckReportTypeSelector(this, reportDetailsResources);
     }
 
 }

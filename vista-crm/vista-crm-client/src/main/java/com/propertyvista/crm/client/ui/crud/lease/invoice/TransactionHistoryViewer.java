@@ -32,7 +32,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -48,7 +48,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
-public class TransactionHistoryViewer extends CEntityViewer<TransactionHistoryDTO> {
+public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
 
     private final static I18n i18n = I18n.get(TransactionHistoryViewer.class);
 

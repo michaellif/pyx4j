@@ -18,6 +18,7 @@ import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -51,7 +52,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         get(proto().website()).addValueValidator(new EditableValueValidator<String>() {
 
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String url) {
+            public ValidationError isValid(CComponent<String> component, String url) {
                 if (url != null) {
                     if (ValidationUtils.isSimpleUrl(url)) {
                         return null;
@@ -62,7 +63,7 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
                 return null;
             }
         });
-        get(proto().website()).setNavigationCommand(new Command() {
+        ((CField) get(proto().website())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().website().getValue();

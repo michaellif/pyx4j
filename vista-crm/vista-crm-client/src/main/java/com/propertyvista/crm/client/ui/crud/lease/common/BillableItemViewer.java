@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -80,7 +81,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         int row = -1;
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 25).build());
-        get(proto().item()).setNavigationCommand(new Command() {
+        ((CField) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 AppSite.getPlaceController().goTo(getTargetPlace());
@@ -252,7 +253,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof BillableItemAdjustment) {
                 return new BillableItemAdjustmentEditor();
             }
@@ -272,7 +273,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
             }
 
             private void bindValueEditor(Type valueType, boolean populate) {
-                CComponent<?, ?> comp = null;
+                CComponent<?> comp = null;
                 if (valueType != null) {
                     switch (valueType) {
                     case monetary:
@@ -286,7 +287,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
 
                 if (comp != null) {
                     @SuppressWarnings("unchecked")
-                    IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().value())).getDecorator();
+                    IDecorator<CComponent<BigDecimal>> decor = get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
                     comp.setDecorator(decor);
@@ -315,7 +316,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof Deposit) {
                 return new DepositEditor();
             }

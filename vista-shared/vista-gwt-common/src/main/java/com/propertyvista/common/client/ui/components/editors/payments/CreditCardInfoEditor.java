@@ -135,7 +135,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         get(proto().securityCode()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 if (CommonsStringUtils.isStringSet(value)) {
                     return ValidationUtils.isCreditCardCodeValid(value) ? null : new ValidationError(component, i18n
                             .tr("Security Code should consist of 3 to 4 digits"));

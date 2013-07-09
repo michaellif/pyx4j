@@ -77,7 +77,7 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         get(proto().accountNo()).addValueValidator(new EcheckAccountNumberValidator());
         get(proto().branchTransitNumber()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 if (CommonsStringUtils.isStringSet(value)) {
                     return ValidationUtils.isBranchTransitNumberValid(value) ? null : new ValidationError(component, i18n
                             .tr("Number should consist of 5 digits"));
@@ -88,7 +88,7 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         });
         get(proto().bankId()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 if (CommonsStringUtils.isStringSet(value)) {
                     return ValidationUtils.isBankIdNumberValid(value) ? null : new ValidationError(component, i18n.tr("Number should consist of 3 digits"));
                 } else {

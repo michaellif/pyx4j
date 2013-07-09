@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -51,7 +52,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PageDescriptor) {
             return new PageDescriptorEditor();
         }
@@ -72,12 +73,13 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             super(PageDescriptor.class, columns());
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
-                CComponent<?, ?> comp = null;
+                CComponent<?> comp = null;
                 comp = inject(column.getObject(), new CLabel<String>());
-                comp.setNavigationCommand(new Command() {
+                ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         viewer.viewChild(getValue().getPrimaryKey());
@@ -90,7 +92,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public void adopt(final CComponent<?, ?> component) {
+    public void adopt(final CComponent<?> component) {
         // first two items are not editable
         if (this.getItemCount() < 2) {
             @SuppressWarnings("unchecked")

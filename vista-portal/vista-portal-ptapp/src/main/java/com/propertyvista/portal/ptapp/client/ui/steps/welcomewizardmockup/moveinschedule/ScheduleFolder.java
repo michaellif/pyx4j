@@ -60,7 +60,7 @@ public class ScheduleFolder extends VistaTableFolder<TimeSegmentDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof TimeSegmentDTO) {
             return new TimeSegmentEditor();
         } else {
@@ -75,7 +75,7 @@ public class ScheduleFolder extends VistaTableFolder<TimeSegmentDTO> {
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             return super.createCell(column);
         }
 

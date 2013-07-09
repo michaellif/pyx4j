@@ -20,11 +20,11 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.NFocusComponent;
+import com.pyx4j.forms.client.ui.NFocusField;
 
 import com.propertyvista.domain.pmc.CreditCheckReportType;
 
-public class NCreditCheckReportTypeSelector extends NFocusComponent<CreditCheckReportType, CreditCheckReportTypeSelector, CCreditCheckReportTypeSelector, HTML> {
+public class NCreditCheckReportTypeSelector extends NFocusField<CreditCheckReportType, CreditCheckReportTypeSelector, CCreditCheckReportTypeSelector, HTML> {
 
     private final ReportTypeDetailsResources reportDetailsResources;
 
@@ -42,19 +42,19 @@ public class NCreditCheckReportTypeSelector extends NFocusComponent<CreditCheckR
 
     @Override
     public CreditCheckReportType getNativeValue() throws ParseException {
-        if (!isViewable()) {
-            return getEditor().getCreditCheckReportType();
-        } else {
+        if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;
+        } else {
+            return getEditor().getCreditCheckReportType();
         }
     }
 
     public void setFees(CreditCheckReportType reportType, BigDecimal setupFee, BigDecimal perApplicantFee) {
-        if (!isViewable()) {
-            getEditor().setFees(reportType, setupFee, perApplicantFee);
-        } else {
+        if (isViewable()) {
             assert false : "this is not implemented yet!";
+        } else {
+            getEditor().setFees(reportType, setupFee, perApplicantFee);
         }
     }
 

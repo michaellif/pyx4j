@@ -103,7 +103,7 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
-            public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+            public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }

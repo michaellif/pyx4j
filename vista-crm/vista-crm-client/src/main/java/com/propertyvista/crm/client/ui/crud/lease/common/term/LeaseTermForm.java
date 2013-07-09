@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -395,9 +394,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         crossValidate(get(proto().termFrom()), get(proto().termTo()), null);
 
-        get(proto().termFrom()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().termFrom()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null) {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();
@@ -418,9 +417,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().serviceItem())));
         get(proto().termFrom()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().version().leaseProducts().featureItems())));
 
-        get(proto().termTo()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().termTo()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 return new FutureDateValidator().isValid(component, value);
             }
         });
@@ -430,7 +429,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         get(proto().version().tenants()).addValueValidator(new EditableValueValidator<List<LeaseTermTenant>>() {
             @Override
-            public ValidationError isValid(CComponent<List<LeaseTermTenant>, ?> component, List<LeaseTermTenant> value) {
+            public ValidationError isValid(CComponent<List<LeaseTermTenant>> component, List<LeaseTermTenant> value) {
                 if (value != null) {
                     return (value.isEmpty() ? new ValidationError(component, i18n.tr("At least one tenant should be selected!")) : null);
                 }
@@ -439,7 +438,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         });
     }
 
-    private void crossValidate(CComponent<LogicalDate, ?> date1, CComponent<LogicalDate, ?> date2, String message) {
+    private void crossValidate(CComponent<LogicalDate> date1, CComponent<LogicalDate> date2, String message) {
         new StartEndDateValidation(date1, date2, message);
         date1.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date2));
         date2.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(date1));

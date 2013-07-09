@@ -103,12 +103,12 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member.getObjectClass() == InvoiceLineItem.class) {
                 return new CEntityFolderRowEditor<InvoiceLineItem>(InvoiceLineItem.class, columns()) {
                     @Override
-                    protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                        CComponent<?, ?> comp = super.createCell(column);
+                    protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                        CComponent<?> comp = super.createCell(column);
                         
                         if (column.getObject() == proto().amount()) {
                             @SuppressWarnings("unchecked")

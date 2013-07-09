@@ -45,7 +45,7 @@ public class ZipCodeValueValidator implements EditableValueValidator<String> {
     }
 
     @Override
-    public ValidationError isValid(CComponent<String, ?> component, String value) {
+    public ValidationError isValid(CComponent<String> component, String value) {
         if (value == null) {
             return null;
         }

@@ -348,7 +348,7 @@ public class PersonalIncomeEditor extends CEntityDecoratableForm<CustomerScreeni
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
 
-                CComponent<?, ?> name, ends;
+                CComponent<?> name, ends;
 
                 int row = -1;
                 main.setWidget(++row, 0, new DecoratorBuilder(name = inject(proto().name()), 25).build());

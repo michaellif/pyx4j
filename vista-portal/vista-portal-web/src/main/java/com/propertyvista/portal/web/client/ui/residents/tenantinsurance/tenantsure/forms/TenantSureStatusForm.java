@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 
 import com.pyx4j.entity.shared.IList;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -36,7 +36,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
     private static final I18n i18n = I18n.get(TenantSureStatusForm.class);
 
-    public static class TenantSureMessagesViewer extends CEntityViewer<IList<TenantSureMessageDTO>> {
+    public static class TenantSureMessagesViewer extends CViewer<IList<TenantSureMessageDTO>> {
 
         @Override
         public IsWidget createContent(IList<TenantSureMessageDTO> value) {

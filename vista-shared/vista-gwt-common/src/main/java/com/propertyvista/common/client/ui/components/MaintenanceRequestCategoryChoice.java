@@ -63,7 +63,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     }
 
     @Override
-    protected void setNativeValue(MaintenanceRequestCategory value) {
+    protected void setEditorValue(MaintenanceRequestCategory value) {
         // when parent container populates children, refresh options based on given value before the value is set
         if (isEditable() && optionsMode == LoadOptionsMode.REFRESH) {
             // this is a hack to avoid clearing CComp value, that we are trying to set, from
@@ -73,7 +73,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         }
         // set visibility based on value pushed by parent container or child selector via onValueSet()
         setVisible(parent == null || (value != null && !value.name().isNull()));
-        super.setNativeValue(value);
+        super.setEditorValue(value);
     }
 
     @Override

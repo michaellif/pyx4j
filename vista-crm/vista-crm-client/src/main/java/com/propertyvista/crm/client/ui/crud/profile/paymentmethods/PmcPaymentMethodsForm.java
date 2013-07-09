@@ -49,7 +49,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
         addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
             @Override
-            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO, ?> component, PmcPaymentMethodsDTO paymentMethodsHolder) {
+            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO paymentMethodsHolder) {
                 if (paymentMethodsHolder != null) {
                     boolean hasEquifaxMethod = false;
                     for (PmcPaymentMethod pmcPaymentMethod : paymentMethodsHolder.paymentMethods()) {
@@ -70,7 +70,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
         });
         addValueValidator(new EditableValueValidator<PmcPaymentMethodsDTO>() {
             @Override
-            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO, ?> component, PmcPaymentMethodsDTO value) {
+            public ValidationError isValid(CComponent<PmcPaymentMethodsDTO> component, PmcPaymentMethodsDTO value) {
                 if (value != null && value.paymentMethods().isEmpty()) {
                     return new ValidationError(component, i18n.tr("At least one payment method is required"));
                 } else {

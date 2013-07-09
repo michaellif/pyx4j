@@ -98,16 +98,16 @@ public class AccountRecoveryOptionsForm extends CEntityDecoratableForm<AccountRe
     // decoration stuff:
     protected class DecoratorBuilder extends WidgetDecorator.Builder {
 
-        public DecoratorBuilder(CComponent<?, ?> component) {
+        public DecoratorBuilder(CComponent<?> component) {
             super(component);
         }
 
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth) {
+        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
             super(component);
             componentWidth(componentWidth);
         }
 
-        public DecoratorBuilder(CComponent<?, ?> component, double componentWidth, double labelWidth) {
+        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
             super(component);
             componentWidth(componentWidth);
             labelWidth(labelWidth);

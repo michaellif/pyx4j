@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -74,7 +75,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof PreauthorizedPaymentListDTO.ListItemDTO) {
                 return new PreauthorizedPaymentEditor();
             }
@@ -115,6 +116,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 expirationWarning.setBR(2, 0, 1);
             }
 
+            @SuppressWarnings("rawtypes")
             @Override
             public IsWidget createContent() {
                 FormFlexPanel content = new FormFlexPanel();
@@ -126,7 +128,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setHR(++row, 0, 1);
 
                 content.setWidget(row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()));
-                get(proto().paymentMethod()).setNavigationCommand(new Command() {
+                ((CField) get(proto().paymentMethod())).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         presenter.viewPaymentMethod(getValue());

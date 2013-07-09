@@ -309,12 +309,12 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     private BigDecimal bigDecimalOf(IPrimitive<BigDecimal> object) {
-        BigDecimal value = ((CComponent<BigDecimal, ?>) (get(object))).getValue();
+        BigDecimal value = ((CComponent<BigDecimal>) (get(object))).getValue();
         return value != null ? value : BigDecimal.ZERO;
     }
 
     private Integer integerOf(IPrimitive<Integer> object) {
-        Integer value = ((CComponent<Integer, ?>) (get(object))).getValue();
+        Integer value = ((CComponent<Integer>) (get(object))).getValue();
         return value != null ? value : 0;
     }
 

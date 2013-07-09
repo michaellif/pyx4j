@@ -144,7 +144,7 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
                         @Override
                         public void onSuccess(DatesPolicy result) {
                             // set build year date picker range: 
-                            CComponent<?, ?> comp = get(proto().info().structureBuildYear());
+                            CComponent<?> comp = get(proto().info().structureBuildYear());
                             if (comp instanceof CMonthYearPicker) {
                                 int rangeStart = 1900 + result.yearRangeStart().getValue().getYear();
                                 ((CMonthYearPicker) comp).setYearRange(new Range(rangeStart, (1900 + ClientContext.getServerDate().getYear())
@@ -247,7 +247,7 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
             get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
 
                 @Override
-                public ValidationError isValid(CComponent<String, ?> component, String url) {
+                public ValidationError isValid(CComponent<String> component, String url) {
                     if (url != null) {
                         if (ValidationUtils.isSimpleUrl(url)) {
                             return null;

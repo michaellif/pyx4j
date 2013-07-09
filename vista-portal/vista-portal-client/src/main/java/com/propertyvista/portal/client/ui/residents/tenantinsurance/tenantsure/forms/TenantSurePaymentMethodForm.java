@@ -104,7 +104,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     @Override
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp) {
         if (set) {
             onSameAsCurrentAddressSelected.execute();
         }

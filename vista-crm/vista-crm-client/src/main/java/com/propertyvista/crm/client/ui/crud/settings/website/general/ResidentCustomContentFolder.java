@@ -75,7 +75,7 @@ public class ResidentCustomContentFolder extends VistaBoxFolder<HtmlContent> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof HtmlContent) {
             return new ResidentCustomContentEditor();
         }

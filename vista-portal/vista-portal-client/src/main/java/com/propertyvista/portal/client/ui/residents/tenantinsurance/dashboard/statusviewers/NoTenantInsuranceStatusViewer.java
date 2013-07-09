@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
@@ -28,7 +28,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class NoTenantInsuranceStatusViewer extends CEntityViewer<NoInsuranceTenantInsuranceStatusDTO> {
+public class NoTenantInsuranceStatusViewer extends CViewer<NoInsuranceTenantInsuranceStatusDTO> {
 
     public static final String STYLE_PREFIX = "-vista-NoTenantInsurance";
 

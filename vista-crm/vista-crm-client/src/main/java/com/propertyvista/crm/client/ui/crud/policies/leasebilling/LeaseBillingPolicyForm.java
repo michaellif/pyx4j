@@ -155,7 +155,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return; // New item
         }
 
-        CComponent<?, ?> comp = null;
+        CComponent<?> comp = null;
         switch (baseFeeType) {
         case FlatAmount:
             comp = new CMoneyField();
@@ -183,7 +183,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             return; // New item
         }
 
-        CComponent<?, ?> comp = null;
+        CComponent<?> comp = null;
         switch (maxFeeType) {
         case Unlimited:
         case FlatAmount:
@@ -250,7 +250,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof LeaseBillingTypePolicyItem) {
                 return new LeaseBillingTypeEditor();
             } else {
@@ -306,7 +306,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 });
                 padExecDayOffset.addValueValidator(new EditableValueValidator<Integer>() {
                     @Override
-                    public ValidationError isValid(CComponent<Integer, ?> component, Integer value) {
+                    public ValidationError isValid(CComponent<Integer> component, Integer value) {
                         if (value == null || padCalcDayOffset.getValue() == null) {
                             return null;
                         } else if (value.compareTo(padCalcDayOffset.getValue()) >= 0) {

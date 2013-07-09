@@ -308,7 +308,6 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quoteSection.add(quoteSendHolder);
 
         quoteViewer = new TenantSureQuoteViewer(true);
-        quoteViewer.initContent();
         quoteSection.add(quoteViewer);
 
         retrievingQuoteMessage = new Label();

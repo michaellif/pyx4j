@@ -64,7 +64,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     @Override
     protected DTO preprocessValue(DTO value, boolean fireEvent, boolean populate) {
-        CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
+        CComponent<?> comp = get(proto().currentTerm().version().tenants());
         ((TenantInLeaseFolder) comp).setPadEditable(!value.status().getValue().isFormer());
 
         return super.preprocessValue(value, fireEvent, populate);
@@ -108,7 +108,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
             concessionsHeader.setVisible(!getValue().currentTerm().version().leaseProducts().concessions().isEmpty());
         }
 
-        CComponent<?, ?> comp = get(proto().currentTerm().version().tenants());
+        CComponent<?> comp = get(proto().currentTerm().version().tenants());
         ((TenantInLeaseFolder) comp).setAgeOfMajority(getValue().ageOfMajority().getValue());
     }
 

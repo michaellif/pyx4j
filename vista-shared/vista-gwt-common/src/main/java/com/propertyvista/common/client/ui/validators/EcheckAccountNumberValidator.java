@@ -14,20 +14,20 @@
 package com.propertyvista.common.client.ui.validators;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.util.ValidationUtils;
 
-public class EcheckAccountNumberValidator implements EditableValueValidator<IPersonalIdentity> {
+public class EcheckAccountNumberValidator implements EditableValueValidator<AccountNumberIdentity> {
 
     private static final I18n i18n = I18n.get(EcheckAccountNumberValidator.class);
 
     @Override
-    public ValidationError isValid(CComponent<IPersonalIdentity, ?> component, IPersonalIdentity value) {
+    public ValidationError isValid(CComponent<AccountNumberIdentity> component, AccountNumberIdentity value) {
         if (value == null) {
             return null;
         } else if (CommonsStringUtils.isStringSet(value.newNumber().getValue())) {

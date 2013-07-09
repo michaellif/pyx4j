@@ -14,7 +14,6 @@
 package com.propertyvista.common.client.ui.components.tenantinsurance;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.Command;
@@ -57,7 +56,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof InsuranceCertificateDocument) {
                 return new InsuranceCertificateDocumentEditor();
             } else {
@@ -79,7 +78,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
             panel.setWidget(0, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
             addValueValidator(new EditableValueValidator<InsuranceCertificateDocument>() {
                 @Override
-                public ValidationError isValid(CComponent<InsuranceCertificateDocument, ?> component, InsuranceCertificateDocument value) {
+                public ValidationError isValid(CComponent<InsuranceCertificateDocument> component, InsuranceCertificateDocument value) {
                     if (value != null && value.documentPages().isEmpty()) {
                         return new ValidationError(component, i18n.tr("Please upload the insurance cerificate"));
                     } else {
@@ -142,7 +141,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().liabilityCoverage()), 20).build());
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (TenantInsuranceCertificateForm.this.minRequiredLiability != null && value != null && value.compareTo(minRequiredLiability) < 0) {
                     return new ValidationError(component, i18n.tr("The minimum required liability is {0,number,#,##0.00}", minRequiredLiability));
                 }
@@ -151,7 +150,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         });
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null && value.compareTo(BigDecimal.ZERO) <= 0) {
                     return new ValidationError(component, i18n.tr("Please enter a positive value"));
                 }
@@ -160,9 +159,9 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
         });
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
 
-        get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) > 0) {
                     return new ValidationError(component, i18n.tr("Please provide a date less than or equal of today"));
                 }
@@ -170,9 +169,9 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
             }
         });
         contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
-        get(proto().expiryDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null && value.compareTo(new LogicalDate()) < 0) {
                     return new ValidationError(component, i18n.tr("Please provide a date greater than or equal of today"));
                 }

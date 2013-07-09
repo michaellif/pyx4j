@@ -43,7 +43,7 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof TriggerSchedule) {
             return new TriggerScheduleEditor();
         }

@@ -27,7 +27,7 @@ public class CrmViewersComponentFactory extends VistaViewersComponentFactory {
 
     @SuppressWarnings("rawtypes")
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member.getOwner() == null) {
             throw new Error("Factory doesn't have editor for " + member);
         }

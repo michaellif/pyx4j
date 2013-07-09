@@ -18,11 +18,11 @@ import com.pyx4j.forms.client.ui.CComponent;
 
 public class PastDateValidation {
 
-    public PastDateValidation(CComponent<LogicalDate, ?> value) {
+    public PastDateValidation(CComponent<LogicalDate> value) {
         value.addValueValidator(new PastDateValidator());
     }
 
-    public PastDateValidation(CComponent<LogicalDate, ?> value, final String message) {
+    public PastDateValidation(CComponent<LogicalDate> value, final String message) {
         value.addValueValidator(new PastDateValidator(message));
     }
 }

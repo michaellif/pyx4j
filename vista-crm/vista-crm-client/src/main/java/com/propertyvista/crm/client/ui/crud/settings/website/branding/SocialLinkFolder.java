@@ -78,7 +78,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof SocialLink) {
             return new SocialLinkEditor();
         }
@@ -138,7 +138,7 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
             main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().siteUrl()), 35).build());
             get(proto().siteUrl()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationError isValid(CComponent<String, ?> component, String url) {
+                public ValidationError isValid(CComponent<String> component, String url) {
                     if (url == null || url.length() == 0) {
                         return new ValidationError(component, i18n.tr("URL should not be empty"));
                     } else if (!ValidationUtils.isCorrectUrl(url)) {

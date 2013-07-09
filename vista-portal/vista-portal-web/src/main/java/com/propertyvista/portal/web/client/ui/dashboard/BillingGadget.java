@@ -100,8 +100,8 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
             mainPanel.setWidth("auto");
             mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "120px", "100px", "200px").build());
-            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "120px", "100px", "200px").build());
+            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "120px", "100px", "120px").build());
+            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "120px", "100px", "120px").build());
             contentPanel.add(mainPanel);
 
             if (!VistaFeatures.instance().yardiIntegration()) {

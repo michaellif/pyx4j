@@ -81,7 +81,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
     }
 
     private void bindValueEditor(Concession.Type valueType, boolean repopulatevalue) {
-        CComponent<?, ?> comp = null;
+        CComponent<?> comp = null;
         if (valueType != null) {
             switch (valueType) {
             case monetaryOff:

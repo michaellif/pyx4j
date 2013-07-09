@@ -70,7 +70,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof ProductTaxPolicyItem) {
                 return new ProductTaxPolicyItemEditor();
             } else {

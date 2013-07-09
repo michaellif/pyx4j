@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.unit.dialogs;
 
-import java.util.Date;
-
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
@@ -54,11 +52,11 @@ public class MakePendingDialog extends OkCancelDialog {
                 if (minMakeVacantStartDay.equals(maxMakeVacantStartDay)) {
                     get(proto().pendingStartDay()).setViewable(true);
                 } else {
-                    EditableValueValidator<Date> validator = null;
+                    EditableValueValidator<LogicalDate> validator = null;
                     if (maxMakeVacantStartDay == null) {
-                        validator = new EditableValueValidator<Date>() {
+                        validator = new EditableValueValidator<LogicalDate>() {
                             @Override
-                            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                                 if (value == null || value.before(minMakeVacantStartDay)) {
                                     return new ValidationError(component, i18n.tr("please enter a date greater or equal to {0}", minMakeVacantStartDay));
                                 } else {
@@ -67,9 +65,9 @@ public class MakePendingDialog extends OkCancelDialog {
                             }
                         };
                     } else {
-                        validator = new EditableValueValidator<Date>() {
+                        validator = new EditableValueValidator<LogicalDate>() {
                             @Override
-                            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                                 if (value == null || (value.before(minMakeVacantStartDay) | value.after(maxMakeVacantStartDay))) {
                                     return new ValidationError(component, i18n.tr("please enter a between {0} and {1}", minMakeVacantStartDay,
                                             maxMakeVacantStartDay));

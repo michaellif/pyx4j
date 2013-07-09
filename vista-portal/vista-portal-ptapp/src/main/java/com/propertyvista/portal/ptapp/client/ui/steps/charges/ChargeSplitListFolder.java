@@ -59,7 +59,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof TenantCharge) {
             return new TenantChargeEditor();
         }
@@ -71,7 +71,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         this.addValueValidator(new EditableValueValidator<IList<TenantCharge>>() {
 
             @Override
-            public ValidationError isValid(CComponent<IList<TenantCharge>, ?> component, IList<TenantCharge> value) {
+            public ValidationError isValid(CComponent<IList<TenantCharge>> component, IList<TenantCharge> value) {
                 BigDecimal totalPrc = BigDecimal.ZERO;
                 for (TenantCharge charge : value) {
                     if (charge.tenant().role().getValue() == LeaseTermParticipant.Role.Applicant) {
@@ -95,9 +95,9 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject() == proto().tenant().percentage() && editable) {
-                CComponent<?, ?> comp = inject(column.getObject());
+                CComponent<?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
             } else if (column.getObject() == proto().tenant().leaseParticipant().customer().person().name()) {
@@ -108,7 +108,7 @@ public class ChargeSplitListFolder extends VistaTableFolder<TenantCharge> {
 
 //TODO tenant().percentage() - use CPercentageField
 //        @Override
-//        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?, ?> component, String width) {
+//        protected Widget createCellDecorator(EntityFolderColumnDescriptor column, CComponent<?> component, String width) {
 //            Widget w = super.createCellDecorator(column, component, width);
 //
 //            if (column.getObject() == proto().tenant().percentage()) {

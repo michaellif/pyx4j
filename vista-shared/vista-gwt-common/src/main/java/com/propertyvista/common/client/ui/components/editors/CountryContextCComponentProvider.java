@@ -19,9 +19,9 @@ import com.propertyvista.domain.ref.Country;
 
 public class CountryContextCComponentProvider implements PostalCodeFormat.ICountryContextProvider {
 
-    private final CComponent<Country, ?> component;
+    private final CComponent<Country> component;
 
-    public CountryContextCComponentProvider(CComponent<Country, ?> component) {
+    public CountryContextCComponentProvider(CComponent<Country> component) {
         assert component != null;
         this.component = component;
     }

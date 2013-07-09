@@ -15,7 +15,6 @@ package com.propertyvista.portal.ptapp.client.ui.steps.tenants;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof TenantInLeaseDTO) {
             return new TenantEditor();
         }
@@ -120,9 +119,9 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
 
             get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new OldAgeValidator());
             get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                 @Override
-                public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                     if (getValue() == null || getValue().isEmpty()) {
                         return null;
                     }
@@ -159,7 +158,8 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     }
                 });
 
-                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<LeaseTermParticipant.Role>(get(proto().leaseParticipant().customer().person().birthDate())));
+                get(proto().role()).addValueChangeHandler(
+                        new RevalidationTrigger<LeaseTermParticipant.Role>(get(proto().leaseParticipant().customer().person().birthDate())));
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {

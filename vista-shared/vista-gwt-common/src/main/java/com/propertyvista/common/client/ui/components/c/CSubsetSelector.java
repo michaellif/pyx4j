@@ -33,11 +33,7 @@ public class CSubsetSelector<OPTION_TYPE> extends CFocusComponent<Set<OPTION_TYP
         this.layout = layout;
         this.format = format;
         this.options = options;
-    }
-
-    @Override
-    protected NSubsetSelector<OPTION_TYPE> createWidget() {
-        return new NSubsetSelector<OPTION_TYPE>(this, this.format);
+        setNativeWidget(new NSubsetSelector<OPTION_TYPE>(this, this.format));
     }
 
     public SubsetSelector.Layout getLayout() {

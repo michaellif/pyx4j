@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEnumLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -61,7 +62,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof Feature) {
             return new FeatureEditor();
         }
@@ -76,13 +77,14 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
             setViewable(true);
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
-            CComponent<?, ?> comp = null;
+        public CComponent<?> create(IObject<?> member) {
+            CComponent<?> comp = null;
             if (member.equals(proto().type())) {
                 comp = new CEnumLabel();
                 if (!ServiceFeatureFolder.this.isEditable()) {
-                    comp.setNavigationCommand(new Command() {
+                    ((CField) comp).setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Feature.class).formViewerPlace(getValue().getPrimaryKey()));

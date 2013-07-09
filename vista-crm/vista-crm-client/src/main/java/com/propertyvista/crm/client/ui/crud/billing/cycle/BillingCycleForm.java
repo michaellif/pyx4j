@@ -79,7 +79,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
     // builder specifically for this form (enlarge default label width)
     protected class DecoratorBuilder extends WidgetDecorator.Builder {
 
-        public DecoratorBuilder(CComponent<?, ?> component) {
+        public DecoratorBuilder(CComponent<?> component) {
             super(component);
             labelWidth(20);
             componentWidth(15);

@@ -145,10 +145,10 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
         @SuppressWarnings("unchecked")
         final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
-        CComponent<LogicalDate, ?> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
-        CComponent<LogicalDate, ?> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
-        CComponent<LogicalDate, ?> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
-        CComponent<LogicalDate, ?> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
+        CComponent<LogicalDate> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
+        CComponent<LogicalDate> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
+        CComponent<LogicalDate> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
+        CComponent<LogicalDate> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
 
@@ -194,7 +194,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
                 @Override
-                public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+                public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                     if (value == null || getValue() == null) {
                         return null;
                     }
@@ -225,11 +225,11 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         enablePreviousAddress();
     }
 
-    private void StartEndDateWithinMonth(final CComponent<LogicalDate, ?> value1, final CComponent<LogicalDate, ?> value2, final String message) {
-        value1.addValueValidator(new EditableValueValidator<Date>() {
+    private void StartEndDateWithinMonth(final CComponent<LogicalDate> value1, final CComponent<LogicalDate> value2, final String message) {
+        value1.addValueValidator(new EditableValueValidator<LogicalDate>() {
 
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (getValue() == null || getValue().isEmpty() || value2.getValue() == null) {
                     return null;
                 }

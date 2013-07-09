@@ -73,7 +73,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         get(proto().guests()).addValueValidator(new EditableValueValidator<List<Guest>>() {
             @Override
-            public ValidationError isValid(CComponent<List<Guest>, ?> component, List<Guest> value) {
+            public ValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
                 Boolean hasContact = false;
                 if (value != null) {
                     for (Guest g : value) {

@@ -34,7 +34,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof ProofOfEmploymentDocument) {
             return new ProofOfEmploymentDocumentEditor();
         } else {

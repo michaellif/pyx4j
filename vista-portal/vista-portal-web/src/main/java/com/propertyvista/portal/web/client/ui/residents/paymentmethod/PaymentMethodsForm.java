@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -81,7 +82,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof LeasePaymentMethod) {
                 return new LeasePaymentMethodEditor();
             }
@@ -110,12 +111,13 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                 super(LeasePaymentMethod.class, columns());
             }
 
+            @SuppressWarnings("rawtypes")
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                CComponent<?, ?> comp = null;
+            public CComponent<?> create(IObject<?> member) {
+                CComponent<?> comp = null;
                 if (member.equals(proto().details())) {
                     comp = new CEntityLabel<PaymentDetails>();
-                    comp.setNavigationCommand(new Command() {
+                    ((CField) comp).setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             presenter.viewPaymentMethod(getValue());

@@ -13,9 +13,8 @@
  */
 package com.propertyvista.portal.ptapp.client.ui.steps.apartment;
 
-import java.util.List;
-
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
@@ -63,9 +62,9 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof BillableItem) {
-            CComponent<?, ?> comp = new FeatureExEditor();
+            CComponent<?> comp = new FeatureExEditor();
             if (isAddable()) {
                 comp.inheritViewable(false); // allow editing behavior (default) if folder modifiable...
             }
@@ -102,9 +101,9 @@ public class FeatureExFolder extends VistaBoxFolder<BillableItem> {
 
     @Override
     public void addValidations() {
-        addValueValidator(new EditableValueValidator<List<BillableItem>>() {
+        addValueValidator(new EditableValueValidator<IList<BillableItem>>() {
             @Override
-            public ValidationError isValid(CComponent<List<BillableItem>, ?> component, List<BillableItem> value) {
+            public ValidationError isValid(CComponent<IList<BillableItem>> component, IList<BillableItem> value) {
                 if (value == null) {
                     return null;
                 }

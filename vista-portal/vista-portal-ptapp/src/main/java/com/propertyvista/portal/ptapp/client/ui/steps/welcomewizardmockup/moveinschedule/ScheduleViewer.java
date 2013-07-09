@@ -34,7 +34,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CDatePicker;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.CTimeField;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -42,7 +42,7 @@ import com.propertyvista.domain.moveinwizardmockup.ScheduleDTO;
 import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO;
 import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO.Status;
 
-public class ScheduleViewer extends CEntityViewer<ScheduleDTO> {
+public class ScheduleViewer extends CViewer<ScheduleDTO> {
 
     private static final I18n i18n = I18n.get(ScheduleViewer.class);
 

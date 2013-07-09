@@ -81,7 +81,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PortalImageSet) {
             return new PortalImageSetEditor();
         }

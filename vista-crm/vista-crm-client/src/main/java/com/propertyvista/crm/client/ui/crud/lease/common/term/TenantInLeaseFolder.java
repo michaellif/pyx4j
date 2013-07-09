@@ -136,7 +136,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof LeaseTermTenant) {
             return new TenantInLeaseEditor();
         }
@@ -146,9 +146,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     @Override
     public void addValidations() {
 
-        this.addValueValidator(new EditableValueValidator<List<LeaseTermTenant>>() {
+        this.addValueValidator(new EditableValueValidator<IList<LeaseTermTenant>>() {
             @Override
-            public ValidationError isValid(CComponent<List<LeaseTermTenant>, ?> component, List<LeaseTermTenant> value) {
+            public ValidationError isValid(CComponent<IList<LeaseTermTenant>> component, IList<LeaseTermTenant> value) {
                 if (value != null) {
                     boolean applicant = false;
                     for (LeaseTermTenant item : value) {
@@ -170,7 +170,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         this.addValueValidator(new EditableValueValidator<IList<LeaseTermTenant>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<LeaseTermTenant>, ?> component, IList<LeaseTermTenant> value) {
+            public ValidationError isValid(CComponent<IList<LeaseTermTenant>> component, IList<LeaseTermTenant> value) {
                 if (value != null) {
                     if (value.isEmpty()) {
                         return new ValidationError(component, i18n.tr("At least one Tenant should be present!"));
@@ -232,7 +232,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
                 get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
                     @Override
-                    public ValidationError isValid(CComponent<LeaseTermParticipant.Role, ?> component, LeaseTermParticipant.Role role) {
+                    public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
                         if (getAgeOfMajority() != null) {
                             if (role != null && role == Role.Applicant) {
                                 if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
@@ -323,7 +323,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof PreauthorizedPayment) {
                 return new PreauthorizedPaymentViewer();
             }

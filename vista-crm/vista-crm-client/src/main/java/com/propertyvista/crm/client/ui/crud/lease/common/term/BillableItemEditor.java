@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -83,9 +82,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     private final LeaseTermEditorView leaseTermEditorView;
 
-    private CComponent<LogicalDate, ?> itemEffectiveDateEditor;
+    private CComponent<LogicalDate> itemEffectiveDateEditor;
 
-    private CComponent<LogicalDate, ?> itemExpirationDateEditor;
+    private CComponent<LogicalDate> itemExpirationDateEditor;
 
     public BillableItemEditor(CEntityForm<LeaseTermDTO> leaseTerm, LeaseTermEditorView leaseTermEditorView) {
         super(BillableItem.class);
@@ -133,8 +132,8 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         }), 20).build());
 
         main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate, ?>) inject(proto().effectiveDate()), 9).build());
-        main.setWidget(row, 1, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate, ?>) inject(proto().expirationDate()), 9).build());
+        main.setWidget(++row, 0, new DecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate()), 9).build());
+        main.setWidget(row, 1, new DecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate()), 9).build());
 
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 51).build());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -225,7 +224,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                             item.inheritViewable(false);
 
                             // compensate the fact that item.setViewable DOESN'T call kids' setViewable!?
-                            for (CComponent<?, ?> comp : item.getComponents()) {
+                            for (CComponent<?> comp : item.getComponents()) {
                                 comp.setViewable(true);
                             }
                         }
@@ -331,7 +330,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof BillableItemAdjustment) {
                 return new BillableItemAdjustmentEditor();
             }
@@ -346,11 +345,11 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
             @SuppressWarnings("unchecked")
             @Override
-            protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-                CComponent<?, ?> comp = super.createCell(column);
+            protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                CComponent<?> comp = super.createCell(column);
 
                 if (column.getObject() == proto().type()) {
-                    ((CComponent<Type, ?>) comp).addValueChangeHandler(new ValueChangeHandler<Type>() {
+                    ((CComponent<Type>) comp).addValueChangeHandler(new ValueChangeHandler<Type>() {
                         @Override
                         public void onValueChange(ValueChangeEvent<Type> event) {
                             bindValueEditor(event.getValue(), false);
@@ -368,7 +367,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             }
 
             private void bindValueEditor(Type valueType, boolean populate) {
-                CComponent<?, ?> comp = null;
+                CComponent<?> comp = null;
                 if (valueType != null) {
                     switch (valueType) {
                     case monetary:
@@ -382,7 +381,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
                 if (comp != null) {
                     @SuppressWarnings("unchecked")
-                    IDecorator<CComponent<BigDecimal, ?>> decor = get((proto().value())).getDecorator();
+                    IDecorator<CComponent<BigDecimal>> decor = get((proto().value())).getDecorator();
                     unbind(proto().value());
                     inject(proto().value(), comp);
                     comp.setDecorator(decor);
@@ -403,9 +402,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 itemEffectiveDateEditor.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
 
                 get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
-                get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
+                get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
-                    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                         if (value != null) {
                             if (leaseTerm.getValue().lease().status().getValue() != Lease.Status.ExistingLease && (itemEffectiveDateEditor.getValue() != null)
                                     && value.before(ClientContext.getServerDate())) {
@@ -426,9 +425,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
                 itemExpirationDateEditor.addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
 
                 get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
-                get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
+                get(proto().expirationDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                     @Override
-                    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                    public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                         if (value != null) {
                             if (itemExpirationDateEditor.getValue() != null && value.after(itemExpirationDateEditor.getValue())) {
                                 return new ValidationError(component, "The date should not exceed the Item Expiration date");
@@ -443,7 +442,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
                 get(proto().value()).addValueValidator(new EditableValueValidator<BigDecimal>() {
                     @Override
-                    public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+                    public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                         if (value != null) {
                             if (value.signum() < 0) {
                                 // TODO : some validation here...
@@ -465,9 +464,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         new StartEndDateValidation(get(proto().effectiveDate()), get(proto().expirationDate()));
 
         get(proto().effectiveDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().expirationDate())));
-        get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().effectiveDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null) {
                     if (leaseTerm.getValue().termTo().getValue() != null && value.before(leaseTerm.getValue().termFrom().getValue())) {
                         return new ValidationError(component, "The date should not precede the Lease Start date");
@@ -483,9 +482,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         });
 
         get(proto().expirationDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().effectiveDate())));
-        get(proto().expirationDate()).addValueValidator(new EditableValueValidator<Date>() {
+        get(proto().expirationDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value != null) {
                     if (leaseTerm.getValue().termTo().getValue() != null && value.after(leaseTerm.getValue().termTo().getValue())) {
                         return new ValidationError(component, "The date should not exceed the Lease Expiration date");
@@ -517,7 +516,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof Deposit) {
                 return new DepositEditor();
             }

@@ -65,7 +65,7 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof IAgree) {
             return new AgreeEditor();
         }
@@ -89,11 +89,11 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().person().name() == column.getObject()) {
                 return inject(proto().person().name(), new CEntityLabel<Name>());
             } else if (proto().agree() == column.getObject() && editable) {
-                CComponent<?, ?> comp = inject(proto().agree(), new CCheckBox());
+                CComponent<?> comp = inject(proto().agree(), new CCheckBox());
                 comp.inheritViewable(false); // always not viewable!
                 comp.inheritEditable(false); // control state later in populate...
                 return comp;
@@ -116,7 +116,7 @@ public class AgreeFolder extends VistaTableFolder<IAgree> {
 
             get(proto().agree()).addValueValidator(new EditableValueValidator<Boolean>() {
                 @Override
-                public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+                public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
                     return value == Boolean.TRUE ? null : new ValidationError(get(proto().agree()), i18n
                             .tr("You Must Agree To The Terms And Conditions To Continue"));
                 }

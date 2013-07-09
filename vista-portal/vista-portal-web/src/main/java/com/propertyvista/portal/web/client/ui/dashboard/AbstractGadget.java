@@ -61,7 +61,7 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
     }
 
     @Override
-    public Collection<? extends CComponent<?, ?>> getComponents() {
+    public Collection<? extends CComponent<?>> getComponents() {
         return null;
     }
 

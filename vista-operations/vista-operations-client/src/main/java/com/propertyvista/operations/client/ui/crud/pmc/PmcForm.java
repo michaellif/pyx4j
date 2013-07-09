@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -98,7 +99,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CLabel<String>()), 50).build());
-        get(proto().vistaCrmUrl()).setNavigationCommand(new Command() {
+        ((CField) get(proto().vistaCrmUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().vistaCrmUrl().getValue();
@@ -115,7 +116,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CLabel<String>()), 50).build());
-        get(proto().residentPortalUrl()).setNavigationCommand(new Command() {
+        ((CField) get(proto().residentPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().residentPortalUrl().getValue();
@@ -132,7 +133,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CLabel<String>()), 50).build());
-        get(proto().prospectPortalUrl()).setNavigationCommand(new Command() {
+        ((CField) get(proto().prospectPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 String url = getValue().prospectPortalUrl().getValue();
@@ -164,8 +165,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        final CComponent<Boolean, ?> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
-        final CComponent<Boolean, ?> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
+        final CComponent<Boolean> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
+        final CComponent<Boolean> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());
         yardiIntegrationSwitch.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

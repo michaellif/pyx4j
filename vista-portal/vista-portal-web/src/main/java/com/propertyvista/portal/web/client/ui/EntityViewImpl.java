@@ -137,17 +137,17 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements Enti
         return layout;
     }
 
-    public void updateDecoratorsLayout(CContainer<?, ?> container, Layout layout) {
+    public void updateDecoratorsLayout(CContainer<?> container, Layout layout) {
         if (container.getComponents() == null) {
             return;
         }
-        for (CComponent<?, ?> component : container.getComponents()) {
+        for (CComponent<?> component : container.getComponents()) {
             if (component.getDecorator() instanceof WidgetDecorator) {
                 WidgetDecorator decorator = (WidgetDecorator) component.getDecorator();
                 decorator.setLayout(layout);
             }
             if (component instanceof CContainer) {
-                updateDecoratorsLayout((CContainer<?, ?>) component, layout);
+                updateDecoratorsLayout((CContainer<?>) component, layout);
             }
         }
     }

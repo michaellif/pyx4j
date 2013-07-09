@@ -49,7 +49,7 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
                 contentPanel.add(new DecoratorBuilder(inject(proto().passwordConfirm())).build());
                 get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
                     @Override
-                    public ValidationError isValid(CComponent<String, ?> component, String value) {
+                    public ValidationError isValid(CComponent<String> component, String value) {
                         if (value != null && !value.equals(get(proto().password()).getValue())) {
                             return new ValidationError(component, "Password and Password confirmation don't match");
                         }

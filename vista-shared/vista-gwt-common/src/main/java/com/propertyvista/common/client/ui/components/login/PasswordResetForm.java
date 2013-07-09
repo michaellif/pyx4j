@@ -51,6 +51,10 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
         super(PasswordChangeRequest.class);
         this.passwordStrengthRule = new DefaultPasswordStrengthRule();
         setDictionary(dictionary);
+        asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
+        asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
+        asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
+
     }
 
     public PasswordResetForm() {
@@ -91,7 +95,7 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
     public void addValidations() {
         get(proto().newPasswordConfirm()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String value) {
+            public ValidationError isValid(CComponent<String> component, String value) {
                 if (value == null || !value.equals(get(proto().newPassword()).getValue())) {
                     return new ValidationError(component, i18n.tr("The passwords don't match."));
                 } else {
@@ -127,14 +131,6 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
         super.onValueSet(populate);
 
         passwordStrengthRule.setDictionary(dictionary);
-    }
-
-    @Override
-    protected void onWidgetCreated() {
-        super.onWidgetCreated();
-        asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
-        asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
-        asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
     }
 
 }

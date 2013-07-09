@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
@@ -52,11 +53,12 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
             this.zoomInHandler = zoomInHandler;
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(final EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(final EntityFolderColumnDescriptor column) {
             if (isZoomable(column.getObject())) {
-                CComponent<?, ?> comp = inject(column.getObject(), this.create(column.getObject()));
-                comp.setNavigationCommand(new Command() {
+                CComponent<?> comp = inject(column.getObject(), this.create(column.getObject()));
+                ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         zoomInHandler.onZoomIn(getValue().getMember(column.getObject().getPath()));
@@ -101,7 +103,7 @@ public abstract class ZoomableViewFolder<E extends IEntity> extends VistaTableFo
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member.getValueClass().equals(proto().getValueClass())) {
             ZoomableViewEntityRowEditor<E> e = editorfactory.createEditor(this, columns());
             e.initZoomin(zoomInHandler, zoomableMembers);

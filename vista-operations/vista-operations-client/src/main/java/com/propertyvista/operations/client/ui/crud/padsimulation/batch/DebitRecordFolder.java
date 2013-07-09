@@ -33,7 +33,7 @@ public class DebitRecordFolder extends VistaBoxFolder<PadSimDebitRecord> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PadSimDebitRecord) {
             return new DebitRecordEditor();
         }

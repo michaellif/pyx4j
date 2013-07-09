@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -70,7 +71,7 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof BillDataDTO) {
                 return new BillEditor();
             }
@@ -83,13 +84,14 @@ public class BillingHistoryForm extends CEntityForm<BillListDTO> {
                 super(BillDataDTO.class, columns());
             }
 
+            @SuppressWarnings("rawtypes")
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                CComponent<?, ?> comp = null;
+            public CComponent<?> create(IObject<?> member) {
+                CComponent<?> comp = null;
                 if (member.equals(proto().amount())) {
                     comp = new CLabel<BigDecimal>();
                     comp.setViewable(true);
-                    comp.setNavigationCommand(new Command() {
+                    ((CField) comp).setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             presenter.view(getValue());

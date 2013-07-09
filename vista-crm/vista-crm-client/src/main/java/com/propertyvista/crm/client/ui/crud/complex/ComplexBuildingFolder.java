@@ -21,11 +21,13 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -58,7 +60,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof Building) {
             return new ComplexBuildingEditor();
         }
@@ -96,11 +98,12 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
             setViewable(true);
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (proto().propertyCode() == column.getObject()) {
-                CComponent<?, ?> comp = inject(proto().propertyCode());
-                comp.setNavigationCommand(new Command() {
+                CComponent<?> comp = inject(proto().propertyCode());
+                ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(Building.class).formViewerPlace(getValue().getPrimaryKey()));
@@ -110,7 +113,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
             } else if (proto().info() == column.getObject()) {
                 return inject(proto().info(), new CEntityLabel<BuildingInfo>());
             } else if (column.getObject() == proto().complexPrimary() && isEditable()) {
-                CComponent<?, ?> comp = inject(column.getObject());
+                CComponent<?> comp = inject(column.getObject());
                 comp.inheritViewable(false); // always not viewable!
                 return comp;
             }
@@ -126,7 +129,7 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < ComplexBuildingFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?> comp : ComplexBuildingFolder.this.getItem(i).getComponents()) {
+                            for (CComponent<?> comp : ComplexBuildingFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof ComplexBuildingEditor && !comp.equals(ComplexBuildingEditor.this)) {
                                     ((ComplexBuildingEditor) comp).get(proto().complexPrimary()).setValue(false);
                                 }
@@ -142,9 +145,9 @@ public class ComplexBuildingFolder extends VistaTableFolder<Building> {
     public void addValidations() {
         super.addValidations();
 
-        this.addValueValidator(new EditableValueValidator<List<Building>>() {
+        this.addValueValidator(new EditableValueValidator<IList<Building>>() {
             @Override
-            public ValidationError isValid(CComponent<List<Building>, ?> component, List<Building> value) {
+            public ValidationError isValid(CComponent<IList<Building>> component, IList<Building> value) {
                 if (value != null && !value.isEmpty()) {
                     boolean primaryFound = false;
                     for (Building item : value) {

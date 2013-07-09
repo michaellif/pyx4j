@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.s
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
@@ -23,7 +23,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceSt
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
 
 /** this is a class that supposed to implement 'polymorphic' tenant insurance status viewer */
-public class TenantInsuranceStatusViewer extends CEntityViewer<TenantInsuranceStatusDTO> {
+public class TenantInsuranceStatusViewer extends CViewer<TenantInsuranceStatusDTO> {
 
     public enum Styles {
         TenantInsuranceWarningText, TenantInsuranceAnchor;

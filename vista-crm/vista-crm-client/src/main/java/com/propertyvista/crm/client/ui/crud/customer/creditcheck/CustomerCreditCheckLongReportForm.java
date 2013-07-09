@@ -239,7 +239,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof AccountDTO) {
                 return new AccountViewer();
             }
@@ -298,7 +298,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof JudgementDTO) {
                 return new JudgementViewer();
             }
@@ -353,7 +353,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof ProposalDTO) {
                 return new ProposalViewer();
             }
@@ -408,7 +408,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof EvictionDTO) {
                 return new EvictionViewer();
             }
@@ -466,7 +466,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof RentDTO) {
                 return new RentViewer();
             }
@@ -525,7 +525,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof CollectionDTO) {
                 return new CollectionViewer();
             }

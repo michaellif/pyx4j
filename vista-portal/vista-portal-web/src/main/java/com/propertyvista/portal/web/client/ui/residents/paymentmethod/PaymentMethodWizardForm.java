@@ -63,7 +63,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         }
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
                 ((PaymentMethodWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {

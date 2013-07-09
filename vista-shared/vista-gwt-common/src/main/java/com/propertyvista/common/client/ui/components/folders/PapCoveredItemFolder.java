@@ -50,7 +50,7 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PreauthorizedPaymentCoveredItem) {
             return new CoveredItemViewer();
         }
@@ -64,8 +64,8 @@ public class PapCoveredItemFolder extends VistaTableFolder<PreauthorizedPayment.
         }
 
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp;
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?> comp;
 
             if (column.getObject() == proto().billableItem()) {
                 comp = inject(column.getObject(), new PapBillableItemLabel());

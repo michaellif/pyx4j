@@ -86,7 +86,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PageContent) {
             return new PageContentEditor();
         }
@@ -98,7 +98,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
         super.addValidations();
         this.addValueValidator(new EditableValueValidator<IList<PageContent>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<PageContent>, ?> component, IList<PageContent> value) {
+            public ValidationError isValid(CComponent<IList<PageContent>> component, IList<PageContent> value) {
                 if (value == null) {
                     return null;
                 }

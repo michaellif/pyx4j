@@ -44,7 +44,6 @@ import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO;
 import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardNumberIdentity;
-import com.propertyvista.domain.payment.PaymentType;
 
 public class InsurancePaymentMethodForm extends CEntityDecoratableForm<InsurancePaymentMethodDTO> {
 
@@ -109,16 +108,16 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
         container.setWidget(++row, 0, paymentTypeImagesPanel);
 
-        CRadioGroup<PaymentType> paymentType = (CRadioGroup<PaymentType>) inject(proto().paymentMethod(), radioGroup);
+        CRadioGroup<PaymentMethod> paymentMethod = inject(proto().paymentMethod(), radioGroup);
 
-        paymentType.asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
+        paymentMethod.asWidget().setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorButtons.name());
 
         ComplexPanel instrumentsPanel = new FlowPanel();
         instrumentsPanel.asWidget().getElement().addClassName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorForm.name());
 
         instrumentsPanel.add(inject(proto().creditCard(), createCreditCardInfoEditor()));
 
-        container.setWidget(row, 1, paymentType);
+        container.setWidget(row, 1, paymentMethod);
 
         container.setWidget(row, 2, instrumentsPanel);
 
@@ -150,7 +149,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
         container.setWidth("100%");
 
-        paymentType.setValue(PaymentType.Echeck);
+        paymentMethod.setValue(PaymentMethod.Visa);
 
         return container;
 
@@ -182,8 +181,8 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
             }
 
             @Override
-            public CComponent<?, ?> create(IObject<?> member) {
-                CComponent<?, ?> comp = super.create(member);
+            public CComponent<?> create(IObject<?> member) {
+                CComponent<?> comp = super.create(member);
                 if (comp instanceof CMonthYearPicker) {
                     Date now = new Date();
                     @SuppressWarnings("deprecation")
@@ -202,7 +201,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
     class InnerPanelWidgetDecorator extends WidgetDecorator {
 
-        public InnerPanelWidgetDecorator(CComponent<?, ?> component) {
+        public InnerPanelWidgetDecorator(CComponent<?> component) {
             super(new Builder(component).labelWidth(12).componentWidth(12));
         }
 

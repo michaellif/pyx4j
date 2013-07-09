@@ -57,7 +57,7 @@ public class EmergencyContactFolder extends CEntityFolder<EmergencyContact> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
             return new EmergencyContactEditor(view) {
                 @Override

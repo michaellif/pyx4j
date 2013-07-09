@@ -49,7 +49,7 @@ public class PersonalAssetFolder extends VistaTableFolder<CustomerScreeningPerso
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningPersonalAsset) {
             return new PersonalAssetEditor();
         }
@@ -66,7 +66,7 @@ public class PersonalAssetFolder extends VistaTableFolder<CustomerScreeningPerso
         public void addValidations() {
             get(proto().percent()).addValueValidator(new EditableValueValidator<Double>() {
                 @Override
-                public ValidationError isValid(CComponent<Double, ?> component, Double value) {
+                public ValidationError isValid(CComponent<Double> component, Double value) {
                     return (value == null) || ((value >= 0) && (value <= 100)) ? null : new ValidationError(component, i18n
                             .tr("Value Should Be In Range Of 0-100%"));
                 }

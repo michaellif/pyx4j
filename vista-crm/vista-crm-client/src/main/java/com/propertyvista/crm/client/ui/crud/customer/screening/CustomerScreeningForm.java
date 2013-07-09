@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.customer.screening;
 
-import java.util.Date;
-
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
@@ -102,9 +100,9 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
 
-        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<Date>() {
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
@@ -122,9 +120,9 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
         new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
 
-        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<Date>() {
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
-            public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+            public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }

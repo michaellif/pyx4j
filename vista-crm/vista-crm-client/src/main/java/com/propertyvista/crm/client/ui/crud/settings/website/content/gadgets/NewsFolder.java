@@ -30,7 +30,7 @@ public class NewsFolder extends VistaBoxFolder<News> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof News) {
             return new NewsEditor();
         }

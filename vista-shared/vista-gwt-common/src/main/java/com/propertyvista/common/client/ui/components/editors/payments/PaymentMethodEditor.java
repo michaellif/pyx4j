@@ -331,7 +331,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         }
     }
 
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp) {
         // Implements meaningful in derived classes...
     }
 

@@ -26,7 +26,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 public class OperationsEditorsComponentFactory extends VistaEditorsComponentFactory {
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         return super.create(member);
     }
 

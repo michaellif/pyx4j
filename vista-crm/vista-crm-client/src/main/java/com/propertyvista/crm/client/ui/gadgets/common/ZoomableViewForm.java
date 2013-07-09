@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 
@@ -57,8 +58,9 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecorat
 
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
-    public void bind(CComponent<?, ?> component, final IObject<?> member) {
+    public void bind(CComponent<?> component, final IObject<?> member) {
         super.bind(component, member);
         if (zoomInHandler != null) {
             if ((component instanceof ZoomableViewFolder) & isZoomable(member)) {
@@ -75,7 +77,7 @@ public abstract class ZoomableViewForm<E extends IEntity> extends CEntityDecorat
                 ((ZoomableViewFolder<?>) component)
                         .initZoomIn(zoomInHandler, transformedZoomInMembers.toArray(new IObject<?>[transformedZoomInMembers.size()]));
             } else if (isZoomable(member)) {
-                component.setNavigationCommand(new Command() {
+                ((CField) component).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         zoomInHandler.onZoomIn(ZoomableViewForm.this.getValue().getMember(member.getPath()));

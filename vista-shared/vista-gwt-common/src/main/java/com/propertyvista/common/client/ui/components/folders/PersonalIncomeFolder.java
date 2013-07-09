@@ -21,8 +21,8 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.editors.PersonalIncomeEditor;
-import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 import com.propertyvista.domain.tenant.income.CustomerScreeningIncome;
+import com.propertyvista.domain.tenant.income.IncomeInfoEmployer;
 
 public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome> {
 
@@ -33,7 +33,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof CustomerScreeningIncome) {
             return new PersonalIncomeEditor();
         }
@@ -48,7 +48,7 @@ public class PersonalIncomeFolder extends VistaBoxFolder<CustomerScreeningIncome
 
             @SuppressWarnings("incomplete-switch")
             @Override
-            public ValidationError isValid(CComponent<IList<CustomerScreeningIncome>, ?> component, IList<CustomerScreeningIncome> value) {
+            public ValidationError isValid(CComponent<IList<CustomerScreeningIncome>> component, IList<CustomerScreeningIncome> value) {
                 if (value != null && value.size() == 1) {
                     CustomerScreeningIncome income = value.get(0);
                     if (!income.details().isEmpty()) {

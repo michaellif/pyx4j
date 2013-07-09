@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -62,7 +63,7 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof HomePageGadget) {
             return new HomePageGadgetItemEditor();
         }
@@ -75,12 +76,13 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
             super(HomePageGadget.class, columns());
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
-            CComponent<?, ?> comp = null;
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+            CComponent<?> comp = null;
             if (column.getObject().equals(proto().name())) {
                 comp = new CLabel<String>();
-                comp.setNavigationCommand(new Command() {
+                ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(HomePageGadget.class, getValue().getPrimaryKey()));

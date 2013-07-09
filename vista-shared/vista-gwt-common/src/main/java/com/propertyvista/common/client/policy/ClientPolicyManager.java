@@ -149,7 +149,7 @@ public class ClientPolicyManager {
 
     // helpers-specializations:
 
-    public static void setIdComponentEditabilityByPolicy(final IdTarget idTarget, final CComponent<String, ?> idComp, final Key entityKey) {
+    public static void setIdComponentEditabilityByPolicy(final IdTarget idTarget, final CComponent<String> idComp, final Key entityKey) {
         idComp.setVisible(true);
         idComp.setViewable(false);
         ClientPolicyManager.obtainEffectivePolicy(ClientPolicyManager.getOrganizationPoliciesNode(), IdAssignmentPolicy.class,

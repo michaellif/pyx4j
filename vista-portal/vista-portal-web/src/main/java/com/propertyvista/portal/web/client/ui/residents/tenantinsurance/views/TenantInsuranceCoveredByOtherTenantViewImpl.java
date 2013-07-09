@@ -30,7 +30,6 @@ public class TenantInsuranceCoveredByOtherTenantViewImpl extends Composite imple
         viewPanel = new SimplePanel();
         viewPanel.getElement().getStyle().setPadding(20, Unit.PX);
         statusViewer = new TenantInsuranceStatusViewer();
-        statusViewer.initContent();
         viewPanel.setWidget(statusViewer);
         initWidget(viewPanel);
     }

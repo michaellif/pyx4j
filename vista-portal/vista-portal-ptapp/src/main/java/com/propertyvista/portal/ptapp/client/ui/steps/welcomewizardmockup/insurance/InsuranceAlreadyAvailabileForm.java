@@ -48,7 +48,7 @@ public class InsuranceAlreadyAvailabileForm extends CEntityDecoratableForm<Exist
         addValueValidator(new EditableValueValidator<ExistingInsurance>() {
 
             @Override
-            public ValidationError isValid(CComponent<ExistingInsurance, ?> component, ExistingInsurance value) {
+            public ValidationError isValid(CComponent<ExistingInsurance> component, ExistingInsurance value) {
                 if (!component.isValid()) {
                     return new ValidationError(component, i18n.tr("Valid Proof of Insurance is Required prior to Move-In"));
                 } else {

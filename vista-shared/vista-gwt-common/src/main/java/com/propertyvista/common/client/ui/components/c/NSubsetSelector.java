@@ -22,10 +22,9 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.NFocusComponent;
+import com.pyx4j.forms.client.ui.NFocusField;
 
-
-public class NSubsetSelector<OPTION_TYPE> extends NFocusComponent<Set<OPTION_TYPE>, SubsetSelector<OPTION_TYPE>, CSubsetSelector<OPTION_TYPE>, HTML> {
+public class NSubsetSelector<OPTION_TYPE> extends NFocusField<Set<OPTION_TYPE>, SubsetSelector<OPTION_TYPE>, CSubsetSelector<OPTION_TYPE>, HTML> {
 
     private final IFormat<OPTION_TYPE> format;
 
@@ -45,10 +44,11 @@ public class NSubsetSelector<OPTION_TYPE> extends NFocusComponent<Set<OPTION_TYP
 
     @Override
     public Set<OPTION_TYPE> getNativeValue() throws ParseException {
-        if (!isViewable()) {
-            return getEditor().getValue();
+        if (isViewable()) {
+            assert false : "getNativeValue() shouldn't be called in viewable mode";
+            return null;
         } else {
-            throw new IllegalStateException("getNativeValue() shouldn't be called in viewable mode");
+            return getEditor().getValue();
         }
     }
 

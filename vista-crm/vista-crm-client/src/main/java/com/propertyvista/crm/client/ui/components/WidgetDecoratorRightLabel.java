@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.Label;
  * side.
  * 
  */
-public class WidgetDecoratorRightLabel extends Composite implements IDecorator<CComponent<?, ?>> {
+public class WidgetDecoratorRightLabel extends Composite implements IDecorator<CComponent<?>> {
 
     private final FlowPanel panel;
 
@@ -49,7 +49,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
 
     private final Label label;
 
-    private CComponent<?, ?> component;
+    private CComponent<?> component;
 
     private final Label validationLabel;
 
@@ -64,7 +64,7 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
      * @param labelWidth
      *            label width in "EM"s
      */
-    public WidgetDecoratorRightLabel(CComponent<?, ?> component, double componentWidth, double labelWidth) {
+    public WidgetDecoratorRightLabel(CComponent<?> component, double componentWidth, double labelWidth) {
         this.componentWidth = componentWidth;
         panel = new FlowPanel();
 
@@ -96,9 +96,9 @@ public class WidgetDecoratorRightLabel extends Composite implements IDecorator<C
     }
 
     @Override
-    public void setComponent(CComponent<?, ?> component) {
+    public void setComponent(CComponent<?> component) {
         this.component = component;
-        this.component.setWidth(componentWidth + "em");
+        this.component.asWidget().setWidth(componentWidth + "em");
         this.component.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
             public void onPropertyChange(PropertyChangeEvent event) {

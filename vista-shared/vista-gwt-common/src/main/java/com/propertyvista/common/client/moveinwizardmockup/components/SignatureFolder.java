@@ -62,7 +62,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof DigitalSignature) {
             return new DigitalSignatureEditor();
         }
@@ -112,7 +112,7 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
 
             get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationError isValid(CComponent<String, ?> component, String value) {
+                public ValidationError isValid(CComponent<String> component, String value) {
                     if (getValue() == null || getValue().isEmpty()) {
                         return null;
                     }

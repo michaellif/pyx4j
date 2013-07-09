@@ -87,7 +87,7 @@ public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<Leg
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if ((member instanceof LegalTermsDescriptor)) {
                 return new LegalTermsForm(isEditable());
             }

@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -73,7 +74,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
                 public void onValueChange(ValueChangeEvent<Boolean> event) {
                     if (event.getValue().booleanValue()) {
                         for (int i = 0; i < PmcPaymentMethodFolder.this.getItemCount(); ++i) {
-                            for (CComponent<?, ?> comp : PmcPaymentMethodFolder.this.getItem(i).getComponents()) {
+                            for (CComponent<?> comp : PmcPaymentMethodFolder.this.getItem(i).getComponents()) {
                                 if (comp instanceof PmcPaymentMethodEditor && !comp.equals(PmcPaymentMethodEditor.this)) {
                                     ((PmcPaymentMethodEditor) comp).get(proto().selectForEquifaxPayments()).setValue(false, false);
                                 }
@@ -87,12 +88,13 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         @Override
         protected CEntityForm<?> createEcheckInfoEditor() {
             return new EcheckInfoEditor() {
+                @SuppressWarnings("rawtypes")
                 @Override
                 public IsWidget createContent() {
                     IsWidget content = super.createContent();
 
                     if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-                        get(proto().accountNo()).setNavigationCommand(new Command() {
+                        ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {
                                 GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
@@ -118,7 +120,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PmcPaymentMethod) {
             return new PmcPaymentMethodEditor();
         }

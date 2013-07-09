@@ -64,7 +64,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
         form = new PasswordChangeForm();
         form.initContent();
-        form.setWidth("100%");
+        form.asWidget().setWidth("100%");
         content.setWidget(++row, 0, form);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 

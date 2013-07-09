@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
@@ -81,7 +82,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
                         new DefaultAsyncCallback<AddressStructured>() {
@@ -98,12 +99,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         @Override
         protected CEntityForm<?> createEcheckInfoEditor() {
             return new EcheckInfoEditor() {
+                @SuppressWarnings("rawtypes")
                 @Override
                 public IsWidget createContent() {
                     IsWidget content = super.createContent();
 
                     if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-                        get(proto().accountNo()).setNavigationCommand(new Command() {
+                        ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {
                                 GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
@@ -181,8 +183,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                                         false, PaymentForm.this.getValue().participants()) {
                                     @Override
                                     public boolean onClickOk() {
-                                        CComponent<?, ?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
-                                        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp).setValue(getSelectedItems().get(0));
+                                        CComponent<?> comp = get(PaymentForm.this.proto().leaseTermParticipant());
+                                        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp).setValue(getSelectedItems().get(0));
                                         return true;
                                     }
                                 };
@@ -225,8 +227,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().finalizeDate()).setViewable(true);
         get(proto().lastStatusChangeDate()).setViewable(true);
 
-        CComponent<?, ?> comp = get(proto().leaseTermParticipant());
-        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>, ?>) comp)
+        CComponent<?> comp = get(proto().leaseTermParticipant());
+        ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp)
                 .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                     @Override
                     public void onValueChange(ValueChangeEvent<LeaseTermParticipant<? extends LeaseParticipant<?>>> event) {
@@ -402,7 +404,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     public void addValidations() {
         get(proto().amount()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
-            public ValidationError isValid(CComponent<BigDecimal, ?> component, BigDecimal value) {
+            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
                 if (value != null) {
                     return (value.compareTo(BigDecimal.ZERO) > 0 ? null
                             : new ValidationError(component, i18n.tr("Payment amount should be greater then zero!")));

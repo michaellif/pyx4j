@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
@@ -73,7 +74,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof LeasePaymentMethod) {
             return new LeasePaymentMethodEditor();
         }
@@ -100,12 +101,13 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         @Override
         protected CEntityForm<?> createEcheckInfoEditor() {
             return new EcheckInfoEditor() {
+                @SuppressWarnings("rawtypes")
                 @Override
                 public IsWidget createContent() {
                     IsWidget content = super.createContent();
 
                     if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
-                        get(proto().accountNo()).setNavigationCommand(new Command() {
+                        ((CField) get(proto().accountNo())).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {
                                 GWT.<RevealAccountNumberService> create(RevealAccountNumberService.class).obtainUnobfuscatedAccountNumber(
@@ -126,12 +128,12 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         }
 
         @Override
-        protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp) {
+        protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp) {
             PaymentMethodFolder.this.onBillingAddressSameAsCurrentOne(set, comp);
         }
     }
 
-    protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured, ?> comp);
+    protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp);
 
     protected abstract void getAllowedPaymentTypes(AsyncCallback<EnumSet<PaymentType>> callback);
 
@@ -141,7 +143,7 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 //
 //        this.addValueValidator(new EditableValueValidator<List<PaymentMethod>>() {
 //            @Override
-//            public ValidationFailure isValid(CComponent<List<PaymentMethod>, ?> component, List<PaymentMethod> value) {
+//            public ValidationFailure isValid(CComponent<List<PaymentMethod>> component, List<PaymentMethod> value) {
 //                if (value != null && !value.isEmpty()) {
 //                    boolean primaryFound = false;
 //                    for (PaymentMethod item : value) {

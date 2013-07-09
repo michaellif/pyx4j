@@ -106,7 +106,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAgree()), 5).build());
         main.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class, true) {
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured, ?> comp) {
+            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
                 if (set) {
                     assert (view != null);
                     view.getPresenter().getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
@@ -160,7 +160,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
 
         get(proto().depositAgree()).addValueValidator(new EditableValueValidator<Boolean>() {
             @Override
-            public ValidationError isValid(CComponent<Boolean, ?> component, Boolean value) {
+            public ValidationError isValid(CComponent<Boolean> component, Boolean value) {
                 if (value == null) {
                     return null;
                 }

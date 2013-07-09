@@ -25,6 +25,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -62,7 +63,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof LeaseParticipanApprovalDTO) {
             return new LeaseParticipanApprovalViewer();
         }
@@ -87,7 +88,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             left.setWidget(++row, 0,
                     new DecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().customer().person().name(), new CEntityLabel<Name>()), 20)
                             .build());
-            get(proto().leaseParticipant().leaseParticipant().customer().person().name()).setNavigationCommand(new Command() {
+            ((CField) get(proto().leaseParticipant().leaseParticipant().customer().person().name())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
                     if (getValue().leaseParticipant().isInstanceOf(LeaseTermTenant.class)) {

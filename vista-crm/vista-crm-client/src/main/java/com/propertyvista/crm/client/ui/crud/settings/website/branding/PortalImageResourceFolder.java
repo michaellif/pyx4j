@@ -90,7 +90,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PortalLogoImageResource) {
             return new PortalImageResourceEditor();
         }

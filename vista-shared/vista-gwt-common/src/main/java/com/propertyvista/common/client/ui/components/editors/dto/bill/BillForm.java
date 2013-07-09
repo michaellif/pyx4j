@@ -155,7 +155,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     protected class DecoratorBuilder extends WidgetDecorator.Builder { //builder specifically for this form (as it uses mixed formats)
 
-        public DecoratorBuilder(CComponent<?, ?> component) {
+        public DecoratorBuilder(CComponent<?> component) {
             super(component);
             componentAlignment(Alignment.right);
             labelAlignment(Alignment.left);

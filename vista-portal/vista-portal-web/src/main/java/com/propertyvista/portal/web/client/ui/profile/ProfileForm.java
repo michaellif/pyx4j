@@ -89,7 +89,7 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
     public void addValidations() {
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
-            public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+            public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }

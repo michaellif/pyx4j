@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -50,7 +51,7 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PageDescriptor) {
             return new PageDescriptorEditor();
         }
@@ -71,11 +72,12 @@ class PageDescriptorFolder extends VistaTableFolder<PageDescriptor> {
             super(PageDescriptor.class, columns());
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().name())) {
-                CComponent<?, ?> comp = new CLabel<String>();
-                comp.setNavigationCommand(new Command() {
+                CComponent<?> comp = new CLabel<String>();
+                ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         viewer.viewChild(getValue().getPrimaryKey());

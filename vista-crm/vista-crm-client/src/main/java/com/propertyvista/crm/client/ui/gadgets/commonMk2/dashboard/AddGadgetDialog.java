@@ -196,7 +196,7 @@ public abstract class AddGadgetDialog extends OkDialog implements OkOptionText {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof AddGadgetGadgetDescriptor) {
                 return new GadgetDescriptorForm();
             } else {

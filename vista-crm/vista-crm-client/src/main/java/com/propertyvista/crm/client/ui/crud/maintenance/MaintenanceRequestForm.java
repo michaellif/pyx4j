@@ -81,6 +81,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
         selectTab(addTab(createGeneralTab()));
+        initSelectors();
+
     }
 
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
@@ -231,12 +233,6 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
         mrCategory.setOptionsMeta(meta);
         choicesReady = true;
-    }
-
-    @Override
-    protected void setNativeValue(MaintenanceRequestDTO value) {
-        initSelectors();
-        super.setNativeValue(value);
     }
 
     @Override

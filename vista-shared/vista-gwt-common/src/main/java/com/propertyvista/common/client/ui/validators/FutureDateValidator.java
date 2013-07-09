@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-public class FutureDateValidator implements EditableValueValidator<Date> {
+public class FutureDateValidator<E extends Date> implements EditableValueValidator<E> {
 
     private static final I18n i18n = I18n.get(FutureDateValidator.class);
 
@@ -37,7 +37,7 @@ public class FutureDateValidator implements EditableValueValidator<Date> {
     }
 
     @Override
-    public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+    public ValidationError isValid(CComponent<E> component, E value) {
         return (value == null) || !value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
     }
 }

@@ -33,7 +33,7 @@ public class InsuranceUploaderFolder extends VistaBoxFolder<InsuranceCertificate
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof InsuranceCertificate) {
             return new InsuranceCertificateDocumentEditor();
         } else {

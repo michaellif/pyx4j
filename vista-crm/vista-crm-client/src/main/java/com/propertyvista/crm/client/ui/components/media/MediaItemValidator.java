@@ -25,7 +25,7 @@ public class MediaItemValidator implements EditableValueValidator<Media> {
     private static final I18n i18n = I18n.get(MediaItemValidator.class);
 
     @Override
-    public ValidationError isValid(CComponent<Media, ?> component, Media value) {
+    public ValidationError isValid(CComponent<Media> component, Media value) {
         if (value == null) {
             return null;
         }

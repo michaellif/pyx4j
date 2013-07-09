@@ -44,7 +44,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof LegalTermsContent) {
             return new LegalTermsContentEditor();
         } else {
@@ -57,7 +57,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
         super.addValidations();
         this.addValueValidator(new EditableValueValidator<IList<LegalTermsContent>>() {
             @Override
-            public ValidationError isValid(CComponent<IList<LegalTermsContent>, ?> component, IList<LegalTermsContent> value) {
+            public ValidationError isValid(CComponent<IList<LegalTermsContent>> component, IList<LegalTermsContent> value) {
                 if (value == null || value.isEmpty()) {
                     return new ValidationError(component, i18n.tr("At least one content item is necessary"));
                 } else {
@@ -81,7 +81,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).labelWidth(10).build());
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().localizedCaption()), 20).labelWidth(10).build());
 
-            CComponent<?, ?> termsContentComp = null;
+            CComponent<?> termsContentComp = null;
             if (isEditable()) {
                 CRichTextArea editor = new CRichTextArea();
                 editor.setImageProvider(new SiteImageResourceProvider());

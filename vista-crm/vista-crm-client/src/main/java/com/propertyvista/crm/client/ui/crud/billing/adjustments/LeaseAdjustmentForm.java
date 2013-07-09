@@ -157,7 +157,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     }
 
     private void bindValueEditor(TaxType valueType, boolean repopulate) {
-        CComponent<?, ?> comp = null;
+        CComponent<?> comp = null;
         if (valueType != null) {
             switch (valueType) {
             case value:

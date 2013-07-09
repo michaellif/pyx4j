@@ -28,7 +28,7 @@ import com.propertyvista.domain.ref.Country;
 public class VistaEditorsComponentFactory extends EntityFormComponentFactory {
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member.getValueClass().equals(Country.class) && EditorType.suggest.equals(member.getMeta().getEditorType())) {
             final CEntitySuggestBox<Country> c = new CEntitySuggestBox<Country>(Country.class);
             c.setFormat(new IFormat<Country>() {

@@ -19,13 +19,13 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.commons.css.IStyleName;
-import com.pyx4j.forms.client.ui.CEntityViewer;
+import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.domain.policy.policies.domain.LegalTermsContent;
 
-public class LegalTermsContentViewer extends CEntityViewer<LegalTermsContent> {
+public class LegalTermsContentViewer extends CViewer<LegalTermsContent> {
 
     public enum Styles implements IStyleName {
         LegalTermsContentViewerCaption, LegalTermsContentViewerHolder, LegalTermsContentViewerContent;

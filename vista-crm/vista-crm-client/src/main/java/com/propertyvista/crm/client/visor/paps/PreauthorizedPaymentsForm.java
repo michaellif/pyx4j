@@ -100,7 +100,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof PreauthorizedPaymentDTO) {
                 return new PreauthorizedPaymentEditor();
             }

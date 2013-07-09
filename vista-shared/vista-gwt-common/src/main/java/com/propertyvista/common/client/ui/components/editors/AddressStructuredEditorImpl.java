@@ -68,10 +68,10 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         FormFlexPanel left = new FormFlexPanel();
         int row = 0;
 
-        final CComponent<Country, ?> country = (CComponent<Country, ?>) inject(proto().country());
+        final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
         left.setWidget(row++, 0, new DecoratorBuilder(country, "150px").build());
 
-        final CComponent<Province, ?> province = (CComponent<Province, ?>) inject(proto().province());
+        final CComponent<Province> province = (CComponent<Province>) inject(proto().province());
         left.setWidget(row++, 0, new DecoratorBuilder(province, "150px").build());
 
         final VerticalPanel county = new VerticalPanel();
@@ -80,7 +80,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
 
         left.setWidget(row++, 0, new DecoratorBuilder(inject(proto().city()), "150px").build());
 
-        final CComponent<String, ?> postalCode = (CComponent<String, ?>) inject(proto().postalCode());
+        final CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
@@ -139,7 +139,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
         }
     }
 
-    private void attachFilters(final AddressStructured proto, CComponent<Province, ?> province, CComponent<Country, ?> country, CComponent<String, ?> postalCode) {
+    private void attachFilters(final AddressStructured proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {
         postalCode.addValueValidator(new ZipCodeValueValidator(this, proto.country()));
         country.addValueChangeHandler(new RevalidationTrigger<Country>(postalCode));
 
@@ -199,7 +199,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
     // this decorator was made so that address form will look well on print
     class DecoratorBuilder extends WidgetDecorator.Builder {
 
-        public DecoratorBuilder(CComponent<?, ?> component, String labelWidth, String componentWidth, String contentWidth) {
+        public DecoratorBuilder(CComponent<?> component, String labelWidth, String componentWidth, String contentWidth) {
             super(component);
             labelWidth(labelWidth);
             contentWidth(contentWidth);
@@ -209,7 +209,7 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
 
         }
 
-        public DecoratorBuilder(CComponent<?, ?> component, String componentWidth) {
+        public DecoratorBuilder(CComponent<?> component, String componentWidth) {
             this(component, "120px", componentWidth, "220px");
         }
     }

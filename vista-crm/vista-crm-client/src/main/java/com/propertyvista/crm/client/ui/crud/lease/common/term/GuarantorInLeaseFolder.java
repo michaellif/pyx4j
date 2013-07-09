@@ -14,7 +14,6 @@
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
@@ -102,7 +101,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof LeaseTermGuarantor) {
             return new GuarantorInLeaseEditor();
         }
@@ -110,7 +109,7 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     }
 
     void updateTenantList() {
-        for (CComponent<?, ?> c : getComponents()) {
+        for (CComponent<?> c : getComponents()) {
             @SuppressWarnings("rawtypes")
             CEntityFolderItem i = (CEntityFolderItem) c;
             ((GuarantorInLeaseEditor) i.getComponents().iterator().next()).updateTenantList();
@@ -147,9 +146,9 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             }));
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<Date>() {
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
                 @Override
-                public ValidationError isValid(CComponent<Date, ?> component, Date value) {
+                public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
                     if (getAgeOfMajority() != null) {
                         if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
                             return new ValidationError(component, i18n.tr("The minimum age requirement for a guarantor is {0}.", getAgeOfMajority()));

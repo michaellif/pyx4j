@@ -50,7 +50,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         content.setH1(row++, 0, 2, i18n.tr("Web Skin"));
 
-        CComponent<?, ?> skinComp;
+        CComponent<?> skinComp;
         content.setWidget(row++, 0, new DecoratorBuilder(skinComp = inject(proto().skin()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object1()), 10).build());
         content.setWidget(row++, 0, new DecoratorBuilder(inject(proto().sitePalette().object2()), 10).build());

@@ -43,7 +43,7 @@ public abstract class PreauthorizedPaymentFolder extends VistaBoxFolder<Preautho
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof PreauthorizedPayment) {
             return new PreauthorizedPaymentEditor();
         }

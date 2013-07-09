@@ -98,7 +98,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
-            public ValidationError isValid(CComponent<List<EmergencyContact>, ?> component, List<EmergencyContact> value) {
+            public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
                 if (value == null || getValue() == null) {
                     return null;
                 }
@@ -171,7 +171,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         }
 
         @Override
-        public CComponent<?, ?> create(IObject<?> member) {
+        public CComponent<?> create(IObject<?> member) {
             if (member instanceof PreauthorizedPaymentDTO) {
                 return new PreauthorizedPaymentEditor();
             }

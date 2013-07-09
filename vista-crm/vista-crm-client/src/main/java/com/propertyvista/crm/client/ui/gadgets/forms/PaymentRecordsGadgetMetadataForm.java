@@ -64,10 +64,10 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityDecoratableForm<Pay
         });
         p.setWidget(++row, 0, new HTML("&nbsp"));
 
-        CComponent<Set<PaymentType>, ?> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
+        CComponent<Set<PaymentType>> paymentTypeSelector = new CEnumSubsetSelector<PaymentType>(PaymentType.class, Layout.Horizontal);
         paymentTypeSelector.addValueValidator(new EditableValueValidator<Set<PaymentType>>() {
             @Override
-            public ValidationError isValid(CComponent<Set<PaymentType>, ?> component, Set<PaymentType> value) {
+            public ValidationError isValid(CComponent<Set<PaymentType>> component, Set<PaymentType> value) {
                 if (value != null && value.isEmpty()) {
                     return new ValidationError(component, i18n.tr("Please select at least one payment method option"));
                 } else {
@@ -78,11 +78,11 @@ public class PaymentRecordsGadgetMetadataForm extends CEntityDecoratableForm<Pay
         p.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethodFilter(), paymentTypeSelector), 50).build());
 
         // TODO we don't use PaymentStatus.Processing that's why we choose this constructor
-        CComponent<Set<PaymentStatus>, ?> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.complementOf(EnumSet
+        CComponent<Set<PaymentStatus>> paymentStatusSelector = new CEnumSubsetSelector<PaymentStatus>(EnumSet.complementOf(EnumSet
                 .of(PaymentStatus.Processing)), Layout.Horizontal);
         paymentStatusSelector.addValueValidator(new EditableValueValidator<Set<PaymentRecord.PaymentStatus>>() {
             @Override
-            public ValidationError isValid(CComponent<Set<PaymentStatus>, ?> component, Set<PaymentStatus> value) {
+            public ValidationError isValid(CComponent<Set<PaymentStatus>> component, Set<PaymentStatus> value) {
                 if (value != null && value.isEmpty()) {
                     return new ValidationError(component, i18n.tr("Please select at least one payment status option"));
                 } else {

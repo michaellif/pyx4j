@@ -21,6 +21,7 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,14 +61,15 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (DebitLinkDTO.class.equals(member.getObjectClass())) {
             return new CEntityFolderRowEditor<DebitLinkDTO>(DebitLinkDTO.class, COLUMNS) {
+                @SuppressWarnings("rawtypes")
                 @Override
-                protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
                     if (column.getObject() == proto().debitAmount()) {
-                        CComponent<?, ?> comp = inject(column.getObject());
-                        comp.setNavigationCommand(new Command() {
+                        CComponent<?> comp = inject(column.getObject());
+                        ((CField) comp).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {
                                 AppSite.getPlaceController().goTo(
@@ -76,8 +78,8 @@ public class DebitCreditLinkFolder extends VistaTableFolder<DebitLinkDTO> {
                         });
                         return comp;
                     } else if (column.getObject() == proto().paidAmount()) {
-                        CComponent<?, ?> comp = inject(column.getObject());
-                        comp.setNavigationCommand(new Command() {
+                        CComponent<?> comp = inject(column.getObject());
+                        ((CField) comp).setNavigationCommand(new Command() {
                             @Override
                             public void execute() {
                                 AppSite.getPlaceController().goTo(

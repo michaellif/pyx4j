@@ -83,7 +83,7 @@ public class PmcSignatureForm extends CEntityDecoratableForm<PmcSignature> {
         ((CTextField) get(proto().fullName())).setWatermark(i18n.tr("SIGN FULL NAME HERE"));
         get(proto().fullName()).addValueValidator(new EditableValueValidator<String>() {
             @Override
-            public ValidationError isValid(CComponent<String, ?> component, String userSignature) {
+            public ValidationError isValid(CComponent<String> component, String userSignature) {
                 if (realFullName != null && userSignature != null && !realFullName.equals(userSignature)) {
                     return new ValidationError(component, i18n.tr("The signature doesn't match the name"));
                 } else {

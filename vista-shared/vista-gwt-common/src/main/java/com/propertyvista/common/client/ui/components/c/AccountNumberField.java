@@ -26,10 +26,6 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
 
     public AccountNumberField() {
         super(AccountNumberIdentity.class, "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null);
-    }
-
-    @Override
-    protected NPersonalIdentityField<AccountNumberIdentity> createWidget() {
 
         NPersonalIdentityField<AccountNumberIdentity> field = new NPersonalIdentityField<AccountNumberIdentity>(this);
 
@@ -44,7 +40,7 @@ public abstract class AccountNumberField extends CPersonalIdentityField<AccountN
 
         field.setActionButton(actionButton);
 
-        return field;
+        setNativeWidget(field);
     }
 
     public abstract void onRevealNumber();

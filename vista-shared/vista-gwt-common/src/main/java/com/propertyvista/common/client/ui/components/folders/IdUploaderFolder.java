@@ -49,7 +49,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
             addValueValidator(new EditableValueValidator<IList<IdentificationDocument>>() {
                 @Override
-                public ValidationError isValid(CComponent<IList<IdentificationDocument>, ?> component, IList<IdentificationDocument> value) {
+                public ValidationError isValid(CComponent<IList<IdentificationDocument>> component, IList<IdentificationDocument> value) {
                     if (value != null) {
 // TODO it should be enough, but now validate is called on populate!?                    
 //                    assert (documentationPolicy != null);
@@ -97,7 +97,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof IdentificationDocument) {
             return new IdentificationDocumentEditor();
         } else {
@@ -123,7 +123,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             ApplicationDocumentFileUploaderFolder docPagesFolder = new ApplicationDocumentFileUploaderFolder();
             docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {
                 @Override
-                public ValidationError isValid(CComponent<IList<ApplicationDocumentFile>, ?> component, IList<ApplicationDocumentFile> value) {
+                public ValidationError isValid(CComponent<IList<ApplicationDocumentFile>> component, IList<ApplicationDocumentFile> value) {
                     if (value != null && value.size() < 1) {
                         return new ValidationError(component, i18n.tr("at least one document file is required"));
                     } else {
@@ -155,7 +155,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
             get(proto().idNumber()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
-                public ValidationError isValid(CComponent<String, ?> component, String value) {
+                public ValidationError isValid(CComponent<String> component, String value) {
                     if (get(proto().idType()).getValue() != null) {
                         switch (get(proto().idType()).getValue().type().getValue()) {
                         case canadianSIN:

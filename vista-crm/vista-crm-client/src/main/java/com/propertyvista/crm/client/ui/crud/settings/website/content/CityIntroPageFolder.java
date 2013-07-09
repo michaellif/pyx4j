@@ -20,6 +20,7 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -29,7 +30,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
-import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website.Content;
 import com.propertyvista.domain.site.CityIntroPage;
 
 public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
@@ -54,7 +54,7 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
     }
 
     @Override
-    public CComponent<?, ?> create(IObject<?> member) {
+    public CComponent<?> create(IObject<?> member) {
         if (member instanceof CityIntroPage) {
             return new CityIntroPageEditor();
         }
@@ -75,12 +75,13 @@ public class CityIntroPageFolder extends VistaTableFolder<CityIntroPage> {
             super(CityIntroPage.class, columns());
         }
 
+        @SuppressWarnings("rawtypes")
         @Override
-        protected CComponent<?, ?> createCell(EntityFolderColumnDescriptor column) {
+        protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
             if (column.getObject().equals(proto().cityName())) {
-                CComponent<?, ?> comp = null;
+                CComponent<?> comp = null;
                 comp = inject(column.getObject(), new CLabel<String>());
-                comp.setNavigationCommand(new Command() {
+                ((CField) comp).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         viewer.viewChild(getValue().getPrimaryKey(), Website.Content.CityIntroPage.class);
