@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.EcheckAccountNumberValidator;
 import com.propertyvista.domain.payment.AccountNumberIdentity;
 import com.propertyvista.domain.payment.EcheckInfo;
@@ -49,16 +50,16 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 1);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 3).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
 
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
+                new FormDecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
                         "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
         panel.getFlexCellFormatter().setColSpan(row, 0, 2);
 

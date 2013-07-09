@@ -28,6 +28,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.person.Name;
 
 public class NameEditor extends CEntityDecoratableForm<Name> {
@@ -53,6 +54,7 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
 
         linkPlace = (linkType != null ? AppPlaceEntityMapper.resolvePlace(linkType) : null);
         viewComp = new CEntityLabel<Name>();
+        viewComp.setViewable(true);
         viewComp.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         if (linkPlace != null) {
@@ -78,17 +80,18 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
     public IsWidget createContent() {
         FormFlexPanel main = new FormFlexPanel();
 
-        int row = -1;
-        if (isEditable()) {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namePrefix()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName()), 15).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().middleName()), 5).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maidenName()), 25).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameSuffix()), 5).build());
+        if (!isViewable()) {
+            int row = -1;
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName()), 15).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName()), 15).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().middleName()), 5).build());
+
+            row = -1;
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().namePrefix()), 5).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().nameSuffix()), 5).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().maidenName()), 15).build());
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(viewComp, 25).customLabel(customViewLabel).useLabelSemicolon(customViewLabel != null).build());
-            viewComp.setViewable(true);
+            main.setWidget(0, 0, 2, new FormDecoratorBuilder(viewComp, 15, true).customLabel(customViewLabel).build());
         }
 
         return main;

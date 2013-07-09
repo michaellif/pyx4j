@@ -33,6 +33,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.moveinwizardmockup.MoveInScheduleDTO;
 import com.propertyvista.domain.moveinwizardmockup.ScheduleDTO;
 import com.propertyvista.domain.moveinwizardmockup.TimeSegmentDTO;
@@ -54,7 +55,7 @@ public class MoveInScheduleForm extends CEntityDecoratableForm<MoveInScheduleDTO
         content.getColumnFormatter().setWidth(0, "70%");
         content.getColumnFormatter().setWidth(1, "30%");
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().moveInDay()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().moveInDay()), 10).build());
 
         content.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
         message = new HTML();

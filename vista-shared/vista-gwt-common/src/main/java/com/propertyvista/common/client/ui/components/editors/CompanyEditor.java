@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.CompanyPhoneFolder;
 import com.propertyvista.common.client.ui.components.folders.EmailFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.company.Company;
 
 public class CompanyEditor extends CEntityDecoratableForm<Company> {
@@ -33,13 +34,13 @@ public class CompanyEditor extends CEntityDecoratableForm<Company> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
 
 // TODO : design representation for:
 //      main.add(parent.inject(proto.addresses()), 15);
 
         main.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().website()), 35).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().website()), 22).build());
 
         main.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
 

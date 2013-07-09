@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.common.client.ui.validators.ZipCodeValueValidator;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -38,21 +39,21 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street1()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().street2()), 25).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().city()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1()), 22).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street2()), 22).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city()), 15).build());
 
         CComponent<Province> province = (CComponent<Province>) inject(proto().province());
-        main.setWidget(++row, 0, new DecoratorBuilder(province, 17).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(province, 17).build());
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
-        main.setWidget(++row, 0, new DecoratorBuilder(country, 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(country, 15).build());
 
         CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-        main.setWidget(++row, 0, new DecoratorBuilder(postalCode, 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);
 

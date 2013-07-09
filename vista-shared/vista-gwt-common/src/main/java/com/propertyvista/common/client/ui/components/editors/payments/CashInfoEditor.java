@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.CashInfo;
 
 public class CashInfoEditor extends CEntityDecoratableForm<CashInfo> {
@@ -34,9 +35,9 @@ public class CashInfoEditor extends CEntityDecoratableForm<CashInfo> {
         FormFlexPanel panel = new FormFlexPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().receivedAmount()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().changeAmount()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().receivedAmount()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().changeAmount()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes()), 20).build());
 
         return panel;
     }

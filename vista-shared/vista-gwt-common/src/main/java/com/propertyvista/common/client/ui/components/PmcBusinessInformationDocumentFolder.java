@@ -28,6 +28,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 
@@ -45,7 +46,7 @@ public class PmcBusinessInformationDocumentFolder extends VistaBoxFolder<PmcBusi
         public IsWidget createContent() {
             FormFlexPanel content = new FormFlexPanel();
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type())).labelWidth(5).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type())).labelWidth(5).build());
             if (isEditable()) {
                 content.setH4(++row, 0, 1, i18n.tr("Click 'Add' to upload document pages"));
             }

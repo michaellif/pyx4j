@@ -33,6 +33,7 @@ import com.pyx4j.widgets.client.Label;
 import com.propertyvista.common.client.ui.components.PmcBusinessInformationDocumentFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 
 // TODO add document requirements label and validator
@@ -62,13 +63,13 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
 
         FormFlexPanel mainPanel = new FormFlexPanel();
         int mrow = -1;
-        mainPanel.setWidget(++mrow, 0, new DecoratorBuilder(inject(proto().companyName())).build());
-        mainPanel.setWidget(++mrow, 0, new DecoratorBuilder(inject(proto().companyType())).build());
+        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
+        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().companyType())).build());
         mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
         mainPanel.setWidget(++mrow, 0, inject(proto().dto_businessAddress(), new AddressSimpleEditor()));
         mainPanel.setWidget(++mrow, 0, new HTML("&nbsp;"));
-        mainPanel.setWidget(++mrow, 0, new DecoratorBuilder(inject(proto().businessNumber())).build());
-        mainPanel.setWidget(++mrow, 0, new DecoratorBuilder(inject(proto().businessEstablishedDate())).build());
+        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().businessNumber())).build());
+        mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().businessEstablishedDate())).build());
         contentPanel.setWidget(0, 0, mainPanel);
 
         FormFlexPanel documentsPanel = new FormFlexPanel();

@@ -22,6 +22,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ProofOfEmploymentDocument;
 
 public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmploymentDocument> {
@@ -53,7 +54,7 @@ public class ProofOfEmploymentUploaderFolder extends VistaBoxFolder<ProofOfEmplo
             FormFlexPanel content = new FormFlexPanel();
 
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description())).labelWidth(8).componentWidth(35).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).build());
             content.setH3(++row, 0, 1, i18n.tr("Files"));
             content.setWidget(++row, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
 

@@ -30,6 +30,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView.Presenter;
 import com.propertyvista.operations.rpc.PrivateKeyDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
@@ -86,14 +87,14 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
     private Widget makeStatusPanel() {
         FormFlexPanel statusPanel = new FormFlexPanel();
         int row = -1;
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).componentWidth(15).build());
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isCurrent())).componentWidth(5).build());
-        statusPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().decryptionEnabled())).componentWidth(5).build());
+        statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).componentWidth(15).build());
+        statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isCurrent())).componentWidth(5).build());
+        statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().decryptionEnabled())).componentWidth(5).build());
 
         row = -1;
-        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().recordsCount())).build());
-        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().created())).build());
-        statusPanel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expired())).build());
+        statusPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().recordsCount())).build());
+        statusPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().created())).build());
+        statusPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expired())).build());
         return statusPanel;
     }
 

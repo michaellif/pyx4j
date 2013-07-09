@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -77,7 +78,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
         panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
 
-        panel.setWidget(2, 0, new DecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
+        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

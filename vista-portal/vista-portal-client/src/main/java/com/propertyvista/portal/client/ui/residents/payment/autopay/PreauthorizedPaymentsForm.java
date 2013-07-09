@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ui.components.VistaViewersComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
@@ -60,7 +61,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     public IsWidget createContent() {
         VerticalPanel container = new VerticalPanel();
 
-        container.add(new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelWidth(25).build());
+        container.add(new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).build());
         container.add(new HTML("&nbsp"));
         container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
 

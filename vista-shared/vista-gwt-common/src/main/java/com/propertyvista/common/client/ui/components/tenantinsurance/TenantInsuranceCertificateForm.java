@@ -32,6 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
@@ -133,12 +134,12 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
                     }
                 });
             }
-            contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), comp), 15).build());
+            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), comp), 15).build());
         }
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber()), 20).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().liabilityCoverage()), 20).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 20).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().liabilityCoverage()), 20).build());
         get(proto().liabilityCoverage()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
@@ -157,7 +158,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inceptionDate()), 10).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inceptionDate()), 10).build());
 
         get(proto().inceptionDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
@@ -168,7 +169,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
                 return null;
             }
         });
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate()), 10).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), 10).build());
         get(proto().expiryDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {

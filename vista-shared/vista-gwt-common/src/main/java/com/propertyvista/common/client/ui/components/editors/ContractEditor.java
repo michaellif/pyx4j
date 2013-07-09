@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.property.vendor.Contract;
 
@@ -34,16 +35,16 @@ public class ContractEditor extends CEntityDecoratableForm<Contract> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contractID()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contractor()), 20).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cost()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contractID()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contractor()), 20).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cost()), 10).build());
 
 // TODO : design representation for:
 //      main.setWidget(++row, 0, decorate(inject(proto.document()), 50);
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().start()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().end()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().start()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().end()), 9).build());
 
         return main;
     }

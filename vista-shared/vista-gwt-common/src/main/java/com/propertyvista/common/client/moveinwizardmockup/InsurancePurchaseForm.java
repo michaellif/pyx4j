@@ -33,7 +33,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
@@ -46,6 +45,7 @@ import com.propertyvista.common.client.moveinwizardmockup.components.MultiDisclo
 import com.propertyvista.common.client.moveinwizardmockup.components.SignatureFolder;
 import com.propertyvista.common.client.moveinwizardmockup.components.Utils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.moveinwizardmockup.PurchaseInsuranceDTO;
 
 public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsuranceDTO> {
@@ -151,63 +151,64 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         int irow = -1;
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Personal Contents"));
         coverageTerms.setWidget(++irow, 0,
-                new DecoratorBuilder(inject(proto().personalContentsLimit(), new CoverageAmountCombo(PERSONAL_CONTENTS_COVERAGE_OPTIONS))).build());
+                new FormDecoratorBuilder(inject(proto().personalContentsLimit(), new CoverageAmountCombo(PERSONAL_CONTENTS_COVERAGE_OPTIONS))).build());
 
         if (false) {
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().propertyAwayFromPremises(), new CoverageAmountCombo(PROPERTY_AWAY_FROM_PREMISES_OPTIONS))).build());
+                    new FormDecoratorBuilder(inject(proto().propertyAwayFromPremises(), new CoverageAmountCombo(PROPERTY_AWAY_FROM_PREMISES_OPTIONS))).build());
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().additionalLivingExpenses(), new CoverageAmountCombo(ADDITIONAL_LIVING_EXPENSES_OPTIONS))).build());
+                    new FormDecoratorBuilder(inject(proto().additionalLivingExpenses(), new CoverageAmountCombo(ADDITIONAL_LIVING_EXPENSES_OPTIONS))).build());
         }
 
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Deductible (per Claim)"));
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().deductible(), new DeductibleCombo())).build());
+        coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().deductible(), new DeductibleCombo())).build());
 
         if (false) {
             coverageTerms.setH2(++irow, 0, 1, i18n.tr("Form of Coverage"));
-            coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().formOfCoverage())).build());
+            coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().formOfCoverage())).build());
         }
 
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Sublimits"));
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().jewleryAndArt(), new CMoneyField())).build());
+        coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().jewleryAndArt(), new CMoneyField())).build());
         get(proto().jewleryAndArt()).setViewable(true);
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().sportsEquipment(), new CMoneyField())).build());
+        coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().sportsEquipment(), new CMoneyField())).build());
         get(proto().sportsEquipment()).setViewable(true);
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().electronics(), new CMoneyField())).build());
+        coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().electronics(), new CMoneyField())).build());
         get(proto().electronics()).setViewable(true);
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().sewerBackUp(), new CMoneyField())).build());
+        coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().sewerBackUp(), new CMoneyField())).build());
         get(proto().sewerBackUp()).setViewable(true);
 
         if (false) {
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().moneyOrGiftGardsOrGiftCertificates(), new LimitCombo(MONEY_GIFT_CARDS_AND_CERTIFICATES_OPTIONS)))
+                    new FormDecoratorBuilder(inject(proto().moneyOrGiftGardsOrGiftCertificates(), new LimitCombo(MONEY_GIFT_CARDS_AND_CERTIFICATES_OPTIONS)))
                             .build());
-            coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().securities(), new LimitCombo(SECURITIES_OPTIONS))).build());
-            coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().utilityTraders(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
-            coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().spareAutomobileParts(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+            coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().securities(), new LimitCombo(SECURITIES_OPTIONS))).build());
+            coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().utilityTraders(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().coinBanknoteOrStampCollections(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+                    new FormDecoratorBuilder(inject(proto().spareAutomobileParts(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().collectibleCardsAndComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+                    new FormDecoratorBuilder(inject(proto().coinBanknoteOrStampCollections(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
+            coverageTerms.setWidget(++irow, 0,
+                    new FormDecoratorBuilder(inject(proto().collectibleCardsAndComics(), new LimitCombo(DEFAULT_LIMITIES_OPTIONS))).build());
         }
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Additional Coverage (per Claim)"));
 
         if (false) {
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().freezerFoodSpoilage(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
+                    new FormDecoratorBuilder(inject(proto().freezerFoodSpoilage(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
             coverageTerms.setWidget(++irow, 0,
-                    new DecoratorBuilder(inject(proto().animalsBirdsAndFish(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
+                    new FormDecoratorBuilder(inject(proto().animalsBirdsAndFish(), new CoverageAmountCombo(asBigDecimals(0, 500, 1000, 1500)))).build());
         }
 
         coverageTerms.setWidget(++irow, 0,
-                new DecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(asBigDecimals(1000000, 2000000, 5000000)))).build());
+                new FormDecoratorBuilder(inject(proto().personalLiability(), new CoverageAmountCombo(asBigDecimals(1000000, 2000000, 5000000)))).build());
 
         coverageTerms.setH2(++irow, 0, 1, i18n.tr("Coverage Qualification Questions"));
         if (false) {
-            coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().homeBuiness())).build());
+            coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().homeBuiness())).build());
         }
 
-        coverageTerms.setWidget(++irow, 0, new DecoratorBuilder(inject(proto().numOfPrevClaims(), new NumberOfPreviousClaimsCombo())).build());
+        coverageTerms.setWidget(++irow, 0, new FormDecoratorBuilder(inject(proto().numOfPrevClaims(), new NumberOfPreviousClaimsCombo())).build());
 
         if (!useFloatingQuote) {
             coverageTerms.setH2(++irow, 0, 1, "");
@@ -229,7 +230,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         quoteTotalPanel.getElement().getStyle().setBorderWidth(1, Unit.PX);
 
         {
-            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().monthlyInsurancePremium()), 10).build());
+            quoteTotalPanel.add(new FormDecoratorBuilder(inject(proto().monthlyInsurancePremium()), 10).build());
             get(proto().monthlyInsurancePremium()).setViewable(true);
 
             tooManyPreviousClaimsMessage = new HTML(i18n.tr("Please call 1888-XXXX-XXX for a custom quote"));
@@ -240,9 +241,9 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
             quoteTotalPanel.add(tooManyPreviousClaimsMessage);
 
-            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalCoverage()), 10).build());
+            quoteTotalPanel.add(new FormDecoratorBuilder(inject(proto().totalCoverage()), 10).build());
             get(proto().totalCoverage()).setViewable(true);
-            quoteTotalPanel.add(new DecoratorBuilder(inject(proto().totalPersonalLiability()), 10).build());
+            quoteTotalPanel.add(new FormDecoratorBuilder(inject(proto().totalPersonalLiability()), 10).build());
             get(proto().totalPersonalLiability()).setViewable(true);
         }
         return quoteTotalPanel;
@@ -309,12 +310,12 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     private BigDecimal bigDecimalOf(IPrimitive<BigDecimal> object) {
-        BigDecimal value = ((CComponent<BigDecimal>) (get(object))).getValue();
+        BigDecimal value = (get(object)).getValue();
         return value != null ? value : BigDecimal.ZERO;
     }
 
     private Integer integerOf(IPrimitive<Integer> object) {
-        Integer value = ((CComponent<Integer>) (get(object))).getValue();
+        Integer value = (get(object)).getValue();
         return value != null ? value : 0;
     }
 

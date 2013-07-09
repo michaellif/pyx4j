@@ -30,6 +30,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.ApplicationDocumentFileUploaderFolder;
 import com.propertyvista.common.client.ui.components.DocumentTypeSelectorDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.media.ApplicationDocumentFile;
 import com.propertyvista.domain.media.IdentificationDocument;
 import com.propertyvista.domain.policy.policies.ApplicationDocumentationPolicy;
@@ -116,9 +117,9 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
             FormFlexPanel content = new FormFlexPanel();
             content.setSize("100%", "100%");
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idType())).labelWidth(8).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().idNumber())).labelWidth(8).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().notes())).labelWidth(8).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idType())).labelWidth(8).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idNumber())).labelWidth(8).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).labelWidth(8).build());
 
             ApplicationDocumentFileUploaderFolder docPagesFolder = new ApplicationDocumentFileUploaderFolder();
             docPagesFolder.addValueValidator(new EditableValueValidator<IList<ApplicationDocumentFile>>() {

@@ -33,6 +33,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
 import com.propertyvista.portal.web.client.themes.TenantInsuranceTheme;
@@ -65,8 +66,8 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
                 @Override
                 public IsWidget createContent() {
                     FlowPanel panel = new FlowPanel();
-                    panel.add(new DecoratorBuilder(inject(proto().emailAddress())).customLabel("").useLabelSemicolon(false).labelWidth(0).componentWidth(15)
-                            .build());
+                    panel.add(new FormDecoratorBuilder(inject(proto().emailAddress())).customLabel("").useLabelSemicolon(false).labelWidth(0)
+                            .componentWidth(15).build());
                     return panel;
                 }
             };

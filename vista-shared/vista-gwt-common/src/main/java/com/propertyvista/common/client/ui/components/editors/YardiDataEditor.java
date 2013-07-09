@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 
 public class YardiDataEditor extends CEntityDecoratableForm<YardiLeaseChargeData> {
@@ -45,7 +46,7 @@ public class YardiDataEditor extends CEntityDecoratableForm<YardiLeaseChargeData
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Yardi Data"));
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeCode()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeCode()), 15).build());
 
         return panel;
     }

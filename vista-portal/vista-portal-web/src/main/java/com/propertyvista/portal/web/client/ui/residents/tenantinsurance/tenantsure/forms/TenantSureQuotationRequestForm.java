@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.components.MoneyComboBox;
@@ -41,17 +42,17 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
         FormFlexPanel contentPanel = new FormFlexPanel();
         int row = -1;
         contentPanel.setH2(++row, 0, 1, i18n.tr("Personal Info and Contact Information"));
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantName())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenantPhone())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantName())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantPhone())).build());
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Coverage"));
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().personalLiabilityCoverage(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().contentsCoverage(), new MoneyComboBox())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deductible(), new MoneyComboBox())).build());
 
         contentPanel.setH2(++row, 0, 1, i18n.tr("Coverage Qualification Questions"));
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).labelWidth(30).componentWidth(10).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().numberOfPreviousClaims())).labelWidth(30).componentWidth(10).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().smoker(), new YesNoComboBox())).labelWidth(30).componentWidth(10).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfPreviousClaims())).labelWidth(30).componentWidth(10).build());
 
         return contentPanel;
     }

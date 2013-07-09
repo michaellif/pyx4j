@@ -321,7 +321,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         main.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
 
         main.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()).asWidget());
+        main.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
 
         main.setH1(++row, 0, 2, i18n.tr("Media"));
         main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));

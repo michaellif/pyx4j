@@ -14,10 +14,8 @@
 package com.propertyvista.common.client.ui.components.c;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
 
 abstract public class CEntityDecoratableForm<E extends IEntity> extends CEntityForm<E> {
 
@@ -29,22 +27,4 @@ abstract public class CEntityDecoratableForm<E extends IEntity> extends CEntityF
         super(clazz, factory);
     }
 
-    // decoration stuff:
-    protected class DecoratorBuilder extends WidgetDecorator.Builder {
-
-        public DecoratorBuilder(CComponent<?> component) {
-            super(component);
-        }
-
-        public DecoratorBuilder(CComponent<?> component, double componentWidth) {
-            super(component);
-            componentWidth(componentWidth);
-        }
-
-        public DecoratorBuilder(CComponent<?> component, double componentWidth, double labelWidth) {
-            super(component);
-            componentWidth(componentWidth);
-            labelWidth(labelWidth);
-        }
-    }
 }

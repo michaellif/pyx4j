@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.dto.vista2pmc.PersonalInformationDTO;
 
 public class PersonalInformationForm extends CEntityDecoratableForm<PersonalInformationDTO> {
@@ -37,9 +38,9 @@ public class PersonalInformationForm extends CEntityDecoratableForm<PersonalInfo
         main.setWidget(++row, 0, new HTML("&nbsp;"));
         main.setWidget(++row, 0, inject(proto().dto_personalAddress(), new AddressSimpleEditor()));
         main.setWidget(++row, 0, new HTML("&nbsp;"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dateOfBirth())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sin())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateOfBirth())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sin())).build());
         return main;
     }
 

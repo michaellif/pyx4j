@@ -61,6 +61,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.client.themes.LandingPagesTheme;
 import com.propertyvista.portal.client.ui.components.LandingViewLayoutPanel;
@@ -105,8 +106,8 @@ public class LandingViewImpl extends Composite implements LandingView {
             setMandatoryValidationMessage(passwordField, i18n.tr("Enter your password"));
 
             captchaField = (CCaptcha) inject(proto().captcha());
-            contentPanel
-                    .add(center((new DecoratorBuilder(captchaField).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build())));
+            contentPanel.add(center((new FormDecoratorBuilder(captchaField).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
+                    .build())));
             setEnableCaptcha(false);
 
             contentPanel.add(center(new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox()))));

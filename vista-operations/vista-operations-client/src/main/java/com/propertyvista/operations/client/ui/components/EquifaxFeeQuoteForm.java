@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 
 public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxFee> {
@@ -34,11 +35,11 @@ public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxF
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recommendationReportSetUpFee())).labelWidth(25).componentWidth(6).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportSetUpFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
         panel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1, Unit.EM);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).labelWidth(25).componentWidth(6).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
 
         if (makeMandatory) {
             get(proto().recommendationReportSetUpFee()).setMandatory(true);

@@ -32,6 +32,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -76,42 +77,42 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());
         content.setBR(++row, 0, 1);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportedForOwnUnit()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 25).build());
         content.setBR(++row, 0, 1);
 
         content.setWidget(++row, 0, categoryPanel);
         content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
         // Description
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().summary()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().description()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().priority(), prioritySelector), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().summary()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().priority(), prioritySelector), 25).build());
         content.setBR(++row, 0, 1);
 
         VerticalPanel schedulePanel = new VerticalPanel();
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate1()), 10).build());
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredTime1()), 10).build());
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredDate2()), 10).build());
-        schedulePanel.add(new DecoratorBuilder(inject(proto().preferredTime2()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredDate1()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredTime1()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredDate2()), 10).build());
+        schedulePanel.add(new FormDecoratorBuilder(inject(proto().preferredTime2()), 10).build());
 
-        accessPanel.add(new DecoratorBuilder(inject(proto().petInstructions()), 25).build());
+        accessPanel.add(new FormDecoratorBuilder(inject(proto().petInstructions()), 25).build());
         accessPanel.add(schedulePanel);
 
-        permissionPanel.add(new DecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
+        permissionPanel.add(new FormDecoratorBuilder(inject(proto().permissionToEnter()), 25).build());
         permissionPanel.add(accessPanel);
         content.setWidget(++row, 0, permissionPanel);
         content.setBR(++row, 0, 1);
 
         int innerRow = -1;
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().status(), new CEntityLabel<MaintenanceRequestStatus>()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         statusPanel.setBR(++innerRow, 0, 1);
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new DecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
         content.setWidget(++row, 0, statusPanel);
 
         // tweaks:
@@ -174,10 +175,10 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
             String choiceLabel = EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue());
             if (i == 0) {
-                categoryPanel.insert(new DecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
+                categoryPanel.insert(new FormDecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build(), 0);
                 mrCategory = choice;
             } else {
-                categoryPanel.insert(new DecoratorBuilder(choice, 20).customLabel(choiceLabel).build(), 0);
+                categoryPanel.insert(new FormDecoratorBuilder(choice, 20).customLabel(choiceLabel).build(), 0);
             }
             if (child != null) {
                 child.assignParent(choice);

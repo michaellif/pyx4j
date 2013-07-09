@@ -26,6 +26,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.property.vendor.Warranty;
 import com.propertyvista.domain.property.vendor.WarrantyItem;
 
@@ -43,8 +44,8 @@ public class WarrantyEditor extends CEntityDecoratableForm<Warranty> {
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().title()), 20).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().type()), 11).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 20).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().type()), 11).build());
 
         main.setH1(++row, 0, 2, proto().contract().getMeta().getCaption());
         main.setWidget(++row, 0, inject(proto().contract(), new ContractEditor()));

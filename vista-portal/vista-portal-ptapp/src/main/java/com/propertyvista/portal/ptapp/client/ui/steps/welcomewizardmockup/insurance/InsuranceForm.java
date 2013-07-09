@@ -31,6 +31,7 @@ import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.moveinwizardmockup.InsurancePurchaseForm;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.moveinwizardmockup.InsuranceDTO;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizardmockup.WelcomeWizardImages;
 import com.propertyvista.portal.ptapp.client.resources.welcomewizardmockup.WelcomeWizardResources;
@@ -91,7 +92,7 @@ public class InsuranceForm extends CEntityDecoratableForm<InsuranceDTO> {
             }
         })));
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().alreadyHaveInsurance())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().alreadyHaveInsurance())).build());
         content.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingTop(3, Unit.EM);
         get(proto().alreadyHaveInsurance()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 

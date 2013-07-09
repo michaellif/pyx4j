@@ -25,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.PasswordIdentityFormat;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.PasswordIdentity;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 
@@ -43,20 +44,20 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serviceURLBase()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentTransactionsServiceURL()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sysBatchServiceURL()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().propertyCode()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().serviceURLBase()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().residentTransactionsServiceURL()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sysBatchServiceURL()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().propertyCode()), 30).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().username()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().username()), 30).build());
 
         CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         password.setFormat(new PasswordIdentityFormat(password));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password(), password), 30).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().serverName()), 30).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().database()), 30).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().platform()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().password(), password), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().serverName()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().database()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().platform()), 15).build());
 
         return content;
     }

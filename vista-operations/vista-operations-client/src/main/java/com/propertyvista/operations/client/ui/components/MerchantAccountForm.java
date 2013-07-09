@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.AbstractMerchantAccount;
 
 public class MerchantAccountForm extends CEntityDecoratableForm<AbstractMerchantAccount> {
@@ -30,11 +31,11 @@ public class MerchantAccountForm extends CEntityDecoratableForm<AbstractMerchant
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().bankId()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().accountNumber()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().chargeDescription()), 30).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 30).build());
 
         return panel;
     }

@@ -41,6 +41,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.payments.CreditCardNumberTypeValidator.CreditCardTypeProvider;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.CreditCardNumberValidator;
 import com.propertyvista.common.client.ui.validators.FutureDateValidator;
 import com.propertyvista.domain.payment.CreditCardInfo;
@@ -63,15 +64,15 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().cardType()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType()), 15).build());
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().card(), new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class,
+                new FormDecoratorBuilder(inject(proto().card(), new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class,
                         "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null)), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityCode()), 3).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

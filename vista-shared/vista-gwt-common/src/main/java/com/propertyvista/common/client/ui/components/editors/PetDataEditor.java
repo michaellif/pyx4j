@@ -20,6 +20,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.lease.extradata.Pet;
 
@@ -42,14 +43,14 @@ public class PetDataEditor extends CEntityDecoratableForm<Pet> {
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Pet Data"));
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().color()), 15).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().breed()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color()), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().breed()), 15).build());
 
         row = 0; // skip header
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weight()), 4).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().weightUnit()), 4).build());
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().weight()), 4).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().weightUnit()), 4).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         return panel;
     }

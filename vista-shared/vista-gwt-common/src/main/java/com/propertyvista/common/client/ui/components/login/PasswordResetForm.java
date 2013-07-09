@@ -36,6 +36,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 
 public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequest> {
 
@@ -70,13 +71,13 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
 
         int row = -1;
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityQuestion())).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().securityAnswer())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityQuestion())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityAnswer())).build());
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget)
-                .build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
+        main.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
 
         get(proto().securityQuestion()).setVisible(false);
         get(proto().securityAnswer()).setVisible(false);

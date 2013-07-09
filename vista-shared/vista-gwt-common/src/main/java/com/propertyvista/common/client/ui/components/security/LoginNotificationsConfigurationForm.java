@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.security.LoginNotificationsConfigurationDTO;
 
 public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<LoginNotificationsConfigurationDTO> {
@@ -32,8 +33,8 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
     public IsWidget createContent() {
         FormFlexPanel contentPanel = new FormFlexPanel();
 
-        contentPanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().isEmailNotificationEnabled()), 5).build());
-        contentPanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().email()), 25).labelWidth(8).build());
+        contentPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().isEmailNotificationEnabled()), 5).build());
+        contentPanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().email()), 22).build());
 
         get(proto().isEmailNotificationEnabled()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override

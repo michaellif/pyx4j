@@ -31,6 +31,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
@@ -59,7 +60,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
 
         int row = -1;
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance(), new CMoneyField()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentBalance(), new CMoneyField()), 10).build());
         ((CMoneyField) get(proto().currentBalance())).setFormat(new CurrentBalanceFormat());
 
         content.setWidget(row, 1, payButton = new Button(i18n.tr("Pay Now"), new Command() {
@@ -68,7 +69,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
                 presenter.payNow();
             }
         }));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBill().dueDate()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentBill().dueDate()), 10).build());
         content.setWidget(row, 1, new Anchor(i18n.tr("View Current Bill"), new Command() {
             @Override
             public void execute() {

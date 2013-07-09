@@ -30,6 +30,7 @@ import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
@@ -58,14 +59,14 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
         content.setBR(++row, 0, 1);
 
         content.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30, 10).labelAlignment(Alignment.left).build());
+                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).labelAlignment(Alignment.left).build());
 
         content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().total()), 10, 40).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total()), 22).build());
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 22).build());
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         content.setHR(++row, 0, 1);

@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 
 public abstract class PasswordEntryDialog extends OkCancelDialog {
 
@@ -44,9 +45,9 @@ public abstract class PasswordEntryDialog extends OkCancelDialog {
         @Override
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
-            contentPanel.add(new DecoratorBuilder(inject(proto().password())).build());
+            contentPanel.add(new FormDecoratorBuilder(inject(proto().password())).build());
             if (requirePasswordConfirm) {
-                contentPanel.add(new DecoratorBuilder(inject(proto().passwordConfirm())).build());
+                contentPanel.add(new FormDecoratorBuilder(inject(proto().passwordConfirm())).build());
                 get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
                     @Override
                     public ValidationError isValid(CComponent<String> component, String value) {

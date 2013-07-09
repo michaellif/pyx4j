@@ -122,7 +122,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     private FormFlexPanel createContactsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
+        main.setWidget(0, 0, 2, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         return main;
     }

@@ -111,23 +111,24 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());
-        main.setWidget(++row, 0, inject(proto().customer().person().name(), new NameEditor(participant)));
+        main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
 
-        main.setBR(++row, 0, 1);
-
+        row = 2;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().homePhone()), 15).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().email()), 25).build());
 
+        row = 2;
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().customer().person().workPhone()), 15).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().customer().person().email()), 15).build());
+
+        row = 4;
         if (!isEditable()) {
-            main.setBR(++row, 0, 1);
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 35).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 15).build());
             if (rootClass.equals(TenantDTO.class)) {
-                main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role()), 10).build());
+                main.setWidget(row, 1, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role()), 10).build());
             }
             main.setWidget(
                     ++row,

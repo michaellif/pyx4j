@@ -47,6 +47,7 @@ import com.propertyvista.common.client.ui.components.editors.dto.FinancialViewFo
 import com.propertyvista.common.client.ui.components.editors.dto.InfoViewForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.dto.TenantFinancialDTO;
 import com.propertyvista.dto.TenantInfoDTO;
@@ -238,9 +239,9 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
             int row = -1;
 
             FormFlexPanel leasePanel = new FormFlexPanel();
-            leasePanel.setWidget(0, 0, new DecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
-            leasePanel.setWidget(0, 1, new DecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
-            leasePanel.setWidget(1, 0, new DecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());
+            leasePanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
+            leasePanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
+            leasePanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());
             setWidget(++row, 0, leasePanel);
 
             consessionPanel.setH2(0, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));

@@ -55,6 +55,7 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -122,8 +123,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 30, 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 40, 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 22).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 22).build());
         panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
@@ -148,10 +149,10 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().selectPaymentMethod(),
-                        new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))).build());
+                new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
+                        RadioGroup.Layout.HORISONTAL))).build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 22).build());
 
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
@@ -235,7 +236,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 25).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 22).build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
@@ -272,7 +273,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new DecoratorBuilder(inject(proto().total()), 10, width).build());
+        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), 10).build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }

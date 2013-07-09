@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorEditor extends CEntityDecoratableForm<Vendor> {
@@ -31,7 +32,7 @@ public class VendorEditor extends CEntityDecoratableForm<Vendor> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, inject(proto(), new CompanyEditor()));
 
         return main;

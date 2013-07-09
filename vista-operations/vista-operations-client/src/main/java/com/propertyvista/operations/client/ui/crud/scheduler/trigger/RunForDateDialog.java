@@ -21,6 +21,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
 // Internals:
@@ -42,7 +43,7 @@ public abstract class RunForDateDialog extends OkCancelDialog {
             public IsWidget createContent() {
                 FormFlexPanel main = new FormFlexPanel();
 
-                main.setWidget(1, 0, new DecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
+                main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
 //                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
 
                 return main;

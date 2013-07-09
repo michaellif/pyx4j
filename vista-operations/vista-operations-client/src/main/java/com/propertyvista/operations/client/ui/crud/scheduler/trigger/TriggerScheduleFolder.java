@@ -31,6 +31,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.domain.scheduler.ScheduleType;
 import com.propertyvista.operations.domain.scheduler.TriggerSchedule;
 
@@ -61,14 +62,14 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
             FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
 
             int row = -1;
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().repeatType()), 12).build());
-            content.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextFireTime()), 12).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().repeatType()), 12).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextFireTime()), 12).build());
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().repeatEvery()), 12).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().time()), 12).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().repeatEvery()), 12).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().time()), 12).build());
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startsOn()), 12).build());
-            content.setWidget(row, 1, new DecoratorBuilder(inject(proto().endsOn()), 12).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().startsOn()), 12).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().endsOn()), 12).build());
 
             // fill ScheduleType types:
             if (get(proto().repeatType()) instanceof CComboBox) {

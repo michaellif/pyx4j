@@ -43,6 +43,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.ChargeLineFolder;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.ptapp.client.PtAppSite;
@@ -103,7 +104,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         info.add(notes.asWidget());
 
         main.setWidget(++row, 0, info);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().depositAgree()), 5).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositAgree()), 5).build());
         main.setWidget(++row, 0, inject(proto().paymentMethod(), new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class, true) {
             @Override
             public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
@@ -130,7 +131,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
             termsScroll.setStyleName(DEFAULT_STYLE_PREFIX + StyleSuffix.recurrentPaymentTerms);
 
             main.setWidget(++row, 0, termsScroll);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().preauthoriseAgree()), 5).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().preauthoriseAgree()), 5).build());
         }
 
         // tune up:

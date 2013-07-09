@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.moveinwizardmockup.ExistingInsurance;
 
 public class InsuranceAlreadyAvailabileForm extends CEntityDecoratableForm<ExistingInsurance> {
@@ -37,11 +38,11 @@ public class InsuranceAlreadyAvailabileForm extends CEntityDecoratableForm<Exist
         FormFlexPanel content = new FormFlexPanel();
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("Proof of Insurance"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().personalLiability()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceStartDate()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().insuranceExpirationDate()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceProvider()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().personalLiability()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceStartDate()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceExpirationDate()), 10).build());
         content.setH2(++row, 0, 1, i18n.tr("Attach Insurance Certificate"));
         content.setWidget(++row, 0, inject(proto().documents(), new InsuranceUploaderFolder()));
 

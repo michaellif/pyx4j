@@ -29,6 +29,7 @@ import com.pyx4j.security.shared.SecurityController;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
@@ -83,9 +84,9 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
 
         FormFlexPanel info = new FormFlexPanel();
 
-        info.setWidget(0, 0, new DecoratorBuilder(inject(proto().floorplan()), 20).build());
-        info.setWidget(1, 0, new DecoratorBuilder(inject(proto().bedroomsAndDens()), 10).build());
-        info.setWidget(1, 1, new DecoratorBuilder(inject(proto().bathrooms()), 10).build());
+        info.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().floorplan()), 20).build());
+        info.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().bedroomsAndDens()), 10).build());
+        info.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().bathrooms()), 10).build());
 
         info.getColumnFormatter().setWidth(0, "30%");
         info.getColumnFormatter().setWidth(1, "70%");
@@ -97,14 +98,14 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
         FormFlexPanel address = new FormFlexPanel();
 
         int addrRow = -1;
-        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().city()), 15).build());
-        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().province()), 17).build());
-        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().country()), 15).build());
-        address.setWidget(++addrRow, 0, new DecoratorBuilder(inject(proto().address().postalCode()), 7).build());
+        address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().city()), 15).build());
+        address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().province()), 17).build());
+        address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().country()), 15).build());
+        address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), 7).build());
 
         FormFlexPanel apartment = new FormFlexPanel();
 
-        apartment.setWidget(0, 0, new DecoratorBuilder(inject(proto().address().street1()), 50).customLabel(i18n.tr("Street Address")).build());
+        apartment.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().address().street1()), 50).customLabel(i18n.tr("Street Address")).build());
         apartment.getFlexCellFormatter().setColSpan(0, 0, 2);
 
         apartment.setWidget(1, 0, address);
@@ -118,9 +119,9 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
         main.setWidget(++row, 0, apartment);
 
         main.setH1(++row, 0, 1, i18n.tr("Lease Terms"));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseFrom()), 8).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leaseTo()), 8).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().unitRent()), 8).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseFrom()), 8).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTo()), 8).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unitRent()), 8).build());
 
         consessionPanel.setH1(0, 0, 1, i18n.tr("Promotions, Discounts and Concessions"));
         consessionPanel.setWidget(1, 0, inject(proto().concessions(), new ConcessionsFolder()));

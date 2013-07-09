@@ -22,10 +22,11 @@ import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.operations.domain.scheduler.TriggerNotification;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.operations.domain.scheduler.TriggerNotification;
 
 public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
 
@@ -55,8 +56,8 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
             FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
             int row = -1;
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().event()), 10).build());
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().user()), 20).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().event()), 10).build());
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user()), 20).build());
 
             return content;
         }

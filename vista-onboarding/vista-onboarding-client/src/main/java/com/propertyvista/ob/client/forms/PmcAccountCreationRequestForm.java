@@ -47,6 +47,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
 import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
@@ -94,7 +95,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         dnsNamePanel.addStyleName(Styles.PmcUrlFieldNote.name());
         SimplePanel dnsSubdomainNameHolder = new SimplePanel();
         dnsSubdomainNameHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        dnsSubdomainNameHolder.setWidget(new DecoratorBuilder(inject(proto().dnsName()), 10).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        dnsSubdomainNameHolder.setWidget(new FormDecoratorBuilder(inject(proto().dnsName()), 10).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
 
         Label dnsDomainName = new Label(".propertyvista.com");
@@ -126,24 +127,23 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
-        contentPanel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().name())).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).customLabel("")
-                        .labelWidth(0).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).customLabel("").labelWidth(0).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().countryOfOperation())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().countryOfOperation())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().lastName())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().email())).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmEmail())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+                .mandatoryMarker(false).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().confirmEmail())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
         get(proto().confirmEmail()).addValueValidator(new EditableValueValidator<String>() {
             @Override
@@ -158,9 +158,9 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         });
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
 
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().password())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().confirmPassword())).customLabel("").labelWidth(0).useLabelSemicolon(false)
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().confirmPassword())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).build());
         get(proto().confirmPassword()).addValueValidator(new EditableValueValidator<String>() {
             @Override

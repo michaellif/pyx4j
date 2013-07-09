@@ -39,6 +39,7 @@ import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO;
 import com.propertyvista.domain.moveinwizardmockup.InsurancePaymentMethodDTO.PaymentMethod;
@@ -123,7 +124,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
 
         container.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
 
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
@@ -144,7 +145,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
         currentAddress.setVisible(false);
 
         container.setHR(++row, 0, 3);
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().phone()), 15).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().phone()), 15).build());
         container.getFlexCellFormatter().setColSpan(row, 0, 3);
 
         container.setWidth("100%");

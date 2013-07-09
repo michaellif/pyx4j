@@ -32,6 +32,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
@@ -58,15 +59,15 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
         container.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"))));
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sex()), 7).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().birthDate()), 9).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         container.setBR(++row, 0, 1);
 
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().homePhone()), 15).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().workPhone()), 15).build());
-        container.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 20).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
+        container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 20).build());
 
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));

@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.property.vendor.License;
 
 public class LicenseEditor extends CEntityDecoratableForm<License> {
@@ -31,11 +32,11 @@ public class LicenseEditor extends CEntityDecoratableForm<License> {
         FormFlexPanel main = new FormFlexPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().number()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().number()), 15).build());
 
         row = -1;
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().expiration()), 9).build());
-        main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().renewal()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiration()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().renewal()), 9).build());
 
         return main;
     }

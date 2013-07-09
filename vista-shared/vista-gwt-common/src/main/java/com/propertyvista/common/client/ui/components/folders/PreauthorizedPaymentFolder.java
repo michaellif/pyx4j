@@ -30,6 +30,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 
@@ -78,7 +79,7 @@ public abstract class PreauthorizedPaymentFolder extends VistaBoxFolder<Preautho
             FormFlexPanel content = new FormFlexPanel();
             int row = -1;
 
-            content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {
                 @Override
                 protected AppPlace getTargetPlace() {
                     return null; // not intended to navigate - just edit mode!
@@ -94,7 +95,7 @@ public abstract class PreauthorizedPaymentFolder extends VistaBoxFolder<Preautho
                         }
                     };
                 }
-            }), 38, 10).build());
+            }), 22).build());
 
             content.setBR(++row, 0, 1);
 

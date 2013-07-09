@@ -29,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.ptapp.DigitalSignature;
 import com.propertyvista.portal.rpc.ptapp.validators.DigitalSignatureValidation;
@@ -81,16 +82,16 @@ public class SignatureFolder extends VistaBoxFolder<DigitalSignature> {
             FormFlexPanel main = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().person().name(), new CEntityLabel<Name>()), 10).build());
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fullName()), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().person().name(), new CEntityLabel<Name>()), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullName()), 10).build());
             if (editable) {
                 get(proto().fullName()).inheritViewable(false); // always not viewable!
                 get(proto().fullName()).inheritEditable(false); // control state later in populate...
             }
 
             row = -1;
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().ipAddress()), 10).build());
-            main.setWidget(++row, 1, new DecoratorBuilder(inject(proto().timestamp()), 10).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().ipAddress()), 10).build());
+            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().timestamp()), 10).build());
 
             main.setStyleName(DEFAULT_STYLE_PREFIX);
             return main;

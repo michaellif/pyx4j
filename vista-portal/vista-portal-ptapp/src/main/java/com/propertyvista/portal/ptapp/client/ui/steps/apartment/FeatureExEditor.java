@@ -27,6 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.PetDataEditor;
 import com.propertyvista.common.client.ui.components.editors.VehicleDataEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.BillableItemExtraData;
@@ -49,12 +50,12 @@ class FeatureExEditor extends CEntityDecoratableForm<BillableItem> {
         int row = -1;
 
         CLabel lb;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().item().code().name(), lb = new CLabel()), 23).customLabel("").useLabelSemicolon(false)
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item().code().name(), lb = new CLabel()), 23).customLabel("").useLabelSemicolon(false)
                 .build());
         lb.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 
         CNumberLabel nl;
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().agreedPrice(), nl = new CNumberLabel()), 6).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice(), nl = new CNumberLabel()), 6).build());
         nl.setNumberFormat(proto().agreedPrice().getMeta().getFormat(), proto().agreedPrice().getMeta().useMessageFormat());
         nl.asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLDER);
 

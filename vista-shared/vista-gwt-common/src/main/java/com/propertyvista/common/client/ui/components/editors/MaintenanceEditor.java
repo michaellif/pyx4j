@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.domain.property.vendor.Maintenance;
@@ -42,8 +43,8 @@ public class MaintenanceEditor extends CEntityDecoratableForm<Maintenance> {
 
         main.setH1(++row, 0, 2, i18n.tr("Schedule"));
         ++row;
-        main.setWidget(row, 0, new DecoratorBuilder(inject(proto().lastService()), 9).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().nextService()), 9).build());
+        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().lastService()), 9).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextService()), 9).build());
 
         validateMaintenanceDates();
         return main;

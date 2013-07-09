@@ -40,6 +40,7 @@ import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.FutureDateValidation;
 import com.propertyvista.common.client.ui.validators.PastDateValidation;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
@@ -85,13 +86,13 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));
         main.setWidget(++row, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().sex()), 7).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().birthDate(), new CDateLabel()), 9).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().sex()), 7).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().birthDate(), new CDateLabel()), 9).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().workPhone()), 15).build());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().email()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 25).build());
 
         main.setH1(++row, 0, 1, i18n.tr("Identification Documents"));
 
@@ -108,26 +109,28 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
         main.setWidget(++row, 0, previousAddress);
 
         main.setH1(++row, 0, 1, proto().version().legalQuestions().getMeta().getCaption());
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 54).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 54, true).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 10, 54).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().suedForDamages()), 54, true).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 10, 54).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().everEvicted()), 54, true).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 10, 54).labelAlignment(Alignment.left)
+        main.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().version().legalQuestions().defaultedOnLease()), 54, true).labelAlignment(Alignment.left)
+                        .useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().version().legalQuestions().convictedOfFelony()), 54, true).labelAlignment(Alignment.left)
+                        .useLabelSemicolon(false).build());
+        main.setHR(++row, 0, 1);
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().legalTroubles()), 54, true).labelAlignment(Alignment.left)
                 .useLabelSemicolon(false).build());
         main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().convictedOfFelony()), 10, 54).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
-        main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().legalTroubles()), 10, 54).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
-        main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().version().legalQuestions().filedBankruptcy()), 10, 54).labelAlignment(Alignment.left)
-                .useLabelSemicolon(false).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().filedBankruptcy()), 54, true)
+                .labelAlignment(Alignment.left).useLabelSemicolon(false).build());
 
         if (!SecurityController.checkBehavior(VistaCustomerBehavior.Guarantor)) {
             main.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());

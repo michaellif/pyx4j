@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.ProvinceContryFilters;
 import com.propertyvista.domain.ref.Country;
 import com.propertyvista.domain.ref.Province;
@@ -53,17 +54,17 @@ public class VehicleDataEditor extends CEntityDecoratableForm<Vehicle> {
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Vehicle Data"));
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().make()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().model()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().color()), 10).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().year()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().color()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().year()), 5).build());
 
         row = 0; // skip header
-        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().plateNumber()), 10).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().plateNumber()), 10).build());
         CComponent<Country> country;
-        panel.setWidget(++row, 1, new DecoratorBuilder(country = (CComponent<Country>) inject(proto().country()), 13).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(country = (CComponent<Country>) inject(proto().country()), 13).build());
         CComponent<Province> province;
-        panel.setWidget(++row, 1, new DecoratorBuilder(province = (CComponent<Province>) inject(proto().province()), 17).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(province = (CComponent<Province>) inject(proto().province()), 17).build());
 
         ProvinceContryFilters.attachFilters(province, country, new OptionsFilter<Province>() {
             @Override

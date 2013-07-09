@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePersonalDisclaimerHolderDTO;
@@ -45,7 +46,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
         contentPanel.setH1(++row, 0, 1, i18n.tr("Personal Disclaimer Terms"));
         contentPanel.setWidget(++row, 0, personalDisclaimerHolder = new SimplePanel());
         contentPanel.setBR(++row, 0, 1);
-        contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().isAgreed(), new CCheckBox())).build());
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isAgreed(), new CCheckBox())).build());
 
         return contentPanel;
     }

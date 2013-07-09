@@ -35,6 +35,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CashInfo;
@@ -76,8 +77,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
-                        RadioGroup.Layout.HORISONTAL)), 25).build());
+                new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
+                        RadioGroup.Layout.HORISONTAL)), 22).build());
 
         main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
@@ -85,12 +86,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
         main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().sameAsCurrent())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent())).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 1);
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments())).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments())).build());
             get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(false);
         }
 

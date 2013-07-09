@@ -49,6 +49,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -106,15 +107,14 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         FormFlexPanel panel = new FormFlexPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), 25).customLabel(i18n.tr("Tenant"))
-                        .build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), 22)
+                .customLabel(i18n.tr("Tenant")).build());
 
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
 
         panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
 
         // tweak UI:
         get(proto().address()).setViewable(true);
@@ -129,10 +129,10 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         panel.setWidget(
                 ++row,
                 0,
-                new DecoratorBuilder(inject(proto().selectPaymentMethod(),
-                        new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class, RadioGroup.Layout.HORISONTAL))).build());
+                new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
+                        RadioGroup.Layout.HORISONTAL))).build());
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 25).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 22).build());
 
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
@@ -200,7 +200,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).build());
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {

@@ -36,6 +36,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.TransactionHistoryViewerYardi;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
@@ -62,7 +63,7 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
 
         int row = -1;
         content.setBR(++row, 0, 2);
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().currentBalance(), new CMoneyField()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentBalance(), new CMoneyField()), 10).build());
         ((CMoneyField) get(proto().currentBalance())).setFormat(new CurrentBalanceFormat());
 
         content.setWidget(row, 1, payButton = new Button(i18n.tr("Pay Now"), new Command() {

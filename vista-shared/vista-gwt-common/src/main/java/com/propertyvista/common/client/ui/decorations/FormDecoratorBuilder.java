@@ -38,8 +38,8 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     }
 
     public FormDecoratorBuilder(CComponent<?> component, int componentWidth, boolean dual) {
-        this(component, "12em", componentWidth + "em", dual ? "48em" : "18em");
-//        assert dual && componentWidth <= 46 || !dual && componentWidth <= 16;
+        this(component, "15em", componentWidth + "em", dual ? "65em" : "25em");
+        assert dual && componentWidth <= 58 || !dual && componentWidth <= 23;
     }
 
     public FormDecoratorBuilder(CComponent<?> component, int componentWidth) {
