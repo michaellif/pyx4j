@@ -185,7 +185,12 @@ public class PropertyManager {
         Map<com.propertyvista.yardi.mock.Name, Property<?>> map = updater.getPropertyMap();
         for (com.propertyvista.yardi.mock.Name name : map.keySet()) {
             Property<?> property = map.get(name);
-            if (property.getName() instanceof RtCustomerUpdater.YCUSTOMER) {
+
+            if (property.getName() instanceof RtCustomerUpdater.RTCUSTOMER) {
+
+                updateProperty(rtCustomer, property);
+
+            } else if (property.getName() instanceof RtCustomerUpdater.YCUSTOMER) {
 
                 if (rtCustomer.getCustomers() == null) {
                     rtCustomer.setCustomers(new YardiCustomers());

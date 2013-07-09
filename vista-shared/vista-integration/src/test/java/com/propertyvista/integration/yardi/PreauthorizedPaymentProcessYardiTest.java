@@ -26,6 +26,7 @@ import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.PaymentType;
@@ -38,6 +39,8 @@ import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
+import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
+import com.propertyvista.yardi.mock.RtCustomerUpdater;
 import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
@@ -124,4 +127,53 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
         }
     }
 
+    public void testBatchPartialCompleation() throws Exception {
+        assertEquals("PAD next Generation date", "2011-01-29", getTargetPadGenerationDate(leasesAll.get(0)));
+
+        // PAD creation triggered at the end of the month
+        advanceSysDate("2011-01-29");
+
+        // Expect PAD executed, verify amount
+        new PaymentRecordTester(leasesAll.get(0).billingAccount()).count(1). //
+                lastRecordStatus(PaymentStatus.Scheduled).lastRecordAmount("580.00");
+
+        // Make some lease fail to post
+        List<Lease> leaseToFail = new ArrayList<Lease>();
+        leaseToFail.add(leasesAll.get(3));
+        leaseToFail.add(leasesAll.get(11));
+        for (Lease lease : leaseToFail) {
+            RtCustomerUpdater updater = new RtCustomerUpdater(lease.unit().building().propertyCode().getValue(), lease.leaseId().getValue());
+            updater.set(RtCustomerUpdater.RTCUSTOMER.PaymentAccepted, String.valueOf(PaymentAccepted.DoNotAccept.paymentCode()));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        // Post and process all payments
+        advanceSysDate("2011-02-01");
+
+        for (Lease lease : leaseToFail) {
+            new PaymentRecordTester(lease.billingAccount()).count(1). //
+                    lastRecordStatus(PaymentStatus.Scheduled);
+        }
+
+        for (Lease lease : leasesAll) {
+            if (leaseToFail.contains(lease)) {
+                continue;
+            }
+            new PaymentRecordTester(lease.billingAccount()).count(1). //
+                    lastRecordStatus(PaymentStatus.Cleared).lastRecordAmount("580.00");
+        }
+
+        // Recover the tenants
+        for (Lease lease : leaseToFail) {
+            RtCustomerUpdater updater = new RtCustomerUpdater(lease.unit().building().propertyCode().getValue(), lease.leaseId().getValue());
+            updater.set(RtCustomerUpdater.RTCUSTOMER.PaymentAccepted, String.valueOf(PaymentAccepted.Any.paymentCode()));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        advanceSysDate("2011-02-02");
+        for (Lease lease : leaseToFail) {
+            new PaymentRecordTester(lease.billingAccount()).count(1). //
+                    lastRecordStatus(PaymentStatus.Cleared);
+        }
+    }
 }

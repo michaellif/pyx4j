@@ -105,7 +105,7 @@ public interface BillingAccount extends IEntity {
             this.paymentCode = paymentCode;
         }
 
-        private int value() {
+        public int paymentCode() {
             return paymentCode;
         }
 
@@ -116,7 +116,7 @@ public interface BillingAccount extends IEntity {
 
         public static PaymentAccepted getPaymentType(int paymentCode) {
             for (PaymentAccepted code : PaymentAccepted.values()) {
-                if (code.value() == paymentCode) {
+                if (code.paymentCode() == paymentCode) {
                     return code;
                 }
             }
