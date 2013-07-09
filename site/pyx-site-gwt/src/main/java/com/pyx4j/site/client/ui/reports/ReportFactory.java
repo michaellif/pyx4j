@@ -27,6 +27,6 @@ public interface ReportFactory<S extends ReportMetadata> {
 
     CEntityForm<S> getReportSettingsForm();
 
-    Report getReport();
+    ReportWidget getReport();
 
 }

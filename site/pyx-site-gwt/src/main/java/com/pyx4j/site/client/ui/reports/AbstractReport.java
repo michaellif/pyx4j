@@ -20,10 +20,6 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
@@ -61,7 +57,7 @@ import com.pyx4j.widgets.client.TextBox;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
-public abstract class AbstractReport extends AbstractPrimePane implements IReportsView {
+public abstract class AbstractReport<R extends ReportMetadata> extends AbstractPrimePane implements IReportsView<R> {
 
     public enum Styles {
 
@@ -71,11 +67,11 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     private enum MementoKeys {
 
-        ReportMetadata, HasData, HorizontalScrollPosition, VerticalScrollPosition, ReportMemento
+        ReportMetadata, HasReportData, HorizontalScrollPosition, VerticalScrollPosition, ReportMemento
 
     }
 
-    private static class ReportPrintPalette extends Palette {
+    public static class ReportPrintPalette extends Palette {
 
     }
 
@@ -124,21 +120,15 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     private static final I18n i18n = I18n.get(AbstractReport.class);
 
-    private IReportsView.Presenter presenter;
+    private IReportsView.Presenter<R> presenter;
 
     private final FlowPanel viewPanel;
-
-    private final Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap;
-
-    private CEntityForm<ReportMetadata> settingsForm;
 
     private final SimplePanel settingsFormPanel;
 
     private final SimplePanel reportPanel;
 
     private final ReportSettingsFormControlBar reportSettingsFormControlBar;
-
-    private Report report;
 
     private String settingsId;
 
@@ -154,18 +144,38 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     private final FlowPanel errorPanel;
 
-    private boolean hasData;
+    private boolean hasReportData;
 
-    public AbstractReport(Map<Class<? extends ReportMetadata>, ReportFactory<?>> reportFactoryMap) {
+    private final ReportWidget reportWidget;
+
+    private CEntityForm<R> activeSettingsForm;
+
+    private final CEntityForm<R> simpleSettingsForm;
+
+    private final CEntityForm<R> advancedSettingsForm;
+
+    /**
+     * @param advancedSettingsForm
+     *            this is optional, and in this case ReportMetadata has to implement HasAdvancedSettings
+     */
+    public AbstractReport(ReportWidget reportWidget, CEntityForm<R> simpleSettingsForm, CEntityForm<R> advancedSettingsForm) {
         setSize("100%", "100%");
-        this.reportFactoryMap = reportFactoryMap;
-        this.settingsForm = null;
+
+        this.reportWidget = reportWidget;
+        this.simpleSettingsForm = simpleSettingsForm;
+        this.simpleSettingsForm.initContent();
+        this.advancedSettingsForm = advancedSettingsForm;
+        if (this.advancedSettingsForm != null) {
+            this.advancedSettingsForm.initContent();
+        }
+
+        this.activeSettingsForm = null;
         this.presenter = null;
 
-        viewPanel = new FlowPanel();
-        viewPanel.setStyleName(Styles.ReportView.name());
-        viewPanel.setWidth("100%");
-        viewPanel.setHeight("100%");
+        this.viewPanel = new FlowPanel();
+        this.viewPanel.setStyleName(Styles.ReportView.name());
+        this.viewPanel.setWidth("100%");
+        this.viewPanel.setHeight("100%");
 
         settingsFormPanel = new SimplePanel();
         settingsFormPanel.setStylePrimaryName(Styles.SettingsFormPanel.name());
@@ -182,11 +192,11 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
             @Override
             public void onApply() {
-                if (presenter != null & settingsForm != null) {
-                    if (settingsForm.isValid()) {
-                        presenter.apply(settingsForm.getValue(), true);
+                if (presenter != null & activeSettingsForm != null) {
+                    if (activeSettingsForm.isValid()) {
+                        presenter.apply(activeSettingsForm.getValue(), true);
                     } else {
-                        settingsForm.setUnconditionalValidationErrorRendering(true);
+                        activeSettingsForm.setUnconditionalValidationErrorRendering(true);
                     }
                 }
             }
@@ -247,7 +257,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         addHeaderToolbarItem(new Button(i18n.tr("Load..."), new Command() {
             @Override
             public void execute() {
-                presenter.populateAvailableReportSettings();
+                presenter.populateAvailableReportMetadata();
             }
         }));
 
@@ -275,7 +285,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         addHeaderToolbarItem(exportButton = new Button(i18n.tr("Export"), new Command() {
             @Override
             public void execute() {
-                presenter.export(settingsForm.getValue());
+                presenter.export(activeSettingsForm.getValue());
             }
         }));
 
@@ -284,28 +294,28 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
     }
 
     @Override
-    public void setPresenter(IReportsView.Presenter presenter) {
+    public void setPresenter(IReportsView.Presenter<R> presenter) {
         this.presenter = presenter;
     }
 
     @Override
-    public void setReportSettings(ReportMetadata reportSettings, String settingsId) {
+    public void setReportMetadata(R reportSettings, String settingsId) {
         hideVisor();
 
         this.settingsId = settingsId;
-        this.settingsForm = null;
+        this.activeSettingsForm = null;
         this.settingsFormPanel.setWidget(null);
         this.reportSettingsFormControlBar.setEnabled(false);
         this.reportPanel.setWidget(null);
 
         if (reportSettings != null) {
+
             populateSettingsForm(reportSettings);
             reportSettingsFormControlBar.setEnabled(true);
 
-            ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
-            report = factory.getReport();
-            report.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            reportPanel.setWidget(report);
+            reportWidget.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            reportPanel.setWidget(reportWidget);
+            reportWidget.setData(null);
 
             exportButton.setVisible(reportSettings instanceof ExportableReport);
         }
@@ -319,11 +329,11 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         unlockReportSettings();
         errorPanel.setVisible(false);
 
-        if (report != null & data != null) {
-            report.setData(data);
-            hasData = true;
+        if (reportWidget != null & data != null) {
+            reportWidget.setData(data);
+            hasReportData = true;
         } else {
-            hasData = false;
+            hasReportData = false;
         }
     }
 
@@ -341,7 +351,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
 
     @Override
     public void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener) {
-        settingsForm.setEnabled(false);
+        activeSettingsForm.setEnabled(false);
         reportSettingsFormControlBar.setEnabled(false);
         reportPanel.setVisible(false);
         errorPanel.setVisible(false);
@@ -353,12 +363,12 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
     }
 
     @Override
-    public void onReportSettingsSaveFailed(String reason) {
+    public void onReportMetadataSaveFailed(String reason) {
         MessageDialog.error(i18n.tr("Save Failed"), reason);
     }
 
     @Override
-    public void onReportSettingsSaveSucceed(String reportSettingsId) {
+    public void onReportMetadataSaveSucceed(String reportSettingsId) {
         MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
         settingsId = reportSettingsId;
         resetCaption();
@@ -392,19 +402,18 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
     @Override
     public void storeState(Place place) {
         getMemento().setCurrentPlace(place);
-        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMetadata.name(), settingsForm.getValue());
-        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HasData.name(), hasData);
-        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMemento.name(), report.getMemento());
+        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMetadata.name(), activeSettingsForm.getValue());
+        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HasReportData.name(), hasReportData);
+        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMemento.name(), reportWidget.getMemento());
     }
 
     @Override
     public void restoreState() {
         if (getMemento().mayRestore()) {
-            ReportMetadata reportMetadata = (ReportMetadata) getMemento().getObject(
-                    ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMetadata.name());
-            setReportSettings(reportMetadata, null); // TODO deal with report metadata Id
+            R reportMetadata = (R) getMemento().getObject(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMetadata.name());
+            setReportMetadata(reportMetadata, null); // TODO deal with report metadata Id
             boolean hadData = Boolean.TRUE.equals(getMemento().getObject(
-                    ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasData.name()));
+                    ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasReportData.name()));
             if (hadData) {
                 // not good: here we rely its not going to be async because activity has cache
                 presenter.apply(reportMetadata, false);
@@ -413,48 +422,41 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
                     public void execute() {
                         Object reportMemento = getMemento().getObject(
                                 ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMemento.name());
-                        report.setMemento(reportMemento);
+                        reportWidget.setMemento(reportMemento);
                     }
                 });
             }
         } else {
-            setReportSettings(((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
+            setReportMetadata((R) ((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
         }
-    }
-
-    @Override
-    public List<Class<? extends ReportMetadata>> getSupportedReportMetadata() {
-        return new ArrayList<Class<? extends ReportMetadata>>(reportFactoryMap.keySet());
     }
 
     private void setSettingsMode(boolean isAdvanced) {
-        if (settingsForm != null) {
-            ((HasAdvancedSettings) settingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
-            populateSettingsForm(settingsForm.getValue());
+        if (activeSettingsForm != null) {
+            ((HasAdvancedSettings) activeSettingsForm.getValue()).isInAdvancedMode().setValue(isAdvanced);
+            populateSettingsForm(activeSettingsForm.getValue());
         }
     }
 
-    private void populateSettingsForm(ReportMetadata reportSettings) {
-        ReportFactory<?> factory = reportFactoryMap.get(reportSettings.getInstanceValueClass());
-        if (factory == null) {
-            throw new Error("factory not found for report: " + reportSettings.getInstanceValueClass().getName());
-        } else if (factory instanceof HasAdvancedModeReportFactory) {
+    private void populateSettingsForm(R reportSettings) {
+        if (advancedSettingsForm != null) {
             boolean isAdvancedMode = ((HasAdvancedSettings) reportSettings).isInAdvancedMode().isBooleanTrue();
-            settingsForm = isAdvancedMode ? ((HasAdvancedModeReportFactory) factory).getAdvancedReportSettingsForm() : factory.getReportSettingsForm();
+            activeSettingsForm = isAdvancedMode ? advancedSettingsForm : simpleSettingsForm;
             reportSettingsFormControlBar.enableSettingsModeToggle(isAdvancedMode);
         } else {
-            settingsForm = (CEntityForm<ReportMetadata>) factory.getReportSettingsForm();
+            activeSettingsForm = simpleSettingsForm;
             reportSettingsFormControlBar.disableModeToggle();
         }
-        settingsFormPanel.setWidget(settingsForm);
-        settingsForm.addValueChangeHandler(new ValueChangeHandler<ReportMetadata>() {
+        settingsFormPanel.setWidget(activeSettingsForm);
+        activeSettingsForm.addValueChangeHandler(new ValueChangeHandler<R>() {
             @Override
-            public void onValueChange(ValueChangeEvent<ReportMetadata> event) {
-                hasData = false;
+            public void onValueChange(ValueChangeEvent<R> event) {
+                hasReportData = false;
             }
         });
-        settingsForm.populate(reportSettings);
-        settingsForm.setEnabled(true);
+
+        activeSettingsForm.populate(reportSettings);
+        activeSettingsForm.setEnabled(true);
         reportSettingsFormControlBar.setEnabled(true);
     }
 
@@ -469,7 +471,7 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
             @Override
             public boolean onClickOk() {
                 if (!settingsId.getText().isEmpty()) {
-                    presenter.saveSettings(settingsForm.getValue(), settingsId.getText(), false);
+                    presenter.saveReportMetadata(activeSettingsForm.getValue(), settingsId.getText(), false);
                     return true;
                 } else {
                     return false;
@@ -482,12 +484,12 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
         if (settingsId == null) {
             onSaveSettingsAsClicked();
         } else {
-            presenter.saveSettings(settingsForm.getValue(), settingsId, true);
+            presenter.saveReportMetadata(activeSettingsForm.getValue(), settingsId, true);
         }
     }
 
     private void resetCaption() {
-        ReportMetadata reportSettings = settingsForm != null ? settingsForm.getValue() : null;
+        ReportMetadata reportSettings = activeSettingsForm != null ? activeSettingsForm.getValue() : null;
         if (reportSettings == null) {
             setCaption(i18n.tr("Reports"));
         } else {
@@ -497,8 +499,8 @@ public abstract class AbstractReport extends AbstractPrimePane implements IRepor
     }
 
     private void unlockReportSettings() {
-        if (settingsForm != null) {
-            settingsForm.setEnabled(true);
+        if (activeSettingsForm != null) {
+            activeSettingsForm.setEnabled(true);
         }
         reportSettingsFormControlBar.setEnabled(true);
         reportPanel.setVisible(true);

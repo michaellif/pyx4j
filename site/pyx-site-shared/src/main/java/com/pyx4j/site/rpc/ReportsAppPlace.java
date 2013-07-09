@@ -26,21 +26,28 @@ import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
-public class ReportsAppPlace extends AppPlace {
+public class ReportsAppPlace<R extends ReportMetadata> extends AppPlace {
 
     private final static String REPORT_TYPE_ARG_NAME = "type";
 
-    private final ReportMetadata metadata;
+    private R metadata;
 
+    /**
+     * This constructor should never be used (it's only for serialization)
+     */
     public ReportsAppPlace() {
         this(null);
     }
 
-    public ReportsAppPlace(ReportMetadata metadata) {
-        this.metadata = metadata;
-        if (metadata != null) {
-            this.queryArg(REPORT_TYPE_ARG_NAME, GWTJava5Helper.getSimpleName(metadata.getInstanceValueClass()));
+    public ReportsAppPlace(Class<R> metadataClass) {
+        if (metadataClass != null) {
+            this.queryArg(REPORT_TYPE_ARG_NAME, GWTJava5Helper.getSimpleName(metadataClass));
         }
+    }
+
+    public ReportsAppPlace<R> of(R metadata) {
+        this.metadata = metadata;
+        return this;
     }
 
     public ReportMetadata getReportMetadata() {

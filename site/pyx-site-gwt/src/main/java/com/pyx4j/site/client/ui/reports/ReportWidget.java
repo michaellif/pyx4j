@@ -22,8 +22,9 @@ package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface Report extends IsWidget {
+public interface ReportWidget extends IsWidget {
 
+    /** has to accept <code>null</code>, which means that the widget must reset it's state, i.e. clear everything */
     void setData(Object data);
 
     /** this is to be used along with data to store information about visual representation, i.e. scroll bar position */

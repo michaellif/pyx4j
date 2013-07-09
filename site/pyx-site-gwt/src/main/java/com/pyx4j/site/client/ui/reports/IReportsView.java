@@ -20,33 +20,31 @@
  */
 package com.pyx4j.site.client.ui.reports;
 
-import java.util.List;
-
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public interface IReportsView extends IPrimePane {
+public interface IReportsView<R extends ReportMetadata> extends IPrimePane {
 
-    public interface Presenter extends IPrimePane.Presenter {
+    public interface Presenter<R> extends IPrimePane.Presenter {
 
-        void export(ReportMetadata settings);
+        void export(R settings);
 
-        void apply(ReportMetadata settings, boolean forceRefresh);
+        void apply(R settings, boolean forceRefresh);
 
-        void loadSettings(String reportSettingsId);
+        void loadReportMetadata(String reportMetadataId);
 
-        void saveSettings(ReportMetadata settings, String reportSettingsId, boolean allowOverwrite);
+        void saveReportMetadata(R reportMetadata, String reportMetadataId, boolean allowOverwrite);
 
-        void deleteSettings(String settings);
+        void deleteReportMetadata(String reportMetadataId);
 
-        void populateAvailableReportSettings();
+        void populateAvailableReportMetadata();
 
     }
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(Presenter<R> presenter);
 
-    <E extends ReportMetadata> void setReportSettings(E reportSettings, String settingsId);
+    void setReportMetadata(R reportMetadtata, String reportMetadataId);
 
     void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener);
 
@@ -54,9 +52,7 @@ public interface IReportsView extends IPrimePane {
 
     void setError(String errorMessage);
 
-    void onReportSettingsSaveSucceed(String reportSettingsId);
+    void onReportMetadataSaveSucceed(String reportMetadataId);
 
-    void onReportSettingsSaveFailed(String reason);
-
-    List<Class<? extends ReportMetadata>> getSupportedReportMetadata();
+    void onReportMetadataSaveFailed(String errorMessage);
 }

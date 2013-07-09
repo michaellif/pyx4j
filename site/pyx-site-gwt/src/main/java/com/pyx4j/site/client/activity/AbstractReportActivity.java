@@ -57,26 +57,24 @@ import com.pyx4j.site.rpc.customization.ICustomizationPersistenceService;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public abstract class AbstractReportActivity extends AbstractActivity implements IReportsView.Presenter {
+public abstract class AbstractReportActivity<R extends ReportMetadata> extends AbstractActivity implements IReportsView.Presenter<R> {
 
-    private static final I18n i18n = I18n.get(AbstractReportActivity.class);
-
-    public static class ReportSettingsManagementVizorController extends AbstractVisorController {
+    public class ReportSettingsManagementVizorController extends AbstractVisorController {
 
         private final ReportSettingsManagementVizor visor;
 
-        public ReportSettingsManagementVizorController(IPane parentView, final IReportsView.Presenter presenter) {
+        public ReportSettingsManagementVizorController(IPane parentView, final IReportsView.Presenter<R> presenter) {
             super(parentView);
             visor = new ReportSettingsManagementVizor(this) {
 
                 @Override
                 public void onLoadRequest(String selectedReportSettingsId) {
-                    presenter.loadSettings(selectedReportSettingsId);
+                    presenter.loadReportMetadata(selectedReportSettingsId);
                 }
 
                 @Override
                 public void onDeleteRequest(String selectedReportSettingsId) {
-                    presenter.deleteSettings(selectedReportSettingsId);
+                    presenter.deleteReportMetadata(selectedReportSettingsId);
                 }
             };
             visor.setAvailableReportSettingsIds(null);
@@ -101,13 +99,15 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
         Object data;
     }
 
+    private static final I18n i18n = I18n.get(AbstractReportActivity.class);
+
     private static final Map<String, CachedReportData> reportDataCache = new HashMap<String, AbstractReportActivity.CachedReportData>();
 
-    protected final IReportsView view;
+    private final ReportsAppPlace<R> place;
 
-    private final IReportsService reportsService;
+    private final IReportsView<R> view;
 
-    private final ReportsAppPlace place;
+    private final IReportsService<R> reportsService;
 
     private final ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService;
 
@@ -117,29 +117,30 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
     private final DeferredProcessService deferredProccessService;
 
-    protected Timer progressTimer;
+    private Timer progressTimer;
 
-    public AbstractReportActivity(IReportsService reportsService, ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService,
-            IReportsView view, ReportsAppPlace place, String dowloadServletPath) {
+    private final Class<R> reportMetadataClass;
+
+    public AbstractReportActivity(Class<R> reportMetadataClass, ReportsAppPlace<R> place, IReportsService<R> reportsService,
+            ICustomizationPersistenceService<ReportMetadata> reportsSettingsPersistenceService, IReportsView<R> view, String dowloadServletPath) {
+        this.reportMetadataClass = reportMetadataClass;
         this.reportsService = reportsService;
         this.reportsSettingsPersistenceService = reportsSettingsPersistenceService;
+        this.deferredProccessService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
 
         this.view = view;
+
         if (place.getReportMetadata() == null) {
-            for (Class<? extends ReportMetadata> reportMetadataClass : view.getSupportedReportMetadata()) {
-                if (GWTJava5Helper.getSimpleName(reportMetadataClass).equals(place.getReportMetadataName())) {
-                    place = createReportsPlace(EntityFactory.create(reportMetadataClass));
-                    break;
-                }
-            }
-            if (place.getReportMetadata() == null) {
+            if (GWTJava5Helper.getSimpleName(reportMetadataClass).equals(place.getReportMetadataName())) {
+                place = place.of(EntityFactory.create(reportMetadataClass));
+            } else {
                 throw new Error("Report '" + place.getReportMetadataName() + "' is not supported!");
             }
         }
         this.place = place;
+
         this.view.setPresenter(this);
         this.downloadServletPath = dowloadServletPath;
-        this.deferredProccessService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
     }
 
     public ReportSettingsManagementVizorController getReportSettingsManagementVizorController() {
@@ -162,7 +163,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     }
 
     @Override
-    public void apply(final ReportMetadata reportMetadata, boolean forceRefresh) {
+    public void apply(final R reportMetadata, boolean forceRefresh) {
         CachedReportData cachedData = reportDataCache.get(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()));
         if (!forceRefresh && cachedData != null && EntityGraph.fullyEqualValues(reportMetadata, cachedData.reportMetadata)) {
             view.setReportData(cachedData.data);
@@ -204,7 +205,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     }
 
     @Override
-    public void export(ReportMetadata settings) {
+    public void export(R settings) {
         ReportDialog d = new ReportDialog(i18n.tr("Exporting Report"), "");
         d.setDownloadServletPath(downloadServletPath);
         ReportRequest request = new ReportRequest();
@@ -216,7 +217,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
 
             @Override
             public void createDownload(AsyncCallback<String> callback, ReportRequest reportRequest) {
-                reportsService.export(callback, (ReportMetadata) reportRequest.getParameters().get(METADATA_KEY));
+                reportsService.export(callback, (R) reportRequest.getParameters().get(METADATA_KEY));
             }
 
             @Override
@@ -228,33 +229,33 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     }
 
     @Override
-    public void loadSettings(final String id) {
+    public void loadReportMetadata(final String id) {
         reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportMetadata>() {
 
             @Override
             public void onSuccess(ReportMetadata result) {
-                view.setReportSettings(result, id);
+                view.setReportMetadata((R) result, id);
             }
 
-        }, id, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
+        }, id, EntityFactory.getEntityPrototype(reportMetadataClass));
     }
 
     @Override
-    public void saveSettings(ReportMetadata settings, final String reportSettingsId, boolean allowOverwrite) {
+    public void saveReportMetadata(ReportMetadata settings, final String reportSettingsId, boolean allowOverwrite) {
         reportsSettingsPersistenceService.save(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.onReportSettingsSaveSucceed(reportSettingsId);
+                view.onReportMetadataSaveSucceed(reportSettingsId);
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof CustomizationOverwriteAttemptException) {
-                    view.onReportSettingsSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists",
+                    view.onReportMetadataSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists",
                             reportSettingsId));
                 } else if (caught instanceof UserRuntimeException) {
-                    view.onReportSettingsSaveFailed(((UserRuntimeException) caught).getMessage());
+                    view.onReportMetadataSaveFailed(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);
                 }
@@ -264,20 +265,20 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
     }
 
     @Override
-    public void deleteSettings(String settings) {
+    public void deleteReportMetadata(String settings) {
 
         reportsSettingsPersistenceService.delete(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                populateAvailableReportSettings();
+                populateAvailableReportMetadata();
             }
 
-        }, settings, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
+        }, settings, EntityFactory.getEntityPrototype(reportMetadataClass));
     }
 
     @Override
-    public void populateAvailableReportSettings() {
+    public void populateAvailableReportMetadata() {
         reportsSettingsPersistenceService.list(new DefaultAsyncCallback<Vector<String>>() {
 
             @Override
@@ -286,7 +287,7 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
                 getReportSettingsManagementVizorController().show();
             }
 
-        }, (ReportMetadata) EntityFactory.getEntityPrototype(retrieveReportSettings(place).getInstanceValueClass()));
+        }, EntityFactory.getEntityPrototype(reportMetadataClass));
 
     }
 
@@ -296,23 +297,12 @@ public abstract class AbstractReportActivity extends AbstractActivity implements
         view.storeState(getPlace());
     }
 
-    protected ReportMetadata retrieveReportSettings(AppPlace place) {
-        if (place instanceof ReportsAppPlace) {
-            return ((ReportsAppPlace) place).getReportMetadata();
-        } else {
-            return null;
-        }
-    }
-
     @Override
     public void populate() {
     }
 
     @Override
     public void refresh() {
-
     }
-
-    protected abstract ReportsAppPlace createReportsPlace(ReportMetadata reportMetadata);
 
 }

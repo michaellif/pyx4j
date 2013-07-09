@@ -42,7 +42,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.site.rpc.reports.IReportsService;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-public class AbstractReportsService implements IReportsService {
+public abstract class AbstractReportsService<R extends ReportMetadata> implements IReportsService<R> {
 
     private static final String REPORT_SESSION_STORAGE_KEY = "REPORT_SESSION_STORAGE_KEY";
 
@@ -210,7 +210,7 @@ public class AbstractReportsService implements IReportsService {
     }
 
     @Override
-    public void generateReport(AsyncCallback<Serializable> callback, ReportMetadata reportMetadata) {
+    public void generateReport(AsyncCallback<Serializable> callback, R reportMetadata) {
 
         Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
         if (reportGeneratorClass != null) {
@@ -229,7 +229,7 @@ public class AbstractReportsService implements IReportsService {
     }
 
     @Override
-    public void generateReportAsync(AsyncCallback<String> callback, ReportMetadata reportMetadata) {
+    public void generateReportAsync(AsyncCallback<String> callback, R reportMetadata) {
         Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
         if (reportGeneratorClass != null) {
             ReportGenerator reportGenerator;
@@ -255,7 +255,7 @@ public class AbstractReportsService implements IReportsService {
     }
 
     @Override
-    public void export(AsyncCallback<String> callback, ReportMetadata reportMetadata) {
+    public void export(AsyncCallback<String> callback, R reportMetadata) {
         Class<? extends ReportGenerator> reportGeneratorClass = reportGenerators.get(reportMetadata.getInstanceValueClass());
         if (reportGeneratorClass != null) {
             ReportGenerator reportGenerator = null;
