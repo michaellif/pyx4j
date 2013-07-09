@@ -164,9 +164,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         try {
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
-//            terminateLeaseCharges(lease, null);
-            log.error("Error", e);
-//            executionMonitor.addErredEvent("Tenant", e);
+            new YardiLeaseProcessor(null).expireLeaseProducts(lease);
+            log.error("Error", e); // log error and reset lease charges.
         }
         if (leaseCharges != null) {
             Lease processed = null;
@@ -178,7 +177,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
             // handle non-processed lease
             if (processed == null) {
-                terminateLeaseCharges(lease, null);
+                new YardiLeaseProcessor(null).expireLeaseProducts(lease);
             }
         }
     }
