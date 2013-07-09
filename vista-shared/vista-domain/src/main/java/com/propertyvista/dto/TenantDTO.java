@@ -41,6 +41,7 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
 
     IList<TenantInsuranceCertificateDTO> insuranceCertificates();
 
+    @Caption(name = "Pre-Authorized Payments")
     IList<PreauthorizedPaymentDTO> preauthorizedPayments();
 
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
