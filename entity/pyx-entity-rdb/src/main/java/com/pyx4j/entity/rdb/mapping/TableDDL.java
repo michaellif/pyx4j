@@ -36,6 +36,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.rdb.cfg.Configuration;
 import com.pyx4j.entity.rdb.dialect.Dialect;
 import com.pyx4j.entity.rdb.mapping.TableMetadata.ColumnMetadata;
 import com.pyx4j.entity.rdb.mapping.TableModel.ModelType;
@@ -88,7 +89,7 @@ class TableDDL {
 
     private static final boolean NS_PART_OF_PK = true;
 
-    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, int tablesIdentityOffset) {
+    static List<String> sqlCreate(Dialect dialect, TableModel tableModel, Configuration configuration) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE ");
@@ -141,6 +142,11 @@ class TableDDL {
         sql.append(")");
 
         sql.append(')');
+
+        if (configuration.tablesCreateOption() != null) {
+            sql.append(' ').append(configuration.tablesCreateOption());
+        }
+
         sqls.add(sql.toString());
 
         Collections.reverse(sqls);
@@ -176,6 +182,7 @@ class TableDDL {
             }
         }
 
+        int tablesIdentityOffset = configuration.tablesIdentityOffset();
         if ((tablesIdentityOffset != 0) && !dialect.isSequencesBaseIdentity() && (tableModel.getPrimaryKeyStrategy() == Table.PrimaryKeyStrategy.AUTO)) {
             sqls.add(dialect.sqlAlterIdentityColumn(tableModel.tableName, nextIdentityOffset(tablesIdentityOffset)));
         }
@@ -470,7 +477,7 @@ class TableDDL {
         return sql.toString();
     }
 
-    public static List<String> sqlCreateCollectionMember(Dialect dialect, TableModel tableModel, MemberOperationsMeta member, int tablesIdentityOffset) {
+    public static List<String> sqlCreateCollectionMember(Dialect dialect, TableModel tableModel, MemberOperationsMeta member, Configuration configuration) {
         List<String> sqls = new Vector<String>();
         StringBuilder sql = new StringBuilder();
 
@@ -510,6 +517,10 @@ class TableDDL {
 
         sql.append(')');
 
+        if (configuration.tablesCreateOption() != null) {
+            sql.append(' ').append(configuration.tablesCreateOption());
+        }
+
         sqls.add(sql.toString());
 
         StringBuilder sqlIdx = new StringBuilder();
@@ -521,6 +532,7 @@ class TableDDL {
 
         sqls.add(sqlIdx.toString());
 
+        int tablesIdentityOffset = configuration.tablesIdentityOffset();
         if ((tablesIdentityOffset != 0) && !dialect.isSequencesBaseIdentity()) {
             sqls.add(dialect.sqlAlterIdentityColumn(tableName, nextIdentityOffset(tablesIdentityOffset)));
         }

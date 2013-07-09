@@ -59,6 +59,8 @@ public class ConfigurationProperties {
 
     public String tablesSchema = null;
 
+    public String tablesCreateOption = null;
+
     public Ddl ddl = Ddl.auto;
 
     public final Map<ConnectionPoolType, ConnectionPoolConfiguration> connectionPoolCfg = new HashMap<ConnectionPoolType, ConnectionPoolConfiguration>();
@@ -89,6 +91,7 @@ public class ConfigurationProperties {
         this.allowForeignKeyDeferrable = c.getBooleanValue("allowForeignKeyDeferrable", this.allowForeignKeyDeferrable);
         this.forceQualifiedNames = c.getBooleanValue("forceQualifiedNames", this.forceQualifiedNames);
         this.tablesSchema = c.getValue("tablesSchema", this.tablesSchema);
+        this.tablesCreateOption = c.getValue("tablesCreateOption", this.tablesCreateOption);
 
         for (ConnectionPoolType connectionType : ConnectionPoolType.poolable()) {
             ConnectionPoolConfiguration cpc = connectionPoolConfiguration(connectionType);

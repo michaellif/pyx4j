@@ -138,6 +138,11 @@ public interface Configuration extends IPersistenceConfiguration {
 
     public String tablesSchema();
 
+    /**
+     * Allow to define globally for application TABLESPACE, STORAGE, ENGINE
+     */
+    public String tablesCreateOption();
+
     public boolean sequencesBaseIdentity();
 
     /**

@@ -92,6 +92,11 @@ public abstract class ConfigurationDerby implements Configuration {
     }
 
     @Override
+    public String tablesCreateOption() {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }

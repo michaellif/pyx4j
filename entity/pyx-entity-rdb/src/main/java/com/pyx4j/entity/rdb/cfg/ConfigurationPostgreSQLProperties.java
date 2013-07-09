@@ -116,6 +116,11 @@ public class ConfigurationPostgreSQLProperties extends ConfigurationPostgreSQL {
     }
 
     @Override
+    public String tablesCreateOption() {
+        return properties.tablesCreateOption;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return properties.sharedSequencesSchema;
     }

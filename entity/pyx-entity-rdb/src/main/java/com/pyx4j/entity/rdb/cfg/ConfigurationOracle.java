@@ -108,6 +108,11 @@ public abstract class ConfigurationOracle implements Configuration {
     }
 
     @Override
+    public String tablesCreateOption() {
+        return null;
+    }
+
+    @Override
     public String sharedSequencesSchema() {
         return null;
     }

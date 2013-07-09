@@ -125,6 +125,11 @@ public class ConfigurationOracleProperties extends ConfigurationOracle {
     }
 
     @Override
+    public String tablesCreateOption() {
+        return properties.tablesCreateOption;
+    }
+
+    @Override
     public boolean createForeignKeys() {
         return properties.createForeignKeys;
     }

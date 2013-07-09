@@ -127,6 +127,11 @@ public class ConfigurationMySQLProperties extends ConfigurationMySQL {
         }
     }
 
+    @Override
+    public String tablesCreateOption() {
+        return properties.tablesCreateOption;
+    }
+
     public void readProperties(String prefix, Map<String, String> properties) {
         PropertiesConfiguration c = new PropertiesConfiguration(prefix, properties);
 
