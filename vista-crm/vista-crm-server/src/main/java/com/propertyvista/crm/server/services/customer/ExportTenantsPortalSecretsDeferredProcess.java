@@ -66,6 +66,8 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
             final EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
             criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
+            criteria.asc(criteria.proto().lease().unit().building());
+            criteria.asc(criteria.proto().lease().unit());
             maximum = Persistence.service().count(criteria);
 
             ICursorIterator<Tenant> tenants = Persistence.service().query(null, criteria, AttachLevel.Attached);
