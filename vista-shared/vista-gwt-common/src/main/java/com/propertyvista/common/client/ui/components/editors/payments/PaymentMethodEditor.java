@@ -82,11 +82,11 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
         main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
-        main.setWidget(++row, 0, paymentDetailsHolder);
+        main.setWidget(++row, 0, 2, paymentDetailsHolder);
 
         main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent())).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), true).build());
         main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {

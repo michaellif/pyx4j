@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -51,25 +53,24 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.getFlexCellFormatter().setColSpan(row, 0, 1);
-
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
-
         panel.setWidget(
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
                         "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
-        panel.getFlexCellFormatter().setColSpan(row, 0, 2);
+
+        row = -1;
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
 
         if (isEditable()) {
-            panel.setWidget(++row, 0, new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri()));
-            panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-            panel.getFlexCellFormatter().setColSpan(row, 0, 1);
+            Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
+            image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            image.getElement().getStyle().setMarginTop(30, Unit.PX);
+            panel.setWidget(++row, 0, 2, image);
+            panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
-        panel.setWidth("36em");
         return panel;
     }
 

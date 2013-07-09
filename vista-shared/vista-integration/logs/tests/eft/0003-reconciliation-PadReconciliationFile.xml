@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<padReconciliationFile identity="15aee56c">
+  <batches>
+    <padReconciliationSummary identity="d582093">
+      <merchantTerminalId>OCNU1</merchantTerminalId>
+      <reconciliationStatus>PAID</reconciliationStatus>
+      <processingStatus>false</processingStatus>
+      <records>
+        <padReconciliationDebitRecord identity="14c299bd">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100019</clientId>
+          <transactionId>5-106000</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="73fb51f0">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100027</clientId>
+          <transactionId>5-106001</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="78c09f0c">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100035</clientId>
+          <transactionId>5-106002</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="2e0a0ac3">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100043</clientId>
+          <transactionId>5-106003</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="15489fd2">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100050</clientId>
+          <transactionId>5-106004</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="52f49ee8">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100068</clientId>
+          <transactionId>5-106005</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="39ecbbe4">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100076</clientId>
+          <transactionId>5-106006</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="65239371">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100084</clientId>
+          <transactionId>5-106007</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="2a51397">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100092</clientId>
+          <transactionId>5-106008</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="23a91fdc">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100100</clientId>
+          <transactionId>5-106009</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="346ab6ce">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100118</clientId>
+          <transactionId>5-106010</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="4a07a944">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100126</clientId>
+          <transactionId>5-106011</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="3cf9d554">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100134</clientId>
+          <transactionId>5-106012</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="36249d12">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100142</clientId>
+          <transactionId>5-106013</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="2f586385">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100159</clientId>
+          <transactionId>5-106014</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="53edc90b">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100167</clientId>
+          <transactionId>5-106015</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="202a1c39">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100175</clientId>
+          <transactionId>5-106016</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="2ca2f2ae">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100183</clientId>
+          <transactionId>5-106017</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="7dea9466">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100191</clientId>
+          <transactionId>5-106018</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="33b4f51f">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100209</clientId>
+          <transactionId>5-106019</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="2d48e0be">
+          <paymentDate>2011-02-01</paymentDate>
+          <merchantTerminalId>OCNU1</merchantTerminalId>
+          <clientId>80000000100217</clientId>
+          <transactionId>5-106020</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+      </records>
+    </padReconciliationSummary>
+  </batches>
+</padReconciliationFile>

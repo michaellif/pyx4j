@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<padAckFile identity="613b010b">
+  <companyId>BIRCHWOOD2</companyId>
+  <fileCreationNumber>s3</fileCreationNumber>
+  <fileCreationDate>20110202</fileCreationDate>
+  <batcheCount>1</batcheCount>
+  <recordsCount>2</recordsCount>
+  <fileAmount>116000</fileAmount>
+  <acknowledgmentStatusCode>0000</acknowledgmentStatusCode>
+</padAckFile>

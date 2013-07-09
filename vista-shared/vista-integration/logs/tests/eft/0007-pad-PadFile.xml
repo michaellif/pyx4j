@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<padFile id="173002" identity="30b4d605">
+  <fileCreationNumber>s3</fileCreationNumber>
+  <companyId>BIRCHWOOD2</companyId>
+  <status>Sending</status>
+  <batches>
+    <padBatch id="174002" identity="1150bc39">
+      <padFile reference="173002" identity="30b4d605"/>
+      <batchNumber>1</batchNumber>
+      <records>
+        <padDebitRecord id="175040" identity="35aef1ab">
+          <padBatch reference="174002" identity="1150bc39"/>
+          <clientId>80000000200033</clientId>
+          <amount>580.00</amount>
+          <bankId>720</bankId>
+          <branchTransitNumber>22457</branchTransitNumber>
+          <accountNumber>58902508148</accountNumber>
+          <transactionId>5-106023</transactionId>
+          <processed>false</processed>
+        </padDebitRecord>
+        <padDebitRecord id="175041" identity="6873f764">
+          <padBatch reference="174002" identity="1150bc39"/>
+          <clientId>80000000200207</clientId>
+          <amount>580.00</amount>
+          <bankId>689</bankId>
+          <branchTransitNumber>36190</branchTransitNumber>
+          <accountNumber>1419456586</accountNumber>
+          <transactionId>5-106040</transactionId>
+          <processed>false</processed>
+        </padDebitRecord>
+      </records>
+      <pmc id="1002" identity="1932e24" attachLevel="IdOnly"/>
+      <merchantAccountKey>50001</merchantAccountKey>
+      <merchantTerminalId>KKGF2</merchantTerminalId>
+      <bankId>109</bankId>
+      <branchTransitNumber>54685</branchTransitNumber>
+      <accountNumber>548758665</accountNumber>
+      <chargeDescription>Pay for Tests</chargeDescription>
+      <batchAmount>1160.00</batchAmount>
+    </padBatch>
+  </batches>
+  <sent>2013-07-09T19:55:29</sent>
+  <created>2011-02-02T05:00:00</created>
+  <updated>2011-02-02T05:00:00</updated>
+  <recordsCount>2</recordsCount>
+  <fileAmount>1160.00</fileAmount>
+</padFile>

@@ -71,8 +71,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                 0,
                 new FormDecoratorBuilder(inject(proto().card(), new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class,
                         "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null)), 15).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
+
+        row = -1;
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
+        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<padReconciliationFile identity="27b2be90">
+  <batches>
+    <padReconciliationSummary identity="47fcf44c">
+      <merchantTerminalId>KKGF2</merchantTerminalId>
+      <reconciliationStatus>PAID</reconciliationStatus>
+      <processingStatus>false</processingStatus>
+      <records>
+        <padReconciliationDebitRecord identity="300ace80">
+          <paymentDate>2011-02-02</paymentDate>
+          <merchantTerminalId>KKGF2</merchantTerminalId>
+          <clientId>80000000200033</clientId>
+          <transactionId>5-106023</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+        <padReconciliationDebitRecord identity="157b4e24">
+          <paymentDate>2011-02-02</paymentDate>
+          <merchantTerminalId>KKGF2</merchantTerminalId>
+          <clientId>80000000200207</clientId>
+          <transactionId>5-106040</transactionId>
+          <amount>580.00</amount>
+          <reconciliationStatus>PROCESSED</reconciliationStatus>
+          <processingStatus>false</processingStatus>
+        </padReconciliationDebitRecord>
+      </records>
+    </padReconciliationSummary>
+  </batches>
+</padReconciliationFile>
