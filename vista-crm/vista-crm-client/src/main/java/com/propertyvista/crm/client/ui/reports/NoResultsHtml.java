@@ -7,22 +7,27 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-27
+ * Created on 2013-07-08
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports;
 
-import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
+import com.pyx4j.i18n.shared.I18n;
 
-// TODO: this is an experimental implementation of a view for auto updating this
-public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
+public class NoResultsHtml {
 
-    public AutoPayReviewUpdaterViewImpl() {
-        AutoPayReviewUpdaterDataGrid autoPayChangesReviewDataGrid = new AutoPayReviewUpdaterDataGrid();
+    private static final I18n i18n = I18n.get(NoResultsHtml.class);
 
-        setContentPane(autoPayChangesReviewDataGrid);
-        setSize("100%", "100%");
+    public static SafeHtml get() {
+        SafeHtmlBuilder b = new SafeHtmlBuilder();
+        b.appendHtmlConstant("<div style=\"text-align: center;\">");
+        b.appendEscaped(i18n.tr("No results that match the query."));
+        b.appendHtmlConstant("</div>");
+        return b.toSafeHtml();
+
     }
 }

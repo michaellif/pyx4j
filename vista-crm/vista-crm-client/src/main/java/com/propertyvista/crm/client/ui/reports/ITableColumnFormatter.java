@@ -7,27 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-08
+ * Created on 2013-03-27
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.components;
+package com.propertyvista.crm.client.ui.reports;
 
 import com.google.gwt.safehtml.shared.SafeHtml;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.entity.shared.IEntity;
 
-public class NoResultsHtml {
+public interface ITableColumnFormatter {
 
-    private static final I18n i18n = I18n.get(NoResultsHtml.class);
+    SafeHtml formatHeader();
 
-    public static SafeHtml get() {
-        SafeHtmlBuilder b = new SafeHtmlBuilder();
-        b.appendHtmlConstant("<div style=\"text-align: center;\">");
-        b.appendEscaped(i18n.tr("No results that match the query."));
-        b.appendHtmlConstant("</div>");
-        return b.toSafeHtml();
+    SafeHtml formatContent(IEntity entity);
 
-    }
+    /** return width in pixels */
+    int getWidth();
+
 }

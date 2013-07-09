@@ -23,6 +23,7 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.CrudAppPlace;
+import com.pyx4j.site.rpc.ReportsAppPlace;
 
 import com.propertyvista.crm.client.activity.MessageActivity;
 import com.propertyvista.crm.client.activity.NotificationsActivity;
@@ -214,8 +215,11 @@ import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsu
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
+import com.propertyvista.crm.client.activity.reports.AutoPayChangesReportActivity;
 import com.propertyvista.crm.client.activity.reports.AutoPayReviewUpdaterActivity;
-import com.propertyvista.crm.client.activity.reports.CrmReportsActivity;
+import com.propertyvista.crm.client.activity.reports.AvailabilityReportActivity;
+import com.propertyvista.crm.client.activity.reports.CustomerCreditCheckReportActivity;
+import com.propertyvista.crm.client.activity.reports.EftReportActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
@@ -229,6 +233,11 @@ import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
 import com.propertyvista.crm.rpc.CrmSiteMap.Marketing;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
+import com.propertyvista.domain.reports.AvailabilityReportMetadata;
+import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
+import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.misc.VistaTODO;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -1192,9 +1201,15 @@ public class ContentActivityMapper implements AppActivityMapper {
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
-                } else if (place instanceof CrmSiteMap.Reports) {
-                    activity = new CrmReportsActivity((CrmSiteMap.Reports) place);
-                } else if (place instanceof CrmSiteMap.AutoPayReviewUpdater) {
+                } else if (place instanceof CrmSiteMap.Reports.AutoPayChanges) {
+                    activity = new AutoPayChangesReportActivity((ReportsAppPlace<AutoPayChangesReportMetadata>) place);
+                } else if (place instanceof CrmSiteMap.Reports.Availability) {
+                    activity = new AvailabilityReportActivity((ReportsAppPlace<AvailabilityReportMetadata>) place);
+                } else if (place instanceof CrmSiteMap.Reports.CustomerCreditCheck) {
+                    activity = new CustomerCreditCheckReportActivity((ReportsAppPlace<CustomerCreditCheckReportMetadata>) place);
+                } else if (place instanceof CrmSiteMap.Reports.Eft) {
+                    activity = new EftReportActivity((ReportsAppPlace<EftReportMetadata>) place);
+                } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReviewUpdater)) {
                     activity = new AutoPayReviewUpdaterActivity(place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
                     activity = new CreditCheckActivity();

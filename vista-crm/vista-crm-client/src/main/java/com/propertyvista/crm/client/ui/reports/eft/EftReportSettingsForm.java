@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.factories.eft;
+package com.propertyvista.crm.client.ui.reports.eft;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -20,7 +20,6 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -35,8 +34,8 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
     public IsWidget createContent() {
         FormFlexPanel panel = new FormFlexPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leasesOnNoticeOnly())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().forthcomingEft())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().leasesOnNoticeOnly())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().forthcomingEft())).componentWidth(10).build());
         get(proto().forthcomingEft()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -46,10 +45,10 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
                 get(proto().onlyWithNotice()).setVisible(event.getValue() != true);
             }
         });
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onlyWithNotice())).componentWidth(10).build());
-        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().paymentStatus())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onlyWithNotice())).componentWidth(10).build());
+        panel.setWidget(row, 1, new DecoratorBuilder(inject(proto().paymentStatus())).componentWidth(10).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(10).build());
         get(proto().filterByBillingCycle()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -60,11 +59,11 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
                 get(proto().billingCycleStartDate()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingPeriod())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingPeriod())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(10).build());
 
         row = 1;
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().filterByBuildings())).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByBuildings())).build());
         get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -73,7 +72,7 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
         });
         panel.setWidget(++row, 1, inject(proto().selectedBuildings(), new SelectedBuildingsFolder()));
 
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -81,8 +80,8 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
                 get(proto().maximum()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().minimum())).build());
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().maximum())).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().minimum())).build());
+        panel.setWidget(++row, 1, new DecoratorBuilder(inject(proto().maximum())).build());
 
         return panel;
     }

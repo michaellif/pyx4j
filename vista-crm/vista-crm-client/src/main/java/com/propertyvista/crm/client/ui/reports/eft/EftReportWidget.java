@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.factories;
+package com.propertyvista.crm.client.ui.reports.eft;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -43,21 +43,22 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.AbstractReport;
-import com.pyx4j.site.client.ui.reports.Report;
+import com.pyx4j.site.client.ui.reports.ReportWidget;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.resources.CrmImages;
-import com.propertyvista.crm.client.ui.reports.components.ColumnDescriptorAnchorTableColumnFormatter;
-import com.propertyvista.crm.client.ui.reports.components.ColumnDescriptorTableColumnFormatter;
-import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
-import com.propertyvista.crm.client.ui.reports.components.ITableColumnFormatter;
-import com.propertyvista.crm.client.ui.reports.components.NoResultsHtml;
+import com.propertyvista.crm.client.ui.reports.ColumnDescriptorAnchorTableColumnFormatter;
+import com.propertyvista.crm.client.ui.reports.ColumnDescriptorTableColumnFormatter;
+import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.ITableColumnFormatter;
+import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
+import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.financial.PaymentRecord;
 
-public class EftReport extends Composite implements Report {
+public class EftReportWidget extends Composite implements ReportWidget {
 
-    private final static I18n i18n = I18n.get(EftReportFactory.class);
+    private final static I18n i18n = I18n.get(EftReportWidget.class);
 
     private final HTML reportHtml;
 
@@ -65,7 +66,7 @@ public class EftReport extends Composite implements Report {
 
     private ScrollBarPositionMemento reportScrollBarPositionMemento;
 
-    public EftReport() {
+    public EftReportWidget() {
         reportHtml = new HTML();
         reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
         reportHtml.getElement().getStyle().setLeft(0, Unit.PX);
@@ -80,6 +81,10 @@ public class EftReport extends Composite implements Report {
 
     @Override
     public void setData(Object data) {
+        if (data == null) {
+            reportHtml.setHTML("");
+            return;
+        }
         @SuppressWarnings("unchecked")
         Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) data;
         if (paymentRecords.isEmpty()) {

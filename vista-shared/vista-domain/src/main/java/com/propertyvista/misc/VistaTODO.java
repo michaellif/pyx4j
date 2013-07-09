@@ -78,4 +78,6 @@ public class VistaTODO {
     public static boolean VISTA_2256_Default_Product_Catalog_Show = false;
 
     public static boolean VISTA_2446_Periodic_Lease_Terms = false;
+
+    public static boolean VISTA_3129_AutoPayBulkEditorExperiment = true;
 }

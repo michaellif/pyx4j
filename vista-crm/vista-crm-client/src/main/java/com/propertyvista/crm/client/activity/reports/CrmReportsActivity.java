@@ -16,32 +16,25 @@ package com.propertyvista.crm.client.activity.reports;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.client.activity.AbstractReportActivity;
+import com.pyx4j.site.client.ui.reports.IReportsView;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
-import com.propertyvista.crm.client.ui.reports.CrmReportsView;
-import com.propertyvista.crm.client.ui.viewfactories.ReportsViewFactory;
-import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class CrmReportsActivity extends AbstractReportActivity {
+public abstract class CrmReportsActivity<R extends ReportMetadata> extends AbstractReportActivity<R> {
 
-    public CrmReportsActivity(ReportsAppPlace reportsPlace) {
+    public <RPlace extends ReportsAppPlace<R>> CrmReportsActivity(Class<R> reportMetadataClass, RPlace reportPlace, IReportsView<R> view) {
         super(//@formatter:off
+                reportMetadataClass,
+                reportPlace,                
                 GWT.<CrmReportsService>create(CrmReportsService.class),
                 GWT.<CrmReportsSettingsPersistenceService>create(CrmReportsSettingsPersistenceService.class),
-                ReportsViewFactory.instance(CrmReportsView.class),
-                reportsPlace,
+                view,                
                 GWT.getModuleBaseURL() + DeploymentConsts.downloadServletMapping
         );//@formatter:on
-
-    }
-
-    @Override
-    protected ReportsAppPlace createReportsPlace(ReportMetadata reportMetadata) {
-        return new CrmSiteMap.Reports(reportMetadata);
     }
 
 }

@@ -7,21 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-25
+ * Created on 2013-07-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.factories;
+package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 
-public class ScrollBarPositionMemento {
+import com.pyx4j.site.client.ui.reports.IReportsView;
 
-    public final int posX;
+import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
-    public final int posY;
-
-    public ScrollBarPositionMemento(int posX, int posY) {
-        this.posX = posX;
-        this.posY = posY;
-    }
+public interface CustomerCreditCheckReportView extends IReportsView<CustomerCreditCheckReportMetadata> {
 
 }

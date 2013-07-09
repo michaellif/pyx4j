@@ -7,23 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-03-27
+ * Created on 2013-07-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.components;
+package com.propertyvista.crm.client.ui.reports.autopay;
 
-import com.google.gwt.safehtml.shared.SafeHtml;
+import com.pyx4j.site.client.ui.reports.IReportsView;
 
-import com.pyx4j.entity.shared.IEntity;
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 
-public interface ITableColumnFormatter {
-
-    SafeHtml formatHeader();
-
-    SafeHtml formatContent(IEntity entity);
-
-    /** return width in pixels */
-    int getWidth();
+public interface AutoPayChangesReportView extends IReportsView<AutoPayChangesReportMetadata> {
 
 }

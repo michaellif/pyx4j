@@ -18,9 +18,13 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.rpc.annotations.PlaceProperties;
-import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.site.shared.meta.SiteMap;
+
+import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
+import com.propertyvista.domain.reports.AvailabilityReportMetadata;
+import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
+import com.propertyvista.domain.reports.EftReportMetadata;
 
 public class CrmSiteMap implements SiteMap {
 
@@ -299,17 +303,37 @@ public class CrmSiteMap implements SiteMap {
 
         public static class CustomerCreditCheck extends CrmCrudAppPlace {
         }
+
     }
 
-    @PlaceProperties(navigLabel = "Reports", caption = "Dashboard")
-    public static class Reports extends ReportsAppPlace {
+    public static class Reports extends AppPlace {
 
-        public Reports(ReportMetadata m) {
-            super(m);
+        // please try to maintain lexicographic order
+
+        public static class AutoPayChanges extends ReportsAppPlace<AutoPayChangesReportMetadata> {
+            public AutoPayChanges() {
+                super(AutoPayChangesReportMetadata.class);
+            }
         }
 
-        public Reports() {
+        public static class Availability extends ReportsAppPlace<AvailabilityReportMetadata> {
+            public Availability() {
+                super(AvailabilityReportMetadata.class);
+            }
         }
+
+        public static class CustomerCreditCheck extends ReportsAppPlace<CustomerCreditCheckReportMetadata> {
+            public CustomerCreditCheck() {
+                super(CustomerCreditCheckReportMetadata.class);
+            }
+        }
+
+        public static class Eft extends ReportsAppPlace<EftReportMetadata> {
+            public Eft() {
+                super(EftReportMetadata.class);
+            }
+        }
+
     }
 
     public static class AutoPayReviewUpdater extends AppPlace {

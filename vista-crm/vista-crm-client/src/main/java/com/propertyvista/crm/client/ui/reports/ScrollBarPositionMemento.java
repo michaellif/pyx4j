@@ -7,22 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-27
+ * Created on 2013-06-25
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.client.ui.reports;
 
-import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
+public class ScrollBarPositionMemento {
 
+    public final int posX;
 
-// TODO: this is an experimental implementation of a view for auto updating this
-public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView {
+    public final int posY;
 
-    public AutoPayReviewUpdaterViewImpl() {
-        AutoPayReviewUpdaterDataGrid autoPayChangesReviewDataGrid = new AutoPayReviewUpdaterDataGrid();
-
-        setContentPane(autoPayChangesReviewDataGrid);
-        setSize("100%", "100%");
+    public ScrollBarPositionMemento(int posX, int posY) {
+        this.posX = posX;
+        this.posY = posY;
     }
+
 }

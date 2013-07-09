@@ -7,14 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 30, 2012
+ * Created on 2013-07-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports;
+package com.propertyvista.crm.client.ui.reports.availability;
 
-import com.pyx4j.site.client.ui.reports.IReportsView;
+import com.pyx4j.site.client.ui.reports.AbstractReport;
 
-public interface CrmReportsView extends IReportsView {
+import com.propertyvista.domain.reports.AvailabilityReportMetadata;
+
+public class AvailabilityReportViewImpl extends AbstractReport<AvailabilityReportMetadata> implements AvailabilityReportView {
+
+    public AvailabilityReportViewImpl() {
+        super(new AvailabilityReportWidget(), new AvailabilityReportSettingsSimpleForm(), new AvailabilityReportSettingsAdvancedForm());
+    }
 
 }

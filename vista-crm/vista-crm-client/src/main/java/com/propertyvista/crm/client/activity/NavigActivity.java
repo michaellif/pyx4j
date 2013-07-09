@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.commons.Key;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.rpc.EntitySearchResult;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -42,10 +41,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
-import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
-import com.propertyvista.domain.reports.AvailabilityReportMetadata;
-import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
-import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter, BoardUpdateHandler {
@@ -203,13 +199,14 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     private NavigFolder makeReportsFolder() {
         NavigFolder folder = new NavigFolder(i18n.tr("Reports"), CrmImages.INSTANCE.reportsNormal(), CrmImages.INSTANCE.reportsHover(),
                 CrmImages.INSTANCE.reportsActive());
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AvailabilityReportMetadata.class)));
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(CustomerCreditCheckReportMetadata.class)));
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(EftReportMetadata.class)));
-        folder.addNavigItem(new CrmSiteMap.Reports(EntityFactory.create(AutoPayChangesReportMetadata.class)));
+
+        folder.addNavigItem(new CrmSiteMap.Reports.AutoPayChanges());
+        folder.addNavigItem(new CrmSiteMap.Reports.Availability());
+        folder.addNavigItem(new CrmSiteMap.Reports.CustomerCreditCheck());
+        folder.addNavigItem(new CrmSiteMap.Reports.Eft());
 
         // TODO this is a temporary place for this view to be used only for development and experimentation
-        if (!GWT.isProdMode() & ApplicationMode.isDevelopment()) {
+        if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && !GWT.isProdMode() && ApplicationMode.isDevelopment()) {
             folder.addNavigItem(new CrmSiteMap.AutoPayReviewUpdater());
         }
         return folder;

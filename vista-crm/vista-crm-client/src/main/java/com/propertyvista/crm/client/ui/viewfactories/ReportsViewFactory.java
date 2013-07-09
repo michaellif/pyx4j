@@ -18,16 +18,29 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.viewfactories.ViewFactoryBase;
 import com.propertyvista.crm.client.ui.reports.AutoPayReviewUpdaterView;
 import com.propertyvista.crm.client.ui.reports.AutoPayReviewUpdaterViewImpl;
-import com.propertyvista.crm.client.ui.reports.CrmReportsView;
-import com.propertyvista.crm.client.ui.reports.CrmReportsViewImpl;
+import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportView;
+import com.propertyvista.crm.client.ui.reports.autopay.AutoPayChangesReportViewImpl;
+import com.propertyvista.crm.client.ui.reports.availability.AvailabilityReportView;
+import com.propertyvista.crm.client.ui.reports.availability.AvailabilityReportViewImpl;
+import com.propertyvista.crm.client.ui.reports.customercreditcheck.CustomerCreditCheckReportView;
+import com.propertyvista.crm.client.ui.reports.customercreditcheck.CustomerCreditCheckReportViewImpl;
+import com.propertyvista.crm.client.ui.reports.eft.EftReportView;
+import com.propertyvista.crm.client.ui.reports.eft.EftReportViewImpl;
+import com.propertyvista.misc.VistaTODO;
 
 public class ReportsViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (CrmReportsView.class.equals(type)) {
-                map.put(type, new CrmReportsViewImpl());
-            } else if (AutoPayReviewUpdaterView.class.equals(type)) {
+            if (AutoPayChangesReportView.class.equals(type)) {
+                map.put(type, new AutoPayChangesReportViewImpl());
+            } else if (AvailabilityReportView.class.equals(type)) {
+                map.put(type, new AvailabilityReportViewImpl());
+            } else if (CustomerCreditCheckReportView.class.equals(type)) {
+                map.put(type, new CustomerCreditCheckReportViewImpl());
+            } else if (EftReportView.class.equals(type)) {
+                map.put(type, new EftReportViewImpl());
+            } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && AutoPayReviewUpdaterView.class.equals(type)) {
                 map.put(type, new AutoPayReviewUpdaterViewImpl());
             }
         }

@@ -7,16 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-13
+ * Created on 2013-07-09
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.components;
+package com.propertyvista.crm.client.ui.reports.availability;
 
-import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.site.client.ui.reports.IReportsView;
 
-public enum CommonReportStyles implements IStyleName {
+import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-    RReportTableFixedHeader, RReportTableScrollableBody, RRowTotal, RCellNumber;
+public interface AvailabilityReportView extends IReportsView<AvailabilityReportMetadata> {
 
 }

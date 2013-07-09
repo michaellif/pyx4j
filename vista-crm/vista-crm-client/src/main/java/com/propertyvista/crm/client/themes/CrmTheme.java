@@ -46,7 +46,7 @@ import com.propertyvista.crm.client.ui.components.PmcSignatureForm;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashboard;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
-import com.propertyvista.crm.client.ui.reports.components.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
