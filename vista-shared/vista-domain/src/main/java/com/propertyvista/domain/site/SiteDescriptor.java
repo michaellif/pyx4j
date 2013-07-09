@@ -126,6 +126,9 @@ public interface SiteDescriptor extends Descriptor {
     IList<HtmlContent> slogan();
 
     @Owned
+    IList<HtmlContent> pmcInfo();
+
+    @Owned
     IList<PortalImageSet> banner();
 
     @Owned
