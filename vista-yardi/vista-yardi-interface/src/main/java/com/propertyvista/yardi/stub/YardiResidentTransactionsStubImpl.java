@@ -336,7 +336,7 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
 
     @Override
     public ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date)
-            throws YardiServiceException, RemoteException {
+            throws YardiServiceException, RemoteException, YardiResidentNoTenantsExistException {
         boolean success = false;
         try {
             init(Action.GetResidentLeaseCharges);
@@ -362,8 +362,12 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             if (Messages.isMessageResponse(xml)) {
                 Messages messages = MarshallUtil.unmarshal(Messages.class, xml);
                 if (messages.isError()) {
-                    throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}, Date {3}", messages.toString(), propertyId,
-                            tenantId, date));
+                    if (messages.getErrorMessage().getValue().startsWith("No tenants exist with the given search criteria")) {
+                        throw new YardiResidentNoTenantsExistException(messages.getErrorMessage().getValue());
+                    } else {
+                        throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}, TenantId {2}, Date {3}", messages.toString(),
+                                propertyId, tenantId, date));
+                    }
                 } else {
                     log.info(messages.toString());
                 }

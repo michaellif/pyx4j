@@ -42,5 +42,5 @@ public interface YardiResidentTransactionsStub {
     ResidentTransactions getAllLeaseCharges(PmcYardiCredential yc, String propertyId, LogicalDate date) throws YardiServiceException, RemoteException;
 
     ResidentTransactions getLeaseChargesForTenant(PmcYardiCredential yc, String propertyId, String tenantId, LogicalDate date) throws YardiServiceException,
-            RemoteException;
+            RemoteException, YardiResidentNoTenantsExistException;
 }

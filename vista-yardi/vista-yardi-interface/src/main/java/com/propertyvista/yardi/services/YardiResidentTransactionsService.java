@@ -63,6 +63,7 @@ import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.bean.Properties;
 import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
+import com.propertyvista.yardi.stub.YardiResidentNoTenantsExistException;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 
 /**
@@ -136,6 +137,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             if (executionMonitor.isTerminationRequested()) {
                 break;
             }
+
             importLeaseCharges(leaseCharges, executionMonitor);
         }
 
@@ -158,8 +160,14 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         LogicalDate now = new LogicalDate(SystemDateManager.getDate());
         BillingCycle currCycle = YardiLeaseIntegrationAgent.getBillingCycleForDate(propertyCode, now);
         BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currCycle);
-        ResidentTransactions leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate()
-                .getValue());
+        ResidentTransactions leaseCharges = null;
+        try {
+            leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
+        } catch (YardiResidentNoTenantsExistException e) {
+//            terminateLeaseCharges(lease, null);
+            log.error("Error", e);
+//            executionMonitor.addErredEvent("Tenant", e);
+        }
         if (leaseCharges != null) {
             Lease processed = null;
             // we should just get one element in the list for the requested leaseId
@@ -492,7 +500,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     String msg = SimpleMessageFormat.format("charges expired for lease {0}", leaseId.leaseId());
                     log.info(msg);
                     if (executionMonitor != null) {
-                        executionMonitor.addInfoEvent("chargesEexpired", msg);
+                        executionMonitor.addInfoEvent("chargesExpired", msg);
                     }
                 }
                 return null;
@@ -500,7 +508,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         });
     }
 
-    // TODO - we may need to request yardi charges for one more cycle forward
+    // TODO - we may need to request Yardi charges for one more cycle forward
     private List<ResidentTransactions> getAllLeaseCharges(YardiResidentTransactionsStub stub, PmcYardiCredential yc, ExecutionMonitor executionMonitor,
             List<String> propertyCodes) throws YardiServiceException, RemoteException {
         // Make sure YardiChargeCodes have been configured
