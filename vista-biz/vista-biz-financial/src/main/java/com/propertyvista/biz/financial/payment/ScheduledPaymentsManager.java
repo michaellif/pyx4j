@@ -85,7 +85,7 @@ class ScheduledPaymentsManager {
             final ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
             try {
 
-                while (paymentRecordIterator.hasNext()) {
+                while (paymentRecordIterator.hasNext() || (iteratorPushBack.get() != null)) {
                     if (executionMonitor.isTerminationRequested()) {
                         break;
                     }
@@ -99,7 +99,7 @@ class ScheduledPaymentsManager {
                             if (firstPaymentRecord == null) {
                                 firstPaymentRecord = paymentRecordIterator.next();
                             } else {
-                                firstPaymentRecord.set(null);
+                                iteratorPushBack.set(null);
                             }
 
                             Building batchBuilding = getBuilding(firstPaymentRecord);

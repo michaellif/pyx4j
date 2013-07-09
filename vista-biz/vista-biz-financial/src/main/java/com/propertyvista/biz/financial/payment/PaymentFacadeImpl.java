@@ -245,7 +245,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
                 throw new UserRuntimeException(i18n.tr("Payment can't be canceled"), e);
             }
         }
-
+        log.info("Payment {} {} Canceled", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
         return paymentRecord;
     }
 
