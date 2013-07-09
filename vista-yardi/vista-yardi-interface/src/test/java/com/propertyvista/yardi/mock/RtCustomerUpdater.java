@@ -18,7 +18,7 @@ import com.yardi.entity.resident.RTCustomer;
 public class RtCustomerUpdater extends Updater<RTCustomer, RtCustomerUpdater> {
 
     public enum YCUSTOMER implements com.propertyvista.yardi.mock.Name {
-        Type, CustomerID;
+        Type, CustomerID, PaymentAccepted;
     }
 
     public enum YCUSTOMERNAME implements com.propertyvista.yardi.mock.Name {

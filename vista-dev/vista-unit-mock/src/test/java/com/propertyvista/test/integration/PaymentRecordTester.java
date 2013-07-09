@@ -39,18 +39,22 @@ public class PaymentRecordTester extends Tester {
         paymentRecords = Persistence.service().query(criteria);
     }
 
+    private String infor() {
+        return billingAccount.lease().leaseId().getStringView();
+    }
+
     public PaymentRecordTester count(int size) {
-        assertEquals("Records count", size, paymentRecords.size());
+        assertEquals(infor() + " Records count", size, paymentRecords.size());
         return this;
     }
 
     public PaymentRecordTester lastRecordStatus(PaymentStatus paymentStatus) {
-        assertEquals("Status of last Record", paymentStatus, paymentRecords.get(paymentRecords.size() - 1).paymentStatus().getValue());
+        assertEquals(infor() + " Status of last Record", paymentStatus, paymentRecords.get(paymentRecords.size() - 1).paymentStatus().getValue());
         return this;
     }
 
     public PaymentRecordTester lastRecordAmount(String amount) {
-        assertEquals("Amount of last Record", new BigDecimal(amount), paymentRecords.get(paymentRecords.size() - 1).amount().getValue());
+        assertEquals(infor() + " Amount of last Record", new BigDecimal(amount), paymentRecords.get(paymentRecords.size() - 1).amount().getValue());
         return this;
     }
 }

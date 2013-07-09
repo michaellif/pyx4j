@@ -23,6 +23,9 @@ public class MockConfig {
 
     public boolean yardiIntegration = false;
 
+    /**
+     * Used for credit card tests
+     */
     public boolean useCaledonMerchantAccounts = false;
 
 }

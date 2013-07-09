@@ -20,6 +20,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
@@ -57,7 +58,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     PropertyManager getExistingPropertyManager(String propertyId) {
         PropertyManager propertyManager = propertyManagers.get(propertyId);
         if (propertyManager == null) {
-            throw new RuntimeException("Property " + propertyId + " not found");
+            throw new RuntimeException("Property '" + propertyId + "' not found");
         }
         return propertyManager;
     }
@@ -91,7 +92,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         return openBatches.get(batchId);
     }
 
-    public void addReceiptsToBatch(long batchId, ResidentTransactions residentTransactions) {
+    public void addReceiptsToBatch(long batchId, ResidentTransactions residentTransactions) throws YardiServiceException {
         getBatch(batchId).addReceiptsToBatch(residentTransactions);
     }
 

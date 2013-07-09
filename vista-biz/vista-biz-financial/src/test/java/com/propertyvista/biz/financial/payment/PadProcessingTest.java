@@ -76,7 +76,7 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
 
     public void testPadSuccessful() throws Exception {
         setSysDate("2011-04-01");
-        setCaledonPAdPaymentBatchProcess();
+        setCaledonPadPaymentBatchProcess();
 
         LeasePaymentMethod paymentMethod = customerDataModel.addPaymentMethod(customer, getBuilding(), PaymentType.Echeck);
 
@@ -95,7 +95,7 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
 
     public void testPadRejected() throws Exception {
         setSysDate("2011-04-01");
-        setCaledonPAdPaymentBatchProcess();
+        setCaledonPadPaymentBatchProcess();
 
         LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(customer, getBuilding(), PaymentType.Echeck);
 
@@ -117,7 +117,7 @@ public class PadProcessingTest extends LeaseFinancialTestBase {
 
     public void testPadMerchantRejectedRecovery() throws Exception {
         setSysDate("2011-04-01");
-        setCaledonPAdPaymentBatchProcess();
+        setCaledonPadPaymentBatchProcess();
 
         LeasePaymentMethod paymentMethod = getDataModel(CustomerDataModel.class).addPaymentMethod(customer, getBuilding(), PaymentType.Echeck);
 

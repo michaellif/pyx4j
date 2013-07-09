@@ -24,6 +24,10 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
+
 class PaymentBatchManager {
 
     private final static Logger log = LoggerFactory.getLogger(PaymentBatchManager.class);
@@ -51,13 +55,14 @@ class PaymentBatchManager {
         id = nextId++;
         this.propertyManager = propertyManager;
         state = State.New;
+        log.debug("ReceiptBatch #{} created", id);
     }
 
     public long getId() {
         return id;
     }
 
-    public void addReceiptsToBatch(ResidentTransactions residentTransactions) {
+    public void addReceiptsToBatch(ResidentTransactions residentTransactions) throws YardiServiceException {
         Validate.isTrue(state == State.New);
         for (com.yardi.entity.resident.Property rtProperty : residentTransactions.getProperty()) {
             for (RTCustomer rtCustomer : rtProperty.getRTCustomer()) {
@@ -69,20 +74,31 @@ class PaymentBatchManager {
         }
     }
 
-    private void validateTransaction(Transactions transaction) {
+    private void validateTransaction(Transactions transaction) throws YardiServiceException {
         Validate.isTrue(propertyManager.getPropertyId().equals(transaction.getPayment().getDetail().getPropertyPrimaryID()));
-        propertyManager.getExistingRTCustomer(transaction.getPayment().getDetail().getCustomerID());
+        RTCustomer rtCustomer = propertyManager.getExistingRTCustomer(transaction.getPayment().getDetail().getCustomerID());
+        if (rtCustomer.getPaymentAccepted() != null) {
+            PaymentAccepted accepted = BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted());
+            switch (accepted) {
+            case CashEquivalent:
+            case DoNotAccept:
+                throw new YardiServiceException(
+                        "Message type= Error, value= Message Type=Error. Item Number=1. Payments are not being accepted for this tenant.");
+            default:
+                break;
+            }
+        }
     }
 
     public void cancelReceiptBatch() {
-        log.debug("cancelReceiptBatch {} of size {}", id, transactions.size());
+        log.debug("cancelReceiptBatch #{} of size {}", id, transactions.size());
         Validate.isTrue(state == State.New);
         state = State.Canceled;
     }
 
     public void postReceiptBatch() {
 
-        log.debug("postReceiptBatch {} of size {}", id, transactions.size());
+        log.debug("postReceiptBatch #{} of size {}", id, transactions.size());
         Validate.isTrue(state == State.New);
         for (Transactions transaction : transactions) {
             propertyManager.addTransaction(transaction);
