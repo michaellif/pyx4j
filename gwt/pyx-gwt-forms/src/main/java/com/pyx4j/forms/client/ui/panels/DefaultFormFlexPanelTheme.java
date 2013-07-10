@@ -31,7 +31,9 @@ import com.pyx4j.commons.css.ThemeId;
 public abstract class DefaultFormFlexPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FormFlexPanel, FormFlexPanelLeftRow, FormFlexPanelRightRow, FormFlexPanelTwoRows, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget
+        FormFlexPanel, FormFlexPanelLeftColumn, FormFlexPanelRightColumn, FormFlexPanelLeftCell, FormFlexPanelRightCell,
+
+        FormFlexPanelTwoRows, FormFlexPanelHR, FormFlexPanelH1, FormFlexPanelH1Label, FormFlexPanelH2, FormFlexPanelH2Label, FormFlexPanelH3, FormFlexPanelH3Label, FormFlexPanelH4, FormFlexPanelH4Label, FormFlexPanelActionWidget
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -57,11 +59,19 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         style.addProperty("padding", "6px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormFlexPanelLeftRow);
+        style = new Style(".", StyleName.FormFlexPanelLeftColumn);
+        style.addProperty("width", "50%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormFlexPanelRightColumn);
+        style.addProperty("width", "50%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FormFlexPanelLeftCell);
         style.addProperty("text-align", "right");
         addStyle(style);
 
-        style = new Style(".", StyleName.FormFlexPanelRightRow);
+        style = new Style(".", StyleName.FormFlexPanelRightCell);
         style.addProperty("text-align", "left");
         addStyle(style);
 

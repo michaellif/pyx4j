@@ -65,7 +65,8 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
     public FormFlexPanel(String title) {
         this.title = title;
         setStyleName(FormFlexPanel.name());
-
+        getColumnFormatter().setStyleName(0, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftColumn.name());
+        getColumnFormatter().setStyleName(0, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightColumn.name());
     }
 
     public FormFlexPanel() {
@@ -143,9 +144,9 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         getFlexCellFormatter().setColSpan(row, column, span);
         if (span == 1) {
             if (column == 0) {
-                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftRow.name());
+                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftCell.name());
             } else if (column == 1) {
-                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightRow.name());
+                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightCell.name());
             }
         } else if (span == 2) {
             getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelTwoRows.name());
