@@ -13,8 +13,14 @@
  */
 package com.propertyvista.biz.financial.maintenance;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -70,8 +76,10 @@ public abstract class MaintenanceMetadataAbstractManager {
                 EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
                 crit.add(PropertyCriterion.eq(crit.proto().name(), getRoot()));
                 meta.rootCategory().set(Persistence.service().retrieve(crit));
-                retrieveSubCategoriesRecursive(meta.rootCategory());
-
+                // load categories
+                new CategoryTree(meta.rootCategory()).retrieveAll();
+                // TODO - remove next line once new algo above is finalized
+                // new CategoryTree(meta.rootCategory()).retrieveRecursive();
                 if (meta.rootCategory().isNull()) {
                     // create root
                     MaintenanceRequestCategory root = EntityFactory.create(MaintenanceRequestCategory.class);
@@ -86,22 +94,91 @@ public abstract class MaintenanceMetadataAbstractManager {
         return result;
     }
 
-    private void retrieveSubCategoriesRecursive(MaintenanceRequestCategory parent) {
-        Persistence.service().retrieveMember(parent.subCategories());
-        Integer level = parent.level().getValue();
-        if (level == null) {
-            level = 0;
-        }
-        for (MaintenanceRequestCategory cat : parent.subCategories()) {
-            cat.level().setValue(level + 1);
-            retrieveSubCategoriesRecursive(cat);
-        }
-    }
-
     private MaintenanceRequestCategoryLevel createLevel(String name, int id) {
         MaintenanceRequestCategoryLevel level = EntityFactory.create(MaintenanceRequestCategoryLevel.class);
         level.level().setValue(id);
         level.name().setValue(name);
         return level;
+    }
+
+    public static class CategoryTree {
+        private final MaintenanceRequestCategory root;
+
+        private final Map<Key, MaintenanceRequestCategory> cTree;
+
+        private int nodeCount = 0;
+
+        public CategoryTree(MaintenanceRequestCategory root) {
+            this.root = root;
+            cTree = new HashMap<Key, MaintenanceRequestCategory>();
+        }
+
+        public MaintenanceRequestCategory getRoot() {
+            return root;
+        }
+
+        public void retrieveAll() {
+            List<MaintenanceRequestCategory> categories = Persistence.service().query(EntityQueryCriteria.create(MaintenanceRequestCategory.class));
+            for (MaintenanceRequestCategory category : categories) {
+                initNodeRecursive(category);
+            }
+        }
+
+        public void retrieveRecursive() {
+            retrieveRecursive(root);
+        }
+
+        public int getNodeCount() {
+            return nodeCount;
+        }
+
+        private void retrieveRecursive(MaintenanceRequestCategory parent) {
+            Persistence.service().retrieveMember(parent.subCategories());
+            Integer level = parent.level().getValue();
+            if (level == null) {
+                level = 0;
+            }
+            for (MaintenanceRequestCategory cat : parent.subCategories()) {
+                cat.level().setValue(level + 1);
+                retrieveRecursive(cat);
+                nodeCount++;
+            }
+        }
+
+        /*
+         * find parents up to the root if not done already; calculate levels
+         */
+        private MaintenanceRequestCategory initNodeRecursive(MaintenanceRequestCategory node) {
+            if (node.isNull()) {
+                return null;
+            }
+            if (node.equals(root)) {
+                if (root.subCategories().getAttachLevel() == AttachLevel.Detached) {
+                    // initialize subCategories
+                    root.subCategories().setAttachLevel(AttachLevel.Attached);
+                }
+                return root;
+            }
+            if (node.getAttachLevel() != AttachLevel.Attached) {
+                Persistence.ensureRetrieve(node, AttachLevel.Attached);
+            }
+            MaintenanceRequestCategory treeCat = cTree.get(node.getPrimaryKey());
+            if (treeCat == null) {
+                MaintenanceRequestCategory parent = initNodeRecursive(node.parent());
+                if (parent != null && !parent.isNull()) {
+                    Integer level = parent.level().getValue();
+                    if (level == null) {
+                        level = 0;
+                    }
+                    node.level().setValue(level + 1);
+                    node.subCategories().setAttachLevel(AttachLevel.Attached);
+                    parent.subCategories().add(node);
+                    cTree.put(node.getPrimaryKey(), node);
+                    treeCat = node;
+                    nodeCount++;
+                }
+            }
+            return treeCat;
+        }
     }
 }

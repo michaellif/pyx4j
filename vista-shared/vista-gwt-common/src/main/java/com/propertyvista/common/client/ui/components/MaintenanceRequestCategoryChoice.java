@@ -42,7 +42,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     public MaintenanceRequestCategoryChoice() {
         super("", NotInOptionsPolicy.DISCARD);
         setMandatory(true);
-        setVisible(false);
+//        setVisible(false);
     }
 
     @Override
@@ -195,7 +195,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         if (parent == null) {
             parent = meta.rootCategory();
         }
-        if (entry == null || parent.subCategories() == null) {
+        if (entry == null || parent.subCategories().isNull()) {
             return null;
         }
         // start meta lookup; we only look for matches on the lowest level
