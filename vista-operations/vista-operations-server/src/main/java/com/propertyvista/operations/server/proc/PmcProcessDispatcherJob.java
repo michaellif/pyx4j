@@ -92,8 +92,9 @@ public class PmcProcessDispatcherJob implements Job {
             }
 
             Date scheduledFireTime = context.getScheduledFireTime();
+            Date forDate = null;
             if (dataMap.containsKey(JobData.forDate.name())) {
-                scheduledFireTime = new Date(dataMap.getLong(JobData.forDate.name()));
+                forDate = new Date(dataMap.getLong(JobData.forDate.name()));
             }
             Long forPmcKey = null;
             if (dataMap.containsKey(JobData.forPmc.name())) {
@@ -106,7 +107,7 @@ public class PmcProcessDispatcherJob implements Job {
                 operationsUserKey = dataMap.getLong(JobData.startedBy.name());
             }
 
-            startAndRun(process, forPmcKey, scheduledFireTime, operationsUserKey);
+            startAndRun(process, forPmcKey, scheduledFireTime, forDate, operationsUserKey);
 
             log.info("process start {} {} {}", process.id().getStringView(), process.triggerType().getStringView(), process.getStringView(), process);
         } finally {
@@ -115,7 +116,7 @@ public class PmcProcessDispatcherJob implements Job {
         }
     }
 
-    private void startAndRun(Trigger trigger, Long forPmcKey, Date scheduledFireTime, Long operationsUserKey) {
+    private void startAndRun(Trigger trigger, Long forPmcKey, Date scheduledFireTime, Date forDate, Long operationsUserKey) {
         EntityQueryCriteria<Run> criteria = EntityQueryCriteria.create(Run.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().trigger(), trigger));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), RunStatus.Sleeping, RunStatus.Running));
@@ -135,8 +136,10 @@ public class PmcProcessDispatcherJob implements Job {
         }
         run.trigger().set(trigger);
 
-        if (run.forDate().isNull()) {
+        if (forDate == null) {
             run.forDate().setValue(scheduledFireTime);
+        } else {
+            run.forDate().setValue(forDate);
         }
 
         Persistence.service().persist(run);
