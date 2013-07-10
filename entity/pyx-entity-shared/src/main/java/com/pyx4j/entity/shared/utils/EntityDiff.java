@@ -167,6 +167,12 @@ public class EntityDiff {
                         getChanges((ISet<IEntity>) member1, (ISet<IEntity>) member2, new DiffPath(path, memberMeta.getCaption()));
                     }
                     break;
+                case PrimitiveSet:
+                    if (!EqualsHelper.equals(member1, member2)) {
+                        getPrimitiveSetChanges(path, memberMeta.getCaption(), logTransient, (Collection<Object>) member1.getValue(),
+                                (Collection<Object>) member2.getValue());
+                    }
+                    break;
                 default:
                     if (!EqualsHelper.equals(member1, member2)) {
                         addChanges(path, memberMeta.getCaption(), logTransient, member1.getValue(), member2.getValue());
@@ -187,6 +193,24 @@ public class EntityDiff {
                 changes.append(v1);
                 changes.append(" -> ");
                 changes.append(v2);
+            }
+        }
+
+        private void getPrimitiveSetChanges(DiffPath path, String name, boolean logTransient, Collection<Object> set1, Collection<Object> set2) {
+            Iterator<Object> iter1 = set1.iterator();
+            List<Object> set2copy = new Vector<Object>(set2);
+            while (iter1.hasNext()) {
+                Object ent1 = iter1.next();
+                if (set2copy.contains(ent1)) {
+                    set2copy.remove(ent1);
+                } else {
+                    // removed
+                    addChanges(path, name, logTransient, ent1, "");
+                }
+            }
+            // Added
+            for (Object ent2 : set2copy) {
+                addChanges(path, name, logTransient, "", ent2);
             }
         }
 
