@@ -15,7 +15,7 @@ BEGIN TRANSACTION;
 
  -- renamed sequences 
 
- ALTER SEQUENCE ortal_image_resource_seq RENAME TO portal_logo_image_resource_seq;
+ ALTER SEQUENCE portal_image_resource_seq RENAME TO portal_logo_image_resource_seq;
 
  -- Sequences to drop
  DROP SEQUENCE communication_favorited_messages_seq;

@@ -87,8 +87,9 @@ BEGIN
         -- portal_image_resource
         
         ALTER TABLE portal_image_resource RENAME TO portal_logo_image_resource;
-                                
+        ALTER TABLE portal_logo_image_resource RENAME COLUMN image_resource TO large;                    
         ALTER TABLE portal_logo_image_resource  ADD COLUMN small BIGINT;
+                                               
         
                                
         -- site_image_resource
@@ -104,7 +105,7 @@ BEGIN
                 owner                   BIGINT,
                 value                   BIGINT,
                 seq                     INT,
-                        CONSTRAINT site_descriptor$pmc_info_pk PRIMARY KEY(id);
+                        CONSTRAINT site_descriptor$pmc_info_pk PRIMARY KEY(id)
                 
         );
         
