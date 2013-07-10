@@ -33,7 +33,7 @@ public class LoginViewImpl extends AbstractLoginViewImpl implements LoginView {
     @Override
     protected void createContent() {
         int row = -1;
-        setWidget(++row, 0, form);
+        setWidget(++row, 0, 2, form);
     }
 
     @Override
