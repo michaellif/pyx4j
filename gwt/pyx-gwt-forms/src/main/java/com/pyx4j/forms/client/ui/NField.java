@@ -169,11 +169,10 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     @Override
     public void setEnabled(boolean enabled) {
-        if (triggerButton != null) {
-            triggerButton.setEnabled(isEditable() && enabled);
-        }
-
-        if (editor != null) {
+        if (!isViewable()) {
+            if (triggerButton != null) {
+                triggerButton.setEnabled(isEditable() && enabled);
+            }
             editor.setEnabled(enabled);
             if (enabled) {
                 editor.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.disabled.name());
@@ -194,11 +193,10 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     @Override
     public void setEditable(boolean editable) {
-        if (triggerButton != null) {
-            triggerButton.setEnabled(isEnabled() && editable);
-        }
-
-        if (editor != null) {
+        if (!isViewable()) {
+            if (triggerButton != null) {
+                triggerButton.setEnabled(isEnabled() && editable);
+            }
             editor.setEditable(editable);
             if (editable) {
                 editor.removeStyleDependentName(DefaultCComponentsTheme.StyleDependent.readonly.name());
