@@ -9,6 +9,8 @@
 
 	<inherits name='com.pyx4j.Commons' />
 	<inherits name='com.propertyvista.common.VistaSiteCommon' />
+    
+    <inherits name='com.propertyvista.common.VistaCommon' />
 
     <source path="client"/>
     <public path="public"/>
