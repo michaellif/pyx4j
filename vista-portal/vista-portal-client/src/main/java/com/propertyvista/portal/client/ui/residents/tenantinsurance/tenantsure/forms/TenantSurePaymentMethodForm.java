@@ -28,6 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
@@ -57,6 +58,11 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
         this.isAgreedToPreauthorizedPayments = false;
         legalTerms.setViewable(true);
+    }
+
+    @Override
+    protected String getNameOn() {
+        return ClientContext.getUserVisit().getName();
     }
 
     @Override

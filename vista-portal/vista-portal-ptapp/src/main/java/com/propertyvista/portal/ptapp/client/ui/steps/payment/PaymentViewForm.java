@@ -120,6 +120,11 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
             }
+
+            @Override
+            protected String getNameOn() {
+                return ClientContext.getUserVisit().getName();
+            }
         }));
 
         if (isRecurring) {

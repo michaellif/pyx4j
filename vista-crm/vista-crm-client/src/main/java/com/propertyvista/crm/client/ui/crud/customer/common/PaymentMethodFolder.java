@@ -133,6 +133,8 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         }
     }
 
+    protected abstract String getNameOn();
+
     protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp);
 
     protected abstract void getAllowedPaymentTypes(AsyncCallback<EnumSet<PaymentType>> callback);

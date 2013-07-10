@@ -108,6 +108,11 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
         }
+
+        @Override
+        protected String getNameOn() {
+            return ClientContext.getUserVisit().getName();
+        }
     };
 
     public PreauthorizedPaymentWizardForm(IWizard<PreauthorizedPaymentDTO> view) {

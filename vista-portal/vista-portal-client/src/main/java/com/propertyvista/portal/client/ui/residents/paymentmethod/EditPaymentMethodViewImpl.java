@@ -18,6 +18,7 @@ import java.util.Collection;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -48,6 +49,11 @@ public class EditPaymentMethodViewImpl extends EditImpl<LeasePaymentMethod> impl
                 } else {
                     comp.setValue(EntityFactory.create(AddressStructured.class), false);
                 }
+            }
+
+            @Override
+            protected String getNameOn() {
+                return ClientContext.getUserVisit().getName();
             }
         });
     }

@@ -182,6 +182,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 if (details.getInstanceValueClass() != CheckInfo.class) {
                     details.set(EntityFactory.create(CheckInfo.class));
                 }
+                details.<CheckInfo> cast().nameOn().setValue(getNameOn());
                 setBillingAddressVisible(true);
                 break;
             case Echeck:
@@ -189,6 +190,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 if (details.getInstanceValueClass() != EcheckInfo.class) {
                     details.set(EntityFactory.create(EcheckInfo.class));
                 }
+                details.<EcheckInfo> cast().nameOn().setValue(getNameOn());
                 setBillingAddressVisible(true);
                 break;
             case CreditCard:
@@ -196,6 +198,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 if (details.getInstanceValueClass() != CreditCardInfo.class) {
                     details.set(EntityFactory.create(CreditCardInfo.class));
                 }
+                details.<CreditCardInfo> cast().nameOn().setValue(getNameOn());
                 setBillingAddressVisible(true);
                 break;
             case Interac:
@@ -238,6 +241,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     protected CEntityForm<?> createInteracInfoEditor() {
         return new InteracInfoEditor();
+    }
+
+    protected String getNameOn() {
+        return null;
     }
 
     private void setPaymentDetailsWidget(Widget w) {

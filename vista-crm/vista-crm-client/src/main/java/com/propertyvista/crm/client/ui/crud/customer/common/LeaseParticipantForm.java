@@ -177,6 +177,11 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             }
 
             @Override
+            public String getNameOn() {
+                return LeaseParticipantForm.this.getValue().customer().person().name().getStringView();
+            }
+
+            @Override
             protected void addItem() {
                 if (LeaseParticipantForm.this.getValue().electronicPaymentsAllowed().isBooleanTrue()) {
                     super.addItem();

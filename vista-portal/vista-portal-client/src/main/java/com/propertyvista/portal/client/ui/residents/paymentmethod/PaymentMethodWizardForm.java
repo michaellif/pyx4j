@@ -34,6 +34,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -75,6 +76,11 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
             } else {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
+        }
+
+        @Override
+        protected String getNameOn() {
+            return ClientContext.getUserVisit().getName();
         }
     };
 
