@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.IEntity;
 
 /**
  * Define the join table between entities for many(one) to many(one) relationship.
- * N.B. implemented only for query and Entity read.
  * 
  * @OrderBy Required for IList collections
  */
@@ -40,7 +39,8 @@ public @interface JoinTable {
     Class<? extends IEntity> value();
 
     /**
-     * The operations that must be cascaded to the target of the association.
+     * The operations that must be cascaded to the the association table (value).
+     * The operations are not cascaded to member unless they are @Owned
      * 
      * By default no operations are cascaded.
      */

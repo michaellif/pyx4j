@@ -20,9 +20,12 @@
  */
 package com.pyx4j.entity.test.shared.domain.join;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.JoinTable;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -34,6 +37,9 @@ public interface AccSubject extends IEntity {
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
+
+    @Timestamp
+    IPrimitive<Date> updated();
 
     @Detached(level = AttachLevel.Detached)
     @JoinTable(value = AccSubjectPrincipal.class)

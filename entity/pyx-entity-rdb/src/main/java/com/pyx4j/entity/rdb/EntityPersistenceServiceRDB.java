@@ -766,7 +766,7 @@ public class EntityPersistenceServiceRDB implements IEntityPersistenceService, I
                         continue;
                     }
                     for (IEntity childEntity : iCollectionMember) {
-                        if (memberMeta.isCascadePersist()) {
+                        if (memberMeta.isOwnedRelationships() && memberMeta.isCascadePersist()) {
                             if (!childEntity.isValueDetached()) {
                                 if (doMerge) {
                                     merge(tableModel(childEntity.getEntityMeta()), childEntity);
