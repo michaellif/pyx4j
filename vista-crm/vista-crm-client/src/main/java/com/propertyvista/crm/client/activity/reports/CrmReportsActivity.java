@@ -15,11 +15,13 @@ package com.propertyvista.crm.client.activity.reports;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractReportActivity;
 import com.pyx4j.site.client.ui.reports.IReportsView;
 import com.pyx4j.site.rpc.ReportsAppPlace;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
+import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsService;
 import com.propertyvista.crm.rpc.services.reports.CrmReportsSettingsPersistenceService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -37,4 +39,8 @@ public abstract class CrmReportsActivity<R extends ReportMetadata> extends Abstr
         );//@formatter:on
     }
 
+    @Override
+    protected void onReportMetadataSet(R reportMetadata) {
+        AppSite.getEventBus().fireEvent(new CrudNavigateEvent(place, place.getReportMetadata()));
+    };
 }

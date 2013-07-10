@@ -1196,19 +1196,22 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Security.TenantSecurity) {
                         activity = new TenantSecurityActivity(place);
+
+                        // reports
+                    } else if (place instanceof CrmSiteMap.Reports.AutoPayChanges) {
+                        activity = new AutoPayChangesReportActivity((ReportsAppPlace<AutoPayChangesReportMetadata>) place);
+                    } else if (place instanceof CrmSiteMap.Reports.Availability) {
+                        activity = new AvailabilityReportActivity((ReportsAppPlace<AvailabilityReportMetadata>) place);
+                    } else if (place instanceof CrmSiteMap.Reports.CustomerCreditCheck) {
+                        activity = new CustomerCreditCheckReportActivity((ReportsAppPlace<CustomerCreditCheckReportMetadata>) place);
+                    } else if (place instanceof CrmSiteMap.Reports.Eft) {
+                        activity = new EftReportActivity((ReportsAppPlace<EftReportMetadata>) place);
+
                     } // CRUD APP PLACE IF ENDS HERE
 
                     // Dashboard related stuff again
                 } else if (place instanceof CrmSiteMap.Dashboard.View) {
                     activity = new DashboardActivity((CrmSiteMap.Dashboard.View) place);
-                } else if (place instanceof CrmSiteMap.Reports.AutoPayChanges) {
-                    activity = new AutoPayChangesReportActivity((ReportsAppPlace<AutoPayChangesReportMetadata>) place);
-                } else if (place instanceof CrmSiteMap.Reports.Availability) {
-                    activity = new AvailabilityReportActivity((ReportsAppPlace<AvailabilityReportMetadata>) place);
-                } else if (place instanceof CrmSiteMap.Reports.CustomerCreditCheck) {
-                    activity = new CustomerCreditCheckReportActivity((ReportsAppPlace<CustomerCreditCheckReportMetadata>) place);
-                } else if (place instanceof CrmSiteMap.Reports.Eft) {
-                    activity = new EftReportActivity((ReportsAppPlace<EftReportMetadata>) place);
                 } else if (VistaTODO.VISTA_3129_AutoPayBulkEditorExperiment && (place instanceof CrmSiteMap.AutoPayReviewUpdater)) {
                     activity = new AutoPayReviewUpdaterActivity(place);
                 } else if (place instanceof Administration.Settings.CreditCheck) {
