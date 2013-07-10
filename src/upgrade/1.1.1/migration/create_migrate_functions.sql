@@ -22,11 +22,21 @@ BEGIN
         **/
         
         -- foreign keys
-       
+        ALTER TABLE page_content DROP CONSTRAINT page_content_image_fk;
+        ALTER TABLE portal_image_resource DROP CONSTRAINT portal_image_resource_image_resource_fk;
+        ALTER TABLE portal_image_resource DROP CONSTRAINT portal_image_resource_locale_fk;
+        ALTER TABLE site_descriptor$logo DROP CONSTRAINT site_descriptor$logo_value_fk;
+
         
         -- check constraints
         ALTER TABLE recipient DROP CONSTRAINT recipient_recipient_type_e_ck;
-       
+        
+        
+        -- primary keys
+        
+        ALTER TABLE portal_image_resource DROP CONSTRAINT portal_image_resource_pk;
+        
+        
         /**
         ***     ======================================================================================================
         ***
@@ -73,11 +83,32 @@ BEGIN
         ALTER TABLE media       ADD COLUMN media_file_caption VARCHAR(500),
                                 ADD COLUMN media_file_description VARCHAR(500);
                                 
+        
+        -- portal_image_resource
+        
+        ALTER TABLE portal_image_resource RENAME TO portal_logo_image_resource;
                                 
+        ALTER TABLE portal_logo_image_resource  ADD COLUMN small BIGINT;
+        
+                               
         -- site_image_resource
         
         ALTER TABLE site_image_resource ADD COLUMN caption VARCHAR(500),
                                         ADD COLUMN description VARCHAR(500);
+                                        
+        -- site_descriptor$pmc_info
+        
+        CREATE TABLE site_descriptor$pmc_info
+        (
+                id                      BIGINT                  NOT NULL,
+                owner                   BIGINT,
+                value                   BIGINT,
+                seq                     INT,
+                        CONSTRAINT site_descriptor$pmc_info_pk PRIMARY KEY(id);
+                
+        );
+        
+        ALTER TABLE site_descriptor$pmc_info OWNER TO vista;
                                         
                                         
         -- vendor
@@ -126,9 +157,20 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        
+        -- primary key
+        
+        ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_pk PRIMARY KEY(id);
+        
         -- foreign key
         
-        
+        ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_large_fk FOREIGN KEY(large) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_small_fk FOREIGN KEY(small) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$logo ADD CONSTRAINT site_descriptor$logo_value_fk FOREIGN KEY(value) REFERENCES portal_logo_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$pmc_info ADD CONSTRAINT site_descriptor$pmc_info_owner_fk FOREIGN KEY(owner) REFERENCES site_descriptor(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE site_descriptor$pmc_info ADD CONSTRAINT site_descriptor$pmc_info_value_fk FOREIGN KEY(value) REFERENCES html_content(id)  DEFERRABLE INITIALLY DEFERRED;
+
 
         
         -- check constraints
