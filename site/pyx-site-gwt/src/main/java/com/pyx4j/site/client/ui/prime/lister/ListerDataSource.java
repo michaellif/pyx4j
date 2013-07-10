@@ -90,11 +90,11 @@ public class ListerDataSource<E extends IEntity> implements EntityDataSource<E> 
     }
 
     public void addPreDefinedFilters(List<Criterion> preDefinedFilters) {
-        preDefinedFilters.addAll(preDefinedFilters);
+        this.preDefinedFilters.addAll(preDefinedFilters);
     }
 
     public void addPreDefinedFilter(Criterion preDefinedFilter) {
-        preDefinedFilters.add(preDefinedFilter);
+        this.preDefinedFilters.add(preDefinedFilter);
     }
 
     public void clearPreDefinedFilters() {
