@@ -20,15 +20,12 @@
  */
 package com.pyx4j.site.rpc;
 
-import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.I18n.I18nStrategy;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 @I18n(strategy = I18nStrategy.IgnoreAll)
-public class ReportsAppPlace<R extends ReportMetadata> extends AppPlace {
-
-    private final static String REPORT_TYPE_ARG_NAME = "type";
+public class ReportsAppPlace<R extends ReportMetadata> extends CrudAppPlace {
 
     private R metadata;
 
@@ -40,13 +37,15 @@ public class ReportsAppPlace<R extends ReportMetadata> extends AppPlace {
     }
 
     public ReportsAppPlace(Class<R> metadataClass) {
-        if (metadataClass != null) {
-            this.queryArg(REPORT_TYPE_ARG_NAME, GWTJava5Helper.getSimpleName(metadataClass));
-        }
+        setStable(true);
+        setType(Type.viewer);
     }
 
-    public ReportsAppPlace<R> of(R metadata) {
+    public ReportsAppPlace<R> define(R metadata) {
         this.metadata = metadata;
+        if (!this.metadata.reportMetadataId().isNull()) {
+            this.queryArg(ARG_NAME_ID, this.metadata.reportMetadataId().getValue());
+        }
         return this;
     }
 
@@ -54,8 +53,8 @@ public class ReportsAppPlace<R extends ReportMetadata> extends AppPlace {
         return metadata;
     }
 
-    public String getReportMetadataName() {
-        return this.getFirstArg(REPORT_TYPE_ARG_NAME);
+    public String getReportMetadataId() {
+        return this.getFirstArg(ARG_NAME_ID);
     }
 
     @Override

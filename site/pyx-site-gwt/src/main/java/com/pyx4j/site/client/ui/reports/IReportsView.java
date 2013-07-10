@@ -28,13 +28,13 @@ public interface IReportsView<R extends ReportMetadata> extends IPrimePane {
 
     public interface Presenter<R> extends IPrimePane.Presenter {
 
-        void export(R settings);
+        void export();
 
-        void apply(R settings, boolean forceRefresh);
+        void apply(boolean forceRefresh);
 
         void loadReportMetadata(String reportMetadataId);
 
-        void saveReportMetadata(R reportMetadata, String reportMetadataId, boolean allowOverwrite);
+        void saveReportMetadata(boolean allowOverwrite);
 
         void deleteReportMetadata(String reportMetadataId);
 
@@ -44,7 +44,9 @@ public interface IReportsView<R extends ReportMetadata> extends IPrimePane {
 
     void setPresenter(Presenter<R> presenter);
 
-    void setReportMetadata(R reportMetadtata, String reportMetadataId);
+    void setReportMetadata(R reportMetadtata);
+
+    R getReportMetadata();
 
     void startReportGenerationProgress(String deferredProgressCorelationId, DeferredProgressListener deferredProgressListener);
 
@@ -55,4 +57,5 @@ public interface IReportsView<R extends ReportMetadata> extends IPrimePane {
     void onReportMetadataSaveSucceed(String reportMetadataId);
 
     void onReportMetadataSaveFailed(String errorMessage);
+
 }

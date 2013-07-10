@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
@@ -67,7 +68,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private enum MementoKeys {
 
-        ReportMetadata, HasReportData, HorizontalScrollPosition, VerticalScrollPosition, ReportMemento
+        ReportMetadata, HasReportData, HorizontalScrollPosition, VerticalScrollPosition, ReportWidget
 
     }
 
@@ -129,8 +130,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     private final SimplePanel reportPanel;
 
     private final ReportSettingsFormControlBar reportSettingsFormControlBar;
-
-    private String settingsId;
 
     private Button exportButton;
 
@@ -194,7 +193,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             public void onApply() {
                 if (presenter != null & activeSettingsForm != null) {
                     if (activeSettingsForm.isValid()) {
-                        presenter.apply(activeSettingsForm.getValue(), true);
+                        presenter.apply(true);
                     } else {
                         activeSettingsForm.setUnconditionalValidationErrorRendering(true);
                     }
@@ -285,11 +284,10 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         addHeaderToolbarItem(exportButton = new Button(i18n.tr("Export"), new Command() {
             @Override
             public void execute() {
-                presenter.export(activeSettingsForm.getValue());
+                presenter.export();
             }
         }));
 
-        resetCaption();
         setContentPane(viewPanel);
     }
 
@@ -299,29 +297,33 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     }
 
     @Override
-    public void setReportMetadata(R reportSettings, String settingsId) {
+    public void setReportMetadata(R reportMetadata) {
         hideVisor();
 
-        this.settingsId = settingsId;
         this.activeSettingsForm = null;
         this.settingsFormPanel.setWidget(null);
         this.reportSettingsFormControlBar.setEnabled(false);
         this.reportPanel.setWidget(null);
 
-        if (reportSettings != null) {
+        if (reportMetadata != null) {
 
-            populateSettingsForm(reportSettings);
+            populateSettingsForm(reportMetadata);
             reportSettingsFormControlBar.setEnabled(true);
 
             reportWidget.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             reportPanel.setWidget(reportWidget);
             reportWidget.setData(null);
 
-            exportButton.setVisible(reportSettings instanceof ExportableReport);
+            exportButton.setVisible(reportMetadata instanceof ExportableReport);
         }
 
         resetCaption();
         errorPanel.setVisible(false);
+    }
+
+    @Override
+    public R getReportMetadata() {
+        return activeSettingsForm.getValue();
     }
 
     @Override
@@ -365,12 +367,13 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     @Override
     public void onReportMetadataSaveFailed(String reason) {
         MessageDialog.error(i18n.tr("Save Failed"), reason);
+        activeSettingsForm.getValue().reportMetadataId().setValue(null);
+        resetCaption();
     }
 
     @Override
     public void onReportMetadataSaveSucceed(String reportSettingsId) {
         MessageDialog.info(i18n.tr("Report settings were saved successfuly!"));
-        settingsId = reportSettingsId;
         resetCaption();
     }
 
@@ -402,32 +405,30 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     @Override
     public void storeState(Place place) {
         getMemento().setCurrentPlace(place);
-        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMetadata.name(), activeSettingsForm.getValue());
-        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.HasReportData.name(), hasReportData);
-        getMemento().putObject(((ReportsAppPlace) place).getReportMetadataName() + MementoKeys.ReportMemento.name(), reportWidget.getMemento());
+        getMemento().putObject(MementoKeys.ReportMetadata.name(), activeSettingsForm.getValue());
+        getMemento().putObject(MementoKeys.HasReportData.name(), hasReportData);
+        getMemento().putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
     }
 
     @Override
     public void restoreState() {
         if (getMemento().mayRestore()) {
-            R reportMetadata = (R) getMemento().getObject(((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMetadata.name());
-            setReportMetadata(reportMetadata, null); // TODO deal with report metadata Id
-            boolean hadData = Boolean.TRUE.equals(getMemento().getObject(
-                    ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.HasReportData.name()));
+            R reportMetadata = (R) getMemento().getObject(MementoKeys.ReportMetadata.name());
+            setReportMetadata(reportMetadata);
+            boolean hadData = Boolean.TRUE.equals(getMemento().getObject(MementoKeys.HasReportData.name()));
             if (hadData) {
-                // not good: here we rely its not going to be async because activity has cache
-                presenter.apply(reportMetadata, false);
+                // TODO: not good: here we rely its not going to be async because activity has cache: apply() has to work with a 'on success' callback
+                presenter.apply(false);
                 Scheduler.get().scheduleDeferred(new ScheduledCommand() {
                     @Override
                     public void execute() {
-                        Object reportMemento = getMemento().getObject(
-                                ((ReportsAppPlace) presenter.getPlace()).getReportMetadataName() + MementoKeys.ReportMemento.name());
+                        Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
                         reportWidget.setMemento(reportMemento);
                     }
                 });
             }
         } else {
-            setReportMetadata((R) ((ReportsAppPlace) getMemento().getCurrentPlace()).getReportMetadata(), null);
+            setReportMetadata((R) ((ReportsAppPlace<?>) getMemento().getCurrentPlace()).getReportMetadata());
         }
     }
 
@@ -462,16 +463,17 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private void onSaveSettingsAsClicked() {
         new OkCancelDialog(i18n.tr("Save current report settings as:")) {
-            private TextBox settingsId;
+            private TextBox reportMetadataIdTextBox;
 
             {
-                setBody(settingsId = new TextBox());
+                setBody(reportMetadataIdTextBox = new TextBox());
             }
 
             @Override
             public boolean onClickOk() {
-                if (!settingsId.getText().isEmpty()) {
-                    presenter.saveReportMetadata(activeSettingsForm.getValue(), settingsId.getText(), false);
+                if (!reportMetadataIdTextBox.getText().isEmpty()) {
+                    activeSettingsForm.getValue().reportMetadataId().setValue(reportMetadataIdTextBox.getText());
+                    presenter.saveReportMetadata(false);
                     return true;
                 } else {
                     return false;
@@ -481,20 +483,21 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     }
 
     private void onSaveSettingsClicked() {
-        if (settingsId == null) {
+        if (!CommonsStringUtils.isStringSet(activeSettingsForm.getValue().reportMetadataId().getValue())) {
             onSaveSettingsAsClicked();
         } else {
-            presenter.saveReportMetadata(activeSettingsForm.getValue(), settingsId, true);
+            presenter.saveReportMetadata(true);
         }
     }
 
     private void resetCaption() {
-        ReportMetadata reportSettings = activeSettingsForm != null ? activeSettingsForm.getValue() : null;
-        if (reportSettings == null) {
-            setCaption(i18n.tr("Reports"));
+        ReportMetadata reportMetadata = activeSettingsForm != null ? activeSettingsForm.getValue() : null;
+        if (reportMetadata == null) {
+            // TODO: maybe just throw an exception?
+            setCaption(i18n.tr("Non Defined Report"));
         } else {
-            setCaption(SimpleMessageFormat.format("{0} - {1}", reportSettings.getEntityMeta().getCaption(), settingsId == null ? i18n.tr("Untitled")
-                    : settingsId));
+            String reportStringView = reportMetadata.isNull() ? i18n.tr("Untitled") : reportMetadata.getStringView();
+            setCaption(SimpleMessageFormat.format("{0} - {1}", reportMetadata.getEntityMeta().getCaption(), reportStringView));
         }
     }
 

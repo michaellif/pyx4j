@@ -103,7 +103,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     private static final Map<String, CachedReportData> reportDataCache = new HashMap<String, AbstractReportActivity.CachedReportData>();
 
-    private final ReportsAppPlace<R> place;
+    protected final ReportsAppPlace<R> place;
 
     private final IReportsView<R> view;
 
@@ -129,14 +129,6 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
         this.deferredProccessService = GWT.<DeferredProcessService> create(DeferredProcessService.class);
 
         this.view = view;
-
-        if (place.getReportMetadata() == null) {
-            if (GWTJava5Helper.getSimpleName(reportMetadataClass).equals(place.getReportMetadataName())) {
-                place = place.of(EntityFactory.create(reportMetadataClass));
-            } else {
-                throw new Error("Report '" + place.getReportMetadataName() + "' is not supported!");
-            }
-        }
         this.place = place;
 
         this.view.setPresenter(this);
@@ -158,14 +150,24 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
-        view.getMemento().setCurrentPlace(getPlace());
+        if (place.getReportMetadata() == null) {
+            if (place.getReportMetadataId() != null) {
+                loadReportMetadata(place.getReportMetadataId());
+                return;
+            } else {
+                place.define(EntityFactory.create(reportMetadataClass));
+            }
+        }
+        view.getMemento().setCurrentPlace(place);
         view.restoreState();
+        onReportMetadataSet((R) place.getReportMetadata());
+
     }
 
     @Override
-    public void apply(final R reportMetadata, boolean forceRefresh) {
-        CachedReportData cachedData = reportDataCache.get(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()));
-        if (!forceRefresh && cachedData != null && EntityGraph.fullyEqualValues(reportMetadata, cachedData.reportMetadata)) {
+    public void apply(boolean forceRefresh) {
+        CachedReportData cachedData = reportDataCache.get(GWTJava5Helper.getSimpleName(view.getReportMetadata().getInstanceValueClass()));
+        if (!forceRefresh && cachedData != null && EntityGraph.fullyEqualValues(view.getReportMetadata(), cachedData.reportMetadata)) {
             view.setReportData(cachedData.data);
         } else {
             reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
@@ -181,8 +183,8 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
                                 public void onSuccess(Serializable result) {
                                     CachedReportData cachedReportData = new CachedReportData();
                                     cachedReportData.data = result;
-                                    cachedReportData.reportMetadata = reportMetadata.duplicate();
-                                    reportDataCache.put(GWTJava5Helper.getSimpleName(reportMetadata.getInstanceValueClass()), cachedReportData);
+                                    cachedReportData.reportMetadata = view.getReportMetadata().duplicate();
+                                    reportDataCache.put(GWTJava5Helper.getSimpleName(view.getReportMetadata().getInstanceValueClass()), cachedReportData);
                                     view.setReportData(result);
                                 }
 
@@ -200,18 +202,22 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
                         }
                     });
                 }
-            }, reportMetadata);
+            }, view.getReportMetadata());
         }
     }
 
     @Override
-    public void export(R settings) {
+    public void export() {
         ReportDialog d = new ReportDialog(i18n.tr("Exporting Report"), "");
         d.setDownloadServletPath(downloadServletPath);
+
         ReportRequest request = new ReportRequest();
+
         final String METADATA_KEY = "METADATA";
+
         HashMap<String, Serializable> parameters = new HashMap<String, Serializable>();
-        parameters.put(METADATA_KEY, settings);
+        parameters.put(METADATA_KEY, view.getReportMetadata());
+
         request.setParameters(parameters);
         d.start(new ReportService<IEntity>() {
 
@@ -229,38 +235,40 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
     }
 
     @Override
-    public void loadReportMetadata(final String id) {
+    public void loadReportMetadata(final String reportMetadataId) {
         reportsSettingsPersistenceService.load(new DefaultAsyncCallback<ReportMetadata>() {
 
             @Override
-            public void onSuccess(ReportMetadata result) {
-                view.setReportMetadata((R) result, id);
+            public void onSuccess(ReportMetadata reportMetadata) {
+                place.define((R) reportMetadata);
+                view.setReportMetadata((R) reportMetadata);
+                onReportMetadataSet((R) reportMetadata);
             }
 
-        }, id, EntityFactory.getEntityPrototype(reportMetadataClass));
+        }, reportMetadataId, EntityFactory.getEntityPrototype(reportMetadataClass));
     }
 
     @Override
-    public void saveReportMetadata(ReportMetadata settings, final String reportSettingsId, boolean allowOverwrite) {
+    public void saveReportMetadata(boolean allowOverwrite) {
         reportsSettingsPersistenceService.save(new DefaultAsyncCallback<VoidSerializable>() {
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.onReportMetadataSaveSucceed(reportSettingsId);
+                view.onReportMetadataSaveSucceed(view.getReportMetadata().reportMetadataId().getValue());
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof CustomizationOverwriteAttemptException) {
-                    view.onReportMetadataSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists",
-                            reportSettingsId));
+                    view.onReportMetadataSaveFailed(i18n.tr("Please choose a different name: a report settings preset named \"{0}\" already exists", view
+                            .getReportMetadata().reportMetadataId().getValue()));
                 } else if (caught instanceof UserRuntimeException) {
                     view.onReportMetadataSaveFailed(((UserRuntimeException) caught).getMessage());
                 } else {
                     super.onFailure(caught);
                 }
             }
-        }, reportSettingsId, settings, allowOverwrite);
+        }, view.getReportMetadata().reportMetadataId().getValue(), view.getReportMetadata(), allowOverwrite);
 
     }
 
@@ -294,7 +302,7 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
     @Override
     public void onStop() {
         super.onStop();
-        view.storeState(getPlace());
+        view.storeState(place);
     }
 
     @Override
@@ -303,6 +311,10 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     @Override
     public void refresh() {
+    }
+
+    protected void onReportMetadataSet(R reportMetadata) {
+
     }
 
 }
