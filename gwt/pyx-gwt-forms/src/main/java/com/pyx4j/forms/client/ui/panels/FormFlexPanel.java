@@ -66,7 +66,7 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         this.title = title;
         setStyleName(FormFlexPanel.name());
         getColumnFormatter().setStyleName(0, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftColumn.name());
-        getColumnFormatter().setStyleName(0, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightColumn.name());
+        getColumnFormatter().setStyleName(1, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightColumn.name());
     }
 
     public FormFlexPanel() {
