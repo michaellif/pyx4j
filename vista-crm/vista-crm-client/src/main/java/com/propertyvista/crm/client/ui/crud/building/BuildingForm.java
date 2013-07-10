@@ -84,45 +84,45 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
         setTabEnabled(tab, !isEditable());
 
-        FormFlexPanel combinedtab = new FormFlexPanel();
+        FormFlexPanel flexPanel = new FormFlexPanel();
         int row = 0;
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Elevators"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Boilers"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Roofs"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Boilers"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Roofs"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
 
-        tab = addTab(combinedtab, i18n.tr("Mechanicals"));
+        tab = addTab(flexPanel, i18n.tr("Mechanicals"));
         setTabEnabled(tab, !isEditable());
 
-        combinedtab = new FormFlexPanel();
+        flexPanel = new FormFlexPanel();
         row = 0;
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Parking"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
 
-        tab = addTab(combinedtab, i18n.tr("Add-Ons"));
+        tab = addTab(flexPanel, i18n.tr("Add-Ons"));
         setTabEnabled(tab, !isEditable());
 
         addTab(createFinancialTab(i18n.tr("Financial")));
 
         addTab(createMarketingTab(i18n.tr("Marketing")));
 
-        combinedtab = new FormFlexPanel();
+        flexPanel = new FormFlexPanel();
         row = 0;
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Services"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
-        combinedtab.setH4(row++, 0, 2, i18n.tr("Features"));
-        combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
+        flexPanel.setH4(row++, 0, 2, i18n.tr("Features"));
+        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
-            combinedtab.setH4(row++, 0, 2, i18n.tr("Concessions"));
-            combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+            flexPanel.setH4(row++, 0, 2, i18n.tr("Concessions"));
+            flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         }
 
         if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().defaultProductCatalog() && !VistaFeatures.instance().yardiIntegration()) {
-            tab = addTab(combinedtab, i18n.tr("Product Catalog"));
+            tab = addTab(flexPanel, i18n.tr("Product Catalog"));
             setTabEnabled(tab, !isEditable());
         }
 
@@ -175,79 +175,79 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     }
 
     private FormFlexPanel createGeneralTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        FormFlexPanel flexPanel = new FormFlexPanel(title);
 
         int row = 0;
-        main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyCode()), 12).build());
+        flexPanel.setH1(row++, 0, 2, i18n.tr("Building Summary"));
+        flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyCode()), 12).build());
 
-        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().shape()), 7).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().shape()), 7).build());
 
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().info().name()), 15).build());
-        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().totalStoreys()), 5).build());
+        flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().info().name()), 15).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().totalStoreys()), 5).build());
 
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().info().type()), 12).build());
-        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
+        flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().info().type()), 12).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
 
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyManager()), 16).build());
-        main.setBR(row++, 1, 1);
+        flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyManager()), 16).build());
+        flexPanel.setBR(row++, 1, 1);
 
-        main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().externalId()), 15).build());
+        flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().externalId()), 15).build());
 
         if (isEditable()) {
-            main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
+            flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
         } else {
-            main.setWidget(
+            flexPanel.setWidget(
                     row++,
                     1,
                     new FormDecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
                             .build());
         }
 
-        main.setWidget(
+        flexPanel.setWidget(
                 row++,
                 1,
                 new FormDecoratorBuilder(inject(proto().floorplans(),
                         new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlaceClass(Floorplan.class))), 15).build());
 
-        main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
-        main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
+        flexPanel.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
+        flexPanel.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().info().address()).setViewable(true);
         }
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
+        flexPanel.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        main.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
+        flexPanel.setH1(row++, 0, 2, proto().geoLocation().getMeta().getCaption());
 //        if (isEditable()) {
-        main.setWidget(row, 0, inject(proto().geoLocation()));
+        flexPanel.setWidget(row, 0, inject(proto().geoLocation()));
 //        } else {
 //            main.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().geoLocation())).customLabel("").useLabelSemicolon(false).build());
 //        }
-        main.getFlexCellFormatter().setColSpan(row++, 0, 2);
+        flexPanel.getFlexCellFormatter().setColSpan(row++, 0, 2);
 
-        return main;
+        return flexPanel;
     }
 
     private FormFlexPanel createDetailsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        FormFlexPanel flexPanel = new FormFlexPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().structureType()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().structureBuildYear()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().constructionType()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().foundationType()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().floorType()), 15).build());
+        flexPanel.setH1(++row, 0, 2, i18n.tr("Information"));
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().structureType()), 15).build());
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().structureBuildYear()), 10).build());
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().constructionType()), 15).build());
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().foundationType()), 15).build());
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().info().floorType()), 15).build());
 
         row = 0;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().landArea()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().centralAir()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().centralHeat()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
+        flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().landArea()), 15).build());
+        flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().waterSupply()), 15).build());
+        flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().centralAir()), 15).build());
+        flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().centralHeat()), 15).build());
+        flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
+        flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
 
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().contacts().website()), 40, true).build());
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().contacts().website()), 40, true).build());
         get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String> component, String url) {
@@ -277,30 +277,30 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         });
 
-        main.setH1(++row, 0, 2, proto().amenities().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
+        flexPanel.setH1(++row, 0, 2, proto().amenities().getMeta().getCaption());
+        flexPanel.setWidget(++row, 0, 2, inject(proto().amenities(), new BuildingAmenityFolder()).asWidget());
 
-        main.setH1(++row, 0, 2, proto().utilities().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
+        flexPanel.setH1(++row, 0, 2, proto().utilities().getMeta().getCaption());
+        flexPanel.setWidget(++row, 0, 2, inject(proto().utilities(), new BuildingUtilityFolder()).asWidget());
 
-        return main;
+        return flexPanel;
     }
 
     private FormFlexPanel createFinancialTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        FormFlexPanel flexPanel = new FormFlexPanel(title);
 
         int row = 0;
-        main.setBR(row++, 0, 2);
-        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
-        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
-        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
-        main.setBR(row++, 0, 1);
-        main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().merchantAccount()), 15).build());
+        flexPanel.setBR(row++, 0, 2);
+        flexPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().dateAcquired()), 9).build());
+        flexPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().purchasePrice()), 10).build());
+        flexPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().financial().marketPrice()), 10).build());
+        flexPanel.setBR(row++, 0, 1);
+        flexPanel.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().merchantAccount()), 15).build());
 
         row = 1;
-        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
-        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
-        main.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
@@ -310,32 +310,32 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
             }
         });
 
-        return main;
+        return flexPanel;
     }
 
     private FormFlexPanel createMarketingTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        FormFlexPanel flexPanel = new FormFlexPanel(title);
 
         int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        main.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
+        flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
+        flexPanel.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
 
-        main.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
-        main.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
+        flexPanel.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
+        flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
 
-        main.setH1(++row, 0, 2, i18n.tr("Media"));
-        main.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
-        main.getFlexCellFormatter().setColSpan(++row, 0, 2);
+        flexPanel.setH1(++row, 0, 2, i18n.tr("Media"));
+        flexPanel.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
+        flexPanel.getFlexCellFormatter().setColSpan(++row, 0, 2);
 
-        return main;
+        return flexPanel;
     }
 
     private FormFlexPanel createContactTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        FormFlexPanel flexPanel = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
+        flexPanel.setWidget(0, 0, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
 
-        return main;
+        return flexPanel;
     }
 
     private class PropertyPhoneFolder extends VistaTableFolder<PropertyPhone> {

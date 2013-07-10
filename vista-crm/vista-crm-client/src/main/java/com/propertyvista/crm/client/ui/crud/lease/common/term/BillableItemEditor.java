@@ -95,10 +95,10 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
     @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel flexPanel = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {
             @Override
             protected AppPlace getTargetPlace() {
                 if (getValue().product().isInstanceOf(Service.ServiceV.class)) {
@@ -131,32 +131,29 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
             }
         }), 20).build());
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate()), 9).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate()), 9).build());
+        flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(itemEffectiveDateEditor = (CComponent<LogicalDate>) inject(proto().effectiveDate()), 9).build());
+        flexPanel.setWidget(row, 1, new FormDecoratorBuilder(itemExpirationDateEditor = (CComponent<LogicalDate>) inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 51).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        flexPanel.getFlexCellFormatter().setColSpan(row, 0, 2);
 
-        main.setWidget(++row, 0, extraDataPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flexPanel.setWidget(++row, 0, 2, extraDataPanel);
 
-        main.setWidget(++row, 0, adjustmentPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flexPanel.setWidget(++row, 0, 2, adjustmentPanel);
 
-        main.setWidget(++row, 0, depositPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flexPanel.setWidget(++row, 0, 2, depositPanel);
 
-        adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
-        adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
+        adjustmentPanel.setH3(0, 0, 2, proto().adjustments().getMeta().getCaption());
+        adjustmentPanel.setWidget(1, 0, 2, inject(proto().adjustments(), new AdjustmentFolder()));
 
-        depositPanel.setH3(0, 0, 1, proto().deposits().getMeta().getCaption());
-        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
+        depositPanel.setH3(0, 0, 2, proto().deposits().getMeta().getCaption());
+        depositPanel.setWidget(1, 0, 2, inject(proto().deposits(), new DepositFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
 
-        return main;
+        return flexPanel;
     }
 
     void updateServiceItemEditability() {

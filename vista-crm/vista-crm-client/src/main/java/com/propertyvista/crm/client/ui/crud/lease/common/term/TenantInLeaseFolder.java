@@ -194,34 +194,32 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            FormFlexPanel flexPanel = new FormFlexPanel();
 
-            FormFlexPanel left = new FormFlexPanel();
-            int row = -1;
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
-            left.setWidget(++row, 0, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            int leftRow = -1;
+            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
+            flexPanel.setWidget(++leftRow, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                 }
             }));
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
+            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
+            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
 
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().role()), 15).build());
-            left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
-            left.setWidget(
-                    ++row,
+            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().role()), 15).build());
+            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
+            flexPanel.setWidget(
+                    ++leftRow,
                     0,
                     new FormDecoratorBuilder(inject(proto().effectiveScreening(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
+            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
-            FormFlexPanel right = new FormFlexPanel();
-            row = -1;
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
+            int rightRow = 1;
+            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
+            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
+            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
 
             if (isEditable()) {
                 get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
@@ -248,15 +246,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             }
 
             preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
-            preauthorizedPaymentsPanel.setWidget(1, 0, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
+            preauthorizedPaymentsPanel.setWidget(1, 0, 2, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
 
-            // assemble main panel:
-            main.setWidget(0, 0, left);
-            main.setWidget(0, 1, right);
-            main.setWidget(1, 0, preauthorizedPaymentsPanel);
-            main.getFlexCellFormatter().setColSpan(1, 0, 2);
+            leftRow = Math.max(leftRow, rightRow);
+            flexPanel.setWidget(leftRow, 0, 2, preauthorizedPaymentsPanel);
 
-            return main;
+            return flexPanel;
         }
 
         @SuppressWarnings("unchecked")
