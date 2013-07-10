@@ -80,17 +80,17 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
                         RadioGroup.Layout.HORISONTAL)), 22).build());
 
-        main.setH3(++row, 0, 1, proto().details().getMeta().getCaption());
+        main.setH3(++row, 0, 2, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, 2, paymentDetailsHolder);
 
-        main.setH3(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
+        main.setH3(++row, 0, 2, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), true).build());
-        main.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
+        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
-            main.setBR(++row, 0, 1);
+            main.setBR(++row, 0, 2);
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments())).build());
             get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(false);
         }

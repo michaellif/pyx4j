@@ -55,21 +55,23 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
 
         int row = -1;
 
-        content.setH4(++row, 0, 1, i18n.tr("Desired:"));
+        content.setH3(++row, 0, 2, i18n.tr("Desired:"));
 
         if (isEditable()) {
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().building(), new CEntityLabel<Building>()), 20).build());
         } else {
             content.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))), 20)
-                            .build());
+                    new FormDecoratorBuilder(inject(proto().building(), new CEntityCrudHyperlink<Building>(AppPlaceEntityMapper.resolvePlace(Building.class))),
+                            20).build());
         }
         if (isEditable()) {
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().floorplan(), new CEntityLabel<Floorplan>()), 20).build());
         } else {
-            content.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().floorplan(), new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))),
-                            20).build());
+            content.setWidget(
+                    ++row,
+                    0,
+                    new FormDecoratorBuilder(inject(proto().floorplan(),
+                            new CEntityCrudHyperlink<Floorplan>(AppPlaceEntityMapper.resolvePlace(Floorplan.class))), 20).build());
         }
 
         content.setH3(++row, 0, 2, i18n.tr("Suggested:"));

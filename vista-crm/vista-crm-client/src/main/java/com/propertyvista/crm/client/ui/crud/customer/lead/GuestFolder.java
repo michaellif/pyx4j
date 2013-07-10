@@ -77,21 +77,17 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            FormFlexPanel flexPanel = new FormFlexPanel();
 
             int row = -1;
-            main.setWidget(++row, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
+            flexPanel.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
 
-            FormFlexPanel right = new FormFlexPanel();
-            row = -1;
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 25).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 25).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
-            main.setWidget(0, 1, right);
-
-            return main;
+            return flexPanel;
         }
     }
 }

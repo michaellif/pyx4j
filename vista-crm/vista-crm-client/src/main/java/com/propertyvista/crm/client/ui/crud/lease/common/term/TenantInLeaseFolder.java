@@ -333,7 +333,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                FormFlexPanel flexPanel = new FormFlexPanel();
                 int row = -1;
                 Widget expirationWarningLabel = new HTML(i18n.tr("This Preauthorized Payment is expired - needs to be replaced with new one!"));
                 expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
@@ -343,11 +343,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 expirationWarning.setHR(1, 0, 1);
                 expirationWarning.setBR(2, 0, 1);
 
-                content.setWidget(++row, 0, expirationWarning);
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod()), 40, 10, 12).build());
-                content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+                flexPanel.setWidget(++row, 0, 2, expirationWarning);
+                flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod())).build());
+                flexPanel.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
-                return content;
+                return flexPanel;
             }
 
             @Override

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.dashboard;
 
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -28,20 +29,24 @@ public class DashboardManagementForm extends CrmEntityForm<DashboardMetadata> {
     public DashboardManagementForm(IForm<DashboardMetadata> view) {
         super(DashboardMetadata.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
+
+        content.setH1(++row, 0, 2, i18n.tr("General"));
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 40).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isShared()), 3).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ownerUser().name()), 15).customLabel(i18n.tr("Owner")).build());
-        (get(proto().ownerUser().name())).setViewable(true);
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ownerUser().name(), new CLabel<String>()), 15).customLabel(i18n.tr("Owner"))
+                .build());
+
         selectTab(addTab(content));
+        setTabBarVisible(false);
     }
 
     public void setNewDashboardMode(boolean isNewDashboard) {
-        (get(proto().type())).setViewable(!isNewDashboard);
+        (get(proto().type())).setEditable(isNewDashboard);
         (get(proto().ownerUser().name())).setVisible(!isNewDashboard);
     }
 }

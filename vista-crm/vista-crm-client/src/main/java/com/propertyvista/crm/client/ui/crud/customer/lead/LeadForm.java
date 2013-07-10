@@ -89,18 +89,18 @@ public class LeadForm extends CrmEntityForm<Lead> {
     }
 
     private FormFlexPanel createGuestsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+        FormFlexPanel flexPanel = new FormFlexPanel(title);
 
         int row = -1;
-        main.setWidget(++row, 0, inject(proto().guests(), new GuestFolder(isEditable())));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().guests(), new GuestFolder(isEditable())));
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refSource()), 20).build());
+        flexPanel.setBR(++row, 0, 2);
+        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refSource())).build());
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().comments()), 50).build());
+        flexPanel.setBR(++row, 0, 2);
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().comments()), true).build());
 
-        return main;
+        return flexPanel;
     }
 
     private FormFlexPanel createDetailsTab(String title) {
@@ -152,7 +152,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lease(), new CEntityLabel<Lease>()), 40).build());
         } else {
             main.setWidget(++row, 0,
-                    new FormDecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 40).build());
+                    new FormDecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(AppPlaceEntityMapper.resolvePlace(Lease.class))), 40)
+                            .build());
             main.getFlexCellFormatter().setColSpan(row, 0, 2);
         }
 

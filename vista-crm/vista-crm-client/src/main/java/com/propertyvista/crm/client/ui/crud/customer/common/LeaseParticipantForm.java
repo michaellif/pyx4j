@@ -147,7 +147,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
     protected FormFlexPanel createPaymentMethodsTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        main.setWidget(0, 0, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
+        main.setWidget(0, 0, 2, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
             protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {

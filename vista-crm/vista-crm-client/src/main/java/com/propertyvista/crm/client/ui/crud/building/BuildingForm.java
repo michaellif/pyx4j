@@ -87,11 +87,11 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         FormFlexPanel flexPanel = new FormFlexPanel();
         int row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
         flexPanel.setH4(row++, 0, 2, i18n.tr("Boilers"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBoilerListerView().asWidget());
         flexPanel.setH4(row++, 0, 2, i18n.tr("Roofs"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getRoofListerView().asWidget());
 
         tab = addTab(flexPanel, i18n.tr("Mechanicals"));
         setTabEnabled(tab, !isEditable());
@@ -99,9 +99,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel = new FormFlexPanel();
         row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
         flexPanel.setH4(row++, 0, 2, i18n.tr("Locker Areas"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getLockerAreaListerView().asWidget());
 
         tab = addTab(flexPanel, i18n.tr("Add-Ons"));
         setTabEnabled(tab, !isEditable());
@@ -113,12 +113,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel = new FormFlexPanel();
         row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
         flexPanel.setH4(row++, 0, 2, i18n.tr("Features"));
-        flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
+        flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getFeatureListerView().asWidget());
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {
             flexPanel.setH4(row++, 0, 2, i18n.tr("Concessions"));
-            flexPanel.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
+            flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getConcessionListerView().asWidget());
         }
 
         if (VistaFeatures.instance().productCatalog() && !VistaFeatures.instance().defaultProductCatalog() && !VistaFeatures.instance().yardiIntegration()) {
