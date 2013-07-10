@@ -20,8 +20,6 @@
  */
 package com.pyx4j.forms.client.ui.folder;
 
-import static com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme.StyleName.EntityFolderAddButton;
-
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -42,7 +40,7 @@ import com.pyx4j.widgets.client.Button;
 
 public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel implements IFolderDecorator<E> {
 
-    private final SimplePanel container = new SimplePanel();
+    private final SimplePanel container;
 
     private Button addButton = null;
 
@@ -53,10 +51,13 @@ public abstract class BaseFolderDecorator<E extends IEntity> extends FlowPanel i
     public BaseFolderDecorator(EntityFolderImages images, String title, boolean addable) {
         this.addable = addable;
         addButton = new Button(images.addButton().regular(), title);
-        addButton.setStyleName(EntityFolderAddButton.name());
+        addButton.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderAddButton.name());
 
         validationMessageHolder = new HTML();
         validationMessageHolder.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
+
+        container = new SimplePanel();
+        container.setStyleName(DefaultEntityFolderTheme.StyleName.EntityFolderContent.name());
 
     }
 
