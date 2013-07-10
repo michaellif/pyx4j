@@ -344,7 +344,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
     private FormFlexPanel createContactTab(String title) {
         FormFlexPanel flexPanel = new FormFlexPanel(title);
 
-        flexPanel.setWidget(0, 0, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
+        flexPanel.setWidget(0, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
 
         return flexPanel;
     }

@@ -60,7 +60,7 @@ class OrganizationContactFolder extends VistaBoxFolder<OrganizationContact> {
             main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().mobilePhone())).build());
             main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().person().homePhone())).build());
 
-            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
             // repopulate related fields from selected employee:
             get(proto().person()).addValueChangeHandler(new ValueChangeHandler<Employee>() {
