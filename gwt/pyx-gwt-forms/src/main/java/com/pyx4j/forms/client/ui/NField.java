@@ -71,6 +71,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
     public NField(CCOMP cComponent) {
         super();
+        setStyleName(DefaultCComponentsTheme.StyleName.FieldPanel.name());
         this.cComponent = cComponent;
         setViewable(true);
     }

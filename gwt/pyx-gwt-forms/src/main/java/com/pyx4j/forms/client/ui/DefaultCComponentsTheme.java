@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DefaultCComponentsTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel,
+        FieldPanel, FieldEditorPanel, FieldViewerPanel, ValidationLabel, NoteLabel,
 
         TabbedFormTab
     }
