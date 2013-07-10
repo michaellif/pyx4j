@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.organisation.employee;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -43,7 +44,9 @@ import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeFolder
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.company.Notification.NotificationType;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
@@ -94,7 +97,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         get(proto().roles()).setEditable(!isSelfEditor);
 
-        boolean permitPortfoliosEditing = isManager & !isSelfEditor;
+        boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
 
         get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).setViewable(!permitPortfoliosEditing);
         get(proto().buildingAccess()).setViewable(!permitPortfoliosEditing);
@@ -106,7 +109,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().employees()).setViewable(!isManager);
         get(proto().employees()).setEditable(isManager);
 
-        get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor | isManager);
+        get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
     }
 
     private FormFlexPanel createInfoTab(String title) {
@@ -230,13 +233,27 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 25).build());
 
                 content.setH3(++row, 0, 1, proto().buildings().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable())));
+                content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable(), EmployeeForm.this)));
 
                 content.setH3(++row, 0, 1, proto().portfolios().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
+                content.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable(), EmployeeForm.this)));
 
                 return content;
             }
         }
+    }
+
+    public List<Building> getBuildingAccess() {
+        if (get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).getValue()) {
+            return get(proto().buildingAccess()).getValue();
+        }
+        return null;
+    }
+
+    public List<Portfolio> getPortfolioAccess() {
+        if (get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).getValue()) {
+            return get(proto().portfolios()).getValue();
+        }
+        return null;
     }
 }

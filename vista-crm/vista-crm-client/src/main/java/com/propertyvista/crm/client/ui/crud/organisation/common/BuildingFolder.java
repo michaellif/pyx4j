@@ -13,12 +13,17 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.Key;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.Criterion;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
@@ -30,12 +35,20 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingFolder extends VistaTableFolder<Building> {
 
+    private EmployeeForm employeeForm;
+
     public BuildingFolder(boolean modifiable) {
         super(Building.class, modifiable);
+    }
+
+    public BuildingFolder(boolean modifiable, EmployeeForm employeeForm) {
+        this(modifiable);
+        this.employeeForm = employeeForm;
     }
 
     @Override
@@ -92,7 +105,22 @@ public class BuildingFolder extends VistaTableFolder<Building> {
                 }
                 return true;
             }
+
+            @Override
+            protected void setFilters(List<Criterion> filters) {
+                super.setFilters(filters);
+
+                if (employeeForm != null) {
+                    List<Building> buildingAccess = employeeForm.getBuildingAccess();
+                    if (buildingAccess != null && !buildingAccess.isEmpty()) {
+                        List<Key> buildingAccessKeys = new ArrayList<Key>(buildingAccess.size());
+                        for (Building entity : buildingAccess) {
+                            buildingAccessKeys.add(entity.getPrimaryKey());
+                        }
+                        addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Building.class).id(), buildingAccessKeys));
+                    }
+                }
+            }
         }.show();
     }
-
 }

@@ -13,15 +13,20 @@
  */
 package com.propertyvista.crm.client.ui.crud.organisation.common;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -36,6 +41,7 @@ import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
+import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.selections.SelectPortfolioListService;
 import com.propertyvista.domain.company.Portfolio;
@@ -44,8 +50,15 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
 
     private final static I18n i18n = I18n.get(PortfolioFolder.class);
 
+    private EmployeeForm employeeForm;
+
     public PortfolioFolder(boolean modifiable) {
         super(Portfolio.class, modifiable);
+    }
+
+    public PortfolioFolder(boolean modifiable, EmployeeForm employeeForm) {
+        this(modifiable);
+        this.employeeForm = employeeForm;
     }
 
     @Override
@@ -122,6 +135,22 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
         @Override
         protected AbstractListService<Portfolio> getSelectService() {
             return GWT.<AbstractListService<Portfolio>> create(SelectPortfolioListService.class);
+        }
+
+        @Override
+        protected void setFilters(List<Criterion> filters) {
+            super.setFilters(filters);
+
+            if (employeeForm != null) {
+                List<Portfolio> portfolioAccess = employeeForm.getPortfolioAccess();
+                if (portfolioAccess != null && !portfolioAccess.isEmpty()) {
+                    List<Key> portfolioAccessKeys = new ArrayList<Key>(portfolioAccess.size());
+                    for (Portfolio entity : portfolioAccess) {
+                        portfolioAccessKeys.add(entity.getPrimaryKey());
+                    }
+                    addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Portfolio.class).id(), portfolioAccessKeys));
+                }
+            }
         }
 
         @Override
