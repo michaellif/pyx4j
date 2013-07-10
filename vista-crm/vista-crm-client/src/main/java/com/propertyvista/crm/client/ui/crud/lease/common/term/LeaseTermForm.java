@@ -319,7 +319,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         flexPanel.setH2(++leftRow, 0, 2, proto().version().leaseProducts().featureItems().getMeta().getCaption());
         featuresHeader = flexPanel.getWidget(leftRow, 0);
-        flexPanel.setWidget(++leftRow, 0,
+        flexPanel.setWidget(++leftRow, 0, 2,
                 inject(proto().version().leaseProducts().featureItems(), new BillableItemFolder(isEditable(), this, leaseTermEditorView)));
 
         if (!VistaTODO.VISTA_1756_Concessions_Should_Be_Hidden) {

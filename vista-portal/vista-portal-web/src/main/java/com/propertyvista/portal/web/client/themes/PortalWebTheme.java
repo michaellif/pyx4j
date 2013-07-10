@@ -79,7 +79,7 @@ public class PortalWebTheme extends Theme {
             protected void initStyles() {
                 super.initStyles();
 
-                Style style = new Style(".", StyleName.FormFlexPanelLeftRow);
+                Style style = new Style(".", StyleName.FormFlexPanelLeftCell);
                 style.addProperty("text-align", "center");
                 addStyle(style);
 
