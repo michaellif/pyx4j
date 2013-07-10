@@ -50,10 +50,10 @@ public class MarketingEditor extends CEntityDecoratableForm<Marketing> {
         row = -1;
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().visibility()), 10).build());
 
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         main.setH1(++row, 0, 2, proto().adBlurbs().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {
+        main.setWidget(++row, 0, 2, inject(proto().adBlurbs(), new VistaTableFolder<AdvertisingBlurb>(AdvertisingBlurb.class, isEditable()) {
             @Override
             public List<EntityFolderColumnDescriptor> columns() {
                 List<EntityFolderColumnDescriptor> columns;

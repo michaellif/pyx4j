@@ -197,11 +197,12 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         if (isEditable()) {
             flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().complex(), new CEntityLabel<Complex>()), 15).build());
         } else {
-            flexPanel.setWidget(
-                    row++,
-                    1,
-                    new FormDecoratorBuilder(inject(proto().complex(), new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15)
-                            .build());
+            flexPanel
+                    .setWidget(
+                            row++,
+                            1,
+                            new FormDecoratorBuilder(inject(proto().complex(),
+                                    new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
 
         flexPanel.setWidget(
@@ -300,7 +301,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         row = 1;
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalDate()), 9).build());
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().lastAppraisalValue()), 10).build());
-        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
+        flexPanel
+                .setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().financial().currency().name()), 10).customLabel(i18n.tr("Currency Name")).build());
 
         // tweak:
         get(proto().merchantAccount()).addValueChangeHandler(new ValueChangeHandler<MerchantAccount>() {
@@ -318,14 +320,13 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
-        flexPanel.setWidget(++row, 0, inject(proto().marketing(), new MarketingEditor()));
+        flexPanel.setWidget(++row, 0, 2, inject(proto().marketing(), new MarketingEditor()));
 
         flexPanel.setH1(++row, 0, 2, proto().contacts().propertyContacts().getMeta().getCaption());
         flexPanel.setWidget(++row, 0, 2, inject(proto().contacts().propertyContacts(), new PropertyContactFolder()));
 
         flexPanel.setH1(++row, 0, 2, i18n.tr("Media"));
-        flexPanel.setWidget(++row, 0, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
-        flexPanel.getFlexCellFormatter().setColSpan(++row, 0, 2);
+        flexPanel.setWidget(++row, 0, 2, inject(proto().media(), new CrmMediaFolder(isEditable(), ImageTarget.Building)));
 
         return flexPanel;
     }

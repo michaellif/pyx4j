@@ -71,29 +71,29 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
     private FormFlexPanel createGeneralTab(String title) {
         FormFlexPanel main = new FormFlexPanel(title);
 
-        int row = -1;
-        main.setH1(++row, 0, 2, i18n.tr("Floorplan Information"));
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().marketingName()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 30).build());
-        main.getFlexCellFormatter().setRowSpan(row, 0, 3);
+        int leftRow = -1;
+        int rightRow = -1;
 
-        row += 4; // leave space for right column items...
-        main.setH1(++row, 0, 2, proto().amenities().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().amenities(), createAmenitiesListEditor()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setH1(++leftRow, 0, 2, i18n.tr("Floorplan Information"));
 
-        row = 0;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().floorCount()), 3).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().bedrooms()), 3).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().dens()), 3).build());
+        leftRow = rightRow = Math.max(leftRow, rightRow);
 
-        // shift one column left because description field RowSpan:
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bathrooms()), 3).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().halfBath()), 3).build());
+        main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().marketingName()), 15).build());
+        main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().bedrooms()), 3).build());
+        main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().dens()), 3).build());
+        main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().area()), 8).build());
 
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().area()), 8).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().areaUnits()), 8).build());
+        main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().floorCount()), 3).build());
+        main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().bathrooms()), 3).build());
+        main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().halfBath()), 3).build());
+        main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().areaUnits()), 8).build());
+
+        leftRow = rightRow = Math.max(leftRow, rightRow);
+
+        main.setWidget(++leftRow, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        main.setH1(++leftRow, 0, 2, proto().amenities().getMeta().getCaption());
+        main.setWidget(++leftRow, 0, 2, inject(proto().amenities(), createAmenitiesListEditor()));
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().name()).setViewable(true);
