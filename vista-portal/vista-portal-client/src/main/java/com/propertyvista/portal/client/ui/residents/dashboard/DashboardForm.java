@@ -141,6 +141,10 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
     class GeneralInfoViewer extends CViewer<TenantProfileDTO> {
         @Override
         public IsWidget createContent(TenantProfileDTO value) {
+            if (value == null) {
+                return null;
+            }
+
             FlexTable content = new FlexTable();
             int row = -1;
 
@@ -158,6 +162,11 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
         @Override
         public IsWidget createContent(FinancialSummaryDTO value) {
+
+            if (value == null) {
+                return null;
+            }
+
             FlexTable dataPanel = new FlexTable();
 
             dataPanel.setWidth("100%");
@@ -222,7 +231,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         public IsWidget createContent(IList<MaintenanceRequestDTO> value) {
             FlexTable container = new FlexTable();
 
-            if (value.size() > 0) {
+            if (value != null && value.size() > 0) {
                 container.getColumnFormatter().setWidth(0, "250px");
                 container.getColumnFormatter().setWidth(1, "75px");
 

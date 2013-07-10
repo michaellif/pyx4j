@@ -31,6 +31,10 @@ public class TenantInsuranceStatusViewer extends CViewer<TenantInsuranceStatusDT
 
     @Override
     public IsWidget createContent(TenantInsuranceStatusDTO tenantInsuranceStatus) {
+        if (tenantInsuranceStatus == null) {
+            return null;
+        }
+
         if (tenantInsuranceStatus instanceof NoInsuranceTenantInsuranceStatusDTO) {
             return new NoTenantInsuranceStatusViewer().createContent((NoInsuranceTenantInsuranceStatusDTO) tenantInsuranceStatus);
 
