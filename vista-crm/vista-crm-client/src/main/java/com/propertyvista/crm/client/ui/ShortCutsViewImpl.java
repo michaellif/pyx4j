@@ -135,7 +135,7 @@ public class ShortCutsViewImpl extends StackLayoutPanel implements ShortCutsView
                 String viewLabel = value != null ? value.getStringView() : "";
                 viewLabel = viewLabel.length() + typeLabel.length() > MAX_SHORTCUT_LENGTH ? viewLabel.substring(0, MAX_SHORTCUT_LENGTH - typeLabel.length())
                         + "..." : viewLabel;
-                label = "<i>" + typeLabel + ":</i> " + viewLabel;
+                label = "<i>" + typeLabel + (!"".equals(viewLabel) ? ":</i> " + viewLabel : "</i>");
             }
 
             Anchor anchor = new Anchor(label, true);
