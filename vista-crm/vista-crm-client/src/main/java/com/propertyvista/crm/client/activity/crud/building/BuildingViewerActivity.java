@@ -120,7 +120,7 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
                 (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class), Concession.class, VistaCrmBehavior.ProductCatalog);
 
         billingCycleLister = ListerControllerFactory.create(((BuildingViewerView) getView()).getBillingCycleListerView(),
-                (AbstractCrudService<BillingCycleDTO>) GWT.create(BillingCycleCrudService.class), BillingCycleDTO.class, VistaCrmBehavior.PropertyManagement);
+                (AbstractCrudService<BillingCycleDTO>) GWT.create(BillingCycleCrudService.class), BillingCycleDTO.class);
     }
 
     @Override
@@ -180,9 +180,11 @@ public class BuildingViewerActivity extends CrmViewerActivity<BuildingDTO> imple
         concessionLister.setParent(result.productCatalog().getPrimaryKey());
         concessionLister.populate();
 
-        billingCycleLister.clearPreDefinedFilters();
-        billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
-        billingCycleLister.populate();
+        if (SecurityController.checkBehavior(VistaCrmBehavior.Billing)) {
+            billingCycleLister.clearPreDefinedFilters();
+            billingCycleLister.addPreDefinedFilter(PropertyCriterion.eq(EntityFactory.getEntityPrototype(BillingCycleDTO.class).building(), result));
+            billingCycleLister.populate();
+        }
     }
 
     @Override

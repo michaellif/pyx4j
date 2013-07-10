@@ -36,6 +36,7 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
@@ -59,6 +60,7 @@ import com.propertyvista.domain.property.asset.Complex;
 import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.ImageConsts.ImageTarget;
@@ -67,6 +69,10 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
     private static final I18n i18n = I18n.get(BuildingForm.class);
+
+    private final Tab financialTab;
+
+    private final Tab billingCyclesTab;
 
     public BuildingForm(IForm<BuildingDTO> view) {
         super(BuildingDTO.class, view);
@@ -106,7 +112,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(flexPanel, i18n.tr("Add-Ons"));
         setTabEnabled(tab, !isEditable());
 
-        addTab(createFinancialTab(i18n.tr("Financial")));
+        financialTab = addTab(createFinancialTab(i18n.tr("Financial")));
 
         addTab(createMarketingTab(i18n.tr("Marketing")));
 
@@ -128,8 +134,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         addTab(createContactTab(i18n.tr("Contacts")));
 
-        tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(), i18n.tr("Billing Cycles"));
-        setTabEnabled(tab, !isEditable());
+        billingCyclesTab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getBillingCycleListerView().asWidget(),
+                i18n.tr("Billing Cycles"));
+        setTabEnabled(billingCyclesTab, !isEditable());
 
     }
 
@@ -157,6 +164,9 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                         }
                     });
         }
+
+        financialTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial));
+        billingCyclesTab.setTabVisible(SecurityController.checkBehavior(VistaCrmBehavior.Billing));
 
         fillMerchantAccountStatus(getValue().merchantAccount());
     }

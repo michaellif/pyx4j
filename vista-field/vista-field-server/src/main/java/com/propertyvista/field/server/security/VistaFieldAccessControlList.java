@@ -15,7 +15,6 @@ package com.propertyvista.field.server.security;
 
 import com.pyx4j.entity.security.EntityPermission;
 import com.pyx4j.rpc.shared.IServiceExecutePermission;
-import com.pyx4j.rpc.shared.ServiceExecutePermission;
 import com.pyx4j.security.server.ServletContainerAclBuilder;
 
 import com.propertyvista.domain.financial.offering.Concession;
@@ -46,14 +45,7 @@ import com.propertyvista.field.rpc.services.unit.UnitCrudService;
 
 public class VistaFieldAccessControlList extends ServletContainerAclBuilder {
 
-    private static final boolean allowAllEntityDuringDevelopment = true;
-
     public VistaFieldAccessControlList() {
-
-        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission("*"));
-        grant(VistaBasicBehavior.CRM, new ServiceExecutePermission("*"));
-        grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.ALL));
-        grant(VistaBasicBehavior.CRM, new EntityPermission("*", EntityPermission.READ));
 
         grant(new IServiceExecutePermission(FieldAuthenticationService.class));
 

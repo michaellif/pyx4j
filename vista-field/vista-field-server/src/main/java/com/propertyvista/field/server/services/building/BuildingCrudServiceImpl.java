@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.geo.GeoPoint;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.biz.asset.BuildingFacade;
 import com.propertyvista.biz.system.Vista2PmcFacade;
@@ -32,6 +33,7 @@ import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BuildingDTO;
 import com.propertyvista.field.rpc.services.building.BuildingCrudService;
 import com.propertyvista.server.common.reference.geo.SharedGeoLocator;
@@ -100,10 +102,12 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         }
 
         // Financial
-        Persistence.service().retrieveMember(in.merchantAccounts());
-        if (!in.merchantAccounts().isEmpty()) {
-            MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
-            dto.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
+        if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial)) {
+            Persistence.service().retrieveMember(in.merchantAccounts());
+            if (!in.merchantAccounts().isEmpty()) {
+                MerchantAccount oneAccount = in.merchantAccounts().iterator().next().merchantAccount();
+                dto.merchantAccount().set(ServerSideFactory.create(Vista2PmcFacade.class).calulateMerchantAccountStatus(oneAccount));
+            }
         }
     }
 
@@ -138,11 +142,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
 
         {
             Persistence.service().retrieveMember(dbo.merchantAccounts());
-            dbo.merchantAccounts().clear();
-            if (!in.merchantAccount().isNull()) {
-                BuildingMerchantAccount bma = dbo.merchantAccounts().$();
-                bma.merchantAccount().set(in.merchantAccount());
-                dbo.merchantAccounts().add(bma);
+            if (SecurityController.checkBehavior(VistaCrmBehavior.BuildingFinancial)) {
+                dbo.merchantAccounts().clear();
+                if (!in.merchantAccount().isNull()) {
+                    BuildingMerchantAccount bma = dbo.merchantAccounts().$();
+                    bma.merchantAccount().set(in.merchantAccount());
+                    dbo.merchantAccounts().add(bma);
+                }
             }
         }
 

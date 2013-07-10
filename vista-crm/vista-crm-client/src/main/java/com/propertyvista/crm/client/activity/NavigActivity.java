@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
@@ -41,6 +42,7 @@ import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -141,7 +143,9 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         if (VistaFeatures.instance().productCatalog()) {
             folder = new NavigFolder(i18n.tr("Finance"), CrmImages.INSTANCE.financeNormal(), CrmImages.INSTANCE.financeHover(),
                     CrmImages.INSTANCE.financeActive());
-            folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
+            if (SecurityController.checkBehavior(VistaCrmBehavior.OrganizationFinancial)) {
+                folder.addNavigItem(new CrmSiteMap.Finance.AggregatedTransfer());
+            }
             list.add(folder);
         }
 
