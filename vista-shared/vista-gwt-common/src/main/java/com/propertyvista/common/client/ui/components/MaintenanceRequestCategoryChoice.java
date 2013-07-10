@@ -42,7 +42,7 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
     public MaintenanceRequestCategoryChoice() {
         super("", NotInOptionsPolicy.DISCARD);
         setMandatory(true);
-//        setVisible(false);
+        setVisible(false);
     }
 
     @Override
