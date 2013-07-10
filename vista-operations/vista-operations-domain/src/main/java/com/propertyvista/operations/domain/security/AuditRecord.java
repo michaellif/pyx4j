@@ -52,6 +52,9 @@ public interface AuditRecord extends IEntity {
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<Date> created();
 
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> worldTime();
+
     IPrimitive<AuditRecordEventType> event();
 
     IPrimitive<VistaApplication> app();

@@ -30,6 +30,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.shared.SecurityController;
@@ -99,6 +100,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         if (!PmcNameValidator.isDnsNameValid(entity.namespace().getValue())) {
             throw new UserRuntimeException("PMC namespace is not valid");
         }
+
+        Pmc orig = Persistence.secureRetrieve(Pmc.class, entity.getPrimaryKey());
+        retrievedSingle(orig, RetrieveTarget.Edit);
+
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
 
@@ -117,6 +122,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         encryptPassword(entity.yardiCredential());
 
         super.persist(entity, dto);
+
+        ServerSideFactory.create(AuditFacade.class).updated(entity, EntityDiff.getChanges(orig, entity, entity.updated()));
 
         // Ppopagate onboardingAccountId to accounts
         EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);

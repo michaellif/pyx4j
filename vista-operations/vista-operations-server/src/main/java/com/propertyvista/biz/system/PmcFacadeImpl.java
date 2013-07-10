@@ -20,6 +20,7 @@ import java.util.Locale;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ApplicationVersion;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -56,6 +57,8 @@ public class PmcFacadeImpl implements PmcFacade {
         pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
         pmc.schemaDataUpgradeSteps().setValue(VistaUpgrade.getPreloadSchemaDataUpgradeSteps());
         Persistence.service().persist(pmc);
+
+        ServerSideFactory.create(AuditFacade.class).created(pmc);
     }
 
     @Override

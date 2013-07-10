@@ -19,12 +19,12 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 
+import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.rpc.services.AuditRecordListerService;
-import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.OperationsUser;
-import com.propertyvista.domain.security.CrmUser;
-import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordDTO> implements AuditRecordListerService {
@@ -36,7 +36,9 @@ public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<Aud
     @Override
     protected void bind() {
         bind(dtoProto.remoteAddr(), dboProto.remoteAddr());
+        bind(dtoProto.userKey(), dboProto.user());
         bind(dtoProto.when(), dboProto.created());
+        bind(dtoProto.worldTime(), dboProto.worldTime());
         bind(dtoProto.event(), dboProto.event());
         bind(dtoProto.pmc(), dboProto.namespace());
         bind(dtoProto.app(), dboProto.app());

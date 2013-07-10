@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.organization;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,9 +24,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.security.server.EmailValidator;
-import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
@@ -51,6 +49,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.common.security.UserAccessUtils;
+import com.propertyvista.server.domain.security.BehaviorHolder;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -130,11 +129,11 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
                 Persistence.service().persist(dbo);
             }
 
-            Set<Behavior> behaviorsOriginal = Collections.emptySet();
+            BehaviorHolder behaviorsOriginal = EntityFactory.create(BehaviorHolder.class);
             CrmUserCredential credential;
             if (!isNew) {
                 credential = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
-                behaviorsOriginal = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential);
+                behaviorsOriginal.permissions().addAll(ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential));
             } else {
                 ServerSideFactory.create(AuditFacade.class).created(user);
                 credential = EntityFactory.create(CrmUserCredential.class);
@@ -152,11 +151,12 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.interfaceUid().setValue(UserAccessUtils.getCrmUserInterfaceUid(credential));
             Persistence.service().persist(credential);
 
-            Set<Behavior> behaviorsUpdated = ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential);
+            BehaviorHolder behaviorsUpdated = EntityFactory.create(BehaviorHolder.class);
+            behaviorsUpdated.permissions().addAll(ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential));
 
             if (!EqualsHelper.equals(behaviorsOriginal, behaviorsUpdated)) {
-                ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.PermitionsUpdate, credential.user(),
-                        "{0}, behaviors {1} updated to {2} ", user.email(), behaviorsOriginal, behaviorsUpdated);
+                ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.PermitionsUpdate, credential.user(), "{0}, {1} ", user.email(),
+                        EntityDiff.getChanges(behaviorsOriginal, behaviorsUpdated));
             }
 
             final Pmc pmc = VistaDeployment.getCurrentPmc();
@@ -164,8 +164,8 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             final OnboardingUser onbUser;
             final OnboardingUserCredential onbUserCred;
 
-            boolean isPropVistaAccOwner = behaviorsOriginal.contains(VistaCrmBehavior.PropertyVistaAccountOwner);
-            boolean isPropVistaAccOwnerSet = behaviorsUpdated.contains(VistaCrmBehavior.PropertyVistaAccountOwner);
+            boolean isPropVistaAccOwner = behaviorsOriginal.permissions().getValue().contains(VistaCrmBehavior.PropertyVistaAccountOwner);
+            boolean isPropVistaAccOwnerSet = behaviorsUpdated.permissions().getValue().contains(VistaCrmBehavior.PropertyVistaAccountOwner);
 
             if (isNew || !isPropVistaAccOwner) {
                 onbUser = EntityFactory.create(OnboardingUser.class);

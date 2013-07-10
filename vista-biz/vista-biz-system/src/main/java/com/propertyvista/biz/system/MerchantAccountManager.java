@@ -15,10 +15,12 @@ package com.propertyvista.biz.system;
 
 import java.util.concurrent.Callable;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.pmc.Pmc;
@@ -29,6 +31,17 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class MerchantAccountManager {
 
     public void persistMerchantAccount(Pmc pmc, final MerchantAccount merchantAccount) {
+
+        MerchantAccount orig = null;
+        if (merchantAccount.getPrimaryKey() != null) {
+            orig = TaskRunner.runInTargetNamespace(pmc, new Callable<MerchantAccount>() {
+                @Override
+                public MerchantAccount call() {
+                    return Persistence.service().retrieve(MerchantAccount.class, merchantAccount.getPrimaryKey());
+                }
+            });
+        }
+
         PmcMerchantAccountIndex pmcMerchantAccountIndex = null;
         if (!merchantAccount.id().isNull()) {
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
@@ -51,6 +64,12 @@ public class MerchantAccountManager {
                 return null;
             }
         });
+
+        if (orig == null) {
+            ServerSideFactory.create(AuditFacade.class).created(merchantAccount);
+        } else {
+            ServerSideFactory.create(AuditFacade.class).updated(merchantAccount, EntityDiff.getChanges(orig, merchantAccount, merchantAccount.updated()));
+        }
 
         pmcMerchantAccountIndex.merchantAccountKey().setValue(merchantAccount.getPrimaryKey());
         pmcMerchantAccountIndex.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
