@@ -43,6 +43,7 @@ import com.pyx4j.entity.test.shared.domain.join.BRefReadChild;
 import com.pyx4j.entity.test.shared.domain.join.BRefReadOwner;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadChild;
 import com.pyx4j.entity.test.shared.domain.join.OneToOneReadOwner;
+import com.pyx4j.gwt.server.DateUtils;
 
 public abstract class JoinTableTestCase extends DatastoreTestBase {
 
@@ -170,6 +171,53 @@ public abstract class JoinTableTestCase extends DatastoreTestBase {
             Assert.assertEquals("Data retrieved using JoinTable", 1, edit1r1.subjects().size());
             Assert.assertTrue("Inserted value present", edit1r1.subjects().contains(subject2));
         }
+    }
+
+    private void testJoinTableCascadeAll(TestCaseMethod testCaseMethod) {
+        String testId = uniqueString();
+        String fixedNameId = "fixed-" + uniqueString();
+
+        AccPrincipal principal1 = EntityFactory.create(AccPrincipal.class);
+        principal1.name().setValue(uniqueString());
+        principal1.testId().setValue(testId);
+        srv.persist(principal1);
+
+        AccSubject subject1 = EntityFactory.create(AccSubject.class);
+        subject1.name().setValue(fixedNameId);
+        subject1.testId().setValue(testId);
+        srv.persist(subject1);
+
+        AccPrincipalEdit edit1 = EntityFactory.create(AccPrincipalEdit.class);
+        edit1.name().setValue(uniqueString());
+        edit1.testId().setValue(testId);
+        edit1.setPrimaryKey(principal1.getPrimaryKey());
+        edit1.subjects().add(subject1);
+
+        srvSave(edit1, testCaseMethod);
+
+        // Update AccSubject while editing AccPrincipalEdit, changes should not be saved since it is not Owned
+        edit1.name().setValue("changes Ok" + uniqueString());
+
+        AccSubject subject1edit = edit1.subjects().iterator().next();
+        subject1edit.name().setValue("other changes not to be saved" + uniqueString());
+        subject1edit.updated().setValue(DateUtils.detectDateformat("2011-01-01"));
+
+        srvSave(edit1, testCaseMethod);
+
+        // verify
+        {
+            AccSubject subject1r1 = srv.retrieve(AccSubject.class, subject1.getPrimaryKey());
+            Assert.assertEquals("Data not changes", fixedNameId, subject1r1.name().getValue());
+        }
+
+    }
+
+    public void testJoinTableCascadeAllPersist() {
+        testJoinTableCascadeAll(TestCaseMethod.Persist);
+    }
+
+    public void testJoinTableCascadeAllMerge() {
+        testJoinTableCascadeAll(TestCaseMethod.Merge);
     }
 
     public void testBackreferencesRead() {
