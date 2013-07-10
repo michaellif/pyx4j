@@ -91,12 +91,10 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
     private LeaseTermGuarantor createGuarantor() {
         LeaseTermGuarantor guarantor = EntityFactory.create(LeaseTermGuarantor.class);
 
-        guarantor.leaseTermV().setPrimaryKey(getParentKey());
         guarantor.leaseTermV().setValueDetached();
         guarantor.role().setValue(LeaseTermParticipant.Role.Guarantor);
         guarantor.relationship().setValue(PersonRelationship.Other); // just not leave it empty - it's mandatory field!
 
-        assert (!guarantor.leaseTermV().isNull());
         return guarantor;
     }
 

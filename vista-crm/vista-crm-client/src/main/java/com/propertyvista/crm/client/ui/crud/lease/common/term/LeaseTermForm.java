@@ -21,7 +21,6 @@ import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.criterion.Criterion;
@@ -332,12 +331,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         flexPanel.setH1(++leftRow, 0, 2, proto().version().tenants().getMeta().getCaption());
 
         TenantInLeaseFolder tf;
-        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable(), getParentView()) {
-            @Override
-            protected Key getParentKey() {
-                return LeaseTermForm.this.getValue().version().getPrimaryKey();
-            }
-        }));
+        flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().tenants(), tf = new TenantInLeaseFolder(isEditable(), getParentView())));
         tf.addValueChangeHandler(new ValueChangeHandler<IList<LeaseTermTenant>>() {
             @Override
             public void onValueChange(ValueChangeEvent<IList<LeaseTermTenant>> event) {
@@ -349,11 +343,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         flexPanel.setH1(++leftRow, 0, 2, proto().version().guarantors().getMeta().getCaption());
         flexPanel.setWidget(++leftRow, 0, 2, inject(proto().version().guarantors(), new GuarantorInLeaseFolder(isEditable()) {
-            @Override
-            protected Key getParentKey() {
-                return LeaseTermForm.this.getValue().version().getPrimaryKey();
-            }
-
             @Override
             protected IList<LeaseTermTenant> getLeaseTermTenants() {
                 return LeaseTermForm.this.getValue().version().tenants();

@@ -125,14 +125,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
     LeaseTermTenant createTenant() {
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
-        tenant.leaseTermV().setPrimaryKey(getParentKey());
         tenant.leaseTermV().setValueDetached();
         if (!isApplicantPresent()) {
             tenant.role().setValue(LeaseTermParticipant.Role.Applicant);
             tenant.relationship().setValue(PersonRelationship.Other); // just do not leave it empty - it's mandatory field!
         }
 
-//        assert (!tenant.leaseTermV().isNull());
         return tenant;
     }
 
