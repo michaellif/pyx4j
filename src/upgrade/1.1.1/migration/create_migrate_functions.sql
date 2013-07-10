@@ -45,7 +45,45 @@ BEGIN
         ***     ======================================================================================================
         **/
         
+        -- application_document_file
         
+        ALTER TABLE application_document_file   ADD COLUMN caption VARCHAR(500),
+                                                ADD COLUMN description VARCHAR(500);
+                                                
+                                                
+        -- company
+        
+        ALTER TABLE company     ADD COLUMN logo_media_file_caption VARCHAR(500),
+                                ADD COLUMN logo_media_file_description  VARCHAR(500);
+                                
+        -- emergency_contact
+        
+        ALTER TABLE emergency_contact   ADD COLUMN address_street1 VARCHAR(500),
+                                        ADD COLUMN address_street2 VARCHAR(500);
+                                        
+                                        
+        -- file
+        
+        ALTER TABLE file        ADD COLUMN caption VARCHAR(500),
+                                ADD COLUMN description VARCHAR(500);   
+        
+        
+        -- media 
+        
+        ALTER TABLE media       ADD COLUMN media_file_caption VARCHAR(500),
+                                ADD COLUMN media_file_description VARCHAR(500);
+                                
+                                
+        -- site_image_resource
+        
+        ALTER TABLE site_image_resource ADD COLUMN caption VARCHAR(500),
+                                        ADD COLUMN description VARCHAR(500);
+                                        
+                                        
+        -- vendor
+        
+        ALTER TABLE vendor   ADD COLUMN logo_media_file_caption VARCHAR(500),
+                             ADD COLUMN logo_media_file_description  VARCHAR(500);   
         
         /**
         ***     =====================================================================================================

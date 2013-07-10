@@ -63,6 +63,12 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_yardi_credential ADD COLUMN password_encrypted VARCHAR(1024);
         ALTER TABLE admin_pmc_yardi_credential RENAME COLUMN credential TO password_password;
+        
+        
+        -- pmc_document_file
+        
+        ALTER TABLE pmc_document_file   ADD COLUMN caption VARCHAR(500),
+                                        ADD COLUMN description VARCHAR(500);
        
        
         /**
