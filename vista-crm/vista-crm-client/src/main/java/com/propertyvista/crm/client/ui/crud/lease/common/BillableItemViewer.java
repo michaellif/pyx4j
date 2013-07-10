@@ -77,10 +77,10 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        FormFlexPanel flowPanel = new FormFlexPanel();
         int row = -1;
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 25).build());
+        flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 22).build());
         ((CField) get(proto().item())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -100,32 +100,28 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
             }
         });
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().effectiveDate()), 9).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expirationDate()), 9).build());
+        flowPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().agreedPrice()), 10).build());
+        flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().effectiveDate()), 9).build());
+        flowPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().expirationDate()), 9).build());
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 51).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flowPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
-        main.setWidget(++row, 0, extraDataPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flowPanel.setWidget(++row, 0, 2, extraDataPanel);
 
-        main.setWidget(++row, 0, adjustmentPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flowPanel.setWidget(++row, 0, 2, adjustmentPanel);
 
-        main.setWidget(++row, 0, depositPanel);
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        flowPanel.setWidget(++row, 0, 2, depositPanel);
 
         adjustmentPanel.setH3(0, 0, 1, proto().adjustments().getMeta().getCaption());
         adjustmentPanel.setWidget(1, 0, inject(proto().adjustments(), new AdjustmentFolder()));
 
-        depositPanel.setH3(0, 0, 1, proto().deposits().getMeta().getCaption());
-        depositPanel.setWidget(1, 0, inject(proto().deposits(), new DepositFolder()));
+        depositPanel.setH3(0, 0, 2, proto().deposits().getMeta().getCaption());
+        depositPanel.setWidget(1, 0, 2, inject(proto().deposits(), new DepositFolder()));
 
         get(proto().effectiveDate()).setVisible(false);
         get(proto().expirationDate()).setVisible(false);
 
-        return main;
+        return flowPanel;
     }
 
     @Override
