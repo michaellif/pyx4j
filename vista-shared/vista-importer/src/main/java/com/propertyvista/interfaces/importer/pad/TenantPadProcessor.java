@@ -235,10 +235,10 @@ public class TenantPadProcessor {
      * Calculate proper percentage with consideration of rounding
      */
     private void processLeasePads(final Lease lease, List<PadFileModel> leasePadEntities, final TenantPadCounter counters) {
+        correctPadParsing(leasePadEntities);
         if (!validateLeasePads(leasePadEntities, counters)) {
             return;
         }
-        correctPadParsing(leasePadEntities);
         assignUid(leasePadEntities);
         calulateLeasePercents(leasePadEntities);
 
@@ -386,9 +386,9 @@ public class TenantPadProcessor {
 
     private void correctDollars(IPrimitive<String> amount) {
         if ((!amount.isNull()) && (amount.getValue().startsWith("$"))) {
-            amount.setValue(amount.getValue().substring(1, amount.getValue().length()));
+            amount.setValue(amount.getValue().substring(1, amount.getValue().length()).trim());
         } else if ((!amount.isNull()) && (amount.getValue().endsWith("$"))) {
-            amount.setValue(amount.getValue().substring(amount.getValue().length() - 1));
+            amount.setValue(amount.getValue().substring(amount.getValue().length() - 1).trim());
         }
     }
 
