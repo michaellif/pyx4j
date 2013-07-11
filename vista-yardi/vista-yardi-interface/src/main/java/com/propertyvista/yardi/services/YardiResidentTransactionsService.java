@@ -164,8 +164,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         try {
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
+            log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
             new YardiLeaseProcessor(null).expireLeaseProducts(lease);
-            log.error("Error", e); // log error and reset lease charges.
         }
         if (leaseCharges != null) {
             Lease processed = null;
