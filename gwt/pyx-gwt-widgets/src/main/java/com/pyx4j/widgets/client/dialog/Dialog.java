@@ -541,6 +541,10 @@ public class Dialog extends DialogPanel {
         openDialogs.clear();
     }
 
+    public static boolean isDialogOpen() {
+        return openDialogs.size() > 0;
+    }
+
     public void requestFocus(final FocusWidget focusWidget) {
         firstFocusWidget = focusWidget;
     }
