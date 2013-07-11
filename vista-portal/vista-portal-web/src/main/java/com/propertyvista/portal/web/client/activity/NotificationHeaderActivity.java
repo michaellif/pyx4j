@@ -39,7 +39,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
 
     static {
         notifications = new ArrayList<Notification>();
-        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
+//        notifications.add(new Notification("Error Message goes here", NotificationType.ERROR, "Error Notification"));
         notifications.add(new Notification("Info Message goes here", NotificationType.INFO, "Info Notification"));
 //        notifications.add(new Notification("Warn Message goes here", NotificationType.WARN, "Warn Notification"));
 //        notifications.add(new Notification("Confirm Message goes here", NotificationType.CONFIRM, "Confirm Notification"));

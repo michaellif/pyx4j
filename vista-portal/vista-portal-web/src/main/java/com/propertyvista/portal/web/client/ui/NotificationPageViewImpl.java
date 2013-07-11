@@ -51,7 +51,7 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
 
     private final Label debugMessageLabel;
 
-    private Presenter presenter;
+    private NotificationPagePresenter presenter;
 
     private final NotificationTypeImages notificationTypeImageResources;
 
@@ -115,7 +115,7 @@ public class NotificationPageViewImpl extends Composite implements NotificationP
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(NotificationPagePresenter presenter) {
         this.presenter = presenter;
     }
 

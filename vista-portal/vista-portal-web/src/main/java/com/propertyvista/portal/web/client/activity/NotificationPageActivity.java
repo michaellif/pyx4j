@@ -24,7 +24,7 @@ import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.NotificationPageView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class NotificationPageActivity extends AbstractActivity implements NotificationPageView.Presenter {
+public class NotificationPageActivity extends AbstractActivity implements NotificationPageView.NotificationPagePresenter {
 
     private final NotificationPageView view;
 

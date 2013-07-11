@@ -17,9 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -32,161 +30,105 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
-import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.web.client.themes.LandingPagesTheme;
 
-public class LandingViewImpl extends Composite implements LandingView {
+public class LandingViewImpl extends FlowPanel implements LandingView {
 
     static final I18n i18n = I18n.get(LandingViewImpl.class);
 
-    private static abstract class DevLoginPanel extends Composite {
-
-        private final FlowPanel devLoginAnchorsPanel;
-
-        private HTML applicationModeLabel;
-
-        private int prevDevKey;
-
-        private int devCount;
-
-        private List<? extends DevLoginCredentials> credentialsSet;
-
-        public DevLoginPanel() {
-            FlowPanel devMessagePanel = new FlowPanel();
-            devMessagePanel.getElement().getStyle().setMargin(20, Unit.PX);
-
-            devMessagePanel.addAttachHandler(new AttachEvent.Handler() {
-                private HandlerRegistration handlerRegistration;
-
-                @Override
-                public void onAttachOrDetach(AttachEvent event) {
-                    if (event.isAttached()) {
-                        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                            @Override
-                            public void onPreviewNativeEvent(NativePreviewEvent event) {
-                                if (event.getTypeInt() == Event.ONKEYDOWN && event.getNativeEvent().getCtrlKey()) {
-                                    if (devCredentialsSelected(event.getNativeEvent().getKeyCode())) {
-                                        event.getNativeEvent().preventDefault();
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        handlerRegistration.removeHandler();
-                    }
-                }
-            });
-
-            devMessagePanel.add(applicationModeLabel = new HTML());
-
-            devLoginAnchorsPanel = new FlowPanel();
-            devMessagePanel.add(devLoginAnchorsPanel);
-
-            initWidget(devMessagePanel);
-        }
-
-        public void setApplicationModeName(String applicationModeName) {
-            applicationModeLabel.setHTML("This application is running in <B>" + DemoData.applicationModeName() + "</B> mode.");
-        }
-
-        public void setDevCredentials(final List<? extends DevLoginCredentials> credentialsSet) {
-            this.credentialsSet = credentialsSet;
-            devLoginAnchorsPanel.clear();
-
-            for (final DevLoginCredentials credentials : credentialsSet) {
-                Anchor touchAnchor = new Anchor(SimpleMessageFormat.format("Press Ctrl+{0} to login as {1}", (char) credentials.getHotKey(), credentials
-                        .getUserType().toString()));
-                touchAnchor.getElement().getStyle().setProperty("textDecoration", "none");
-                touchAnchor.getElement().getStyle().setDisplay(Display.BLOCK);
-                touchAnchor.addClickHandler(new ClickHandler() {
-
-                    private final int hotKey = credentials.getHotKey();
-
-                    @Override
-                    public void onClick(ClickEvent event) {
-                        devCredentialsSelected(hotKey);
-                    }
-
-                });
-                devLoginAnchorsPanel.add(touchAnchor);
-            }
-        }
-
-        protected abstract void onDevCredentialsSelected(String userId, String password);
-
-        private boolean devCredentialsSelected(int hotKey) {
-            if (prevDevKey != hotKey) {
-                devCount = 0;
-            }
-            prevDevKey = hotKey;
-            for (DevLoginCredentials credentials : credentialsSet) {
-                if (hotKey == credentials.getHotKey()) {
-                    devCount = (devCount % credentials.getUserType().getDefaultMax()) + 1;
-                    onDevCredentialsSelected(credentials.getUserType().getEmail(devCount), credentials.getUserType().getEmail(devCount));
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
-
     private LandingView.Presenter presenter;
 
-    private LoginForm loginForm;
+    private final LoginForm loginForm;
 
-    private Button loginButton;
+    private final LoginButton loginButton;
 
     private DevLoginPanel devLoginPanel;
 
-    private Button signUpButton;
+    private final Button signUpButton;
 
-    private Anchor termsAndConditionsAnchor;
+    private final Anchor termsAndConditionsAnchor;
 
     public LandingViewImpl() {
 
-        FlowPanel viewPanel = new FlowPanel();
-        viewPanel.setStyleName(LandingPagesTheme.StyleName.LandingPage.name());
+        setStyleName(LandingPagesTheme.StyleName.LandingPage.name());
 
-        // attach handler to invoke login via ENTER key
-        viewPanel.addAttachHandler(new Handler() {
+        add(new HTML(i18n.tr("Welcome.")));
+        add(new HTML(i18n.tr("Please Login")));
 
-            private HandlerRegistration handlerRegistration;
+        loginForm = new LoginForm(this);
+        loginForm.initContent();
+        add(loginForm);
 
+        HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
+        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
+        termsAndConditionsAnchor.setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
+        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
             @Override
-            public void onAttachOrDetach(AttachEvent event) {
-                if (event.isAttached()) {
-                    handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
-                        @Override
-                        public void onPreviewNativeEvent(NativePreviewEvent event) {
-                            if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
-                                onLogin();
-                            }
-                        }
-                    });
-                } else {
-                    handlerRegistration.removeHandler();
-                }
+            public void onClick(ClickEvent event) {
+                presenter.showVistaTerms();
+                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
+        });
+        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
+        add(loginTermsLinkPanel);
 
+        loginButton = new LoginButton();
+        SimplePanel loginButtonHolder = new SimplePanel();
+        loginButtonHolder.setWidget(loginButton);
+
+        add(loginButtonHolder);
+
+        SimplePanel resetPasswordAnchorHolder = new SimplePanel();
+        resetPasswordAnchorHolder.setWidth("100%");
+        resetPasswordAnchorHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        Anchor resetPassword = new Anchor(i18n.tr("forgot your password?"));
+        resetPassword.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                onResetPassword();
+            }
+        });
+        resetPasswordAnchorHolder.add(resetPassword);
+        add(resetPasswordAnchorHolder);
+
+        add(devLoginPanel = new DevLoginPanel() {
+            @Override
+            protected void onDevCredentialsSelected(String userId, String password) {
+                loginForm.get(loginForm.proto().email()).setValue(userId);
+                loginForm.get(loginForm.proto().password()).setValue(password);
+            }
         });
 
-        bindLoginWidgets(viewPanel);
-        bindSingupWidgets(viewPanel);
+        add(new HTML(i18n.tr("First Time.")));
+        add(new HTML(i18n.tr("Get Started")));
 
-        initWidget(viewPanel);
+        FlowPanel signUpGreetingPanel = new FlowPanel();
+
+        add(signUpGreetingPanel);
+
+        signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
+            @Override
+            public void execute() {
+                LandingViewImpl.this.onSignUp();
+            }
+        });
+
+        SimplePanel signUpButtonHolder = new SimplePanel();
+        signUpButtonHolder.setWidget(signUpButton);
+        add(signUpButtonHolder);
+
     }
 
     @Override
@@ -233,81 +175,6 @@ public class LandingViewImpl extends Composite implements LandingView {
         presenter.gotoResetPassword();
     }
 
-    private void bindLoginWidgets(FlowPanel sideLayout) {
-        sideLayout.add(new HTML(i18n.tr("Welcome.")));
-        sideLayout.add(new HTML(i18n.tr("Please Login")));
-
-        loginForm = new LoginForm(this);
-        loginForm.initContent();
-        sideLayout.add(loginForm);
-
-        HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
-        termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
-        termsAndConditionsAnchor.setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
-        termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                presenter.showVistaTerms();
-                DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
-            }
-        });
-        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
-        sideLayout.add(loginTermsLinkPanel);
-
-        loginButton = new Button(i18n.tr("LOGIN"), new Command() {
-            @Override
-            public void execute() {
-                onLogin();
-            }
-
-        });
-        SimplePanel loginButtonHolder = new SimplePanel();
-        loginButtonHolder.setWidget(loginButton);
-
-        sideLayout.add(loginButtonHolder);
-
-        SimplePanel resetPasswordAnchorHolder = new SimplePanel();
-        resetPasswordAnchorHolder.setWidth("100%");
-        resetPasswordAnchorHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        Anchor resetPassword = new Anchor(i18n.tr("forgot your password?"));
-        resetPassword.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                onResetPassword();
-            }
-        });
-        resetPasswordAnchorHolder.add(resetPassword);
-        sideLayout.add(resetPasswordAnchorHolder);
-
-        sideLayout.add(devLoginPanel = new DevLoginPanel() {
-            @Override
-            protected void onDevCredentialsSelected(String userId, String password) {
-                loginForm.get(loginForm.proto().email()).setValue(userId);
-                loginForm.get(loginForm.proto().password()).setValue(password);
-            }
-        });
-    }
-
-    private void bindSingupWidgets(FlowPanel sideLayout) {
-        sideLayout.add(new HTML(i18n.tr("First Time.")));
-        sideLayout.add(new HTML(i18n.tr("Get Started")));
-
-        FlowPanel signUpGreetingPanel = new FlowPanel();
-
-        sideLayout.add(signUpGreetingPanel);
-
-        signUpButton = new Button(i18n.tr("SIGN UP"), new Command() {
-            @Override
-            public void execute() {
-                LandingViewImpl.this.onSignUp();
-            }
-        });
-
-        SimplePanel signUpButtonHolder = new SimplePanel();
-        signUpButtonHolder.setWidget(signUpButton);
-        sideLayout.add(signUpButtonHolder);
-    }
-
     @Override
     public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
         if (devCredientials == null) {
@@ -320,4 +187,41 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
     }
 
+    class LoginButton extends Button {
+
+        public LoginButton() {
+            super(i18n.tr("LOGIN"), new Command() {
+                @Override
+                public void execute() {
+                    onLogin();
+                }
+            });
+
+            // attach handler to invoke login via ENTER key
+            addAttachHandler(new Handler() {
+
+                private HandlerRegistration handlerRegistration;
+
+                @Override
+                public void onAttachOrDetach(AttachEvent event) {
+                    if (event.isAttached()) {
+                        handlerRegistration = Event.addNativePreviewHandler(new NativePreviewHandler() {
+                            @Override
+                            public void onPreviewNativeEvent(NativePreviewEvent event) {
+                                if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
+                                    if (!Dialog.isDialogOpen()) {
+                                        LoginButton.this.click();
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        handlerRegistration.removeHandler();
+                    }
+                }
+
+            });
+        }
+
+    }
 }
