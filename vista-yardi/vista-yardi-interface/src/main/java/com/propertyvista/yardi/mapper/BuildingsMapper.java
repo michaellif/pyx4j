@@ -30,6 +30,9 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.Province;
+import com.propertyvista.server.common.util.CanadianStreetAddressParser;
+import com.propertyvista.server.common.util.StreetAddressParser;
+import com.propertyvista.server.common.util.StreetAddressParser.StreetAddress;
 
 /**
  * Maps buildings information from YARDI System to domain entities.
@@ -60,33 +63,28 @@ public class BuildingsMapper {
 
         // address
         Address addressImported = propertyID.getAddress().get(0);
-        String street = StringUtils.isNotEmpty(addressImported.getAddress1()) ? addressImported.getAddress1() : StringUtils.EMPTY;
 
-        String streetName = street;
-        String streetNumber = StringUtils.EMPTY;
-        StreetType streetType = StreetType.other;
-
-        String[] streetTokens = street.split("\\s+", 2);
-        if (streetTokens.length == 2) {
-            streetNumber = streetTokens[0];
-            streetName = streetTokens[1];
-
-            //extract street type information
-            String[] tkns = streetName.split("\\s+");
-            if (tkns.length > 1) {
-                String type = tkns[tkns.length - 1];
-                streetType = getStreetType(type);
-                if (streetType != StreetType.other) {
-                    streetName = StringUtils.substringBeforeLast(streetName, type).trim();
-                }
+        StreetAddress streetAddress = null;
+        try {
+            if (StringUtils.isEmpty(addressImported.getAddress1())) {
+                throw new IllegalArgumentException("imported address for property '" + propertyID.getIdentification().getPrimaryID()
+                        + "' has no street address");
             }
+
+            StreetAddressParser streetAddressParser = null;
+            // TODO instantiate address parser according to the building country
+            streetAddressParser = new CanadianStreetAddressParser();
+            streetAddress = streetAddressParser.parse(addressImported.getAddress1(), null);
+        } catch (Throwable e) {
+            log.warn("failed to parse street address for property '" + propertyID.getIdentification().getPrimaryID() + "'", e);
+            streetAddress = new StreetAddress(null, StringUtils.EMPTY, StringUtils.EMPTY, StreetType.other, null);
         }
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
 
-        address.streetNumber().setValue(streetNumber);
-        address.streetName().setValue(streetName);
-        address.streetType().setValue(streetType);
+        address.streetNumber().setValue(streetAddress.streetNumber);
+        address.streetName().setValue(streetAddress.streetName);
+        address.streetType().setValue(streetAddress.streetType);
         address.city().setValue(addressImported.getCity());
 
         address.province().code().setValue(addressImported.getState());
