@@ -208,7 +208,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             credentialsOk = true;
         } finally {
             if (!credentialsOk) {
-                ServerSideFactory.create(AuditFacade.class).loginFailed(user);
+                ServerSideFactory.create(AuditFacade.class).loginFailed(getVistaApplication(), user);
             }
         }
 
@@ -230,7 +230,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
 
         String sessionToken = Lifecycle.beginSession(visit, behaviors);
         VistaContext.setCurrentUser(user);
-        ServerSideFactory.create(AuditFacade.class).login();
+        ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
         callback.onSuccess(createAuthenticationResponse(sessionToken));
     }
 
@@ -285,7 +285,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             credentialsOk = true;
         } finally {
             if (!credentialsOk) {
-                ServerSideFactory.create(AuditFacade.class).loginFailed(user);
+                ServerSideFactory.create(AuditFacade.class).loginFailed(getVistaApplication(), user);
             }
         }
 
@@ -302,7 +302,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             visit.setEmail(user.email().getValue());
             String token = Lifecycle.beginSession(visit, behaviors);
             VistaContext.setCurrentUser(user);
-            ServerSideFactory.create(AuditFacade.class).login();
+            ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
             return token;
         } else {
             Set<Behavior> behaviors = new HashSet<Behavior>();
@@ -375,7 +375,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
         String token = Lifecycle.beginSession(visit, behaviors);
         VistaContext.setCurrentUser(user);
         try {
-            ServerSideFactory.create(AuditFacade.class).login();
+            ServerSideFactory.create(AuditFacade.class).login(getVistaApplication());
         } catch (DatastoreReadOnlyRuntimeException readOnly) {
             if (honorSystemState()) {
                 throw readOnly;
@@ -387,6 +387,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
     @Override
     @IgnoreSessionToken
     public final void logout(AsyncCallback<AuthenticationResponse> callback) {
+        ServerSideFactory.create(AuditFacade.class).logout(getVistaApplication());
         Lifecycle.endSession();
         callback.onSuccess(createAuthenticationResponse(null));
     }

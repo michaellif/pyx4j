@@ -23,6 +23,10 @@ public enum AuditRecordEventType {
 
     LoginFailed,
 
+    Logout,
+
+    SessionExpiration,
+
     CredentialUpdate,
 
     PermitionsUpdate,

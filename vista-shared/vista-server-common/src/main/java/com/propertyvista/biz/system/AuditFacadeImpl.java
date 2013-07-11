@@ -15,49 +15,64 @@ package com.propertyvista.biz.system;
 
 import java.util.concurrent.Callable;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.entity.server.ConnectionTarget;
+import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.TransactionScopeOption;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.common.security.VistaAntiBot;
+import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class AuditFacadeImpl implements AuditFacade {
 
     @Override
-    public void login() {
+    public void login(VistaApplication application) {
         record(AuditRecordEventType.Login, null, null);
-        Persistence.service().commit();
     }
 
     @Override
-    public void loginFailed(final AbstractUser user) {
-        final String namespace = NamespaceManager.getNamespace();
-        final String ip = getRequestRemoteAddr();
-        TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
-            @Override
-            public Void call() {
-                AuditRecord record = EntityFactory.create(AuditRecord.class);
-                record.namespace().setValue(namespace);
-                record.remoteAddr().setValue(ip);
-                record.event().setValue(AuditRecordEventType.LoginFailed);
-                record.user().setValue(user.getPrimaryKey());
-                record.worldTime().setValue(WorldDateManager.getWorldTime());
-                Persistence.service().persist(record);
-                Persistence.service().commit();
-                return null;
-            }
-        });
+    public void logout(VistaApplication application) {
+        record(AuditRecordEventType.Logout, null, null);
+    }
+
+    @Override
+    public void sessionExpiration(String namespace, VistaApplication application, AbstractUser user, String sessionId) {
+        AuditRecord record = EntityFactory.create(AuditRecord.class);
+        record.event().setValue(AuditRecordEventType.SessionExpiration);
+        record.namespace().setValue(namespace);
+        record.app().setValue(application);
+        record.sessionId().setValue(sessionId);
+        setPrincipalUser(record, user);
+        record(record);
+    }
+
+    @Override
+    public void loginFailed(VistaApplication application, AbstractUser user) {
+        AuditRecord record = EntityFactory.create(AuditRecord.class);
+        record.event().setValue(AuditRecordEventType.LoginFailed);
+        record.namespace().setValue(NamespaceManager.getNamespace());
+        record.app().setValue(application);
+        record.remoteAddr().setValue(getRequestRemoteAddr());
+        setPrincipalUser(record, user);
+        record(record);
     }
 
     @Override
@@ -87,31 +102,55 @@ public class AuditFacadeImpl implements AuditFacade {
 
     @Override
     public void record(final AuditRecordEventType eventType, final IEntity entity, String format, Object... args) {
-        final String namespace = NamespaceManager.getNamespace();
-        final String ip = getRequestRemoteAddr();
-        final String details = (format == null) ? null : SimpleMessageFormat.format(format, args);
-        TaskRunner.runAutonomousTransation(VistaNamespace.operationsNamespace, new Callable<Void>() {
+        AuditRecord record = EntityFactory.create(AuditRecord.class);
+        record.namespace().setValue(NamespaceManager.getNamespace());
+        record.remoteAddr().setValue(getRequestRemoteAddr());
+        record.sessionId().setValue(Context.getSessionId());
+        record.event().setValue(eventType);
+        record.details().setValue((format == null) ? null : SimpleMessageFormat.format(format, args));
+        if (entity != null) {
+            record.entityId().setValue(entity.getPrimaryKey());
+            record.entityClass().setValue(entity.getEntityMeta().getEntityClass().getSimpleName());
+        }
+        setPrincipalUser(record, getPrincipal());
+        record.app().setValue(VistaApplication.getVistaApplication(SecurityController.getBehaviors()));
+        record(record);
+    }
+
+    private void setPrincipalUser(AuditRecord record, AbstractUser principal) {
+        if (principal != null) {
+            record.user().setValue(principal.getPrimaryKey());
+            record.userType().setValue(VistaContext.getVistaUserType(principal));
+        }
+    }
+
+    private void record(final AuditRecord record) {
+
+        record.worldTime().setValue(WorldDateManager.getWorldTime());
+
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                AuditRecord record = EntityFactory.create(AuditRecord.class);
-                record.namespace().setValue(namespace);
-                record.remoteAddr().setValue(ip);
-                record.event().setValue(eventType);
-                record.details().setValue(details);
-                if (entity != null) {
-                    record.entityId().setValue(entity.getPrimaryKey());
-                    record.entityClass().setValue(entity.getEntityMeta().getEntityClass().getSimpleName());
+                if (!record.namespace().isNull() && !record.namespace().getValue().equals(VistaNamespace.operationsNamespace)) {
+                    NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                    criteria.add(PropertyCriterion.eq(criteria.proto().namespace(), record.namespace()));
+                    record.pmc().set(Persistence.service().retrieve(criteria));
                 }
-                record.user().setValue(getPrincipalPrimaryKey());
-                record.worldTime().setValue(WorldDateManager.getWorldTime());
-                Persistence.service().persist(record);
-                Persistence.service().commit();
+
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.Web).execute(new Executable<Void, RuntimeException>() {
+                    @Override
+                    public Void execute() throws RuntimeException {
+                        Persistence.service().persist(record);
+                        return null;
+                    }
+                });
                 return null;
             }
         });
     }
 
-    private Key getPrincipalPrimaryKey() {
+    private AbstractUser getPrincipal() {
         Visit visit = Context.getVisit();
         if (visit == null) {
             return null;
@@ -120,7 +159,7 @@ public class AuditFacadeImpl implements AuditFacade {
             if (userVisit == null) {
                 return null;
             } else {
-                return userVisit.getPrincipalPrimaryKey();
+                return VistaContext.getUserFromVisit(visit);
             }
         }
     }

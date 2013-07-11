@@ -25,9 +25,10 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
-import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl<AuditRecord, AuditRecordDTO> implements CrmAuditRecordsListerService {
@@ -41,7 +42,7 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
         bind(dtoProto.remoteAddr(), dboProto.remoteAddr());
         bind(dtoProto.when(), dboProto.created());
         bind(dtoProto.event(), dboProto.event());
-        bind(dtoProto.app(), dboProto.app());
+        bind(dtoProto.application(), dboProto.app());
         bind(dtoProto.details(), dboProto.details());
     }
 
@@ -64,7 +65,7 @@ public class CrmAuditRecordsListerServiceImpl extends AbstractListServiceDtoImpl
     @Override
     protected void enhanceListRetrieved(AuditRecord entity, AuditRecordDTO dto) {
         if (!entity.user().isNull()) {
-            CrmUser user = Persistence.service().retrieve(CrmUser.class, entity.user().getValue());
+            AbstractUser user = Persistence.service().retrieve(VistaContext.getVistaUserClass(entity.userType().getValue()), entity.user().getValue());
             if (user != null) {
                 dto.userName().setValue(user.getStringView());
             }

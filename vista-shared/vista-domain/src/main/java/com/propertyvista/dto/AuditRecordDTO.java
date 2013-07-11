@@ -38,7 +38,7 @@ public interface AuditRecordDTO extends IEntity {
 
     IPrimitive<AuditRecordEventType> event();
 
-    IPrimitive<VistaApplication> app();
+    IPrimitive<VistaApplication> application();
 
     IPrimitive<String> targetEntity();
 

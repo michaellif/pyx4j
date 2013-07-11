@@ -27,7 +27,8 @@ public class CrmAuditRecordsLister extends AbstractLister<AuditRecordDTO> {
     public CrmAuditRecordsLister() {
         super(AuditRecordDTO.class);
         setColumnDescriptors(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto().when()).build(),              
+                new MemberColumnDescriptor.Builder(proto().when()).build(),
+                new MemberColumnDescriptor.Builder(proto().application()).build(),
                 new MemberColumnDescriptor.Builder(proto().userName()).build(),
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
                 new MemberColumnDescriptor.Builder(proto().event()).build(),

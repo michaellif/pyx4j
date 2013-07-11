@@ -17,12 +17,17 @@ import com.pyx4j.entity.shared.IEntity;
 
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.VistaApplication;
 
 public interface AuditFacade {
 
-    public void login();
+    public void login(VistaApplication application);
 
-    public void loginFailed(AbstractUser user);
+    public void logout(VistaApplication application);
+
+    public void loginFailed(VistaApplication application, AbstractUser user);
+
+    public void sessionExpiration(String namespace, VistaApplication application, AbstractUser user, String sessionId);
 
     public void credentialsUpdated(AbstractUser user);
 

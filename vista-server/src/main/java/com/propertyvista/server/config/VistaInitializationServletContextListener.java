@@ -24,8 +24,10 @@ import com.pyx4j.quartz.SchedulerHelper;
 import com.pyx4j.server.contexts.DevSession;
 import com.pyx4j.server.contexts.Lifecycle;
 
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.operations.server.proc.PmcProcessMonitor;
 import com.propertyvista.sshd.InterfaceSSHDServer;
 
@@ -36,9 +38,9 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
         super.contextInitialized(sce);
         try {
             Persistence.service();
+            ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System Start");
 
             ServerSideFactory.create(PasswordEncryptorFacade.class).activateDecryption();
-
             SchedulerHelper.init();
             SchedulerHelper.setActive(!VistaDeployment.isVistaStaging());
             InterfaceSSHDServer.init();
@@ -53,6 +55,7 @@ public class VistaInitializationServletContextListener extends com.pyx4j.entity.
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.System, null, "System Shutdown");
         try {
             InterfaceSSHDServer.shutdown();
             PmcProcessMonitor.shutdown();

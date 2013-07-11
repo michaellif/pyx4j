@@ -17,6 +17,7 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
@@ -28,8 +29,10 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.VistaApplication;
+import com.propertyvista.domain.security.common.VistaUserType;
 
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -39,13 +42,20 @@ public interface AuditRecord extends IEntity {
     @Indexed(group = { "f,2" })
     IPrimitive<String> namespace();
 
+    Pmc pmc();
+
     @Indexed(group = { "f,1" })
-    @MemberColumn(name = "usr")
     @Caption(name = "Modified by")
+    @MemberColumn(name = "usr")
+    @Detached
     IPrimitive<Key> user();
+
+    IPrimitive<VistaUserType> userType();
 
     @Length(39)
     IPrimitive<String> remoteAddr();
+
+    IPrimitive<String> sessionId();
 
     @Caption(name = "When")
     @Format("MM/dd/yyyy HH:mm")

@@ -30,9 +30,11 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO>
                 new MemberColumnDescriptor.Builder(proto().when()).build(),
                 new MemberColumnDescriptor.Builder(proto().worldTime()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
+                new MemberColumnDescriptor.Builder(proto().application()).build(),
                 new MemberColumnDescriptor.Builder(proto().userKey()).build(),
                 new MemberColumnDescriptor.Builder(proto().userName()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().remoteAddr()).build(),
+                new MemberColumnDescriptor.Builder(proto().sessionId()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().event()).build(),
                 new MemberColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(),
                 new MemberColumnDescriptor.Builder(proto().details()).build()                

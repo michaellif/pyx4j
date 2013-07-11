@@ -24,13 +24,13 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.server.common.security.VistaContext;
 
 public class CrmLoginAttemptsListerServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, LoginAttemptDTO> implements CrmLoginAttemptsListerService {

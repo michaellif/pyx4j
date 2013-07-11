@@ -22,7 +22,11 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
 
+import com.propertyvista.domain.security.CrmUser;
+import com.propertyvista.domain.security.CustomerUser;
+import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.security.common.VistaUserType;
 
 public class VistaContext {
 
@@ -45,6 +49,14 @@ public class VistaContext {
         Context.getVisit().setAttribute(userAttr, abstractUser);
     }
 
+    public static AbstractUser getUserFromVisit(Visit visit) {
+        if (visit != null) {
+            return (AbstractUser) visit.getAttribute(userAttr);
+        } else {
+            return null;
+        }
+    }
+
     public static AbstractUser getCurrentUser() {
         Visit v = Context.getVisit();
         if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
@@ -52,6 +64,31 @@ public class VistaContext {
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
         }
         return (AbstractUser) v.getAttribute(userAttr);
+    }
+
+    public static Class<? extends AbstractUser> getVistaUserClass(VistaUserType userType) {
+        switch (userType) {
+        case crm:
+            return CrmUser.class;
+        case customer:
+            return CustomerUser.class;
+        case operations:
+            return OperationsUser.class;
+        default:
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public static VistaUserType getVistaUserType(AbstractUser abstractUser) {
+        if (abstractUser.isAssignableFrom(CrmUser.class)) {
+            return VistaUserType.crm;
+        } else if (abstractUser.isAssignableFrom(CustomerUser.class)) {
+            return VistaUserType.customer;
+        } else if (abstractUser.isAssignableFrom(OperationsUser.class)) {
+            return VistaUserType.operations;
+        } else {
+            throw new IllegalArgumentException();
+        }
     }
 
 }

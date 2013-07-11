@@ -35,6 +35,8 @@ public interface AuditRecordOperationsDTO extends IEntity {
 
     IPrimitive<String> remoteAddr();
 
+    IPrimitive<String> sessionId();
+
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> when();
 
@@ -45,7 +47,7 @@ public interface AuditRecordOperationsDTO extends IEntity {
 
     IPrimitive<String> pmc();
 
-    IPrimitive<VistaApplication> app();
+    IPrimitive<VistaApplication> application();
 
     IPrimitive<String> targetEntity();
 
