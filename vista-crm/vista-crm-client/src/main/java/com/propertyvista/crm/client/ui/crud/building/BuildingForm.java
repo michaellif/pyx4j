@@ -91,6 +91,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         setTabEnabled(tab, !isEditable());
 
         FormFlexPanel flexPanel = new FormFlexPanel();
+        flexPanel.setWidth("100%");
         int row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
         flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
@@ -103,6 +104,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         setTabEnabled(tab, !isEditable());
 
         flexPanel = new FormFlexPanel();
+        flexPanel.setWidth("100%");
         row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
         flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());

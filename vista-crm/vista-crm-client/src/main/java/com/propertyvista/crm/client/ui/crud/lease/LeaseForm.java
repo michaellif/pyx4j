@@ -64,7 +64,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
 
         CViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()
                 : new TransactionHistoryViewer();
-        financialTransactionHistory.setWidget(++row, 0, inject(proto().transactionHistory(), transactionHistoryViewer));
+        financialTransactionHistory.setWidget(++row, 0, 2, inject(proto().transactionHistory(), transactionHistoryViewer));
 
         return financialTransactionHistory;
     }
