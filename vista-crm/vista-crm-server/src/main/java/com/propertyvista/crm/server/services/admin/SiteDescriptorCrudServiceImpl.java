@@ -15,8 +15,10 @@ package com.propertyvista.crm.server.services.admin;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -45,6 +47,7 @@ import com.propertyvista.domain.site.gadgets.CustomGadgetContent;
 import com.propertyvista.domain.site.gadgets.NewsGadgetContent;
 import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.dto.SiteDescriptorDTO;
+import com.propertyvista.server.domain.CustomSkinResourceBlob;
 import com.propertyvista.server.proxy.HttpsProxyInjection;
 
 public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
@@ -74,16 +77,10 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
 
     @Override
     protected void persist(final SiteDescriptor dbo, final SiteDescriptorDTO in) {
-        // generate proxy white list
         if (in.residentPortalSettings().useCustomHtml().isBooleanTrue()) {
-            in.residentPortalSettings().proxyWhitelist().clear();
-            for (HtmlContent customHtml : in.residentPortalSettings().customHtml()) {
-                if (customHtml.isEmpty() || customHtml.html().isNull()) {
-                    continue;
-                }
-                in.residentPortalSettings().proxyWhitelist().addAll(HttpsProxyInjection.generateWhitelist(customHtml.html().getValue()));
-            }
+            updateCustomSkin(in);
         }
+
         // keep the sort order
         for (int idx = 0; idx < in.locales().size(); idx++) {
             in.locales().get(idx).displayOrder().setValue(idx);
@@ -195,5 +192,36 @@ public class SiteDescriptorCrudServiceImpl extends AbstractCrudServiceDtoImpl<Si
             }
         }
         Persistence.service().persist(site);
+    }
+
+    private void updateCustomSkin(final SiteDescriptorDTO in) {
+        // get old skins
+        SiteDescriptor site = Persistence.service().retrieve(EntityQueryCriteria.create(SiteDescriptor.class));
+        Map<AvailableLocale, String> oldSkins = new HashMap<AvailableLocale, String>();
+        if (site.residentPortalSettings().useCustomHtml().isBooleanTrue()) {
+            for (HtmlContent customHtml : site.residentPortalSettings().customHtml()) {
+                oldSkins.put(customHtml.locale(), customHtml.html().getValue());
+            }
+        }
+
+        boolean skinChanged = false;
+        List<String> whiteList = new ArrayList<String>();
+        for (HtmlContent customHtml : in.residentPortalSettings().customHtml()) {
+            if (customHtml.isEmpty() || customHtml.html().isNull()) {
+                continue;
+            }
+            if (!customHtml.html().getValue().equals(oldSkins.get(customHtml.locale()))) {
+                skinChanged = true;
+                // generate proxy white list
+                whiteList.addAll(HttpsProxyInjection.generateWhitelist(customHtml.html().getValue()));
+            }
+        }
+        if (skinChanged) {
+            // update white list
+            in.residentPortalSettings().proxyWhitelist().clear();
+            in.residentPortalSettings().proxyWhitelist().addAll(whiteList);
+            // clear cached resources
+            Persistence.service().delete(EntityQueryCriteria.create(CustomSkinResourceBlob.class));
+        }
     }
 }
