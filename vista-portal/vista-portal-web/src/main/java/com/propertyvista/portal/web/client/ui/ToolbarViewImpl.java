@@ -15,6 +15,7 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Command;
@@ -23,7 +24,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
-import com.google.gwt.user.client.ui.RequiresResize;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
@@ -41,7 +41,7 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresResize {
+public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private static final I18n i18n = I18n.get(ToolbarViewImpl.class);
 
@@ -64,6 +64,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
     private final Button languageButton;
 
     private final Toolbar rightToolbar;
+
+    private final Image brandImage;
 
     private final FlowPanel brandHolder;
 
@@ -153,9 +155,8 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
         leftToolbar.getElement().getStyle().setPosition(Position.ABSOLUTE);
         leftToolbar.getElement().getStyle().setProperty("left", "0");
 
-        Image brandImage = new Image(PortalImages.INSTANCE.myCommunityHeaderLogo());
+        brandImage = new Image(PortalImages.INSTANCE.myCommunityHeaderLogo());
         brandImage.getElement().getStyle().setFloat(Float.LEFT);
-        brandImage.getElement().getStyle().setProperty("margin", "5px 10px 0 10px");
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
 
         brandLabel = new HTML(
@@ -165,7 +166,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
 
         brandHolder = new FlowPanel();
         brandHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
-        brandHolder.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        brandHolder.getElement().getStyle().setDisplay(Display.BLOCK);
 
         brandHolder.add(brandImage);
         brandHolder.add(brandLabel);
@@ -236,13 +237,15 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
             sideMenuButton.setVisible(loggedIn && true);
             tenantButton.setVisible(false);
             languageButton.setVisible(false);
-            brandHolder.getElement().getStyle().setProperty("margin", "0 auto");
+            brandHolder.getElement().getStyle().setProperty("margin", "0 50%");
+            brandImage.getElement().getStyle().setProperty("margin", "5px -25px 0");
             break;
         default:
             sideMenuButton.setVisible(false);
             tenantButton.setVisible(loggedIn);
             languageButton.setVisible(true);
             brandHolder.getElement().getStyle().setProperty("margin", "0");
+            brandImage.getElement().getStyle().setProperty("margin", "5px 10px 0");
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
@@ -260,17 +263,4 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView, RequiresR
         }
     }
 
-    @Override
-    public void onResize() {
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-            brandHolder.getElement().getStyle().setProperty("left", ((getOffsetWidth() - brandHolder.getOffsetWidth()) / 2) + "px");
-            break;
-        default:
-            brandHolder.getElement().getStyle().setProperty("left", "0");
-            break;
-        }
-
-    }
 }
