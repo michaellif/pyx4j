@@ -97,7 +97,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
-        get(proto().isSecurityQuestionSet()).setViewable(true);
+        get(proto().isSecurityQuestionSet()).setEditable(false);
         get(proto().enabled()).setVisible(isManager);
         get(proto().requiredPasswordChangeOnNextLogIn()).setVisible(isManager);
 
@@ -105,14 +105,11 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
 
-        get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).setViewable(!permitPortfoliosEditing);
-        get(proto().buildingAccess()).setViewable(!permitPortfoliosEditing);
+        get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
         get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
 
-        get(proto().portfolios()).setViewable(!permitPortfoliosEditing);
         get(proto().portfolios()).setEditable(permitPortfoliosEditing);
 
-        get(proto().employees()).setViewable(!isManager);
         get(proto().employees()).setEditable(isManager);
 
         get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
@@ -123,23 +120,21 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employeeId()), 10).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().title()), 20).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().title()), 20).build());
 
-        main.setBR(++row, 0, 1);
-
-        main.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Employee"))));
+        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Employee"))));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
-        main.setBR(++row, 0, 1);
+        main.setBR(++row, 0, 2);
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 25).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().email()), 22).build());
         get(proto().email()).setMandatory(true);
 
-        main.setBR(++row, 0, 1);
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 50).build());
+        main.setBR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         return main;
     }
@@ -156,20 +151,20 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         FormFlexPanel content = new FormFlexPanel(title);
 
         int row = -1;
-        content.setH1(++row, 0, 1, i18n.tr("Information"));
+        content.setH1(++row, 0, 2, i18n.tr("Information"));
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().password()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().passwordConfirm()), 10).build());
-        content.setBR(++row, 0, 1);
+        content.setBR(++row, 0, 2);
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enabled()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn()), 5).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().requiredPasswordChangeOnNextLogIn()), 5).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isSecurityQuestionSet()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().credentialUpdated()), 15).build());
 
-        content.setH1(++row, 0, 1, i18n.tr("Roles"));
-        content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));
+        content.setH1(++row, 0, 2, i18n.tr("Roles"));
+        content.setWidget(++row, 0, 2, inject(proto().roles(), new CrmRoleFolder(isEditable())));
 
-        content.setH1(++row, 0, 1, i18n.tr("Buildings Access"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), 5).labelWidth(30).build());
+        content.setH1(++row, 0, 2, i18n.tr("Buildings Access"));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), true).build());
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -178,16 +173,16 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         });
 
         int baRow = -1;
-        buildingsAccessPanel.setH3(++baRow, 0, 1, i18n.tr("Buildings"));
-        buildingsAccessPanel.setWidget(++baRow, 0, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
+        buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Buildings"));
+        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
 
-        buildingsAccessPanel.setH3(++baRow, 0, 1, i18n.tr("Portfolios"));
-        buildingsAccessPanel.setWidget(++baRow, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
+        buildingsAccessPanel.setH3(++baRow, 0, 2, i18n.tr("Portfolios"));
+        buildingsAccessPanel.setWidget(++baRow, 0, 2, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
 
-        content.setWidget(++row, 0, buildingsAccessPanel);
+        content.setWidget(++row, 0, 2, buildingsAccessPanel);
 
-        content.setH1(++row, 0, 1, i18n.tr("Subordinates"));
-        content.setWidget(++row, 0, inject(proto().employees(), new EmployeeFolder(isEditable(), new ParentEmployeeGetter() {
+        content.setH1(++row, 0, 2, i18n.tr("Subordinates"));
+        content.setWidget(++row, 0, 2, inject(proto().employees(), new EmployeeFolder(isEditable(), new ParentEmployeeGetter() {
             @Override
             public Key getParentId() {
                 return (getValue() != null ? getValue().getPrimaryKey() : null);

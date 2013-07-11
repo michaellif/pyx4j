@@ -33,12 +33,13 @@ public class PortfolioForm extends CrmEntityForm<Portfolio> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 40).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), 20, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
-        content.setH1(++row, 0, 1, i18n.tr("Assigned Buildings"));
-        content.setWidget(++row, 0, inject(proto().buildings(), new BuildingFolder(isEditable())));
+        content.setH1(++row, 0, 2, i18n.tr("Assigned Buildings"));
+        content.setWidget(++row, 0, 2, inject(proto().buildings(), new BuildingFolder(isEditable())));
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 }

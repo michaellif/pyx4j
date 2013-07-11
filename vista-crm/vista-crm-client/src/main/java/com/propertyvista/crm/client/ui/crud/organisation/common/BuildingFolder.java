@@ -88,11 +88,7 @@ public class BuildingFolder extends VistaTableFolder<Building> {
 
     @Override
     protected IFolderDecorator<Building> createFolderDecorator() {
-        return new VistaTableFolderDecorator<Building>(this, this.isEditable()) {
-            {
-                setShowHeader(false);
-            }
-        };
+        return new VistaTableFolderDecorator<Building>(this, this.isEditable());
     }
 
     @Override
