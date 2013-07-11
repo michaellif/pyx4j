@@ -103,6 +103,11 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(dbo);
         }
 
+        if (!in.restrictAccessToSelectedBuildingsAndPortfolios().getValue(false)) {
+            dbo.buildingAccess().clear();
+            dbo.portfolios().clear();
+        }
+
         super.persist(dbo, in);
 
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization)) {

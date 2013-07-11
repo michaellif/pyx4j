@@ -142,13 +142,17 @@ public class PortfolioFolder extends VistaTableFolder<Portfolio> {
             super.setFilters(filters);
 
             if (employeeForm != null) {
-                List<Portfolio> portfolioAccess = employeeForm.getPortfolioAccess();
-                if (portfolioAccess != null && !portfolioAccess.isEmpty()) {
-                    List<Key> portfolioAccessKeys = new ArrayList<Key>(portfolioAccess.size());
-                    for (Portfolio entity : portfolioAccess) {
-                        portfolioAccessKeys.add(entity.getPrimaryKey());
+                if (employeeForm.isRestrictAccessSet()) {
+                    List<Portfolio> portfolioAccess = employeeForm.getPortfolioAccess();
+                    if (portfolioAccess != null && !portfolioAccess.isEmpty()) {
+                        List<Key> portfolioAccessKeys = new ArrayList<Key>(portfolioAccess.size());
+                        for (Portfolio entity : portfolioAccess) {
+                            portfolioAccessKeys.add(entity.getPrimaryKey());
+                        }
+                        addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Portfolio.class).id(), portfolioAccessKeys));
+                    } else {
+                        addFilter(PropertyCriterion.isNull(EntityFactory.getEntityPrototype(Portfolio.class).id()));
                     }
-                    addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Portfolio.class).id(), portfolioAccessKeys));
                 }
             }
         }

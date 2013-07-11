@@ -107,9 +107,12 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).setEditable(permitPortfoliosEditing);
         get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
+        get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
 
         get(proto().portfolios()).setEditable(permitPortfoliosEditing);
+        get(proto().portfolios()).setEditable(permitPortfoliosEditing);
 
+        get(proto().employees()).setEditable(isManager);
         get(proto().employees()).setEditable(isManager);
 
         get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
@@ -253,6 +256,10 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
                 return content;
             }
         }
+    }
+
+    public boolean isRestrictAccessSet() {
+        return get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).getValue();
     }
 
     public List<Building> getBuildingAccess() {

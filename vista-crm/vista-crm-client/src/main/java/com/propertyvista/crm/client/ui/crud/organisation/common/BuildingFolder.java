@@ -36,6 +36,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.common.client.ui.decorations.VistaTableFolderDecorator;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeForm;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.property.asset.building.Building;
 
 public class BuildingFolder extends VistaTableFolder<Building> {
@@ -107,13 +108,30 @@ public class BuildingFolder extends VistaTableFolder<Building> {
                 super.setFilters(filters);
 
                 if (employeeForm != null) {
-                    List<Building> buildingAccess = employeeForm.getBuildingAccess();
-                    if (buildingAccess != null && !buildingAccess.isEmpty()) {
-                        List<Key> buildingAccessKeys = new ArrayList<Key>(buildingAccess.size());
-                        for (Building entity : buildingAccess) {
-                            buildingAccessKeys.add(entity.getPrimaryKey());
+                    if (employeeForm.isRestrictAccessSet()) {
+                        List<Key> buildingAccessKeys = new ArrayList<Key>();
+
+                        List<Building> buildingAccess = employeeForm.getBuildingAccess();
+                        if (buildingAccess != null && !buildingAccess.isEmpty()) {
+                            for (Building entity : buildingAccess) {
+                                buildingAccessKeys.add(entity.getPrimaryKey());
+                            }
                         }
-                        addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Building.class).id(), buildingAccessKeys));
+
+                        List<Portfolio> portfolioAccess = employeeForm.getPortfolioAccess();
+                        if (portfolioAccess != null && !portfolioAccess.isEmpty()) {
+                            for (Portfolio portfolio : portfolioAccess) {
+                                for (Building building : portfolio.buildings()) {
+                                    buildingAccessKeys.add(building.getPrimaryKey());
+                                }
+                            }
+                        }
+
+                        if (!buildingAccessKeys.isEmpty()) {
+                            addFilter(PropertyCriterion.in(EntityFactory.getEntityPrototype(Building.class).id(), buildingAccessKeys));
+                        } else {
+                            addFilter(PropertyCriterion.isNull(EntityFactory.getEntityPrototype(Building.class).id()));
+                        }
                     }
                 }
             }
