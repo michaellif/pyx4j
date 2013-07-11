@@ -28,11 +28,10 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
     public DepositLifecycleForm(IForm<DepositLifecycleDTO> view) {
         super(DepositLifecycleDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        FormFlexPanel content = new FormFlexPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().billableItem()), 30).build());
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().deposit().billableItem()), true).build());
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().type()), 12).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().status()), 9).build());
@@ -43,8 +42,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositDate()), 9).build());
         content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().refundDate()), 9).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().deposit().description()), 30).build());
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().deposit().description()), true).build());
 
         content.setBR(++row, 0, 2);
         content.setH2(++row, 0, 2, proto().interestAdjustments().getMeta().getCaption());
@@ -63,5 +61,6 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
         get(proto().currentAmount()).setViewable(true);
 
         selectTab(addTab(content));
+        setTabBarVisible(false);
     }
 }
