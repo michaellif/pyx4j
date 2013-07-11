@@ -42,6 +42,17 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
                 void setText(String text) {
                     PasswordTextBox.super.setText(text);
                 }
+
+                @Override
+                void show(boolean show) {
+                    super.show(show);
+                    if (isShown()) {
+                        getElement().setAttribute("type", "text");
+                    } else {
+                        getElement().setAttribute("type", "password");
+                    }
+
+                }
             };
         }
         watermark.setWatermark(text);

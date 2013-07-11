@@ -81,7 +81,7 @@ public abstract class TextWatermark {
         show(watermark != null && !watermark.isEmpty() && isEmptyText());
     }
 
-    private void show(boolean show) {
+    void show(boolean show) {
         insideShowWatermark = true;
         if (show) {
             if (isEmptyText() || getText().equals(watermark)) {
