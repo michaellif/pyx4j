@@ -84,10 +84,10 @@ public abstract class DefaultEntityFolderTheme extends Theme {
         style = new Style(".", StyleName.EntityFolderTableDecorator);
         style.addProperty("margin-top", "2px");
         style.addProperty("padding", "4px");
+        style.addProperty("width", "80em");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderContent);
-        style.addProperty("background-color", ThemeColor.foreground, 0.05);
         addStyle(style);
 
         style = new Style(".", StyleName.EntityFolderBoxItem);
