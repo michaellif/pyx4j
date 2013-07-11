@@ -17,11 +17,15 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.propertyvista.domain.contact.AddressStructured.StreetDirection;
+import com.propertyvista.domain.contact.AddressStructured.StreetType;
 
 public class CanadianStreetAddressParser implements StreetAddressParser {
 
-    private static final Set<String> streetTypeKeywords = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(//@formatter:off
+    private static final List<String> streetTypeKeywords = Arrays.asList(//@formatter:off
             "ABBEY",
             "ABBEY",
             "ACRES",
@@ -312,9 +316,11 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
             "WOOD",
             "WYND",
             "WYND"
-    )));//@formatter:on 
+    );//@formatter:on 
 
-    private static final Set<String> streetDirectionKeywords = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList(//@formatter:off
+    private static final Set<String> streetTypeSet = Collections.unmodifiableSet(new HashSet<String>(streetTypeKeywords));
+
+    private static final List<String> streetDirectionKeywords = Arrays.asList(//@formatter:off
             "EAST",
             "E",
             "EST",
@@ -347,15 +353,17 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
             "W",
             "OUEST",
             "O"
-    )));//@formatter:on
+    );//@formatter:on
+
+    private static final Set<String> streetDirectionSet = Collections.unmodifiableSet(new HashSet<String>(streetDirectionKeywords));
 
     private enum ParserState {
-        PARSE_STREET_NAME, PARSE_STREET_TYPE, PARSE_STREET_DIRECTION, PARSE_END
+        StreetName, StreetType, StreetDirection, End
     }
 
     @Override
     public StreetAddress parse(String address1, String address2) throws ParseException {
-        String[] addressTokens = address1.trim().split("\\s");
+        String[] addressTokens = address1.trim().replaceAll("\\s+", " ").split(" ");
 
         String streetNumber = addressTokens[0];
         String unitNumber = null;
@@ -373,43 +381,71 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
 
         int tokenIndex = 1;
         StringBuilder streetName = new StringBuilder();
-        String streetDirection = null;
-        String streetType = null;
+        StreetType streetType = null;
+        StreetDirection streetDirection = null;
 
-        ParserState parserState = ParserState.PARSE_STREET_NAME;
+        ParserState parserState = ParserState.StreetName;
 
         while (tokenIndex < addressTokens.length) {
-            String token = addressTokens[tokenIndex].toUpperCase();
+
             switch (parserState) {
-            case PARSE_STREET_NAME:
-                if (streetTypeKeywords.contains(token)) {
-                    parserState = ParserState.PARSE_STREET_TYPE;
-                } else if (streetDirectionKeywords.contains(token)) {
-                    parserState = ParserState.PARSE_STREET_DIRECTION;
+            case StreetName:
+                String normalizedToken = addressTokens[tokenIndex].toUpperCase();
+                if (streetTypeSet.contains(normalizedToken)) {
+                    parserState = ParserState.StreetType;
+                } else if (streetDirectionSet.contains(normalizedToken)) {
+                    parserState = ParserState.StreetDirection;
                 } else {
+                    if (streetName.length() != 0) {
+                        streetName.append(' ');
+                    }
                     streetName.append(addressTokens[tokenIndex]);
                     tokenIndex += 1;
                 }
                 break;
 
-            case PARSE_STREET_TYPE:
-                streetType = addressTokens[tokenIndex];
-                parserState = ParserState.PARSE_STREET_DIRECTION;
+            case StreetType: {
+                String streetTypeCandidate = addressTokens[tokenIndex];
+                int i = streetTypeKeywords.indexOf(streetTypeCandidate.toUpperCase());
+                try {
+                    // (i / 2 * 2) should convert index of abbreviation to index of associated full name of street type
+                    streetType = StreetType.valueOf(streetTypeKeywords.get(i / 2 * 2).toLowerCase());
+                } catch (Throwable e) {
+                    // we don't care
+                }
+
+                if (streetType == null) {
+                    streetName.append(' ').append(streetTypeCandidate);
+                    streetType = StreetType.other;
+                }
+
+                parserState = ParserState.StreetDirection;
                 tokenIndex += 1;
                 break;
+            }
 
-            case PARSE_STREET_DIRECTION:
-                streetDirection = addressTokens[tokenIndex];
+            case StreetDirection: {
+                String streetDirectionCandidate = addressTokens[tokenIndex];
+                int i = streetDirectionKeywords.indexOf(streetDirectionCandidate.toLowerCase());
+                try {
+                    streetDirection = StreetDirection.valueOf(streetDirectionKeywords.get(i / 2 * 2).toLowerCase());
+                } catch (Throwable e) {
+                    throw new ParseException("failed to match street direction `" + streetDirectionCandidate + "` to any known value for address + `"
+                            + address1 + "`", tokenIndex);
+                }
+
                 tokenIndex += 1;
-                parserState = ParserState.PARSE_END;
+                parserState = ParserState.End;
                 break;
+            }
 
-            case PARSE_END:
+            case End:
             default:
                 throw new ParseException("Failed to parse address`" + address1 + "` unrecoginzed token `" + addressTokens[tokenIndex] + "`", tokenIndex);
             }
+
         }
 
-        return new StreetAddress(unitNumber, streetNumber, streetName.toString(), null, null);
+        return new StreetAddress(unitNumber, streetNumber, streetName.toString(), streetType, streetDirection);
     }
 }

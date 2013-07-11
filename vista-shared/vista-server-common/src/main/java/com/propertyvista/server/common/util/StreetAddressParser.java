@@ -30,7 +30,7 @@ public interface StreetAddressParser {
 
         public final StreetDirection streetDirection;
 
-        private final String streetNumber;
+        public final String streetNumber;
 
         StreetAddress(String unitNumber, String streetNumber, String streetName, StreetType streetType, StreetDirection streetDirection) {
             this.unitNumber = unitNumber;
