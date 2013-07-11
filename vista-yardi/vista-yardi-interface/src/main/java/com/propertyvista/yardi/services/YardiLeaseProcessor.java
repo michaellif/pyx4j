@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +32,7 @@ import com.yardi.entity.resident.ChargeDetail;
 import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.Transactions;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -74,7 +76,7 @@ public class YardiLeaseProcessor {
     public Lease findLease(String customerId, String propertyCode) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.eq(criteria.proto().leaseId(), customerId);
-        // currently propertyCode parameter isn't used?..
+        criteria.eq(criteria.proto().unit().building().propertyCode(), propertyCode);
         return Persistence.service().retrieve(criteria);
     }
 
@@ -93,10 +95,19 @@ public class YardiLeaseProcessor {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
+        Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "propertyCode required");
+        String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
+        Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
+
         EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
         criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
-        criteria.eq(criteria.proto().info().number(), YardiARIntegrationAgent.getUnitId(rtCustomer));
-        AptUnit unit = Persistence.service().query(criteria).get(0);
+        criteria.eq(criteria.proto().info().number(), unitNumber);
+        List<AptUnit> units = Persistence.service().query(criteria);
+        if (units.size() != 1) {
+            throw new Error("Non unique unit " + unitNumber + " found in building " + propertyCode);
+        }
+        AptUnit unit = units.get(0);
+        log.debug("creating lease {} for unit {}", getLeaseId(rtCustomer), unit.getStringView());
 
         LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
 
@@ -142,6 +153,8 @@ public class YardiLeaseProcessor {
         leaseFacade.activate(lease);
         Persistence.service().retrieve(lease);
 
+        log.debug("lease {} created for unit {}", lease.leaseId().getValue(), lease.unit().getStringView());
+
         // manage state:
 
         if (isOnNotice(rtCustomer)) {
@@ -155,11 +168,17 @@ public class YardiLeaseProcessor {
     }
 
     private Lease updateLease(RTCustomer rtCustomer, Lease leaseId) {
+
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
+
+        // Validations
+        String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
+        Validate.isTrue(unitNumber.equals(lease.unit().info().number().getValue()), "Unit number change unsupported; LaaseId " + leaseId.leaseId().getValue()
+                + ", new unit.number" + unitNumber);
 
         boolean toPersist = false;
         boolean toFinalize = false;
