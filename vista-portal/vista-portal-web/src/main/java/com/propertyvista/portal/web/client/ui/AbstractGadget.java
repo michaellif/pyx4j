@@ -22,6 +22,7 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.IDebugId;
@@ -36,7 +37,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public abstract class AbstractGadget<E extends IEntity, T extends GadgetViewer<?>> extends CEntityContainer<E> {
+public abstract class AbstractGadget<E extends IEntity, T extends IsWidget> extends CEntityContainer<E> {
 
     private final ImageResource imageResource;
 
