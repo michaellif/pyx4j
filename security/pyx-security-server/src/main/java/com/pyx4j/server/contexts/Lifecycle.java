@@ -264,6 +264,10 @@ public class Lifecycle {
         return (Visit) session.getAttribute(Context.SESSION_VISIT);
     }
 
+    public static String getNamespaceFromSession(HttpSession session) {
+        return (String) session.getAttribute(Context.NAMESPACE);
+    }
+
     public static void endSession() {
         endSession(Context.getSession());
     }

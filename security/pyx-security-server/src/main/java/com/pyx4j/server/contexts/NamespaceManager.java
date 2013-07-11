@@ -61,7 +61,11 @@ public class NamespaceManager {
                 }
             }
         } finally {
-            NamespaceManager.setNamespace(namespace);
+            if (namespace != null) {
+                NamespaceManager.setNamespace(namespace);
+            } else {
+                NamespaceManager.remove();
+            }
         }
     }
 }
