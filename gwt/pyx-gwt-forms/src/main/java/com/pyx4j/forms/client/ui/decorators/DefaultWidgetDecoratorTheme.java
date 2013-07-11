@@ -66,7 +66,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
 
         style = new Style(".", StyleName.WidgetDecoratorLabelHolder);
         style.addProperty("text-align", "left");
-        style.addProperty("white-space", "normal");
+        style.addProperty("white-space", "nowrap");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorComponent);
@@ -89,7 +89,7 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("color", ThemeColor.foreground, 1);
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-right", "1em");
-        style.addProperty("line-height", "1.5em");
+        style.addProperty("white-space", "normal");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable, " .", StyleName.WidgetDecoratorLabel);
