@@ -140,11 +140,25 @@ BEGIN
         
         DROP TABLE communication_favorited_messages;
         
+        -- emergency_contact
         
+        ALTER TABLE emergency_contact   DROP COLUMN address_county,
+                                        DROP COLUMN address_location_lat,
+                                        DROP COLUMN address_location_lng,
+                                        DROP COLUMN address_street_direction,
+                                        DROP COLUMN address_street_name,
+                                        DROP COLUMN address_street_number,
+                                        DROP COLUMN address_street_number_suffix,
+                                        DROP COLUMN address_street_type,
+                                        DROP COLUMN address_suite_number;
+
         -- message
         
         ALTER TABLE message DROP COLUMN message_type;
         
+        -- page_content
+        
+        ALTER TABLE page_content DROP COLUMN image;
         
         -- portal_preferences
         
@@ -188,6 +202,7 @@ BEGIN
         **/
         
         CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
+        CREATE INDEX site_descriptor$pmc_info_owner_idx ON site_descriptor$pmc_info USING btree (owner);
         
         
         -- Finishing touch
