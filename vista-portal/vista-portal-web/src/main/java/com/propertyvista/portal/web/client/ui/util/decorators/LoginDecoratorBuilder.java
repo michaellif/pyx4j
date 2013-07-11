@@ -23,11 +23,8 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
 
     private String watermark;
 
-    private final boolean useWatermark;
-
-    public LoginDecoratorBuilder(CComponent<?> component, boolean useWatermark) {
+    public LoginDecoratorBuilder(CComponent<?> component) {
         super(component);
-        this.useWatermark = useWatermark;
     }
 
     public Builder watermark(String watermark) {
@@ -37,20 +34,14 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
 
     @Override
     public WidgetDecorator build() {
-        if (useWatermark) {
-            customLabel("");
-            labelWidth(0);
-            useLabelSemicolon(false);
-            if (getComponent() instanceof CTextFieldBase) {
-                ((CTextFieldBase<?, ?>) getComponent()).setWatermark(watermark != null ? watermark : getComponent().getTitle());
-            }
-        } else {
-            layout(Layout.vertical);
-            labelAlignment(Alignment.left);
-            useLabelSemicolon(true);
+        customLabel("");
+        labelWidth("0");
+        useLabelSemicolon(false);
+        if (getComponent() instanceof CTextFieldBase) {
+            ((CTextFieldBase<?, ?>) getComponent()).setWatermark(watermark != null ? watermark : getComponent().getTitle());
         }
         mandatoryMarker(false);
-        componentWidth(20);
+        componentWidth("100%");
 
         return super.build();
     }

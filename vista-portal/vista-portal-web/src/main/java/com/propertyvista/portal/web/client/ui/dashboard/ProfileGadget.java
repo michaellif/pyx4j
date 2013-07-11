@@ -38,7 +38,7 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
 
     private AddressPanel addressPanel;
 
-    ProfileGadget(DashboardForm_New form) {
+    ProfileGadget(DashboardForm form) {
         super(form, ThemeColor.contrast2);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }

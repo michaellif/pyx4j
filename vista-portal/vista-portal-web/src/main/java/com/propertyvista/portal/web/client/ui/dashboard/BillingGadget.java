@@ -39,7 +39,7 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
     private BillingViewer billingViewer;
 
-    BillingGadget(DashboardForm_New form) {
+    BillingGadget(DashboardForm form) {
         super(form, PortalImages.INSTANCE.billingIcon(), "My Billing Summary", ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
     }

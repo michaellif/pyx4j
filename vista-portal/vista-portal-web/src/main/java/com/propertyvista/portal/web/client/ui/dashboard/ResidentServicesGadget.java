@@ -27,7 +27,7 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 
 public class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO> {
 
-    ResidentServicesGadget(DashboardForm_New form) {
+    ResidentServicesGadget(DashboardForm form) {
         super(form, PortalImages.INSTANCE.residentServicesIcon(), "Resident Services", ThemeColor.contrast3);
         setActionsToolbar(new ResidentServicesToolbar());
     }

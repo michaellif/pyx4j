@@ -46,9 +46,9 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
 
     private ThemeColor themeColor;
 
-    private DashboardForm_New form;
+    private DashboardForm form;
 
-    public AbstractGadget(DashboardForm_New form, ImageResource imageResource, String title, ThemeColor themeColor) {
+    public AbstractGadget(DashboardForm form, ImageResource imageResource, String title, ThemeColor themeColor) {
         this.form = form;
         this.imageResource = imageResource;
         this.title = title;
@@ -56,7 +56,7 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 
-    public AbstractGadget(DashboardForm_New form, ThemeColor themeColor) {
+    public AbstractGadget(DashboardForm form, ThemeColor themeColor) {
         this(form, null, null, themeColor);
     }
 
@@ -75,7 +75,7 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
         return new GadgetDecorator();
     }
 
-    public DashboardForm_New getForm() {
+    public DashboardForm getForm() {
         return form;
     }
 

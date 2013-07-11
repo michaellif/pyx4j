@@ -27,7 +27,7 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 
 public class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO> {
 
-    MaintenanceGadget(DashboardForm_New form) {
+    MaintenanceGadget(DashboardForm form) {
         super(form, PortalImages.INSTANCE.maintenanceIcon(), "My Maintenance Requests", ThemeColor.contrast5);
         setActionsToolbar(new MaintenanceToolbar());
     }

@@ -58,10 +58,10 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        buildingSelector = ((CBuildingSuggestBox) inject(proto().building(), new CBuildingSuggestBox()));
+        buildingSelector = (inject(proto().building(), new CBuildingSuggestBox()));
         buildingSelector.setWatermark(i18n.tr("Your building's address"));
         buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
-        userDataPanel.add(center(new LoginDecoratorBuilder(buildingSelector, false).customLabel(i18n.tr("Select your building")).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(buildingSelector).customLabel(i18n.tr("Select your building")).build()));
 
         Label userDataLabel = new Label();
         userDataLabel.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
@@ -70,18 +70,18 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         userDataPanel.getElement().getStyle().setMarginBottom(20, Unit.PX);
 
         userDataPanel.add(center(userDataLabel));
-        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().firstName()), true).build()));
-        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().middleName()), true).build()));
-        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().lastName()), true).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().firstName())).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().middleName())).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(inject(proto().lastName())).build()));
 
         CTextFieldBase<?, ?> emailField;
-        Widget w = center(new LoginDecoratorBuilder(emailField = (CTextFieldBase<?, ?>) inject(proto().email()), true).build());
+        Widget w = center(new LoginDecoratorBuilder(emailField = (CTextFieldBase<?, ?>) inject(proto().email())).build());
         w.getElement().getStyle().setMarginTop(20, Unit.PX);
         userDataPanel.add(w);
         emailField.setNote(i18n.tr("Please note: your email will be your user name"));
 
         CTextFieldBase<?, ?> securityCodeField;
-        userDataPanel.add(center(new LoginDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode()), true).build()));
+        userDataPanel.add(center(new LoginDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode())).build()));
         securityCodeField.setNote(i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
         securityCodeField
                 .setTooltip(i18n
@@ -92,9 +92,9 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         FlowPanel definePasswordPanel = new FlowPanel();
         definePasswordPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        definePasswordPanel.add(center(new LoginDecoratorBuilder(inject(proto().password()), false).customLabel(i18n.tr("Set up your password")).build()));
+        definePasswordPanel.add(center(new LoginDecoratorBuilder(inject(proto().password())).customLabel(i18n.tr("Set up your password")).build()));
 
-        definePasswordPanel.add(center(new LoginDecoratorBuilder(inject(proto().passwordConfirm()), false).build()));
+        definePasswordPanel.add(center(new LoginDecoratorBuilder(inject(proto().passwordConfirm())).build()));
 
         contentPanel.add(center(definePasswordPanel));
 
