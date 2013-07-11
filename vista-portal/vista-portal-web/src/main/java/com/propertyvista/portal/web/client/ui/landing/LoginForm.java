@@ -23,7 +23,6 @@ import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.security.rpc.AuthenticationRequest;
@@ -35,14 +34,10 @@ import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuil
 
 class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
 
-    private final LandingViewImpl landingView;
-
     private CCaptcha captchaField;
 
-    public LoginForm(LandingViewImpl landingViewImpl) {
+    public LoginForm() {
         super(AuthenticationRequest.class);
-        landingView = landingViewImpl;
-
     }
 
     @Override
@@ -51,11 +46,11 @@ class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
 
         CTextField emailField = inject(proto().email(), new CTextField());
         contentPanel.add(center(new LoginDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email")).build()));
-        setMandatoryValidationMessage(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
+        addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
 
         CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
         contentPanel.add(center(new LoginDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build()));
-        setMandatoryValidationMessage(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
+        addValidator(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
 
         captchaField = (CCaptcha) inject(proto().captcha());
         contentPanel
@@ -79,11 +74,9 @@ class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
         return w;
     }
 
-    @Deprecated
-    // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough)        
-    private <E, C extends CTextFieldBase<E, ?>> void setMandatoryValidationMessage(C c, final String message) {
-        c.setMandatory(false);
-        c.addValueValidator(new EditableValueValidator<E>() {
+    private <E> void addValidator(CComponent<E> component, final String message) {
+        component.setMandatory(false);
+        component.addValueValidator(new EditableValueValidator<E>() {
             @Override
             public ValidationError isValid(CComponent<E> component, E value) {
                 if (value == null || ((value instanceof String) && CommonsStringUtils.isEmpty((String) value))) {

@@ -54,7 +54,7 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
 
     private final LoginButton loginButton;
 
-    private DevLoginPanel devLoginPanel;
+    private final DevLoginButton devLoginButton;
 
     private final Button signUpButton;
 
@@ -64,10 +64,7 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
 
         setStyleName(LandingPagesTheme.StyleName.LandingPage.name());
 
-        add(new HTML(i18n.tr("Welcome.")));
-        add(new HTML(i18n.tr("Please Login")));
-
-        loginForm = new LoginForm(this);
+        loginForm = new LoginForm();
         loginForm.initContent();
         add(loginForm);
 
@@ -85,8 +82,11 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         add(loginTermsLinkPanel);
 
         loginButton = new LoginButton();
-        SimplePanel loginButtonHolder = new SimplePanel();
-        loginButtonHolder.setWidget(loginButton);
+        devLoginButton = new DevLoginButton();
+
+        FlowPanel loginButtonHolder = new FlowPanel();
+        loginButtonHolder.add(loginButton);
+        loginButtonHolder.add(devLoginButton);
 
         add(loginButtonHolder);
 
@@ -102,14 +102,6 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         });
         resetPasswordAnchorHolder.add(resetPassword);
         add(resetPasswordAnchorHolder);
-
-        add(devLoginPanel = new DevLoginPanel() {
-            @Override
-            protected void onDevCredentialsSelected(String userId, String password) {
-                loginForm.get(loginForm.proto().email()).setValue(userId);
-                loginForm.get(loginForm.proto().password()).setValue(password);
-            }
-        });
 
         add(new HTML(i18n.tr("First Time.")));
         add(new HTML(i18n.tr("Get Started")));
@@ -178,12 +170,11 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     @Override
     public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
         if (devCredientials == null) {
-            devLoginPanel.setVisible(false);
-            devLoginPanel.setDevCredentials(new LinkedList<DevLoginCredentials>());
+            devLoginButton.setVisible(false);
+            devLoginButton.setDevLogin(new LinkedList<DevLoginCredentials>(), "ERROR!!!");
         } else {
-            devLoginPanel.setVisible(true);
-            devLoginPanel.setApplicationModeName(appModeName);
-            devLoginPanel.setDevCredentials(devCredientials);
+            devLoginButton.setVisible(true);
+            devLoginButton.setDevLogin(devCredientials, appModeName);
         }
     }
 
@@ -210,7 +201,7 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
                             public void onPreviewNativeEvent(NativePreviewEvent event) {
                                 if (event.getTypeInt() == Event.ONKEYUP && (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)) {
                                     if (!Dialog.isDialogOpen()) {
-                                        LoginButton.this.click();
+                                        onLogin();
                                     }
                                 }
                             }
@@ -224,4 +215,37 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         }
 
     }
+
+    class DevLoginButton extends Button {
+
+        private final ButtonMenuBar menu;
+
+        public DevLoginButton() {
+            super(i18n.tr("LOGIN"));
+            menu = new ButtonMenuBar();
+            setMenu(menu);
+        }
+
+        public void setDevLogin(List<? extends DevLoginCredentials> devCredientials, String appModeName) {
+            setTextLabel(i18n.tr("{0} FAST LOGIN", appModeName));
+
+            menu.clearItems();
+            for (final DevLoginCredentials credentials : devCredientials) {
+
+                for (int i = 0; i < credentials.getUserType().getDefaultMax(); i++) {
+                    final int index = i + 1;
+                    menu.addItem(credentials.getUserType().toString() + " " + index, new Command() {
+                        @Override
+                        public void execute() {
+                            loginForm.get(loginForm.proto().email()).setValue(credentials.getUserType().getEmail(index));
+                            loginForm.get(loginForm.proto().password()).setValue(credentials.getUserType().getEmail(index));
+                            onLogin();
+                        }
+                    });
+                }
+
+            }
+        }
+    }
+
 }

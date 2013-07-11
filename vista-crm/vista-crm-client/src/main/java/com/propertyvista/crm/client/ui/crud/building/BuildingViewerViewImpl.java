@@ -116,7 +116,7 @@ public class BuildingViewerViewImpl extends CrmViewerViewImplBase<BuildingDTO> i
         }));
 
         Button dashboardButton = new Button(i18n.tr("Dashboard"));
-        dashboardsMenu = dashboardButton.createMenu();
+        dashboardsMenu = new ButtonMenuBar();
         dashboardButton.setMenu(dashboardsMenu);
         addHeaderToolbarItem(dashboardButton);
     }

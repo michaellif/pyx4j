@@ -33,7 +33,7 @@ public class ComplexViewerViewImpl extends CrmViewerViewImplBase<ComplexDTO> imp
 
     public ComplexViewerViewImpl() {
         Button dashboardButton = new Button(i18n.tr("Dashboard"));
-        dashboardsMenu = dashboardButton.createMenu();
+        dashboardsMenu = new ButtonMenuBar();
         dashboardButton.setMenu(dashboardsMenu);
         addHeaderToolbarItem(dashboardButton);
 
