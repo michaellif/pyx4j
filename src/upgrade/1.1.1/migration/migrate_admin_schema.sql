@@ -65,6 +65,10 @@ SET search_path = '_admin_';
         ALTER TABLE admin_pmc_yardi_credential RENAME COLUMN credential TO password_password;
         
         
+        -- audit_record
+        
+        ALTER TABLE audit_record ADD COLUMN world_time TIMESTAMP; 
+        
         -- pmc_document_file
         
         ALTER TABLE pmc_document_file   ADD COLUMN caption VARCHAR(500),
