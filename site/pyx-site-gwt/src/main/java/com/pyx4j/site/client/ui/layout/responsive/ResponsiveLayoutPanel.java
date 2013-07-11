@@ -25,6 +25,7 @@ import java.util.Map;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
@@ -125,6 +126,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         stickyHeaderHolder = new StickyHeaderHolder(this);
 
         extraHolder = new ExtraHolder(this);
+
+        getNotificationDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         contentHolder = new ContentHolder(this);
         contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
