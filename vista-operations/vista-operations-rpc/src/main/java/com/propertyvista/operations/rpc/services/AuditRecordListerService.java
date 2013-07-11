@@ -15,8 +15,8 @@ package com.propertyvista.operations.rpc.services;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 
-import com.propertyvista.dto.AuditRecordDTO;
+import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 
-public interface AuditRecordListerService extends AbstractListService<AuditRecordDTO> {
+public interface AuditRecordListerService extends AbstractListService<AuditRecordOperationsDTO> {
 
 }

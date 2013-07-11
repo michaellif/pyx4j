@@ -7,11 +7,11 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 17, 2012
- * @author ArtyomB
+ * Created on Jul 11, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.operations.rpc;
 
 import java.util.Date;
 
@@ -20,12 +20,14 @@ import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.VistaApplication;
 
 @Transient
-public interface AuditRecordDTO extends IEntity {
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface AuditRecordOperationsDTO extends IEntity {
 
     IPrimitive<String> userName();
 
@@ -36,11 +38,17 @@ public interface AuditRecordDTO extends IEntity {
     @Format("MM/dd/yyyy HH:mm")
     IPrimitive<Date> when();
 
+    @Format("MM/dd/yyyy HH:mm")
+    IPrimitive<Date> worldTime();
+
     IPrimitive<AuditRecordEventType> event();
+
+    IPrimitive<String> pmc();
 
     IPrimitive<VistaApplication> app();
 
     IPrimitive<String> targetEntity();
 
     IPrimitive<String> details();
+
 }

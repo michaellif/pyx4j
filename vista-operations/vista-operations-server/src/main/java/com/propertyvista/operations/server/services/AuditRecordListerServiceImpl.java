@@ -22,15 +22,15 @@ import com.pyx4j.entity.server.Persistence;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OperationsUser;
-import com.propertyvista.dto.AuditRecordDTO;
 import com.propertyvista.operations.domain.security.AuditRecord;
+import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.services.AuditRecordListerService;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordDTO> implements AuditRecordListerService {
+public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordOperationsDTO> implements AuditRecordListerService {
 
     public AuditRecordListerServiceImpl() {
-        super(AuditRecord.class, AuditRecordDTO.class);
+        super(AuditRecord.class, AuditRecordOperationsDTO.class);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<Aud
     }
 
     @Override
-    protected void enhanceListRetrieved(final AuditRecord entity, final AuditRecordDTO dto) {
+    protected void enhanceListRetrieved(final AuditRecord entity, final AuditRecordOperationsDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         dto.targetEntity().setValue(CommonsStringUtils.nvl_concat(entity.entityClass().getStringView(), entity.entityId().getStringView(), ":"));
 

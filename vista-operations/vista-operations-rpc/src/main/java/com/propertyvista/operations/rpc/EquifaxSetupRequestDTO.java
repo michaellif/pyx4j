@@ -19,12 +19,14 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.pmc.PmcEquifaxInfo;
 import com.propertyvista.dto.vista2pmc.BusinessInformationDTO;
 import com.propertyvista.dto.vista2pmc.PersonalInformationDTO;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 public interface EquifaxSetupRequestDTO extends PmcEquifaxInfo {
 
     @Editor(type = EditorType.money)
