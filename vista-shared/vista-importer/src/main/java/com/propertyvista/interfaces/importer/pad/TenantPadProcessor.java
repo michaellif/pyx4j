@@ -16,6 +16,8 @@ package com.propertyvista.interfaces.importer.pad;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -295,12 +297,15 @@ public class TenantPadProcessor {
 
     private void correctPadParsing(List<PadFileModel> leasePadEntities) {
         for (PadFileModel padFileModel : leasePadEntities) {
-            if (!padFileModel.chargeCode().isNull()) {
-                padFileModel.chargeCode().setValue(padFileModel.chargeCode().getValue().trim());
-            }
-            if (!padFileModel.chargeId().isNull()) {
-                padFileModel.chargeId().setValue(padFileModel.chargeId().getValue().trim());
-            }
+            trimValue(padFileModel.chargeCode());
+            trimValue(padFileModel.chargeId());
+
+            trimValue(padFileModel.percent());
+            trimValue(padFileModel.charge());
+            trimValue(padFileModel.estimatedCharge());
+
+            correctDollars(padFileModel.charge());
+            correctDollars(padFileModel.estimatedCharge());
         }
     }
 
@@ -342,13 +347,13 @@ public class TenantPadProcessor {
             return i18n.tr("Bank Id/Institution is required");
         }
         if (!ValidationUtils.isBankIdNumberValid(padFileModel.bankId().getValue())) {
-            return i18n.tr("Bank Id/Institution should consist of 3 digits");
+            return i18n.tr("Bank Id/Institution {0} should consist of 3 digits", padFileModel.bankId());
         }
         if (padFileModel.transitNumber().isNull()) {
             return i18n.tr("Transit Number is required");
         }
         if (!ValidationUtils.isBranchTransitNumberValid(padFileModel.transitNumber().getValue())) {
-            return i18n.tr("Transit Number should consist of 5 digits");
+            return i18n.tr("Transit Number {0} should consist of 5 digits", padFileModel.transitNumber());
         }
 
         // We support Upload account only
@@ -360,34 +365,65 @@ public class TenantPadProcessor {
 //            return i18n.tr("Charge and percent not supported simultaneously");
 //        }
 
-        if ((!padFileModel.charge().isNull()) && (padFileModel.charge().getValue().startsWith("$"))) {
-            padFileModel.charge().setValue(padFileModel.charge().getValue().substring(1, padFileModel.charge().getValue().length()));
-        }
-
-        if (!padFileModel.charge().isNull() && (!isValidNumber(padFileModel.charge().getValue()))) {
-            return i18n.tr("Charge '" + padFileModel.charge().getValue() + "' is not valid number");
+        if (!padFileModel.charge().isNull() && (!isValidateAndCorrectAmount(padFileModel.charge()))) {
+            return i18n.tr("Charge ''{0}'' is not valid number", padFileModel.charge());
         }
 
         if ((!padFileModel.percent().isNull()) && (padFileModel.percent().getValue().endsWith("%"))) {
             padFileModel.percent().setValue(padFileModel.percent().getValue().substring(0, padFileModel.percent().getValue().length() - 1));
         }
 
-        if (!padFileModel.percent().isNull() && (!isValidNumber(padFileModel.percent().getValue()))) {
-            return i18n.tr("Percent '" + padFileModel.percent().getValue() + "' is not valid number");
+        if (!padFileModel.percent().isNull() && (!isValidateAndCorrectNumber(padFileModel.percent()))) {
+            return i18n.tr("Percent ''{0}'' is not valid number", padFileModel.percent());
         }
 
-        if (!padFileModel.estimatedCharge().isNull() && (!isValidNumber(padFileModel.estimatedCharge().getValue()))) {
-            return i18n.tr("Estimated Charge is not valid number");
+        if (!padFileModel.estimatedCharge().isNull() && (!isValidateAndCorrectAmount(padFileModel.estimatedCharge()))) {
+            return i18n.tr("Estimated Charge ''{0}'' is not valid number", padFileModel.estimatedCharge());
         }
 
         return null;
     }
 
-    private boolean isValidNumber(String value) {
+    private void correctDollars(IPrimitive<String> amount) {
+        if ((!amount.isNull()) && (amount.getValue().startsWith("$"))) {
+            amount.setValue(amount.getValue().substring(1, amount.getValue().length()));
+        } else if ((!amount.isNull()) && (amount.getValue().endsWith("$"))) {
+            amount.setValue(amount.getValue().substring(amount.getValue().length() - 1));
+        }
+    }
+
+    private void trimValue(IPrimitive<String> value) {
+        if (!value.isNull()) {
+            value.setValue(value.getValue().trim());
+        }
+    }
+
+    private boolean isValidateAndCorrectAmount(IPrimitive<String> value) {
         try {
-            Double.parseDouble(value.trim());
+            Double.parseDouble(value.getValue());
             return true;
         } catch (NumberFormatException e) {
+        }
+        try {
+            Number number = new DecimalFormat("#,##0.00").parse(value.getValue());
+            value.setValue(new DecimalFormat("0.00").format(number.doubleValue()));
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    private boolean isValidateAndCorrectNumber(IPrimitive<String> value) {
+        try {
+            Double.parseDouble(value.getValue());
+            return true;
+        } catch (NumberFormatException e) {
+        }
+        try {
+            Number number = new DecimalFormat("#,##0.0000").parse(value.getValue());
+            value.setValue(number.toString());
+            return true;
+        } catch (ParseException e) {
             return false;
         }
     }
