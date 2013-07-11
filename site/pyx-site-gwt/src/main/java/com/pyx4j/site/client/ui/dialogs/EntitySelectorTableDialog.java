@@ -61,6 +61,10 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
 
     private final List<E> alreadySelected;
 
+    public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, String caption) {
+        this(entityClass, false, isMultiselect, null, caption);
+    }
+
     public EntitySelectorTableDialog(Class<E> entityClass, boolean isMultiselect, List<E> alreadySelected, String caption) {
         this(entityClass, false, isMultiselect, alreadySelected, caption);
     }
@@ -69,7 +73,7 @@ public abstract class EntitySelectorTableDialog<E extends IEntity> extends Abstr
         super(caption);
         this.entityClass = entityClass;
         this.isMultiselect = isMultiselect;
-        this.alreadySelected = new ArrayList<E>(alreadySelected);
+        this.alreadySelected = (alreadySelected != null ? alreadySelected : Collections.<E> emptyList());
         this.lister = new SelectEntityLister(this.entityClass, isVersioned) {
             @Override
             protected void onObtainSuccess() {
