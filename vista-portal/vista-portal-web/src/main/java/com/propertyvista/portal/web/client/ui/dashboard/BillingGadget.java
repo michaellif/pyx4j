@@ -32,15 +32,16 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantBillingDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
+public class BillingGadget extends AbstractGadget<TenantBillingDTO, DashboardForm> {
 
     private BillingViewer billingViewer;
 
-    BillingGadget(DashboardForm form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), "My Billing Summary", ThemeColor.contrast4);
+    BillingGadget(DashboardForm viewer) {
+        super(viewer, PortalImages.INSTANCE.billingIcon(), "My Billing Summary", ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
     }
 
@@ -68,7 +69,7 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
                 @Override
                 public void execute() {
-                    getForm().getPresenter().payNow();
+                    getGadgetViewer().getPresenter().payNow();
                 }
             });
             paymentButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
@@ -78,7 +79,7 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
                 @Override
                 public void execute() {
-                    getForm().getPresenter().setAutopay();
+                    getGadgetViewer().getPresenter().setAutopay();
                 }
             });
             autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 0.6));
@@ -109,7 +110,7 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO> {
 
                     @Override
                     public void execute() {
-                        getForm().getPresenter().viewCurrentBill();
+                        getGadgetViewer().getPresenter().viewCurrentBill();
                     }
                 });
                 viewBillAnchor.getElement().getStyle().setMarginTop(10, Unit.PX);

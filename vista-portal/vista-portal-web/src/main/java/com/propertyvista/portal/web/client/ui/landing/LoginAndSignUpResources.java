@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.login;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;

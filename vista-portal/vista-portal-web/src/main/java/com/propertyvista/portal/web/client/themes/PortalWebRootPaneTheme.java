@@ -343,6 +343,8 @@ public class PortalWebRootPaneTheme extends Theme {
     private void initNotificationStyles() {
         Style style = new Style(".", StyleName.NotificationContainer);
         style.addProperty("padding-top", "10px");
+        style.addProperty("display", "inline-block");
+        style.addProperty("width", "100%");
         addStyle(style);
 
         style = new Style(".", StyleName.NotificationItem);

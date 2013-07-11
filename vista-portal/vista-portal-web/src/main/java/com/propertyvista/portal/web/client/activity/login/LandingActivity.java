@@ -30,8 +30,8 @@ import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCre
 import com.propertyvista.domain.DemoData.UserType;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
-import com.propertyvista.portal.web.client.ui.residents.login.LandingView;
-import com.propertyvista.portal.web.client.ui.residents.login.LandingViewImpl;
+import com.propertyvista.portal.web.client.ui.landing.LandingView;
+import com.propertyvista.portal.web.client.ui.landing.LandingViewImpl;
 
 public class LandingActivity extends AbstractLoginActivty implements LandingView.Presenter {
 

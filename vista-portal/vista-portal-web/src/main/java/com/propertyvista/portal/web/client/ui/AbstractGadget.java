@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.dashboard;
+package com.propertyvista.portal.web.client.ui;
 
 import java.util.Collection;
 
@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityContainer;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
@@ -36,7 +36,7 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContainer<E> {
+public abstract class AbstractGadget<E extends IEntity, T extends GadgetViewer<?>> extends CEntityContainer<E> {
 
     private final ImageResource imageResource;
 
@@ -46,18 +46,18 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
 
     private ThemeColor themeColor;
 
-    private DashboardForm form;
+    private T viewer;
 
-    public AbstractGadget(DashboardForm form, ImageResource imageResource, String title, ThemeColor themeColor) {
-        this.form = form;
+    public AbstractGadget(T viewer, ImageResource imageResource, String title, ThemeColor themeColor) {
+        this.viewer = viewer;
         this.imageResource = imageResource;
         this.title = title;
         this.themeColor = themeColor;
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
     }
 
-    public AbstractGadget(DashboardForm form, ThemeColor themeColor) {
-        this(form, null, null, themeColor);
+    public AbstractGadget(T viewer, ThemeColor themeColor) {
+        this(viewer, null, null, themeColor);
     }
 
     @Override
@@ -75,8 +75,8 @@ public abstract class AbstractGadget<E extends IObject<?>> extends CEntityContai
         return new GadgetDecorator();
     }
 
-    public DashboardForm getForm() {
-        return form;
+    public T getGadgetViewer() {
+        return viewer;
     }
 
     protected void setActionsToolbar(Toolbar actionsToolbar) {

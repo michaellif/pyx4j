@@ -24,8 +24,9 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO> {
+public class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO, DashboardForm> {
 
     MaintenanceGadget(DashboardForm form) {
         super(form, PortalImages.INSTANCE.maintenanceIcon(), "My Maintenance Requests", ThemeColor.contrast5);

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.login;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -36,98 +36,21 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.SimpleMessageFormat;
-import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CPasswordTextField;
-import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.validators.EditableValueValidator;
-import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
-import com.pyx4j.widgets.client.Label;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.portal.web.client.themes.LandingPagesTheme;
-import com.propertyvista.portal.web.client.ui.util.decorators.CheckBoxDecorator;
-import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
 public class LandingViewImpl extends Composite implements LandingView {
 
-    private static final I18n i18n = I18n.get(LandingViewImpl.class);
-
-    private class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
-
-        private CCaptcha captchaField;
-
-        public LoginForm() {
-            super(AuthenticationRequest.class);
-
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FlowPanel contentPanel = new FlowPanel();
-
-            CTextField emailField = inject(proto().email(), new CTextField());
-            contentPanel.add(center(new LoginDecoratorBuilder(emailField).watermark(i18n.tr("Email")).build()));
-            setMandatoryValidationMessage(emailField, i18n.tr("Enter your email address"));
-
-            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
-            contentPanel.add(center(new LoginDecoratorBuilder(passwordField).watermark(i18n.tr("Password")).build()));
-            setMandatoryValidationMessage(passwordField, i18n.tr("Enter your password"));
-
-            captchaField = (CCaptcha) inject(proto().captcha());
-            contentPanel.add(center((new FormDecoratorBuilder(captchaField).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false)
-                    .build())));
-            setEnableCaptcha(false);
-
-            contentPanel.add(center(new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox()))));
-
-            return contentPanel;
-        }
-
-        public final void setEnableCaptcha(boolean isEnabled) {
-            captchaField.setVisible(isEnabled);
-            if (isEnabled) {
-                captchaField.createNewChallenge();
-            }
-
-        }
-
-        private Widget center(Widget w) {
-            return w;
-        }
-
-        @Deprecated
-        // TODO this is workaround to override default validation message(just 'setMandatoryValidationMessage()' is not enough)        
-        private <E, C extends CTextFieldBase<E, ?>> void setMandatoryValidationMessage(C c, final String message) {
-            c.setMandatory(false);
-            c.addValueValidator(new EditableValueValidator<E>() {
-                @Override
-                public ValidationError isValid(CComponent<E> component, E value) {
-                    if (value == null || ((value instanceof String) && CommonsStringUtils.isEmpty((String) value))) {
-                        return new ValidationError(component, message);
-                    } else {
-                        return null;
-                    }
-                }
-            });
-        }
-    }
+    static final I18n i18n = I18n.get(LandingViewImpl.class);
 
     private static abstract class DevLoginPanel extends Composite {
 
@@ -230,8 +153,6 @@ public class LandingViewImpl extends Composite implements LandingView {
 
     private Button signUpButton;
 
-    private Label signUpGreeting;
-
     private Anchor termsAndConditionsAnchor;
 
     public LandingViewImpl() {
@@ -288,7 +209,6 @@ public class LandingViewImpl extends Composite implements LandingView {
         }
         loginForm.get(loginForm.proto().rememberID()).setValue(rememberUserId);
         loginForm.setEnableCaptcha(false);
-        signUpGreeting.setHTML("");
     }
 
     @Override
@@ -317,7 +237,7 @@ public class LandingViewImpl extends Composite implements LandingView {
         sideLayout.add(new HTML(i18n.tr("Welcome.")));
         sideLayout.add(new HTML(i18n.tr("Please Login")));
 
-        loginForm = new LoginForm();
+        loginForm = new LoginForm(this);
         loginForm.initContent();
         sideLayout.add(loginForm);
 
@@ -372,8 +292,6 @@ public class LandingViewImpl extends Composite implements LandingView {
         sideLayout.add(new HTML(i18n.tr("First Time.")));
         sideLayout.add(new HTML(i18n.tr("Get Started")));
 
-        signUpGreeting = new Label();
-
         FlowPanel signUpGreetingPanel = new FlowPanel();
 
         sideLayout.add(signUpGreetingPanel);
@@ -400,11 +318,6 @@ public class LandingViewImpl extends Composite implements LandingView {
             devLoginPanel.setApplicationModeName(appModeName);
             devLoginPanel.setDevCredentials(devCredientials);
         }
-    }
-
-    @Override
-    public void setSignupGreetingHtml(String html) {
-        signUpGreeting.setHTML(html);
     }
 
 }

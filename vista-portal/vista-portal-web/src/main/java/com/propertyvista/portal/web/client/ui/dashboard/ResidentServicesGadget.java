@@ -24,8 +24,9 @@ import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO> {
+public class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO, DashboardForm> {
 
     ResidentServicesGadget(DashboardForm form) {
         super(form, PortalImages.INSTANCE.residentServicesIcon(), "Resident Services", ThemeColor.contrast3);

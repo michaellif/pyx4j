@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.login;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import com.google.gwt.place.shared.Place;
 
@@ -30,14 +30,9 @@ public interface LandingView extends LoginView {
     }
 
     /**
-     * Resets the view and populates email and rememberMe fields, and disables captcha. Also it clears the signup greeting of the page, so if necessary it
-     * should be populated via setSignupGreetingHtml()
+     * Resets the view, populates email and rememberMe fields and disables captcha.
      */
     @Override
     void reset(String email, boolean rememberUser);
-
-    // TODO this is not used: a jolly static images from resources are displayed instead  
-    @Deprecated
-    void setSignupGreetingHtml(String html);
 
 }

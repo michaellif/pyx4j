@@ -31,8 +31,9 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
+import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class ProfileGadget extends AbstractGadget<TenantProfileDTO> {
+public class ProfileGadget extends AbstractGadget<TenantProfileDTO, DashboardForm> {
 
     private PersonInfoPanel personInfoPanel;
 

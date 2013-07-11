@@ -19,24 +19,21 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.web.client.ui.GadgetViewer;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardView.DashboardPresenter;
 
-public class DashboardForm extends CEntityForm<TenantDashboardDTO> {
+public class DashboardForm extends GadgetViewer<TenantDashboardDTO> {
 
     private static final I18n i18n = I18n.get(DashboardForm.class);
 
     public static final String NoRecordsFound = i18n.tr("No Records Found");
-
-    private DashboardView.DashboardPresenter presenter;
 
     private ProfileGadget profileGadget;
 
@@ -49,7 +46,7 @@ public class DashboardForm extends CEntityForm<TenantDashboardDTO> {
     private final DashboardViewImpl view;
 
     public DashboardForm(DashboardViewImpl view) {
-        super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
+        super(TenantDashboardDTO.class);
         this.view = view;
 
         Scheduler.get().scheduleDeferred(new ScheduledCommand() {
@@ -70,28 +67,6 @@ public class DashboardForm extends CEntityForm<TenantDashboardDTO> {
             }
 
         });
-    }
-
-    private void doLayout(LayoutType layoutType) {
-        profileGadget.doLayout(layoutType);
-        switch (layoutType) {
-        case phonePortrait:
-        case phoneLandscape:
-        case tabletPortrait:
-            billingGadget.asWidget().setWidth("100%");
-            maintenanceGadget.asWidget().setWidth("100%");
-            break;
-
-        default:
-            billingGadget.asWidget().setWidth("50%");
-            maintenanceGadget.asWidget().setWidth("50%");
-            break;
-        }
-
-    }
-
-    protected DashboardView.DashboardPresenter getPresenter() {
-        return (DashboardPresenter) view.getPresenter();
     }
 
     @Override
@@ -124,4 +99,25 @@ public class DashboardForm extends CEntityForm<TenantDashboardDTO> {
         return contentPanel;
     }
 
+    private void doLayout(LayoutType layoutType) {
+        profileGadget.doLayout(layoutType);
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletPortrait:
+            billingGadget.asWidget().setWidth("100%");
+            maintenanceGadget.asWidget().setWidth("100%");
+            break;
+
+        default:
+            billingGadget.asWidget().setWidth("50%");
+            maintenanceGadget.asWidget().setWidth("50%");
+            break;
+        }
+
+    }
+
+    protected DashboardView.DashboardPresenter getPresenter() {
+        return (DashboardPresenter) view.getPresenter();
+    }
 }

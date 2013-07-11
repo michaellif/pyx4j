@@ -7,26 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 24, 2013
+ * Created on Jul 11, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.mvp;
+package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.activity.shared.Activity;
-import com.google.gwt.activity.shared.ActivityMapper;
-import com.google.gwt.place.shared.Place;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.CEntityForm;
 
-import com.propertyvista.portal.web.client.activity.NotificationHeaderActivity;
+import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 
-public class NotificationActivityMapper implements ActivityMapper {
+public abstract class GadgetViewer<E extends IEntity> extends CEntityForm<E> {
 
-    public NotificationActivityMapper() {
-    }
-
-    @Override
-    public Activity getActivity(Place place) {
-        return new NotificationHeaderActivity(place);
+    public GadgetViewer(Class<E> clazz) {
+        super(clazz, new VistaViewersComponentFactory());
     }
 
 }

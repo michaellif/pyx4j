@@ -37,7 +37,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
-import com.propertyvista.portal.web.client.ui.residents.login.LoginAndSignUpResources;
+import com.propertyvista.portal.web.client.ui.landing.LoginAndSignUpResources;
 
 public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {
 
