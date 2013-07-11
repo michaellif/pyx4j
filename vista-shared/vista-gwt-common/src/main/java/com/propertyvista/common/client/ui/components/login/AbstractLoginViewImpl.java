@@ -36,6 +36,7 @@ public abstract class AbstractLoginViewImpl extends FormFlexPanel implements Log
     protected final LoginForm form;
 
     public AbstractLoginViewImpl(String caption) {
+        setWidth("100%");
         form = new LoginForm(caption, new Command() {
             @Override
             public void execute() {
