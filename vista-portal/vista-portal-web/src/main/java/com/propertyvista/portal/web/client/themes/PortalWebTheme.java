@@ -79,7 +79,11 @@ public class PortalWebTheme extends Theme {
             protected void initStyles() {
                 super.initStyles();
 
-                Style style = new Style(".", StyleName.FormFlexPanelLeftColumn);
+                Style style = new Style(".", StyleName.FormFlexPanel);
+                style.addProperty("width", "100%");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelLeftColumn);
                 style.addProperty("width", "100%");
                 addStyle(style);
 
