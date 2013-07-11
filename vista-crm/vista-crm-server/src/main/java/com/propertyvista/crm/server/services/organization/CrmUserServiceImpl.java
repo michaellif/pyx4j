@@ -62,7 +62,7 @@ public class CrmUserServiceImpl extends AbstractCrudServiceDtoImpl<Employee, Emp
         Persistence.service().retrieve(dto.employees());
 
         CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
-        dto.restrictAccessToSelectedBuildingsOrPortfolio().setValue(!crs.accessAllBuildings().getValue(false));
+        dto.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
         dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
         dto.roles().addAll(crs.roles());
         dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());

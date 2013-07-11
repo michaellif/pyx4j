@@ -80,7 +80,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
         if (SecurityController.checkBehavior(VistaCrmBehavior.Organization) && (entity.user().getPrimaryKey() != null)) {
             CrmUserCredential crs = Persistence.service().retrieve(CrmUserCredential.class, entity.user().getPrimaryKey());
             dto.enabled().set(crs.enabled());
-            dto.restrictAccessToSelectedBuildingsOrPortfolio().setValue(!crs.accessAllBuildings().getValue(false));
+            dto.restrictAccessToSelectedBuildingsAndPortfolios().setValue(!crs.accessAllBuildings().getValue(false));
             dto.requiredPasswordChangeOnNextLogIn().setValue(crs.requiredPasswordChangeOnNextLogIn().getValue());
             dto.roles().addAll(crs.roles());
             dto.credentialUpdated().setValue(crs.credentialUpdated().getValue());
@@ -144,7 +144,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.enabled().set(in.enabled());
             credential.roles().clear();
             credential.roles().addAll(in.roles());
-            credential.accessAllBuildings().setValue(!in.restrictAccessToSelectedBuildingsOrPortfolio().getValue(false));
+            credential.accessAllBuildings().setValue(!in.restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
             credential.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
             ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
             Persistence.service().persist(credential);

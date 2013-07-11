@@ -32,7 +32,7 @@ public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
     @Caption(name = "Active Employee")
     IPrimitive<Boolean> enabled();
 
-    IPrimitive<Boolean> restrictAccessToSelectedBuildingsOrPortfolio();
+    IPrimitive<Boolean> restrictAccessToSelectedBuildingsAndPortfolios();
 
     IList<CrmRole> roles();
 

@@ -16,6 +16,8 @@ package com.propertyvista.crm.client.ui.crud.organisation.employee;
 import java.util.EnumSet;
 import java.util.List;
 
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
@@ -51,6 +53,8 @@ import com.propertyvista.domain.property.asset.building.Building;
 public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeForm.class);
+
+    private final FormFlexPanel buildingsAccessPanel = new FormFlexPanel();
 
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
@@ -88,6 +92,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         get(proto().password()).setVisible(isNewEmployee());
         get(proto().passwordConfirm()).setVisible(isNewEmployee());
+
+        buildingsAccessPanel.setVisible(getValue().restrictAccessToSelectedBuildingsAndPortfolios().getValue());
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
@@ -99,7 +105,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
         boolean permitPortfoliosEditing = (isManager && !isSelfEditor);
 
-        get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).setViewable(!permitPortfoliosEditing);
+        get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).setViewable(!permitPortfoliosEditing);
         get(proto().buildingAccess()).setViewable(!permitPortfoliosEditing);
         get(proto().buildingAccess()).setEditable(permitPortfoliosEditing);
 
@@ -163,11 +169,22 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         content.setWidget(++row, 0, inject(proto().roles(), new CrmRoleFolder(isEditable())));
 
         content.setH1(++row, 0, 1, i18n.tr("Buildings Access"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsOrPortfolio()), 5).labelWidth(30).build());
-        content.setWidget(++row, 0, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().restrictAccessToSelectedBuildingsAndPortfolios()), 5).labelWidth(30).build());
+        get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                buildingsAccessPanel.setVisible(event.getValue());
+            }
+        });
 
-        content.setH1(++row, 0, 1, i18n.tr("Portfolios"));
-        content.setWidget(++row, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
+        int baRow = -1;
+        buildingsAccessPanel.setH3(++baRow, 0, 1, i18n.tr("Buildings"));
+        buildingsAccessPanel.setWidget(++baRow, 0, inject(proto().buildingAccess(), new BuildingFolder(isEditable())));
+
+        buildingsAccessPanel.setH3(++baRow, 0, 1, i18n.tr("Portfolios"));
+        buildingsAccessPanel.setWidget(++baRow, 0, inject(proto().portfolios(), new PortfolioFolder(isEditable())));
+
+        content.setWidget(++row, 0, buildingsAccessPanel);
 
         content.setH1(++row, 0, 1, i18n.tr("Subordinates"));
         content.setWidget(++row, 0, inject(proto().employees(), new EmployeeFolder(isEditable(), new ParentEmployeeGetter() {
@@ -244,14 +261,14 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
     }
 
     public List<Building> getBuildingAccess() {
-        if (get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).getValue()) {
+        if (get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).getValue()) {
             return get(proto().buildingAccess()).getValue();
         }
         return null;
     }
 
     public List<Portfolio> getPortfolioAccess() {
-        if (get(proto().restrictAccessToSelectedBuildingsOrPortfolio()).getValue()) {
+        if (get(proto().restrictAccessToSelectedBuildingsAndPortfolios()).getValue()) {
             return get(proto().portfolios()).getValue();
         }
         return null;
