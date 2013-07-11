@@ -94,6 +94,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             } else {
                 comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
+
+        }
+
+        @Override
+        protected String getNameOn() {
+            return PaymentForm.this.getValue().leaseTermParticipant().leaseParticipant().customer().person().name().getStringView();
         }
 
         @Override
