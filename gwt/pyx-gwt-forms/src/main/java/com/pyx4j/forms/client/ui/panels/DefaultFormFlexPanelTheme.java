@@ -51,7 +51,6 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
 
     protected void initStyles() {
         Style style = new Style(".", StyleName.FormFlexPanel);
-        style.addProperty("width", "100%");
         style.addProperty("border-spacing", "0");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
@@ -60,11 +59,11 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelLeftColumn);
-        style.addProperty("width", "50%");
+        style.addProperty("width", "45em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelRightColumn);
-        style.addProperty("width", "50%");
+        style.addProperty("width", "45em");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelLeftCell);
