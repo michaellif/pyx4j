@@ -147,7 +147,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
 
     @Override
     public String getRemoteAddr() {
-        throw new UnsupportedOperationException();
+        return "1.1.1.1";
     }
 
     @Override
