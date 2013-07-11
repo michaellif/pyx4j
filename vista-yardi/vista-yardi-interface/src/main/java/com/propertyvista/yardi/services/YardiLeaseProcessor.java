@@ -178,7 +178,7 @@ public class YardiLeaseProcessor {
         // Validations
         String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
         Validate.isTrue(unitNumber.equals(lease.unit().info().number().getValue()), "Unit number change unsupported; LaaseId " + leaseId.leaseId().getValue()
-                + ", new unit.number" + unitNumber);
+                + ", new unit.number " + unitNumber);
 
         boolean toPersist = false;
         boolean toFinalize = false;
