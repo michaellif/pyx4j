@@ -166,7 +166,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
         brandHolder = new FlowPanel();
         brandHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
-        brandHolder.getElement().getStyle().setDisplay(Display.BLOCK);
+        brandHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         brandHolder.add(brandImage);
         brandHolder.add(brandLabel);
