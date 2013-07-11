@@ -36,17 +36,13 @@ import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillingGadget extends AbstractGadget<TenantBillingDTO, DashboardForm> {
+public class BillingGadget extends AbstractGadget<DashboardViewImpl> {
 
-    private BillingViewer billingViewer;
+    private final BillingViewer billingViewer;
 
-    BillingGadget(DashboardForm viewer) {
+    BillingGadget(DashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), "My Billing Summary", ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
-    }
-
-    @Override
-    public IsWidget createContent() {
 
         billingViewer = new BillingViewer();
         billingViewer.setViewable(true);
@@ -55,11 +51,11 @@ public class BillingGadget extends AbstractGadget<TenantBillingDTO, DashboardFor
         SimplePanel contentPanel = new SimplePanel(billingViewer.asWidget());
         contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        return contentPanel;
+        setContent(contentPanel);
+
     }
 
-    @Override
-    protected void setComponentsValue(TenantBillingDTO value, boolean fireEvent, boolean populate) {
+    protected void populate(TenantBillingDTO value) {
         billingViewer.populate(value);
     }
 

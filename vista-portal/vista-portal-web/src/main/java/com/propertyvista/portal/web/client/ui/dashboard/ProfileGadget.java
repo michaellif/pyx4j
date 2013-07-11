@@ -21,7 +21,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.css.ThemeColor;
@@ -33,19 +32,15 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class ProfileGadget extends AbstractGadget<TenantProfileDTO, DashboardForm> {
+public class ProfileGadget extends AbstractGadget<DashboardViewImpl> {
 
-    private PersonInfoPanel personInfoPanel;
+    private final PersonInfoPanel personInfoPanel;
 
-    private AddressPanel addressPanel;
+    private final AddressPanel addressPanel;
 
-    ProfileGadget(DashboardForm form) {
+    ProfileGadget(DashboardViewImpl form) {
         super(form, ThemeColor.contrast2);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
-    }
-
-    @Override
-    public IsWidget createContent() {
 
         FlowPanel contentPanel = new FlowPanel();
 
@@ -62,7 +57,7 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO, DashboardFor
         contentPanel.add(personInfoPanel);
         contentPanel.add(addressPanel);
 
-        return contentPanel;
+        setContent(contentPanel);
     }
 
     public void doLayout(LayoutType layoutType) {
@@ -159,8 +154,7 @@ public class ProfileGadget extends AbstractGadget<TenantProfileDTO, DashboardFor
         }
     }
 
-    @Override
-    protected void setComponentsValue(TenantProfileDTO value, boolean fireEvent, boolean populate) {
+    protected void populate(TenantProfileDTO value) {
         personInfoPanel.setValue(value);
         addressPanel.setValue(value);
     }

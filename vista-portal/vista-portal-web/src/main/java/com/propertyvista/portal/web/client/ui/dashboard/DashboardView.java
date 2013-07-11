@@ -13,12 +13,13 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.user.client.ui.IsWidget;
+
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
-import com.propertyvista.portal.web.client.ui.EntityView;
 
-public interface DashboardView extends EntityView<TenantDashboardDTO> {
+public interface DashboardView extends IsWidget {
 
-    interface DashboardPresenter extends EntityPresenter<TenantDashboardDTO> {
+    interface DashboardPresenter {
 
         void viewCurrentBill();
 
@@ -27,5 +28,9 @@ public interface DashboardView extends EntityView<TenantDashboardDTO> {
         void setAutopay();
 
     }
+
+    void setPresenter(DashboardPresenter presenter);
+
+    void populate(TenantDashboardDTO result);
 
 }

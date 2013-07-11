@@ -15,7 +15,6 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -26,26 +25,20 @@ import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class MaintenanceGadget extends AbstractGadget<TenantMaintenanceDTO, DashboardForm> {
+public class MaintenanceGadget extends AbstractGadget<DashboardViewImpl> {
 
-    MaintenanceGadget(DashboardForm form) {
+    MaintenanceGadget(DashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.maintenanceIcon(), "My Maintenance Requests", ThemeColor.contrast5);
         setActionsToolbar(new MaintenanceToolbar());
-    }
-
-    @Override
-    public IsWidget createContent() {
 
         FlowPanel contentPanel = new FlowPanel();
         contentPanel
                 .add(new HTML(
                         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
-        return contentPanel;
+        setContent(contentPanel);
     }
 
-    @Override
-    protected void setComponentsValue(TenantMaintenanceDTO value, boolean fireEvent, boolean populate) {
-        // TODO Auto-generated method stub
+    protected void populate(TenantMaintenanceDTO value) {
 
     }
 

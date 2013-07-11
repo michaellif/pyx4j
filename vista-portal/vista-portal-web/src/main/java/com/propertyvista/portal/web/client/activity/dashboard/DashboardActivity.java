@@ -76,8 +76,4 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
         }
     }
 
-    @Override
-    public void save(TenantDashboardDTO value) {
-    }
-
 }

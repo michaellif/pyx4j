@@ -15,7 +15,6 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -26,25 +25,20 @@ import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class ResidentServicesGadget extends AbstractGadget<TenantResidentServicesDTO, DashboardForm> {
+public class ResidentServicesGadget extends AbstractGadget<DashboardViewImpl> {
 
-    ResidentServicesGadget(DashboardForm form) {
+    ResidentServicesGadget(DashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.residentServicesIcon(), "Resident Services", ThemeColor.contrast3);
         setActionsToolbar(new ResidentServicesToolbar());
-    }
-
-    @Override
-    public IsWidget createContent() {
         FlowPanel contentPanel = new FlowPanel();
         contentPanel
                 .add(new HTML(
                         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
-        return contentPanel;
+
+        setContent(contentPanel);
     }
 
-    @Override
-    protected void setComponentsValue(TenantResidentServicesDTO value, boolean fireEvent, boolean populate) {
-        // TODO Auto-generated method stub
+    protected void populate(TenantResidentServicesDTO value) {
 
     }
 

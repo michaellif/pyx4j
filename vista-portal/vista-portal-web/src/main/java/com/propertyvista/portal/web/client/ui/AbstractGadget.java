@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import java.util.Collection;
-
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
@@ -25,19 +23,15 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.commons.IDebugId;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
-import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CEntityContainer;
-import com.pyx4j.forms.client.ui.decorators.IDecorator;
-import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
-public abstract class AbstractGadget<E extends IEntity, T extends IsWidget> extends CEntityContainer<E> {
+public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
+
+    private ContainerPanel containerPanel;
 
     private final ImageResource imageResource;
 
@@ -54,26 +48,14 @@ public abstract class AbstractGadget<E extends IEntity, T extends IsWidget> exte
         this.imageResource = imageResource;
         this.title = title;
         this.themeColor = themeColor;
-        asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
+        setStyleName(DashboardTheme.StyleName.Gadget.name());
+
+        containerPanel = new ContainerPanel();
+        setWidget(containerPanel);
     }
 
     public AbstractGadget(T viewer, ThemeColor themeColor) {
         this(viewer, null, null, themeColor);
-    }
-
-    @Override
-    public Collection<? extends CComponent<?>> getComponents() {
-        return null;
-    }
-
-    @Override
-    public ValidationResults getValidationResults() {
-        return new ValidationResults();
-    }
-
-    @Override
-    protected IDecorator<?> createDecorator() {
-        return new GadgetDecorator();
     }
 
     public T getGadgetViewer() {
@@ -84,13 +66,17 @@ public abstract class AbstractGadget<E extends IEntity, T extends IsWidget> exte
         this.actionsToolbar = actionsToolbar;
     }
 
-    class GadgetDecorator extends SimplePanel implements IDecorator<CEntityContainer<?>> {
+    public void setContent(IsWidget widget) {
+        containerPanel.setContentPanel(widget);
+    }
+
+    class ContainerPanel extends SimplePanel {
 
         private final FlowPanel mainPanel;
 
         private final SimplePanel contentPanel;
 
-        public GadgetDecorator() {
+        public ContainerPanel() {
             asWidget().setStyleName(DashboardTheme.StyleName.GadgetDecorator.name());
 
             mainPanel = new FlowPanel();
@@ -134,15 +120,8 @@ public abstract class AbstractGadget<E extends IEntity, T extends IsWidget> exte
             add(mainPanel);
         }
 
-        @Override
-        public void setComponent(CEntityContainer<?> viewer) {
-            contentPanel.setWidget(viewer.createContent().asWidget());
-        }
-
-        @Override
-        public void onSetDebugId(IDebugId parentDebugId) {
-            // TODO Auto-generated method stub
-
+        public void setContentPanel(IsWidget widget) {
+            contentPanel.setWidget(widget);
         }
 
     }
