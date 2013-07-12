@@ -36,4 +36,23 @@ public class GWTJava5Helper {
     public static int longCompare(long x, long y) {
         return (x < y) ? -1 : ((x == y) ? 0 : 1);
     }
+
+    public static boolean isAssignableFrom(Class<?> child, Class<?> cls) {
+        if (cls == null) {
+            return false;
+        }
+
+        if (cls.equals(child)) {
+            return true;
+        }
+
+        Class<?> currentSuperClass = cls.getSuperclass();
+        while (currentSuperClass != null) {
+            if (currentSuperClass.equals(child)) {
+                return true;
+            }
+            currentSuperClass = currentSuperClass.getSuperclass();
+        }
+        return false;
+    }
 }

@@ -33,6 +33,7 @@ import java.util.Set;
 import com.pyx4j.commons.ConverterUtils;
 import com.pyx4j.commons.ConverterUtils.ToStringConverter;
 import com.pyx4j.commons.EqualsHelper;
+import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -105,8 +106,9 @@ public class PrimitiveSetHandler<TYPE extends Serializable> extends ObjectHandle
 
     @Override
     public boolean add(TYPE e) {
-        if (!getValueClass().equals(e.getClass())) {
-            throw new ClassCastException("Set member type expected " + getValueClass());
+        // Limitation of GWT
+        if (!getValueClass().isInterface() && !GWTJava5Helper.isAssignableFrom(getValueClass(), e.getClass())) {
+            throw new ClassCastException("Set member type expected " + getValueClass() + "; got " + e.getClass());
         }
         return ensureValue().add(e);
     }
@@ -148,8 +150,9 @@ public class PrimitiveSetHandler<TYPE extends Serializable> extends ObjectHandle
 
     @Override
     public boolean contains(Object o) {
-        if (!getValueClass().equals(o.getClass())) {
-            throw new ClassCastException("Set member type expected " + getValueClass());
+        // Limitation of GWT
+        if (!getValueClass().isInterface() && !GWTJava5Helper.isAssignableFrom(getValueClass(), o.getClass())) {
+            throw new ClassCastException("Set member type expected " + getValueClass() + "; got " + o.getClass());
         }
         Set<?> value = getValue();
         if (value != null) {
