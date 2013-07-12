@@ -43,7 +43,7 @@ import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
 import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 import com.propertyvista.operations.rpc.services.AdminUserService;
-import com.propertyvista.operations.rpc.services.AuditRecordListerService;
+import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 import com.propertyvista.operations.rpc.services.DBIntegrityCheckService;
 import com.propertyvista.operations.rpc.services.EncryptedStorageService;
 import com.propertyvista.operations.rpc.services.EncryptedStorageServicePrivateKeyUploadService;
@@ -145,7 +145,7 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
 
-        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordListerService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(MerchantAccountFileUploadService.class));

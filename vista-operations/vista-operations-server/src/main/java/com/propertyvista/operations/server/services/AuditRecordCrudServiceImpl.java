@@ -23,13 +23,13 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaUserType;
 import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
-import com.propertyvista.operations.rpc.services.AuditRecordListerService;
+import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.jobs.TaskRunner;
 
-public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordOperationsDTO> implements AuditRecordListerService {
+public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<AuditRecord, AuditRecordOperationsDTO> implements AuditRecordCrudService {
 
-    public AuditRecordListerServiceImpl() {
+    public AuditRecordCrudServiceImpl() {
         super(AuditRecord.class, AuditRecordOperationsDTO.class);
     }
 
@@ -79,5 +79,10 @@ public class AuditRecordListerServiceImpl extends AbstractCrudServiceDtoImpl<Aud
             }
         }
 
+    }
+
+    @Override
+    protected void enhanceRetrieved(AuditRecord entity, AuditRecordOperationsDTO dto, RetrieveTarget retrieveTarget) {
+        enhanceListRetrieved(entity, dto);
     }
 }

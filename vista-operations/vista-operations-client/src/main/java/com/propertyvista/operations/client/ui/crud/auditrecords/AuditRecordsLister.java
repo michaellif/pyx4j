@@ -25,7 +25,8 @@ import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO> {
 
     public AuditRecordsLister() {
-        super(AuditRecordOperationsDTO.class);
+        super(AuditRecordOperationsDTO.class, false, false);
+
         setColumnDescriptors(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto().when()).build(),
                 new MemberColumnDescriptor.Builder(proto().worldTime()).visible(false).build(),
@@ -44,5 +45,10 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO>
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().when(), true), new Sort(proto().pmc(), false));
+    }
+
+    @Override
+    protected void onItemSelect(AuditRecordOperationsDTO item) {
+        super.onItemSelect(item);
     }
 }

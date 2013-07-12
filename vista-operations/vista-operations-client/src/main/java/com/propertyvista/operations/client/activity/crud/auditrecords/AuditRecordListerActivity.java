@@ -21,12 +21,12 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.propertyvista.operations.client.ui.crud.auditrecords.AuditRecordListerView;
 import com.propertyvista.operations.client.viewfactories.crud.SecurityViewFactory;
 import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
-import com.propertyvista.operations.rpc.services.AuditRecordListerService;
+import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 
-public class AuditRecordsActivity extends AbstractListerActivity<AuditRecordOperationsDTO> {
+public class AuditRecordListerActivity extends AbstractListerActivity<AuditRecordOperationsDTO> {
 
-    public AuditRecordsActivity(Place place) {
-        super(place, SecurityViewFactory.instance(AuditRecordListerView.class), GWT.<AuditRecordListerService> create(AuditRecordListerService.class),
+    public AuditRecordListerActivity(Place place) {
+        super(place, SecurityViewFactory.instance(AuditRecordListerView.class), GWT.<AuditRecordCrudService> create(AuditRecordCrudService.class),
                 AuditRecordOperationsDTO.class);
     }
 

@@ -28,7 +28,8 @@ import com.propertyvista.operations.client.activity.crud.account.AccountViewerAc
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserEditorActivity;
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserListerActivity;
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserViewerActivity;
-import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordsActivity;
+import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationCardEditorActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationCardListerActivity;
 import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorActivity;
@@ -50,12 +51,12 @@ import com.propertyvista.operations.client.activity.crud.pmc.PmcListerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcViewerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountEditorActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.merchantaccount.MerchantAccountViewerActivity;
+import com.propertyvista.operations.client.activity.crud.scheduler.RunDataListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunDataViewerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.RunViewerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerEditorActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerListerActivity;
-import com.propertyvista.operations.client.activity.crud.scheduler.RunDataListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 import com.propertyvista.operations.client.activity.crud.simulatedpad.PadBatchEditorActivity;
@@ -159,7 +160,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
 // - Security:
                     } else if (place instanceof OperationsSiteMap.Security.AuditRecord) {
-                        activity = new AuditRecordsActivity(place);
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new AuditRecordListerActivity(place);
+                            break;
+                        case viewer:
+                            activity = new AuditRecordViewerActivity(crudPlace);
+                        default:
+                            break;
+                        }
+
 // - Administration:
                     } else if (place instanceof OperationsSiteMap.Administration.Maintenance) {
                         switch (crudPlace.getType()) {

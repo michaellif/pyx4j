@@ -27,6 +27,7 @@ import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.TriggerDTO;
@@ -49,5 +50,6 @@ public class OperationsEntityMapper {
         register(CardServiceSimulationCard.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard.class, DEFAULT_IMAGE);
         register(CardServiceSimulationTransaction.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction.class,
                 DEFAULT_IMAGE);
+        register(AuditRecordOperationsDTO.class, OperationsSiteMap.Security.AuditRecord.class, DEFAULT_IMAGE);
     }
 }

@@ -7,16 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 17, 2012
+ * Created on 2013-07-12
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.rpc.services;
+package com.propertyvista.operations.client.ui.crud.auditrecords;
 
-import com.pyx4j.entity.rpc.AbstractListService;
-
+import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 
-public interface AuditRecordListerService extends AbstractListService<AuditRecordOperationsDTO> {
+public class AuditRecordViewerViewImpl extends OperationsViewerViewImplBase<AuditRecordOperationsDTO> {
 
+    public AuditRecordViewerViewImpl() {
+        setForm(new AuditRecordForm(this));
+    }
 }
