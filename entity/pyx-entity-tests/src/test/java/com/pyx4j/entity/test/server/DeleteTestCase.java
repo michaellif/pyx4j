@@ -30,6 +30,9 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.test.shared.domain.Department;
 import com.pyx4j.entity.test.shared.domain.Employee;
 import com.pyx4j.entity.test.shared.domain.Organization;
+import com.pyx4j.entity.test.shared.domain.Task;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyChild;
+import com.pyx4j.entity.test.shared.domain.ownership.managed.BidirectionalOneToManyParent;
 
 public abstract class DeleteTestCase extends DatastoreTestBase {
 
@@ -132,4 +135,99 @@ public abstract class DeleteTestCase extends DatastoreTestBase {
         assertNull("found by pk", department2);
     }
 
+    public void testPrimitiveSetDelete() {
+        String setId = uniqueString();
+        Task task = EntityFactory.create(Task.class);
+        task.description().setValue(setId);
+        task.notes().add("Note1");
+        task.notes().add("Note2");
+        srv.persist(task);
+
+        // Test that it can be removed
+        srv.delete(task);
+    }
+
+    public void testPrimitiveSetOwnedCascadeDeleteUnidirectionalOneToManyPersist() {
+        testPrimitiveSetOwnedCascadeDeleteUnidirectionalOneToMany(TestCaseMethod.Persist);
+    }
+
+    public void testPrimitiveSetOwnedCascadeDeleteUnidirectionalOneToManyMerge() {
+        testPrimitiveSetOwnedCascadeDeleteUnidirectionalOneToMany(TestCaseMethod.Merge);
+    }
+
+    public void testPrimitiveSetOwnedCascadeDeleteUnidirectionalOneToMany(TestCaseMethod testCaseMethod) {
+        String setId = uniqueString();
+        Employee o = EntityFactory.create(Employee.class);
+        o.firstName().setValue(setId);
+
+        Task c1 = EntityFactory.create(Task.class);
+        c1.description().setValue("1-" + setId);
+        c1.notes().add("Note11");
+        c1.notes().add("Note12");
+
+        o.tasksSorted().add(c1);
+
+        Task c2 = EntityFactory.create(Task.class);
+        c2.description().setValue("2-" + setId);
+        c2.notes().add("Note21");
+        c2.notes().add("Note22");
+
+        o.tasksSorted().add(c2);
+
+        srvSave(o, testCaseMethod);
+
+        // Test that Set in cascade can be removed
+        o.tasksSorted().remove(c2);
+        srvSave(o, testCaseMethod);
+
+        {
+            Employee or1 = srv.retrieve(Employee.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 1, or1.tasksSorted().size());
+        }
+
+        // Test that full graph can be removed
+        srv.delete(o);
+    }
+
+    public void testPrimitiveSetOwnedCascadeDeletePersistBidirectionalOneToMany() {
+        testPrimitiveSetOwnedCascadeDeleteBidirectionalOneToMany(TestCaseMethod.Persist);
+    }
+
+    public void testPrimitiveSetOwnedCascadeDeleteMergeBidirectionalOneToMany() {
+        testPrimitiveSetOwnedCascadeDeleteBidirectionalOneToMany(TestCaseMethod.Merge);
+    }
+
+    public void testPrimitiveSetOwnedCascadeDeleteBidirectionalOneToMany(TestCaseMethod testCaseMethod) {
+        String setId = uniqueString();
+        BidirectionalOneToManyParent o = EntityFactory.create(BidirectionalOneToManyParent.class);
+        o.testId().setValue(setId);
+
+        BidirectionalOneToManyChild c1 = EntityFactory.create(BidirectionalOneToManyChild.class);
+        c1.testId().setValue("1-" + setId);
+        c1.childData1().add("Note11");
+        c1.childData1().add("Note12");
+
+        o.children().add(c1);
+
+        BidirectionalOneToManyChild c2 = EntityFactory.create(BidirectionalOneToManyChild.class);
+        c2.testId().setValue("2-" + setId);
+        c2.childData1().add("Note21");
+        c2.childData1().add("Note22");
+
+        o.children().add(c2);
+
+        srvSave(o, testCaseMethod);
+
+        // Test that Set in cascade can be removed
+        o.children().remove(c2);
+        srvSave(o, testCaseMethod);
+
+        {
+            BidirectionalOneToManyParent or1 = srv.retrieve(BidirectionalOneToManyParent.class, o.getPrimaryKey());
+            Assert.assertEquals("child data size", 1, or1.children().size());
+        }
+
+        // Test that full graph can be removed
+        srv.delete(o);
+    }
 }

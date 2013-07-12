@@ -26,6 +26,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @Table(prefix = "test")
 public interface BidirectionalOneToManyNCPChild extends IEntity {
@@ -40,5 +41,7 @@ public interface BidirectionalOneToManyNCPChild extends IEntity {
     IPrimitive<String> testId();
 
     IPrimitive<String> name();
+
+    IPrimitiveSet<String> childData1();
 
 }

@@ -298,13 +298,20 @@ public class TableModelCollections {
                         }
                     }
                 } else {
-                    persistenceContext.setUncommittedChanges();
-                    rs.deleteRow();
-                    if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships()) && (!member.isJoinTableSameAsTarget())) {
+                    boolean removeFromFoinTable = true;
+                    if ((value instanceof IEntity) && (member.getMemberMeta().isOwnedRelationships())) {
                         if (EntityPersistenceServiceRDB.trace) {
                             log.info(Trace.id() + "add cascadeRemove " + ((IEntity) value).getDebugExceptionInfoString());
                         }
                         cascadeRemove.add((IEntity) value);
+                        if (member.isJoinTableSameAsTarget()) {
+                            removeFromFoinTable = false;
+                        }
+                    }
+
+                    if (removeFromFoinTable) {
+                        persistenceContext.setUncommittedChanges();
+                        rs.deleteRow();
                     }
                 }
             }
@@ -320,7 +327,7 @@ public class TableModelCollections {
             if (dialect.isIntegrityConstraintException(e)) {
                 // TODO Use proper caption.
                 throw new IntegrityConstraintUserRuntimeException(i18n.tr("Unable to delete \"{0}\". The record is referenced by another record.", memberObject
-                        .getMeta().getCaption()), null);
+                        .getMeta().getCaption()), null, e);
             } else {
                 throw new RuntimeException(e);
             }
