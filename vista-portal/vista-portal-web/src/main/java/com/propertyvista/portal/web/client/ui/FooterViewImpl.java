@@ -15,6 +15,7 @@ package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
@@ -143,6 +144,8 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
 
         public BrandPanel() {
 
+            getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
             myCommunityImage = new Image(PortalImages.INSTANCE.myCommunityFooterLogo());
             myCommunityImage.getElement().getStyle().setProperty("margin", "-5px 5px 0 0");
             myCommunityImage.getElement().getStyle().setDisplay(Display.BLOCK);
@@ -153,7 +156,13 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             add(vistaImage);
 
             deviceImage = new Image();
-            add(deviceImage);
+            SimplePanel deviceImageHolder = new SimplePanel(deviceImage);
+            deviceImageHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            deviceImageHolder.getElement().getStyle().setProperty("margin", "5px 5px 5px auto");
+            deviceImageHolder.getElement().getStyle().setProperty("borderRadius", "5px");
+            deviceImageHolder.getElement().getStyle().setProperty("background", "white");
+            deviceImageHolder.getElement().getStyle().setProperty("padding", "5px");
+            add(deviceImageHolder);
 
         }
 
@@ -193,9 +202,6 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
                 deviceImage.setResource(PortalImages.INSTANCE.huge());
                 break;
             }
-            deviceImage.getElement().getStyle().setDisplay(Display.BLOCK);
-            deviceImage.getElement().getStyle().setProperty("margin", "5px 5px 5px auto");
-
         }
     }
 
