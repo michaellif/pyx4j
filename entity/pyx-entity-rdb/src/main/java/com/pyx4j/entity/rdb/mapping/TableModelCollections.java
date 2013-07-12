@@ -310,6 +310,10 @@ public class TableModelCollections {
                     }
 
                     if (removeFromFoinTable) {
+                        if (EntityPersistenceServiceRDB.traceSql) {
+                            log.debug("{}{} {}\n\tfrom:{}\t", Trace.id(), persistenceContext.txId(), "delete row from cursor",
+                                    Trace.getCallOrigin(EntityPersistenceServiceRDB.class));
+                        }
                         persistenceContext.setUncommittedChanges();
                         rs.deleteRow();
                     }
