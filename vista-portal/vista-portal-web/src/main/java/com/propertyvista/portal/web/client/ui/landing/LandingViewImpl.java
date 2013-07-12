@@ -15,11 +15,16 @@ package com.propertyvista.portal.web.client.ui.landing;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.FontStyle;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.SystemWallMessage;
@@ -37,17 +42,30 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     public LandingViewImpl() {
 
         loginGadget = new LoginGadget(this);
-        loginGadget.asWidget().setWidth("45%");
+        loginGadget.asWidget().setWidth("46%");
 
         HTML orLabel = new HTML("OR");
-        orLabel.getElement().getStyle().setMarginTop(100, Unit.PX);
-        orLabel.getElement().getStyle().setFloat(Float.LEFT);
+        orLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        orLabel.getElement().getStyle().setLineHeight(50, Unit.PX);
+        orLabel.setPixelSize(50, 50);
+        orLabel.getElement().getStyle().setFontSize(1.5, Unit.EM);
+        orLabel.getElement().getStyle().setFontStyle(FontStyle.ITALIC);
+        orLabel.getElement().getStyle().setColor("white");
+        orLabel.getElement().getStyle().setBackgroundColor("#999");
+        orLabel.getElement().getStyle().setProperty("borderRadius", "50%");
+        orLabel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+
+        SimplePanel orHolder = new SimplePanel(orLabel);
+        orHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        orHolder.getElement().getStyle().setMarginTop(100, Unit.PX);
+        orHolder.asWidget().setWidth("8%");
+        orHolder.getElement().getStyle().setFloat(Float.LEFT);
 
         signUpGadget = new SignUpGadget(this);
-        signUpGadget.asWidget().setWidth("45%");
+        signUpGadget.asWidget().setWidth("46%");
 
         add(loginGadget);
-        add(orLabel);
+        add(orHolder);
         add(signUpGadget);
 
     }
