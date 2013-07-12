@@ -17,10 +17,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -81,40 +83,44 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
                 }
             }
 
-            int[] row = { -1 };
+            int row = -1;
+            contentPanel.setH1(++row, 0, 2, i18n.tr("Outstanding Charges"));
+            contentPanel.setWidget(++row, 0, 2, renderLineItems(outstangingCharges, chargeFormat, i18n.tr("Due Date")));
 
-            contentPanel.setH1(++row[0], 0, COLUMNS_NUMBER, i18n.tr("Outstanding Charges"));
-            renderLineItems(row, contentPanel, outstangingCharges, chargeFormat, i18n.tr("Due Date"));
+            contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Account Credits"));
+            contentPanel.setWidget(++row, 0, 2, renderLineItems(accountCredits, paymentFormat, null));
 
-            if (!accountCredits.isEmpty()) {
-                contentPanel.setH1(++row[0], 0, COLUMNS_NUMBER, i18n.tr("Account Credits"));
-                renderLineItems(row, contentPanel, accountCredits, paymentFormat, null);
-            }
-
-            if (!unappliedPayments.isEmpty()) {
-                contentPanel.setH1(++row[0], 0, COLUMNS_NUMBER, i18n.tr("Unapplied Payments"));
-                renderLineItems(row, contentPanel, unappliedPayments, paymentFormat, null);
-            }
+            contentPanel.setH1(++row, 0, COLUMNS_NUMBER, i18n.tr("Unapplied Payments"));
+            contentPanel.setWidget(++row, 0, 2, renderLineItems(unappliedPayments, paymentFormat, null));
         }
         return contentPanel;
     }
 
-    private <E extends InvoiceLineItem> void renderLineItems(int[] row, FormFlexPanel panel, List<E> items, NumberFormat format, String dateHdr) {
+    private <E extends InvoiceLineItem> FlexTable renderLineItems(List<E> items, NumberFormat format, String dateHdr) {
         // this code should be very defensive because you never know the quality of information that is coming from Yardi
+        int row = -1;
+        FlexTable panel = new FlexTable();
+        panel.getElement().getStyle().setWidth(100, Unit.PCT);
+        panel.getColumnFormatter().setWidth(0, "25%");
+        panel.getColumnFormatter().setWidth(1, "25%");
+        panel.getColumnFormatter().setWidth(2, "25%");
+        panel.getColumnFormatter().setWidth(3, "25%");
+
         if (!items.isEmpty()) {
             int COL_DATE = 0;
             int COL_TYPE = 1;
             int COL_DESCRIPTION = 2;
             int COL_AMOUNT = 3;
 
-            ++row[0];
-            panel.setWidget(row[0], COL_DATE, new HTML(dateHdr == null ? i18n.tr("Post Date") : dateHdr));
-            panel.setWidget(row[0], COL_TYPE, new HTML(i18n.tr("AR Code Type")));
-            panel.setWidget(row[0], COL_DESCRIPTION, new HTML(i18n.tr("Description")));
-            panel.setWidget(row[0], COL_AMOUNT, new HTML(i18n.tr("Amount")));
+            ++row;
+            panel.setWidget(row, COL_DATE, new HTML(dateHdr == null ? i18n.tr("Post Date") : dateHdr));
+            panel.setWidget(row, COL_TYPE, new HTML(i18n.tr("AR Code Type")));
+            panel.setWidget(row, COL_DESCRIPTION, new HTML(i18n.tr("Description")));
+            panel.setWidget(row, COL_AMOUNT, new HTML(i18n.tr("Amount")));
 
-            panel.getRowFormatter().setStyleName(row[0], TransactionHistoryViewerTheme.StyleName.FinancialTransactionHeaderRow.name());
-            panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
+            panel.getRowFormatter().setStyleName(row, TransactionHistoryViewerTheme.StyleName.FinancialTransactionHeaderRow.name());
+            panel.getCellFormatter().addStyleName(row, COL_TYPE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+            panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
             DateTimeFormat dateFormat = DateTimeFormat.getFormat(CDatePicker.defaultDateFormat);
 
@@ -132,21 +138,24 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
 
                 HTML typeHtml = new HTML(htmlEscape(item.arCode().type().getValue().toString()));
 
-                ++row[0];
-                panel.setWidget(row[0], COL_DATE, dateHtml);
-                panel.setWidget(row[0], COL_TYPE, typeHtml);
-                panel.setWidget(row[0], COL_DESCRIPTION, descriptionHtml);
-                panel.setWidget(row[0], COL_AMOUNT, amountHtml);
+                ++row;
+                panel.setWidget(row, COL_DATE, dateHtml);
+                panel.setWidget(row, COL_TYPE, typeHtml);
+                panel.setWidget(row, COL_DESCRIPTION, descriptionHtml);
+                panel.setWidget(row, COL_AMOUNT, amountHtml);
 
-                panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionRow.name());
+                panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionRow.name());
                 panel.getRowFormatter().addStyleName(//@formatter:off
-                        row[0], 
-                        row[0] % 2 == 0 ? 
+                        row, 
+                        row % 2 == 0 ? 
                                 TransactionHistoryViewerTheme.StyleName.FinancialTransactionEvenRow.name() : 
                                 TransactionHistoryViewerTheme.StyleName.FinancialTransactionOddRow.name()
                 );//@formatter:on
-                panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
-                panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
+                panel.getCellFormatter().addStyleName(row, COL_DATE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+                panel.getCellFormatter().addStyleName(row, COL_TYPE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+                panel.getCellFormatter().addStyleName(row, COL_DESCRIPTION, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+                panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
+                panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
                 if (amount != null) {
                     totalAmount = totalAmount.add(amount);
@@ -156,23 +165,25 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
             HTML totalDescription = new HTML(htmlEscape(i18n.tr("Total")));
             HTML totalHtml = new HTML(htmlEscape(format.format(totalAmount)));
 
-            ++row[0];
-            panel.setWidget(row[0], COL_DESCRIPTION, totalDescription);
-            panel.setWidget(row[0], COL_AMOUNT, totalHtml);
-            panel.getRowFormatter().addStyleName(row[0], TransactionHistoryViewerTheme.StyleName.FinancialTransactionRow.name());
-            panel.getRowFormatter().addStyleName(row[0], TransactionHistoryViewerTheme.StyleName.FinancialTransactionTotalRow.name());
-            panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
-            panel.getCellFormatter().addStyleName(row[0], COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
+            ++row;
+            panel.setWidget(row, COL_DESCRIPTION, totalDescription);
+            panel.setWidget(row, COL_AMOUNT, totalHtml);
+            panel.getRowFormatter().addStyleName(row, TransactionHistoryViewerTheme.StyleName.FinancialTransactionRow.name());
+            panel.getRowFormatter().addStyleName(row, TransactionHistoryViewerTheme.StyleName.FinancialTransactionTotalRow.name());
+            panel.getCellFormatter().addStyleName(row, COL_DESCRIPTION, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+            panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
+            panel.getCellFormatter().addStyleName(row, COL_AMOUNT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
 
         } else {
             Label noItems = new Label();
             noItems.setText(i18n.tr("None"));
-            ++row[0];
-            panel.setWidget(row[0], 0, noItems);
-            panel.getFlexCellFormatter().setColSpan(row[0], 0, 3);
-            panel.getFlexCellFormatter().setHorizontalAlignment(row[0], 0, HasHorizontalAlignment.ALIGN_CENTER);
+            ++row;
+            panel.setWidget(row, 0, noItems);
+            panel.getFlexCellFormatter().setColSpan(row, 0, 4);
+            panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
         }
 
+        return panel;
     }
 
     private static SafeHtml htmlEscape(String s) {

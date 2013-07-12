@@ -19,11 +19,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
@@ -72,7 +74,9 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
     }
 
     private IsWidget createLineItems(List<InvoiceLineItem> items) {
-        FormFlexPanel lineItemsView = new FormFlexPanel();
+        FlexTable lineItemsView = new FlexTable();
+        lineItemsView.getElement().getStyle().setWidth(100, Unit.PCT);
+
         int row = 0;
 
         // build header
@@ -99,24 +103,20 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
         lineItemsView.getCellFormatter().addStyleName(row, COL_CREDIT, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
         lineItemsView.getCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
 
-        BigDecimal balance = new BigDecimal("0.0");
-
-        ++row;
+        row += 1;
+        BigDecimal balance = new BigDecimal("0.00");
 
         lineItemsView.setHTML(row, COL_ITEM, toSafeHtml(i18n.tr("Balance Forward")));
         lineItemsView.setHTML(row, COL_BALANCE, toSafeHtml(balance.toString()));
         lineItemsView.getRowFormatter().setStyleName(row, TransactionHistoryViewerTheme.StyleName.FinancialTransactionRow.name());
-        lineItemsView.getRowFormatter().addStyleName(//@formatter:off
-                row,
-                row % 2 == 0 ? 
-                        TransactionHistoryViewerTheme.StyleName.FinancialTransactionEvenRow.name() :
-                        TransactionHistoryViewerTheme.StyleName.FinancialTransactionOddRow.name()
-        );//@formatter:on
+        lineItemsView.getRowFormatter().addStyleName(row, TransactionHistoryViewerTheme.StyleName.FinancialTransactionOddRow.name());
+        lineItemsView.getFlexCellFormatter().addStyleName(row, COL_ITEM, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+
         lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
         lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
 
         for (final InvoiceLineItem item : items) {
-            ++row;
+            row += 1;
 
             int colAmount = -1;
             String amountRepresentation = "error";
@@ -161,10 +161,12 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
             lineItemsView.getRowFormatter().addStyleName(row, TransactionHistoryViewerTheme.StyleName.FinancialTransactionRow.name());
             lineItemsView.getRowFormatter().addStyleName(//@formatter:off
                     row,
-                    row % 2 == 0 ? 
-                            TransactionHistoryViewerTheme.StyleName.FinancialTransactionEvenRow.name(): 
-                            TransactionHistoryViewerTheme.StyleName.FinancialTransactionOddRow.name() 
+                    row % 2 == 0 ? TransactionHistoryViewerTheme.StyleName.FinancialTransactionEvenRow.name(): 
+                                   TransactionHistoryViewerTheme.StyleName.FinancialTransactionOddRow.name() 
             );//@formatter:on
+            lineItemsView.getFlexCellFormatter().addStyleName(row, COL_DATE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+            lineItemsView.getFlexCellFormatter().addStyleName(row, COL_ITEM, TransactionHistoryViewerTheme.StyleName.FinancialTransactionDataColumn.name());
+            lineItemsView.getFlexCellFormatter().addStyleName(row, colAmount, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
             lineItemsView.getFlexCellFormatter().addStyleName(row, colAmount, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
             lineItemsView.getFlexCellFormatter().addStyleName(row, colAmount, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyCell.name());
             lineItemsView.getFlexCellFormatter().addStyleName(row, COL_BALANCE, TransactionHistoryViewerTheme.StyleName.FinancialTransactionMoneyColumn.name());
@@ -183,7 +185,8 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
                 return arg0.arCode().getValue().toString().compareTo(arg1.arCode().getValue().toString());
             }
         });
-        FormFlexPanel arrearsView = new FormFlexPanel();
+        FlexTable arrearsView = new FlexTable();
+        arrearsView.getElement().getStyle().setWidth(100, Unit.PCT);
         int row = 0;
 
         drawArrearsTableHeader(arrearsView, ++row);
@@ -197,8 +200,8 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
         return arrearsView;
     }
 
-    private void drawArrearsTableHeader(FormFlexPanel arrearsView, int row) {
-        AgingBuckets proto = EntityFactory.getEntityPrototype(AgingBuckets.class);
+    private void drawArrearsTableHeader(FlexTable arrearsView, int row) {
+        AgingBuckets<?> proto = EntityFactory.getEntityPrototype(AgingBuckets.class);
         arrearsView.setHTML(row, 0, toSafeHtml(proto.arCode().getMeta().getCaption()));
         arrearsView.setHTML(row, 1, toSafeHtml(proto.bucketCurrent().getMeta().getCaption()));
         arrearsView.setHTML(row, 2, toSafeHtml(proto.bucket30().getMeta().getCaption()));
@@ -216,13 +219,13 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
 
     }
 
-    private void drawArrears(LeaseAgingBuckets bucket, FormFlexPanel panel, int row) {
+    private void drawArrears(LeaseAgingBuckets bucket, FlexTable panel, int row) {
 
         if (bucket.isNull()) {
             return;
         }
 
-        panel.setHTML(row, 0, toSafeHtml(bucket.arCode().getStringView()));
+        panel.setHTML(row, 0, toSafeHtml(!bucket.arCode().isNull() ? bucket.arCode().getStringView() : i18n.tr("Total")));
         panel.setHTML(row, 1, toSafeHtml(NUMBER_FORMAT.format(bucket.bucketCurrent().getValue())));
         panel.setHTML(row, 2, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket30().getValue())));
         panel.setHTML(row, 3, toSafeHtml(NUMBER_FORMAT.format(bucket.bucket60().getValue())));
@@ -236,6 +239,8 @@ public class TransactionHistoryViewer extends CViewer<TransactionHistoryDTO> {
         } else {
             panel.getRowFormatter().setStyleName(row, CrmTheme.ArrearsStyleName.ArrearsCategoryAll.name());
         }
+        panel.getFlexCellFormatter().setStyleName(row, 0, CrmTheme.ArrearsStyleName.ArrearsARCode.name());
+        panel.getFlexCellFormatter().setStyleName(row, 1, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
         panel.getFlexCellFormatter().setStyleName(row, 1, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
         panel.getFlexCellFormatter().setStyleName(row, 2, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());
         panel.getFlexCellFormatter().setStyleName(row, 3, CrmTheme.ArrearsStyleName.ArrearsMoneyCell.name());

@@ -34,8 +34,8 @@ public class InvoiceDebitForm extends CrmEntityForm<InvoiceDebitDTO> {
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAmount())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().outstandingDebit())).build());
-        panel.setH2(++row, 0, 1, i18n.tr("Links"));
-        panel.setWidget(++row, 0, inject(proto().debitCreditLinks(), new DebitCreditLinkFolder()));
+        panel.setH2(++row, 0, 2, i18n.tr("Links"));
+        panel.setWidget(++row, 0, 2, inject(proto().debitCreditLinks(), new DebitCreditLinkFolder()));
         selectTab(addTab(panel));
     }
 

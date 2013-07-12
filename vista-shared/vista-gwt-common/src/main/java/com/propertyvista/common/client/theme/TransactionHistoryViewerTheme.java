@@ -27,6 +27,7 @@ public class TransactionHistoryViewerTheme extends Theme {
         FinancialTransactionEvenRow,
         FinancialTransactionOddRow,
         
+        FinancialTransactionDataColumn,
         FinancialTransactionMoneyColumn,
         FinancialTransactionMoneyCell,
         
@@ -36,32 +37,36 @@ public class TransactionHistoryViewerTheme extends Theme {
     public TransactionHistoryViewerTheme() {
         Style style = null;
 
-        style = new Style(".", StyleName.FinancialTransactionHeaderRow);
+        style = new Style(".", StyleName.FinancialTransactionHeaderRow.name());
         style.addProperty("font-weight", "bold");
         style.addProperty("text-align", "left");
         addStyle(style);
 
-        style = new Style(".", StyleName.FinancialTransactionRow);
+        style = new Style(".", StyleName.FinancialTransactionRow.name());
         style.addProperty("padding", "1em 2px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FinancialTransactionEvenRow);
+        style = new Style(".", StyleName.FinancialTransactionEvenRow.name());
         style.addProperty("padding", "1em 2px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FinancialTransactionOddRow);
+        style = new Style(".", StyleName.FinancialTransactionOddRow.name());
         style.addProperty("padding", "1em 2px");
         addStyle(style);
 
-        style = new Style(".", StyleName.FinancialTransactionMoneyColumn);
+        style = new Style(".", StyleName.FinancialTransactionDataColumn.name());
+        style.addProperty("text-align", "left");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FinancialTransactionMoneyColumn.name());
         style.addProperty("text-align", "right");
         addStyle(style);
 
-        style = new Style(".", StyleName.FinancialTransactionMoneyCell);
+        style = new Style(".", StyleName.FinancialTransactionMoneyCell.name());
         style.addProperty("font-family", "monospace");
         addStyle(style);
 
-        style = new Style(".", StyleName.FinancialTransactionTotalRow);
+        style = new Style(".", StyleName.FinancialTransactionTotalRow.name());
         style.addProperty("font-weight", "bold");
         addStyle(style);
 

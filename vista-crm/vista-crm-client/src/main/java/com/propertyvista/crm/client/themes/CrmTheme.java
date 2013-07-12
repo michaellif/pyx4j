@@ -62,7 +62,7 @@ public class CrmTheme extends VistaTheme {
     }
 
     public static enum ArrearsStyleName implements IStyleName {
-        ArrearsColumnTitle, ArrearsMoneyColumnTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell;
+        ArrearsColumnTitle, ArrearsMoneyColumnTitle, ArrearsCategoryEven, ArrearsCategoryOdd, ArrearsCategoryAll, ArrearsMoneyCell, ArrearsARCode;
     }
 
     public CrmTheme() {
@@ -441,9 +441,14 @@ public class CrmTheme extends VistaTheme {
             addStyle(style);
         }
         {
-            Style style = new Style("." + ArrearsStyleName.ArrearsMoneyCell);
+            Style style = new Style("." + ArrearsStyleName.ArrearsMoneyCell.name());
             style.addProperty("text-align", "right");
             style.addProperty("font-family", "monospace");
+            addStyle(style);
+        }
+        {
+            Style style = new Style("." + ArrearsStyleName.ArrearsARCode.name());
+            style.addProperty("text-align", "left");
             addStyle(style);
         }
 
