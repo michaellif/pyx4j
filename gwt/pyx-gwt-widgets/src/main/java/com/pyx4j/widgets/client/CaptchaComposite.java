@@ -84,12 +84,13 @@ public class CaptchaComposite extends SimplePanel {
         divHolder.getElement().setId(divName);
         //divHolder.getElement().getStyle().setDisplay(Display.NONE);
         recaptchaImage = new SimplePanel();
-        recaptchaImage.getElement().getStyle().setWidth(300, Unit.PX);
+        recaptchaImage.getElement().getStyle().setWidth(250, Unit.PX);
         recaptchaImage.getElement().getStyle().setHeight(57, Unit.PX);
         recaptchaImage.getElement().getStyle().setMarginRight(5, Unit.PX);
 
         HorizontalPanel images = new HorizontalPanel();
         images.add(recaptchaImage);
+        images.setCellWidth(recaptchaImage, "100%");
 
         VerticalPanel buttons = new VerticalPanel();
         images.add(buttons);
@@ -161,7 +162,7 @@ public class CaptchaComposite extends SimplePanel {
 
         response.setName("recaptcha_response_field");
         response.getElement().getStyle().setMarginTop(5, Unit.PX);
-        response.getElement().getStyle().setWidth(300, Unit.PX);
+        response.getElement().getStyle().setWidth(100, Unit.PCT);
         divHolder.add(response);
 
         this.add(divHolder);
@@ -283,7 +284,7 @@ public class CaptchaComposite extends SimplePanel {
     }-*/;
 
     public void createNewChallenge() {
-        response.setValue("");
+        response.setText("");
         if (isVisible() && created) {
             createNewChallengeImpl();
         }

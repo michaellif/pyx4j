@@ -34,8 +34,9 @@ import com.pyx4j.commons.Pair;
 import com.pyx4j.commons.css.IStyleDependent;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.widgets.client.CaptchaComposite;
+import com.pyx4j.widgets.client.WatermarkComponent;
 
-public class NativeCaptcha extends CaptchaComposite implements INativeFocusComponent<Pair<String, String>> {
+public class NativeCaptcha extends CaptchaComposite implements INativeFocusComponent<Pair<String, String>>, WatermarkComponent {
 
     public static enum StyleDependent implements IStyleDependent {
         invalid
@@ -51,6 +52,11 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
                 component.onEditingStop();
             }
         });
+    }
+
+    @Override
+    public void setWatermark(String text) {
+        getResponseTextBox().setWatermark(text);
     }
 
     @Override

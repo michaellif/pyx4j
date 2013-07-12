@@ -23,10 +23,13 @@ package com.pyx4j.forms.client.ui;
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Pair;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.WatermarkComponent;
 
 public class CCaptcha extends CField<Pair<String, String>, NativeCaptcha> {
 
     private static final I18n i18n = I18n.get(CCaptcha.class);
+
+    private String watermark;
 
     public CCaptcha() {
         setMandatoryValidationMessage(i18n.tr("Captcha code is required"));
@@ -51,6 +54,15 @@ public class CCaptcha extends CField<Pair<String, String>, NativeCaptcha> {
 
     public void createNewChallenge() {
         getWidget().createNewChallenge();
+    }
+
+    public void setWatermark(String watermark) {
+        this.watermark = watermark;
+        ((WatermarkComponent) asWidget()).setWatermark(watermark);
+    }
+
+    public String getWatermark() {
+        return watermark;
     }
 
 }
