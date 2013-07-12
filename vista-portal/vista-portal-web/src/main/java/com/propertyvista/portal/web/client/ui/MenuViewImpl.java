@@ -22,6 +22,7 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
@@ -34,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
@@ -56,6 +58,8 @@ import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTyp
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MenuViewImpl extends DockPanel implements MenuView {
+
+    private static final I18n i18n = I18n.get(MenuViewImpl.class);
 
     private MenuPresenter presenter;
 
@@ -109,8 +113,16 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         footerHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
-        //TODO FIXME!!! call presenter to logout 
-        footerHolder.add(new NavigItem(new PortalSiteMap.Login(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+
+        footerHolder.add(new NavigItem(new Command() {
+
+            @Override
+            public void execute() {
+                //TODO
+                System.out.println("Logout");
+
+            }
+        }, i18n.tr("Logout"), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -227,16 +239,15 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         private boolean selected;
 
-        private final AppPlace place;
+        private AppPlace place;
 
         private final ButtonImages images;
 
         private final String color;
 
-        NavigItem(AppPlace appPlace, ButtonImages images, ThemeColor color) {
+        NavigItem(final Command command, String labelString, ButtonImages images, ThemeColor color) {
             super();
 
-            this.place = appPlace;
             this.images = images;
             this.color = StyleManager.getPalette().getThemeColor(color, 1);
             selected = false;
@@ -251,24 +262,34 @@ public class MenuViewImpl extends DockPanel implements MenuView {
             icon.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuIcon.name());
             add(icon);
 
-            label = new Label(AppSite.getHistoryMapper().getPlaceInfo(place).getNavigLabel());
+            label = new Label(labelString);
             label.setStyleName(PortalWebRootPaneTheme.StyleName.MainMenuLabel.name());
             add(label);
 
             addDomHandler(new ClickHandler() {
                 @Override
                 public void onClick(ClickEvent event) {
-
-                    presenter.navigTo(place);
-
+                    command.execute();
                     LayoutType layout = LayoutType.getLayoutType(Window.getClientWidth());
                     if (LayoutType.phonePortrait.equals(layout) || (LayoutType.phoneLandscape.equals(layout))) {
                         AppSite.getEventBus().fireEvent(new LayoutChangeRerquestEvent(ChangeType.toggleSideMenu));
                     }
                 }
             }, ClickEvent.getType());
+
             getElement().getStyle().setCursor(Cursor.POINTER);
 
+        }
+
+        NavigItem(final AppPlace appPlace, ButtonImages images, ThemeColor color) {
+            this(new Command() {
+
+                @Override
+                public void execute() {
+                    presenter.navigTo(appPlace);
+                }
+            }, AppSite.getHistoryMapper().getPlaceInfo(appPlace).getNavigLabel(), images, color);
+            this.place = appPlace;
         }
 
         public void setSelected(boolean select) {

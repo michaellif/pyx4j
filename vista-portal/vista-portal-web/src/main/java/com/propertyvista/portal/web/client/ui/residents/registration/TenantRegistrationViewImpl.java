@@ -37,7 +37,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
-import com.propertyvista.portal.web.client.ui.landing.LoginAndSignUpResources;
 
 public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {
 
@@ -87,7 +86,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         signupform.initContent();
         layout.add(signupform);
 
-        HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.signUpViewTermsAgreementText().getText());
+        HTMLPanel loginTermsLinkPanel = new HTMLPanel(SignUpResources.INSTANCE.signUpViewTermsAgreementText().getText());
         termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
 //        termsAndConditionsAnchor.setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
         termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
@@ -97,7 +96,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
                 DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
-        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
+        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, SignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
         layout.add(loginTermsLinkPanel);
 
         SimplePanel buttonHolder = new SimplePanel();

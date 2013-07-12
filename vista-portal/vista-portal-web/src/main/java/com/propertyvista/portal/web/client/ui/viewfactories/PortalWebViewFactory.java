@@ -80,10 +80,6 @@ import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMet
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodsViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.ViewPaymentMethodView;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.ViewPaymentMethodViewImpl;
-import com.propertyvista.portal.web.client.ui.residents.personalinfo.PersonalInfoEdit;
-import com.propertyvista.portal.web.client.ui.residents.personalinfo.PersonalInfoEditImpl;
-import com.propertyvista.portal.web.client.ui.residents.personalinfo.PersonalInfoView;
-import com.propertyvista.portal.web.client.ui.residents.personalinfo.PersonalInfoViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.registration.TenantRegistrationView;
 import com.propertyvista.portal.web.client.ui.residents.registration.TenantRegistrationViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
@@ -112,12 +108,9 @@ public class PortalWebViewFactory extends ViewFactoryBase {
                 map.put(type, new TenantRegistrationViewImpl());
             } else if (DashboardView.class.equals(type)) {
                 map.put(type, new DashboardViewImpl());
-            } else if (PersonalInfoView.class.equals(type)) {
-                map.put(type, new PersonalInfoViewImpl());
-            } else if (PersonalInfoEdit.class.equals(type)) {
-                map.put(type, new PersonalInfoEditImpl());
+            }
 
-            } else if (ProfileView.class.equals(type)) {
+            else if (ProfileView.class.equals(type)) {
                 map.put(type, new ProfileViewImpl());
 
             } else if (BillSummaryView.class.equals(type)) {

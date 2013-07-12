@@ -11,20 +11,17 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.landing;
+package com.propertyvista.portal.web.client.ui.residents.registration;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.resources.client.ClientBundleWithLookup;
 import com.google.gwt.resources.client.TextResource;
 
-public interface LoginAndSignUpResources extends ClientBundleWithLookup {
+public interface SignUpResources extends ClientBundleWithLookup {
 
-    LoginAndSignUpResources INSTANCE = GWT.create(LoginAndSignUpResources.class);
+    SignUpResources INSTANCE = GWT.create(SignUpResources.class);
 
     static final String TERMS_AND_AGREEMENTS_ANCHOR_TAG = "TermsAndConditionsAnchor";
-
-    @Source("login-page-terms-agreement-text.html")
-    TextResource loginViewTermsAgreementText();
 
     @Source("signup-page-terms-agreement-text.html")
     TextResource signUpViewTermsAgreementText();

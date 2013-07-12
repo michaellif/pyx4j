@@ -53,7 +53,6 @@ import com.propertyvista.portal.web.client.activity.residents.paymentmethod.Paym
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodsActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.ViewPaymentMethodActivity;
-import com.propertyvista.portal.web.client.activity.residents.personalinfo.PersonalInfoEditActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
 import com.propertyvista.portal.web.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
@@ -84,8 +83,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new DashboardActivity(appPlace);
                     } else if (appPlace instanceof Resident.ProfileViewer) {
                         activity = new ProfileActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ProfileEditor) {
-                        activity = new PersonalInfoEditActivity(appPlace);
                     } else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
                         activity = new PotentialTenantActivity(appPlace);
 
