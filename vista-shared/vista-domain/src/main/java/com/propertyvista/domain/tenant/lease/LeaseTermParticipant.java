@@ -53,9 +53,10 @@ public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IE
     @XmlType(name = "TenantRole")
     public static enum Role implements Serializable {
 
+        @Translate("Tenant")
         Applicant,
 
-        @Translate("Co-Applicant")
+        @Translate("Co-Tenant")
         CoApplicant,
 
         Dependent,
