@@ -17,7 +17,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -30,17 +33,15 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.rpc.AppPlaceInfo;
+import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 import com.pyx4j.widgets.client.dialog.Dialog;
 
@@ -68,14 +69,23 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         setActionsToolbar(loginToolbar);
 
         FlowPanel contentPanel = new FlowPanel();
+        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
-        loginForm = new LoginForm();
+        loginForm = new LoginForm(this);
         loginForm.initContent();
         contentPanel.add(loginForm);
 
-        HTMLPanel loginTermsLinkPanel = new HTMLPanel(LoginAndSignUpResources.INSTANCE.loginViewTermsAgreementText().getText());
+        FlowPanel loginTermsLinkPanel = new FlowPanel();
+        loginTermsLinkPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+
+        HTML termsPrefix = new HTML(i18n.tr("By clicking LOGIN, you are acknowledging that you have read and agree to our "));
+        termsPrefix.getElement().getStyle().setDisplay(Display.INLINE);
+        loginTermsLinkPanel.add(termsPrefix);
+
         termsAndConditionsAnchor = new Anchor(i18n.tr("RESIDENT PORTAL TERMS AND CONDITIONS"));
-        termsAndConditionsAnchor.setStylePrimaryName(DefaultWidgetsTheme.StyleName.Anchor.name());
+        termsAndConditionsAnchor.getElement().getStyle().setDisplay(Display.INLINE);
+        termsAndConditionsAnchor.getElement().getStyle().setPadding(0, Unit.PX);
+        termsAndConditionsAnchor.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
         termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
@@ -83,22 +93,13 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
                 DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
-        loginTermsLinkPanel.addAndReplaceElement(termsAndConditionsAnchor, LoginAndSignUpResources.TERMS_AND_AGREEMENTS_ANCHOR_TAG);
+        loginTermsLinkPanel.add(termsAndConditionsAnchor);
+
+        HTML suffixPrefix = new HTML(".");
+        suffixPrefix.getElement().getStyle().setDisplay(Display.INLINE);
+        loginTermsLinkPanel.add(suffixPrefix);
+
         contentPanel.add(loginTermsLinkPanel);
-
-        SimplePanel resetPasswordAnchorHolder = new SimplePanel();
-        resetPasswordAnchorHolder.setWidth("100%");
-        resetPasswordAnchorHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        Anchor resetPassword = new Anchor(i18n.tr("forgot your password?"));
-        resetPassword.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                onResetPassword();
-            }
-        });
-        resetPasswordAnchorHolder.add(resetPassword);
-        contentPanel.add(resetPasswordAnchorHolder);
-
         setContent(contentPanel);
     }
 
@@ -128,7 +129,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         }
     }
 
-    private void onResetPassword() {
+    void onResetPassword() {
         presenter.gotoResetPassword();
     }
 

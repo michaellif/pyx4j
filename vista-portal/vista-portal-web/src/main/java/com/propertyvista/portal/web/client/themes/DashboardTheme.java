@@ -34,6 +34,13 @@ public class DashboardTheme extends Theme {
         style.addProperty("float", "left");
         addStyle(style);
 
+        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.TextBox);
+        //  style.addProperty("border", "1px solid");
+        style.addProperty("border-radius", "5px");
+        style.addProperty("height", "2em");
+        style.addProperty("line-height", "2em");
+        addStyle(style);
+
         style = new Style(".", StyleName.GadgetContent);
         style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("border-color", ThemeColor.foreground, 0.3);

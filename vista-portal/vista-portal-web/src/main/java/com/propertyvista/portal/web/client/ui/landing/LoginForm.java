@@ -13,51 +13,73 @@
  */
 package com.propertyvista.portal.web.client.ui.landing;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationRequest;
+import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.portal.web.client.ui.util.decorators.CheckBoxDecorator;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
-class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
+class LoginForm extends CEntityForm<AuthenticationRequest> {
+
+    static final I18n i18n = I18n.get(LoginForm.class);
 
     private CCaptcha captchaField;
 
-    public LoginForm() {
+    private final LoginGadget loginGadget;
+
+    public LoginForm(LoginGadget loginGadget) {
         super(AuthenticationRequest.class);
+        this.loginGadget = loginGadget;
     }
 
     @Override
     public IsWidget createContent() {
-        FlowPanel contentPanel = new FlowPanel();
+        FormFlexPanel contentPanel = new FormFlexPanel();
+
+        int row = -1;
+
+        contentPanel.setBR(++row, 0, 2);
 
         CTextField emailField = inject(proto().email(), new CTextField());
-        contentPanel.add(center(new LoginDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build()));
+        contentPanel.setWidget(++row, 0, new LoginDecoratorBuilder(emailField, "280px").watermark(LandingViewImpl.i18n.tr("Email Address")).build());
         addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
 
         CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
-        contentPanel.add(center(new LoginDecoratorBuilder(passwordField).watermark(LandingViewImpl.i18n.tr("Password")).build()));
+        contentPanel.setWidget(++row, 0, new LoginDecoratorBuilder(passwordField, "280px").watermark(LandingViewImpl.i18n.tr("Password")).build());
         addValidator(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
 
+        contentPanel.setWidget(++row, 0, new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox())));
+
+        Anchor resetPassword = new Anchor(i18n.tr("Forgot your password?"));
+        resetPassword.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                loginGadget.onResetPassword();
+            }
+        });
+        contentPanel.setWidget(++row, 0, resetPassword);
+
         captchaField = (CCaptcha) inject(proto().captcha());
-        contentPanel
-                .add(center((new FormDecoratorBuilder(captchaField).customLabel("").labelWidth(0).useLabelSemicolon(false).mandatoryMarker(false).build())));
+        contentPanel.setWidget(++row, 0,
+                (new LoginDecoratorBuilder(captchaField, "280px").watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
         setEnableCaptcha(false);
 
-        contentPanel.add(center(new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox()))));
+        contentPanel.setBR(++row, 0, 2);
 
         return contentPanel;
     }
@@ -68,10 +90,6 @@ class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
             captchaField.createNewChallenge();
         }
 
-    }
-
-    private Widget center(Widget w) {
-        return w;
     }
 
     private <E> void addValidator(CComponent<E> component, final String message) {
