@@ -129,8 +129,10 @@ public class CustomSkinProxyServlet extends HttpServlet {
             try {
                 status = client.executeMethod(method);
                 log.debug("proxy service " + method.getName() + " response status and duration", status, TimeUtils.secSince(startTime));
-                blob = saveResource(url, method.getResponseHeader("Content-Type").getValue(), ResourceConverter.convert(method));
-                sucsess = true;
+                if (status == HttpURLConnection.HTTP_OK) {
+                    blob = saveResource(url, method.getResponseHeader("Content-Type").getValue(), ResourceConverter.convert(method));
+                    sucsess = true;
+                }
             } finally {
                 if (!sucsess) {
                     log.warn("Exception in accessing: {} {}", method.getName(), method.getURI().toString());
