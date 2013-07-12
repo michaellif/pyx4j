@@ -48,7 +48,9 @@ public class DefaultWidgetsTheme extends Theme {
 
         GlassPanel, GlassPanelLabel,
 
-        DropDownPanel;
+        DropDownPanel,
+
+        Recaptcha;
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -75,6 +77,7 @@ public class DefaultWidgetsTheme extends Theme {
         initImageGalleryStyle();
         initRadioGroupStyle();
         initGlassPanelStyle();
+        initRecaptchaStyle();
     }
 
     private void initAnchorStyle() {
@@ -275,4 +278,13 @@ public class DefaultWidgetsTheme extends Theme {
 
     }
 
+    private void initRecaptchaStyle() {
+        Style style = new Style("#recaptcha_image");
+        style.addProperty("width", "250px !important;");
+        addStyle(style);
+
+        style = new Style("#recaptcha_image img");
+        style.addProperty("width", "250px !important;");
+        addStyle(style);
+    }
 }

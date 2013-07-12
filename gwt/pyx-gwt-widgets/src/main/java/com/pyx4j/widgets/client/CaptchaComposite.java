@@ -284,7 +284,7 @@ public class CaptchaComposite extends SimplePanel {
     }-*/;
 
     public void createNewChallenge() {
-        response.setText("");
+        response.setText(null);
         if (isVisible() && created) {
             createNewChallengeImpl();
         }
