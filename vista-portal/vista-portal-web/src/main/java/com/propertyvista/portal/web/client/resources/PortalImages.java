@@ -142,6 +142,34 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @Source("Social-Flickr.png")
     ImageResource socialFlickr();
 
+    //=============== Devices ====================
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Huge.gif")
+    ImageResource huge();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Monitor.gif")
+    ImageResource monitor();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("TabletL.gif")
+    ImageResource tabletL();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Tablet.gif")
+    ImageResource tablet();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("PhoneL.gif")
+    ImageResource phoneL();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Phone.gif")
+    ImageResource phone();
+
+    //=============== Menu ====================
+
     DashboardMenuImages dashboardMenu();
 
     interface DashboardMenuImages extends ButtonImages {

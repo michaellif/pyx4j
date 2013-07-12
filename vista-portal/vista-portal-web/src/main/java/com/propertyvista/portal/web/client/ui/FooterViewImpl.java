@@ -134,9 +134,12 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
     }
 
     class BrandPanel extends FlowPanel {
+
         private final Image myCommunityImage;
 
         private final Image vistaImage;
+
+        private final Image deviceImage;
 
         public BrandPanel() {
 
@@ -148,6 +151,9 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
             vistaImage = new Image(PortalImages.INSTANCE.vistaFooterLogo());
             vistaImage.getElement().getStyle().setDisplay(Display.BLOCK);
             add(vistaImage);
+
+            deviceImage = new Image();
+            add(deviceImage);
 
         }
 
@@ -166,6 +172,30 @@ public class FooterViewImpl extends FlowPanel implements FooterView {
                 myCommunityImage.getElement().getStyle().setProperty("borderRadius", "0");
                 break;
             }
+
+            switch (layoutType) {
+            case phonePortrait:
+                deviceImage.setResource(PortalImages.INSTANCE.phone());
+                break;
+            case phoneLandscape:
+                deviceImage.setResource(PortalImages.INSTANCE.phoneL());
+                break;
+            case tabletPortrait:
+                deviceImage.setResource(PortalImages.INSTANCE.tablet());
+                break;
+            case tabletLandscape:
+                deviceImage.setResource(PortalImages.INSTANCE.tabletL());
+                break;
+            case monitor:
+                deviceImage.setResource(PortalImages.INSTANCE.monitor());
+                break;
+            case huge:
+                deviceImage.setResource(PortalImages.INSTANCE.huge());
+                break;
+            }
+            deviceImage.getElement().getStyle().setDisplay(Display.BLOCK);
+            deviceImage.getElement().getStyle().setProperty("margin", "5px 5px 5px auto");
+
         }
     }
 
