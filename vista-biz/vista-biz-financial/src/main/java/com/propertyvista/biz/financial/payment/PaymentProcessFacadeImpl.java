@@ -114,6 +114,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
+    public void suspendPmcScheduledLastMonthPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        new PreauthorizedPaymentAgreementMananger().suspendPreauthorisedPaymentsInLastMonth(executionMonitor, forDate);
+    }
+
+    @Override
     public void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate) {
         new ScheduledPaymentsManager().verifyYardiPaymentIntegration(executionMonitor, forDate);
     }

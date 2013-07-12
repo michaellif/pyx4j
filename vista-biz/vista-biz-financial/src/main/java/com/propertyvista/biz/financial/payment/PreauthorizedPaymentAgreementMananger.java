@@ -22,14 +22,21 @@ import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
+import com.pyx4j.entity.server.Executable;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
+import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -104,6 +111,13 @@ class PreauthorizedPaymentAgreementMananger {
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
         EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
         criteria.eq(criteria.proto().tenant(), tenantId);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        return Persistence.service().query(criteria);
+    }
+
+    List<PreauthorizedPayment> retrievePreauthorizedPayments(Lease leaseId) {
+        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+        criteria.eq(criteria.proto().tenant().lease(), leaseId);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
         return Persistence.service().query(criteria);
     }
@@ -183,6 +197,9 @@ class PreauthorizedPaymentAgreementMananger {
             }
         }
 
+        // lease last month check:
+        suspend |= (before(nextCycle.billingCycleEndDate(), lease.expectedMoveOut()) || before(nextCycle.billingCycleEndDate(), lease.actualMoveOut()));
+
         if (!suspend) {
             // migrate each PAP to new billableItems
             forEachAllPap: for (PreauthorizedPayment pap : activePap) {
@@ -207,6 +224,56 @@ class PreauthorizedPaymentAgreementMananger {
                 Persistence.service().merge(pap);
             }
         }
+    }
 
+    public void suspendPreauthorisedPaymentsInLastMonth(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+        criteria.lt(criteria.proto().billingCycleStartDate(), forDate);
+        criteria.gt(criteria.proto().billingCycleEndDate(), forDate);
+
+        ICursorIterator<BillingCycle> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        try {
+            while (i.hasNext()) {
+                BillingCycle currentCycle = i.next();
+                final BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currentCycle);
+                try {
+                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                        @Override
+                        public Void execute() {
+                            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+                            criteria.eq(criteria.proto().lease().unit().building(), nextCycle.building());
+                            criteria.eq(criteria.proto().billingType(), nextCycle.billingType());
+                            criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                            {
+                                OrCriterion or = criteria.or();
+                                or.right().le(criteria.proto().lease().expectedMoveOut(), nextCycle.billingCycleEndDate());
+                                or.left().le(criteria.proto().lease().actualMoveOut(), nextCycle.billingCycleEndDate());
+                            }
+
+                            for (BillingAccount account : Persistence.service().query(criteria)) {
+                                for (PreauthorizedPayment item : retrievePreauthorizedPayments(account.lease())) {
+                                    suspendPreauthorizedPayment(item);
+                                }
+                            }
+
+                            return null;
+                        }
+                    });
+
+                    executionMonitor.addProcessedEvent("Pad suspension");
+                } catch (Throwable error) {
+                    executionMonitor.addFailedEvent("Pad suspension", error);
+                }
+            }
+        } finally {
+            i.close();
+        }
+    }
+
+    private boolean before(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
+        if (!one.isNull() && !two.isNull()) {
+            return one.getValue().before(two.getValue());
+        }
+        return false;
     }
 }

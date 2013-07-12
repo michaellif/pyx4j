@@ -47,6 +47,9 @@ public class PmcProcessFactory {
         case paymentsScheduledEcheck:
             return new PaymentsScheduledProcess(PaymentType.Echeck);
 
+        case paymentsLastMonthSuspend:
+            return new PaymentsLastMonthSuspendProcess();
+
 // Caledon            
         case paymentsPadSend:
             return new PadSendProcess();
