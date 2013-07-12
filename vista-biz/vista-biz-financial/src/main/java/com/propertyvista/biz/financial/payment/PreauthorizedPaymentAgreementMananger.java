@@ -226,43 +226,49 @@ class PreauthorizedPaymentAgreementMananger {
         }
     }
 
-    public void suspendPreauthorisedPaymentsInLastMonth(ExecutionMonitor executionMonitor, LogicalDate forDate) {
+    public void suspendPreauthorisedPaymentsInLastMonth(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.lt(criteria.proto().billingCycleStartDate(), forDate);
         criteria.gt(criteria.proto().billingCycleEndDate(), forDate);
 
-        ICursorIterator<BillingCycle> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
+        ICursorIterator<BillingCycle> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (i.hasNext()) {
-                BillingCycle currentCycle = i.next();
-                final BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currentCycle);
-                try {
-                    new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
-                        @Override
-                        public Void execute() {
-                            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-                            criteria.eq(criteria.proto().lease().unit().building(), nextCycle.building());
-                            criteria.eq(criteria.proto().billingType(), nextCycle.billingType());
-                            criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
-                            {
-                                OrCriterion or = criteria.or();
-                                or.right().le(criteria.proto().lease().expectedMoveOut(), nextCycle.billingCycleEndDate());
-                                or.left().le(criteria.proto().lease().actualMoveOut(), nextCycle.billingCycleEndDate());
-                            }
+                BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(i.next());
 
-                            for (BillingAccount account : Persistence.service().query(criteria)) {
+                EntityQueryCriteria<BillingAccount> criteria1 = EntityQueryCriteria.create(BillingAccount.class);
+                criteria1.eq(criteria1.proto().lease().unit().building(), nextCycle.building());
+                criteria1.eq(criteria1.proto().billingType(), nextCycle.billingType());
+                criteria1.isNotNull(criteria1.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+                {
+                    OrCriterion or = criteria1.or();
+                    or.right().le(criteria1.proto().lease().expectedMoveOut(), nextCycle.billingCycleEndDate());
+                    or.left().le(criteria1.proto().lease().actualMoveOut(), nextCycle.billingCycleEndDate());
+                }
+
+                for (final BillingAccount account : Persistence.service().query(criteria1)) {
+                    try {
+                        new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
+                            @Override
+                            public Void execute() {
                                 for (PreauthorizedPayment item : retrievePreauthorizedPayments(account.lease())) {
                                     suspendPreauthorizedPayment(item);
+                                    executionMonitor.addProcessedEvent("Pad suspended");
                                 }
+                                return null;
                             }
+                        });
+                    } catch (Throwable error) {
+                        executionMonitor.addFailedEvent("Pad suspension", error);
+                    }
 
-                            return null;
-                        }
-                    });
+                    if (executionMonitor.isTerminationRequested()) {
+                        break;
+                    }
+                }
 
-                    executionMonitor.addProcessedEvent("Pad suspension");
-                } catch (Throwable error) {
-                    executionMonitor.addFailedEvent("Pad suspension", error);
+                if (executionMonitor.isTerminationRequested()) {
+                    break;
                 }
             }
         } finally {

@@ -17,6 +17,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.domain.settings.PmcVistaFeatures;
 
 public class PaymentsLastMonthSuspendProcess implements PmcProcess {
 
@@ -27,11 +28,16 @@ public class PaymentsLastMonthSuspendProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).suspendPmcScheduledLastMonthPreauthorisedPayments(context.getExecutionMonitor(), new LogicalDate(context.getForDate()));
+        ServerSideFactory.create(PaymentProcessFacade.class).suspendPmcScheduledLastMonthPreauthorisedPayments(context.getExecutionMonitor(),
+                new LogicalDate(context.getForDate()));
     }
 
     @Override
     public void complete(PmcProcessContext context) {
     }
 
+    @Override
+    public boolean allowExecution(PmcVistaFeatures features) {
+        return true;
+    }
 }

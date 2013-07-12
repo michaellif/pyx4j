@@ -67,7 +67,7 @@ public enum PmcProcessType implements Serializable {
 
     paymentsTenantSure(PmcProcessOptions.RunForDay),
 
-    paymentsLastMonthSuspend,
+    paymentsLastMonthSuspend(PmcProcessOptions.RunForDay),
 
     initializeFutureBillingCycles,
 
