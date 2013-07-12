@@ -128,6 +128,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         extraHolder = new ExtraHolder(this);
 
         getNotificationDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
+        getContentDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         contentHolder = new ContentHolder(this);
         contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
@@ -319,7 +320,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         if (getExtraDisplay().isVisible()) {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - extraHolder.getOffsetWidth()) + "px");
         } else {
-            contentHolder.setWidth("auto");
+            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth()) + "px");
         }
     }
 
