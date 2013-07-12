@@ -16,6 +16,8 @@ package com.propertyvista.portal.web.client.ui.landing;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
@@ -23,6 +25,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.landing.LandingView.LandingPresenter;
 
@@ -39,6 +42,23 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
         FlowPanel contentPanel = new FlowPanel();
 
         contentPanel.add(new HTML("Don't have an account yet?"));
+
+        HorizontalPanel imagesPanel = new HorizontalPanel();
+        imagesPanel.setWidth("100%");
+
+        Image image = new Image(PortalImages.INSTANCE.safeAndSecure());
+        imagesPanel.add(image);
+        imagesPanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+
+        image = new Image(PortalImages.INSTANCE.easyToUse());
+        imagesPanel.add(image);
+        imagesPanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+
+        image = new Image(PortalImages.INSTANCE.manageRequests());
+        imagesPanel.add(image);
+        imagesPanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+
+        contentPanel.add(imagesPanel);
 
         setContent(contentPanel);
     }

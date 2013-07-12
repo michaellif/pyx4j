@@ -115,6 +115,18 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     ImageResource marker();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("SafeAndSecure.png")
+    ImageResource safeAndSecure();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("EasyToUse.png")
+    ImageResource easyToUse();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("ManageRequests.png")
+    ImageResource manageRequests();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Social-Facebook.png")
     ImageResource socialFacebook();
 
