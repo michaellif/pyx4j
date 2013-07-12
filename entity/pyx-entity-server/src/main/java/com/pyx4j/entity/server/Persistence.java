@@ -48,21 +48,58 @@ public class Persistence {
         return PersistenceServicesFactory.getPersistenceService();
     }
 
-    public static <T extends IEntity> EntitySearchResult<T> secureQuery(EntityListCriteria<T> criteria) {
-        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
-        @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings("unchecked")
+    public static <T extends IEntity> void applyDatasetAccessRule(EntityQueryCriteria<T> criteria) {
+        @SuppressWarnings("rawtypes")
         List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
         if (rules != null) {
             for (DatasetAccessRule<T> rule : rules) {
                 rule.applyRule(criteria);
             }
         }
+    }
+
+    public static <T extends IEntity> ICursorIterator<T> secureQuery(String encodedCursorReference, EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
+        SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
+        applyDatasetAccessRule(criteria);
+        final ICursorIterator<T> unfiltered = service().query(encodedCursorReference, criteria, AttachLevel.Attached);
+        return new ICursorIterator<T>() {
+
+            @Override
+            public boolean hasNext() {
+                return unfiltered.hasNext();
+            }
+
+            @Override
+            public T next() {
+                T entity = unfiltered.next();
+                SecurityController.assertPermission(EntityPermission.permissionRead(entity));
+                return entity;
+            }
+
+            @Override
+            public void remove() {
+                unfiltered.remove();
+            }
+
+            @Override
+            public String encodedCursorReference() {
+                return unfiltered.encodedCursorReference();
+            }
+
+            @Override
+            public void close() {
+                unfiltered.close();
+            }
+        };
+    }
+
+    public static <T extends IEntity> EntitySearchResult<T> secureQuery(EntityListCriteria<T> criteria) {
         EntitySearchResult<T> r = new EntitySearchResult<T>();
-        final ICursorIterator<T> unfiltered = service().query(null, criteria, AttachLevel.Attached);
+        final ICursorIterator<T> unfiltered = secureQuery(null, criteria, AttachLevel.Attached);
         try {
             while (unfiltered.hasNext()) {
                 T ent = unfiltered.next();
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
                 r.add(ent);
                 if ((criteria.getPageSize() > 0) && r.getData().size() >= criteria.getPageSize()) {
                     break;
@@ -74,23 +111,13 @@ public class Persistence {
         } finally {
             unfiltered.close();
         }
-
         r.setTotalRows(service().count(criteria));
-
         return r;
     }
 
     public static <T extends IEntity> Vector<T> secureQuery(EntityQueryCriteria<T> criteria, AttachLevel attachLevel) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
-
-        @SuppressWarnings({ "rawtypes" })
-        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
-        if (rules != null) {
-            for (DatasetAccessRule<T> rule : rules) {
-                rule.applyRule(criteria);
-            }
-        }
-
+        applyDatasetAccessRule(criteria);
         List<T> rc = PersistenceServicesFactory.getPersistenceService().query(criteria, attachLevel);
         Vector<T> v = new Vector<T>();
         for (T ent : rc) {
@@ -106,15 +133,7 @@ public class Persistence {
 
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
-        @SuppressWarnings({ "rawtypes" })
-        List<DatasetAccessRule> rules = SecurityController.getAccessRules(DatasetAccessRule.class, criteria.getEntityClass());
-        if (rules != null) {
-            criteria = new EntityQueryCriteria<T>(criteria);
-            for (DatasetAccessRule<T> rule : rules) {
-                rule.applyRule(criteria);
-            }
-        }
-
+        applyDatasetAccessRule(criteria);
         T ent;
         if (criteria instanceof EntityCriteriaByPK) {
             ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
