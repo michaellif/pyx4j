@@ -24,6 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -66,6 +68,8 @@ public class CaptchaComposite extends SimplePanel {
     private final SimplePanel recaptchaImage;
 
     private final TextBox response;
+
+    private final TextBox responseInternal;
 
     private final Image toText;
 
@@ -158,6 +162,13 @@ public class CaptchaComposite extends SimplePanel {
 
         divHolder.add(images);
         response = new TextBox();
+        response.addChangeHandler(new ChangeHandler() {
+
+            @Override
+            public void onChange(ChangeEvent event) {
+                responseInternal.setValue(response.getText());
+            }
+        });
         response.getElement().getStyle().setProperty("padding", "2px 5px");
 
         response.setName("recaptcha_response_field");
@@ -165,17 +176,21 @@ public class CaptchaComposite extends SimplePanel {
         response.getElement().getStyle().setWidth(100, Unit.PCT);
         divHolder.add(response);
 
+        responseInternal = new TextBox();
+        responseInternal.setVisible(false);
+        divHolder.add(responseInternal);
+
         this.add(divHolder);
     }
 
     private void assigneRecaptchaId() {
         recaptchaImage.getElement().setId("recaptcha_image");
-        response.getElement().setId("recaptcha_response_field");
+        responseInternal.getElement().setId("recaptcha_response_field");
     }
 
     private void assigneNutralId() {
         recaptchaImage.getElement().setId(divName + "_image");
-        response.getElement().setId(divName + "_response_field");
+        responseInternal.getElement().setId(divName + "_response_field");
     }
 
     /**
