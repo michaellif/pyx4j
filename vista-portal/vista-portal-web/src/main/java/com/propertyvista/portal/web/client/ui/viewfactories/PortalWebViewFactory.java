@@ -18,11 +18,8 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenViewImpl;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
-import com.propertyvista.common.client.ui.components.login.PasswordResetRequestViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
-import com.propertyvista.common.client.ui.components.security.PasswordChangeViewImpl;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
-import com.propertyvista.common.client.ui.components.security.PasswordResetViewImpl;
 import com.propertyvista.portal.web.client.ui.CommunicationView;
 import com.propertyvista.portal.web.client.ui.CommunicationViewImpl;
 import com.propertyvista.portal.web.client.ui.ExtraView;
@@ -43,6 +40,8 @@ import com.propertyvista.portal.web.client.ui.ToolbarView;
 import com.propertyvista.portal.web.client.ui.ToolbarViewImpl;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardViewImpl;
+import com.propertyvista.portal.web.client.ui.landing.PasswordResetRequestViewImpl;
+import com.propertyvista.portal.web.client.ui.landing.PasswordResetViewImpl;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView;
 import com.propertyvista.portal.web.client.ui.profile.ProfileViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
@@ -103,6 +102,7 @@ import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.Pr
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantViewImpl;
+import com.propertyvista.portal.web.client.ui.security.PasswordChangeViewImpl;
 
 public class PortalWebViewFactory extends ViewFactoryBase {
 
@@ -176,20 +176,20 @@ public class PortalWebViewFactory extends ViewFactoryBase {
                 map.put(type, new NotificationHeaderViewImpl());
             } else if (ToolbarView.class.equals(type)) {
                 map.put(type, new ToolbarViewImpl());
+
             } else if (PasswordResetRequestView.class.equals(type)) {
                 map.put(type, new PasswordResetRequestViewImpl());
             } else if (PasswordResetView.class.equals(type)) {
                 map.put(type, new PasswordResetViewImpl());
-            } else if (PasswordChangeView.class.equals(type)) {
-                map.put(type, new PasswordChangeViewImpl());
+
             } else if (LoginWithTokenView.class.equals(type)) {
                 map.put(type, new LoginWithTokenViewImpl());
             } else if (PasswordChangeView.class.equals(type)) {
                 map.put(type, new PasswordChangeViewImpl());
             } else if (LeaseContextSelectionView.class.equals(type)) {
                 map.put(type, new LeaseContextSelectionViewImpl());
-            } else if (TenantSureManagementView.class.equals(type)) {
 
+            } else if (TenantSureManagementView.class.equals(type)) {
                 map.put(type, new TenantSureManagementViewImpl());
             } else if (TenantSurePurchaseView.class.equals(type)) {
                 map.put(type, new TenantSurePurchaseViewImpl());
