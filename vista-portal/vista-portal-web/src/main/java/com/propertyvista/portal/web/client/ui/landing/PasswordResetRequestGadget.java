@@ -25,12 +25,12 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView.PasswordResetRequestPresenter;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
@@ -85,27 +85,22 @@ public class PasswordResetRequestGadget extends AbstractGadget<PasswordResetRequ
             super(PasswordRetrievalRequest.class);
             this.passwordResetFailedMessage = new HTML(i18n.tr("Failed to reset password. Check that email and captcha you provided are correct."));
 
-            asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
-            asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
-            asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
-
         }
 
         @Override
         public IsWidget createContent() {
-            FlowPanel main = new FlowPanel();
+            FormFlexPanel flexPanel = new FormFlexPanel();
 
-            main.add(new HTML("Please enter the email address you registered with:"));
-            main.add(new LoginDecoratorBuilder(inject(proto().email())).build());
-            main.add(new LoginDecoratorBuilder(inject(proto().captcha())).build());
-            main.add(passwordResetFailedMessage);
+            int row = -1;
+            flexPanel.setWidget(++row, 0, new HTML("Please enter the email address you registered with:"));
+            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().email())).build());
+            flexPanel.setWidget(++row, 0,
+                    new LoginDecoratorBuilder(inject(proto().captcha())).watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build());
+            flexPanel.setWidget(++row, 0, passwordResetFailedMessage);
             passwordResetFailedMessage.getElement().getStyle().setMarginTop(1, Unit.EM);
             passwordResetFailedMessage.setVisible(false);
 
-            main.getElement().getStyle().setMarginTop(1, Unit.EM);
-            main.getElement().getStyle().setMarginBottom(1, Unit.EM);
-
-            return main;
+            return flexPanel;
         }
 
         public void createNewCaptchaChallenge() {

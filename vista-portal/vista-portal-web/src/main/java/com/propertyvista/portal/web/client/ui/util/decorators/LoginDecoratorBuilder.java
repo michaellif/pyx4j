@@ -28,11 +28,6 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
         super(component);
     }
 
-    public LoginDecoratorBuilder(CComponent<?> component, String contentWidth) {
-        this(component);
-        contentWidth(contentWidth);
-    }
-
     public Builder watermark(String watermark) {
         this.watermark = watermark;
         return this;
@@ -51,6 +46,7 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
         }
         mandatoryMarker(false);
         componentWidth("100%");
+        contentWidth("280px");
 
         return super.build();
     }

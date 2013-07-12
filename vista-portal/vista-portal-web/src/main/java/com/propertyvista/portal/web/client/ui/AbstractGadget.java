@@ -14,6 +14,7 @@
 package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.resources.client.ImageResource;
@@ -87,6 +88,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
             FlowPanel containerPanel = new FlowPanel();
             containerPanel.setWidth("100%");
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            containerPanel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
             if (imageResource != null || title != null) {
                 FlowPanel headerPanel = new FlowPanel();
@@ -110,6 +112,8 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
             }
 
             contentHolder = new SimplePanel();
+            contentHolder.getElement().getStyle().setProperty("padding", "10px 0");
+
             containerPanel.add(contentHolder);
 
             mainPanel.add(containerPanel);
