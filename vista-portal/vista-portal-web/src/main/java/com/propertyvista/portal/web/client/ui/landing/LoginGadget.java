@@ -35,10 +35,22 @@ import com.google.gwt.user.client.Event.NativePreviewEvent;
 import com.google.gwt.user.client.Event.NativePreviewHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CCaptcha;
+import com.pyx4j.forms.client.ui.CCheckBox;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CTextField;
+import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -48,6 +60,8 @@ import com.pyx4j.widgets.client.dialog.Dialog;
 import com.propertyvista.common.client.ui.components.login.LoginView.DevLoginCredentials;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.landing.LandingView.LandingPresenter;
+import com.propertyvista.portal.web.client.ui.util.decorators.CheckBoxDecorator;
+import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
 public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
@@ -139,6 +153,77 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
     public void setTermsAndConditions(Class<? extends Place> place) {
         termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, this.presenter.getPortalTermsPlace()));
+    }
+
+    class LoginForm extends CEntityForm<AuthenticationRequest> {
+
+        private CCaptcha captchaField;
+
+        private final LoginGadget loginGadget;
+
+        public LoginForm(LoginGadget loginGadget) {
+            super(AuthenticationRequest.class);
+            this.loginGadget = loginGadget;
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FormFlexPanel contentPanel = new FormFlexPanel();
+
+            int row = -1;
+
+            contentPanel.setBR(++row, 0, 2);
+
+            CTextField emailField = inject(proto().email(), new CTextField());
+            contentPanel.setWidget(++row, 0, new LoginDecoratorBuilder(emailField, "280px").watermark(LandingViewImpl.i18n.tr("Email Address")).build());
+            addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
+
+            CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());
+            contentPanel.setWidget(++row, 0, new LoginDecoratorBuilder(passwordField, "280px").watermark(LandingViewImpl.i18n.tr("Password")).build());
+            addValidator(passwordField, LandingViewImpl.i18n.tr("Enter your password"));
+
+            contentPanel.setWidget(++row, 0, new CheckBoxDecorator(inject(proto().rememberID(), new CCheckBox())));
+
+            Anchor resetPassword = new Anchor(i18n.tr("Forgot your password?"));
+            resetPassword.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                    loginGadget.onResetPassword();
+                }
+            });
+            contentPanel.setWidget(++row, 0, resetPassword);
+
+            captchaField = (CCaptcha) inject(proto().captcha());
+            contentPanel.setWidget(++row, 0,
+                    (new LoginDecoratorBuilder(captchaField, "280px").watermark(LandingViewImpl.i18n.tr("Enter both security words above")).build()));
+            setEnableCaptcha(false);
+
+            contentPanel.setBR(++row, 0, 2);
+
+            return contentPanel;
+        }
+
+        public final void setEnableCaptcha(boolean isEnabled) {
+            captchaField.setVisible(isEnabled);
+            if (isEnabled) {
+                captchaField.createNewChallenge();
+            }
+
+        }
+
+        private <E> void addValidator(CComponent<E> component, final String message) {
+            component.setMandatory(false);
+            component.addValueValidator(new EditableValueValidator<E>() {
+                @Override
+                public ValidationError isValid(CComponent<E> component, E value) {
+                    if (value == null || ((value instanceof String) && CommonsStringUtils.isEmpty((String) value))) {
+                        return new ValidationError(component, message);
+                    } else {
+                        return null;
+                    }
+                }
+            });
+        }
     }
 
     class LoginToolbar extends Toolbar {

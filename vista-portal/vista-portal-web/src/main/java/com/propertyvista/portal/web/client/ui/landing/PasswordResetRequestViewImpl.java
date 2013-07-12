@@ -17,10 +17,13 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 
 public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordResetRequestView {
+
+    static final I18n i18n = I18n.get(PasswordResetRequestViewImpl.class);
 
     private Presenter presenter;
 
