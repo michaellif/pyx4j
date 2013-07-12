@@ -61,7 +61,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     private final Anchor termsAndConditionsAnchor;
 
     LoginGadget(final LandingViewImpl view) {
-        super(view, null, "Returning Users", ThemeColor.contrast5);
+        super(view, null, "Returning Users", ThemeColor.contrast2);
 
         loginToolbar = new LoginToolbar();
 
@@ -151,8 +151,8 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
             loginButton = new LoginButton();
             devLoginButton = new DevLoginButton();
 
-            loginButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
-            devLoginButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 0.6));
+            loginButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 1));
+            devLoginButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast2, 0.6));
 
             add(loginButton);
             add(devLoginButton);

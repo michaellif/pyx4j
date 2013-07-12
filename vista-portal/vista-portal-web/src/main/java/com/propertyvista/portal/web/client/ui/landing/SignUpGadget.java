@@ -33,7 +33,7 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
     private LandingPresenter presenter;
 
     SignUpGadget(LandingViewImpl view) {
-        super(view, null, "New Users", ThemeColor.contrast5);
+        super(view, null, "New Users", ThemeColor.contrast3);
         setActionsToolbar(new SignUpToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
@@ -59,7 +59,7 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
                     presenter.signUp();
                 }
             });
-            signUpButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
+            signUpButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             add(signUpButton);
 
         }
