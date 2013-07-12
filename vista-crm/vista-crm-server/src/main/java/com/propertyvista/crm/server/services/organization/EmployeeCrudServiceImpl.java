@@ -136,8 +136,10 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
 
             BehaviorHolder behaviorsOriginal = EntityFactory.create(BehaviorHolder.class);
             CrmUserCredential credential;
+            CrmUserCredential credentialOrig = null;
             if (!isNew) {
                 credential = Persistence.service().retrieve(CrmUserCredential.class, in.user().getPrimaryKey());
+                credentialOrig = credential.duplicate();
                 behaviorsOriginal.permissions().addAll(ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential));
             } else {
                 ServerSideFactory.create(AuditFacade.class).created(user);
@@ -151,15 +153,24 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
             credential.roles().addAll(in.roles());
             credential.accessAllBuildings().setValue(!in.restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
             credential.requiredPasswordChangeOnNextLogIn().setValue(in.requiredPasswordChangeOnNextLogIn().getValue());
-            ServerSideFactory.create(AuditFacade.class).credentialsUpdated(credential.user());
+
             Persistence.service().persist(credential);
+
+            if (credentialOrig != null) {
+                String diff = EntityDiff.getChanges(credentialOrig, credential, credential.credentialUpdated());
+                if (diff.length() > 0) {
+                    ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.CredentialUpdate, credential.user(), "{0}, {1} ", user.email(),
+                            diff);
+                }
+            }
+
             credential.interfaceUid().setValue(UserAccessUtils.getCrmUserInterfaceUid(credential));
             Persistence.service().persist(credential);
 
             BehaviorHolder behaviorsUpdated = EntityFactory.create(BehaviorHolder.class);
             behaviorsUpdated.permissions().addAll(ServerSideFactory.create(UserManagementFacade.class).getBehaviors(credential));
 
-            if (!EqualsHelper.equals(behaviorsOriginal, behaviorsUpdated)) {
+            if (!EqualsHelper.equals(behaviorsOriginal.permissions(), behaviorsUpdated.permissions())) {
                 ServerSideFactory.create(AuditFacade.class).record(AuditRecordEventType.PermitionsUpdate, credential.user(), "{0}, {1} ", user.email(),
                         EntityDiff.getChanges(behaviorsOriginal, behaviorsUpdated));
             }
