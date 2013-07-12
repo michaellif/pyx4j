@@ -91,9 +91,8 @@ public class DefaultWidgetsTheme extends Theme {
 //      while all other browsers (Firefox, Chrome) or ignore it or thomehow different calculate text line position.
 //        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
 
-        style.addProperty("font", "12px Arial, Helvetica, sans-serif");
         style.addProperty("color", ThemeColor.foreground);
-        style.addProperty("background-color", ThemeColor.background);
+        style.addProperty("background-color", "white");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
