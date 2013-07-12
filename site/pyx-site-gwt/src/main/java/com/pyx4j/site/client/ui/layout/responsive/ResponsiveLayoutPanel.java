@@ -315,8 +315,12 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         inlineMenuHolder.onPositionChange();
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
-        contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - extraHolder.getOffsetWidth()) + "px");
 
+        if (getExtraDisplay().isVisible()) {
+            contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth() - extraHolder.getOffsetWidth()) + "px");
+        } else {
+            contentHolder.setWidth("auto");
+        }
     }
 
     @Override
