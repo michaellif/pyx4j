@@ -201,7 +201,7 @@ public class CaptchaComposite extends SimplePanel {
     }-*/;
 
     public String getValueResponse() {
-        return response.getValue();
+        return response.getText();
     }
 
     public HandlerRegistration addResponseValueChangeHandler(ValueChangeHandler<String> handler) {
