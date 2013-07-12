@@ -69,7 +69,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
 
     @Override
     public void logout() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.LogOut());
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
     }
 
     @Override

@@ -24,7 +24,6 @@ import com.propertyvista.portal.client.activity.UserMessageActivity;
 import com.propertyvista.portal.client.activity.login.LandingActivity;
 import com.propertyvista.portal.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.client.activity.login.LoginWithTokenActivity;
-import com.propertyvista.portal.client.activity.login.LogoutActivity;
 import com.propertyvista.portal.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.client.activity.security.PasswordChangeActivity;
@@ -38,8 +37,6 @@ public class UtilityActivityMapper implements AppActivityMapper {
         Activity activity = null;
         if (place instanceof PortalSiteMap.Login) {
             activity = new LandingActivity(place);
-        } else if (place instanceof PortalSiteMap.LogOut) {
-            activity = new LogoutActivity();
         } else if (place instanceof PortalSiteMap.PasswordReset) {
             activity = new PasswordResetActivity(place);
         } else if (place instanceof PortalSiteMap.LoginWithToken) {

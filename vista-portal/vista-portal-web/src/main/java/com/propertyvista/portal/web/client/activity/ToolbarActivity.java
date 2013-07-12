@@ -14,21 +14,26 @@
 package com.propertyvista.portal.web.client.activity;
 
 import com.google.gwt.activity.shared.AbstractActivity;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
 import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.rpc.AuthenticationResponse;
+import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
 import com.propertyvista.common.client.ClientNavigUtils;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
+import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.web.client.ui.ToolbarView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 import com.propertyvista.shared.i18n.CompiledLocale;
@@ -81,7 +86,12 @@ public class ToolbarActivity extends AbstractActivity implements ToolbarView.Too
 
     @Override
     public void logout() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.LogOut());
+        ClientContext.logout(GWT.<AuthenticationService> create(PortalAuthenticationService.class), new DefaultAsyncCallback<AuthenticationResponse>() {
+            @Override
+            public void onSuccess(AuthenticationResponse result) {
+                AppSite.getPlaceController().goTo(new PortalSiteMap.Login());
+            }
+        });
     }
 
     @Override

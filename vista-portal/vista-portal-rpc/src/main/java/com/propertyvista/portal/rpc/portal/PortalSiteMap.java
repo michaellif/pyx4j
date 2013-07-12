@@ -27,9 +27,9 @@ public class PortalSiteMap implements SiteMap {
 
     @PlaceProperties(caption = "Resident Login")
     public static class Login extends AppPlace implements PublicPlace {
-    }
-
-    public static class LogOut extends AppPlace implements PublicPlace {
+        {
+            setStable(false);
+        }
     }
 
     public static class LoginWithToken extends AppPlace implements PublicPlace {

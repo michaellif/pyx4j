@@ -109,7 +109,8 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         footerHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
-        footerHolder.add(new NavigItem(new PortalSiteMap.LogOut(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+        //TODO FIXME!!! call presenter to logout 
+        footerHolder.add(new NavigItem(new PortalSiteMap.Login(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 

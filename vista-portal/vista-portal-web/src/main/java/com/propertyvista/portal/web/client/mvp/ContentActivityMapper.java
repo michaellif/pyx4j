@@ -31,7 +31,6 @@ import com.propertyvista.portal.web.client.activity.dashboard.DashboardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
-import com.propertyvista.portal.web.client.activity.login.LogoutActivity;
 import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfileActivity;
@@ -156,8 +155,6 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);
-                    } else if (place instanceof PortalSiteMap.LogOut) {
-                        activity = new LogoutActivity();
                     } else if (place instanceof PortalSiteMap.PasswordReset) {
                         activity = new PasswordResetActivity(place);
                     } else if (place instanceof PortalSiteMap.LoginWithToken) {
