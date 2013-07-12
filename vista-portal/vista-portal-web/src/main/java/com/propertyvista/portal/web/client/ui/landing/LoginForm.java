@@ -45,7 +45,7 @@ class LoginForm extends CEntityDecoratableForm<AuthenticationRequest> {
         FlowPanel contentPanel = new FlowPanel();
 
         CTextField emailField = inject(proto().email(), new CTextField());
-        contentPanel.add(center(new LoginDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email")).build()));
+        contentPanel.add(center(new LoginDecoratorBuilder(emailField).watermark(LandingViewImpl.i18n.tr("Email Address")).build()));
         addValidator(emailField, LandingViewImpl.i18n.tr("Enter your email address"));
 
         CPasswordTextField passwordField = inject(proto().password(), new CPasswordTextField());

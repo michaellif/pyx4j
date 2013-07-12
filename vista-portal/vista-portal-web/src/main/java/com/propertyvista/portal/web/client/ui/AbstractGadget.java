@@ -37,8 +37,6 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
 
     private final String title;
 
-    private Toolbar actionsToolbar;
-
     private ThemeColor themeColor;
 
     private T viewer;
@@ -63,7 +61,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
     }
 
     protected void setActionsToolbar(Toolbar actionsToolbar) {
-        this.actionsToolbar = actionsToolbar;
+        containerPanel.setActionsToolbar(actionsToolbar);
     }
 
     public void setContent(IsWidget widget) {
@@ -74,7 +72,9 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
 
         private final FlowPanel mainPanel;
 
-        private final SimplePanel contentPanel;
+        private final SimplePanel contentHolder;
+
+        private final SimplePanel actionsToolbarHolder;
 
         public ContainerPanel() {
             asWidget().setStyleName(DashboardTheme.StyleName.GadgetDecorator.name());
@@ -88,7 +88,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
             containerPanel.setWidth("100%");
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
-            if (imageResource != null && title != null) {
+            if (imageResource != null || title != null) {
                 FlowPanel headerPanel = new FlowPanel();
                 headerPanel.setStyleName(DashboardTheme.StyleName.GadgetHeader.name());
                 headerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -109,19 +109,23 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
                 containerPanel.add(headerPanel);
             }
 
-            contentPanel = new SimplePanel();
-            containerPanel.add(contentPanel);
+            contentHolder = new SimplePanel();
+            containerPanel.add(contentHolder);
 
             mainPanel.add(containerPanel);
-            if (actionsToolbar != null) {
-                mainPanel.add(actionsToolbar);
-            }
+
+            actionsToolbarHolder = new SimplePanel();
+            mainPanel.add(actionsToolbarHolder);
 
             add(mainPanel);
         }
 
+        public void setActionsToolbar(Toolbar actionsToolbar) {
+            actionsToolbarHolder.setWidget(actionsToolbar);
+        }
+
         public void setContentPanel(IsWidget widget) {
-            contentPanel.setWidget(widget);
+            contentHolder.setWidget(widget);
         }
 
     }

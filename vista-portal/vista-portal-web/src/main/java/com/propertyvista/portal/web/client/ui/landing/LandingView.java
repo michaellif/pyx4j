@@ -19,7 +19,7 @@ import com.propertyvista.common.client.ui.components.login.LoginView;
 
 public interface LandingView extends LoginView {
 
-    interface Presenter extends LoginView.Presenter {
+    interface LandingPresenter extends LoginView.Presenter {
 
         void signUp();
 

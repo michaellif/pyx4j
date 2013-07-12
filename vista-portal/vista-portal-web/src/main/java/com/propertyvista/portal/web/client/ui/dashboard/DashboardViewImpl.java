@@ -31,6 +31,8 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
     @SuppressWarnings("unused")
     private static final I18n i18n = I18n.get(DashboardViewImpl.class);
 
+    private DashboardPresenter presenter;
+
     private final ProfileGadget profileGadget;
 
     private final BillingGadget billingGadget;
@@ -39,11 +41,7 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
 
     private final ResidentServicesGadget residentServicesGadget;
 
-    private DashboardPresenter presenter;
-
     public DashboardViewImpl() {
-
-        getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
 
         profileGadget = new ProfileGadget(this);
         profileGadget.asWidget().setWidth("100%");
