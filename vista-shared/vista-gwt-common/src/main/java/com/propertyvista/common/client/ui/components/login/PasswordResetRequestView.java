@@ -19,14 +19,14 @@ import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 
 public interface PasswordResetRequestView extends IsWidget {
 
-    interface Presenter {
+    public interface PasswordResetRequestPresenter {
 
         void requestPasswordReset(PasswordRetrievalRequest value);
 
         void createNewCaptchaChallenge();
     }
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(PasswordResetRequestPresenter presenter);
 
     void createNewCaptchaChallenge();
 

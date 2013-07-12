@@ -29,7 +29,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.CaptchaComposite;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public class AbstractPasswordResetRequestActivity extends AbstractActivity implements PasswordResetRequestView.Presenter {
+public class AbstractPasswordResetRequestActivity extends AbstractActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     private final static I18n i18n = I18n.get(AbstractPasswordResetRequestActivity.class);
 

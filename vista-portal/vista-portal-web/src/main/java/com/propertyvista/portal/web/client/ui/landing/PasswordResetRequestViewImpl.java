@@ -13,10 +13,9 @@
  */
 package com.propertyvista.portal.web.client.ui.landing;
 
-import com.google.gwt.user.client.Command;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
@@ -25,45 +24,32 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
 
     static final I18n i18n = I18n.get(PasswordResetRequestViewImpl.class);
 
-    private Presenter presenter;
-
-    private final PasswordResetRequestForm form;
+    private final PasswordResetRequestGadget gadget;
 
     public PasswordResetRequestViewImpl() {
-        form = new PasswordResetRequestForm(new Command() {
-            @Override
-            public void execute() {
-                if (!form.isValid()) {
-                    form.setUnconditionalValidationErrorRendering(true);
-                    throw new UserRuntimeException(form.getValidationResults().getValidationMessage(true, false));
-                }
-                presenter.requestPasswordReset(form.getValue());
-            }
-        });
-        form.initContent();
-        add(form);
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+
+        gadget = new PasswordResetRequestGadget(this);
+        add(gadget);
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
-        this.presenter = presenter;
-        form.populateNew();
-        form.displayResetPasswordMessage(false);
-        this.presenter.createNewCaptchaChallenge();
+    public void setPresenter(PasswordResetRequestPresenter presenter) {
+        gadget.setPresenter(presenter);
     }
 
     @Override
     public void reset() {
-        form.reset();
+        gadget.reset();
     }
 
     @Override
     public void createNewCaptchaChallenge() {
-        form.createNewCaptchaChallenge();
+        gadget.createNewCaptchaChallenge();
     }
 
     @Override
     public void displayPasswordResetFailedMessage() {
-        form.displayResetPasswordMessage(true);
+        gadget.displayResetPasswordMessage(true);
     }
 }

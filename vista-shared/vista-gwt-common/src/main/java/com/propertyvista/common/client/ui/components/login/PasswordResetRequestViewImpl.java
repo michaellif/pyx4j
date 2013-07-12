@@ -20,7 +20,7 @@ import com.pyx4j.commons.UserRuntimeException;
 
 public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordResetRequestView {
 
-    private Presenter presenter;
+    private PasswordResetRequestPresenter presenter;
 
     private final RetrievePasswordForm form;
 
@@ -40,7 +40,7 @@ public class PasswordResetRequestViewImpl extends FlowPanel implements PasswordR
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(PasswordResetRequestPresenter presenter) {
         this.presenter = presenter;
         form.populateNew();
         form.displayResetPasswordMessage(false);

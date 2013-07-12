@@ -24,7 +24,7 @@ import com.propertyvista.operations.rpc.services.OperationsAuthenticationService
 import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 
-public class PasswordResetRequesetActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.Presenter {
+public class PasswordResetRequesetActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     public PasswordResetRequesetActivity(Place place) {
         super(place, SecurityViewFactory.instance(PasswordResetRequestView.class), GWT.<AuthenticationService> create(OperationsAuthenticationService.class),
