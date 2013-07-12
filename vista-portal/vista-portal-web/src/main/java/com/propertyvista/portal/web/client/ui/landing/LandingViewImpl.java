@@ -22,14 +22,20 @@ import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.common.client.ui.components.login.LoginView;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 
 public class LandingViewImpl extends FlowPanel implements LandingView {
 
@@ -39,10 +45,11 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
 
     private final SignUpGadget signUpGadget;
 
+    private final SimplePanel orHolder;
+
     public LandingViewImpl() {
 
         loginGadget = new LoginGadget(this);
-        loginGadget.asWidget().setWidth("46%");
 
         HTML orLabel = new HTML("OR");
         orLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -55,18 +62,60 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         orLabel.getElement().getStyle().setProperty("borderRadius", "50%");
         orLabel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
-        SimplePanel orHolder = new SimplePanel(orLabel);
+        orHolder = new SimplePanel(orLabel);
         orHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        orHolder.getElement().getStyle().setMarginTop(100, Unit.PX);
-        orHolder.asWidget().setWidth("8%");
         orHolder.getElement().getStyle().setFloat(Float.LEFT);
 
         signUpGadget = new SignUpGadget(this);
-        signUpGadget.asWidget().setWidth("46%");
 
         add(loginGadget);
         add(orHolder);
         add(signUpGadget);
+
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+        AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+            @Override
+            public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                doLayout(event.getLayoutType());
+            }
+
+        });
+    }
+
+    private void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletPortrait:
+            loginGadget.setWidth("100%");
+            orHolder.setWidth("100%");
+            orHolder.getElement().getStyle().setMarginTop(0, Unit.PX);
+            signUpGadget.setWidth("100%");
+            break;
+        case tabletLandscape:
+        case monitor:
+        case huge:
+            loginGadget.asWidget().setWidth("46%");
+            orHolder.asWidget().setWidth("8%");
+            orHolder.getElement().getStyle().setMarginTop(100, Unit.PX);
+            signUpGadget.asWidget().setWidth("46%");
+            break;
+        }
+
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+        case tabletLandscape:
+            signUpGadget.setImages(PortalImages.INSTANCE.safeAndSecureS(), PortalImages.INSTANCE.easyToUseS(), PortalImages.INSTANCE.manageRequestsS());
+            break;
+        case tabletPortrait:
+        case monitor:
+        case huge:
+            signUpGadget.setImages(PortalImages.INSTANCE.safeAndSecure(), PortalImages.INSTANCE.easyToUse(), PortalImages.INSTANCE.manageRequests());
+            break;
+        }
 
     }
 

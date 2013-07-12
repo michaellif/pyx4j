@@ -114,17 +114,33 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @Source("Dashboard-LocationIcon.png")
     ImageResource marker();
 
+    //=============== SignUp ====================
+
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("SafeAndSecure.png")
     ImageResource safeAndSecure();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("SafeAndSecureS.png")
+    ImageResource safeAndSecureS();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("EasyToUse.png")
     ImageResource easyToUse();
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("EasyToUseS.png")
+    ImageResource easyToUseS();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("ManageRequests.png")
     ImageResource manageRequests();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("ManageRequestsS.png")
+    ImageResource manageRequestsS();
+
+    //=============== Social ====================
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
     @Source("Social-Facebook.png")

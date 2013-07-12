@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.landing;
 
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -25,7 +26,6 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.landing.LandingView.LandingPresenter;
 
@@ -34,6 +34,12 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
     static final I18n i18n = I18n.get(LandingViewImpl.class);
 
     private LandingPresenter presenter;
+
+    private final Image safeAndSecureImage;
+
+    private final Image easyToUseImage;
+
+    private final Image manageRequestsImage;
 
     SignUpGadget(LandingViewImpl view) {
         super(view, null, "New Users", ThemeColor.contrast3);
@@ -46,17 +52,17 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
         HorizontalPanel imagesPanel = new HorizontalPanel();
         imagesPanel.setWidth("100%");
 
-        Image image = new Image(PortalImages.INSTANCE.safeAndSecure());
-        imagesPanel.add(image);
-        imagesPanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+        safeAndSecureImage = new Image();
+        imagesPanel.add(safeAndSecureImage);
+        imagesPanel.setCellHorizontalAlignment(safeAndSecureImage, HorizontalPanel.ALIGN_CENTER);
 
-        image = new Image(PortalImages.INSTANCE.easyToUse());
-        imagesPanel.add(image);
-        imagesPanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+        easyToUseImage = new Image();
+        imagesPanel.add(easyToUseImage);
+        imagesPanel.setCellHorizontalAlignment(easyToUseImage, HorizontalPanel.ALIGN_CENTER);
 
-        image = new Image(PortalImages.INSTANCE.manageRequests());
-        imagesPanel.add(image);
-        imagesPanel.setCellHorizontalAlignment(image, HorizontalPanel.ALIGN_CENTER);
+        manageRequestsImage = new Image();
+        imagesPanel.add(manageRequestsImage);
+        imagesPanel.setCellHorizontalAlignment(manageRequestsImage, HorizontalPanel.ALIGN_CENTER);
 
         contentPanel.add(imagesPanel);
 
@@ -65,6 +71,12 @@ public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 
     public void setPresenter(LandingPresenter presenter) {
         this.presenter = presenter;
+    }
+
+    void setImages(ImageResource safeAndSecure, ImageResource easyToUse, ImageResource manageRequests) {
+        safeAndSecureImage.setResource(safeAndSecure);
+        easyToUseImage.setResource(easyToUse);
+        manageRequestsImage.setResource(manageRequests);
     }
 
     class SignUpToolbar extends Toolbar {
