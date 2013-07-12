@@ -45,6 +45,10 @@ public class NEntityContainer<E extends IObject<?>> extends FlowPanel implements
 
     private boolean viewable;
 
+    private boolean editable = true;
+
+    private boolean enabled = true;
+
     public NEntityContainer(final CEntityContainer<E> container) {
         this.container = container;
 
@@ -70,11 +74,6 @@ public class NEntityContainer<E extends IObject<?>> extends FlowPanel implements
     }
 
     @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    @Override
     public CComponent<?, ?> getCComponent() {
         return container;
     }
@@ -92,6 +91,7 @@ public class NEntityContainer<E extends IObject<?>> extends FlowPanel implements
 
     @Override
     public void setEditable(boolean editable) {
+        this.editable = editable;
         if (editable) {
             asWidget().removeStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
         } else {
@@ -101,6 +101,7 @@ public class NEntityContainer<E extends IObject<?>> extends FlowPanel implements
 
     @Override
     public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
         if (enabled) {
             asWidget().removeStyleDependentName(DefaultEntityFolderTheme.StyleDependent.readOnly.name());
         } else {
@@ -110,8 +111,13 @@ public class NEntityContainer<E extends IObject<?>> extends FlowPanel implements
     }
 
     @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
     public boolean isEditable() {
-        return true;
+        return editable;
     }
 
     @Override
