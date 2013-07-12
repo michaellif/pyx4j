@@ -13,6 +13,7 @@
  */
 package com.propertyvista.domain.tenant.lease;
 
+import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.JoinTable;
@@ -39,6 +40,7 @@ public interface Tenant extends LeaseParticipant<LeaseTermTenant> {
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
+    @Caption(name = "Pre-Authorized Payments")
     IList<PreauthorizedPayment> preauthorizedPayments();
 
     // ----------------------------------------------------
