@@ -15,8 +15,11 @@ package com.propertyvista.portal.web.client.ui.landing;
 
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Float;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.SystemWallMessage;
@@ -34,12 +37,17 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     public LandingViewImpl() {
 
         loginGadget = new LoginGadget(this);
-        loginGadget.asWidget().setWidth("50%");
+        loginGadget.asWidget().setWidth("45%");
+
+        HTML orLabel = new HTML("OR");
+        orLabel.getElement().getStyle().setMarginTop(100, Unit.PX);
+        orLabel.getElement().getStyle().setFloat(Float.LEFT);
 
         signUpGadget = new SignUpGadget(this);
-        signUpGadget.asWidget().setWidth("50%");
+        signUpGadget.asWidget().setWidth("45%");
 
         add(loginGadget);
+        add(orLabel);
         add(signUpGadget);
 
     }
