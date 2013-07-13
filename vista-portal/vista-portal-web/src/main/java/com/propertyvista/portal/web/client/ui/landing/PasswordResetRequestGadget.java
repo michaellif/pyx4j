@@ -25,7 +25,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CCaptcha;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
 import com.pyx4j.widgets.client.Button;
@@ -89,7 +89,7 @@ public class PasswordResetRequestGadget extends AbstractGadget<PasswordResetRequ
 
         @Override
         public IsWidget createContent() {
-            TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
 
             int row = -1;
             flexPanel.setWidget(++row, 0, new HTML("Please enter the email address you registered with:"));

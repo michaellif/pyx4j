@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -157,7 +157,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
-            TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel flexPanel = new BasicFlexFormPanel();
             flexPanel.getColumnFormatter().setWidth(0, "50px");
             flexPanel.getColumnFormatter().setWidth(1, "300px");
             int row = -1;

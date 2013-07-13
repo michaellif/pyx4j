@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -93,7 +93,7 @@ public class BillingGadget extends AbstractGadget<DashboardViewImpl> {
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
 
-            TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
             mainPanel.setWidth("auto");
             mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
