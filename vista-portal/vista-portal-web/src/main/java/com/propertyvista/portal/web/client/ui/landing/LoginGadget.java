@@ -114,6 +114,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
         loginTermsLinkPanel.add(suffixPrefix);
 
         contentPanel.add(loginTermsLinkPanel);
+
         setContent(contentPanel);
     }
 

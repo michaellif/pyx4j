@@ -26,15 +26,6 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
 
     public LoginDecoratorBuilder(CComponent<?> component) {
         super(component);
-    }
-
-    public Builder watermark(String watermark) {
-        this.watermark = watermark;
-        return this;
-    }
-
-    @Override
-    public WidgetDecorator build() {
         customLabel("");
         labelWidth("0");
         useLabelSemicolon(false);
@@ -47,8 +38,11 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
         mandatoryMarker(false);
         componentWidth("100%");
         contentWidth("280px");
+    }
 
-        return super.build();
+    public Builder watermark(String watermark) {
+        this.watermark = watermark;
+        return this;
     }
 
 }

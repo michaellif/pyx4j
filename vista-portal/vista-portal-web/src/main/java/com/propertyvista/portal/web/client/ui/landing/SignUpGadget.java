@@ -31,7 +31,7 @@ import com.propertyvista.portal.web.client.ui.landing.LandingView.LandingPresent
 
 public class SignUpGadget extends AbstractGadget<LandingViewImpl> {
 
-    static final I18n i18n = I18n.get(LandingViewImpl.class);
+    static final I18n i18n = I18n.get(SignUpGadget.class);
 
     private LandingPresenter presenter;
 

@@ -63,7 +63,7 @@ public class SignUpActivity extends AbstractActivity implements SignUpView.SignU
                     @Override
                     public void onSuccess(EntitySearchResult<SelfRegistrationBuildingDTO> result) {
                         view.setPresenter(SignUpActivity.this);
-                        view.populate(result.getData());
+                        view.setBuildingOptions(result.getData());
                         panel.setWidget(view);
                     }
                 });

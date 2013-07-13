@@ -36,7 +36,7 @@ public interface SignUpView extends IsWidget {
 
     void setPresenter(SignUpPresenter presenter);
 
-    void populate(List<SelfRegistrationBuildingDTO> buildings);
+    void setBuildingOptions(List<SelfRegistrationBuildingDTO> buildings);
 
     void showError(String message);
 
