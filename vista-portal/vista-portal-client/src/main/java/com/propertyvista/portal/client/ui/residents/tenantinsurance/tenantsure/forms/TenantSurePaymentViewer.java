@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -58,7 +58,7 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
         FlowPanel contentPanel = new FlowPanel();
         if (payment != null) {
             int row = -1;
-            FormFlexPanel paymentBreakdownPanel = new FormFlexPanel();
+            TwoColumnFlexFormPanel paymentBreakdownPanel = new TwoColumnFlexFormPanel();
             for (TenantSurePaymentItemDTO paymentItem : payment.paymentBreakdown()) {
 
                 addDetailRecord(paymentBreakdownPanel, ++row, paymentItem.description().getValue(), paymentItem.amount().getValue());

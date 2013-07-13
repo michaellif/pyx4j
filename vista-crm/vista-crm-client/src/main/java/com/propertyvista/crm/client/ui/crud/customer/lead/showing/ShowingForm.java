@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -51,7 +51,7 @@ public class ShowingForm extends CrmEntityForm<ShowingDTO> {
     public ShowingForm(IForm<ShowingDTO> view) {
         super(ShowingDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
 

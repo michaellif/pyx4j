@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.financial.arcode;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
@@ -31,12 +31,12 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
 
     private static final I18n i18n = I18n.get(ARCodeForm.class);
 
-    private final FormFlexPanel yardiIntegrationPanel;
+    private final TwoColumnFlexFormPanel yardiIntegrationPanel;
 
     public ARCodeForm(IForm<ARCode> view) {
         super(ARCode.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 25).build());
@@ -61,7 +61,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
             }
         }), 25).build());
 
-        yardiIntegrationPanel = new FormFlexPanel();
+        yardiIntegrationPanel = new TwoColumnFlexFormPanel();
         yardiIntegrationPanel.setH1(0, 0, 1, i18n.tr("Yardi Integration"));
         yardiIntegrationPanel.setWidget(1, 0, inject(proto().yardiChargeCodes(), new YardiChargeCodeFolder()));
 

@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -125,7 +125,7 @@ class PageContentFolder extends VistaBoxFolder<PageContent> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();

@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -44,12 +44,12 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createItemsPanel());
     }
 
-    private FormFlexPanel createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
+    private TwoColumnFlexFormPanel createItemsPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().editableItems(), new IdAssignmentItemFolder(isEditable())));

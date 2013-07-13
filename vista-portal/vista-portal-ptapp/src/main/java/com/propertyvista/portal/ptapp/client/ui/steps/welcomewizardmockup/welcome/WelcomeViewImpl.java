@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
@@ -42,7 +42,7 @@ public class WelcomeViewImpl extends AbstractLoginViewImpl {
 
     private final static I18n i18n = I18n.get(WelcomeViewImpl.class);
 
-    private FormFlexPanel panel;
+    private TwoColumnFlexFormPanel panel;
 
     public WelcomeViewImpl() {
         super(i18n.tr("Login"));
@@ -127,7 +127,7 @@ public class WelcomeViewImpl extends AbstractLoginViewImpl {
 
     @Override
     protected void createContent() {
-        panel = new FormFlexPanel();
+        panel = new TwoColumnFlexFormPanel();
 
         panel.setWidget(0, 0, createTextPanel());
         panel.getFlexCellFormatter().setWidth(0, 0, "50%");

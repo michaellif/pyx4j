@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -43,7 +43,7 @@ public class AccountRecoveryOptionsForm extends CEntityDecoratableForm<AccountRe
     @Override
     public IsWidget createContent() {
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().recoveryEmail())).build());

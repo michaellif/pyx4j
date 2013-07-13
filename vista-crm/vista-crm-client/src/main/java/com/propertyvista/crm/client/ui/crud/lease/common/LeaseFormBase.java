@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -116,9 +116,9 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
     }
 
-    private FormFlexPanel createDetailsTab(String title) {
+    private TwoColumnFlexFormPanel createDetailsTab(String title) {
         // Lease details: ---------------------------------------------------------------------------------------------------------------------------
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         int leftRow = -1;
         int rightRow = -1;
@@ -157,7 +157,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
 
         // Lease dates: -----------------------------------------------------------------------------------------------------------------------------
         flexPanel.setHR(++leftRow, 0, 2);
-        FormFlexPanel datesPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel datesPanel = new TwoColumnFlexFormPanel();
 
         int datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().leaseFrom()), 9).build());
@@ -170,7 +170,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         flexPanel.setWidget(++leftRow, 0, 2, datesPanel);
 
         // Move dates: ------------------------------------------------------------------------------------------------------------------------------
-        datesPanel = new FormFlexPanel();
+        datesPanel = new TwoColumnFlexFormPanel();
 
         datesRow = -1; // first column:
         datesPanel.setWidget(++datesRow, 0, new FormDecoratorBuilder(inject(proto().terminationLeaseTo()), 9).build());
@@ -185,7 +185,7 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         // Other dates: -----------------------------------------------------------------------------------------------------------------------------
         flexPanel.setBR(++leftRow, 0, 2);
 
-        datesPanel = new FormFlexPanel();
+        datesPanel = new TwoColumnFlexFormPanel();
 
         datesPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
         datesPanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().approvalDate()), 9).build());
@@ -234,8 +234,8 @@ public abstract class LeaseFormBase<DTO extends LeaseDTO> extends CrmEntityForm<
         return i18n.tr("Charges");
     }
 
-    private FormFlexPanel createChargesTab() {
-        FormFlexPanel main = new FormFlexPanel(getChargesTabTitle());
+    private TwoColumnFlexFormPanel createChargesTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(getChargesTabTitle());
 
         main.setWidget(0, 0, inject(proto().billingPreview(), new BillForm(true)));
 

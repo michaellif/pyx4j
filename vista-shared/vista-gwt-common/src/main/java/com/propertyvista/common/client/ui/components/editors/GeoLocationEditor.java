@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,7 +44,7 @@ public class GeoLocationEditor extends CEntityDecoratableForm<GeoLocation> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().latitude()), 10).build());

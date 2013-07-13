@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.TableFolderDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -63,7 +63,7 @@ public class FeatureChargesFolder extends VistaBoxFolder<InvoiceProductCharge> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
             main.setWidth("100%");
 
             int row = -1;

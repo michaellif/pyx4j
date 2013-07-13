@@ -46,7 +46,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CPasswordTextField;
 import com.pyx4j.forms.client.ui.CTextField;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -169,7 +169,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel contentPanel = new FormFlexPanel();
+            TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
             int row = -1;
 

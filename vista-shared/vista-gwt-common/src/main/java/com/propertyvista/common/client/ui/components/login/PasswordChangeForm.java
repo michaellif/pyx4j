@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
@@ -71,7 +71,7 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
     @Override
     public IsWidget createContent() {
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         main.setWidth("40em");
         main.setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
 

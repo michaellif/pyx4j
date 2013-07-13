@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -60,7 +60,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);

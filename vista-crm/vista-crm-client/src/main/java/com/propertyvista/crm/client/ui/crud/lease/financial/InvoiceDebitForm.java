@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.financial;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -28,7 +28,7 @@ public class InvoiceDebitForm extends CrmEntityForm<InvoiceDebitDTO> {
     public InvoiceDebitForm(IForm<InvoiceDebitDTO> view) {
         super(InvoiceDebitDTO.class, view);
 
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().date())).build());

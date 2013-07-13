@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -90,7 +90,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
         setTabEnabled(tab, !isEditable());
 
-        FormFlexPanel flexPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
         flexPanel.setWidth("100%");
         int row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Elevators"));
@@ -103,7 +103,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         tab = addTab(flexPanel, i18n.tr("Mechanicals"));
         setTabEnabled(tab, !isEditable());
 
-        flexPanel = new FormFlexPanel();
+        flexPanel = new TwoColumnFlexFormPanel();
         flexPanel.setWidth("100%");
         row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Parking"));
@@ -118,7 +118,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
 
         addTab(createMarketingTab(i18n.tr("Marketing")));
 
-        flexPanel = new FormFlexPanel();
+        flexPanel = new TwoColumnFlexFormPanel();
         row = 0;
         flexPanel.setH4(row++, 0, 2, i18n.tr("Services"));
         flexPanel.setWidget(row++, 0, 2, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
@@ -186,8 +186,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         });
     }
 
-    private FormFlexPanel createGeneralTab(String title) {
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createGeneralTab(String title) {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
         flexPanel.setH1(row++, 0, 2, i18n.tr("Building Summary"));
@@ -241,8 +241,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private FormFlexPanel createDetailsTab(String title) {
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab(String title) {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -299,8 +299,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private FormFlexPanel createFinancialTab(String title) {
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createFinancialTab(String title) {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
         flexPanel.setBR(row++, 0, 2);
@@ -327,8 +327,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private FormFlexPanel createMarketingTab(String title) {
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createMarketingTab(String title) {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         flexPanel.setH1(++row, 0, 2, i18n.tr("Marketing Summary"));
@@ -343,8 +343,8 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         return flexPanel;
     }
 
-    private FormFlexPanel createContactTab(String title) {
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createContactTab(String title) {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         flexPanel.setWidget(0, 0, 2, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
 

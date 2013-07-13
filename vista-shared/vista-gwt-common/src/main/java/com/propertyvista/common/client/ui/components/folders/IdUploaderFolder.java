@@ -20,7 +20,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -114,7 +114,7 @@ public class IdUploaderFolder extends VistaBoxFolder<IdentificationDocument> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             content.setSize("100%", "100%");
             int row = -1;
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().idType())).labelWidth(8).build());

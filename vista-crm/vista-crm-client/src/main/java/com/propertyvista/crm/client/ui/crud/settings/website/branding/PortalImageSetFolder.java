@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CImage.Type;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.MediaUtils;
@@ -97,7 +97,7 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();

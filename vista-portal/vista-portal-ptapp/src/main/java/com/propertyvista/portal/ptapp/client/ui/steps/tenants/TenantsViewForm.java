@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,7 +40,7 @@ public class TenantsViewForm extends CEntityForm<TenantInApplicationListDTO> {
     public IsWidget createContent() {
         boolean modifiable = SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Tenants & Occupants"));

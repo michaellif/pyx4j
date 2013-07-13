@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -39,8 +39,8 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         addTab(makeTenantSureSettingsTab());
     }
 
-    private FormFlexPanel makeCaledonSettingsTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Caledon"));
+    private TwoColumnFlexFormPanel makeCaledonSettingsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Caledon"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
         // TODO inject fees form
@@ -48,8 +48,8 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         return panel;
     }
 
-    private FormFlexPanel makeEquifaxSettingsTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Equifax"));
+    private TwoColumnFlexFormPanel makeEquifaxSettingsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
         panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
@@ -63,8 +63,8 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         return panel;
     }
 
-    private FormFlexPanel makeTenantSureSettingsTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("TenantSure"));
+    private TwoColumnFlexFormPanel makeTenantSureSettingsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("TenantSure"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
         panel.setWidget(++row, 0, inject(proto().tenantSureMerchantAccount(), new MerchantAccountForm()));

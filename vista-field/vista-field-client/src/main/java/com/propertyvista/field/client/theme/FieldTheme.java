@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.DefaultCComponentsTheme;
 import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
-import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme;
+import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.site.client.ui.DefaultPaneTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -60,7 +60,7 @@ public class FieldTheme extends VistaTheme {
                 return ThemeColor.foreground;
             }
         });
-        addTheme(new DefaultFormFlexPanelTheme() {
+        addTheme(new FlexFormPanelTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {
                 return ThemeColor.foreground;

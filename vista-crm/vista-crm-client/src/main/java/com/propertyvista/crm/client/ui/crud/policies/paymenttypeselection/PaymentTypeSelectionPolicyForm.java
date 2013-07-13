@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -39,12 +39,12 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createMiscPoliciesTab());
     }
 
-    private FormFlexPanel createMiscPoliciesTab() {
-        FormFlexPanel accepted = new FormFlexPanel();
+    private TwoColumnFlexFormPanel createMiscPoliciesTab() {
+        TwoColumnFlexFormPanel accepted = new TwoColumnFlexFormPanel();
         int col = -1;
         accepted.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Accepted:") + "</i>"));
         accepted.getWidget(0, col).setWidth("10em");
@@ -69,7 +69,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
                 new FormDecoratorBuilder(inject(proto().acceptedInterac()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
                         .componentAlignment(Alignment.center).build());
 
-        FormFlexPanel residentPortal = new FormFlexPanel();
+        TwoColumnFlexFormPanel residentPortal = new TwoColumnFlexFormPanel();
         col = -1;
         residentPortal.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Resident Portal:") + "</i>"));
         residentPortal.getWidget(0, col).setWidth("10em");
@@ -90,7 +90,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalInterac()), 5).labelWidth(5).layout(Layout.vertical)
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
 
-        FormFlexPanel cashEquivalent = new FormFlexPanel();
+        TwoColumnFlexFormPanel cashEquivalent = new TwoColumnFlexFormPanel();
         col = -1;
         cashEquivalent.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Cash Equivalent:") + "</i>"));
         cashEquivalent.getWidget(0, col).setWidth("10em");
@@ -113,7 +113,7 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
                 .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
 
         // put all together:
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("Selection"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Selection"));
         int row = -1;
 
         main.setWidget(++row, 0, accepted);

@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -44,7 +44,7 @@ public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
 
     private static final Logger log = LoggerFactory.getLogger(ChargesViewForm.class);
 
-    private final FormFlexPanel splitCharges = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel splitCharges = new TwoColumnFlexFormPanel();
 
     private final boolean editable;
 
@@ -74,7 +74,7 @@ public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().monthlyCharges(), new ChargesSubCategoryViewForm(proto().monthlyCharges().getMeta().getCaption())));
@@ -108,7 +108,7 @@ public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
         form.get(member).setViewable(true);
         form.get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         main.setHR(0, 0, 1);
         main.setWidget(1, 0, totalRow);
         main.setWidth("48em");
@@ -131,7 +131,7 @@ public class ChargesViewForm extends CEntityDecoratableForm<Charges> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
             content.setH1(++row, 0, 1, caption);

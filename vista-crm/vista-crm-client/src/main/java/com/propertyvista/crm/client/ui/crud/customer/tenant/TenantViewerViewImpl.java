@@ -17,7 +17,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.OkDialog;
@@ -132,7 +132,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
                     TenantPortalAccessInformationDTO.class) {
                 @Override
                 public IsWidget createContent() {
-                    FormFlexPanel panel = new FormFlexPanel();
+                    TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
                     int row = -1;
                     panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address())).build());
                     panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cityZip())).build());

@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.onboardingusers;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -30,7 +30,7 @@ public class OnboardingUserForm extends OperationsEntityForm<OnboardingUserDTO> 
 
     public OnboardingUserForm(IForm<OnboardingUserDTO> view) {
         super(OnboardingUserDTO.class, view);
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().firstName())).build());

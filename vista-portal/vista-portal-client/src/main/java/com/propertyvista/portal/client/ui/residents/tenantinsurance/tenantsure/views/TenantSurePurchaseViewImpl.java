@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.Anchor;
@@ -75,9 +75,9 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private TenantSurePersonalDisclaimerForm personalDisclaimerForm;
 
-    private FormFlexPanel quotationRequestStepPanel;
+    private TwoColumnFlexFormPanel quotationRequestStepPanel;
 
-    private FormFlexPanel paymentStepPanel;
+    private TwoColumnFlexFormPanel paymentStepPanel;
 
     private Button acceptQuoteButton;
 
@@ -96,7 +96,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         viewDecorator.setCompensationDisclosureStatement(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
         viewDecorator.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
 
-        FormFlexPanel viewPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel viewPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         stepDriver = new StepDriver(Arrays.asList(//@formatter:off
@@ -279,7 +279,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     private Step makeQuotationRequestStep() {
-        quotationRequestStepPanel = new FormFlexPanel();
+        quotationRequestStepPanel = new TwoColumnFlexFormPanel();
         quotationRequestStepPanel.getElement().getStyle().setMarginBottom(2, Unit.EM);
         int qrpRow = -1;
         quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Coverage"));
@@ -377,7 +377,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
     private Step makePaymentStep() {
         int row = -1;
-        paymentStepPanel = new FormFlexPanel();
+        paymentStepPanel = new TwoColumnFlexFormPanel();
         paymentStepQuoteViewer = new TenantSureQuoteViewer(true);
         paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
         paymentStepPanel.setWidget(++row, 0, paymentStepQuoteViewer);

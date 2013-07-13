@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -83,7 +83,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel left = new FormFlexPanel();
+            TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
             int row = -1;
             left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().leaseParticipant().participantId()), 7).build());
             left.setWidget(++row, 0,
@@ -117,7 +117,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             creditCheckResultPanel = createCreditCheckResultPanel();
 
             // assemble main panel:
-            FormFlexPanel main = new FormFlexPanel();
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             main.setWidget(0, 0, left);
             if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
@@ -133,9 +133,9 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
         }
 
         Widget createCreditCheckResultPanel() {
-            FormFlexPanel panel = new FormFlexPanel();
+            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
-            FormFlexPanel left = new FormFlexPanel();
+            TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
 
             int row = -1;
             left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckResult()), 10).build());
@@ -179,7 +179,7 @@ public class LeaseParticipanApprovalFolder extends VistaBoxFolder<LeaseParticipa
             });
             left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditCheck().creditCheckReport(), creditCheckReport), 10).build());
 
-            FormFlexPanel right = new FormFlexPanel();
+            TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
             row = -1;
 
             right.setWidget(++row, 0, new HTML("<i>" + i18n.tr("Credit Check Parameters:") + "</i>"));

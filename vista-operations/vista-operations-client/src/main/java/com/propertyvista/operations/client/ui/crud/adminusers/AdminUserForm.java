@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -58,7 +58,7 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
     }
 
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());

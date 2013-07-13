@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
@@ -52,7 +52,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
     private final VerticalPanel accessPanel = new VerticalPanel();
 
-    private final FormFlexPanel statusPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel statusPanel = new TwoColumnFlexFormPanel();
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
 
@@ -74,7 +74,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 25).build());

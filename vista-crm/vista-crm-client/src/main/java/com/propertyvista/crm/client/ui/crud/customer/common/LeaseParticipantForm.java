@@ -22,7 +22,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -97,8 +97,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         });
     }
 
-    protected FormFlexPanel createDetailsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    protected TwoColumnFlexFormPanel createDetailsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         String participant = null;
         if (rootClass.equals(TenantDTO.class)) {
@@ -144,8 +144,8 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         return main;
     }
 
-    protected FormFlexPanel createPaymentMethodsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    protected TwoColumnFlexFormPanel createPaymentMethodsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         main.setWidget(0, 0, 2, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")

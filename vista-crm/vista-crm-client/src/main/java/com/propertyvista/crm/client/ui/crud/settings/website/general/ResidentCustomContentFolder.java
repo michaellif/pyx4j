@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -90,7 +90,7 @@ public class ResidentCustomContentFolder extends VistaBoxFolder<HtmlContent> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel();
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             CEntityComboBox<AvailableLocale> locale = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);

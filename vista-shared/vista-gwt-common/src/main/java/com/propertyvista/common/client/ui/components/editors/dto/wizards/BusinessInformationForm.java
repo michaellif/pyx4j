@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.gwt.shared.DownloadFormat;
 import com.pyx4j.i18n.shared.I18n;
@@ -53,7 +53,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         contentPanel.getFlexCellFormatter().setWidth(0, 0, "50%");
         contentPanel.getFlexCellFormatter().setAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
 
@@ -61,7 +61,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
         contentPanel.getFlexCellFormatter().setAlignment(0, 1, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_TOP);
         contentPanel.getFlexCellFormatter().getElement(0, 1).getStyle().setPaddingLeft(10, Unit.PX);
 
-        FormFlexPanel mainPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
         int mrow = -1;
         mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().companyName())).build());
         mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().companyType())).build());
@@ -72,7 +72,7 @@ public class BusinessInformationForm extends CEntityDecoratableForm<BusinessInfo
         mainPanel.setWidget(++mrow, 0, new FormDecoratorBuilder(inject(proto().businessEstablishedDate())).build());
         contentPanel.setWidget(0, 0, mainPanel);
 
-        FormFlexPanel documentsPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel documentsPanel = new TwoColumnFlexFormPanel();
         int drow = -1;
         Label documentsLabel = new Label();
         documentsLabel.setText(isEditable() ? i18n.tr("Attach Documentation:") : i18n.tr("Attached Documentation:"));

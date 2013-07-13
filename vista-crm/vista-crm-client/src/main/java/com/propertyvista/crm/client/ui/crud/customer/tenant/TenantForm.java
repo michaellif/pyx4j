@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -119,16 +119,16 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         get(proto().customer().emergencyContacts()).setMandatory(!VistaFeatures.instance().yardiIntegration());
     }
 
-    private FormFlexPanel createContactsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createContactsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         main.setWidget(0, 0, 2, inject(proto().customer().emergencyContacts(), new EmergencyContactFolder(isEditable())));
 
         return main;
     }
 
-    protected FormFlexPanel createPreauthorizedPaymentsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    protected TwoColumnFlexFormPanel createPreauthorizedPaymentsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
 
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), true).labelWidth("20em").build());
@@ -139,8 +139,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         return main;
     }
 
-    private FormFlexPanel createTenantInsuranceTab(String title) {
-        FormFlexPanel tabPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createTenantInsuranceTab(String title) {
+        TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel(title);
         int row = -1;
         tabPanel.setH1(++row, 0, 1, i18n.tr("Requirements"));
         tabPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), true).build());
@@ -201,7 +201,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
-            private final FormFlexPanel expirationWarning = new FormFlexPanel();
+            private final TwoColumnFlexFormPanel expirationWarning = new TwoColumnFlexFormPanel();
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
@@ -216,7 +216,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
                 content.setWidget(++row, 0, 2, expirationWarning);

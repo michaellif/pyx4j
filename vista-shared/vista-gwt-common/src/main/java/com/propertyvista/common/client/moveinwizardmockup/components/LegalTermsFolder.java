@@ -23,7 +23,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -68,7 +68,7 @@ public class LegalTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
     private class LegalTermsEditor extends CEntityDecoratableForm<LegalTermsDescriptorDTO> {
 
-        private FormFlexPanel main;
+        private TwoColumnFlexFormPanel main;
 
         public LegalTermsEditor() {
             super(LegalTermsDescriptorDTO.class);
@@ -76,7 +76,7 @@ public class LegalTermsFolder extends VistaBoxFolder<LegalTermsDescriptorDTO> {
 
         @Override
         public IsWidget createContent() {
-            main = new FormFlexPanel();
+            main = new TwoColumnFlexFormPanel();
 
             int row = -1;
             ScrollPanel scroll = new ScrollPanel(inject(proto().content().content(), new CLabel<String>()).asWidget());

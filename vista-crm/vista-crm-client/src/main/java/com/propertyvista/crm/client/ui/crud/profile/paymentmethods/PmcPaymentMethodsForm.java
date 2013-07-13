@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -35,7 +35,7 @@ public class PmcPaymentMethodsForm extends CrmEntityForm<PmcPaymentMethodsDTO> {
 
     public PmcPaymentMethodsForm(IForm<PmcPaymentMethodsDTO> view) {
         super(PmcPaymentMethodsDTO.class, view);
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Payment Methods"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Payment Methods"));
         int row = -1;
 
         noPaymentMethodsMessage = new Label();

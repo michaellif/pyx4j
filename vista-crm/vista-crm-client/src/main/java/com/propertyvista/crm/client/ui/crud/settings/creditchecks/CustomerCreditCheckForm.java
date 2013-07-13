@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.creditchecks;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
@@ -33,7 +33,7 @@ public class CustomerCreditCheckForm extends CrmEntityForm<CustomerCreditCheckDT
     public CustomerCreditCheckForm(IForm<CustomerCreditCheckDTO> view) {
         super(CustomerCreditCheckDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
         content.setWidget(++row, 0, inject(proto().screening().screene().person().name(), new NameEditor(i18n.tr("Customer"))));
 

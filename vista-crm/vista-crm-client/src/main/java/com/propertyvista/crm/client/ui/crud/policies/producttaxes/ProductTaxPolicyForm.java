@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -51,12 +51,12 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createItemsPanel());
     }
 
-    private FormFlexPanel createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Items"));
+    private TwoColumnFlexFormPanel createItemsPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
 
         int row = -1;
         panel.setWidget(++row, 0, inject(proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable())));
@@ -101,7 +101,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode())).build());

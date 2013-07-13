@@ -21,7 +21,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -41,15 +41,15 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
                 createInsuranceRequirementsTab(),
                 createPortalConfigurationTab()                
         );//@formatter:on
     }
 
-    private FormFlexPanel createInsuranceRequirementsTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Insurance Requirements"));
+    private TwoColumnFlexFormPanel createInsuranceRequirementsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Insurance Requirements"));
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireMinimumLiability()), 5).build());
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -78,8 +78,8 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
         return panel;
     }
 
-    private FormFlexPanel createPortalConfigurationTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Portal Configuration"));
+    private TwoColumnFlexFormPanel createPortalConfigurationTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Portal Configuration"));
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50).build());
         if (VistaFeatures.instance().tenantSure()) {

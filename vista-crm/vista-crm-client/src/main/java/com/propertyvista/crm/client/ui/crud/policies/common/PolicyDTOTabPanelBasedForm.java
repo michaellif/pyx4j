@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -64,15 +64,15 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         super(policyDTOClass, view);
 
         selectTab(addTab(createScopeTab(i18n.tr("Scope"))));
-        for (FormFlexPanel customTab : createCustomTabPanels()) {
+        for (TwoColumnFlexFormPanel customTab : createCustomTabPanels()) {
             addTab(customTab);
         }
     }
 
-    protected abstract List<FormFlexPanel> createCustomTabPanels();
+    protected abstract List<TwoColumnFlexFormPanel> createCustomTabPanels();
 
-    private FormFlexPanel createScopeTab(String title) {
-        FormFlexPanel content = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createScopeTab(String title) {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
         content.setHeight("3em");
         int row = -1;
 
@@ -208,7 +208,7 @@ public abstract class PolicyDTOTabPanelBasedForm<POLICY_DTO extends PolicyDTOBas
         @SuppressWarnings("unchecked")
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             nodeTypeToComponentMap = new HashMap<Class<? extends PolicyNode>, CComponent<?>>();
             for (NodeType nodeType : AVAILABLE_NODE_TYPES) {

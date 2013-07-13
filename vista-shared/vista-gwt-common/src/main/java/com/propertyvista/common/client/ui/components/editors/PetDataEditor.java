@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.editors;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -38,7 +38,7 @@ public class PetDataEditor extends CEntityDecoratableForm<Pet> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
         panel.setH3(++row, 0, 2, i18n.tr("Pet Data"));

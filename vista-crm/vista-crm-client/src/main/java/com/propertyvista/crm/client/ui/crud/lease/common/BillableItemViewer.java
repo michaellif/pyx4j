@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
@@ -65,9 +65,9 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
-    private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel adjustmentPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel depositPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel depositPanel = new TwoColumnFlexFormPanel();
 
     public BillableItemViewer() {
         super(BillableItem.class);
@@ -77,7 +77,7 @@ public class BillableItemViewer extends CEntityDecoratableForm<BillableItem> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel flowPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel flowPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         flowPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntityLabel<ProductItem>()), 22).build());

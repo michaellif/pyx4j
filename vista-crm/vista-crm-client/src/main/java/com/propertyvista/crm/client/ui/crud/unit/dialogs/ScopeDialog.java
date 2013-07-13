@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -48,7 +48,7 @@ public class ScopeDialog extends OkCancelDialog {
         form = new CEntityDecoratableForm<ScopingResultDTO>(ScopingResultDTO.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scopingResult()), 10).build());
                 get(proto().scopingResult()).addValueChangeHandler(new ValueChangeHandler<ScopingResultDTO.ScopingResult>() {

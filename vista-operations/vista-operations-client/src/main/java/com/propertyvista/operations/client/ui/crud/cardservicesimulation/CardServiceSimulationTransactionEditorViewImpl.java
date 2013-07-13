@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.cardservicesimulation;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
@@ -30,7 +30,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
         public CardServiceSimulationTransactionForm(IForm<CardServiceSimulationTransaction> view) {
             super(CardServiceSimulationTransaction.class, view);
 
-            FormFlexPanel tabPanel = new FormFlexPanel("General Transaction Data");
+            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel("General Transaction Data");
             int row = -1;
 
             tabPanel.setWidget(++row, 0,

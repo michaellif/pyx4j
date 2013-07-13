@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -67,7 +67,7 @@ public class TransactionHistoryViewerYardi extends CViewer<TransactionHistoryDTO
 
     @Override
     public IsWidget createContent(TransactionHistoryDTO value) {
-        FormFlexPanel contentPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         if (value != null) {
             List<YardiPayment> unappliedPayments = new ArrayList<YardiPayment>();
             List<YardiDebit> outstangingCharges = new ArrayList<YardiDebit>();

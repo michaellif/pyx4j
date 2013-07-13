@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -43,8 +43,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         updatecardServiceVisibility();
     }
 
-    private FormFlexPanel createGeneralTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+    private TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
         content.setH2(++row, 0, 1, i18n.tr("Cache"));
@@ -59,8 +59,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         return content;
     }
 
-    private FormFlexPanel createCaledonTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Caledon (Payments)"));
+    private TwoColumnFlexFormPanel createCaledonTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Caledon (Payments)"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().usePadSimulator()), 5).build());
@@ -105,8 +105,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         }
     }
 
-    private FormFlexPanel createEquifaxTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Equifax"));
+    private TwoColumnFlexFormPanel createEquifaxTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useEquifaxSimulator()), 5).build());
@@ -118,8 +118,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         return content;
     }
 
-    private FormFlexPanel createOnboardingTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("On-Boarding"));
+    private TwoColumnFlexFormPanel createOnboardingTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("On-Boarding"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().onboarding().enabled()), 5).build());

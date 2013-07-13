@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -40,12 +40,12 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createEdtorFormTab());
     }
 
-    private FormFlexPanel createEdtorFormTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Settings"));
+    private TwoColumnFlexFormPanel createEdtorFormTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
         int row = -1;
         content.setH3(++row, 0, 1, proto().allowedIDs().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));

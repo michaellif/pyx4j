@@ -30,7 +30,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -84,10 +84,10 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         }
     }
 
-    private FormFlexPanel createGeneralTab(String title) {
+    private TwoColumnFlexFormPanel createGeneralTab(String title) {
 
         int row = -1;
-        FormFlexPanel left = new FormFlexPanel();
+        TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
 
         left.setWidget(
                 ++row,
@@ -117,7 +117,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         row = -1;
-        FormFlexPanel right = new FormFlexPanel();
+        TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().floor()), 5).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().number()), 5).build());
 
@@ -136,7 +136,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
         }
 
         // form main panel from those two:
-        FormFlexPanel main = new FormFlexPanel(title);
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         main.setWidget(0, 0, left);
         main.setWidget(0, 1, right);

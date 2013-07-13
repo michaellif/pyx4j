@@ -19,7 +19,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -53,7 +53,7 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
             int row = -1;
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().event()), 10).build());

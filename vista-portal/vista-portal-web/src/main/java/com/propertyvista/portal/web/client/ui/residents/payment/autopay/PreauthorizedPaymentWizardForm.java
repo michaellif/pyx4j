@@ -42,7 +42,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -119,8 +119,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private FormFlexPanel createDetailsStep() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Details"));
+    private TwoColumnFlexFormPanel createDetailsStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 22).build());
@@ -142,8 +142,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         return panel;
     }
 
-    private FormFlexPanel createSelectPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method Selection"));
+    private TwoColumnFlexFormPanel createSelectPaymentMethodStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
         panel.setWidget(
@@ -212,16 +212,16 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         return panel;
     }
 
-    private FormFlexPanel createPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method"));
+    private TwoColumnFlexFormPanel createPaymentMethodStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         return panel;
     }
 
-    private FormFlexPanel createConfirmationStep() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Confirmation"));
+    private TwoColumnFlexFormPanel createConfirmationStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);

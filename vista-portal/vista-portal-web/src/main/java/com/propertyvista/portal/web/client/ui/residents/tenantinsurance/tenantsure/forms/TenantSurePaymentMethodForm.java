@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
@@ -61,7 +61,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.setWidget(0, 0, super.createContent());
         content.setBR(1, 0, 1);
@@ -71,7 +71,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     private Widget createLegalTermsPanel() {
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
 

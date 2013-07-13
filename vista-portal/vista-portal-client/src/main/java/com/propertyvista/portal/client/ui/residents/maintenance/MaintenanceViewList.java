@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RateIt;
@@ -43,9 +43,9 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
 
     private MaintenanceView.Presenter presenter;
 
-    private final FormFlexPanel openRequestsPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel openRequestsPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel historyRequestsPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel historyRequestsPanel = new TwoColumnFlexFormPanel();
 
     public MaintenanceViewList() {
         setWidth("100%");

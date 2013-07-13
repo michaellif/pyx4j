@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -39,7 +39,7 @@ public class ConcessionForm extends CrmEntityForm<Concession> {
     public ConcessionForm(IForm<Concession> view) {
         super(Concession.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().type()), 12).build());

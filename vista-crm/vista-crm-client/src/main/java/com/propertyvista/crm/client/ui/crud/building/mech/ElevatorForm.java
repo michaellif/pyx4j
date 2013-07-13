@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -31,9 +31,9 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
     }
 
     @Override
-    protected FormFlexPanel createGeneralTab() {
+    protected TwoColumnFlexFormPanel createGeneralTab() {
 
-        FormFlexPanel info = new FormFlexPanel();
+        TwoColumnFlexFormPanel info = new TwoColumnFlexFormPanel();
 
         int row = -1;
         info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
@@ -46,7 +46,7 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
         info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
 
         // form main panel:
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));

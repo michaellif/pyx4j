@@ -18,7 +18,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -35,8 +35,8 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
     }
 
     @SuppressWarnings("unchecked")
-    protected FormFlexPanel internalCreateContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    protected TwoColumnFlexFormPanel internalCreateContent() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1()), 22).build());

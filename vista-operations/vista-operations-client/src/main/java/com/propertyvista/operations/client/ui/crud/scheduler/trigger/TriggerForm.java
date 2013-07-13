@@ -17,7 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -42,8 +42,8 @@ public class TriggerForm extends OperationsEntityForm<TriggerDTO> {
 
     }
 
-    private FormFlexPanel createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("Details"));
+    private TwoColumnFlexFormPanel createDetailsTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Details"));
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 40).build());

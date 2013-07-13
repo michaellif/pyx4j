@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -55,7 +55,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         panelMap.put(GadgetType.testimonials, getTestimContentEditor());
         panelMap.put(GadgetType.promo, getPromoContentEditor());
 
-        FormFlexPanel generalPanel = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel generalPanel = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = 0;
         generalPanel.setH1(row++, 0, 1, i18n.tr("General"));
@@ -98,7 +98,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CEntityDecoratableForm<CustomGadgetContent> editor = new CEntityDecoratableForm<CustomGadgetContent>(CustomGadgetContent.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 1, proto().htmlContent().getMeta().getCaption());
                 main.setWidget(row++, 0, inject(proto().htmlContent(), new RichTextContentEditor(true)));
@@ -112,7 +112,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CEntityDecoratableForm<NewsGadgetContent> editor = new CEntityDecoratableForm<NewsGadgetContent>(NewsGadgetContent.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 1, proto().news().getMeta().getCaption());
                 main.setWidget(row++, 0, inject(proto().news(), new NewsFolder(isEditable())));
@@ -126,7 +126,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CEntityDecoratableForm<TestimonialsGadgetContent> editor = new CEntityDecoratableForm<TestimonialsGadgetContent>(TestimonialsGadgetContent.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 1, proto().testimonials().getMeta().getCaption());
                 main.setWidget(row++, 0, inject(proto().testimonials(), new TestimonialFolder(isEditable())));
@@ -140,7 +140,7 @@ public class HomePageGadgetForm extends CrmEntityForm<HomePageGadget> {
         CEntityDecoratableForm<PromoGadgetContent> editor = new CEntityDecoratableForm<PromoGadgetContent>(PromoGadgetContent.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
                 int row = 0;
                 main.setH1(row++, 0, 1, i18n.tr("Promotions"));
                 main.setWidget(row++, 0, new HTML(i18n.tr("No input required. Content will be generated automatically according to built-in rules")));

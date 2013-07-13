@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.UploadPanel;
 import com.pyx4j.gwt.rpc.upload.UploadService;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,7 +49,7 @@ public class UpdateUploadDialog extends UploadDialogBase<ImportUploadDTO, Downlo
         form = new CEntityForm<ImportUploadDTO>(ImportUploadDTO.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int row = -1;
                 main.setWidget(++row, 0, uploadPanel);

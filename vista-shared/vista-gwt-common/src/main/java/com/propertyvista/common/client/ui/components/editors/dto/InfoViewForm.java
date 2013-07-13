@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,14 +54,14 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
 
     private static final I18n i18n = I18n.get(InfoViewForm.class);
 
-    private final FormFlexPanel previousAddress;
+    private final TwoColumnFlexFormPanel previousAddress;
 
     private IdUploaderFolder fileUpload;
 
     public InfoViewForm() {
         super(TenantInfoDTO.class, new VistaEditorsComponentFactory());
 
-        previousAddress = new FormFlexPanel() {
+        previousAddress = new TwoColumnFlexFormPanel() {
             @Override
             public void setVisible(boolean visible) {
                 get(proto().version().previousAddress()).setVisible(visible);
@@ -81,7 +81,7 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Contact Details"));

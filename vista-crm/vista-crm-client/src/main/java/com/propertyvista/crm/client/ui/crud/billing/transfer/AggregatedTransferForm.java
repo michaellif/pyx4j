@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.billing.transfer;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -31,7 +31,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
     }
 
     public void createTabs() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentDate()), 10).build());
@@ -48,7 +48,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentFee()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentCount()), 10).build());
 
-        FormFlexPanel amount = new FormFlexPanel();
+        TwoColumnFlexFormPanel amount = new TwoColumnFlexFormPanel();
         int row2 = -1;
         amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
         amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());

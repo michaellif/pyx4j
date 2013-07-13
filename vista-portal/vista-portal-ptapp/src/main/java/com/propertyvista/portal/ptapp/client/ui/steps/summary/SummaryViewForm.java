@@ -35,7 +35,7 @@ import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
@@ -66,23 +66,23 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
 
     private SummaryViewPresenter presenter;
 
-    private final FormFlexPanel consessionPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel consessionPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel includedPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel includedPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel excludedPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel excludedPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel chargedPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel chargedPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel petsPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel petsPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel parkingPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel parkingPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel storagePanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel storagePanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel otherPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel otherPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel addonsPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel addonsPanel = new TwoColumnFlexFormPanel();
 
     private final boolean viewMode;
 
@@ -110,7 +110,7 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
@@ -233,12 +233,12 @@ public class SummaryViewForm extends CEntityDecoratableForm<SummaryDTO> {
     /*
      * Selected Apartment information view implementation
      */
-    private class LeaseTermView extends FormFlexPanel {
+    private class LeaseTermView extends TwoColumnFlexFormPanel {
 
         public LeaseTermView() {
             int row = -1;
 
-            FormFlexPanel leasePanel = new FormFlexPanel();
+            TwoColumnFlexFormPanel leasePanel = new TwoColumnFlexFormPanel();
             leasePanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().selectedUnit().leaseFrom()), 8).build());
             leasePanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().selectedUnit().leaseTo()), 8).build());
             leasePanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().selectedUnit().unitRent()), 8).build());

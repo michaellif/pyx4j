@@ -20,7 +20,7 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -35,7 +35,7 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
     public PmcFormNewItem(IForm<PmcDTO> view) {
         super(PmcDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());

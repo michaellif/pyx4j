@@ -15,7 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.welcomewizardmockup.revie
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.domain.moveinwizardmockup.LeaseReviewDTO;
@@ -28,7 +28,7 @@ public class LeaseReviewForm extends CEntityDecoratableForm<LeaseReviewDTO> {
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
 

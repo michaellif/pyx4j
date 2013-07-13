@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
@@ -85,16 +85,16 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private FormFlexPanel createPaymentMethodStep() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Payment Method"));
+    private TwoColumnFlexFormPanel createPaymentMethodStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         return panel;
     }
 
-    private FormFlexPanel createConfirmationStep() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Confirmation"));
+    private TwoColumnFlexFormPanel createConfirmationStep() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);

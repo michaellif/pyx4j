@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -33,7 +33,7 @@ public class UnitOccupancyForm extends CrmEntityForm<AptUnitOccupancySegment> {
     public UnitOccupancyForm(IForm<AptUnitOccupancySegment> view) {
         super(AptUnitOccupancySegment.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dateFrom()), 9).build());

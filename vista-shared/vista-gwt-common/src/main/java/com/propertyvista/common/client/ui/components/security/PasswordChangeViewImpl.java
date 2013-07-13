@@ -32,7 +32,7 @@ import com.pyx4j.commons.HtmlUtils;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.Anchor;
@@ -53,7 +53,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     private final Panel panel;
 
     public PasswordChangeViewImpl() {
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         content.getElement().getStyle().setPaddingTop(1, Unit.EM);
 
         int row = -1;

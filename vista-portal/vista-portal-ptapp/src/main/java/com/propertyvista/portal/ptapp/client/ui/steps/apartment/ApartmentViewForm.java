@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.HtmlUtils;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -42,17 +42,17 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
 
     static I18n i18n = I18n.get(ApartmentViewForm.class);
 
-    private final FormFlexPanel consessionPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel consessionPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel chargedPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel chargedPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel petsPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel petsPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel parkingPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel parkingPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel storagePanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel storagePanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel otherPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel otherPanel = new TwoColumnFlexFormPanel();
 
     private final SimplePanel pictureHolder = new SimplePanel();
 
@@ -73,7 +73,7 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
     public IsWidget createContent() {
         boolean modifiable = SecurityController.checkBehavior(VistaCustomerBehavior.ProspectiveApplicant);
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         welcome.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -82,7 +82,7 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
 
         main.setH1(++row, 0, 1, i18n.tr("General Info"));
 
-        FormFlexPanel info = new FormFlexPanel();
+        TwoColumnFlexFormPanel info = new TwoColumnFlexFormPanel();
 
         info.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().floorplan()), 20).build());
         info.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().bedroomsAndDens()), 10).build());
@@ -95,7 +95,7 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
 
         main.setHR(++row, 0, 1);
 
-        FormFlexPanel address = new FormFlexPanel();
+        TwoColumnFlexFormPanel address = new TwoColumnFlexFormPanel();
 
         int addrRow = -1;
         address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().city()), 15).build());
@@ -103,7 +103,7 @@ public class ApartmentViewForm extends CEntityDecoratableForm<ApartmentInfoDTO> 
         address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().country()), 15).build());
         address.setWidget(++addrRow, 0, new FormDecoratorBuilder(inject(proto().address().postalCode()), 7).build());
 
-        FormFlexPanel apartment = new FormFlexPanel();
+        TwoColumnFlexFormPanel apartment = new TwoColumnFlexFormPanel();
 
         apartment.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().address().street1()), 50).customLabel(i18n.tr("Street Address")).build());
         apartment.getFlexCellFormatter().setColSpan(0, 0, 2);

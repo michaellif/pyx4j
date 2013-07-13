@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.pmc;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -27,7 +27,7 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         super(EquifaxSetupRequestDTO.class, view);
         this.setEditable(false);
 
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, "Credit Pricing Option");
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportType())).build());

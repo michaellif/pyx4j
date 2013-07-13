@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.theme.BillingTheme;
@@ -34,7 +34,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     private static final I18n i18n = I18n.get(BillForm.class);
 
-    private final FormFlexPanel billPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel billPanel = new TwoColumnFlexFormPanel();
 
     private final boolean justPreviewBill;
 
@@ -54,7 +54,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
     public IsWidget createContent() {
 
         // form top panel:
-        FormFlexPanel infoPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel infoPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         if (!justPreviewBill) {
@@ -113,7 +113,7 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         billPanel.setWidget(++row, 0, grandTotal);
 
         // form main panel:
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         main.setWidget(0, 0, infoPanel);
         main.setWidget(1, 0, billPanel);
 

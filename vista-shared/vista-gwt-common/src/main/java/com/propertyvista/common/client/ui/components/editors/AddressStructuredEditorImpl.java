@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -52,8 +52,8 @@ public abstract class AddressStructuredEditorImpl<A extends AddressStructured> e
     }
 
     @SuppressWarnings("unchecked")
-    protected FormFlexPanel internalCreateContent() {
-        FormFlexPanel main = new FormFlexPanel();
+    protected TwoColumnFlexFormPanel internalCreateContent() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());

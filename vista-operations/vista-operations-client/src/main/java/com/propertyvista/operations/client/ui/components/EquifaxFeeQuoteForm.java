@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.components;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -33,7 +33,7 @@ public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxF
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportSetUpFee())).labelWidth(25).componentWidth(6).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());

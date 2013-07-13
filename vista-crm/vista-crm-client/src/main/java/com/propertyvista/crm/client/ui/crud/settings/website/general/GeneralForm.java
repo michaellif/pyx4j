@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
@@ -46,7 +46,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
     public GeneralForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = 0;
 
         content.setH1(row++, 0, 2, i18n.tr("Web Skin"));
@@ -118,7 +118,7 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
 
         // =====================================================================================================================
 
-        content = new FormFlexPanel(proto().locales().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().locales().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
         addTab(content);
     }

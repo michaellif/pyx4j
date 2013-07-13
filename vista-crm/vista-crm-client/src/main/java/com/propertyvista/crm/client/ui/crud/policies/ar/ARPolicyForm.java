@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -36,12 +36,12 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createARPoliciesTab());
     }
 
-    private FormFlexPanel createARPoliciesTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("AR Settings"));
+    private TwoColumnFlexFormPanel createARPoliciesTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("AR Settings"));
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditDebitRule()), 25).build());
 

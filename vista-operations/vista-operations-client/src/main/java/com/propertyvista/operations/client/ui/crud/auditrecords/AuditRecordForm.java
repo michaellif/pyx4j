@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.auditrecords;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,7 +30,7 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
     public AuditRecordForm(IForm<AuditRecordOperationsDTO> view) {
         super(AuditRecordOperationsDTO.class, view);
 
-        FormFlexPanel detailsTab = new FormFlexPanel(i18n.tr("Details"));
+        TwoColumnFlexFormPanel detailsTab = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().userName())).build());
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().userKey(), new CLabel<Key>())).build());

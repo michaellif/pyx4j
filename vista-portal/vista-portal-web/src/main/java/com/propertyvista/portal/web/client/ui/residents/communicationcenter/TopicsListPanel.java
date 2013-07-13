@@ -23,7 +23,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTMLTable;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -32,7 +32,7 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.portal.web.client.themes.CommunicationCenterTheme;
 
-public class TopicsListPanel extends FormFlexPanel {
+public class TopicsListPanel extends TwoColumnFlexFormPanel {
 
     private static final I18n i18n = I18n.get(TopicsListPanel.class);
 

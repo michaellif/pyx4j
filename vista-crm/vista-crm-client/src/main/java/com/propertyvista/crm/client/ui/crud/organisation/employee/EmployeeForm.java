@@ -25,7 +25,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEnumLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,7 +54,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
     private static final I18n i18n = I18n.get(EmployeeForm.class);
 
-    private final FormFlexPanel buildingsAccessPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel buildingsAccessPanel = new TwoColumnFlexFormPanel();
 
     public EmployeeForm(IForm<EmployeeDTO> view) {
         super(EmployeeDTO.class, view);
@@ -118,8 +118,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().userAuditingConfiguration()).setEnabled(isSelfEditor || isManager);
     }
 
-    private FormFlexPanel createInfoTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createInfoTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().employeeId()), 10).build());
@@ -142,16 +142,16 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return main;
     }
 
-    private FormFlexPanel createAuditingConfigurationTab(String title) {
-        FormFlexPanel tabContent = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createAuditingConfigurationTab(String title) {
+        TwoColumnFlexFormPanel tabContent = new TwoColumnFlexFormPanel(title);
 
         tabContent.setWidget(0, 0, inject(proto().userAuditingConfiguration(), new UserAuditingConfigurationForm()));
 
         return tabContent;
     }
 
-    private FormFlexPanel createPrivilegesTab(String title) {
-        FormFlexPanel content = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createPrivilegesTab(String title) {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -195,8 +195,8 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         return content;
     }
 
-    private FormFlexPanel createAlertsTab(String title) {
-        FormFlexPanel content = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createAlertsTab(String title) {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(title);
 
         content.setWidget(0, 0, inject(proto().notifications(), new NotificationFolder()));
 
@@ -242,7 +242,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
                 int row = -1;
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 25).build());

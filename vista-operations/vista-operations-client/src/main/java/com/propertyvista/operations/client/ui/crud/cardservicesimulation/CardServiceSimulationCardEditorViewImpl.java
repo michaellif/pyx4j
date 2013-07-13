@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.Button;
@@ -109,7 +109,7 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         public CardServiceSimulationForm(IForm<CardServiceSimulationCard> view) {
             super(CardServiceSimulationCard.class, view);
 
-            FormFlexPanel contentPanel = new FormFlexPanel("Cards Simulation");
+            TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel("Cards Simulation");
 
             int row = -1;
             contentPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchant())).build());

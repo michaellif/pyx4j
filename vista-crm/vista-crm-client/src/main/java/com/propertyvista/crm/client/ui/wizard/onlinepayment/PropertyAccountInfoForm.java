@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -34,7 +34,7 @@ public class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymen
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().averageMonthlyRent())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfRentedUnits())).build());

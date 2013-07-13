@@ -20,7 +20,7 @@ import com.google.gwt.view.client.Range;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -38,12 +38,12 @@ public class DatesPolicyForm extends PolicyDTOTabPanelBasedForm<DatesPolicyDTO> 
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createMiscPoliciesTab());
     }
 
-    private FormFlexPanel createMiscPoliciesTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Misc Settings"));
+    private TwoColumnFlexFormPanel createMiscPoliciesTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Misc Settings"));
         int row = -1;
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().yearRangeStart())).labelWidth(20).componentWidth(5).build());

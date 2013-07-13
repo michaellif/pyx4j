@@ -35,7 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.moveinwizardmockup.components.FormattableCombo;
@@ -82,7 +82,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
     private final ValueChangeHandler<?> summaryRecalculationRequiredHandler;
 
-    private FormFlexPanel coverageTerms;
+    private TwoColumnFlexFormPanel coverageTerms;
 
     private final Command onPurchaseConfirmed;
 
@@ -108,7 +108,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.getColumnFormatter().setWidth(0, "70%");
         content.getColumnFormatter().setWidth(1, "50%");
@@ -145,7 +145,7 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
     }
 
     private Widget createConverageTermsPanel() {
-        coverageTerms = new FormFlexPanel();
+        coverageTerms = new TwoColumnFlexFormPanel();
         coverageTerms.setWidth("50%");
 
         int irow = -1;

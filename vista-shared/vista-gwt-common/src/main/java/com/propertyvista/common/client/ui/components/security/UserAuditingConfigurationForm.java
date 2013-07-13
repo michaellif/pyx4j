@@ -15,7 +15,7 @@ package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -31,7 +31,7 @@ public class UserAuditingConfigurationForm extends CEntityDecoratableForm<UserAu
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Login Notifications"));

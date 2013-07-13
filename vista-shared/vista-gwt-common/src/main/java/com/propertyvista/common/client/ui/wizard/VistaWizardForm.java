@@ -22,7 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
@@ -59,7 +59,7 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityDecorata
         return wizardPanel;
     }
 
-    public VistaWizardStep addStep(final FormFlexPanel panel) {
+    public VistaWizardStep addStep(final TwoColumnFlexFormPanel panel) {
         final VistaWizardStep step = addStep(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
@@ -40,7 +40,7 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
 
     private Presenter presenter;
 
-    private final FormFlexPanel content;
+    private final TwoColumnFlexFormPanel content;
 
     private final Panel panel;
 
@@ -48,7 +48,7 @@ public class ApplicationSelectionViewImpl implements ApplicationSelectionView {
 
     public ApplicationSelectionViewImpl() {
         int row = -1;
-        content = new FormFlexPanel();
+        content = new TwoColumnFlexFormPanel();
         content.setSize("100%", "100%");
         lister = new ApplicationsLister();
         lister.setSize("100%", "100%");

@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.gadgets.common.ZoomableViewForm;
@@ -29,7 +29,7 @@ public class ApplicationsGadgetSummaryForm extends ZoomableViewForm<Applications
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().applications()), 10).build());

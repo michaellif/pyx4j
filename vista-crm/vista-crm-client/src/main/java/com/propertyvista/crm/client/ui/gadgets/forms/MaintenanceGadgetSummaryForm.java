@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.gadgets.forms;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -33,7 +33,7 @@ public class MaintenanceGadgetSummaryForm extends ZoomableViewForm<MaintenanceGa
     @Override
     public IsWidget createContent() {
 
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setH2(++row, 0, 1, i18n.tr("Open:"));
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().openWorkOrders())).customLabel("").useLabelSemicolon(false).componentWidth(5).build());

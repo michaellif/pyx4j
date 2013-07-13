@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.PriorAddress.OwnedRented;
@@ -37,7 +37,7 @@ public class PriorAddressEditor extends AddressStructuredEditorImpl<PriorAddress
     @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = internalCreateContent();
+        TwoColumnFlexFormPanel main = internalCreateContent();
 
         int row0 = main.getRowCount();
 

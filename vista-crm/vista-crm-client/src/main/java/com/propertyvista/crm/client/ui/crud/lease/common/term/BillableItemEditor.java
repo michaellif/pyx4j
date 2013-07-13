@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -74,9 +74,9 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
 
     private final SimplePanel extraDataPanel = new SimplePanel();
 
-    private final FormFlexPanel adjustmentPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel adjustmentPanel = new TwoColumnFlexFormPanel();
 
-    private final FormFlexPanel depositPanel = new FormFlexPanel();
+    private final TwoColumnFlexFormPanel depositPanel = new TwoColumnFlexFormPanel();
 
     private final CEntityForm<LeaseTermDTO> leaseTerm;
 
@@ -95,7 +95,7 @@ public class BillableItemEditor extends CEntityDecoratableForm<BillableItem> {
     @SuppressWarnings("unchecked")
     @Override
     public IsWidget createContent() {
-        FormFlexPanel flexPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().item(), new CEntitySelectorHyperlink<ProductItem>() {

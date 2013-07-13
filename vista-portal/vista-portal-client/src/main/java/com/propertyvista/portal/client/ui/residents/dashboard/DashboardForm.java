@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
@@ -79,7 +79,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
 
         leftPanelHolder.setWidget(leftPanelBorder);
 
-        FormFlexPanel leftPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel leftPanel = new TwoColumnFlexFormPanel();
         leftPanelBorder.setWidget(leftPanel);
         container.add(leftPanelHolder);
         container.setCellWidth(leftPanelHolder, "50%");
@@ -102,7 +102,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
         SimplePanel rightPanelHolder = new SimplePanel();
         rightPanelHolder.setStyleName(TenantDashboardTheme.StyleName.TenantDashboardRight.name());
 
-        FormFlexPanel rightPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel rightPanel = new TwoColumnFlexFormPanel();
         rightPanelHolder.setWidget(rightPanel);
         container.add(rightPanelHolder);
         container.setCellWidth(rightPanelHolder, "50%");

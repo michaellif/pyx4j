@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -34,7 +34,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
     public VistaTermsForm(IForm<VistaTerms> view) {
         super(VistaTerms.class, view);
 
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         main.setWidget(0, 0, inject(proto().version().document(), new VistaTermsDocumentFolder()));
 
@@ -65,7 +65,7 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
             int row = -1;
             // locale

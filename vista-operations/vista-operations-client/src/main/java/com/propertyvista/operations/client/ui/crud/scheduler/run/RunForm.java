@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -32,7 +32,7 @@ public class RunForm extends OperationsEntityForm<Run> {
     public RunForm(IForm<Run> view) {
         super(Run.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)),

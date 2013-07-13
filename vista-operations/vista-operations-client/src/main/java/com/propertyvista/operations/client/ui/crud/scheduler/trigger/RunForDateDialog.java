@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -41,7 +41,7 @@ public abstract class RunForDateDialog extends OkCancelDialog {
         content = new CEntityDecoratableForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
 //                    main.setWidget(2, 0, new DecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());

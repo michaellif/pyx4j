@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.deposit;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -28,7 +28,7 @@ public class DepositLifecycleForm extends CrmEntityForm<DepositLifecycleDTO> {
     public DepositLifecycleForm(IForm<DepositLifecycleDTO> view) {
         super(DepositLifecycleDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().deposit().billableItem()), true).build());

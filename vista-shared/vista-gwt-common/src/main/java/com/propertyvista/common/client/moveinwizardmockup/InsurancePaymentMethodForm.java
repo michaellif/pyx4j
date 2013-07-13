@@ -31,7 +31,7 @@ import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
@@ -71,7 +71,7 @@ public class InsurancePaymentMethodForm extends CEntityDecoratableForm<Insurance
     @Override
     public IsWidget createContent() {
 
-        FormFlexPanel container = new FormFlexPanel();
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
 
         container.setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditor.name());
 

@@ -20,7 +20,7 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CheckBox;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.portal.client.themes.CommunicationCenterTheme;
 import com.propertyvista.portal.client.ui.residents.communicationcenter.CommunicationCenterView.Presenter;
 
-public class NewMessagePanel extends FormFlexPanel {
+public class NewMessagePanel extends TwoColumnFlexFormPanel {
 
     private static final I18n i18n = I18n.get(CommunicationCenterViewImpl.class);
 

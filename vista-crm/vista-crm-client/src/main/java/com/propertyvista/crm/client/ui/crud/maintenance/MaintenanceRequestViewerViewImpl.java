@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CNumberField;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -159,7 +159,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CEntityDecoratableForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
                 @Override
                 public IsWidget createContent() {
-                    FormFlexPanel main = new FormFlexPanel();
+                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
                     main.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
@@ -200,7 +200,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             content = new CEntityDecoratableForm<SurveyResponse>(SurveyResponse.class) {
                 @Override
                 public IsWidget createContent() {
-                    FormFlexPanel main = new FormFlexPanel();
+                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().rating()), 3).labelWidth(7).build());
                     main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 20).labelWidth(7).build());

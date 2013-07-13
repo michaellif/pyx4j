@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -88,8 +88,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         });
     }
 
-    private FormFlexPanel createGuestsTab(String title) {
-        FormFlexPanel flexPanel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createGuestsTab(String title) {
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         flexPanel.setWidget(++row, 0, 2, inject(proto().guests(), new GuestFolder(isEditable())));
@@ -103,8 +103,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         return flexPanel;
     }
 
-    private FormFlexPanel createDetailsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leadId()), 20).build());

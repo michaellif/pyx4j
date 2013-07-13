@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -66,12 +66,12 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createEmailTemplatesPanel(), createEmailTemplatesHeaderFooterPanel());
     }
 
-    private FormFlexPanel createEmailTemplatesHeaderFooterPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Header and Footer"));
+    private TwoColumnFlexFormPanel createEmailTemplatesHeaderFooterPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Header and Footer"));
         int row = -1;
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().header()), 30).build());
@@ -80,8 +80,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         return panel;
     }
 
-    private FormFlexPanel createEmailTemplatesPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Templates"));
+    private TwoColumnFlexFormPanel createEmailTemplatesPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Templates"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().templates(), new EmailTemplateEditorFolder()));
@@ -129,7 +129,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());

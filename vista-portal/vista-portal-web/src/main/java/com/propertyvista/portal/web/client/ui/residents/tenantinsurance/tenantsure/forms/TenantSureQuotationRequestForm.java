@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -39,7 +39,7 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         contentPanel.setH2(++row, 0, 1, i18n.tr("Personal Info and Contact Information"));
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantName())).build());

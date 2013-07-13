@@ -21,7 +21,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
@@ -76,7 +76,7 @@ public abstract class PreauthorizedPaymentFolder extends VistaBoxFolder<Preautho
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
             int row = -1;
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorHyperlink<LeasePaymentMethod>() {

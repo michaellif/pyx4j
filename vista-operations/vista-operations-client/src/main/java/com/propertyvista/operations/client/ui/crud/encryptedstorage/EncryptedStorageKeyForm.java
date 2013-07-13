@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
@@ -85,7 +85,7 @@ public class EncryptedStorageKeyForm extends CEntityDecoratableForm<EncryptedSto
     }
 
     private Widget makeStatusPanel() {
-        FormFlexPanel statusPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel statusPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).componentWidth(15).build());
         statusPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isCurrent())).componentWidth(5).build());

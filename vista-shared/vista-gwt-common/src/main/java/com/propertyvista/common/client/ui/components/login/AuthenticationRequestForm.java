@@ -16,7 +16,7 @@ package com.propertyvista.common.client.ui.components.login;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CCaptcha;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.security.rpc.AuthenticationRequest;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -31,7 +31,7 @@ public class AuthenticationRequestForm extends CEntityDecoratableForm<Authentica
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, new LoginPanelWidgetDecorator(inject(proto().email())));

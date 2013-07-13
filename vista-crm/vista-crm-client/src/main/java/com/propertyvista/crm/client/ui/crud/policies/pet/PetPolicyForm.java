@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.pet;
 import java.util.Arrays;
 import java.util.List;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -32,12 +32,12 @@ public class PetPolicyForm extends PolicyDTOTabPanelBasedForm<PetPolicyDTO> {
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createSettignsForm());
     }
 
-    private FormFlexPanel createSettignsForm() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Pet Limits"));
+    private TwoColumnFlexFormPanel createSettignsForm() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Pet Limits"));
         content.setWidget(0, 0, inject(proto().constraints(), new PetConstraintsFolder()));
         return content;
     }

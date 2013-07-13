@@ -29,7 +29,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -105,16 +105,16 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         }
     }
 
-    private FormFlexPanel createPricingStep(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createPricingStep(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = 0;
         main.setH1(++row, 0, 1, i18n.tr("Pricing Information for Online Payments"));
         main.setWidget(++row, 0, onlinePaymentPricingTab = new OnlinePaymentPricingTab());
         return main;
     }
 
-    private FormFlexPanel createBusinessInfoStep(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createBusinessInfoStep(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Business Information"));
         Label collectionOfBusinessInformation = new Label();
@@ -124,8 +124,8 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private FormFlexPanel createPersonalInfoStep(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createPersonalInfoStep(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
 
         main.setH1(++row, 0, 1, i18n.tr("Personal Information"));
@@ -136,9 +136,9 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private FormFlexPanel createPropertyAndBankingStep(String title) {
+    private TwoColumnFlexFormPanel createPropertyAndBankingStep(String title) {
         // TODO add 'refundable deposit'? or not?
-        FormFlexPanel main = new FormFlexPanel(title);
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Property and Banking"));
         main.setWidget(++row, 0, inject(proto().propertyAccounts(), new PropertyAccountInfoFolder()));
@@ -155,22 +155,22 @@ public class OnlinePaymentWizardForm extends WizardForm<OnlinePaymentSetupDTO> {
         return main;
     }
 
-    private FormFlexPanel createConfirmationStep(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createConfirmationStep(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Confirmation"));
         main.setWidget(++row, 0, makeServiceAgreementLabel());
         return main;
     }
 
-    private FormFlexPanel createSignatureStep(String title) {
+    private TwoColumnFlexFormPanel createSignatureStep(String title) {
         // TODO need to add actual signature, but pending the following questions:
         //     - the full text of the agreements is required
         //     - if payment pad indeed needs "I <company name> agree to accept <bla bla bla...>" checkbox, what should be in placed instead of <bla bla bla> 
         final int TOP_I_AGREE_PANEL_PADDING = 20;
         final int AGREEMENTS_SEPARATOR_PADDING = 20;
 
-        FormFlexPanel main = new FormFlexPanel(title);
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Signature"));
 

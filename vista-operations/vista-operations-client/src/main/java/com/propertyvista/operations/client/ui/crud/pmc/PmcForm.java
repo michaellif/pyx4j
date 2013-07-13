@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -87,8 +87,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().isBooleanTrue());
     }
 
-    private FormFlexPanel createGeneralTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+    private TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
@@ -176,16 +176,16 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         return content;
     }
 
-    private FormFlexPanel createOnboardingMerchantAccountsTab() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Merchant Accounts"));
+    private TwoColumnFlexFormPanel createOnboardingMerchantAccountsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Merchant Accounts"));
         panel.setWidget(0, 0, onboardingMerchantAccountsLister = new MerchantAccountsLister());
         return panel;
     }
 
-    private FormFlexPanel createEquifaxlTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Equifax"));
+    private TwoColumnFlexFormPanel createEquifaxlTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
 
-        FormFlexPanel equifaxFeeQuotePanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel equifaxFeeQuotePanel = new TwoColumnFlexFormPanel();
         int rowFeeQuote = -1;
         equifaxFeeQuotePanel.setH1(++rowFeeQuote, 0, 2, i18n.tr("Equifax Fee Quote"));
         equifaxFeeQuotePanel.setWidget(++rowFeeQuote, 0, inject(proto().equifaxFee(), new EquifaxFeeQuoteForm(false)));
@@ -229,8 +229,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         return content;
     }
 
-    private FormFlexPanel createYardiTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Yardi"));
+    private TwoColumnFlexFormPanel createYardiTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
         int row = -1;
         content.setWidget(++row, 0, inject(proto().yardiCredential(), new YardiCredentialEditor()));
         return content;

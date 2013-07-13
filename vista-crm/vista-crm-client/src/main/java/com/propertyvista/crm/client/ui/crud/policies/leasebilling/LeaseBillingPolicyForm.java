@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -73,7 +73,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         baseFeeHolder = new SimplePanel();
         maxFeeHolder = new SimplePanel();
         if (VistaFeatures.instance().yardiIntegration()) {
@@ -89,8 +89,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         }
     }
 
-    private FormFlexPanel createBillingPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Billing"));
+    private TwoColumnFlexFormPanel createBillingPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Billing"));
 
         int row = -1;
 
@@ -106,8 +106,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         return panel;
     }
 
-    private FormFlexPanel createLateFeesPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Late Fee"));
+    private TwoColumnFlexFormPanel createLateFeesPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Late Fee"));
 
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lateFee().baseFeeType()), 10).build());
@@ -132,8 +132,8 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
         return panel;
     }
 
-    private FormFlexPanel createNsfFeesPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("NSF Fee"));
+    private TwoColumnFlexFormPanel createNsfFeesPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("NSF Fee"));
 
         panel.setWidget(0, 0, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
 
@@ -284,7 +284,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingPeriod(), new CLabel<BillingPeriod>()), 15).labelWidth(20).build());
 

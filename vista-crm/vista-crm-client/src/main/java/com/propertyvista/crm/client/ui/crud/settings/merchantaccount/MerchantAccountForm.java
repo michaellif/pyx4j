@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.merchantaccount;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -35,7 +35,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
             setViewable(true);
         }
 
-        FormFlexPanel general = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel general = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentsStatus()), 25).build());

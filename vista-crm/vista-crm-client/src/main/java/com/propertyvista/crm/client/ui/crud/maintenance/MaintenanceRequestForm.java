@@ -27,7 +27,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -57,11 +57,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private FlowPanel categoryPanel;
 
-    private FormFlexPanel accessPanel;
+    private TwoColumnFlexFormPanel accessPanel;
 
-    private FormFlexPanel statusPanel;
+    private TwoColumnFlexFormPanel statusPanel;
 
-    private FormFlexPanel surveyPanel;
+    private TwoColumnFlexFormPanel surveyPanel;
 
     private final BuildingSelector buildingSelector = new BuildingSelector();
 
@@ -95,8 +95,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
     }
 
-    private FormFlexPanel createGeneralTab() {
-        FormFlexPanel panel = new FormFlexPanel();
+    private TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
@@ -136,7 +136,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // --------------------------------------------------------------------------------------------------------------------
 
         // --------------------------------------------------------------------------------------------------------------------
-        accessPanel = new FormFlexPanel();
+        accessPanel = new TwoColumnFlexFormPanel();
 
         accessPanel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), true).build());
         get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
@@ -151,7 +151,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         // --------------------------------------------------------------------------------------------------------------------
 
-        statusPanel = new FormFlexPanel();
+        statusPanel = new TwoColumnFlexFormPanel();
         int innerRow = -1;
 
         statusPanel.setH1(++innerRow, 0, 2, i18n.tr("Status"));
@@ -167,7 +167,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         // --------------------------------------------------------------------------------------------------------------------
 
-        surveyPanel = new FormFlexPanel();
+        surveyPanel = new TwoColumnFlexFormPanel();
 
         surveyPanel.setH1(++innerRow, 0, 2, proto().surveyResponse().getMeta().getCaption());
         surveyPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().surveyResponse().rating(), new CLabel<Integer>()), 10).build());

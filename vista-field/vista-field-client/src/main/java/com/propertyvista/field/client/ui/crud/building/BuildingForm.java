@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CHyperlink;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -79,7 +79,7 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         tab = addTab(isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getUnitListerView().asWidget(), i18n.tr("Units"));
         setTabEnabled(tab, !isEditable());
 
-        FormFlexPanel combinedtab = new FormFlexPanel();
+        TwoColumnFlexFormPanel combinedtab = new TwoColumnFlexFormPanel();
         int row = 0;
         combinedtab.setH4(row++, 0, 2, i18n.tr("Elevators"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getElevatorListerView().asWidget());
@@ -91,7 +91,7 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         tab = addTab(combinedtab, i18n.tr("Mechanicals"));
         setTabEnabled(tab, !isEditable());
 
-        combinedtab = new FormFlexPanel();
+        combinedtab = new TwoColumnFlexFormPanel();
         row = 0;
         combinedtab.setH4(row++, 0, 2, i18n.tr("Parking"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getParkingListerView().asWidget());
@@ -105,7 +105,7 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
 
         addTab(createMarketingTab(i18n.tr("Marketing")));
 
-        combinedtab = new FormFlexPanel();
+        combinedtab = new TwoColumnFlexFormPanel();
         row = 0;
         combinedtab.setH4(row++, 0, 2, i18n.tr("Services"));
         combinedtab.setWidget(row++, 0, isEditable() ? new HTML() : ((BuildingViewerView) getParentView()).getServiceListerView().asWidget());
@@ -168,8 +168,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         });
     }
 
-    private FormFlexPanel createGeneralTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createGeneralTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Building Summary"));
@@ -220,8 +220,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         return main;
     }
 
-    private FormFlexPanel createDetailsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createDetailsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
@@ -285,8 +285,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         return main;
     }
 
-    private FormFlexPanel createFinancialTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createFinancialTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
         main.setBR(row++, 0, 2);
@@ -304,8 +304,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         return main;
     }
 
-    private FormFlexPanel createMarketingTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createMarketingTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
         main.setH1(row++, 0, 2, i18n.tr("Marketing Summary"));
@@ -322,8 +322,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
         return main;
     }
 
-    private FormFlexPanel createContactTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createContactTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
 //        main.setWidget(0, 0, inject(proto().contacts().organizationContacts(), new OrganizationContactFolder(isEditable())));
 

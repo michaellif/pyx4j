@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -36,14 +36,14 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(//@formatter:off
                 createItemsPanel()
         );//@formatter:on
     }
 
-    private FormFlexPanel createItemsPanel() {
-        FormFlexPanel panel = new FormFlexPanel(i18n.tr("Policy"));
+    private TwoColumnFlexFormPanel createItemsPanel() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Policy"));
         int row = -1;
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().bankruptcy()), 5).build());

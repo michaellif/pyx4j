@@ -23,7 +23,7 @@ import com.google.gwt.user.client.ui.DisclosurePanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 
@@ -33,12 +33,12 @@ public class MultiDisclosurePanel implements IsWidget {
 
     private final ArrayList<DisclosurePanel> disclosurePanels;
 
-    private final FormFlexPanel panel;
+    private final TwoColumnFlexFormPanel panel;
 
     private int currentRow;
 
     public MultiDisclosurePanel() {
-        panel = new FormFlexPanel();
+        panel = new TwoColumnFlexFormPanel();
         disclosurePanels = new ArrayList<DisclosurePanel>();
         currentRow = -1;
     }
@@ -66,7 +66,7 @@ public class MultiDisclosurePanel implements IsWidget {
             }
         });
 
-        FormFlexPanel continuationPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel continuationPanel = new TwoColumnFlexFormPanel();
         continuationPanel.setWidget(0, 0, widget);
 
         continuationPanel.setWidget(1, 0, new Button((customButtonLabel == null ? i18n.tr("Continue") : customButtonLabel), new Command() {

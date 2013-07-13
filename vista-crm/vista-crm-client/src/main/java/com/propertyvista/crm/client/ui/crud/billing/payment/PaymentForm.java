@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -135,7 +135,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     public PaymentForm(IForm<PaymentRecordDTO> view) {
         super(PaymentRecordDTO.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         content.setWidget(0, 0, createDetailsPanel());
         content.setH1(1, 0, 1, i18n.tr("Payment Method"));
@@ -156,7 +156,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
     @SuppressWarnings("unchecked")
     private IsWidget createDetailsPanel() {
 
-        FormFlexPanel left = new FormFlexPanel();
+        TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
         int row = -1;
 
         left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), "100px").build());
@@ -207,7 +207,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), "30px").labelWidth("20em").build());
 
-        FormFlexPanel right = new FormFlexPanel();
+        TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         row = -1;
 
         right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().amount()), "100px").build());
@@ -303,7 +303,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             }
         });
 
-        FormFlexPanel formPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
 
         formPanel.setWidget(0, 0, left);
         formPanel.setWidget(0, 1, right);

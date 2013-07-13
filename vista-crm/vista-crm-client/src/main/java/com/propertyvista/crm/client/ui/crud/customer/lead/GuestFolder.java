@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -77,7 +77,7 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel flexPanel = new FormFlexPanel();
+            TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
             int row = -1;
             flexPanel.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));

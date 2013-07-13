@@ -32,7 +32,7 @@ import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -89,7 +89,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
 
     private final ArrearsReportService service;
 
-    private FormFlexPanel contentPanel;
+    private TwoColumnFlexFormPanel contentPanel;
 
     private HTML titleBannerLabel;
 
@@ -123,7 +123,7 @@ public class ArrearsStatusGadget extends GadgetInstanceBase<ArrearsStatusGadgetM
 
     @Override
     protected Widget initContentPanel() {
-        contentPanel = new FormFlexPanel();
+        contentPanel = new TwoColumnFlexFormPanel();
         contentPanel.setWidget(1, 0, initTitleBannerPanel());
         contentPanel.setWidget(2, 0, initDataTablePanel());
         return contentPanel;

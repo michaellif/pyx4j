@@ -17,14 +17,14 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
 
 public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
 
-    private final FormFlexPanel viewPanel;
+    private final TwoColumnFlexFormPanel viewPanel;
 
     private SimulatedDataPreloadActivity presenter;
 
@@ -33,7 +33,7 @@ public class SimulatedDataPreloadViewImpl implements SimulatedDataPreloadView {
     private Button maintenanceRequestsGenerationButton;
 
     public SimulatedDataPreloadViewImpl() {
-        viewPanel = new FormFlexPanel();
+        viewPanel = new TwoColumnFlexFormPanel();
         viewPanel.setWidth("100%");
         int row = -1;
         viewPanel.setWidget(++row, 0, arrearsHistoryGenerationButton = new Button("Generate arrears snapshots history", new Command() {

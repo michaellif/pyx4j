@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -64,7 +64,7 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));

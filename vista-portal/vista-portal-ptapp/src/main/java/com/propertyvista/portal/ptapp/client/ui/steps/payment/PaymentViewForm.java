@@ -31,7 +31,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -80,7 +80,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
 
@@ -186,7 +186,7 @@ public class PaymentViewForm extends CEntityDecoratableForm<PaymentInformationDT
         get(member).setViewable(true);
         get(member).asWidget().getElement().getStyle().setFontWeight(FontWeight.BOLD);
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         main.setHR(0, 0, 1);
         main.setWidget(1, 0, totalRow);
         main.setWidth("48em");

@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
@@ -59,8 +59,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         };
     }
 
-    private FormFlexPanel createMediaTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createMediaTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Media Information"));
@@ -68,8 +68,8 @@ public class FloorplanForm extends CrmEntityForm<FloorplanDTO> {
         return main;
     }
 
-    private FormFlexPanel createGeneralTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createGeneralTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int leftRow = -1;
         int rightRow = -1;

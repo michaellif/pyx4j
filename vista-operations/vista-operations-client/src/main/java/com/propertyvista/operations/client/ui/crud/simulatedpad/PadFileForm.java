@@ -15,7 +15,7 @@ package com.propertyvista.operations.client.ui.crud.simulatedpad;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -31,7 +31,7 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
     public PadFileForm(IForm<PadSimFile> view) {
         super(PadSimFile.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
         content.setH1(++row, 0, 1, i18n.tr("File Details"));
@@ -45,7 +45,7 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
     }
 
     private Widget createDetailsTab() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 25).build());

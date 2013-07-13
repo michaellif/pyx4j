@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -61,7 +61,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
         main.setWidget(++row, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
@@ -130,7 +130,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
-            private final FormFlexPanel expirationWarning = new FormFlexPanel();
+            private final TwoColumnFlexFormPanel expirationWarning = new TwoColumnFlexFormPanel();
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
@@ -145,7 +145,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel content = new FormFlexPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
                 content.setWidget(++row, 0, expirationWarning);

@@ -16,7 +16,7 @@ package com.propertyvista.crm.client.ui.crud.lease;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -59,7 +59,7 @@ public class LeaseForm extends LeaseFormBase<LeaseDTO> {
     }
 
     private IsWidget createFinancialTransactionHistoryTab() {
-        FormFlexPanel financialTransactionHistory = new FormFlexPanel();
+        TwoColumnFlexFormPanel financialTransactionHistory = new TwoColumnFlexFormPanel();
         int row = -1;
 
         CViewer<TransactionHistoryDTO> transactionHistoryViewer = VistaFeatures.instance().yardiIntegration() ? new TransactionHistoryViewerYardi()

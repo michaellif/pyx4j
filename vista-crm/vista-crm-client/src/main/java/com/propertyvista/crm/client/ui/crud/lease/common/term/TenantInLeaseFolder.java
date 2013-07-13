@@ -36,7 +36,7 @@ import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -182,7 +182,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
     private class TenantInLeaseEditor extends CEntityDecoratableForm<LeaseTermTenant> {
 
-        private final FormFlexPanel preauthorizedPaymentsPanel = new FormFlexPanel();
+        private final TwoColumnFlexFormPanel preauthorizedPaymentsPanel = new TwoColumnFlexFormPanel();
 
         private final PreauthorizedPayments preauthorizedPayments = new PreauthorizedPayments();
 
@@ -192,7 +192,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel flexPanel = new FormFlexPanel();
+            TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
             int leftRow = -1;
             flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
@@ -323,7 +323,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
 
-            private FormFlexPanel expirationWarning;
+            private TwoColumnFlexFormPanel expirationWarning;
 
             public PreauthorizedPaymentViewer() {
                 super(PreauthorizedPayment.class);
@@ -331,11 +331,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel flexPanel = new FormFlexPanel();
+                TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
                 int row = -1;
                 Widget expirationWarningLabel = new HTML(i18n.tr("This Pre-Authorized Payment is expired - needs to be replaced with new one!"));
                 expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
-                expirationWarning = new FormFlexPanel();
+                expirationWarning = new TwoColumnFlexFormPanel();
                 expirationWarning.setWidget(0, 0, expirationWarningLabel);
                 expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
                 expirationWarning.setHR(1, 0, 1);

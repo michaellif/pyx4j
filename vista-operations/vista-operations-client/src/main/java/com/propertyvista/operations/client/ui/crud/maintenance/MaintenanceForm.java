@@ -18,7 +18,7 @@ import java.util.Collection;
 import java.util.EnumSet;
 
 import com.pyx4j.forms.client.ui.CComboBox;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -33,7 +33,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
     public MaintenanceForm(IForm<VistaSystemMaintenanceState> view) {
         super(VistaSystemMaintenanceState.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systemIdentification()), 10).build());
@@ -56,7 +56,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
         selectTab(addTab(content));
 
-        FormFlexPanel tenantSureMaintenanceTab = new FormFlexPanel(i18n.tr("Vista Interfaces"));
+        TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel(i18n.tr("Vista Interfaces"));
         row = -1;
         tenantSureMaintenanceTab.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
         addTab(tenantSureMaintenanceTab);

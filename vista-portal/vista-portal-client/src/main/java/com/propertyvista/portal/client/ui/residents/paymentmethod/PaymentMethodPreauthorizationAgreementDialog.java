@@ -17,7 +17,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
@@ -50,7 +50,7 @@ public abstract class PaymentMethodPreauthorizationAgreementDialog extends OkCan
             break;
         }
 
-        FormFlexPanel content = new FormFlexPanel();
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         content.setH1(0, 0, 1, i18n.tr("Pre-Authorized Agreement"));
         content.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));

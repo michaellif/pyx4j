@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -36,12 +36,12 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         return Arrays.asList(createMiscPoliciesTab());
     }
 
-    private FormFlexPanel createMiscPoliciesTab() {
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("Restrictions"));
+    private TwoColumnFlexFormPanel createMiscPoliciesTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Restrictions"));
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxLockers())).labelWidth(20).componentWidth(3).build());

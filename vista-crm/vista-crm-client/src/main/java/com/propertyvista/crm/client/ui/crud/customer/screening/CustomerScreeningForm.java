@@ -22,7 +22,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -45,7 +45,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
     private static final I18n i18n = I18n.get(CustomerScreeningForm.class);
 
-    private final FormFlexPanel previousAddress = new FormFlexPanel() {
+    private final TwoColumnFlexFormPanel previousAddress = new TwoColumnFlexFormPanel() {
         @Override
         public void setVisible(boolean visible) {
             get(proto().version().previousAddress()).setVisible(visible);
@@ -138,8 +138,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
                 new RevalidationTrigger<LogicalDate>(previousAddressForm.get(previousAddressForm.proto().moveInDate())));
     }
 
-    private FormFlexPanel createIdentificationDocumentsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createIdentificationDocumentsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         main.setWidget(++row, 0, inject(proto().documents(), fileUpload = new IdUploaderFolder()));
@@ -147,8 +147,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         return main;
     }
 
-    private FormFlexPanel createAddressesTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createAddressesTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = -1;
         main.setH1(++row, 0, 1, proto().version().currentAddress().getMeta().getCaption());
@@ -161,8 +161,8 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
         return main;
     }
 
-    private FormFlexPanel createlegalQuestionsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createlegalQuestionsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         int row = 0;
         main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().version().legalQuestions().suedForRent()), 10, 35, 40).labelAlignment(Alignment.left)
@@ -199,16 +199,16 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
 // Financial: ------------------------------------------------------------------------------------------------
 
-    private FormFlexPanel createIncomesTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createIncomesTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         main.setWidget(0, 0, inject(proto().version().incomes(), new PersonalIncomeFolder(isEditable())));
 
         return main;
     }
 
-    private FormFlexPanel createAssetsTab(String title) {
-        FormFlexPanel main = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createAssetsTab(String title) {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(title);
 
         main.setWidget(0, 0, inject(proto().version().assets(), new PersonalAssetFolder(isEditable())));
 

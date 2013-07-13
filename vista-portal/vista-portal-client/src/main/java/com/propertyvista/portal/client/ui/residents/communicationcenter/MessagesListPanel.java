@@ -18,7 +18,7 @@ import java.util.Vector;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTMLTable;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.CheckBox;
@@ -26,7 +26,7 @@ import com.pyx4j.widgets.client.CheckBox;
 import com.propertyvista.dto.CommunicationCenterDTO;
 import com.propertyvista.portal.client.themes.CommunicationCenterTheme;
 
-public class MessagesListPanel extends FormFlexPanel {
+public class MessagesListPanel extends TwoColumnFlexFormPanel {
 
     private static final I18n i18n = I18n.get(MessagesListPanel.class);
 

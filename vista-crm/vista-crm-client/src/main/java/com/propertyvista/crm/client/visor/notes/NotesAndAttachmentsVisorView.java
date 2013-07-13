@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.rpc.upload.UploadResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -101,7 +101,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel();
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
             content.setWidget(0, 0, inject(proto().notes(), new NotesAndAttachmentsFolder()));
 
@@ -201,7 +201,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 @Override
                 public IsWidget createContent() {
 
-                    FormFlexPanel content = new FormFlexPanel();
+                    TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                     int row = -1;
 
                     content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
@@ -371,7 +371,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     @Override
                     public IsWidget createContent() {
 
-                        FormFlexPanel content = new FormFlexPanel();
+                        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                         int row = -1;
 
                         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).build());

@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -56,7 +56,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     public CustomerCreditCheckLongReportForm(IForm<CustomerCreditCheckLongReportDTO> view) {
         super(CustomerCreditCheckLongReportDTO.class, view);
 
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
         main.setH1(++row, 0, 1, i18n.tr("QUICK SUMMARY"));
@@ -102,7 +102,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     }
 
     private Widget createQuickSummary() {
-        FormFlexPanel summary = new FormFlexPanel();
+        TwoColumnFlexFormPanel summary = new TwoColumnFlexFormPanel();
         int row = -1;
         summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().percentOfRentCovered()), 10).labelWidth(20).build());
         summary.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalAccounts()), 10).labelWidth(20).build());
@@ -118,7 +118,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 // Not implemented in Equifax:
 //      summary.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().numberOfEvictions()), 10).labelWidth(20).build());
 
-        FormFlexPanel accounts = new FormFlexPanel();
+        TwoColumnFlexFormPanel accounts = new TwoColumnFlexFormPanel();
         int col = -1;
         accounts.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Accounts paid late:") + "</i>"));
         accounts.getWidget(0, col).setWidth("15em");
@@ -131,7 +131,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         accounts.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().latePayments61_90days()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
 
-        FormFlexPanel equiifax = new FormFlexPanel();
+        TwoColumnFlexFormPanel equiifax = new TwoColumnFlexFormPanel();
         col = -1;
         equiifax.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Equifax:") + "</i>"));
         equiifax.getWidget(0, col).setWidth("15em");
@@ -144,7 +144,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         equiifax.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().equifaxRiskLevel()), 15).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
 
-        FormFlexPanel raitings = new FormFlexPanel();
+        TwoColumnFlexFormPanel raitings = new TwoColumnFlexFormPanel();
         col = -1;
         raitings.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().rating1()), 3).labelWidth(3).layout(Layout.vertical).labelAlignment(Alignment.center)
                 .componentAlignment(Alignment.center).build());
@@ -166,7 +166,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
                 .componentAlignment(Alignment.center).build());
 
         // put all together:
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         row = -1;
 
         main.setWidget(++row, 0, summary);
@@ -181,7 +181,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
     }
 
     private Widget createIdentity() {
-        FormFlexPanel name = new FormFlexPanel();
+        TwoColumnFlexFormPanel name = new TwoColumnFlexFormPanel();
 
         name.setWidget(0, 0, inject(proto().identity().name(), new NameEditor(i18n.tr("Name"))));
         name.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().identity().SIN()), 20).build());
@@ -190,7 +190,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         name.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().identity().maritalStatus()), 10).build());
         name.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().identity().deathDate()), 10).build());
 
-        FormFlexPanel address = new FormFlexPanel();
+        TwoColumnFlexFormPanel address = new TwoColumnFlexFormPanel();
         address.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
         address.getWidget(0, 0).getElement().getStyle().setPaddingLeft(16, Unit.EM);
         address.setWidget(1, 0, inject(proto().identity().currentAddress(), new AddressSimpleEditor()));
@@ -199,7 +199,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         address.getWidget(0, 1).getElement().getStyle().setPaddingLeft(16, Unit.EM);
         address.setWidget(1, 1, inject(proto().identity().formerAddress(), new AddressSimpleEditor()));
 
-        FormFlexPanel employement = new FormFlexPanel();
+        TwoColumnFlexFormPanel employement = new TwoColumnFlexFormPanel();
         employement.setWidget(0, 0, new HTML("<i>" + i18n.tr("Current:") + "</i>"));
         employement.getWidget(0, 0).getElement().getStyle().setPaddingLeft(16, Unit.EM);
         employement.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().identity().currentEmployer()), 20).build());
@@ -211,7 +211,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
         employement.setWidget(2, 1, new FormDecoratorBuilder(inject(proto().identity().formerOccupation()), 20).build());
 
         // put all together:
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         main.setWidget(0, 0, name);
 
@@ -246,7 +246,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 main.setWidget(0, ++col,
@@ -305,7 +305,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 main.setWidget(0, ++col,
@@ -360,7 +360,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 main.setWidget(0, ++col,
@@ -415,7 +415,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 main.setWidget(0, ++col,
@@ -473,7 +473,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 main.setWidget(0, ++col,
@@ -532,7 +532,7 @@ public class CustomerCreditCheckLongReportForm extends CrmEntityForm<CustomerCre
 
             @Override
             public IsWidget createContent() {
-                FormFlexPanel main = new FormFlexPanel();
+                TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                 int col = -1;
                 main.setWidget(0, ++col,

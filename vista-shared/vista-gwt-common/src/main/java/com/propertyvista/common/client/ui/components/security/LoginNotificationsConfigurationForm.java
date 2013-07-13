@@ -17,7 +17,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -31,7 +31,7 @@ public class LoginNotificationsConfigurationForm extends CEntityDecoratableForm<
 
     @Override
     public IsWidget createContent() {
-        FormFlexPanel contentPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
         contentPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().isEmailNotificationEnabled()), 5).build());
         contentPanel.setWidget(0, 1, new FormDecoratorBuilder(inject(proto().email()), 22).build());

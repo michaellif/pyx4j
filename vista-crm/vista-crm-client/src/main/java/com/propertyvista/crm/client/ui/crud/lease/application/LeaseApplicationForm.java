@@ -19,7 +19,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -75,16 +75,16 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         return i18n.tr("Potential Charges");
     }
 
-    private FormFlexPanel createInfoTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("Information"));
+    private TwoColumnFlexFormPanel createInfoTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Information"));
 
         main.setWidget(0, 0, inject(proto().tenantInfo(), createTenantView()));
 
         return main;
     }
 
-    private FormFlexPanel createFinancialTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("Financial"));
+    private TwoColumnFlexFormPanel createFinancialTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Financial"));
 
         main.setWidget(0, 0, inject(proto().tenantFinancials(), createFinancialView()));
 
@@ -129,8 +129,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         };
     }
 
-    private FormFlexPanel createApprovalTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("Approval"));
+    private TwoColumnFlexFormPanel createApprovalTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Approval"));
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().status(), new CEnumLabel()), 15).build());
@@ -157,8 +157,8 @@ public class LeaseApplicationForm extends LeaseFormBase<LeaseApplicationDTO> {
         return main;
     }
 
-    private FormFlexPanel createOnlineStatusTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("Online Status Details"));
+    private TwoColumnFlexFormPanel createOnlineStatusTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Online Status Details"));
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseApplication().onlineApplication().status()), 15).labelWidth(20).build());

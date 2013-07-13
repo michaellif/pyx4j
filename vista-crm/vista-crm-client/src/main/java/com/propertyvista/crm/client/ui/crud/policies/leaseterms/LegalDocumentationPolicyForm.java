@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
@@ -34,7 +34,7 @@ public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<Leg
     }
 
     @Override
-    protected List<FormFlexPanel> createCustomTabPanels() {
+    protected List<TwoColumnFlexFormPanel> createCustomTabPanels() {
         if (VistaFeatures.instance().yardiIntegration()) {
             return Arrays.asList(//@formatter:off
                         createPaymentAuthorizationPanel() 
@@ -50,32 +50,32 @@ public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<Leg
         }
     }
 
-    private FormFlexPanel createMainApplicatinoTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel(proto().mainApplication().getMeta().getCaption());
+    private TwoColumnFlexFormPanel createMainApplicatinoTermsPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().mainApplication().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().mainApplication(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
-    private FormFlexPanel createCoApplicatinoTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel(proto().coApplication().getMeta().getCaption());
+    private TwoColumnFlexFormPanel createCoApplicatinoTermsPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().coApplication().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().coApplication(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
-    private FormFlexPanel createGuarantorApplicationPanel() {
-        FormFlexPanel container = new FormFlexPanel(proto().guarantorApplication().getMeta().getCaption());
+    private TwoColumnFlexFormPanel createGuarantorApplicationPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().guarantorApplication().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().guarantorApplication(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
-    private FormFlexPanel createLeaseTermsPanel() {
-        FormFlexPanel container = new FormFlexPanel(proto().lease().getMeta().getCaption());
+    private TwoColumnFlexFormPanel createLeaseTermsPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().lease().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().lease(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
-    private FormFlexPanel createPaymentAuthorizationPanel() {
-        FormFlexPanel container = new FormFlexPanel(proto().paymentAuthorization().getMeta().getCaption());
+    private TwoColumnFlexFormPanel createPaymentAuthorizationPanel() {
+        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().paymentAuthorization().getMeta().getCaption());
         container.setWidget(0, 0, inject(proto().paymentAuthorization(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }

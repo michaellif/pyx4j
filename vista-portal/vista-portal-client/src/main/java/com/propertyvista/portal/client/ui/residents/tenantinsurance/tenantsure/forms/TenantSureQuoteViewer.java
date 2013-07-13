@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -56,7 +56,7 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
     @Override
     public IsWidget createContent(TenantSureQuoteDTO quote) {
         FlowPanel contentPanel = new FlowPanel();
-        FormFlexPanel paymentBreakdownPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel paymentBreakdownPanel = new TwoColumnFlexFormPanel();
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;

@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -59,7 +59,7 @@ public class TriggerScheduleFolder extends VistaBoxFolder<TriggerSchedule> {
 
         @Override
         public IsWidget createContent() {
-            FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
             int row = -1;
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().repeatType()), 12).build());

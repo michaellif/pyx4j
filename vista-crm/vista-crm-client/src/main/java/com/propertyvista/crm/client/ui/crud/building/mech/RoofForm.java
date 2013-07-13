@@ -13,7 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.building.mech;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -30,8 +30,8 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
     }
 
     @Override
-    protected FormFlexPanel createGeneralTab() {
-        FormFlexPanel main = new FormFlexPanel(i18n.tr("General"));
+    protected TwoColumnFlexFormPanel createGeneralTab() {
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));

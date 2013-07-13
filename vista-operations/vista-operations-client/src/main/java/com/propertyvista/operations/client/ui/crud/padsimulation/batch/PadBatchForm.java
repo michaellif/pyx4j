@@ -13,7 +13,7 @@
  */
 package com.propertyvista.operations.client.ui.crud.padsimulation.batch;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -30,7 +30,7 @@ public class PadBatchForm extends OperationsEntityForm<PadSimBatch> {
     public PadBatchForm(IForm<PadSimBatch> view) {
         super(PadSimBatch.class, view);
 
-        FormFlexPanel content = new FormFlexPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
 

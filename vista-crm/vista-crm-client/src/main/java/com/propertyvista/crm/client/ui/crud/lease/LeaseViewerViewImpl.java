@@ -37,7 +37,7 @@ import com.pyx4j.essentials.client.ConfirmCommand;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -547,7 +547,7 @@ public class LeaseViewerViewImpl extends LeaseViewerViewImplBase<LeaseDTO> imple
             content = new CEntityDecoratableForm<LeaseDTO>(LeaseDTO.class) {
                 @Override
                 public IsWidget createContent() {
-                    FormFlexPanel main = new FormFlexPanel();
+                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     main.setWidget(0, 0,
                             new FormDecoratorBuilder(inject(proto().moveOutSubmissionDate()), 9).customLabel(action.toString() + i18n.tr(" Submission Date"))

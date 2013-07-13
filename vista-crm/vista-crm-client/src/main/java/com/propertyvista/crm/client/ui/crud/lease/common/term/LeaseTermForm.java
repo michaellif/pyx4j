@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.decorators.EntityContainerCollapsableDecorator;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -117,9 +117,9 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     }
 
-    private FormFlexPanel createDetailsTab(String title) {
+    private TwoColumnFlexFormPanel createDetailsTab(String title) {
         // Lease details: -------------------------------------------------------------------------------------------------------
-        FormFlexPanel flexPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
 
         int leftRow = -1; // first column:
 
@@ -289,7 +289,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                 new FormDecoratorBuilder(inject(proto().lease().completion(), new CEnumLabel()), 15).customLabel(i18n.tr("Lease Completion")).build());
 
         // Lease dates: ---------------------------------------------------------------------------------------------------------
-        FormFlexPanel datesPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel datesPanel = new TwoColumnFlexFormPanel();
 
         // first column:
         datesPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().termFrom()), 9).build());

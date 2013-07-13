@@ -15,7 +15,7 @@ package com.propertyvista.crm.client.ui.crud.settings.website.content;
 
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
@@ -29,23 +29,23 @@ public class ContentForm extends CrmEntityForm<SiteDescriptorDTO> {
     public ContentForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        FormFlexPanel content;
+        TwoColumnFlexFormPanel content;
 
-        content = new FormFlexPanel(proto().childPages().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().childPages().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().childPages(), new PageDescriptorFolder(this)));
         selectTab(addTab(content));
 
-        content = new FormFlexPanel(i18n.tr("Home Page Gadgets"));
+        content = new TwoColumnFlexFormPanel(i18n.tr("Home Page Gadgets"));
         content.setWidget(0, 0, createGadgetPanel());
         addTab(content);
 
-        content = new FormFlexPanel(proto().cityIntroPages().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().cityIntroPages().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().cityIntroPages(), new CityIntroPageFolder(this)));
         addTab(content);
     }
 
     private Widget createGadgetPanel() {
-        FormFlexPanel gadgetPanel = new FormFlexPanel();
+        TwoColumnFlexFormPanel gadgetPanel = new TwoColumnFlexFormPanel();
         int row = 0;
 
         gadgetPanel.setH4(row++, 0, 1, i18n.tr("Narrow Page Gadgets:"));

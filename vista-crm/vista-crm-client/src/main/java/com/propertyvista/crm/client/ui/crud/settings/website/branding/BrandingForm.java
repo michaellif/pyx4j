@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 
 import com.pyx4j.forms.client.ui.CFile;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -43,29 +43,29 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
     public BrandingForm(IForm<SiteDescriptorDTO> view) {
         super(SiteDescriptorDTO.class, view);
 
-        FormFlexPanel content;
+        TwoColumnFlexFormPanel content;
 
-        content = new FormFlexPanel(proto().siteTitles().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().siteTitles().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
         selectTab(addTab(content));
 
-        content = new FormFlexPanel(i18n.tr("Site Logos"));
+        content = new TwoColumnFlexFormPanel(i18n.tr("Site Logos"));
         content.setWidget(0, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
         addTab(content);
 
-        content = new FormFlexPanel(proto().slogan().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().slogan().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
         addTab(content);
 
-        content = new FormFlexPanel(proto().banner().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().banner().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().banner(), new PortalImageSetFolder(isEditable())));
         addTab(content);
 
-        content = new FormFlexPanel(proto().metaTags().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().metaTags().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
         addTab(content);
 
-        content = new FormFlexPanel(proto().socialLinks().getMeta().getCaption());
+        content = new TwoColumnFlexFormPanel(proto().socialLinks().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
         addTab(content);
 
@@ -79,8 +79,8 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
         thumb.setUrl(MediaUtils.createSiteImageResourceUrl(getValue().crmLogo()));
     }
 
-    private FormFlexPanel createCrmLogoTab() {
-        FormFlexPanel content = new FormFlexPanel(proto().crmLogo().getMeta().getCaption());
+    private TwoColumnFlexFormPanel createCrmLogoTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(proto().crmLogo().getMeta().getCaption());
 
         content.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().crmLogo(), new CFile<File>(new Command() {
             @Override

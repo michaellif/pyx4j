@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.reports.PropertyCriteriaFolder;
 
 import com.propertyvista.common.client.resources.VistaImages;
@@ -35,7 +35,7 @@ public class AvailabilityReportSettingsAdvancedForm extends CEntityDecoratableFo
     @Override
     public IsWidget createContent() {
         int row = -1;
-        FormFlexPanel panel = new FormFlexPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().asOf())).labelWidth(10).componentWidth(10).build());
         panel.setWidget(
                 ++row,

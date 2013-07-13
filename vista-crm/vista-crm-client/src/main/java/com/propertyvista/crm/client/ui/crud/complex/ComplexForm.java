@@ -19,7 +19,7 @@ import com.google.gwt.user.client.Window;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CField;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,8 +44,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
 
     }
 
-    private FormFlexPanel createGeneralPanel(String title) {
-        FormFlexPanel panel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createGeneralPanel(String title) {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
 
         panel.setWidget(0, 0, (new FormDecoratorBuilder(inject(proto().name()))).build());
         panel.setWidget(0, 1, (new FormDecoratorBuilder(inject(proto().website()))).build());
@@ -81,8 +81,8 @@ public class ComplexForm extends CrmEntityForm<ComplexDTO> {
         return panel;
     }
 
-    private FormFlexPanel createBuildingsPanel(String title) {
-        FormFlexPanel panel = new FormFlexPanel(title);
+    private TwoColumnFlexFormPanel createBuildingsPanel(String title) {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(title);
 
         panel.setWidget(0, 0, 2, inject(proto().buildings(), new ComplexBuildingFolder(isEditable())));
 
