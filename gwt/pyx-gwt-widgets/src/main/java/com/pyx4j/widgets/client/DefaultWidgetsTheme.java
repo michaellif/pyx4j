@@ -179,7 +179,6 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("vertical-align", "middle");
         style.addProperty("font-size", "1.1em");
         style.addProperty("font-weight", "bolder");
-        style.addProperty("padding", "0 2px");
         addStyle(style);
 
         style = new Style(".", StyleName.ToolbarSeparator);
