@@ -50,12 +50,14 @@ public abstract class FlexFormPanelTheme extends Theme {
     }
 
     protected void initStyles() {
+
         Style style = new Style(".", StyleName.FormFlexPanel);
         style.addProperty("border-spacing", "0");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         style.addProperty("padding", "6px");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.FormFlexPanelLeftColumn);
