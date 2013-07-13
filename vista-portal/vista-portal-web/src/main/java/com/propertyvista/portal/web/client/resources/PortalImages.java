@@ -184,6 +184,20 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
     @Source("Phone.gif")
     ImageResource phone();
 
+    //=============== Devices ====================
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("SignUp-Building.png")
+    ImageResource signUpBuilding();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("SignUp-Personal.png")
+    ImageResource signUpPersonal();
+
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("SignUp-Security.png")
+    ImageResource signUpSecurity();
+
     //=============== Menu ====================
 
     DashboardMenuImages dashboardMenu();

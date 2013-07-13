@@ -29,12 +29,6 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
         customLabel("");
         labelWidth("0");
         useLabelSemicolon(false);
-        String text = watermark != null ? watermark : getComponent().getTitle();
-        if (getComponent() instanceof CTextFieldBase) {
-            ((CTextFieldBase<?, ?>) getComponent()).setWatermark(text);
-        } else if (getComponent() instanceof CCaptcha) {
-            ((CCaptcha) getComponent()).setWatermark(text);
-        }
         mandatoryMarker(false);
         componentWidth("100%");
         contentWidth("280px");
@@ -45,4 +39,14 @@ public class LoginDecoratorBuilder extends WidgetDecorator.Builder {
         return this;
     }
 
+    @Override
+    public WidgetDecorator build() {
+        String text = watermark != null ? watermark : getComponent().getTitle();
+        if (getComponent() instanceof CTextFieldBase) {
+            ((CTextFieldBase<?, ?>) getComponent()).setWatermark(text);
+        } else if (getComponent() instanceof CCaptcha) {
+            ((CCaptcha) getComponent()).setWatermark(text);
+        }
+        return super.build();
+    }
 }

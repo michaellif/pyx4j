@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -60,15 +58,7 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
         add(maintenanceGadget);
         add(residentServicesGadget);
 
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                try {
-                    doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
-                } catch (Throwable e) {
-                }
-            }
-        });
+        doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
         AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 

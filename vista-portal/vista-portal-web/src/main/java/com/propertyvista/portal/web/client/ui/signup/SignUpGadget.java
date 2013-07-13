@@ -26,6 +26,8 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -40,6 +42,7 @@ import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
@@ -49,6 +52,7 @@ import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.signup.SignUpView.SignUpPresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
@@ -121,6 +125,23 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         signupform.populateNew();
     }
 
+    public void doLayout(LayoutType layoutType) {
+        switch (layoutType) {
+        case phonePortrait:
+        case phoneLandscape:
+            signupform.signUpBuildingImage.setVisible(false);
+            signupform.signUpPersonalImage.setVisible(false);
+            signupform.signUpSecurity.setVisible(false);
+            break;
+
+        default:
+            signupform.signUpBuildingImage.setVisible(true);
+            signupform.signUpPersonalImage.setVisible(true);
+            signupform.signUpSecurity.setVisible(true);
+            break;
+        }
+    }
+
     class SignUpToolbar extends Toolbar {
 
         private final Button signUpButton;
@@ -150,6 +171,12 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
 
         private EntityValidationException entityValidationError;
 
+        private Image signUpBuildingImage;
+
+        private Image signUpPersonalImage;
+
+        private Image signUpSecurity;
+
         public SignUpForm() {
             super(SelfRegistrationDTO.class);
         }
@@ -162,34 +189,66 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
             flexPanel.getColumnFormatter().setWidth(1, "300px");
             int row = -1;
 
+            signUpBuildingImage = new Image(PortalImages.INSTANCE.signUpBuilding());
+            flexPanel.setWidget(++row, 0, signUpBuildingImage);
+            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 2);
+            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+
+            flexPanel.setH4(row, 1, 1, i18n.tr("Which building do you live in?"));
+
             buildingSelector = (inject(proto().building(), new BuildingSuggestBox()));
             buildingSelector.setWatermark(i18n.tr("Your building's address"));
             buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
             flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(buildingSelector).build());
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            flexPanel.setH4(++row, 0, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement"));
+            flexPanel.setBR(++row, 0, 2);
+
+            signUpPersonalImage = new Image(PortalImages.INSTANCE.signUpPersonal());
+            flexPanel.setWidget(++row, 0, signUpPersonalImage);
+            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 5);
+            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+
+            flexPanel.setH4(row, 1, 1, i18n.tr("Enter your first, middle and last name the way it is spelled in your lease agreement:"));
 
             flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().firstName())).build());
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().middleName())).build());
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().lastName())).build());
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
-            CTextFieldBase<?, ?> emailField;
-            Widget w = new LoginDecoratorBuilder(emailField = (CTextFieldBase<?, ?>) inject(proto().email())).build();
-            w.getElement().getStyle().setMarginTop(20, Unit.PX);
-            flexPanel.setWidget(++row, 0, w);
+            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().middleName())).build());
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+
+            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().lastName())).build());
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+
+            CTextFieldBase<?, ?> emailField = (CTextFieldBase<?, ?>) inject(proto().email());
             emailField.setNote(i18n.tr("Please note: your email will be your user name"));
+            Widget widget = new LoginDecoratorBuilder(emailField).build();
+            flexPanel.setWidget(++row, 0, widget);
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+
+            flexPanel.setBR(++row, 0, 2);
+
+            signUpSecurity = new Image(PortalImages.INSTANCE.signUpSecurity());
+            flexPanel.setWidget(++row, 0, signUpSecurity);
+            flexPanel.getFlexCellFormatter().setRowSpan(row, 0, 4);
+            flexPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
+
+            flexPanel.setH4(row, 1, 1, i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
 
             CTextFieldBase<?, ?> securityCodeField;
             flexPanel.setWidget(++row, 0,
                     new LoginDecoratorBuilder(securityCodeField = (CTextFieldBase<?, ?>) inject(proto().securityCode())).componentWidth("90%").build());
-            securityCodeField.setNote(i18n.tr("The Security Code is a secure identifier that is provided by your Property Manager specifically for you."));
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
+
             securityCodeField
                     .setTooltip(i18n
                             .tr("You should have received Security Code by mail. Don't have a Security Code? To get your own unique access code, please contact the Property Manager directly."));
 
-            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().password())).build());
+            flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().password())).watermark(i18n.tr("Create a Password")).build());
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             flexPanel.setWidget(++row, 0, new LoginDecoratorBuilder(inject(proto().passwordConfirm())).build());
+            flexPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setTextAlign(TextAlign.LEFT);
 
             get(proto().passwordConfirm()).addValueValidator(new EditableValueValidator<String>() {
                 @Override
@@ -228,6 +287,8 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
                 }
             }
 
+            flexPanel.setBR(++row, 0, 2);
+
             return flexPanel;
         }
 
@@ -242,4 +303,5 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
         }
 
     }
+
 }
