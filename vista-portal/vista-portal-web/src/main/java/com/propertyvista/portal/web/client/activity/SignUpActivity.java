@@ -35,7 +35,7 @@ import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
-import com.propertyvista.portal.web.client.ui.landing.SignUpView;
+import com.propertyvista.portal.web.client.ui.signup.SignUpView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class SignUpActivity extends AbstractActivity implements SignUpView.SignUpPresenter {

@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.landing;
+package com.propertyvista.portal.web.client.ui.signup;
 
 import java.util.List;
 

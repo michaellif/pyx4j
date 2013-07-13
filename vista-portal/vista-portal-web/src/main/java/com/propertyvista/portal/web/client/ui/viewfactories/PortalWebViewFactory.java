@@ -42,8 +42,6 @@ import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.portal.web.client.ui.landing.PasswordResetRequestViewImpl;
 import com.propertyvista.portal.web.client.ui.landing.PasswordResetViewImpl;
-import com.propertyvista.portal.web.client.ui.landing.SignUpView;
-import com.propertyvista.portal.web.client.ui.landing.SignUpViewImpl;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView;
 import com.propertyvista.portal.web.client.ui.profile.ProfileViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
@@ -99,6 +97,8 @@ import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.Pr
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantViewImpl;
 import com.propertyvista.portal.web.client.ui.security.PasswordChangeViewImpl;
+import com.propertyvista.portal.web.client.ui.signup.SignUpView;
+import com.propertyvista.portal.web.client.ui.signup.SignUpViewImpl;
 
 public class PortalWebViewFactory extends ViewFactoryBase {
 
