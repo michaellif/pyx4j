@@ -20,17 +20,17 @@
  */
 package com.pyx4j.forms.client.ui.panels;
 
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanel;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelActionWidget;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH1Label;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH2;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH2Label;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH3;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH3Label;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH4;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelH4Label;
-import static com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName.FormFlexPanelHR;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanel;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelActionWidget;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH1;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH1Label;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH2;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH2Label;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH3;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH3Label;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH4;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH4Label;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelHR;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -51,25 +51,23 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
-import com.pyx4j.forms.client.ui.panels.DefaultFormFlexPanelTheme.StyleName;
+import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName;
 import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
-public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers, IValidatable {
+public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers, IValidatable {
 
     private final String title;
 
     private final List<CComponent<?>> components = new ArrayList<CComponent<?>>();
 
-    public FormFlexPanel(String title) {
+    public BasicFlexFormPanel(String title) {
         this.title = title;
         setStyleName(FormFlexPanel.name());
-        getColumnFormatter().setStyleName(0, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftColumn.name());
-        getColumnFormatter().setStyleName(1, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightColumn.name());
     }
 
-    public FormFlexPanel() {
+    public BasicFlexFormPanel() {
         this(null);
     }
 
@@ -142,16 +140,6 @@ public class FormFlexPanel extends FlexTable implements PropertyChangeHandler, H
         locateCComponents(widget);
         super.setWidget(row, column, widget);
         getFlexCellFormatter().setColSpan(row, column, span);
-        if (span == 1) {
-            if (column == 0) {
-                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelLeftCell.name());
-            } else if (column == 1) {
-                getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelRightCell.name());
-            }
-        } else if (span == 2) {
-            getFlexCellFormatter().setStyleName(row, column, DefaultFormFlexPanelTheme.StyleName.FormFlexPanelTwoRows.name());
-        }
-
     }
 
     @Override

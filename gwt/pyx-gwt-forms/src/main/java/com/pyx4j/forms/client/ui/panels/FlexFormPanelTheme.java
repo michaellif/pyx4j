@@ -28,7 +28,7 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public abstract class DefaultFormFlexPanelTheme extends Theme {
+public abstract class FlexFormPanelTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
         FormFlexPanel, FormFlexPanelLeftColumn, FormFlexPanelRightColumn, FormFlexPanelLeftCell, FormFlexPanelRightCell,
@@ -40,7 +40,7 @@ public abstract class DefaultFormFlexPanelTheme extends Theme {
 
     }
 
-    public DefaultFormFlexPanelTheme() {
+    public FlexFormPanelTheme() {
         initStyles();
     }
 

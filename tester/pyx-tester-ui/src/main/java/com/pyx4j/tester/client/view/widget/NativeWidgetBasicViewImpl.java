@@ -33,7 +33,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -51,7 +51,7 @@ public class NativeWidgetBasicViewImpl extends ScrollPanel implements NativeWidg
     public NativeWidgetBasicViewImpl() {
         setSize("100%", "100%");
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));

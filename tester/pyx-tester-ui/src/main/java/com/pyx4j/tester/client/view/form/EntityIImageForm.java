@@ -28,7 +28,7 @@ import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CImageList;
 import com.pyx4j.forms.client.ui.CLabel;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.images.Images;
@@ -47,7 +47,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
     @Override
     public IsWidget createContent() {
 
-        FormFlexPanel main = new FormFlexPanel();
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
         main.setH2(++row, 0, 1, i18n.tr("CImage is here"));
@@ -66,7 +66,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
 
             @Override
             public Widget getImageEntryView(CEntityForm<TFile> entryForm) {
-                FormFlexPanel infoPanel = new FormFlexPanel();
+                TwoColumnFlexFormPanel infoPanel = new TwoColumnFlexFormPanel();
                 int row = -1;
                 infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())));
                 infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().caption())));

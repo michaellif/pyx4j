@@ -33,7 +33,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.panels.FormFlexPanel;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -59,7 +59,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
         return tabPanel;
     }
 
-    public Tab addTab(final FormFlexPanel panel) {
+    public Tab addTab(final TwoColumnFlexFormPanel panel) {
         final Tab tab = addTab(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override
