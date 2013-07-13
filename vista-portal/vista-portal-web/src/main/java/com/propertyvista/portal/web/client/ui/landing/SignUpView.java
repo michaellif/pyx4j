@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.registration;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import java.util.List;
 
@@ -22,23 +22,21 @@ import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
-public interface TenantRegistrationView extends IsWidget {
+public interface SignUpView extends IsWidget {
 
-    interface Presenter {
+    interface SignUpPresenter {
 
-        void onRegister();
+        void register(SelfRegistrationDTO value);
 
-        void onShowVistaTerms();
+        void showVistaTerms();
 
         Class<? extends Place> getPortalTermsPlace();
 
     }
 
-    void setPresenter(Presenter presenter);
+    void setPresenter(SignUpPresenter presenter);
 
     void populate(List<SelfRegistrationBuildingDTO> buildings);
-
-    SelfRegistrationDTO getValue();
 
     void showError(String message);
 

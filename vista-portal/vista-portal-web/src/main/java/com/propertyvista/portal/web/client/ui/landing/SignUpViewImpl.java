@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.registration;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import java.util.List;
 
@@ -35,22 +35,21 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
-public class TenantRegistrationViewImpl extends Composite implements TenantRegistrationView {
+public class SignUpViewImpl extends Composite implements SignUpView {
 
-    private static I18n i18n = I18n.get(TenantRegistrationForm.class);
+    private static I18n i18n = I18n.get(SignUpForm.class);
 
-    private TenantRegistrationForm signupform;
+    private SignUpForm signupform;
 
-    private Presenter presenter;
+    private SignUpPresenter presenter;
 
     private Anchor termsAndConditionsAnchor;
 
-    public TenantRegistrationViewImpl() {
+    public SignUpViewImpl() {
         FlowPanel viewPanel = new FlowPanel();
-        bindResitrationPanel(viewPanel);
+        bindRegistrationPanel(viewPanel);
         bindGreetingPanel(viewPanel);
         initWidget(viewPanel);
     }
@@ -64,14 +63,9 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
     }
 
     @Override
-    public void setPresenter(Presenter presenter) {
+    public void setPresenter(SignUpPresenter presenter) {
         this.presenter = presenter;
         this.termsAndConditionsAnchor.setHref(AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), true, presenter.getPortalTermsPlace()));
-    }
-
-    @Override
-    public SelfRegistrationDTO getValue() {
-        return signupform.getValue();
     }
 
     @Override
@@ -79,10 +73,10 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         MessageDialog.error(i18n.tr("Registration Error"), message);
     }
 
-    private void bindResitrationPanel(FlowPanel layout) {
+    private void bindRegistrationPanel(FlowPanel layout) {
         layout.add(new HTML(i18n.tr("Create your account")));
 
-        signupform = new TenantRegistrationForm();
+        signupform = new SignUpForm();
         signupform.initContent();
         layout.add(signupform);
 
@@ -92,7 +86,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         termsAndConditionsAnchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                presenter.onShowVistaTerms();
+                presenter.showVistaTerms();
                 DOM.eventPreventDefault((com.google.gwt.user.client.Event) event.getNativeEvent());
             }
         });
@@ -105,7 +99,7 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         Button registerButton = new Button(i18n.tr("Register"), new Command() {
             @Override
             public void execute() {
-                onRegister();
+                register();
             }
         });
         buttonHolder.setWidget(registerButton);
@@ -134,12 +128,12 @@ public class TenantRegistrationViewImpl extends Composite implements TenantRegis
         layout.add(signUpGreetingPanel);
     }
 
-    private void onRegister() {
+    private void register() {
         signupform.setEntityValidationError(null);
         signupform.revalidate();
         signupform.setUnconditionalValidationErrorRendering(true);
         if (signupform.isValid()) {
-            TenantRegistrationViewImpl.this.presenter.onRegister();
+            presenter.register(signupform.getValue());
         }
     }
 

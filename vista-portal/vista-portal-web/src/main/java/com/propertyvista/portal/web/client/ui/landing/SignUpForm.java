@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.registration;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import java.util.List;
 
@@ -38,15 +38,15 @@ import com.propertyvista.portal.rpc.shared.EntityValidationException;
 import com.propertyvista.portal.rpc.shared.EntityValidationException.MemberValidationError;
 import com.propertyvista.portal.web.client.ui.util.decorators.LoginDecoratorBuilder;
 
-public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrationDTO> {
+public class SignUpForm extends CEntityDecoratableForm<SelfRegistrationDTO> {
 
-    private static final I18n i18n = I18n.get(TenantRegistrationForm.class);
+    private static final I18n i18n = I18n.get(SignUpForm.class);
 
-    private CBuildingSuggestBox buildingSelector;
+    private BuildingSuggestBox buildingSelector;
 
     private EntityValidationException entityValidationError;
 
-    public TenantRegistrationForm() {
+    public SignUpForm() {
         super(SelfRegistrationDTO.class);
     }
 
@@ -58,7 +58,7 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
         FlowPanel userDataPanel = new FlowPanel();
         userDataPanel.getElement().getStyle().setMarginTop(20, Unit.PX);
 
-        buildingSelector = (inject(proto().building(), new CBuildingSuggestBox()));
+        buildingSelector = (inject(proto().building(), new BuildingSuggestBox()));
         buildingSelector.setWatermark(i18n.tr("Your building's address"));
         buildingSelector.setNote(i18n.tr("Search by typing your building's street, postal code, province etc..."));
         userDataPanel.add(center(new LoginDecoratorBuilder(buildingSelector).customLabel(i18n.tr("Select your building")).build()));
@@ -122,8 +122,8 @@ public class TenantRegistrationForm extends CEntityDecoratableForm<SelfRegistrat
                 boundMember.addValueValidator(new EditableValueValidator() {
                     @Override
                     public ValidationError isValid(CComponent component, Object value) {
-                        if (TenantRegistrationForm.this.entityValidationError != null) {
-                            for (MemberValidationError memberValidationError : TenantRegistrationForm.this.entityValidationError.getErrors()) {
+                        if (SignUpForm.this.entityValidationError != null) {
+                            for (MemberValidationError memberValidationError : SignUpForm.this.entityValidationError.getErrors()) {
                                 if (memberValidationError.getMember().getPath().equals(member.getPath())) {
                                     return new ValidationError(component, memberValidationError.getMessage());
                                 }

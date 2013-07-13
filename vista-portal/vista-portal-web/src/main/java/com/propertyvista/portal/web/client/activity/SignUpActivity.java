@@ -31,25 +31,26 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
-import com.propertyvista.portal.web.client.ui.residents.registration.TenantRegistrationView;
+import com.propertyvista.portal.web.client.ui.landing.SignUpView;
 import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
-public class TenantRegistrationActivity extends AbstractActivity implements TenantRegistrationView.Presenter {
+public class SignUpActivity extends AbstractActivity implements SignUpView.SignUpPresenter {
 
     private static final I18n i18n = I18n.get(I18n.class);
 
-    private final TenantRegistrationView view;
+    private final SignUpView view;
 
-    public TenantRegistrationActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(TenantRegistrationView.class);
+    public SignUpActivity(Place place) {
+        this.view = PortalWebViewFactory.instance(SignUpView.class);
         withPlace(place);
 
     }
 
-    public TenantRegistrationActivity withPlace(Place place) {
+    public SignUpActivity withPlace(Place place) {
         return this;
     }
 
@@ -61,7 +62,7 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
 
                     @Override
                     public void onSuccess(EntitySearchResult<SelfRegistrationBuildingDTO> result) {
-                        view.setPresenter(TenantRegistrationActivity.this);
+                        view.setPresenter(SignUpActivity.this);
                         view.populate(result.getData());
                         panel.setWidget(view);
                     }
@@ -70,8 +71,8 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
     }
 
     @Override
-    public void onRegister() {
-        ClientContext.authenticate(GWT.<AuthenticationService> create(PortalAuthenticationService.class), view.getValue(), new DefaultAsyncCallback<Boolean>() {
+    public void register(SelfRegistrationDTO value) {
+        ClientContext.authenticate(GWT.<AuthenticationService> create(PortalAuthenticationService.class), value, new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {
 
@@ -91,7 +92,7 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
     }
 
     @Override
-    public void onShowVistaTerms() {
+    public void showVistaTerms() {
         Window.open(AppPlaceInfo.absoluteUrl(NavigationUri.getHostPageURL(), false, getPortalTermsPlace()), "_blank", null);
     }
 

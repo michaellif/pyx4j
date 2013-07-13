@@ -42,6 +42,8 @@ import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardViewImpl;
 import com.propertyvista.portal.web.client.ui.landing.PasswordResetRequestViewImpl;
 import com.propertyvista.portal.web.client.ui.landing.PasswordResetViewImpl;
+import com.propertyvista.portal.web.client.ui.landing.SignUpView;
+import com.propertyvista.portal.web.client.ui.landing.SignUpViewImpl;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView;
 import com.propertyvista.portal.web.client.ui.profile.ProfileViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
@@ -80,8 +82,6 @@ import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMet
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodsViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.ViewPaymentMethodView;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.ViewPaymentMethodViewImpl;
-import com.propertyvista.portal.web.client.ui.residents.registration.TenantRegistrationView;
-import com.propertyvista.portal.web.client.ui.residents.registration.TenantRegistrationViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateViewImpl;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureAboutView;
@@ -104,8 +104,8 @@ public class PortalWebViewFactory extends ViewFactoryBase {
 
     public static <T extends IsWidget> T instance(Class<T> type) {
         if (!map.containsKey(type)) {
-            if (TenantRegistrationView.class.equals(type)) {
-                map.put(type, new TenantRegistrationViewImpl());
+            if (SignUpView.class.equals(type)) {
+                map.put(type, new SignUpViewImpl());
             } else if (DashboardView.class.equals(type)) {
                 map.put(type, new DashboardViewImpl());
             }

@@ -26,7 +26,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.PotentialTenantActivity;
-import com.propertyvista.portal.web.client.activity.TenantRegistrationActivity;
+import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.DashboardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
@@ -161,7 +161,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof PortalSiteMap.PasswordChange) {
                         activity = new PasswordChangeActivity();
                     } else if (place instanceof PortalSiteMap.Registration) {
-                        activity = new TenantRegistrationActivity(place);
+                        activity = new SignUpActivity(place);
                     } else if (place instanceof PortalSiteMap.LeaseContextSelection) {
                         activity = new LeaseContextSelectionActivity();
                     } else if (place instanceof PortalSiteMap.PortalTermsAndConditions) {

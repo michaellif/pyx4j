@@ -11,7 +11,7 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.registration;
+package com.propertyvista.portal.web.client.ui.landing;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -27,9 +27,9 @@ import com.pyx4j.forms.client.ui.NSuggestBox;
 
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 
-public class CBuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuildingDTO> {
+public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuildingDTO> {
 
-    public CBuildingSuggestBox() {
+    public BuildingSuggestBox() {
         setFormat(new BuildingSuggestFormat());
     }
 
