@@ -324,13 +324,11 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             if (mandatory) {
                 addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
             } else {
-                EditableValueValidator<DATA_TYPE> mandatoryValidator = null;
                 for (EditableValueValidator<DATA_TYPE> validator : validators) {
                     if (validator instanceof MandatoryValidator) {
-                        mandatoryValidator = validator;
+                        removeValueValidator(validator);
                     }
                 }
-                removeValueValidator(mandatoryValidator);
             }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
             revalidate();
@@ -339,6 +337,10 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     public boolean isMandatoryConditionMet() {
         return !(validationError instanceof MandatoryValidationFailure);
+    }
+
+    public void setMandatoryValidationMessage(String message) {
+        mandatoryValidationMessage = message;
     }
 
     @Override
@@ -588,10 +590,6 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             results.appendValidationError(this, validationError.getMessage(), getLocationHint());
         }
         return results;
-    }
-
-    public void setMandatoryValidationMessage(String message) {
-        mandatoryValidationMessage = message;
     }
 
     public boolean isVisited() {
