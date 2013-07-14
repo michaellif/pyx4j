@@ -37,13 +37,10 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.validators.ValidationResults;
-import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
 
     private static final Logger log = LoggerFactory.getLogger(CContainer.class);
-
-    private static final I18n i18n = I18n.get(CContainer.class);
 
     private final HashMap<CComponent<?>, HandlerRegistration> propertyChangeHandlerRegistrations = new HashMap<CComponent<?>, HandlerRegistration>();
 

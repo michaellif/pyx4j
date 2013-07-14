@@ -118,7 +118,7 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
 
     private ValidationError validationError;
 
-    private IDecorator decorator;
+    private IDecorator<?> decorator;
 
     private boolean unconditionalValidationErrorRendering;
 

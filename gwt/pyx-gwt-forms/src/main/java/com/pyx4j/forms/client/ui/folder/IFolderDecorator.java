@@ -36,7 +36,4 @@ public interface IFolderDecorator<E extends IEntity> extends IDecorator<CEntityF
 
     void setAddButtonVisible(boolean show);
 
-    @Override
-    void setComponent(CEntityFolder<E> folder);
-
 }
