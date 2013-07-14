@@ -24,31 +24,15 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
 
-public class CEntityHyperlink<E extends IEntity> extends CHyperlink<E> {
+public class CEntityHyperlink<E extends IEntity> extends CEntityLabel<E> {
 
     protected CEntityHyperlink(String title) {
         super(title);
-        setFormat(new IFormat<E>() {
-            @Override
-            public String format(E value) {
-                if (value != null) {
-                    return value.getStringView();
-                } else {
-                    return null;
-                }
-            }
-
-            @Override
-            public E parse(String string) {
-                return null;
-            }
-        });
-
     }
 
     public CEntityHyperlink(String title, Command command) {
         this(title);
-        setCommand(command);
+        setNavigationCommand(command);
     }
 
     /**

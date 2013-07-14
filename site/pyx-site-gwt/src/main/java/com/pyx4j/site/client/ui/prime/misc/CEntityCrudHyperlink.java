@@ -31,7 +31,7 @@ public class CEntityCrudHyperlink<E extends IEntity> extends CEntityHyperlink<E>
 
     public CEntityCrudHyperlink(final CrudAppPlace place) {
         super((String) null);
-        setCommand(new Command() {
+        setNavigationCommand(new Command() {
             @Override
             public void execute() {
                 if (getValue().getPrimaryKey() != null) {

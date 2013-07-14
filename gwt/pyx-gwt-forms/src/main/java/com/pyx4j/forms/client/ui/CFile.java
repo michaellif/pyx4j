@@ -25,16 +25,19 @@ import com.google.gwt.user.client.Command;
 import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.i18n.shared.I18n;
 
-public abstract class CFile<E extends IFile> extends CEntityHyperlink<E> {
+public abstract class CFile<E extends IFile> extends CField<E, INativeHyperlink<E>> {
 
     private static final I18n i18n = I18n.get(CFile.class);
+
+    private IFormat<E> format;
 
     public CFile() {
         this(null);
     }
 
     public CFile(Command command) {
-        super("", command);
+        super("");
+        setNavigationCommand(command);
 
         setFormat(new IFormat<E>() {
             @Override
@@ -49,6 +52,14 @@ public abstract class CFile<E extends IFile> extends CEntityHyperlink<E> {
         });
 
         setNativeWidget(new NFile<E>(this));
+    }
+
+    public void setFormat(IFormat<E> format) {
+        this.format = format;
+    }
+
+    public IFormat<E> getFormat() {
+        return format;
     }
 
     public abstract void showFileSelectionDialog();

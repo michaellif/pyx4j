@@ -79,8 +79,8 @@ public class NFile<E extends IFile> extends NField<E, Anchor, CFile<E>, Anchor> 
         anchor.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
-                if (getCComponent().getCommand() != null) {
-                    getCComponent().getCommand().execute();
+                if (getCComponent().getNavigationCommand() != null) {
+                    getCComponent().getNavigationCommand().execute();
                 }
             }
 
