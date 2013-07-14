@@ -250,8 +250,8 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         } else {
             flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().lease(), new CEntityCrudHyperlink<Lease>(null) {
                 @Override
-                public void setCommand(Command command) {
-                    super.setCommand(new Command() {
+                public void setNavigationCommand(Command command) {
+                    super.setNavigationCommand(new Command() {
                         @Override
                         public void execute() {
                             if (getValue().getPrimaryKey() != null) {

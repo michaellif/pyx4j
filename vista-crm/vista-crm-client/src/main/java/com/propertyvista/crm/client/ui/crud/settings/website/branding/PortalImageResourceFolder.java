@@ -141,7 +141,7 @@ public class PortalImageResourceFolder extends VistaBoxFolder<PortalLogoImageRes
             private SiteImageThumbnail thumb;
 
             public LogoLink(SiteImageThumbnail thumb) {
-                setCommand(new Command() {
+                setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         OkDialog dialog = new OkDialog(getValue().fileName().getValue()) {
