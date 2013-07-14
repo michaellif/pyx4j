@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.ui;
 
 import com.google.gwt.user.client.Command;
 
+@Deprecated
 public class CHyperlink<E> extends CField<E, INativeHyperlink<E>> {
 
     private IFormat<E> format;

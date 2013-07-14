@@ -97,7 +97,7 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                         public void execute() {
                             if (event.isEventOfType(PropertyName.valid)) {
                                 log.trace("CContainer.onPropertyChange fired from {}. Changed property is {}.", shortDebugInfo(), event.getPropertyName());
-                                revalidateContainerOnly();
+                                CContainer.super.revalidate();
                                 PropertyChangeEvent.fire(CContainer.this, PropertyChangeEvent.PropertyName.valid);
                             }
                             sheduled = false;
@@ -117,7 +117,7 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
                         @Override
                         public void execute() {
-                            revalidateContainerOnly();
+                            CContainer.super.revalidate();
                             log.trace("CContainer.onValueChange fired from {}", shortDebugInfo());
                             ValueChangeEvent.fire(CContainer.this, getValue());
                             sheduled = false;
@@ -239,10 +239,6 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                 component.revalidate();
             }
         }
-        super.revalidate();
-    }
-
-    private void revalidateContainerOnly() {
         super.revalidate();
     }
 
