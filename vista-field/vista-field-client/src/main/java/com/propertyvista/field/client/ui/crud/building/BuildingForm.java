@@ -26,7 +26,7 @@ import com.google.gwt.view.client.Range;
 import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CHyperlink;
+import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -37,7 +37,6 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -51,7 +50,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.dto.BuildingDTO;
@@ -198,10 +196,6 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
                             .build());
         }
 
-        main.setWidget(row++, 1,
-                new DecoratorBuilder(inject(proto().floorplans(), new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlaceClass(Floorplan.class))),
-                        15).build());
-
         main.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         main.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));
         if (VistaFeatures.instance().yardiIntegration()) {
@@ -256,7 +250,9 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
                 }
             });
         } else {
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website(), new CHyperlink(new Command() {
+            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().contacts().website()), 50).build());
+
+            ((CField) get(proto().contacts().website())).setNavigationCommand(new Command() {
                 @Override
                 public void execute() {
                     String url = getValue().contacts().website().getValue();
@@ -270,7 +266,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
                     Window.open(url, proto().contacts().website().getMeta().getCaption(), "status=1,toolbar=1,location=1,resizable=1,scrollbars=1");
                 }
 
-            })), 50).build());
+            });
+
         }
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
 

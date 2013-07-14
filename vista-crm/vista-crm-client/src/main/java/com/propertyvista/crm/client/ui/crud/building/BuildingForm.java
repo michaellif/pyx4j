@@ -39,7 +39,6 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
@@ -57,7 +56,6 @@ import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.PropertyPhone;
 import com.propertyvista.domain.property.asset.Complex;
-import com.propertyvista.domain.property.asset.Floorplan;
 import com.propertyvista.domain.property.asset.building.BuildingAmenity;
 import com.propertyvista.domain.property.asset.building.BuildingUtility;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -216,12 +214,6 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
                             new FormDecoratorBuilder(inject(proto().complex(),
                                     new CEntityCrudHyperlink<Complex>(AppPlaceEntityMapper.resolvePlace(Complex.class))), 15).build());
         }
-
-        flexPanel.setWidget(
-                row++,
-                1,
-                new FormDecoratorBuilder(inject(proto().floorplans(),
-                        new CEntityCollectionCrudHyperlink(AppPlaceEntityMapper.resolvePlaceClass(Floorplan.class))), 15).build());
 
         flexPanel.setH1(row++, 0, 2, proto().info().address().getMeta().getCaption());
         flexPanel.setWidget(row, 0, inject(proto().info().address(), new AddressStructuredEditor(false)));

@@ -13,12 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.components;
 
-import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCollectionCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
@@ -37,11 +35,4 @@ public class OperationsEditorsComponentFactory extends VistaEditorsComponentFact
         return link;
     }
 
-    public static <E extends IEntity> CEntityCollectionCrudHyperlink<ICollection<E, ?>> createEntityCollectionHyperlink(Class<E> entityClass) {
-        CEntityCollectionCrudHyperlink<ICollection<E, ?>> link = new CEntityCollectionCrudHyperlink<ICollection<E, ?>>(
-                AppPlaceEntityMapper.resolvePlaceClass(entityClass));
-        link.inheritViewable(false);
-        link.setViewable(true);
-        return link;
-    }
 }
