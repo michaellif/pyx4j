@@ -37,6 +37,9 @@ public abstract class CFile<E extends IFile> extends CField<E, INativeHyperlink<
 
     public CFile(Command command) {
         super("");
+
+        setNativeWidget(new NFile<E>(this));
+
         setNavigationCommand(command);
 
         setFormat(new IFormat<E>() {
@@ -51,7 +54,6 @@ public abstract class CFile<E extends IFile> extends CField<E, INativeHyperlink<
             }
         });
 
-        setNativeWidget(new NFile<E>(this));
     }
 
     public void setFormat(IFormat<E> format) {
