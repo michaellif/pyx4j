@@ -37,7 +37,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
 
     public BillingCycleForm(IForm<BillingCycleDTO> view) {
         super(BillingCycleDTO.class, view);
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingType())).build());
@@ -71,6 +71,7 @@ class BillingCycleForm extends CrmEntityForm<BillingCycleDTO> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().pads())).build());
         content.setWidget(row, 1, new ViewPadLink());
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 
