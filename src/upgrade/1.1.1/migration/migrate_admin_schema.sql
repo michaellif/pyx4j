@@ -73,6 +73,24 @@ SET search_path = '_admin_';
                                         ADD COLUMN session_id VARCHAR(500),
                                         ADD COLUMN world_time TIMESTAMP;
                                         
+        -- global_crm_user_index
+        
+        CREATE TABLE global_crm_user_index
+        (
+                id                      BIGINT                  NOT NULL,
+                pmc                     BIGINT,
+                crm_user                BIGINT,
+                email                   VARCHAR(64),
+                        CONSTRAINT global_crm_user_index_pmc_fk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE global_crm_user_index OWNER TO vista;
+        
+        
+        -- onboarding_user
+        
+        ALTER TABLE onboarding_user     ADD COLUMN pmc BIGINT,
+                                        ADD COLUMN password VARCHAR(500);                              
         
         -- pmc_document_file
         
