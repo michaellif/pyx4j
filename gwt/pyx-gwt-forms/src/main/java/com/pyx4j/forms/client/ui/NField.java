@@ -26,6 +26,7 @@ import java.util.Set;
 import com.google.gwt.dom.client.AnchorElement;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
+import com.google.gwt.dom.client.Style.WhiteSpace;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.DoubleClickEvent;
@@ -250,6 +251,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.FieldEditorPanel.name());
+            getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
             setWidth("100%");
 
             SimplePanel editorHolder = new SimplePanel();
@@ -266,7 +268,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             }
 
             triggerButtonHolder = new SimplePanel();
-            triggerButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
+            triggerButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             triggerButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
             add(triggerButtonHolder);
@@ -359,22 +361,22 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             super();
 
             setStyleName(DefaultCComponentsTheme.StyleName.FieldViewerPanel.name());
-            getElement().getStyle().setProperty("display", "table");
+            getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
             setWidth("100%");
 
             viewerLabelHolder = new SimplePanel();
             viewerLabelHolder.setWidth("100%");
-            viewerLabelHolder.getElement().getStyle().setProperty("display", "table-cell");
+            viewerLabelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             viewerLabelHolder.setWidget(viewer);
             add(viewerLabelHolder);
 
             viewerLinkHolder = new Link();
             viewerLinkHolder.setWidth("100%");
-            viewerLinkHolder.getElement().getStyle().setProperty("display", "table-cell");
+            viewerLinkHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             add(viewerLinkHolder);
 
             actionButtonHolder = new SimplePanel();
-            actionButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
+            actionButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             add(actionButtonHolder);
 
             setActionButton();
@@ -415,6 +417,9 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             }
             if (actionButton != null) {
                 actionButtonHolder.setWidget(actionButton);
+                actionButtonHolder.setVisible(true);
+            } else {
+                actionButtonHolder.setVisible(false);
             }
         }
 
