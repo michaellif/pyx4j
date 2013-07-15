@@ -18,10 +18,7 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -45,12 +42,12 @@ import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
@@ -323,7 +320,7 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
 
-            private TwoColumnFlexFormPanel expirationWarning;
+            private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
 
             public PreauthorizedPaymentViewer() {
                 super(PreauthorizedPayment.class);
@@ -331,27 +328,21 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
             @Override
             public IsWidget createContent() {
-                TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-                Widget expirationWarningLabel = new HTML(i18n.tr("This Pre-Authorized Payment is expired - needs to be replaced with new one!"));
-                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
-                expirationWarning = new TwoColumnFlexFormPanel();
-                expirationWarning.setWidget(0, 0, expirationWarningLabel);
-                expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-                expirationWarning.setHR(1, 0, 1);
-                expirationWarning.setBR(2, 0, 1);
 
-                flexPanel.setWidget(++row, 0, 2, expirationWarning);
-                flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod())).build());
-                flexPanel.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+                content.setWidget(++row, 0, expirationWarning.getExpirationWarningPanel());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod())).build());
+                content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
-                return flexPanel;
+                return content;
             }
 
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
-                expirationWarning.setVisible(!getValue().expiring().isNull());
+
+                expirationWarning.prepareView(getValue().expiring());
             }
         }
     }

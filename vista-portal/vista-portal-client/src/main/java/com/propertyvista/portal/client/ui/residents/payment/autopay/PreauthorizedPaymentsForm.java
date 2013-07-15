@@ -15,10 +15,8 @@ package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -31,12 +29,12 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.VistaViewersComponentFactory;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentsView.Presenter;
@@ -101,20 +99,13 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentListDTO.ListItemDTO> {
 
-            private final TwoColumnFlexFormPanel expirationWarning = new TwoColumnFlexFormPanel();
+            private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentListDTO.ListItemDTO.class);
 
                 setViewable(true);
                 inheritViewable(false);
-
-                Widget expirationWarningLabel = new HTML(i18n.tr("This Pre-Authorized Payment is expired - needs to be replaced with new one!"));
-                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
-                expirationWarning.setWidget(0, 0, expirationWarningLabel);
-                expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-                expirationWarning.setHR(1, 0, 1);
-                expirationWarning.setBR(2, 0, 1);
             }
 
             @SuppressWarnings("rawtypes")
@@ -123,7 +114,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, expirationWarning);
+                content.setWidget(++row, 0, expirationWarning.getExpirationWarningPanel());
                 content.setWidget(++row, 0, inject(proto().tenant(), new CEntityLabel<Tenant>()));
 
                 content.setHR(++row, 0, 1);
@@ -148,7 +139,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
-                expirationWarning.setVisible(!getValue().expiring().isNull());
+                expirationWarning.prepareView(getValue().expiring());
 
                 boolean isCurrentTenant = getValue().tenant().customer().user().getPrimaryKey().equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
                 ((CEntityFolderItem<PreauthorizedPaymentListDTO.ListItemDTO>) getParent()).setRemovable(isCurrentTenant);

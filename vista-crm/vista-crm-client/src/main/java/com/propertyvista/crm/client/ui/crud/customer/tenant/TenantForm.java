@@ -17,11 +17,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
@@ -42,12 +39,12 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorLabel;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 
-import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
@@ -201,17 +198,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
 
-            private final TwoColumnFlexFormPanel expirationWarning = new TwoColumnFlexFormPanel();
+            private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
 
             public PreauthorizedPaymentEditor() {
                 super(PreauthorizedPaymentDTO.class);
-
-                Widget expirationWarningLabel = new HTML(i18n.tr("This Preauthorized Payment is expired - needs to be replaced with new one!"));
-                expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
-                expirationWarning.setWidget(0, 0, expirationWarningLabel);
-                expirationWarning.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-                expirationWarning.setHR(1, 0, 1);
-                expirationWarning.setBR(2, 0, 1);
             }
 
             @Override
@@ -219,7 +209,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, 2, expirationWarning);
+                content.setWidget(++row, 0, expirationWarning.getExpirationWarningPanel());
 
                 content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
@@ -246,8 +236,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
 
+                expirationWarning.prepareView(getValue().expiring());
                 setEditable(getValue().expiring().isNull());
-                expirationWarning.setVisible(!getValue().expiring().isNull());
             }
         }
     }
