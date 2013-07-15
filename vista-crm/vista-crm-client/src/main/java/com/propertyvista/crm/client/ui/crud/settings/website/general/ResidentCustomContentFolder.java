@@ -108,8 +108,11 @@ public class ResidentCustomContentFolder extends VistaBoxFolder<HtmlContent> {
         @Override
         protected void onValuePropagation(HtmlContent value, boolean fireEvent, boolean populate) {
             if (!isEditable()) {
-                String html = value.html().getValue();
-                String status = html.contains(DeploymentConsts.RESIDENT_CONTENT_ID) && html.contains(DeploymentConsts.RESIDENT_LOGIN_ID) ? "OK" : "INCOMPLETE";
+                String status = "NOT SET";
+                if (!value.html().isNull()) {
+                    String html = value.html().getValue();
+                    status = html.contains(DeploymentConsts.RESIDENT_CONTENT_ID) && html.contains(DeploymentConsts.RESIDENT_LOGIN_ID) ? "OK" : "INCOMPLETE";
+                }
                 value.html().setValue(status);
             }
             super.onValuePropagation(value, fireEvent, populate);
