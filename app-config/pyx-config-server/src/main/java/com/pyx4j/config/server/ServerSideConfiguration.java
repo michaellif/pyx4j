@@ -105,6 +105,13 @@ public class ServerSideConfiguration {
         return false;
     }
 
+    /**
+     * Enable temporary to allow hosted mode on production environment.
+     */
+    public boolean allowToBypassRpcServiceManifest() {
+        return false;
+    }
+
     public IServiceFactory getRPCServiceFactory() {
         return null;
     }
