@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.google.gwt.dom.client.AnchorElement;
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -245,12 +246,11 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.FieldEditorPanel.name());
-            getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
             SimplePanel editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
-            editorHolder.getElement().getStyle().setProperty("display", "table-cell");
+            editorHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             editorHolder.setWidget(editor);
             add(editorHolder);
 
