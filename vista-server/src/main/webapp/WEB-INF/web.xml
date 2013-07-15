@@ -535,26 +535,15 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
         <url-pattern>/index.html</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>OpenAPIv1Servlet</servlet-name>
-        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
-        <init-param>
-            <param-name>javax.ws.rs.Application</param-name>
-            <param-value>com.propertyvista.crm.server.openapi.OpenAPIv1RsApplication</param-value>
-        </init-param>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>OpenAPIv1Servlet</servlet-name>
-        <url-pattern>/interfaces/rest/*</url-pattern>
-    </servlet-mapping>
-
     <listener>
         <listener-class>com.propertyvista.server.ci.bugs.WSServletContextListenerFix</listener-class>
     </listener>
+
     <servlet>
         <servlet-name>OpenApiWsService</servlet-name>
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>OpenApiWsService</servlet-name>
         <url-pattern>/interfaces/oapi/ws/*</url-pattern>
@@ -568,6 +557,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
             <param-value>com.propertyvista.oapi.rs.OpenApiRsApplication</param-value>
         </init-param>
     </servlet>
+
     <servlet-mapping>
         <servlet-name>OpenApiRsService</servlet-name>
         <url-pattern>/interfaces/oapi/rs/*</url-pattern>
