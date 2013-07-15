@@ -141,12 +141,13 @@ public class RemoteServiceServlet extends com.google.gwt.user.server.rpc.RemoteS
         String realServiceName = ServicePolicy.decodeServiceInterfaceClassName(serviceInterfaceClassName);
         if (realServiceName != null) {
             serviceInterfaceClassName = realServiceName;
-        } else if ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment)
-                && (ServerSideConfiguration.instance().isDevelopmentBehavior())) {
+        } else if ((ServerSideConfiguration.instance().allowToBypassRpcServiceManifest()) // 
+                || ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment) && (ServerSideConfiguration
+                        .instance().isDevelopmentBehavior()))) {
             realServiceName = serviceInterfaceClassName;
             log.warn("Using development service name {}", serviceInterfaceClassName);
         } else {
-            log.error("unable to find service-manifest");
+            log.error("unable to find service-manifest for {}", serviceInterfaceClassName);
             throw new IncompatibleRemoteServiceException();
         }
 
