@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.IncompatibleRemoteServiceException;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.gwt.server.IOUtils;
-import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 import com.pyx4j.server.contexts.Context;
 
 public class ServicePolicy {
@@ -85,12 +85,21 @@ public class ServicePolicy {
     public static String decodeServiceInterfaceClassName(String serviceClassId) {
         @SuppressWarnings("unchecked")
         Map<String, String> servicePolicy = (Map<String, String>) Context.getRequest().getAttribute(SERVICE_INTERFACE_CLASSNAMES_REQUEST_ATTRIBUTE);
+
+        String realServiceName = null;
         if (servicePolicy != null) {
-            return servicePolicy.get(serviceClassId);
-        } else if (ApplicationMode.isDevelopment()) {
+            realServiceName = servicePolicy.get(serviceClassId);
+        }
+        if ((realServiceName == null) && (servicePolicy != null) && ApplicationMode.isDevelopment()) {
+            return serviceClassId;
+        } else if ((ServerSideConfiguration.instance().allowToBypassRpcServiceManifest()) // 
+                || ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment) && (ServerSideConfiguration
+                        .instance().isDevelopmentBehavior()))) {
+            log.warn("Using development service name {}", serviceClassId);
             return serviceClassId;
         } else {
-            throw new UnRecoverableRuntimeException("Fatal system error");
+            log.error("unable to find service-manifest for {}", serviceClassId);
+            throw new IncompatibleRemoteServiceException();
         }
     }
 }
