@@ -38,6 +38,7 @@ import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
+import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmRole;
@@ -238,6 +239,11 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
         credential.securityAnswer().setValue(null);
         credential.securityQuestion().setValue(null);
         Persistence.service().persist(credential);
+    }
+
+    @Override
+    public GlobalLoginResponseDTO globalFindAndVerifyCrmUser(String email, String password) {
+        return new GlobalLoginManager().findAndVerifyCrmUser(email, password);
     }
 
 }

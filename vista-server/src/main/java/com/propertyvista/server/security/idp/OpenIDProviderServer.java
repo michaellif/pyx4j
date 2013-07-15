@@ -43,17 +43,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.server.onboarding.rh.OnboardingUserAuthenticationRequestHandler;
+import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.onboarding.OnboardingUserAuthenticationRequestIO;
-import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO;
-import com.propertyvista.onboarding.OnboardingUserAuthenticationResponseIO.AuthenticationStatusCode;
+import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
 
 public class OpenIDProviderServer {
 
@@ -238,36 +234,17 @@ public class OpenIDProviderServer {
             return null;
 
         }
+        GlobalLoginResponseDTO userInfo = ServerSideFactory.create(UserManagementFacade.class).globalFindAndVerifyCrmUser(httpReq.getParameter("j_username"),
+                httpReq.getParameter("j_password"));
 
-        UserData userData = new UserData();
-        try {
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-
-            OnboardingUserAuthenticationResponseIO authResponse = OnboardingUserAuthenticationRequestHandler.processOnboardingUserLogin(
-                    asOnboardingAuthRequest(httpReq.getParameter("j_username"), httpReq.getParameter("j_password"), null, null), false);
-
-            if ((authResponse.status().getValue() == AuthenticationStatusCode.OK)
-                    || (authResponse.status().getValue() == AuthenticationStatusCode.OK_PasswordChangeRequired)) {
-                userData.authenticatedAndApproved = true;
-                userData.email = authResponse.email().getValue();
-                return userData;
-            } else {
-                return null;
-            }
-        } finally {
-            NamespaceManager.setNamespace("_");
+        if (userInfo != null) {
+            UserData userData = new UserData();
+            userData.authenticatedAndApproved = true;
+            userData.email = userInfo.user().email().getValue();
+            return userData;
+        } else {
+            return null;
         }
-    }
-
-    private OnboardingUserAuthenticationRequestIO asOnboardingAuthRequest(String email, String password, String captchaChallenge, String captchaResponse) {
-        OnboardingUserAuthenticationRequestIO request = EntityFactory.create(OnboardingUserAuthenticationRequestIO.class);
-        request.email().setValue(email);
-        request.password().setValue(password);
-        if (captchaChallenge != null & captchaResponse != null) {
-            request.captcha().challenge().setValue(captchaChallenge);
-            request.captcha().response().setValue(captchaResponse);
-        }
-        return request;
     }
 
     private String directResponse(HttpServletResponse httpResp, String response) throws IOException {

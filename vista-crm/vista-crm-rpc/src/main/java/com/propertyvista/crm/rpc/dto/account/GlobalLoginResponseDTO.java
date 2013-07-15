@@ -7,16 +7,22 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 10, 2012
- * @author igor
+ * Created on Jul 15, 2013
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.onboarding.example.model;
+package com.propertyvista.crm.rpc.dto.account;
 
-import javax.validation.constraints.Size;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-public class BankAccountInfoApproval extends BankAccountInfo {
+import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.security.CrmUser;
 
-    @Size(max = 8)
-    public String terminalId;
+@Transient
+public interface GlobalLoginResponseDTO extends IEntity {
+
+    Pmc pmc();
+
+    CrmUser user();
 }

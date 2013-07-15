@@ -194,7 +194,6 @@
         <module>vista-onboarding</module>
         <module>vista-field</module>
         <module>vista-crm</module>
-        <module>vista-paypad</module>
         <module>vista-pmsite</module>
         <module>vista-server</module>
         <module>vista-i18n-catalog</module>
