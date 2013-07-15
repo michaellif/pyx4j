@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors.dto.bill;
 
 import java.util.Collection;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -43,9 +44,9 @@ import com.propertyvista.dto.InvoiceLineItemGroupDTO;
 
 public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemGroupDTO> implements ToggleHandler {
 
-    private final SimplePanel collapsedPanel = new SimplePanel();
+    private SimplePanel collapsedPanel;
 
-    private final SimplePanel expandedPanel = new SimplePanel();
+    private SimplePanel expandedPanel = new SimplePanel();
 
     public LineItemCollapsibleViewer() {
         asWidget().setWidth("46em");
@@ -61,7 +62,13 @@ public class LineItemCollapsibleViewer extends CEntityContainer<InvoiceLineItemG
     @Override
     public final IsWidget createContent() {
         VerticalPanel mainPanel = new VerticalPanel();
+        mainPanel.setHeight("1.5em");
         mainPanel.setWidth("100%");
+        collapsedPanel = new SimplePanel();
+        collapsedPanel.getElement().getStyle().setMarginLeft(50, Unit.PX);
+        expandedPanel = new SimplePanel();
+        expandedPanel.getElement().getStyle().setMarginLeft(50, Unit.PX);
+
         mainPanel.add(collapsedPanel);
         mainPanel.add(expandedPanel);
         setExpended(false);
