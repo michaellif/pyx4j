@@ -36,6 +36,7 @@ public class DelinquentLeaseListServiceImpl extends AbstractCrudServiceDtoImpl<L
     public EntityListCriteria<LeaseAgingBuckets> convertCriteria(EntityListCriteria<DelinquentLeaseDTO> dtoCriteria) {
         EntityListCriteria<LeaseAgingBuckets> dboCriteria = EntityListCriteria.create(LeaseAgingBuckets.class);
         enhanceListCriteria(dboCriteria, dtoCriteria);
+        Persistence.applyDatasetAccessRule(dboCriteria);
 
         return dboCriteria;
     }

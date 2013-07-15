@@ -71,11 +71,14 @@ public class ARArrearsManager {
         return snapshot;
     }
 
-    public BuildingArrearsSnapshot retrieveArrearsSnapshot(Building building, LogicalDate date) {
+    public BuildingArrearsSnapshot retrieveArrearsSnapshot(Building building, LogicalDate date, boolean secure) {
         EntityQueryCriteria<BuildingArrearsSnapshot> criteria = EntityQueryCriteria.create(BuildingArrearsSnapshot.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().building(), building));
         criteria.add(PropertyCriterion.ge(criteria.proto().toDate(), date));
         criteria.add(PropertyCriterion.le(criteria.proto().fromDate(), date));
+        if (secure) {
+            Persistence.applyDatasetAccessRule(criteria);
+        }
         return Persistence.service().retrieve(criteria);
     }
 
@@ -139,7 +142,7 @@ public class ARArrearsManager {
 
         // 2. retrieve previous ArrearsSnapshot
         LogicalDate asOf = new LogicalDate(SystemDateManager.getDate());
-        BuildingArrearsSnapshot previousSnapshot = retrieveArrearsSnapshot(building, asOf);
+        BuildingArrearsSnapshot previousSnapshot = retrieveArrearsSnapshot(building, asOf, false);
 
         // 3. compare 1 and 2 - if it is a difference persist first and update toDate of second otherwise do nothing
         currentSnapshot.building().set(building);

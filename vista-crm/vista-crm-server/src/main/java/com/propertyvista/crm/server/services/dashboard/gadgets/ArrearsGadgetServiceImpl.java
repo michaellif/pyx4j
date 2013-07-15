@@ -13,18 +13,26 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Vector;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
@@ -32,7 +40,6 @@ import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.ArrearsGadgetQueryDataDTO;
 import com.propertyvista.crm.rpc.dto.gadgets.DelinquentLeaseDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
 import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
@@ -40,12 +47,10 @@ import com.propertyvista.domain.property.asset.building.Building;
 
 public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
+    private static final Logger log = LoggerFactory.getLogger(ArrearsGadgetServiceImpl.class);
+
     @Override
     public void countData(AsyncCallback<ArrearsGadgetDataDTO> callback, ArrearsGadgetQueryDataDTO query) {
-        Vector<Building> buildingsFilter = Util.enforcePortfolio(query.buildingsFilter());
-        query.buildingsFilter().clear();
-        query.buildingsFilter().addAll(buildingsFilter);
-
         ArrearsGadgetDataDTO data = EntityFactory.create(ArrearsGadgetDataDTO.class);
 
         calculateArrearsSummary(data.buckets(), query);
@@ -80,8 +85,14 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
 
         ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
 
-        for (Building b : query.buildingsFilter()) {
-            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, query.asOf().getValue());
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        if (!query.buildingsFilter().isEmpty()) {
+            criteria.in(criteria.proto().id(), new Vector<Building>(query.buildingsFilter()));
+        }
+        ICursorIterator<Building> i = Persistence.secureQuery(null, criteria, AttachLevel.IdOnly);
+        while (i.hasNext()) {
+            Building b = i.next();
+            BuildingArrearsSnapshot snapshot = arFacade.getArrearsSnapshot(b, query.asOf().getValue(), true);
             if (snapshot == null) {
                 continue;
             } else {
@@ -109,6 +120,11 @@ public class ArrearsGadgetServiceImpl implements ArrearsGadgetService {
                 add(aggregatedBuckets.totalBalance(), buckets.totalBalance());
                 add(aggregatedBuckets.creditAmount(), buckets.creditAmount());
             }
+        }
+        try {
+            ((Closeable) i).close();
+        } catch (IOException e) {
+            log.warn("Warning", e);
         }
     }
 

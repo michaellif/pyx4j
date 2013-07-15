@@ -117,8 +117,8 @@ public class ARInternalFacadeImpl implements ARFacade {
     }
 
     @Override
-    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf) {
-        return ARArrearsManager.instance().retrieveArrearsSnapshot(buildingStub, asOf);
+    public BuildingArrearsSnapshot getArrearsSnapshot(Building buildingStub, LogicalDate asOf, boolean secure) {
+        return ARArrearsManager.instance().retrieveArrearsSnapshot(buildingStub, asOf, secure);
     }
 
     @Override

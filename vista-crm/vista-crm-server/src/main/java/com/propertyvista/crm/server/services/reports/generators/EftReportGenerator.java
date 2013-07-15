@@ -94,7 +94,7 @@ public class EftReportGenerator implements ReportExporter {
             int count = Persistence.service().count(criteria);
             int progress = 0;
 
-            ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(count);
 
             while (paymentRecordsIter.hasNext() & !aborted) {

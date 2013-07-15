@@ -53,7 +53,6 @@ import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.property.asset.building.Building;
 
-// TODO join with Arrears Gadget Service
 public class ArrearsReportServiceImpl implements ArrearsReportService {
 
     private final static I18n i18n = I18n.get(ArrearsReportServiceImpl.class);
@@ -120,17 +119,14 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
 
     @Override
     public void arrearsMonthlyComparison(AsyncCallback<ArrearsYOYComparisonDataDTO> callback, Vector<Building> buildingsFilter, int yearsAgo) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         if (yearsAgo < 0 | yearsAgo > YOY_ANALYSIS_CHART_MAX_YEARS_AGO) {
             throw new UserRuntimeException(i18n.tr("the value of years for comparison has to be between 0 and {0}", YOY_ANALYSIS_CHART_MAX_YEARS_AGO));
         }
-        Vector<Building> buildings = null;
-        if (buildingsFilter.isEmpty()) {
-            buildings = new Vector<Building>(Persistence.secureQuery(EntityQueryCriteria.create(Building.class)));
-        } else {
-            buildings = buildingsFilter;
+        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+        if (!buildingsFilter.isEmpty()) {
+            criteria.in(criteria.proto().id(), buildingsFilter);
         }
+        Vector<Building> buildings = Persistence.secureQuery(criteria);
 
         final LogicalDate now = new LogicalDate(SystemDateManager.getDate());
 
@@ -190,7 +186,7 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
             ARFacade facade = ServerSideFactory.create(ARFacade.class);
 
             for (Building b : buildings) {
-                ArrearsSnapshot<?> snapshot = facade.getArrearsSnapshot(b, asOf);
+                ArrearsSnapshot<?> snapshot = facade.getArrearsSnapshot(b, asOf, true);
                 if (snapshot != null) {
                     for (AgingBuckets<?> buckets : snapshot.agingBuckets()) {
                         if (buckets.arCode().isNull()) {

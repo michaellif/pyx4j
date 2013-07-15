@@ -161,8 +161,10 @@ import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityS
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BuildingAgingBuckets;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
 import com.propertyvista.domain.financial.offering.Concession;
 import com.propertyvista.domain.financial.offering.Feature;
 import com.propertyvista.domain.financial.offering.Service;
@@ -520,10 +522,10 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 
         // Data Access for Gadgets & Reports
         grant(VistaDataAccessBehavior.BuildingsAssigned, new UnitAvailabilityStatusDatasetAccessRule(), UnitAvailabilityStatus.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseAgingBucketsDatasetAccessRule(), LeaseAgingBucketsDatasetAccessRule.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseAgingBucketsDatasetAccessRule(), LeaseAgingBuckets.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingAgingBucketsDatasetAccessRule(), BuildingAgingBuckets.class);
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new UnitAvailabilityStatusDatasetAccessRule(), UnitAvailabilityStatus.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new CustomerCreditCheckDatasetAccessRule(), CustomerCreditCheck.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingArrearsSnapshotDatasetAccessRule(), BuildingArrearsSnapshot.class);
 
         freeze();
     }
