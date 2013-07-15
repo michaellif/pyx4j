@@ -50,10 +50,10 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
 
     private final SimplePanel contentHolder;
 
-    private final FlowPanel containerPanel;
+    private final ContainerPanel containerPanel;
 
     public CEntityContainer() {
-        containerPanel = new FlowPanel();
+        containerPanel = new ContainerPanel();
         if (false) {
             Button debugButton = new Button("Debug", new Command() {
 
@@ -148,7 +148,7 @@ public abstract class CEntityContainer<E extends IObject<?>> extends CContainer<
         return addHandler(handler, DevShortcutEvent.getType());
     }
 
-    class ContainerPanel implements RequiresResize, ProvidesResize {
+    class ContainerPanel extends FlowPanel implements RequiresResize, ProvidesResize {
 
         public ContainerPanel() {
         }
