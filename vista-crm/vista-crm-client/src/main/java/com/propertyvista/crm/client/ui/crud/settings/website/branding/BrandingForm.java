@@ -57,6 +57,10 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setWidget(0, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
         addTab(content);
 
+        content = new TwoColumnFlexFormPanel(proto().pmcInfo().getMeta().getCaption());
+        content.setWidget(0, 0, inject(proto().pmcInfo(), new RichTextContentFolder(isEditable())));
+        addTab(content);
+
         content = new TwoColumnFlexFormPanel(proto().banner().getMeta().getCaption());
         content.setWidget(0, 0, inject(proto().banner(), new PortalImageSetFolder(isEditable())));
         addTab(content);

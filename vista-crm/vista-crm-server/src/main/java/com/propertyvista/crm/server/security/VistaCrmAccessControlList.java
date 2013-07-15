@@ -38,7 +38,9 @@ import com.propertyvista.crm.rpc.services.admin.CustomerCreditCheckCrudService;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
-import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceCrudService;
 import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
@@ -444,7 +446,9 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new EntityPermission(EmailTemplatesPolicy.class, EntityPermission.ALL));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(EmailTemplatesPolicyCrudService.class));
 
-        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteDescriptorCrudService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteGeneralCrudService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteBrandingCrudService.class));
+        grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteContentCrudService.class));
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceCrudService.class));
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(SiteImageResourceUploadService.class));
         grant(VistaCrmBehavior.Marketing, new IServiceExecutePermission(CityIntroPageCrudService.class));

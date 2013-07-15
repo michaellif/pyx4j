@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
-import com.propertyvista.crm.rpc.services.admin.SiteDescriptorCrudService;
+import com.propertyvista.crm.rpc.services.admin.SiteGeneralCrudService;
 import com.propertyvista.crm.server.util.TransientListHelpers;
 import com.propertyvista.crm.server.util.TransientListHelpers.DefaultWorkflowAdapter;
 import com.propertyvista.domain.site.AvailableLocale;
@@ -47,7 +47,7 @@ import com.propertyvista.domain.site.gadgets.TestimonialsGadgetContent;
 import com.propertyvista.dto.SiteDescriptorDTO;
 import com.propertyvista.server.proxy.HttpsProxyInjection;
 
-public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteDescriptorCrudService {
+public class SiteGeneralCrudServiceImpl extends AbstractCrudServiceDtoImpl<SiteDescriptor, SiteDescriptorDTO> implements SiteGeneralCrudService {
 
     public SiteGeneralCrudServiceImpl() {
         super(SiteDescriptor.class, SiteDescriptorDTO.class);
