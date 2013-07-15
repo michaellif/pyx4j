@@ -14,7 +14,6 @@
 package com.propertyvista.biz.communication;
 
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.UserRuntimeException;
@@ -31,7 +30,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
 import com.propertyvista.domain.security.OnboardingUser;
@@ -41,12 +39,10 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.server.common.security.AccessKey;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 import com.propertyvista.server.domain.security.CustomerUserCredential;
-import com.propertyvista.server.jobs.TaskRunner;
 
 public class CommunicationFacadeImpl implements CommunicationFacade {
 
@@ -185,37 +181,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
             throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
         }
         MailMessage m = MessageTemplates.createAdminPasswordResetEmail(user, token);
-        if (MailDeliveryStatus.Success != Mail.send(m)) {
-            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
-        }
-    }
-
-    @Override
-    public void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl) {
-        if (disabled) {
-            return;
-        }
-        String token = AccessKey.createAccessToken(user, OnboardingUserCredential.class, 1);
-        if (token == null) {
-            throw new UserRuntimeException(GENERIC_FAILED_MESSAGE);
-        }
-        final MailMessage m = MessageTemplates.createOnboardingUserPasswordResetEmail(user, token, onboardingSystemBaseUrl);
-
-        final OnboardingUserCredential credential = Persistence.service().retrieve(OnboardingUserCredential.class, user.getPrimaryKey());
-        if (!credential.pmc().isNull() && (credential.pmc().status().getValue() != PmcStatus.Created)) {
-            TaskRunner.runInTargetNamespace(credential.pmc().namespace().getValue(), new Callable<Void>() {
-                @Override
-                public Void call() {
-                    CrmUserCredential crmCredential = Persistence.service().retrieve(CrmUserCredential.class, credential.crmUser().getValue());
-                    if (!crmCredential.recoveryEmail().isNull()) {
-                        m.setTo(crmCredential.recoveryEmail().getValue());
-                    }
-                    return null;
-                }
-            });
-
-        }
-
         if (MailDeliveryStatus.Success != Mail.send(m)) {
             throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
         }

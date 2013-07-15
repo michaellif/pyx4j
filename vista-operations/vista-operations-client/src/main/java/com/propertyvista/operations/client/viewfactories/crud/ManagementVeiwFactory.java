@@ -18,12 +18,6 @@ import com.pyx4j.site.client.ui.IPane;
 
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageViewImpl;
-import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserEditorView;
-import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserEditorViewImpl;
-import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserListerView;
-import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserListerViewImpl;
-import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserViewerView;
-import com.propertyvista.operations.client.ui.crud.onboardingusers.OnboardingUserViewerViewImpl;
 import com.propertyvista.operations.client.ui.crud.pmc.EquifaxApprovalView;
 import com.propertyvista.operations.client.ui.crud.pmc.EquifaxApprovalViewImpl;
 import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorView;
@@ -36,14 +30,14 @@ import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerViewImpl;
+import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerView;
+import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataViewerView;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataViewerViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunListerView;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerView;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerViewImpl;
-import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerView;
-import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerEditorView;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerEditorViewImpl;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerListerView;
@@ -64,13 +58,6 @@ public class ManagementVeiwFactory extends ViewFactoryBase {
 
             } else if (EquifaxApprovalView.class.equals(type)) {
                 map.put(type, new EquifaxApprovalViewImpl());
-
-            } else if (OnboardingUserViewerView.class.equals(type)) {
-                map.put(type, new OnboardingUserViewerViewImpl());
-            } else if (OnboardingUserEditorView.class.equals(type)) {
-                map.put(type, new OnboardingUserEditorViewImpl());
-            } else if (OnboardingUserListerView.class.equals(type)) {
-                map.put(type, new OnboardingUserListerViewImpl());
 
             } else if (TriggerViewerView.class.equals(type)) {
                 map.put(type, new TriggerViewerViewImpl());

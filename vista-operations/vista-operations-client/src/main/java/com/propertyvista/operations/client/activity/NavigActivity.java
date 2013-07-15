@@ -72,7 +72,6 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         // Properties
         NavigFolder folder = new NavigFolder("PMC Management");
         folder.addNavigItem(new OperationsSiteMap.Management.PMC());
-        folder.addNavigItem(new OperationsSiteMap.Management.OnboardingUser());
         folder.addNavigItem(new OperationsSiteMap.Management.Trigger());
         folder.addNavigItem(new OperationsSiteMap.Management.TriggerRun());
         folder.addNavigItem(new OperationsSiteMap.Management.TriggerRunData());

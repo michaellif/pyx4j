@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.domain.security;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Indexed;
@@ -20,21 +21,23 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.security.CrmUser;
 
 @RpcTransient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @Table(namespace = VistaNamespace.operationsNamespace)
-public interface GlobalCrmUserIndex {
+public interface GlobalCrmUserIndex extends IEntity {
 
+    @Indexed(group = { "f,1" })
     Pmc pmc();
 
-    CrmUser user();
+    @Indexed(group = { "f,2" })
+    IPrimitive<Key> crmUser();
 
     // Update with each CRM user update
     @Editor(type = EditorType.email)

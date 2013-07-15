@@ -19,7 +19,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -28,31 +27,12 @@ public class UserAccessUtils {
 
     private static final I18n i18n = I18n.get(UserAccessUtils.class);
 
-    public static String getPmcInterfaceUidBase(OnboardingUserCredential credential) {
-        return credential.interfaceUid().getStringView() + ":";
-    }
-
     private static String getPmcInterfaceUidBase(Pmc pmc) {
         if (pmc.interfaceUidBase().isNull()) {
             return pmc.namespace().getStringView();
         } else {
             return pmc.interfaceUidBase().getStringView();
         }
-    }
-
-    public static String getUserUUID(Pmc pmc, OnboardingUserCredential credential) {
-        StringBuilder uid = new StringBuilder();
-        if (ApplicationMode.isDevelopment()) {
-            uid.append("$$");
-        }
-        if (pmc == null) {
-            uid.append(getPmcInterfaceUidBase(credential));
-        } else {
-            uid.append(getPmcInterfaceUidBase(pmc));
-        }
-        uid.append(credential.interfaceUid().getStringView());
-
-        return uid.toString();
     }
 
     public static String getCrmUserInterfaceUid(CrmUserCredential credential) {

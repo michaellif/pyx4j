@@ -36,8 +36,6 @@ public class VistaTODO {
      */
     public static final boolean ENABLE_COMMUNCATION_CENTER = false;
 
-    public static final boolean tenantSureDisabledForProduction = true;
-
     /**
      * Set <code>true</code> to let PtApp show a demo wizard for approved tenants
      */

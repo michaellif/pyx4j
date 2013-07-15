@@ -13,7 +13,6 @@
  */
 package com.propertyvista.ob.rpc.dto;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.security.shared.UserVisit;
 
 @SuppressWarnings("serial")
@@ -22,8 +21,6 @@ public class OnboardingUserVisit extends UserVisit {
     public OnboardingApplicationStatus status;
 
     public String pmcNamespace;
-
-    public Key onboardingUserPrimaryKey;
 
     public String accountCreationDeferredCorrelationId;
 
@@ -34,11 +31,6 @@ public class OnboardingUserVisit extends UserVisit {
 
     public void setPmcNamespace(String pmcNamespace) {
         this.pmcNamespace = pmcNamespace;
-        this.changed = true;
-    }
-
-    public void setOnboardingUserPrimaryKey(Key onboardingUserPrimaryKey) {
-        this.onboardingUserPrimaryKey = onboardingUserPrimaryKey;
         this.changed = true;
     }
 

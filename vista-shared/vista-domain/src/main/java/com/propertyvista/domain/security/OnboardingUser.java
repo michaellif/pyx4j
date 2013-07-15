@@ -13,18 +13,44 @@
  */
 package com.propertyvista.domain.security;
 
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.common.AbstractUser;
+import com.propertyvista.domain.pmc.Pmc;
 
 @Caption(name = "User")
 @Table(namespace = VistaNamespace.operationsNamespace)
-public interface OnboardingUser extends AbstractUser {
+public interface OnboardingUser extends IEntity {
+
+    Pmc pmc();
 
     IPrimitive<String> firstName();
 
     IPrimitive<String> lastName();
+
+    @Editor(type = EditorType.email)
+    @NotNull
+    @Length(64)
+    @Indexed(ignoreCase = true)
+    IPrimitive<String> email();
+
+    @NotNull
+    @Editor(type = EditorType.password)
+    @LogTransient
+    IPrimitive<String> password();
+
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> created();
 }

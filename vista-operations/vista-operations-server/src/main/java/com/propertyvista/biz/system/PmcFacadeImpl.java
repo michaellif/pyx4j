@@ -15,7 +15,6 @@ package com.propertyvista.biz.system;
 
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Locale;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -35,12 +34,9 @@ import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcAccountNumbers;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
 import com.propertyvista.domain.pmc.ReservedPmcNames;
-import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.TriggerPmc;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -86,14 +82,6 @@ public class PmcFacadeImpl implements PmcFacade {
     }
 
     private void remove(Pmc pmc) {
-        {
-            EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
-            for (OnboardingUserCredential credential : Persistence.service().query(criteria)) {
-                Persistence.service().delete(credential);
-                Persistence.service().delete(credential.user());
-            }
-        }
         {
             EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
@@ -188,23 +176,11 @@ public class PmcFacadeImpl implements PmcFacade {
             pmc.status().setValue(PmcStatus.Activating);
             Persistence.service().persist(pmc);
 
-            EntityQueryCriteria<OnboardingUserCredential> credentialCrt = EntityQueryCriteria.create(OnboardingUserCredential.class);
-            credentialCrt.add(PropertyCriterion.eq(credentialCrt.proto().pmc(), pmc));
-            List<OnboardingUserCredential> creds = Persistence.service().query(credentialCrt);
+            PmcCreator.preloadPmc(pmc);
 
-            if (creds.size() == 0) {
-                throw new UserRuntimeException("No users for PMC " + pmc.name().getValue());
-            }
-
-            OnboardingUserCredential onbUserCred = creds.get(0);
-
-            OnboardingUser onbUser = Persistence.service().retrieve(OnboardingUser.class, onbUserCred.user().getPrimaryKey());
-
-            PmcCreator.preloadPmc(pmc, onbUser, onbUserCred);
             pmc.status().setValue(PmcStatus.Active);
+
             Persistence.service().persist(pmc);
-            onbUserCred.behavior().setValue(VistaOnboardingBehavior.Client);
-            Persistence.service().persist(onbUserCred);
 
         } else if (EnumSet.of(PmcStatus.Activating, PmcStatus.Terminated).contains(pmc.status().getValue())) {
             throw new UserRuntimeException(i18n.tr("Invalid transition {0}", pmc.status().getValue()));

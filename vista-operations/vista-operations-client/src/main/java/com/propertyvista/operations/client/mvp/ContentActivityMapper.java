@@ -42,9 +42,6 @@ import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorA
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsViewerActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceEditorActivity;
 import com.propertyvista.operations.client.activity.crud.maintenance.MaintenanceViewerActivity;
-import com.propertyvista.operations.client.activity.crud.onboardingusers.OnBoardingUserViewerActivity;
-import com.propertyvista.operations.client.activity.crud.onboardingusers.OnboardingUserEditorActivity;
-import com.propertyvista.operations.client.activity.crud.onboardingusers.OnboardingUserListerActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.EquifaxApprovalViewActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcEditorActivity;
 import com.propertyvista.operations.client.activity.crud.pmc.PmcListerActivity;
@@ -146,18 +143,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Management.OnboardingUser) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new OnboardingUserEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new OnBoardingUserViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new OnboardingUserListerActivity(crudPlace);
-                            break;
-                        }
 // - Security:
                     } else if (place instanceof OperationsSiteMap.Security.AuditRecord) {
                         switch (crudPlace.getType()) {

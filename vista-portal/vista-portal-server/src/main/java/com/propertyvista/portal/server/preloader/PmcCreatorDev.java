@@ -41,13 +41,11 @@ public class PmcCreatorDev {
         pmc.name().setValue(pmcName + " Demo");
         pmc.dnsName().setValue(pmcName);
         pmc.namespace().setValue(pmcName.replace('-', '_'));
-        pmc.onboardingAccountId().setValue("onb_" + pmc.namespace().getValue());
 
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
-        pmc.features().xmlSiteExport().setValue(Boolean.TRUE);
         pmc.features().defaultProductCatalog().setValue(true);
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);

@@ -41,8 +41,6 @@ public interface CommunicationFacade {
 
     void sendAdminPasswordRetrievalToken(OperationsUser user);
 
-    void sendOnboardingPasswordRetrievalToken(OnboardingUser user, String onboardingSystemBaseUrl);
-
     void sendCrmPasswordRetrievalToken(CrmUser user);
 
     /**

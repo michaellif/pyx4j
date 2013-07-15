@@ -48,11 +48,6 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
-    public boolean xmlSiteExport() {
-        return features.xmlSiteExport().getValue(Boolean.FALSE);
-    }
-
-    @Override
     public boolean defaultProductCatalog() {
         return features.defaultProductCatalog().getValue(Boolean.FALSE);
     }

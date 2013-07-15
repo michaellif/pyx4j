@@ -21,36 +21,23 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.essentials.server.AbstractAntiBot;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
-import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.Behavior;
 import com.pyx4j.server.contexts.Context;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
-import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.CrmRole;
-import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.VistaDataAccessBehavior;
-import com.propertyvista.domain.security.VistaOnboardingBehavior;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
-import com.propertyvista.generator.SecurityGenerator;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.common.security.VistaContext;
 import com.propertyvista.server.common.security.VistaPasswordResetServiceImpl;
 import com.propertyvista.server.domain.security.CrmUserCredential;
@@ -72,45 +59,6 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
             throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
         }
 
-        if (credentialClass.equals(OnboardingUserCredential.class)) {
-            OnboardingUserCredential cr = (OnboardingUserCredential) credential;
-
-            if (cr.pmc().getPrimaryKey() != null) {
-                Pmc pmc = cr.pmc();
-
-                if (pmc.status().getValue() != PmcStatus.Created) {
-                    String curNameSpace = NamespaceManager.getNamespace();
-
-                    try {
-                        NamespaceManager.setNamespace(pmc.namespace().getValue());
-
-                        EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
-                        crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
-                        crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), cr.getPrimaryKey()));
-                        CrmUserCredential crmCredential = Persistence.service().retrieve(crmUCrt);
-
-                        if (crmCredential == null) {
-                            throw new UserRuntimeException(i18n.tr("Invalid User Account. Please Contact Support"));
-                        }
-                        if (!crmCredential.enabled().isBooleanTrue()) {
-                            throw new UserRuntimeException(AbstractAntiBot.GENERIC_LOGIN_FAILED_MESSAGE);
-                        }
-
-                        crmCredential.accessKey().setValue(null);
-                        crmCredential.credential().setValue(
-                                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
-                        crmCredential.passwordUpdated().setValue(new Date());
-                        crmCredential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.FALSE);
-                        Persistence.service().persist(crmCredential);
-                        Persistence.service().commit();
-
-                    } finally {
-                        NamespaceManager.setNamespace(curNameSpace);
-                    }
-                }
-            }
-        }
-
         credential.accessKey().setValue(null);
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         credential.passwordUpdated().setValue(new Date());
@@ -123,42 +71,7 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
 
     @Override
     public <E extends AbstractUserCredential<? extends AbstractUser>> void managedSetPassword(Class<E> credentialClass, PasswordChangeRequest request) {
-
         E credential = Persistence.service().retrieve(credentialClass, request.userPk().getValue());
-
-        if (credentialClass.equals(OnboardingUserCredential.class)) {
-            OnboardingUserCredential cr = (OnboardingUserCredential) credential;
-
-            if (cr.pmc().getPrimaryKey() != null) {
-                Pmc pmc = cr.pmc();
-
-                if (pmc.status().getValue() != PmcStatus.Created) {
-                    String curNameSpace = NamespaceManager.getNamespace();
-
-                    try {
-                        NamespaceManager.setNamespace(pmc.namespace().getValue());
-
-                        EntityQueryCriteria<CrmUserCredential> crmUCrt = EntityQueryCriteria.create(CrmUserCredential.class);
-                        crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().roles().$().behaviors(), VistaCrmBehavior.PropertyVistaAccountOwner));
-                        crmUCrt.add(PropertyCriterion.eq(crmUCrt.proto().onboardingUser(), cr.getPrimaryKey()));
-                        CrmUserCredential crmCredential = Persistence.service().retrieve(crmUCrt);
-
-                        crmCredential.credential().setValue(
-                                ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
-                        if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
-                            crmCredential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
-                        }
-
-                        Persistence.service().persist(crmCredential);
-                        Persistence.service().commit();
-
-                    } finally {
-                        NamespaceManager.setNamespace(curNameSpace);
-                    }
-                }
-            }
-        }
-
         credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(request.newPassword().getValue()));
         if (request.requireChangePasswordOnNextSignIn().isBooleanTrue()) {
             credential.requiredPasswordChangeOnNextLogIn().setValue(Boolean.TRUE);
@@ -199,41 +112,6 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
     }
 
     @Override
-    public OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
-            String onboardingAccountId) {
-        email = EmailValidator.normalizeEmailAddress(email);
-        OnboardingUser user = EntityFactory.create(OnboardingUser.class);
-        user.firstName().setValue(firstName);
-        user.lastName().setValue(lastName);
-        user.name().setValue(CommonsStringUtils.nvl_concat(firstName, lastName, " "));
-        user.email().setValue(email);
-        Persistence.service().persist(user);
-
-        OnboardingUserCredential credential = EntityFactory.create(OnboardingUserCredential.class);
-        credential.setPrimaryKey(user.getPrimaryKey());
-
-        if (onboardingAccountId == null) {
-            onboardingAccountId = "o" + user.getPrimaryKey();
-        }
-
-        credential.user().set(user);
-        credential.behavior().setValue(role);
-        credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
-        credential.enabled().setValue(Boolean.TRUE);
-        credential.onboardingAccountId().setValue(onboardingAccountId);
-
-        credential.interfaceUid().setValue("o" + user.getPrimaryKey().toString());
-
-        if (ApplicationMode.isDevelopment()) {
-            SecurityGenerator.assignSecurityQuestion(credential);
-        }
-
-        Persistence.service().persist(credential);
-
-        return credential;
-    }
-
-    @Override
     public <E extends AbstractUser> void clearSecurityQuestion(Class<? extends AbstractUserCredential<E>> credentialClass, E user) {
         AbstractUserCredential<?> credential = Persistence.service().retrieve(credentialClass, user.getPrimaryKey());
         credential.securityAnswer().setValue(null);
@@ -244,6 +122,16 @@ public class UserManagementFacadeImpl implements UserManagementFacade {
     @Override
     public GlobalLoginResponseDTO globalFindAndVerifyCrmUser(String email, String password) {
         return new GlobalLoginManager().findAndVerifyCrmUser(email, password);
+    }
+
+    @Override
+    public void createGlobalCrmUserIndex(CrmUser user) {
+        new GlobalLoginManager().createGlobalCrmUserIndex(user);
+    }
+
+    @Override
+    public void updateGlobalCrmUserIndex(CrmUser user) {
+        new GlobalLoginManager().updateGlobalCrmUserIndex(user);
     }
 
 }

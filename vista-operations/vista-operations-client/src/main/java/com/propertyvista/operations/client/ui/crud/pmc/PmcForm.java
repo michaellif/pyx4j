@@ -48,8 +48,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private MerchantAccountsLister onboardingMerchantAccountsLister;
 
-    private ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource;
-
     private Anchor approvalLink;
 
     public PmcForm(IForm<PmcDTO> view) {
@@ -62,7 +60,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
-        this.onboardingMerchantAccountsSource = onboardingMerchantAccountsSource;
         this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
     }
 
@@ -93,7 +90,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
@@ -155,7 +151,6 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());

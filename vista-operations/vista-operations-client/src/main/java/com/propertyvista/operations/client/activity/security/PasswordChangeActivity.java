@@ -38,7 +38,6 @@ import com.propertyvista.operations.client.viewfactories.SecurityViewFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
-import com.propertyvista.operations.rpc.services.OnboardingUserPasswordChangeManagedService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
@@ -98,28 +97,23 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
                 service = GWT.<AbstractPasswordChangeService> create(AdminPasswordChangeManagedService.class);
             }
             break;
-        case ONBOARDING_PMC:
-            service = GWT.<AbstractPasswordChangeService> create(OnboardingUserPasswordChangeManagedService.class);
-            break;
-        }
-        if (service == null) {
+        default:
             throw new Error("don't know which service to user for principal " + principalClass);
-        } else {
-            service.changePassword(new DefaultAsyncCallback<VoidSerializable>() {
-
-                @Override
-                public void onSuccess(VoidSerializable result) {
-                    MessageDialog.info(i18n.tr("Password was changed successfully"));
-                    History.back();
-                }
-
-                @Override
-                public void onFailure(Throwable caught) {
-                    MessageDialog.error(i18n.tr("Failed to change the password"), caught);
-                }
-
-            }, request);
         }
+        service.changePassword(new DefaultAsyncCallback<VoidSerializable>() {
+
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                MessageDialog.info(i18n.tr("Password was changed successfully"));
+                History.back();
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                MessageDialog.error(i18n.tr("Failed to change the password"), caught);
+            }
+
+        }, request);
     }
 
     @Override

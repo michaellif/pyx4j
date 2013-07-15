@@ -46,7 +46,7 @@ public class PmcAccountCreationProgressActivity extends AbstractActivity impleme
     private final static I18n i18n = I18n.get(PmcAccountCreationProgressActivity.class);
 
     private final static List<String> PROGRESS_STEPS = Arrays.asList(//@formatter:off
-            i18n.tr("Creating and verifyng DNS name..."),
+            i18n.tr("Creating and verifying DNS name..."),
             i18n.tr("Reserving DNS name..."),
             i18n.tr("Creating private database..."),
             i18n.tr("Loading company profile..."),

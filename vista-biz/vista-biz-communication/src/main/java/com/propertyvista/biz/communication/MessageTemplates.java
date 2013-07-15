@@ -247,27 +247,6 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createOnboardingUserPasswordResetEmail(AbstractUser user, String token, String onboardingSystemBaseUrl) {
-        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
-        context.accessToken().setValue(token);
-        context.user().set(user);
-
-        ArrayList<IEntity> data = new ArrayList<IEntity>();
-
-        EmailTemplate emailTemplate = emailTemplatePasswordRetrievalOnboardingUser();
-        PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
-        pwdReqT.RequestorName().set(user.name());
-        pwdReqT.PasswordResetUrl().setValue(passwordResetUrl(onboardingSystemBaseUrl, token));
-        data.add(pwdReqT);
-
-        MailMessage email = new MailMessage();
-        email.setTo(user.email().getValue());
-        email.setSender(getSender());
-        // set email subject and body from the template
-        buildEmail(email, emailTemplate, data);
-        return email;
-    }
-
     public static MailMessage createNewPmcEmail(OnboardingUser user, Pmc pmc) {
 
         EmailTemplate emailTemplate = emailTemplateNewPmc(user, pmc);
@@ -476,21 +455,6 @@ public class MessageTemplates {
                 "Dear {0},<br/>\n" +
                 "This email was sent to you in response to your request to modify your Property Vista Support Administration account password.<br/>\n" +
                 "Click the link below to go to the Property Vista Operations site and create new password for your account:<br/>\n" +
-                "    <a href=\"{1}\">Change Your Password</a>",
-                EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
-                EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())
-        )));//@formatter:on
-        return template;
-    }
-
-    private static EmailTemplate emailTemplatePasswordRetrievalOnboardingUser() {
-        PasswordRequestAdminT pwdReqT = EntityFactory.create(PasswordRequestAdminT.class);
-        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
-        template.subject().setValue(i18n.tr("New Password Retrieval"));
-        template.content().setValue(wrapAdminHtml(i18n.tr(//@formatter:off
-                "Dear {0},<br/>\n" +
-                "This email was sent to you in response to your request to modify your Property Vista account password.<br/>\n" +
-                "Click the link below to go to the Property Vista site and create new password for your account:<br/>\n" +
                 "    <a href=\"{1}\">Change Your Password</a>",
                 EmailTemplateManager.getVarname(pwdReqT.RequestorName()),
                 EmailTemplateManager.getVarname(pwdReqT.PasswordResetUrl())

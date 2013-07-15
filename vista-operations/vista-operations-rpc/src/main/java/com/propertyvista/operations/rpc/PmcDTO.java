@@ -14,15 +14,10 @@
 package com.propertyvista.operations.rpc;
 
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.ExtendsDBO;
-import com.pyx4j.entity.annotations.LogTransient;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.OnboardingUser;
 
@@ -31,18 +26,7 @@ import com.propertyvista.domain.security.OnboardingUser;
 @ExtendsDBO(Pmc.class)
 public interface PmcDTO extends Pmc {
 
-    OnboardingUser createPmcForExistingOnboardingUserRequest();
-
-    Person person();
-
-    @Editor(type = EditorType.email)
-    @NotNull
-    IPrimitive<String> email();
-
-    @NotNull
-    @Editor(type = EditorType.password)
-    @LogTransient
-    IPrimitive<String> password();
+    OnboardingUser onboardingUser();
 
     IPrimitive<String> vistaCrmUrl();
 

@@ -54,10 +54,6 @@ public class OperationsSiteMap implements SiteMap {
         public static class EquifaxApproval extends CrmCrudAppPlace {
         }
 
-        @PlaceProperties(navigLabel = "Onboarding Users")
-        public static class OnboardingUser extends CrmCrudAppPlace {
-        }
-
         public static class PmcMerchantAccounts extends CrmCrudAppPlace {
 
         }

@@ -14,6 +14,7 @@
 package com.propertyvista.portal.server.preloader;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,6 @@ import com.pyx4j.entity.server.dataimport.AbstractDataPreloader;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
@@ -45,70 +45,81 @@ import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.generator.SecurityGenerator;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class PmcCreator {
 
     private final static Logger log = LoggerFactory.getLogger(PmcCreator.class);
 
-    public static void preloadPmc(Pmc pmc, OnboardingUser onbUser, OnboardingUserCredential onbUserCred) {
-        assert onbUser != null;
-        assert onbUserCred != null;
+    public static void preloadPmc(final Pmc pmc) {
+        TaskRunner.runInTargetNamespace(pmc, new Callable<Void>() {
+            @Override
+            public Void call() {
 
-        final String namespace = NamespaceManager.getNamespace();
-        NamespaceManager.setNamespace(pmc.namespace().getValue());
-        try {
-            new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
 
-                @Override
-                public Void execute() {
-                    RDBUtils.ensureNamespace();
-                    if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
-                        RDBUtils.initAllEntityTables();
+                    @Override
+                    public Void execute() {
+                        RDBUtils.ensureNamespace();
+                        if (((EntityPersistenceServiceRDB) Persistence.service()).getMultitenancyType() == MultitenancyType.SeparateSchemas) {
+                            RDBUtils.initAllEntityTables();
+                        }
+                        return null;
                     }
-                    return null;
+
+                });
+
+                AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
+                preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
+                log.info("Preload {}", preloader.create());
+
+                CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
+                CrmRole pvRole = CrmRolesPreloader.getPropertyVistaAccountOwnerRole();
+
+                for (OnboardingUser onbUser : getAllOnboardingUsers(pmc)) {
+                    createCrmEmployee(onbUser.firstName().getValue(), onbUser.lastName().getValue(), onbUser.email().getValue(), onbUser.password().getValue(),
+                            defaultRole, pvRole);
                 }
 
-            });
+                // Create support account by default
+                createVistaSupportUsers();
 
-            AbstractDataPreloader preloader = VistaDataPreloaders.productionPmcPreloaders();
-            preloader.setParameterValue(VistaDataPreloaderParameter.pmcName.name(), pmc.name().getStringView());
-            log.info("Preload {}", preloader.create());
-
-            CrmRole defaultRole = CrmRolesPreloader.getDefaultRole();
-            CrmRole pvRole = CrmRolesPreloader.getPropertyVistaAccountOwnerRole();
-            CrmUser crmUser = createCrmEmployee(onbUser.firstName().getValue(), onbUser.lastName().getValue(), onbUser.email().getValue(), null, onbUserCred,
-                    defaultRole, pvRole);
-            onbUserCred.crmUser().setValue(crmUser.getPrimaryKey());
-
-            // Create support account by default
-            createVistaSupportUsers();
-
-            if (ApplicationMode.isDevelopment()) {
-                for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
-                    String email = DemoData.UserType.PM.getEmail(i);
-                    CrmRole additinalRole = null;
-                    if (i == 2) {
-                        additinalRole = CrmRolesPreloader.getSupportRole();
+                if (ApplicationMode.isDevelopment()) {
+                    for (int i = 1; i <= DemoData.UserType.PM.getDefaultMax(); i++) {
+                        String email = DemoData.UserType.PM.getEmail(i);
+                        CrmRole additinalRole = null;
+                        if (i == 2) {
+                            additinalRole = CrmRolesPreloader.getSupportRole();
+                        }
+                        createCrmEmployee(email, email, email, email, defaultRole, additinalRole);
                     }
-                    createCrmEmployee(email, email, email, email, null, defaultRole, additinalRole);
                 }
+
+                return null;
             }
+        });
 
-        } finally {
-            NamespaceManager.setNamespace(namespace);
-        }
+    }
+
+    private static List<OnboardingUser> getAllOnboardingUsers(final Pmc pmc) {
+        return TaskRunner.runInOperationsNamespace(new Callable<List<OnboardingUser>>() {
+            @Override
+            public List<OnboardingUser> call() {
+                EntityQueryCriteria<OnboardingUser> criteria = EntityQueryCriteria.create(OnboardingUser.class);
+                criteria.eq(criteria.proto().pmc(), pmc);
+                return Persistence.service().query(criteria);
+            }
+        });
     }
 
     public static void createVistaSupportUsers() {
-        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, null, CrmRolesPreloader.getDefaultRole(),
+        createCrmEmployee("Support", "PropertyVista", CrmUser.VISTA_SUPPORT_ACCOUNT_EMAIL, null, CrmRolesPreloader.getDefaultRole(),
                 CrmRolesPreloader.getSupportRole());
     }
 
-    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, OnboardingUserCredential onbUserCred,
-            CrmRole... roles) {
+    public static CrmUser createCrmEmployee(String firstName, String lastName, String email, String password, CrmRole... roles) {
         if (!ApplicationMode.isDevelopment()) {
             EntityQueryCriteria<CrmUser> criteria = EntityQueryCriteria.create(CrmUser.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().email(), email));
@@ -131,21 +142,15 @@ public class PmcCreator {
         employee.name().firstName().setValue(firstName);
         employee.name().lastName().setValue(lastName);
         employee.email().setValue(email);
-        if (onbUserCred != null) {
-            employee.title().setValue("PMC Owner");
-        }
+
         Persistence.service().persist(employee);
 
         CrmUserCredential credential = EntityFactory.create(CrmUserCredential.class);
         credential.setPrimaryKey(user.getPrimaryKey());
 
         credential.user().set(user);
-        if (onbUserCred != null) {
-            assert onbUserCred.user().getPrimaryKey() != null;
-            credential.onboardingUser().setValue(onbUserCred.user().getPrimaryKey());
-            credential.credential().setValue(onbUserCred.credential().getValue());
-            credential.interfaceUid().setValue(onbUserCred.interfaceUid().getValue());
-        } else if (password != null) {
+
+        if (password != null) {
             credential.credential().setValue(ServerSideFactory.create(PasswordEncryptorFacade.class).encryptUserPassword(password));
         }
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {

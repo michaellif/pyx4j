@@ -19,10 +19,9 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.crm.rpc.dto.account.GlobalLoginResponseDTO;
-import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.AbstractUserCredential;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.server.domain.security.CrmUserCredential;
 
 public interface UserManagementFacade {
@@ -35,12 +34,13 @@ public interface UserManagementFacade {
 
     Set<Behavior> getBehaviors(CrmUserCredential userCredentialId);
 
-    OnboardingUserCredential createOnboardingUser(String firstName, String lastName, String email, String password, VistaOnboardingBehavior role,
-            String onboardingAccountId);
-
     /**
      * Used in global login
      */
     GlobalLoginResponseDTO globalFindAndVerifyCrmUser(String email, String password);
+
+    void createGlobalCrmUserIndex(CrmUser user);
+
+    void updateGlobalCrmUserIndex(CrmUser user);
 
 }

@@ -31,7 +31,7 @@ public interface PasswordChangeView extends IsWidget {
         public static final String PRINCIPAL_CLASS = "class";
 
         enum PrincipalClass {
-            TENANT, GUARANTOR, EMPLOYEE, ADMIN, ONBOARDING_PMC
+            TENANT, GUARANTOR, EMPLOYEE, ADMIN
         }
 
         void changePassword(PasswordChangeRequest request);

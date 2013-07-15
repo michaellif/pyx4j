@@ -43,9 +43,7 @@ public class DemoData {
 
         EMP("e", 10),
 
-        ADMIN("a", VistaOperationsBehavior.values().length),
-
-        ONB("o", 2);
+        ADMIN("a", VistaOperationsBehavior.values().length);
 
         private final String namePrefix;
 

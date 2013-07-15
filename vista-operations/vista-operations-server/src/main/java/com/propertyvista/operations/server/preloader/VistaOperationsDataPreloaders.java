@@ -17,7 +17,6 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 
 import com.propertyvista.preloader.EquifaxSimulationPreloader;
-import com.propertyvista.preloader.OnboardingUserPreloader;
 import com.propertyvista.shared.config.VistaDemo;
 
 public class VistaOperationsDataPreloaders extends DataPreloaderCollection {
@@ -27,7 +26,6 @@ public class VistaOperationsDataPreloaders extends DataPreloaderCollection {
         add(new TriggerPreloader());
         if (ApplicationMode.isDevelopment()) {
             add(new V2BPreloader());
-            add(new OnboardingUserPreloader());
             add(new DevelopmentSecurityPreloader());
         }
         if (ApplicationMode.isDevelopment() || VistaDemo.isDemo()) {

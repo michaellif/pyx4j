@@ -17,7 +17,6 @@ import java.util.Date;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.Caption;
-import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Length;
@@ -47,7 +46,6 @@ public interface AuditRecord extends IEntity {
     @Indexed(group = { "f,1" })
     @Caption(name = "Modified by")
     @MemberColumn(name = "usr")
-    @Detached
     IPrimitive<Key> user();
 
     IPrimitive<VistaUserType> userType();

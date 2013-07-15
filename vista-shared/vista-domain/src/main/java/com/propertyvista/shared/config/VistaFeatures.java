@@ -34,8 +34,6 @@ public class VistaFeatures {
 
         boolean onlineApplication();
 
-        boolean xmlSiteExport();
-
         boolean defaultProductCatalog();
 
         CountryOfOperation countryOfOperation();

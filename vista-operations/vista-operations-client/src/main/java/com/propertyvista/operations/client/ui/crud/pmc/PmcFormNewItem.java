@@ -40,11 +40,10 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         int row = -1;
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingAccountId()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().firstName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().person().name().lastName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().password()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().firstName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().lastName()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().email()), 15).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().password()), 15).build());
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
@@ -52,7 +51,6 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().xmlSiteExport()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
@@ -72,12 +70,6 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-        boolean existingOnboardingUser = !getValue().createPmcForExistingOnboardingUserRequest().isNull();
-        get(proto().person().name().firstName()).setViewable(existingOnboardingUser);
-        get(proto().person().name().lastName()).setViewable(existingOnboardingUser);
-        get(proto().email()).setViewable(existingOnboardingUser);
-        get(proto().password()).setVisible(!existingOnboardingUser);
-
         get(proto().features().yardiMaintenance()).setEnabled(getValue() != null && getValue().features().yardiIntegration().isBooleanTrue());
     }
 
@@ -102,10 +94,10 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         get(proto().name()).setValue("P" + System.currentTimeMillis() % 1000000);
         get(proto().dnsName()).setValue(get(proto().name()).getValue());
 
-        get(proto().person().name().firstName()).setValue("F" + get(proto().name()).getValue());
-        get(proto().person().name().lastName()).setValue("L" + get(proto().name()).getValue());
+        get(proto().onboardingUser().firstName()).setValue("F" + get(proto().name()).getValue());
+        get(proto().onboardingUser().lastName()).setValue("L" + get(proto().name()).getValue());
 
-        get(proto().email()).setValue(get(proto().name()).getValue() + DemoData.USERS_DOMAIN);
-        get(proto().password()).setValue(get(proto().email()).getValue());
+        get(proto().onboardingUser().email()).setValue(get(proto().name()).getValue() + DemoData.USERS_DOMAIN);
+        get(proto().onboardingUser().password()).setValue(get(proto().onboardingUser().email()).getValue());
     }
 }

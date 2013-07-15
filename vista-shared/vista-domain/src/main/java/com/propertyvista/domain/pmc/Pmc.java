@@ -99,11 +99,6 @@ public interface Pmc extends IEntity {
     @Detached(level = AttachLevel.Detached)
     PmcYardiCredential yardiCredential();
 
-    @Indexed(uniqueConstraint = true)
-    @Length(63)
-    @Editor(type = Editor.EditorType.label)
-    IPrimitive<String> onboardingAccountId();
-
     /**
      * Initialized from OnboardingUserCredential.interfaceUid
      */

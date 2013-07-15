@@ -80,11 +80,6 @@ public class VistaFeatures {
         }
 
         @Override
-        public boolean xmlSiteExport() {
-            return threadLocale.get().xmlSiteExport().getValue(Boolean.FALSE);
-        }
-
-        @Override
         public boolean defaultProductCatalog() {
             return threadLocale.get().defaultProductCatalog().getValue(Boolean.FALSE);
         }

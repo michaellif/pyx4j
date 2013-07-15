@@ -14,7 +14,6 @@
 package com.propertyvista.operations.server.services;
 
 import java.util.Locale;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -29,10 +28,10 @@ import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.gwt.server.deferred.DeferredProcessRegistry;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.security.server.EmailValidator;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.server.contexts.Context;
 
@@ -40,21 +39,19 @@ import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.biz.system.PmcNameValidator;
-import com.propertyvista.biz.system.UserManagementFacade;
 import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.config.ThreadPoolNames;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcDnsName;
-import com.propertyvista.domain.security.VistaOnboardingBehavior;
+import com.propertyvista.domain.security.OnboardingUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
-import com.propertyvista.operations.domain.security.OnboardingUserCredential;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -107,10 +104,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         entity.dnsName().setValue(entity.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         entity.namespace().setValue(entity.namespace().getValue().toLowerCase(Locale.ENGLISH).replace('-', '_'));
 
-        if (entity.onboardingAccountId().isNull()) {
-            entity.onboardingAccountId().setValue(UUID.randomUUID().toString());
-        }
-
         for (PmcDnsName alias : entity.dnsNameAliases()) {
             alias.dnsName().setValue(alias.dnsName().getValue().toLowerCase(Locale.ENGLISH));
         }
@@ -124,16 +117,6 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         super.persist(entity, dto);
 
         ServerSideFactory.create(AuditFacade.class).updated(entity, EntityDiff.getChanges(orig, entity, entity.updated()));
-
-        // Ppopagate onboardingAccountId to accounts
-        EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), entity));
-        for (OnboardingUserCredential cred : Persistence.service().query(criteria)) {
-            if (!cred.onboardingAccountId().equals(entity.onboardingAccountId())) {
-                cred.onboardingAccountId().setValue(entity.onboardingAccountId().getValue());
-                Persistence.service().persist(cred);
-            }
-        }
 
         TaskRunner.runInTargetNamespace(entity, new Callable<Void>() {
             @Override
@@ -154,23 +137,10 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         encryptPassword(entity.yardiCredential());
         ServerSideFactory.create(PmcFacade.class).create(entity);
 
-        OnboardingUserCredential cred;
-        if (dto.createPmcForExistingOnboardingUserRequest().isNull()) {
-            cred = ServerSideFactory.create(UserManagementFacade.class).createOnboardingUser(dto.person().name().firstName().getValue(),
-                    dto.person().name().lastName().getValue(), dto.email().getValue(), dto.password().getValue(), VistaOnboardingBehavior.ProspectiveClient,
-                    null);
-
-        } else {
-            EntityQueryCriteria<OnboardingUserCredential> criteria = EntityQueryCriteria.create(OnboardingUserCredential.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), dto.createPmcForExistingOnboardingUserRequest()));
-            cred = Persistence.service().retrieve(criteria);
-            if (cred == null) {
-                throw new UserRuntimeException("failed to create PMC because existing onboarding user with key = '"
-                        + dto.createPmcForExistingOnboardingUserRequest().getPrimaryKey() + "' was not found");
-            }
-        }
-        cred.pmc().set(entity);
-        Persistence.service().persist(cred);
+        OnboardingUser user = dto.onboardingUser();
+        user.pmc().set(entity);
+        user.email().setValue(EmailValidator.normalizeEmailAddress(dto.onboardingUser().email().getValue()));
+        Persistence.service().persist(user);
     }
 
     private void encryptPassword(PmcYardiCredential yardiCredential) {
