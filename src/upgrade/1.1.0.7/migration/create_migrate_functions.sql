@@ -3,7 +3,7 @@
 ***
 ***             @version $Revision$ ($Author$) $Date$
 ***
-***             version 1.1.1 PMC migration function
+***             version 1.1.0.7 PMC migration function
 ***
 ***     ======================================================================================================================
 **/
