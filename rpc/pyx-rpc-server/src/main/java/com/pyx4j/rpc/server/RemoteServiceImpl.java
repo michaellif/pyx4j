@@ -165,7 +165,11 @@ public class RemoteServiceImpl implements RemoteService {
                     }
                 } else {
                     // Log SecurityViolationException
-                    log.error("Service call exception for {} {}", Context.getVisit(), e.getMessage());
+                    if (ApplicationMode.isDevelopment()) {
+                        log.error("Service call exception for {}", Context.getVisit(), e);
+                    } else {
+                        log.error("Service call exception for {} {}", Context.getVisit(), e.getMessage());
+                    }
                 }
                 if (e instanceof RuntimeExceptionSerializable) {
                     throw (RuntimeExceptionSerializable) e;
