@@ -80,7 +80,7 @@ public class PageNavigBar extends Toolbar {
 
         firstButton = new Button(DataTableImages.INSTANCE.first());
         firstButton.setVisible(false);
-        firstButton.getElement().getStyle().setMarginRight(3, Unit.PX);
+        firstButton.getElement().getStyle().setMarginRight(0, Unit.PX);
         add(firstButton);
 
         prevButton = new Button(DataTableImages.INSTANCE.prev());
@@ -95,7 +95,7 @@ public class PageNavigBar extends Toolbar {
 
         nextButton = new Button(DataTableImages.INSTANCE.next());
         nextButton.setVisible(false);
-        nextButton.getElement().getStyle().setMarginRight(3, Unit.PX);
+        nextButton.getElement().getStyle().setMarginRight(0, Unit.PX);
         add(nextButton);
 
         lastButton = new Button(DataTableImages.INSTANCE.last());
