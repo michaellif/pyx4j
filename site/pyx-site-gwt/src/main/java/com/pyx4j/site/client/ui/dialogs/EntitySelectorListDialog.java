@@ -188,8 +188,7 @@ public abstract class EntitySelectorListDialog<E extends IEntity> extends Abstra
         cellList.setRowData(data);
         cellList.setEmptyListWidget(new Label(i18n.tr("There are no available items")));
         ScrollPanel panel = new ScrollPanel(cellList);
-        panel.getElement().getStyle().setProperty("borderStyle", "inset");
-        panel.getElement().getStyle().setProperty("borderWidth", "1px");
+        panel.getElement().getStyle().setProperty("padding", "5px");
         return panel;
     }
 

@@ -69,8 +69,7 @@ public abstract class SelectEnumDialog<E extends Enum<E>> extends OkCancelDialog
         list.setRowData(listOfValues);
         selectionModel.setSelected(listOfValues.get(0), true);
         ScrollPanel panel = new ScrollPanel(list);
-        panel.getElement().getStyle().setProperty("borderStyle", "inset");
-        panel.getElement().getStyle().setProperty("borderWidth", "1px");
+        panel.getElement().getStyle().setProperty("padding", "5px");
         return panel;
     }
 
