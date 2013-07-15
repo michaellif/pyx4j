@@ -37,6 +37,7 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name DROP CONSTRAINT admin_pmc_dns_name_target_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
+        ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
 
         
@@ -67,7 +68,11 @@ SET search_path = '_admin_';
         
         -- audit_record
         
-        ALTER TABLE audit_record ADD COLUMN world_time TIMESTAMP; 
+        ALTER TABLE audit_record        ADD COLUMN pmc BIGINT,
+                                        ADD COLUMN user_type VARCHAR(50),
+                                        ADD COLUMN session_id VARCHAR(500),
+                                        ADD COLUMN world_time TIMESTAMP;
+                                        
         
         -- pmc_document_file
         
@@ -105,12 +110,19 @@ SET search_path = '_admin_';
         ***     ========================================================================================================
         **/
         
+        -- foreign keys
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
+        
         -- check constraints
         
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck 
                 CHECK ((target) IN ('field', 'prospectPortal', 'resident', 'residentPortal', 'vistaCrm'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck 
                 CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'residentPortal'));
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
+                CHECK ((event) IN ('Create', 'CredentialUpdate', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 
+                'LoginFailed', 'Logout', 'PermitionsUpdate', 'Read', 'SessionExpiration', 'System', 'Update'));
+        ALTER TABLE audit_record ADD CONSTRAINT audit_record_user_type_e_ck CHECK ((user_type) IN ('crm', 'customer', 'operations'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck 
                 CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'residentPortal'));
 
