@@ -32,6 +32,11 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
+    public boolean allowToBypassRpcServiceManifest() {
+        return getConfigProperties().getBooleanValue("allowToBypassRpcServiceManifest", false);
+    }
+
+    @Override
     public boolean openIdrequired() {
         return getConfigProperties().getBooleanValue("openIdrequired", true);
     }
