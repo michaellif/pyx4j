@@ -43,4 +43,6 @@ public interface INativeComponent<E> extends IWidget {
 
     void setDebugId(IDebugId debugId);
 
+    void init();
+
 }

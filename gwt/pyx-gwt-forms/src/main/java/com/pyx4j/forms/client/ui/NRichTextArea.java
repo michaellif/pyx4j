@@ -27,13 +27,14 @@ import com.pyx4j.widgets.client.richtext.ExtendedRichTextArea;
 import com.pyx4j.widgets.client.richtext.RichTextImageProvider;
 
 public class NRichTextArea extends NTextComponent<String, ExtendedRichTextArea, CRichTextArea> {
+
     public NRichTextArea(CRichTextArea textArea) {
         super(textArea);
-        textArea.asWidget().setWidth("100%");
-
+        setWidth("100%");
         getElement().getStyle().setProperty("resize", "none");
         sinkEvents(Event.ONMOUSEOVER);
         sinkEvents(Event.ONMOUSEOUT);
+
     }
 
     @Override

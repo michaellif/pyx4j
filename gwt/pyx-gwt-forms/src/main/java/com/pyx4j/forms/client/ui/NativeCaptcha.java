@@ -160,4 +160,10 @@ public class NativeCaptcha extends CaptchaComposite implements INativeFocusCompo
 
     }
 
+    @Override
+    public void init() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -78,4 +78,10 @@ public class NativeInLineListBox<E> extends NativeListSelectionComposite<E> {
 
     }
 
+    @Override
+    public void init() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

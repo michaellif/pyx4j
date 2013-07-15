@@ -74,7 +74,6 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         super();
         setStyleName(DefaultCComponentsTheme.StyleName.FieldPanel.name());
         this.cComponent = cComponent;
-        setViewable(true);
     }
 
     public final EDITOR getEditor() {
@@ -119,6 +118,11 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
     protected void onEditorCreate() {
         getEditor().setWidth("100%");
         setDebugId(getCComponent().getDebugId());
+    }
+
+    @Override
+    public void init() {
+        setViewable(true);
     }
 
     protected void onEditorInit() {

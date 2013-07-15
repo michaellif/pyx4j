@@ -87,4 +87,10 @@ public class NViewer<DATA> extends SimplePanel implements INativeComponent<DATA>
     public void setDebugId(IDebugId debugId) {
     }
 
+    @Override
+    public void init() {
+        // TODO Auto-generated method stub
+
+    }
+
 }

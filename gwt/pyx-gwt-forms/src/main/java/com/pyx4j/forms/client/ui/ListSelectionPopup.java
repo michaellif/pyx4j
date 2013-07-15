@@ -116,6 +116,12 @@ public abstract class ListSelectionPopup<E> extends Dialog {
 
         }
 
+        @Override
+        public void init() {
+            // TODO Auto-generated method stub
+
+        }
+
     }
 
     public abstract String getItemName(E item);

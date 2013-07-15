@@ -26,7 +26,6 @@ public class NTextBox<DATA> extends NTextFieldBase<DATA, TextBox, CTextFieldBase
 
     public NTextBox(CTextFieldBase<DATA, ?> cComponent) {
         super(cComponent);
-
     }
 
     @Override

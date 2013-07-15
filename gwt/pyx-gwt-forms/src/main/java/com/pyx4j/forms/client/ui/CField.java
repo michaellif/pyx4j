@@ -78,6 +78,7 @@ public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DAT
 
     protected void setNativeWidget(WIDGET_TYPE widget) {
         this.widget = widget;
+        widget.init();
         applyAccessibilityRules();
 
         widget.setNavigationCommand(navigationCommand);

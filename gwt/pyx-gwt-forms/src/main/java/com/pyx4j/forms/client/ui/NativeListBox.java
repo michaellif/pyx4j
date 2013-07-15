@@ -192,4 +192,10 @@ public class NativeListBox<E> extends TriggerComponent<List<E>> implements INati
 
     }
 
+    @Override
+    public void init() {
+        // TODO Auto-generated method stub
+
+    }
+
 }
