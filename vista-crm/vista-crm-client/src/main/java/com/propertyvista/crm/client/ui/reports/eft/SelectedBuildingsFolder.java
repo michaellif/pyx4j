@@ -17,6 +17,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderRowEditor;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
@@ -42,6 +45,22 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return COLUMNS;
+    }
+
+    @Override
+    public CComponent<?> create(IObject<?> member) {
+        if (member instanceof Building) {
+            return new CEntityFolderRowEditor<Building>(Building.class, COLUMNS) {
+                @Override
+                protected CComponent<?> createCell(EntityFolderColumnDescriptor column) {
+                    if (column.getObject() == proto().propertyCode()) {
+                        return inject(proto().propertyCode());
+                    }
+                    return super.createCell(column);
+                }
+            };
+        }
+        return super.create(member);
     }
 
     @Override

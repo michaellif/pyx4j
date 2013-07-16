@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.reports.autopay;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -32,19 +34,12 @@ public class AutoPayChangesReportSettingsForm extends CEntityDecoratableForm<Aut
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
-        int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leasesOnNoticeOnly())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByBuildings())).build());
-        get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<Boolean> event) {
-                get(proto().buildings()).setVisible(event.getValue());
-            }
-        });
-        panel.setWidget(++row, 0, inject(proto().buildings(), new SelectedBuildingsFolder()));
+        TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
+        FlowPanel leftSidePanel = new FlowPanel();
+
+        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().leasesOnNoticeOnly())).build());
+        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().filterByExpectedMoveOut())).build());
         get(proto().filterByExpectedMoveOut()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
@@ -52,9 +47,27 @@ public class AutoPayChangesReportSettingsForm extends CEntityDecoratableForm<Aut
                 get(proto().maximum()).setVisible(event.getValue() == true);
             }
         });
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().minimum())).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maximum())).build());
-        return panel;
+        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().minimum())).build());
+        leftSidePanel.add(new FormDecoratorBuilder(inject(proto().maximum())).build());
+
+        FlowPanel buildingFilterPanel = new FlowPanel();
+        buildingFilterPanel.add(new FormDecoratorBuilder(inject(proto().filterByBuildings())).build());
+        get(proto().filterByBuildings()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                get(proto().buildings()).setVisible(event.getValue() == true);
+            }
+        });
+
+        buildingFilterPanel.add(inject(proto().buildings(), new SelectedBuildingsFolder()));
+        get(proto().buildings()).setVisible(false);
+
+        formPanel.setWidget(0, 0, leftSidePanel);
+        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 0, HasVerticalAlignment.ALIGN_TOP);
+        formPanel.setWidget(0, 1, buildingFilterPanel);
+        formPanel.getFlexCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
+
+        return formPanel;
     }
 
     @Override
