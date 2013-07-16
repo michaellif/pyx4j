@@ -21,6 +21,9 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
@@ -78,7 +81,7 @@ public class RemconParser {
                 }
             }
             String value = line.substring(cIndex, endIndex);
-            validate(remconField, value);
+            validate(field, remconField, value);
 
             try {
                 field.set(record, value);
@@ -91,15 +94,24 @@ public class RemconParser {
         remconFile.records.add(record);
     }
 
-    private void validate(RemconField remconField, String value) {
+    private void validate(Field field, RemconField remconField, String value) {
         switch (remconField.type()) {
         case Alphanumeric:
             break;
         case Numeric:
+            if (!value.matches("[0-9]+")) {
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+            }
             break;
         case DateYYMMDD:
+            if (!value.matches("[0-9]+")) {
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+            }
             break;
         case Filler:
+            if (!value.matches("[ ]*")) {
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+            }
             break;
 
         }
