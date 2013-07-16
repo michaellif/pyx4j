@@ -18,7 +18,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
@@ -60,8 +60,8 @@ public class UnitItemForm extends CrmEntityForm<AptUnitItem> {
     public void addValidations() {
         super.addValidations();
 
-        new PastDateValidation(get(proto().flooringInstallDate()));
-        new PastDateValidation(get(proto().counterTopInstallDate()));
-        new PastDateValidation(get(proto().cabinetsInstallDate()));
+        get(proto().flooringInstallDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().counterTopInstallDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().cabinetsInstallDate()).addValueValidator(new PastDateIncludeTodayValidator());
     }
 }

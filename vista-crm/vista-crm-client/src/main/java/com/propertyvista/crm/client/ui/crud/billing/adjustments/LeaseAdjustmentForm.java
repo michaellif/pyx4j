@@ -35,7 +35,7 @@ import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.FutureDateValidator;
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.components.boxes.LeaseAdjustmentReasonSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.ARCode;
@@ -143,7 +143,7 @@ public class LeaseAdjustmentForm extends CrmEntityForm<LeaseAdjustment> {
     public void addValidations() {
         super.addValidations();
 
-        get(proto().targetDate()).addValueValidator(new FutureDateValidator());
+        get(proto().targetDate()).addValueValidator(new FutureDateIncludeTodayValidator());
     }
 
     @Override

@@ -44,7 +44,7 @@ import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
 import com.propertyvista.common.client.ui.components.editors.MarketingEditor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.domain.policy.policies.DatesPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.PropertyContact;
@@ -155,8 +155,8 @@ public class BuildingForm extends FieldEntityForm<BuildingDTO> {
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().financial().dateAcquired()));
-        new PastDateValidation(get(proto().financial().lastAppraisalDate()));
+        get(proto().financial().dateAcquired()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().financial().lastAppraisalDate()).addValueValidator(new PastDateIncludeTodayValidator());
 
         get(proto().complex()).addValueChangeHandler(new ValueChangeHandler<Complex>() {
             @Override

@@ -36,7 +36,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.domain.contact.AddressStructured;
@@ -82,7 +82,7 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().customer().person().birthDate()));
+        get(proto().customer().person().birthDate()).addValueValidator(new PastDateIncludeTodayValidator());
         get(proto().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {

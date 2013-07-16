@@ -18,7 +18,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.dto.RoofDTO;
 
 public class RoofForm extends MechBaseForm<RoofDTO> {
@@ -43,6 +43,6 @@ public class RoofForm extends MechBaseForm<RoofDTO> {
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().year()));
+        get(proto().year()).addValueValidator(new PastDateIncludeTodayValidator());
     }
 }

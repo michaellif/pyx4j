@@ -20,8 +20,8 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.FutureDateValidation;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.FutureDateValidator;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.domain.property.vendor.Maintenance;
 
 public class MaintenanceEditor extends CEntityDecoratableForm<Maintenance> {
@@ -51,7 +51,7 @@ public class MaintenanceEditor extends CEntityDecoratableForm<Maintenance> {
     }
 
     private void validateMaintenanceDates() {
-        new PastDateValidation(get(proto().lastService()));
-        new FutureDateValidation(get(proto().nextService()));
+        get(proto().lastService()).addValueValidator(new PastDateIncludeTodayValidator());
+        get(proto().nextService()).addValueValidator(new FutureDateValidator());
     }
 }

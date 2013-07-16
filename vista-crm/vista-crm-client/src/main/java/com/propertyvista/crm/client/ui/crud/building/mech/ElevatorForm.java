@@ -19,7 +19,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.editors.LicenseEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.dto.ElevatorDTO;
 
 public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
@@ -60,6 +60,6 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
     @Override
     public void addValidations() {
-        new PastDateValidation(get(proto().build()));
+        get(proto().build()).addValueValidator(new PastDateIncludeTodayValidator());
     }
 }

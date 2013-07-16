@@ -34,8 +34,9 @@ import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalAssetFolder;
 import com.propertyvista.common.client.ui.components.folders.PersonalIncomeFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.FutureDateValidation;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.tenant.CustomerScreening;
@@ -81,7 +82,6 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
     @Override
     public void addValidations() {
-        @SuppressWarnings("unchecked")
         CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
@@ -91,16 +91,14 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
             }
         });
 
-        new PastDateValidation(currentAddressForm.get(currentAddressForm.proto().moveInDate()));
-        new FutureDateValidation(currentAddressForm.get(currentAddressForm.proto().moveOutDate()));
+        currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueValidator(new PastDateIncludeTodayValidator());
+        currentAddressForm.get(currentAddressForm.proto().moveOutDate()).addValueValidator(new FutureDateIncludeTodayValidator());
 
         // ------------------------------------------------------------------------------------------------
 
-        @SuppressWarnings("unchecked")
         final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
 
-        new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveInDate()));
-
+        previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new PastDateValidator());
         previousAddressForm.get(previousAddressForm.proto().moveInDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
@@ -119,8 +117,7 @@ public class CustomerScreeningForm extends CrmEntityForm<CustomerScreening> {
 
         // ------------------------------------------------------------------------------------------------
 
-        new PastDateValidation(previousAddressForm.get(previousAddressForm.proto().moveOutDate()));
-
+        previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new PastDateValidator());
         previousAddressForm.get(previousAddressForm.proto().moveOutDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
             @Override
             public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {

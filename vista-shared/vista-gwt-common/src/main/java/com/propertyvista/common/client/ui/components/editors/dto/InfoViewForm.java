@@ -41,8 +41,9 @@ import com.propertyvista.common.client.ui.components.editors.PriorAddressEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.components.folders.IdUploaderFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.FutureDateValidation;
-import com.propertyvista.common.client.ui.validators.PastDateValidation;
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
+import com.propertyvista.common.client.ui.validators.PastDateValidator;
 import com.propertyvista.common.client.ui.validators.StartEndDateValidation;
 import com.propertyvista.domain.PriorAddress;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
@@ -144,26 +145,25 @@ public class InfoViewForm extends CEntityDecoratableForm<TenantInfoDTO> {
 
     @Override
     public void addValidations() {
-        @SuppressWarnings("unchecked")
         CEntityForm<PriorAddress> currentAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().currentAddress()));
-        @SuppressWarnings("unchecked")
-        final CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
+        CEntityForm<PriorAddress> previousAddressForm = ((CEntityForm<PriorAddress>) get(proto().version().previousAddress()));
+
         CComponent<LogicalDate> c1 = currentAddressForm.get(currentAddressForm.proto().moveInDate());
         CComponent<LogicalDate> c2 = currentAddressForm.get(currentAddressForm.proto().moveOutDate());
         CComponent<LogicalDate> p1 = previousAddressForm.get(previousAddressForm.proto().moveInDate());
         CComponent<LogicalDate> p2 = previousAddressForm.get(previousAddressForm.proto().moveOutDate());
 
         currentAddressForm.get(currentAddressForm.proto().moveInDate()).addValueChangeHandler(new ValueChangeHandler<LogicalDate>() {
-
             @Override
             public void onValueChange(ValueChangeEvent<LogicalDate> event) {
                 enablePreviousAddress();
             }
         });
 
-        new PastDateValidation(c1);
-        new PastDateValidation(p1);
-        new FutureDateValidation(c2);
+        p1.addValueValidator(new PastDateValidator());
+        c1.addValueValidator(new PastDateIncludeTodayValidator());
+        c2.addValueValidator(new FutureDateIncludeTodayValidator());
+
         new StartEndDateValidation(c1, c2);
         new StartEndDateValidation(p1, p2);
         StartEndDateWithinMonth(c1, p2, i18n.tr("Current Move In Date Should Be Within 30 Days Of Previous Move Out Date"));
