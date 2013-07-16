@@ -15,7 +15,10 @@ package com.propertyvista.ob.client.forms;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Position;
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -92,19 +95,25 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
         int row = -1;
 
         FlowPanel dnsNamePanel = new FlowPanel();
-        dnsNamePanel.addStyleName(Styles.PmcUrlFieldNote.name());
-        SimplePanel dnsSubdomainNameHolder = new SimplePanel();
-        dnsSubdomainNameHolder.getElement().getStyle().setFloat(com.google.gwt.dom.client.Style.Float.LEFT);
-        dnsSubdomainNameHolder.setWidget(new FormDecoratorBuilder(inject(proto().dnsName()), 10).customLabel("").labelWidth(0).useLabelSemicolon(false)
-                .mandatoryMarker(false).build());
+        dnsNamePanel.getElement().getStyle().setPosition(Position.RELATIVE);
 
-        Label dnsDomainName = new Label(".propertyvista.com");
-        dnsDomainName.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        SimplePanel dnsSubdomainNameHolder = new SimplePanel();
+        int domainNameFieldWidth = 13;
+        dnsSubdomainNameHolder.setWidget(new FormDecoratorBuilder(inject(proto().dnsName()), domainNameFieldWidth).customLabel("").labelWidth(0)
+                .useLabelSemicolon(false).mandatoryMarker(false).build());
+
+        Label pmcDomainNameSuffixLabel = new Label(".propertyvista.com");
+        pmcDomainNameSuffixLabel.getElement().getStyle().setPosition(Position.ABSOLUTE);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setTop(0, Unit.PX);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setLeft(domainNameFieldWidth + 2.5, Unit.EM);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setRight(0, Unit.PX);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setBottom(0, Unit.PX);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setTextAlign(TextAlign.LEFT);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        pmcDomainNameSuffixLabel.getElement().getStyle().setLineHeight(2, Unit.EM);
 
         dnsNamePanel.add(dnsSubdomainNameHolder);
-        dnsNamePanel.add(dnsDomainName);
-
-        formPanel.add(dnsNamePanel);
+        dnsNamePanel.add(pmcDomainNameSuffixLabel);
 
         get(proto().dnsName()).addValueChangeHandler(new ValueChangeHandler<String>() {
             @Override
@@ -127,6 +136,7 @@ public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAcc
             }
         });
 
+        contentPanel.setWidget(++row, 0, dnsNamePanel);
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).customLabel("").labelWidth(0).useLabelSemicolon(false)
                 .mandatoryMarker(false).customLabel("").labelWidth(0).build());
         contentPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(SPACE, Unit.PX);
