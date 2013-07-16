@@ -249,7 +249,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             return flexPanel;
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
@@ -268,7 +267,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     CComboBox<Role> role = (CComboBox<Role>) get(proto().role());
                     role.setOptions(Role.tenantRelated());
                 }
-
             }
         }
 
@@ -331,8 +329,8 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, expirationWarning.getExpirationWarningPanel());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod())).build());
+                content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod()), true).componentWidth("35em").build());
                 content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;

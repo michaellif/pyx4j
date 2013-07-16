@@ -61,14 +61,13 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
         int row = -1;
 
+        main.setBR(++row, 0, 2);
         main.setWidget(++row, 0, inject(proto().tenantInfo(), new CEntityLabel<PreauthorizedPaymentsDTO.TenantInfo>()));
-        main.getWidget(row, 0).getElement().getStyle().setMargin(0.5, Unit.EM);
-        main.getWidget(row, 0).getElement().getStyle().setMarginLeft(1, Unit.EM);
         main.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
         main.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
-        main.getWidget(row, 0).setWidth("30em");
+        main.getWidget(row, 0).setWidth("25em");
 
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 7, 20, 22).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel())).labelWidth(20).build());
 
         main.setH3(++row, 0, 1, proto().preauthorizedPayments().getMeta().getCaption());
         main.getFlexCellFormatter().setColSpan(row, 0, 2);
@@ -138,7 +137,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, expirationWarning.getExpirationWarningPanel());
+                content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
@@ -152,11 +151,11 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                             }
                         };
                     }
-                }), 38, 10, 12).build());
+                }), true).componentWidth("35em").build());
 
-                content.setBR(++row, 0, 1);
+                content.setBR(++row, 0, 2);
 
-                content.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
+                content.setWidget(++row, 0, 2, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder()));
 
                 return content;
             }

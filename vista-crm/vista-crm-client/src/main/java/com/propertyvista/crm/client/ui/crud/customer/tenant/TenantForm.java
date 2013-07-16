@@ -209,7 +209,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
 
-                content.setWidget(++row, 0, expirationWarning.getExpirationWarningPanel());
+                content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
                 content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
@@ -223,7 +223,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                }), true).build());
+                }), true).componentWidth("35em").build());
 
                 content.setBR(++row, 0, 2);
 

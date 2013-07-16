@@ -37,10 +37,10 @@ public class PapExpirationWarning {
     public PapExpirationWarning() {
 
         expirationWarningLabel.setStyleName(VistaTheme.StyleName.warningMessage.name());
-        expirationWarningPanel.setWidget(0, 0, expirationWarningLabel);
+        expirationWarningPanel.setWidget(0, 0, 2, expirationWarningLabel);
         expirationWarningPanel.getCellFormatter().setHorizontalAlignment(0, 0, HasHorizontalAlignment.ALIGN_CENTER);
-        expirationWarningPanel.setHR(1, 0, 1);
-        expirationWarningPanel.setBR(2, 0, 1);
+        expirationWarningPanel.setHR(1, 0, 2);
+        expirationWarningPanel.setBR(2, 0, 2);
     }
 
     public TwoColumnFlexFormPanel getExpirationWarningPanel() {
