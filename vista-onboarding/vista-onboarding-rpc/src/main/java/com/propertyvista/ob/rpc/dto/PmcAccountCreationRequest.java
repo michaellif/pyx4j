@@ -51,13 +51,13 @@ public interface PmcAccountCreationRequest extends IEntity {
     @NotNull
     @Editor(type = EditorType.password)
     @LogTransient
-    @Caption(watermark = "****************")
+    @Caption(watermark = "Password")
     IPrimitive<String> password();
 
     @NotNull
     @Editor(type = EditorType.password)
     @LogTransient
-    @Caption(watermark = "****************")
+    @Caption(watermark = "Confirm Password")
     IPrimitive<String> confirmPassword();
 
     @NotNull
