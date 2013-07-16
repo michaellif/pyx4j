@@ -15,6 +15,7 @@ package com.propertyvista.yardi.mapper;
 
 import java.util.List;
 
+import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
 
@@ -61,8 +62,35 @@ public class TenantMapper {
             }
         }
 
+        for (Address address : yardiCustomer.getAddress()) {
+            switch (address.getType()) {
+            case BILLING:
+                break;
+            case CURRENT:
+                customer.person().email().setValue(address.getEmail());
+                break;
+            case FORWARDING:
+                break;
+            case LEGAL_NOTICE:
+                break;
+            case MAILING:
+                break;
+            case OTHER:
+                break;
+            case PREVIOUS:
+                break;
+            case PROPERTY:
+                break;
+            case SHIPPING:
+                break;
+            case TERMINATION_NOTICE:
+                break;
+            default:
+                break;
+            }
+        }
+
 // TODO - find somewhere...
-//        customer.person().email().setValue(value);
 //        customer.person().birthDate().setValue(value);
 
         LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
