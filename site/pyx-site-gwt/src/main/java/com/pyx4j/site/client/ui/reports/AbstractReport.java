@@ -343,6 +343,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     public void setError(String errorMessage) {
         unlockReportSettings();
         errorPanel.clear();
+        setReportData(null);
         if (errorMessage != null) {
             errorPanel.setVisible(true);
             errorPanel.add(new Label(errorMessage));
