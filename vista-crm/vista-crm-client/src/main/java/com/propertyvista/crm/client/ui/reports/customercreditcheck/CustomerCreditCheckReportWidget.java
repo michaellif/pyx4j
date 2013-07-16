@@ -90,7 +90,7 @@ public class CustomerCreditCheckReportWidget implements ReportWidget {
             return;
         }
         SafeHtmlBuilder bb = new SafeHtmlBuilder();
-        bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22pt\">");
+        bb.appendHtmlConstant("<div style=\"text-align: center; font-size: 22px; line-height: 22px;\">");
         bb.appendEscaped(i18n.tr("Customer Credit Check Report"));
         bb.appendHtmlConstant("</div>");
         bb.appendHtmlConstant("<div>");
