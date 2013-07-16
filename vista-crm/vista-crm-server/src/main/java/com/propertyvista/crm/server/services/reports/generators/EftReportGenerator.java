@@ -28,6 +28,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
@@ -66,7 +67,7 @@ public class EftReportGenerator implements ReportExporter {
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().billingCycleStartDate(), reportMetadata.billingCycleStartDate().getValue());
             criteria.isNull(criteria.proto().actualPadGenerationDate());
-            for (BillingCycle cycle : Persistence.service().query(criteria)) {
+            for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
                 padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
             }
 
@@ -87,8 +88,8 @@ public class EftReportGenerator implements ReportExporter {
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enhancePaymentRecord(paymentRecord);
             }
-
             return paymentRecords;
+
         } else {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
             int count = Persistence.service().count(criteria);
@@ -96,19 +97,19 @@ public class EftReportGenerator implements ReportExporter {
 
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(count);
-
-            while (paymentRecordsIter.hasNext() & !aborted) {
-                if (progress % 10 == 0) {
-                    reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
+            try {
+                while (paymentRecordsIter.hasNext() & !aborted) {
+                    if (progress % 10 == 0) {
+                        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
+                    }
+                    PaymentRecord paymentRecord = paymentRecordsIter.next();
+                    enhancePaymentRecord(paymentRecord);
+                    paymentRecords.add(paymentRecord);
                 }
-                PaymentRecord paymentRecord = paymentRecordsIter.next();
-                enhancePaymentRecord(paymentRecord);
-                paymentRecords.add(paymentRecord);
+            } finally {
+                IOUtils.closeQuietly(paymentRecordsIter);
             }
 
-            if (false) {
-                makeMockupProgress();
-            }
             return paymentRecords;
         }
 
