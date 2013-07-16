@@ -365,6 +365,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             setWidth("100%");
 
             viewerLabelHolder = new SimplePanel();
+            viewerLabelHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             viewerLabelHolder.setWidth("100%");
             viewerLabelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             viewerLabelHolder.setWidget(viewer);
