@@ -295,8 +295,7 @@ public class EftReportWidget extends Composite implements ReportWidget {
                             return b.toSafeHtml();                            
                         }
                     },
-                    
-                    new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingType()).build()),
+                                        
                     new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.padBillingCycle().billingCycleStartDate()).build()),
                     new ColumnDescriptorAnchorTableColumnFormatter(shortColumnWidth, new MemberColumnDescriptor.Builder(proto.preauthorizedPayment().tenant().lease().leaseId()).build()) {
                         @Override protected CrudAppPlace makePlace(IEntity entity) { return new CrmSiteMap.Tenants.Lease().formViewerPlace(((IEntity)entity.getMember(proto.preauthorizedPayment().tenant().lease().getPath())).getPrimaryKey()); }
