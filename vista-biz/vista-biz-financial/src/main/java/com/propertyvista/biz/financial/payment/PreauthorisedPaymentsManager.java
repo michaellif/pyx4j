@@ -96,8 +96,8 @@ class PreauthorisedPaymentsManager {
         ICursorIterator<BillingCycle> billingCycleIterator;
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-            criteria.lt(criteria.proto().targetPadGenerationDate(), runDate);
-            criteria.gt(criteria.proto().targetPadExecutionDate(), runDate);
+            criteria.le(criteria.proto().targetPadGenerationDate(), runDate);
+            criteria.ge(criteria.proto().targetPadExecutionDate(), runDate);
             criteria.isNotNull(criteria.proto().actualPadGenerationDate());
             criteria.asc(criteria.proto().building().propertyCode());
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
