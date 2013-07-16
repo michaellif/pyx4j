@@ -24,6 +24,8 @@ public class PastDateIncludeTodayValidator implements EditableValueValidator<Log
 
     private static final I18n i18n = I18n.get(PastDateIncludeTodayValidator.class);
 
+    private final LogicalDate point;
+
     private final String message;
 
     public PastDateIncludeTodayValidator() {
@@ -31,11 +33,17 @@ public class PastDateIncludeTodayValidator implements EditableValueValidator<Log
     }
 
     public PastDateIncludeTodayValidator(String message) {
+        this(null, message);
+    }
+
+    public PastDateIncludeTodayValidator(LogicalDate point, String message) {
+        this.point = point;
         this.message = message;
     }
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || !value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
+        return (value == null) || !value.after(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
+                message);
     }
 }

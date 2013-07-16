@@ -24,6 +24,8 @@ public class FutureDateIncludeTodayValidator implements EditableValueValidator<L
 
     private static final I18n i18n = I18n.get(FutureDateIncludeTodayValidator.class);
 
+    private final LogicalDate point;
+
     private final String message;
 
     public FutureDateIncludeTodayValidator() {
@@ -31,11 +33,17 @@ public class FutureDateIncludeTodayValidator implements EditableValueValidator<L
     }
 
     public FutureDateIncludeTodayValidator(String message) {
+        this(null, message);
+    }
+
+    public FutureDateIncludeTodayValidator(LogicalDate point, String message) {
+        this.point = point;
         this.message = message;
     }
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || !value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
+        return (value == null) || !value.before(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
+                message);
     }
 }

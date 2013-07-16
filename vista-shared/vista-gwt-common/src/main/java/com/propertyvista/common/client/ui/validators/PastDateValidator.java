@@ -24,6 +24,8 @@ public class PastDateValidator implements EditableValueValidator<LogicalDate> {
 
     private static final I18n i18n = I18n.get(PastDateValidator.class);
 
+    private final LogicalDate point;
+
     private final String message;
 
     public PastDateValidator() {
@@ -31,11 +33,17 @@ public class PastDateValidator implements EditableValueValidator<LogicalDate> {
     }
 
     public PastDateValidator(String message) {
+        this(null, message);
+    }
+
+    public PastDateValidator(LogicalDate point, String message) {
+        this.point = point;
         this.message = message;
     }
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
+        return (value == null) || value.before(point != null ? point : new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
+                message);
     }
 }
