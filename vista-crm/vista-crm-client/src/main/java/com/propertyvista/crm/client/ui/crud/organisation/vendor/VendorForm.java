@@ -30,17 +30,18 @@ public class VendorForm extends CrmEntityForm<Vendor> {
     public VendorForm(IForm<Vendor> view) {
         super(Vendor.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().website()), 35).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().name()), true).componentWidth("15em").build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().type()), true).componentWidth("15em").build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().website()), true).build());
         content.setH1(++row, 0, 2, i18n.tr("Phone Numbers"));
-        content.setWidget(++row, 0, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
+        content.setWidget(++row, 0, 2, inject(proto().phones(), new CompanyPhoneFolder(isEditable())));
         content.setH1(++row, 0, 2, i18n.tr("Emails"));
-        content.setWidget(++row, 0, inject(proto().emails(), new EmailFolder(isEditable())));
+        content.setWidget(++row, 0, 2, inject(proto().emails(), new EmailFolder(isEditable())));
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 }

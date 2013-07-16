@@ -30,7 +30,7 @@ public class EmailFolder extends VistaTableFolder<CompanyEmail> {
     public List<EntityFolderColumnDescriptor> columns() {
         List<EntityFolderColumnDescriptor> columns;
         columns = new ArrayList<EntityFolderColumnDescriptor>();
-        columns.add(new EntityFolderColumnDescriptor(proto().email(), "15em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().email(), "35em"));
         return columns;
     }
 }

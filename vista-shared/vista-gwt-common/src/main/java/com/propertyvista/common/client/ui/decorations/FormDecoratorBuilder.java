@@ -47,7 +47,7 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     }
 
     public FormDecoratorBuilder(CComponent<?> component, boolean dual) {
-        this(component, dual ? 50 : 16, dual);
+        this(component, dual ? 55 : 15, dual);
     }
 
     public FormDecoratorBuilder(CComponent<?> component) {
