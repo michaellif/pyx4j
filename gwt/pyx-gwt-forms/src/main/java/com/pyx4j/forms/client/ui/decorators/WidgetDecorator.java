@@ -139,7 +139,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         labelHolder = new FlowPanel();
         labelHolder.setStyleName(WidgetDecoratorLabelHolder.name());
         labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         labelHolder.setWidth(builder.labelWidth);
         labelHolder.add(mandatoryImageHolder);
@@ -177,7 +177,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
         containerPanel = new FlexTable();
         containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         containerPanel.setWidget(0, 1, contentPanel);
         containerPanel.setWidget(1, 1, validationLabel);
