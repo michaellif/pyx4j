@@ -85,10 +85,11 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setInterfaceEntity(YardiConstants.INTERFACE_ENTITY);
 
             GetPropertyConfigurationsResponse response = getResidentTransactionsService(yc).getPropertyConfigurations(request);
-            if (response.getGetPropertyConfigurationsResult() == null) {
-                throw new Error("Received response is null");
+            if ((response == null) || (response.getGetPropertyConfigurationsResult() == null)
+                    || (response.getGetPropertyConfigurationsResult().getExtraElement() == null)) {
+                throw new YardiServiceException(SimpleMessageFormat.format(
+                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server", yc.database()));
             }
-
             String xml = response.getGetPropertyConfigurationsResult().getExtraElement().toString();
 
             log.debug("GetPropertyConfigurations Result: {}", xml);
@@ -182,6 +183,12 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setTenantId(tenantId);
 
             GetResidentTransaction_LoginResponse response = getResidentTransactionsService(yc).getResidentTransaction_Login(request);
+            if ((response == null) || (response.getGetResidentTransaction_LoginResult() == null)
+                    || (response.getGetResidentTransaction_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException(SimpleMessageFormat.format(
+                        "Yardi connection configuration error, Login error or database ''{0}'' do not exists on Yardi server; PropertyId {1}, TenantId {2}",
+                        yc.database(), propertyId, tenantId));
+            }
             String xml = response.getGetResidentTransaction_LoginResult().getExtraElement().toString();
 
             log.debug("GetResidentTransaction: {}", xml);
@@ -227,6 +234,10 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setTransactionXml(transactionXml);
 
             ImportResidentTransactions_LoginResponse response = getResidentTransactionsService(yc).importResidentTransactions_Login(request);
+            if ((response == null) || (response.getImportResidentTransactions_LoginResult() == null)
+                    || (response.getImportResidentTransactions_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException("importResidentTransactions received NULL response");
+            }
             String xml = response.getImportResidentTransactions_LoginResult().getExtraElement().toString();
 
             log.debug("ImportResidentTransactions: {}", xml);
@@ -265,6 +276,10 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setYardiPropertyId(propertyId);
 
             GetUnitInformation_LoginResponse response = getResidentTransactionsService(yc).getUnitInformation_Login(request);
+            if ((response == null) || (response.getGetUnitInformation_LoginResult() == null)
+                    || (response.getGetUnitInformation_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException("getUnitInformation_Login received NULL response");
+            }
             String xml = response.getGetUnitInformation_LoginResult().getExtraElement().toString();
 
             log.debug("GetUnitInformation: {}", xml);
@@ -310,6 +325,11 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setPostMonth(calendar);
 
             GetResidentsLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentsLeaseCharges_Login(request);
+            if ((response == null) || (response.getGetResidentsLeaseCharges_LoginResult() == null)
+                    || (response.getGetResidentsLeaseCharges_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException(SimpleMessageFormat.format("getResidentsLeaseCharges received NULL response; PropertyId {0}, Date {1}",
+                        propertyId, date));
+            }
             String xml = response.getGetResidentsLeaseCharges_LoginResult().getExtraElement().toString();
 
             log.debug("GetResidentsLeaseCharges: {}", xml);
@@ -356,6 +376,11 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
             request.setPostMonth(calendar);
 
             GetResidentLeaseCharges_LoginResponse response = getResidentTransactionsService(yc).getResidentLeaseCharges_Login(request);
+            if ((response == null) || (response.getGetResidentLeaseCharges_LoginResult() == null)
+                    || (response.getGetResidentLeaseCharges_LoginResult().getExtraElement() == null)) {
+                throw new YardiServiceException(SimpleMessageFormat.format(
+                        "getResidentsLeaseCharges received NULL response; PropertyId {0}, TenantId {1}, Date {2}", propertyId, tenantId, date));
+            }
             String xml = response.getGetResidentLeaseCharges_LoginResult().getExtraElement().toString();
 
             log.debug("GetResidentLeaseCharges: {}", xml);

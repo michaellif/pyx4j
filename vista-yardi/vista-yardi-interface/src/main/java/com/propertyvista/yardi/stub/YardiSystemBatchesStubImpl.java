@@ -52,7 +52,7 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
     private final static Logger log = LoggerFactory.getLogger(YardiSystemBatchesStubImpl.class);
 
     @Override
-    public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException {
+    public long openReceiptBatch(PmcYardiCredential yc, String propertyId) throws RemoteException, YardiServiceException {
         boolean success = false;
         try {
             init(Action.OpenReceiptBatch);
@@ -71,6 +71,14 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
 
             long result = response.getOpenReceiptBatchResult();
             log.debug("OpenReceiptBatch: {}", result);
+            if (result == 0) {
+                throw new YardiServiceException("Could not open Receipt batch");
+            } else if (result == -1) {
+                throw new YardiServiceException("Web service user has insufficient privileges for this operation");
+            } else if (result == -2) {
+                throw new YardiServiceException("Interface Entity does not have access to Yardi Property " + propertyId);
+            }
+
             success = true;
             return result;
         } finally {
@@ -107,6 +115,9 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setTransactionXml(transactionXml);
 
             AddReceiptsToBatchResponse response = getResidentTransactionsSysBatchService(yc).addReceiptsToBatch(request);
+            if ((response == null) || (response.getAddReceiptsToBatchResult() == null) || (response.getAddReceiptsToBatchResult().getExtraElement() == null)) {
+                throw new YardiServiceException("addReceiptsToBatch received NULL response");
+            }
             String responseXml = response.getAddReceiptsToBatchResult().getExtraElement().toString();
             log.debug("AddReceiptsToBatch: {}", responseXml);
 
@@ -145,6 +156,9 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setBatchId(batchId);
 
             PostReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).postReceiptBatch(request);
+            if ((response == null) || (response.getPostReceiptBatchResult() == null) || (response.getPostReceiptBatchResult().getExtraElement() == null)) {
+                throw new YardiServiceException("postReceiptBatch received NULL response");
+            }
             String xml = response.getPostReceiptBatchResult().getExtraElement().toString();
             log.debug("PostReceiptBatch: {}", xml);
 
@@ -181,6 +195,9 @@ public class YardiSystemBatchesStubImpl extends AbstractYardiStub implements Yar
             request.setBatchId(batchId);
 
             CancelReceiptBatchResponse response = getResidentTransactionsSysBatchService(yc).cancelReceiptBatch(request);
+            if ((response == null) || (response.getCancelReceiptBatchResult() == null) || (response.getCancelReceiptBatchResult().getExtraElement() == null)) {
+                throw new YardiServiceException("cancelReceiptBatch received NULL response");
+            }
             String xml = response.getCancelReceiptBatchResult().getExtraElement().toString();
             log.debug("CancelReceiptBatch: {}", xml);
 
