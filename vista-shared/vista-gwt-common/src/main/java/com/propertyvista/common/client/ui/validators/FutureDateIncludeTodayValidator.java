@@ -20,22 +20,22 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-public class FutureDateValidator implements EditableValueValidator<LogicalDate> {
+public class FutureDateIncludeTodayValidator implements EditableValueValidator<LogicalDate> {
 
-    private static final I18n i18n = I18n.get(FutureDateValidator.class);
+    private static final I18n i18n = I18n.get(FutureDateIncludeTodayValidator.class);
 
     private final String message;
 
-    public FutureDateValidator() {
-        this(i18n.tr("The Date Must Be Later Than Today's Date"));
+    public FutureDateIncludeTodayValidator() {
+        this(i18n.tr("The Date Must Be Later Than Or Equal To Today's Date"));
     }
 
-    public FutureDateValidator(String message) {
+    public FutureDateIncludeTodayValidator(String message) {
         this.message = message;
     }
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
+        return (value == null) || !value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
     }
 }

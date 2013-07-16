@@ -36,6 +36,6 @@ public class PastDateValidator implements EditableValueValidator<LogicalDate> {
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || !value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
+        return (value == null) || value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
     }
 }

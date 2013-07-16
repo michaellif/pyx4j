@@ -1,13 +1,13 @@
 /*
  * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
- * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
- * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
+ * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information").
+ * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement
  * you entered into with Property Vista Software Inc.
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-05-14
+ * Created on Aug 1, 2011
  * @author Vlad
  * @version $Id$
  */
@@ -20,22 +20,22 @@ import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
-public class FutureDateValidator implements EditableValueValidator<LogicalDate> {
+public class PastDateIncludeTodayValidator implements EditableValueValidator<LogicalDate> {
 
-    private static final I18n i18n = I18n.get(FutureDateValidator.class);
+    private static final I18n i18n = I18n.get(PastDateIncludeTodayValidator.class);
 
     private final String message;
 
-    public FutureDateValidator() {
-        this(i18n.tr("The Date Must Be Later Than Today's Date"));
+    public PastDateIncludeTodayValidator() {
+        this(i18n.tr("The Date Must Be Earlier Than Or Equal To Today's Date"));
     }
 
-    public FutureDateValidator(String message) {
+    public PastDateIncludeTodayValidator(String message) {
         this.message = message;
     }
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        return (value == null) || value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
+        return (value == null) || !value.after(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component, message);
     }
 }
