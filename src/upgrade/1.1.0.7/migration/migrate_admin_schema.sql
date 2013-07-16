@@ -68,7 +68,11 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        -- turn tenantsure on
         
+        UPDATE  _admin_.admin_pmc_vista_features
+        SET     tenant_sure_integration = TRUE
+        WHERE   NOT tenant_sure_integration;
         
         
         
