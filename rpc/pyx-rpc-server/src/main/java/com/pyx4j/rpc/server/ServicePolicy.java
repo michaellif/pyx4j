@@ -90,7 +90,9 @@ public class ServicePolicy {
         if (servicePolicy != null) {
             realServiceName = servicePolicy.get(serviceClassId);
         }
-        if ((realServiceName == null) && (servicePolicy != null) && ApplicationMode.isDevelopment()) {
+        if (realServiceName != null) {
+            return realServiceName;
+        } else if ((realServiceName == null) && (servicePolicy != null) && ApplicationMode.isDevelopment()) {
             return serviceClassId;
         } else if ((ServerSideConfiguration.instance().allowToBypassRpcServiceManifest()) // 
                 || ((ServerSideConfiguration.instance().getEnvironmentType() == ServerSideConfiguration.EnvironmentType.GAEDevelopment) && (ServerSideConfiguration
