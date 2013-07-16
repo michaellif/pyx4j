@@ -125,7 +125,14 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- _admin_.global_crm_user_index
         
+        EXECUTE 'INSERT INTO _admin_.global_crm_user_index(id,pmc,crm_user,email) '
+                ||'(SELECT      nextval(''public.global_crm_user_index_seq'') AS id,'
+                ||'             a.id AS pmc, u.id AS crm_user, u.email '
+                ||'FROM         _admin_.admin_pmc a '
+                ||'JOIN         '||v_schema_name||'.crm_user u ON (a.namespace = '||quote_literal(v_schema_name)||') '
+                ||'WHERE        u.email != ''support@propertyvista.com'' )'; 
         
         
         /**

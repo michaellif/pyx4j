@@ -81,7 +81,7 @@ SET search_path = '_admin_';
                 pmc                     BIGINT,
                 crm_user                BIGINT,
                 email                   VARCHAR(64),
-                        CONSTRAINT global_crm_user_index_pmc_fk PRIMARY KEY(id)
+                        CONSTRAINT global_crm_user_index_pk PRIMARY KEY(id)
         );
         
         ALTER TABLE global_crm_user_index OWNER TO vista;
@@ -106,8 +106,13 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        -- onboarding_user
         
-        
+        UPDATE  onboarding_user AS u
+        SET     pmc = c.pmc
+        FROM    onboarding_user_credential c
+        WHERE   c.usr = u.id;
+               
         
         
         /**
@@ -118,6 +123,22 @@ SET search_path = '_admin_';
         ***     ==========================================================================================================
         **/
         
+        -- admin_pmc
+        
+        ALTER TABLE admin_pmc DROP COLUMN onboarding_account_id;
+        
+        -- admin_pmc_vista_features
+        
+        ALTER TABLE admin_pmc_vista_features DROP COLUMN xml_site_export;
+        
+        -- onboarding_user
+        
+        ALTER TABLE onboarding_user     DROP COLUMN name,
+                                        DROP COLUMN updated;
+                                        
+        -- onboarding_user_credential
+        
+        DROP TABLE onboarding_user_credential;
        
         
         /**
@@ -130,7 +151,9 @@ SET search_path = '_admin_';
         
         -- foreign keys
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
-        
+        ALTER TABLE global_crm_user_index ADD CONSTRAINT global_crm_user_index_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE onboarding_user ADD CONSTRAINT onboarding_user_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
+
         -- check constraints
         
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck 
@@ -153,7 +176,10 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
-        
+        CREATE INDEX global_crm_user_index_email_idx ON global_crm_user_index USING btree (email);
+        CREATE INDEX global_crm_user_index_pmc_crm_user_idx ON global_crm_user_index USING btree (pmc, crm_user);
+        CREATE INDEX onboarding_user_email_idx ON onboarding_user USING btree (lower(email));
+
        
 
 
