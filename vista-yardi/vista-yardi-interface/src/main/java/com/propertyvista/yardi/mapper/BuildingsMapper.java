@@ -77,7 +77,7 @@ public class BuildingsMapper {
             streetAddress = streetAddressParser.parse(addressImported.getAddress1(), null);
         } catch (Throwable e) {
             log.warn("failed to parse street address for property '" + propertyID.getIdentification().getPrimaryID() + "'", e);
-            streetAddress = new StreetAddress(null, StringUtils.EMPTY, StringUtils.EMPTY, StreetType.other, null);
+            streetAddress = new StreetAddress(null, StringUtils.EMPTY, addressImported.getAddress1(), StreetType.other, null);
         }
 
         AddressStructured address = EntityFactory.create(AddressStructured.class);
@@ -85,6 +85,7 @@ public class BuildingsMapper {
         address.streetNumber().setValue(streetAddress.streetNumber);
         address.streetName().setValue(streetAddress.streetName);
         address.streetType().setValue(streetAddress.streetType);
+        address.streetDirection().setValue(streetAddress.streetDirection);
         address.city().setValue(addressImported.getCity());
 
         address.province().code().setValue(addressImported.getState());
