@@ -81,7 +81,7 @@ class PreauthorisedPaymentsManager {
             if ((reportCriteria != null) && (reportCriteria.selectedBuildings != null)) {
                 criteria.in(criteria.proto().building(), reportCriteria.selectedBuildings);
             }
-            billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
         }
         try {
             while (billingCycleIterator.hasNext()) {

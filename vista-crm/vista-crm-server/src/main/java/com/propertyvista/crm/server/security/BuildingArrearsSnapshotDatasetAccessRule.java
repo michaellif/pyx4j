@@ -21,6 +21,8 @@ import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
 
 public class BuildingArrearsSnapshotDatasetAccessRule implements DatasetAccessRule<BuildingArrearsSnapshot> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<BuildingArrearsSnapshot> criteria) {
         criteria.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());

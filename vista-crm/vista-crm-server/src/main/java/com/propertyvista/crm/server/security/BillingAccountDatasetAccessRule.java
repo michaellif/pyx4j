@@ -18,16 +18,15 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.financial.BillingAccount;
 
-public class PaymentRecordDatasetAccessRule implements DatasetAccessRule<PaymentRecord> {
+public class BillingAccountDatasetAccessRule implements DatasetAccessRule<BillingAccount> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<PaymentRecord> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().billingAccount().lease().unit().building().userAccess(), Context.getVisit().getUserVisit()
-                .getPrincipalPrimaryKey()));
+    public void applyRule(EntityQueryCriteria<BillingAccount> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().lease().unit().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
     }
 
 }

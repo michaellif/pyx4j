@@ -75,7 +75,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
             criteria.asc(criteria.proto().lease().unit().building().propertyCode());
             criteria.asc(criteria.proto().lease().leaseId());
 
-            billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
+            billingAccountIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
         }
         try {
             while (billingAccountIterator.hasNext()) {

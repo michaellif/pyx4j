@@ -159,6 +159,7 @@ import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.financial.AggregatedTransfer;
+import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.Bill;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -531,6 +532,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new CustomerCreditCheckDatasetAccessRule(), CustomerCreditCheck.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new PaymentRecordDatasetAccessRule(), PaymentRecord.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingCycleDatasetAccessRule(), BillingCycle.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new BillingAccountDatasetAccessRule(), BillingAccount.class);
 
         freeze();
     }

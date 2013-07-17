@@ -21,6 +21,8 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 
 public class BillingCycleDatasetAccessRule implements DatasetAccessRule<BillingCycle> {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public void applyRule(EntityQueryCriteria<BillingCycle> criteria) {
         criteria.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey());
