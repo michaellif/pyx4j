@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -32,6 +33,7 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
 
     IPrimitive<Boolean> leasesOnNoticeOnly();
 
+    @Caption(name = "Issues/Alerts")
     IPrimitive<Boolean> onlyWithNotice();
 
     @Caption(name = "Filter by Billing Cycle")
@@ -43,6 +45,16 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
     @NotNull
     IPrimitive<LogicalDate> billingCycleStartDate();
 
+    @Caption(name = "Filter by Portfolio")
+    IPrimitive<Boolean> filterByPortfolio();
+
+    IList<Portfolio> selectedPortfolios();
+
+    @Caption(name = "Filter by Complex")
+    IPrimitive<Boolean> filterByComplex();
+
+    IList<Portfolio> selectedComplexes();
+
     @Caption(name = "Filter by Buildings")
     IPrimitive<Boolean> filterByBuildings();
 
@@ -50,13 +62,17 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
 
     IPrimitive<PaymentRecord.PaymentStatus> paymentStatus();
 
+    @Caption(name = "Upcoming/Future EFTs")
     IPrimitive<Boolean> forthcomingEft();
 
+    @Caption(name = "Filter by Expected Move Out")
     IPrimitive<Boolean> filterByExpectedMoveOut();
 
+    /** minimum of expected move out */
     @NotNull
     IPrimitive<LogicalDate> minimum();
 
+    /** maximum of expected move out */
     @NotNull
     IPrimitive<LogicalDate> maximum();
 }
