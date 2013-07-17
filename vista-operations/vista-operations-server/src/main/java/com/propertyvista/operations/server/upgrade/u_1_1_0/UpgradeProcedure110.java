@@ -42,6 +42,7 @@ import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.RefferenceDataPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayChangePolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 import com.propertyvista.server.jobs.TaskRunner;
 
@@ -51,7 +52,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 4;
+        return 5;
     }
 
     @Override
@@ -69,6 +70,8 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         case 4:
             upgradeOldArrearsGadget();
             break;
+        case 5:
+            addYardiInterfacePolicy();
         default:
             throw new IllegalArgumentException();
         }
@@ -174,6 +177,17 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
             ServerSideFactory.create(GadgetStorageFacade.class).delete(rawGadgetMetadata.identifierKey().getValue());
             ServerSideFactory.create(GadgetStorageFacade.class).save(upgradedGadgetMetadata, true);
         }
+    }
+
+    private void addYardiInterfacePolicy() {
+        YardiInterfacePolicyPreloader policyPreloader = new YardiInterfacePolicyPreloader();
+        OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
+        if (organizationNode == null) {
+            throw new UserRuntimeException("Organizational Policy Was not found");
+        }
+        policyPreloader.setTopNode(organizationNode);
+        String policyCreationLog = policyPreloader.create();
+        log.info("Added Yardi Interface Policy: " + policyCreationLog);
     }
 
 }

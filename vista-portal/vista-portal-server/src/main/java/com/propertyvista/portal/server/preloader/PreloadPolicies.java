@@ -32,6 +32,7 @@ import com.propertyvista.portal.server.preloader.policy.subpreloaders.PaymentMet
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.PreloadRestrictionsPolicies;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.ProductTaxPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.TenantInsurancePolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPoliciesPreloader;
 import com.propertyvista.portal.server.preloader.policy.util.OrganizationPoliciesNodePreloader;
 
@@ -48,6 +49,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new TenantInsurancePolicyPreloader());
         add(new PaymentMethodSelectionPolicyPreloader());
         add(new AutoPayChangePolicyPreloader());
+        add(new YardiInterfacePolicyPreloader());
 
         if (!VistaTODO.Equifax_Short_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
