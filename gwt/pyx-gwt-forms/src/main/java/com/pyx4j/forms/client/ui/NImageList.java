@@ -26,8 +26,8 @@ import java.util.List;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.IDebugId;
@@ -35,16 +35,20 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.CImageList.Type;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageHolder;
 import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport.Scale;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -60,14 +64,13 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
 
     private ImageHolder widget;
 
-    private ImageOrganizer organizer;
-
     protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
     public NImageList(CImageList<T> cComponent) {
         super(cComponent);
         imageFiles = new ArrayList<T>();
         imageUrls = new ArrayList<String>();
+        setWidth("250px");
     }
 
     @Override
@@ -111,22 +114,27 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
     }
 
     @Override
+    public void setNavigationCommand(Command navigationCommand) {
+        if (navigationCommand != null) {
+            super.setNavigationCommand(navigationCommand);
+        }
+    }
+
+    @Override
     public List<String> getImageUrls() {
         return imageUrls;
     }
 
     private ImageHolder createWidget() {
         if (widget == null) {
-            widget = new ImageHolder(new Dimension(250, 250), ImageHolder.Type.multiple, this);
-            organizer = new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons());
-            organizer.initContent();
+            widget = new ImageHolder(new Dimension(250, 250), this);
         }
         return widget;
     }
 
     @Override
     public void editImage() {
-        organizer.show();
+        new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
     }
 
     class ImageOrganizer extends CEntityFolder<T> {
@@ -139,10 +147,18 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
             super(imgClass);
             this.imgClass = imgClass;
             this.folderIcons = folderIcons;
+            initContent();
         }
 
         public void addNewImage() {
             addItem();
+        }
+
+        @SuppressWarnings("unchecked")
+        public void clear() {
+            for (CComponent<?> item : new ArrayList<CComponent<?>>(getComponents())) {
+                removeItem((CEntityFolderItem<T>) item);
+            }
         }
 
         public void show() {
@@ -154,14 +170,16 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
         public CComponent<?> create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
                 return new CEntityForm<T>(imgClass) {
-                    private final ImageViewport thumb = new ImageViewport(new Dimension(70, 70));
+                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbnailSize(), Scale.ScaleToFit);
 
                     @Override
                     public IsWidget createContent() {
-                        HorizontalPanel content = new HorizontalPanel();
-                        content.add(thumb);
+                        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
-                        content.add(getCComponent().getImageEntryView(this));
+                        content.setWidget(0, 0, thumb);
+                        thumb.getElement().getStyle().setProperty("border", "1px solid black");
+                        thumb.setImage(getCComponent().getThumbnailPlaceholder());
+                        content.setWidget(0, 1, getCComponent().getImageEntryView(this));
 
                         return content;
                     }
@@ -185,6 +203,9 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
             new FileUploadDialog<T>("Upload Image File", null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
                 @Override
                 public void onUploadComplete(T uploadResponse) {
+                    if (getCComponent().getType() == Type.single) {
+                        ImageOrganizer.this.clear();
+                    }
                     callback.onSuccess(uploadResponse);
                 }
             }).show();
@@ -244,12 +265,12 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
 
             @Override
             public String custom2Text() {
-                return "Save";
+                return i18n.tr("Save");
             }
 
             @Override
             public boolean onClickCustom2() {
-                NImageList.this.setNativeValue(organizer.getValue());
+                NImageList.this.setNativeValue(getValue());
                 createViewer().reset();
                 return true;
             }
@@ -262,12 +283,16 @@ public class NImageList<T extends IFile> extends NField<IList<T>, ImageHolder, C
 
             @Override
             public String custom1Text() {
-                return "Add New Image";
+                if (getCComponent().getType() == CImageList.Type.multiple || getCComponent().getValue() == null || getCComponent().getValue().size() == 0) {
+                    return i18n.tr("Add Image");
+                } else {
+                    return i18n.tr("Change Image");
+                }
             }
 
             @Override
             public boolean onClickCustom1() {
-                organizer.addNewImage();
+                addNewImage();
                 return false;
             }
 

@@ -7,6 +7,7 @@ import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.gwt.rpc.upload.UploadService;
+import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.gwt.shared.FileURLBuilder;
 
 /*
@@ -14,7 +15,13 @@ import com.pyx4j.gwt.shared.FileURLBuilder;
  */
 public abstract class CImageList<E extends IFile> extends CField<IList<E>, NImageList<E>> {
 
+    public enum Type {
+        single, multiple
+    }
+
     private Image placeholder;
+
+    private Dimension thumbSize;
 
     private FileURLBuilder<E> imageFileUrlBuilder;
 
@@ -24,13 +31,21 @@ public abstract class CImageList<E extends IFile> extends CField<IList<E>, NImag
 
     private final Class<E> imgClass;
 
-    public CImageList(Class<E> imgClass) {
+    private final Type type;
+
+    public CImageList(Class<E> imgClass, Type type) {
         this.imgClass = imgClass;
+        this.type = type;
+        this.thumbSize = new Dimension(160, 120);
         setNativeWidget(new NImageList<E>(this));
     }
 
     public Class<E> getImgClass() {
         return imgClass;
+    }
+
+    public Type getType() {
+        return type;
     }
 
     protected abstract EntityFolderImages getFolderIcons();
@@ -39,8 +54,20 @@ public abstract class CImageList<E extends IFile> extends CField<IList<E>, NImag
         return imageFileUrlBuilder.getUrl(file);
     }
 
-    public void setPlaceholderImage(Image placeholder) {
+    public void setThumbnailPlaceholder(Image placeholder) {
         this.placeholder = placeholder;
+    }
+
+    public Image getThumbnailPlaceholder() {
+        return placeholder;
+    }
+
+    public void setThumbnailSize(int width, int height) {
+        this.thumbSize = new Dimension(width, height);
+    }
+
+    public Dimension getThumbnailSize() {
+        return thumbSize;
     }
 
     public void setImageFileUrlBuilder(FileURLBuilder<E> fileURLBuilder) {

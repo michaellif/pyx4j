@@ -22,11 +22,13 @@ package com.pyx4j.tester.client.view.form;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CImageList;
+import com.pyx4j.forms.client.ui.CImageList.Type;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -58,7 +60,7 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
 //        cImage.setUploadService(GWT.<TFileUploadService> create(TFileUploadService.class));
 //        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().files(), cGallery)));
 
-        CImageList<TFile> cGallery = new CImageList<TFile>(TFile.class) {
+        CImageList<TFile> cGallery = new CImageList<TFile>(TFile.class, Type.multiple) {
             @Override
             public EntityFolderImages getFolderIcons() {
                 return Images.INSTANCE;
@@ -66,11 +68,10 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
 
             @Override
             public Widget getImageEntryView(CEntityForm<TFile> entryForm) {
-                TwoColumnFlexFormPanel infoPanel = new TwoColumnFlexFormPanel();
-                int row = -1;
-                infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())));
-                infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().caption())));
-                infoPanel.setWidget(++row, 0, new TesterWidgetDecorator(entryForm.inject(entryForm.proto().description())));
+                VerticalPanel infoPanel = new VerticalPanel();
+                infoPanel.add(new TesterWidgetDecorator(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())));
+                infoPanel.add(new TesterWidgetDecorator(entryForm.inject(entryForm.proto().caption())));
+                infoPanel.add(new TesterWidgetDecorator(entryForm.inject(entryForm.proto().description())));
                 return infoPanel;
             }
         };

@@ -290,6 +290,7 @@ public class Slideshow extends LayoutPanel {
         void reset() {
             itemActionList.clear();
             itemActionsHolder.clear();
+            setVisible(getItemCount() > 1);
             for (int i = 0; i < getItemCount(); i++) {
                 Action itemAction = new Action();
                 itemActionList.add(itemAction);

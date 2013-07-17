@@ -96,7 +96,7 @@ public class NImage<T extends IFile> extends NField<List<T>, ImageHolder, CImage
 
     private ImageHolder createWidget() {
         if (widget == null) {
-            widget = new ImageHolder(new Dimension(250, 250), ImageHolder.Type.multiple, this);
+            widget = new ImageHolder(new Dimension(250, 250), this);
         }
         return widget;
     }
