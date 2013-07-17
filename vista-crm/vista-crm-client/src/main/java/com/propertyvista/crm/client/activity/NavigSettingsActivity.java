@@ -88,8 +88,10 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Financial"));
         folder.addNavigItem(new CrmSiteMap.Administration.Financial.ARCode());
-        folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
-        folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
+            folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
+        }
         folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
         list.add(folder);
 
