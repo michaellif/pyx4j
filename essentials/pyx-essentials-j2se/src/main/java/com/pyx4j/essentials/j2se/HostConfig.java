@@ -95,17 +95,38 @@ public abstract class HostConfig {
         }
     }
 
+    public static String getLocalHostHardwareAddress() {
+        byte[] mac;
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            NetworkInterface itf = NetworkInterface.getByInetAddress(address);
+            mac = itf.getHardwareAddress();
+        } catch (IOException e) {
+            throw new Error("NetworkInterface not found", e);
+        }
+        StringBuilder macAddress = new StringBuilder();
+        for (byte b : mac) {
+            macAddress.append(String.valueOf(b));
+        }
+        return macAddress.toString();
+    }
+
     public static String getHardwareAddress() {
+        final boolean debug = false;
         try {
             Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
             TreeMap<String, byte[]> macByName = new TreeMap<String, byte[]>();
             while (en.hasMoreElements()) {
                 NetworkInterface itf = en.nextElement();
-                if (itf.isLoopback() || itf.isVirtual() || !itf.isUp() || itf.getName() == null) {
+                if (itf.isLoopback() || itf.isVirtual() || !itf.isUp() || (itf.getName() == null) || itf.isPointToPoint()) {
                     continue;
                 }
-                if (!itf.getName().startsWith("eth")) {
+                if (!itf.getName().startsWith("eth") || itf.getInterfaceAddresses().isEmpty()) {
                     continue;
+                }
+                if (debug) {
+                    System.out.println("NetworkInterface: " + itf.getName() + " " + macToString(itf.getHardwareAddress()) + " " + itf.getDisplayName());
+                    System.out.println("                  " + itf.getInterfaceAddresses());
                 }
                 byte[] mac = itf.getHardwareAddress();
                 macByName.put(itf.getName(), mac);
@@ -123,6 +144,16 @@ public abstract class HostConfig {
         } catch (IOException e) {
             throw new Error(e);
         }
+    }
+
+    static String macToString(byte[] mac) {
+        StringBuilder sb = new StringBuilder(18);
+        for (byte b : mac) {
+            if (sb.length() > 0)
+                sb.append(':');
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
     }
 
     public void setProxy(String proxyHost, String proxyPort) {
