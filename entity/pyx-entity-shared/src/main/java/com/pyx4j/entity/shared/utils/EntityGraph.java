@@ -125,6 +125,18 @@ public class EntityGraph {
         return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), new IObject<?>[0]);
     }
 
+    /**
+     * 
+     * @param ent1
+     *            entity1 to compare
+     * @param ent2
+     *            entity2 to compare
+     * @param ignoreValues
+     *            ignore values of selected members
+     * 
+     *            Example: EntityGraph.fullyEqualValues(origSchedule, updateSchedule, origSchedule.timestamp());
+     * @return
+     */
     public static boolean fullyEqualValues(IEntity ent1, IEntity ent2, IObject<?>... ignoreValues) {
         return fullyEqualValues(ent1, ent2, false, new HashSet<IEntity>(), ignoreValues);
     }
