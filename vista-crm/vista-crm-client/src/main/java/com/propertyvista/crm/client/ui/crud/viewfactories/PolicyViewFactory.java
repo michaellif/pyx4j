@@ -114,6 +114,12 @@ import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsur
 import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyListerViewImpl;
 import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyViewerView;
 import com.propertyvista.crm.client.ui.crud.policies.tenantinsurance.TenantInsurancePolicyViewerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyEditorView;
+import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyEditorViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyListerView;
+import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyListerViewImpl;
+import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyViewerView;
+import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyViewerViewImpl;
 
 public class PolicyViewFactory extends ViewFactoryBase {
     public static <E extends IEntity, T extends IPane> T instance(Class<T> type) {
@@ -232,8 +238,14 @@ public class PolicyViewFactory extends ViewFactoryBase {
                 map.put(type, new AutoPayChangePolicyViewerViewImpl());
             } else if (AutoPayChangePolicyEditorView.class.equals(type)) {
                 map.put(type, new AutoPayChangePolicyEditorViewImpl());
-            }
 
+            } else if (YardiInterfacePolicyListerView.class.equals(type)) {
+                map.put(type, new YardiInterfacePolicyListerViewImpl());
+            } else if (YardiInterfacePolicyViewerView.class.equals(type)) {
+                map.put(type, new YardiInterfacePolicyViewerViewImpl());
+            } else if (YardiInterfacePolicyEditorView.class.equals(type)) {
+                map.put(type, new YardiInterfacePolicyEditorViewImpl());
+            }
         }
         @SuppressWarnings("unchecked")
         T impl = (T) map.get(type);

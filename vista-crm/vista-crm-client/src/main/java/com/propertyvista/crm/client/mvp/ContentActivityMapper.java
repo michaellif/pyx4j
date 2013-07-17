@@ -213,6 +213,9 @@ import com.propertyvista.crm.client.activity.policies.restrictions.RestrictionsP
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.tenantinsurance.TenantInsurancePolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.yardiinterface.YardiInterfacePolicyViewerActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsEditorActivity;
 import com.propertyvista.crm.client.activity.profile.PmcPaymentMethodsViewerActivity;
 import com.propertyvista.crm.client.activity.reports.AutoPayChangesReportActivity;
@@ -1164,6 +1167,18 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         case viewer:
                             activity = new AutoPayChangePolicyViewerActivity(crudPlace);
+                            break;
+                        }
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.YardiInterface) {
+                        switch (crudPlace.getType()) {
+                        case lister:
+                            activity = new YardiInterfacePolicyListerActivity(crudPlace);
+                            break;
+                        case editor:
+                            activity = new YardiInterfacePolicyEditorActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new YardiInterfacePolicyViewerActivity(crudPlace);
                             break;
                         }
 // - Security          

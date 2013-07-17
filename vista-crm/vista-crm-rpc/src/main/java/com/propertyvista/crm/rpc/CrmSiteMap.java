@@ -518,6 +518,9 @@ public class CrmSiteMap implements SiteMap {
 
             public static class AutoPayChange extends CrmCrudAppPlace {
             }
+
+            public static class YardiInterface extends CrmCrudAppPlace {
+            }
         }
     }
 

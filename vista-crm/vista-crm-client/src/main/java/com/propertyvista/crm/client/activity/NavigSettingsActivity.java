@@ -133,6 +133,9 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.TenantInsurance());
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.AutoPayChange());
+        if (VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.YardiInterface());
+        }
         list.add(folder);
 
         return list;
