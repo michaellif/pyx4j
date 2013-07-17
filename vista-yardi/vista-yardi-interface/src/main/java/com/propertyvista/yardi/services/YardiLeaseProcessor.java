@@ -17,8 +17,10 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
@@ -44,16 +46,20 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.policy.policies.YardiInterfacePolicy;
+import com.propertyvista.domain.policy.policies.domain.YardiInterfacePolicyChargeCodeIgnore;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
+import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
 import com.propertyvista.yardi.mapper.TenantMapper;
 import com.propertyvista.yardi.merger.LeaseMerger;
 import com.propertyvista.yardi.merger.LeaseMerger.LeaseChargesMergeStatus;
@@ -254,17 +260,39 @@ public class YardiLeaseProcessor {
          */
         Map<String, Integer> chargeCodeItemsCount = new HashMap<String, Integer>();
 
+        // build ignored ChargeCode set
+        Set<String> ignoredCodes = new HashSet<String>();
+        try {
+            YardiInterfacePolicy yardiIfacePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(),
+                    YardiInterfacePolicy.class);
+            for (YardiInterfacePolicyChargeCodeIgnore policyItem : yardiIfacePolicy.ignoreChargeCodes()) {
+                log.debug("    Processing ChargeCodeIgnore entry: {}", policyItem.yardiChargeCode().getValue());
+                ignoredCodes.add(policyItem.yardiChargeCode().getValue());
+            }
+        } catch (PolicyNotFoundException e) {
+            // ignore
+        }
+
         for (Transactions tr : transactions) {
             if (tr == null || tr.getCharge() == null) {
                 continue;
             }
-            Integer chargeCodeItemNo = chargeCodeItemsCount.get(tr.getCharge().getDetail().getChargeCode());
+
+            String chargeCode = tr.getCharge().getDetail().getChargeCode();
+
+            // consult ignored codes
+            if (ignoredCodes.contains(chargeCode)) {
+                log.debug("    charge code ignored: {}", chargeCode);
+                continue;
+            }
+
+            Integer chargeCodeItemNo = chargeCodeItemsCount.get(chargeCode);
             if (chargeCodeItemNo == null) {
                 chargeCodeItemNo = 1;
             } else {
                 chargeCodeItemNo = chargeCodeItemNo + 1;
             }
-            chargeCodeItemsCount.put(tr.getCharge().getDetail().getChargeCode(), chargeCodeItemNo);
+            chargeCodeItemsCount.put(chargeCode, chargeCodeItemNo);
 
             newItems.add(createBillableItem(tr.getCharge().getDetail(), chargeCodeItemNo));
         }
