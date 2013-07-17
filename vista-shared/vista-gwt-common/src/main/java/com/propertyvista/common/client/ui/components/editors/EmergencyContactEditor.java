@@ -46,6 +46,8 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
 
+        main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+
         return main;
     }
 }
