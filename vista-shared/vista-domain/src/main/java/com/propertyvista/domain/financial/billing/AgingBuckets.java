@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -41,6 +42,7 @@ public interface AgingBuckets<SNAPSHOT extends ArrearsSnapshot<?>> extends IEnti
     @ReadOnly
     @Detached
     @JoinColumn
+    @Indexed
     SNAPSHOT arrearsSnapshot();
 
     IPrimitive<ARCode.Type> arCode();

@@ -179,6 +179,7 @@ public interface Lease extends IEntity {
 
     @NotNull
     @ToString(index = 2)
+    @Indexed
     AptUnit unit();
 
     /**

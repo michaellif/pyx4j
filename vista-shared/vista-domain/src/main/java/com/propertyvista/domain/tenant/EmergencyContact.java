@@ -14,6 +14,7 @@
 package com.propertyvista.domain.tenant;
 
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -32,6 +33,7 @@ public interface EmergencyContact extends Person {
     @MemberColumn(notNull = true)
     @Owner
     @JoinColumn
+    @Indexed
     Customer customer();
 
     @OrderColumn

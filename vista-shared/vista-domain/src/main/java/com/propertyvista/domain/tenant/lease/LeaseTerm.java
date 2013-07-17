@@ -20,6 +20,7 @@ import javax.xml.bind.annotation.XmlType;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
@@ -131,6 +132,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
     @ReadOnly
     @Detached
     @JoinColumn
+    @Indexed
     Lease lease();
 
     @OrderColumn

@@ -43,17 +43,16 @@ public interface BillingCycle extends IEntity {
     @MemberColumn(notNull = true)
     @Detached
     @JoinColumn
-    @Indexed(group = "DBT,2", uniqueConstraint = true)
+    @Indexed(group = "BD,1", uniqueConstraint = true)
     Building building();
 
     @ReadOnly
     @ToString(index = 1)
-    @Indexed(group = "DBT,3")
     BillingType billingType();
 
     // @Comment(name = "Start Day",description = "First day of the Billing Period within Payment Frequency")
     @ReadOnly
-    @Indexed(group = "DBT,1")
+    @Indexed(group = "BD,2")
     IPrimitive<LogicalDate> billingCycleStartDate();
 
     @ReadOnly
