@@ -54,6 +54,32 @@ BEGIN
         );
         
         ALTER TABLE custom_skin_resource_blob OWNER TO vista;
+        
+        -- yardi_interface_policy
+        
+        CREATE TABLE yardi_interface_policy
+        (
+                id                      BIGINT                  NOT NULL,
+                node_discriminator      VARCHAR(50),
+                node                    BIGINT,
+                updated                 TIMESTAMP,
+                        CONSTRAINT yardi_interface_policy_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE yardi_interface_policy OWNER TO vista;
+       
+       
+       -- yardi_interface_policy_charge_code_ignore
+       
+       CREATE TABLE yardi_interface_policy_charge_code_ignore
+       (
+                id                      BIGINT                  NOT NULL,
+                policy                  BIGINT                  NOT NULL,
+                yardi_charge_code       VARCHAR(500),
+                        CONSTRAINT yardi_interface_policy_charge_code_ignore_pk PRIMARY KEY(id)
+       );
+       
+       ALTER TABLE yardi_interface_policy_charge_code_ignore OWNER TO vista;
        
         /**
         ***     =====================================================================================================
@@ -84,7 +110,17 @@ BEGIN
         ***     =======================================================================================================
         **/
         
+        -- foreign keys
         
+        ALTER TABLE yardi_interface_policy_charge_code_ignore ADD CONSTRAINT yardi_interface_policy_charge_code_ignore_policy_fk FOREIGN KEY(policy) 
+                REFERENCES yardi_interface_policy(id)  DEFERRABLE INITIALLY DEFERRED;
+                
+        -- check constraints
+        
+        ALTER TABLE yardi_interface_policy ADD CONSTRAINT yardi_interface_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 
+                'OrganizationPoliciesNode', 'Unit_BuildingElement'));
+
         
        
         /**
