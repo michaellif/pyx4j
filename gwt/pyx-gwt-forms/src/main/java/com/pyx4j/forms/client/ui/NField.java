@@ -256,6 +256,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
             SimplePanel editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
+            editorHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             editorHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             editorHolder.setWidget(editor);
             add(editorHolder);
