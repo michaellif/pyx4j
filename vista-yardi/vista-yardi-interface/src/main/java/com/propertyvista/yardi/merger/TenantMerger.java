@@ -19,11 +19,9 @@ import java.util.List;
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.resident.RTCustomer;
 
-import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -55,34 +53,43 @@ public class TenantMerger {
 
     public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
         IList<LeaseTermTenant> tenants = term.version().tenants();
+
+        // calculate:
         List<String> existing = fromT(tenants);
         List<String> imported = fromC(yardiCustomers);
+
         List<String> removed = new ArrayList<String>(existing);
         removed.removeAll(imported);
+
         List<String> added = new ArrayList<String>(imported);
         added.removeAll(existing);
+
+        // process:
         for (String id : removed) {
-            LeaseTermTenant tenant = toT(tenants, id);
-            term.version().tenants().remove(tenant);
+            term.version().tenants().remove(toT(tenants, id));
         }
+
         for (String id : added) {
-            YardiCustomer customer = toC(yardiCustomers, id);
-            LeaseTermTenant tenant = new TenantMapper().map(customer, term.version().tenants());
-            term.version().tenants().add(tenant);
+            term.version().tenants().add(new TenantMapper().createTenant(toC(yardiCustomers, id), term.version().tenants()));
         }
+
         return term;
     }
 
-    public boolean isSameName(YardiCustomer customer, LeaseTermTenant tenant) {
-        return (CommonsStringUtils.equals(customer.getName().getFirstName(), tenant.leaseParticipant().customer().person().name().firstName().getValue()) && //
-        CommonsStringUtils.equals(customer.getName().getLastName(), tenant.leaseParticipant().customer().person().name().lastName().getValue()));
+    public void updateTenantsData(RTCustomer rtCustomer, Lease lease) {
+        for (YardiCustomer customer : rtCustomer.getCustomers().getCustomer()) {
+            for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
+                if (tenant.leaseParticipant().participantId().getValue().equals(customer.getCustomerID())) {
+                    Persistence.service().merge(new TenantMapper().mapCustomer(customer, tenant.leaseParticipant().customer()));
+                }
+            }
+        }
     }
 
     private List<String> fromT(List<LeaseTermTenant> tenants) {
         List<String> ids = new ArrayList<String>();
         for (LeaseTermTenant tenant : tenants) {
-            String id = tenant.leaseParticipant().participantId().getValue();
-            ids.add(id);
+            ids.add(tenant.leaseParticipant().participantId().getValue());
         }
         return ids;
     }
@@ -90,8 +97,7 @@ public class TenantMerger {
     private List<String> fromC(List<YardiCustomer> customers) {
         List<String> ids = new ArrayList<String>();
         for (YardiCustomer customer : customers) {
-            String id = customer.getCustomerID();
-            ids.add(id);
+            ids.add(customer.getCustomerID());
         }
         return ids;
     }
@@ -112,43 +118,5 @@ public class TenantMerger {
             }
         }
         return null;
-    }
-
-    public boolean isNamesChanged(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
-        for (YardiCustomer customer : yardiCustomers) {
-            boolean isChanged = true;
-
-            for (LeaseTermTenant tenant : tenants) {
-                if (isSameName(customer, tenant)) {
-                    isChanged = false;
-                    break;
-                }
-            }
-
-            if (isChanged) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void updateTenantNames(RTCustomer rtCustomer, Lease lease) {
-        List<LeaseTermTenant> tenants = lease.currentTerm().version().tenants();
-        if (new TenantMerger().isNamesChanged(rtCustomer.getCustomers().getCustomer(), tenants)) {
-            for (YardiCustomer yardiCustomer : rtCustomer.getCustomers().getCustomer()) {
-                for (LeaseTermTenant tenant : tenants) {
-                    if (tenant.leaseParticipant().participantId().getValue().equals(yardiCustomer.getCustomerID())
-                            && !new TenantMerger().isSameName(yardiCustomer, tenant)) {
-
-                        Customer cust = tenant.leaseParticipant().customer();
-
-                        cust.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
-                        cust.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
-
-                        Persistence.service().persist(cust);
-                    }
-                }
-            }
-        }
     }
 }

@@ -15,7 +15,6 @@ package com.propertyvista.yardi.mapper;
 
 import java.util.List;
 
-import com.yardi.entity.mits.Address;
 import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
 
@@ -29,11 +28,24 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class TenantMapper {
 
-    public LeaseTermTenant map(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
-        Customer customer = EntityFactory.create(Customer.class);
+    public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
+        LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
-// TODO translate plane string to our Name.Prefix enum:
-//        customer.person().name().namePrefix().setValue(yardiCustomer.getName().getNamePrefix());
+        tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, EntityFactory.create(Customer.class)));
+        tenant.leaseParticipant().participantId().setValue(yardiCustomer.getCustomerID());
+
+        if (yardiCustomer.getLease().isResponsibleForLease()) {
+            tenant.role().setValue(isApplicantExists(tenants) ? Role.CoApplicant : Role.Applicant);
+        } else {
+            tenant.role().setValue(Role.Dependent);
+        }
+
+        return tenant;
+    }
+
+    public Customer mapCustomer(YardiCustomer yardiCustomer, Customer customer) {
+        // TODO translate plane string to our Name.Prefix enum:
+//      customer.person().name().namePrefix().setValue(yardiCustomer.getName().getNamePrefix());
         customer.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
         customer.person().name().middleName().setValue(yardiCustomer.getName().getMiddleName());
         customer.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
@@ -62,53 +74,14 @@ public class TenantMapper {
             }
         }
 
-        for (Address address : yardiCustomer.getAddress()) {
-            switch (address.getType()) {
-            case BILLING:
-                break;
-            case CURRENT:
-                customer.person().email().setValue(address.getEmail());
-                break;
-            case FORWARDING:
-                break;
-            case LEGAL_NOTICE:
-                break;
-            case MAILING:
-                break;
-            case OTHER:
-                break;
-            case PREVIOUS:
-                break;
-            case PROPERTY:
-                break;
-            case SHIPPING:
-                break;
-            case TERMINATION_NOTICE:
-                break;
-            default:
-                break;
-            }
+        if (!yardiCustomer.getAddress().isEmpty()) {
+            setEmail(yardiCustomer.getAddress().get(0).getEmail(), customer);
         }
 
-// TODO - find somewhere...
-//        customer.person().birthDate().setValue(value);
+//TODO - find somewhere...
+//      customer.person().birthDate().setValue(value);
 
-        LeaseTermTenant tenantInLease = EntityFactory.create(LeaseTermTenant.class);
-
-        tenantInLease.leaseParticipant().customer().set(customer);
-        tenantInLease.leaseParticipant().participantId().setValue(yardiCustomer.getCustomerID());
-
-        if (yardiCustomer.getLease().isResponsibleForLease()) {
-            if (!isApplicantExists(tenants)) {
-                tenantInLease.role().setValue(Role.Applicant);
-            } else {
-                tenantInLease.role().setValue(Role.CoApplicant);
-            }
-        } else {
-            tenantInLease.role().setValue(Role.Dependent);
-        }
-
-        return tenantInLease;
+        return customer;
     }
 
     private boolean isApplicantExists(List<LeaseTermTenant> tenants) {
@@ -125,6 +98,12 @@ public class TenantMapper {
             to.setValue(phone.getPhoneNumber());
         } else {
             to.setValue(phone.getPhoneNumber() + " x" + phone.getExtension());
+        }
+    }
+
+    private void setEmail(String email, Customer customer) {
+        if (!customer.registeredInPortal().isBooleanTrue()) {
+            customer.person().email().setValue(email);
         }
     }
 }
