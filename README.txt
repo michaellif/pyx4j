@@ -2,10 +2,10 @@
 
 ========= Install Eclipse ==========
 
-1. Get: Eclipse SDK
-       eclipse-SDK-4.2.2-win32.zip or eclipse-SDK-4.4.4-win32-x86_64.zip
+1. Get: Latest Eclipse SDK
+      eclipse-standard-kepler-R-win32-x86_64.zip or eclipse-standard-kepler-R-win32.zip
 
-2. Unzip it to directory: eclipse-4.2.2   (Optionally)
+2. Unzip it to directory: eclipse-4.3.0   (Optionally)
 
 3. Create Shortcut, provide path to JDK (for example -vm "C:\My\Programs\Java\jdk1.7.0\bin\javaw.exe")
    Or full Target on Windows 32:
@@ -67,9 +67,9 @@ MAVEN_OPTS=-Xmx256M -XX:MaxPermSize=256m -Xss1024k -XX:ReservedCodeCacheSize=64m
     Star this bugs: http://code.google.com/p/googleappengine/issues/detail?id=3401
                     http://code.google.com/p/googleappengine/issues/detail?id=2282
 
-2. Download and unzip appengine-java-sdk-1.7.5.zip  http://googleappengine.googlecode.com/files/appengine-java-sdk-1.7.5.zip
+2. Download and unzip appengine-java-sdk-1.8.2.zip  http://googleappengine.googlecode.com/files/appengine-java-sdk-1.8.2.zip
 		from http://code.google.com/appengine/downloads.html
-3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.7.5  (or make NTFS link)
+3. Unzip GAE SDK to C:\3p-libs\gae\appengine-java-sdk-1.8.2  (or make NTFS link)
 4. Configure Eclipse -> Preferences -> Google -> App Engine to use SDK above!
 
 4. For heavy server side development use jrebel

@@ -121,8 +121,10 @@
         <timestamp>${maven.build.timestamp}</timestamp>
 
         <gwtVersion>2.5.1</gwtVersion>
-        <gaeVersion>1.7.5</gaeVersion>
+        <gaeVersion>1.8.2</gaeVersion>
+        <gaeVersion.kindleit.deploy>1.8.0</gaeVersion.kindleit.deploy>
         <gae.version>${gaeVersion}</gae.version>
+
 
         <jettyVersion>9.0.3.v20130506</jettyVersion>
 
@@ -680,7 +682,7 @@
                 <plugin>
                     <groupId>net.kindleit</groupId>
                     <artifactId>maven-gae-plugin</artifactId>
-                    <version>0.9.5</version>
+                    <version>0.9.6</version>
                     <configuration>
                         <serverId>${gaeDeployServerId}</serverId>
                         <sdkDir>${appengine.sdk.root}</sdkDir>
@@ -690,7 +692,7 @@
                         <dependency>
                             <groupId>net.kindleit</groupId>
                             <artifactId>gae-runtime</artifactId>
-                            <version>${gaeVersion}.1</version>
+                            <version>${gaeVersion.kindleit.deploy}</version>
                             <type>pom</type>
                         </dependency>
                     </dependencies>
