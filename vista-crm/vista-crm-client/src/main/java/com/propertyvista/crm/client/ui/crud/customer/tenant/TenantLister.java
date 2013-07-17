@@ -49,11 +49,15 @@ public class TenantLister extends AbstractLister<TenantDTO> {
             new Builder(proto().customer().person().mobilePhone(), false).build(),
             new Builder(proto().customer().person().workPhone(), false).build(),
             new Builder(proto().customer().person().email()).build(),
+            new Builder(proto().customer().registeredInPortal()).visible(false).build(),
             
             new Builder(proto().lease()).searchable(false).build(),
             new Builder(proto().lease().leaseId()).columnTitle(i18n.tr("Lease Id")).searchableOnly().build(),
             
-            new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).searchableOnly().build()
+            new Builder(proto().lease().unit().info().number()).columnTitle(i18n.tr("Unit #")).build(),
+            new Builder(proto().lease().unit().building().propertyCode()).visible(false).build(),
+            new Builder(proto().lease().unit().building().info().name()).visible(false).columnTitle(i18n.tr("Building Name")).build()
+            
         ); // @formatter:on
 
         addActionItem(padFileUpload = new Button(i18n.tr("Upload PAD File"), new Command() {
