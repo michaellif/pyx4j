@@ -83,11 +83,10 @@ public class Slideshow extends LayoutPanel {
         add(controlPanel);
         setWidgetHorizontalPosition(controlPanel, Alignment.END);
         setWidgetVerticalPosition(controlPanel, Alignment.END);
-
     }
 
     public void addItem(Widget widget) {
-        widget.setPixelSize(getOffsetWidth(), getOffsetHeight());
+//        widget.setPixelSize(getOffsetWidth(), getOffsetHeight());
         widget.setVisible(false);
         slides.add(widget);
         controlPanel.reset();

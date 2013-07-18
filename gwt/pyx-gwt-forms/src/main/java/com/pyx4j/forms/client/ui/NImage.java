@@ -23,31 +23,61 @@ package com.pyx4j.forms.client.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.ScrollPanel;
+
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IFile;
+import com.pyx4j.entity.shared.IList;
+import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.CImage.Type;
+import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
+import com.pyx4j.forms.client.ui.folder.CEntityFolder;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.IFolderDecorator;
+import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
+import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.gwt.client.upload.FileUploadDialog;
 import com.pyx4j.gwt.client.upload.FileUploadReciver;
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageHolder;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport.Scale;
+import com.pyx4j.widgets.client.dialog.CancelOption;
+import com.pyx4j.widgets.client.dialog.Custom1Option;
+import com.pyx4j.widgets.client.dialog.Custom2Option;
+import com.pyx4j.widgets.client.dialog.Dialog;
 
-public class NImage<T extends IFile> extends NField<List<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
+public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImage<T>, ImageHolder> implements ImageHolder.ImageDataProvider {
 
     private static final I18n i18n = I18n.get(NImage.class);
 
-    private final List<IFile> imageFiles;
+    private final List<T> imageFiles;
 
     private final List<String> imageUrls;
 
-    private ImageHolder widget;
+    private ImageHolder editor;
+
+    private ImageHolder viewer;
+
+    protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
     public NImage(CImage<T> cComponent) {
         super(cComponent);
-        imageFiles = new ArrayList<IFile>();
+        imageFiles = new ArrayList<T>();
         imageUrls = new ArrayList<String>();
     }
 
     @Override
-    public void setNativeValue(List<T> values) {
+    public void setNativeValue(IList<T> values) {
+        imageFiles.clear();
         imageUrls.clear();
         if (values != null) {
             for (T value : values) {
@@ -55,38 +85,39 @@ public class NImage<T extends IFile> extends NField<List<T>, ImageHolder, CImage
                 imageUrls.add(getCComponent().getImageUrl(value));
             }
         }
-        createWidget().reset();
+        if (isViewable()) {
+            viewer.reset();
+        } else {
+            editor.reset();
+        }
     }
 
     @Override
-    public List<T> getNativeValue() {
-        List<T> value = new ArrayList<T>();
-        for (IFile file : imageFiles) {
-            value.add(getCComponent().getNewValue(file));
-        }
-        return value;
+    public IList<T> getNativeValue() {
+        return null;
     }
 
     @Override
     protected ImageHolder createEditor() {
-        return createWidget();
-    }
-
-    @Override
-    protected void onEditorInit() {
-        super.onEditorInit();
-        widget.setEditable(true);
+        if (editor == null) {
+            editor = createWidget();
+        }
+        return editor;
     }
 
     @Override
     protected ImageHolder createViewer() {
-        return createWidget();
+        if (viewer == null) {
+            viewer = createWidget();
+        }
+        return viewer;
     }
 
     @Override
-    protected void onViewerInit() {
-        super.onViewerInit();
-        widget.setEditable(false);
+    public void setNavigationCommand(Command navigationCommand) {
+        if (navigationCommand != null) {
+            super.setNavigationCommand(navigationCommand);
+        }
     }
 
     @Override
@@ -95,26 +126,191 @@ public class NImage<T extends IFile> extends NField<List<T>, ImageHolder, CImage
     }
 
     private ImageHolder createWidget() {
-        if (widget == null) {
-            widget = new ImageHolder(new Dimension(250, 250), this);
+        Dimension imageSize = getCComponent().getImageSize();
+        return new ImageHolder(imageSize, this);
+    }
+
+    public void resizeToFit() {
+        Dimension imageSize = getCComponent().getImageSize();
+        if (viewer != null) {
+            viewer.setImageSize(imageSize.width, imageSize.height);
         }
-        return widget;
+        if (editor != null) {
+            editor.setImageSize(imageSize.width, imageSize.height);
+        }
     }
 
     @Override
     public void editImage() {
-        //TODO What is the best way customize title
-        new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
+        new ImageOrganizer(getCComponent().getImgClass(), getCComponent().getFolderIcons()).show();
+    }
+
+    class ImageOrganizer extends CEntityFolder<T> {
+
+        private final Class<T> imgClass;
+
+        private final EntityFolderImages folderIcons;
+
+        public ImageOrganizer(Class<T> imgClass, EntityFolderImages folderIcons) {
+            super(imgClass);
+            this.imgClass = imgClass;
+            this.folderIcons = folderIcons;
+            initContent();
+        }
+
+        public void addNewImage() {
+            addItem();
+        }
+
+        @SuppressWarnings("unchecked")
+        public void clear() {
+            for (CComponent<?> item : new ArrayList<CComponent<?>>(getComponents())) {
+                removeItem((CEntityFolderItem<T>) item);
+            }
+        }
+
+        public void show() {
+            setValue(getCComponent().getValue());
+            ((Dialog) getDecorator()).show();
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member.getObjectClass().equals(imgClass)) {
+                return new CEntityForm<T>(imgClass) {
+                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), Scale.ScaleToFit);
+
+                    @Override
+                    public IsWidget createContent() {
+                        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+
+                        content.setWidget(0, 0, thumb);
+                        thumb.setImage(getCComponent().getThumbnailPlaceholder());
+                        content.setWidget(0, 1, getCComponent().getImageEntryView(this));
+
+                        return content;
+                    }
+
+                    @Override
+                    protected void onValueSet(boolean populate) {
+                        super.onValueSet(populate);
+                        if (getValue() != null) {
+                            thumb.setUrl(getCComponent().getImageUrl(getValue()));
+                        }
+                    }
+
+                };
+            } else {
+                return factory.create(member);
+            }
+        }
+
+        @Override
+        protected void createNewEntity(final AsyncCallback<T> callback) {
+            new FileUploadDialog<T>(i18n.tr("Upload Image File"), null, getCComponent().getUploadService(), new FileUploadReciver<T>() {
+                @Override
+                public void onUploadComplete(T uploadResponse) {
+                    if (getCComponent().getType() == Type.single) {
+                        ImageOrganizer.this.clear();
+                    }
+                    callback.onSuccess(uploadResponse);
+                }
+            }).show();
+        }
+
+        @Override
+        protected IFolderItemDecorator<T> createItemDecorator() {
+            return new BoxFolderItemDecorator<T>(folderIcons);
+        }
+
+        @Override
+        protected IFolderDecorator<T> createFolderDecorator() {
+            return new Decorator();
+        }
+
+        class Decorator extends Dialog implements IFolderDecorator<T>, Custom1Option, Custom2Option, CancelOption {
+            private CEntityFolder<T> folder;
+
+            public Decorator() {
+                super(i18n.tr("Image Organizer"));
+                setDialogOptions(this);
+            }
 
             @Override
-            public void onUploadComplete(T uploadResponse) {
-                //TODO What is the best way to add to native value
-                List<T> value = new ArrayList<T>();
-                value.addAll(getNativeValue());
-                value.add(uploadResponse);
-                getCComponent().setValue(value);
+            public void onSetDebugId(IDebugId parentDebugId) {
+                // TODO Auto-generated method stub
             }
-        }).show();
 
+            @Override
+            public void onValueChange(ValueChangeEvent<IList<T>> event) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public HandlerRegistration addItemAddClickHandler(ClickHandler handler) {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public void setAddButtonVisible(boolean show) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void setComponent(CEntityFolder<T> folder) {
+                this.folder = folder;
+                ScrollPanel panel = new ScrollPanel();
+                panel.add(folder.getContainer());
+                panel.setHeight("500px");
+                setBody(panel);
+            }
+
+            @Override
+            public boolean onClickCancel() {
+                getCComponent().getValue().clear();
+                getCComponent().getValue().addAll(imageFiles);
+                return true;
+            }
+
+            @Override
+            public String custom2Text() {
+                return i18n.tr("Save");
+            }
+
+            @Override
+            public boolean onClickCustom2() {
+                NImage.this.setNativeValue(getValue());
+                createViewer().reset();
+                return true;
+            }
+
+            @Override
+            public IDebugId getCustom2DebugID() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+
+            @Override
+            public String custom1Text() {
+                if (getCComponent().getType() == CImage.Type.multiple || getCComponent().getValue() == null || getCComponent().getValue().size() == 0) {
+                    return i18n.tr("Add Image");
+                } else {
+                    return i18n.tr("Change Image");
+                }
+            }
+
+            @Override
+            public boolean onClickCustom1() {
+                addNewImage();
+                return false;
+            }
+
+            @Override
+            public IDebugId getCustom1DebugID() {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        }
     }
 }

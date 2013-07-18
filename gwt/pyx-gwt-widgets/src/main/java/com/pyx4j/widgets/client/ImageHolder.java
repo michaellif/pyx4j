@@ -35,12 +35,11 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.widgets.client.ImageHolder.ImageViewport.Scale;
 
-public class ImageHolder extends SimplePanel implements IWidget {
+public class ImageHolder extends LayoutPanel implements IWidget {
 
     public interface ImageDataProvider {
 
@@ -50,7 +49,7 @@ public class ImageHolder extends SimplePanel implements IWidget {
 
     }
 
-    private final Dimension dimension;
+    private Dimension imageSize;
 
     private final Slideshow slideshow;
 
@@ -61,16 +60,9 @@ public class ImageHolder extends SimplePanel implements IWidget {
     private final ImageDataProvider imageList;
 
     public ImageHolder(Dimension dimension, ImageDataProvider imageList) {
-        this.dimension = dimension;
+        this.imageSize = dimension;
         this.imageList = imageList;
-
-        LayoutPanel contentPanel = new LayoutPanel();
-
-        contentPanel.setPixelSize(dimension.width, dimension.height);
-
-        getElement().getStyle().setProperty("display", "inline-block");
-        getElement().getStyle().setProperty("padding", "5px");
-        getElement().getStyle().setProperty("border", "1px solid #999");
+        this.editable = false;
 
         slideshow = new Slideshow(0, false);
         editControl = new EditorControlPanel();
@@ -81,7 +73,7 @@ public class ImageHolder extends SimplePanel implements IWidget {
         addHandler(new MouseOverHandler() {
             @Override
             public void onMouseOver(MouseOverEvent event) {
-                editControl.setVisible(true);
+                editControl.setVisible(isEditable());
             }
         }, MouseOverEvent.getType());
         addHandler(new MouseOutHandler() {
@@ -91,17 +83,17 @@ public class ImageHolder extends SimplePanel implements IWidget {
             }
         }, MouseOutEvent.getType());
 
-        contentPanel.add(slideshow);
-        contentPanel.add(editControl);
-        contentPanel.setWidgetBottomHeight(editControl, 20, Unit.PCT, 40, Unit.PX);
+        add(slideshow);
+        add(editControl);
+        setWidgetBottomHeight(editControl, 20, Unit.PCT, 40, Unit.PX);
 
-        setWidget(contentPanel);
+        setPixelSize(imageSize.width, imageSize.height);
     }
 
     public void onModelChange() {
         slideshow.removeAllItems();
         for (String url : imageList.getImageUrls()) {
-            final ImageViewport imageViewport = new ImageViewport(dimension, Scale.ScaleToFill);
+            final ImageViewport imageViewport = new ImageViewport(imageSize, Scale.ScaleToFill);
             imageViewport.setUrl(url);
             slideshow.addItem(imageViewport);
         }
@@ -110,6 +102,12 @@ public class ImageHolder extends SimplePanel implements IWidget {
 
     public void reset() {
         onModelChange();
+    }
+
+    public void setImageSize(int width, int height) {
+        imageSize = new Dimension(width, height);
+        setPixelSize(imageSize.width, imageSize.height);
+        reset();
     }
 
     @Override
