@@ -36,7 +36,7 @@ SET search_path = '_admin_';
         -- check constraints
         
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
-
+        ALTER TABLE scheduler_run DROP CONSTRAINT scheduler_run_status_e_ck;
         
         /**
         ***     ======================================================================================================
@@ -95,7 +95,11 @@ SET search_path = '_admin_';
         **/
         
         -- check constraints
-       
+        
+        ALTER TABLE scheduler_run ADD CONSTRAINT scheduler_run_status_e_ck
+                CHECK (status IN ('Completed','Failed','PartiallyCompleted','Running','Sleeping','Terminated'));
+
+        
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 
                 'initializeFutureBillingCycles', 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 
