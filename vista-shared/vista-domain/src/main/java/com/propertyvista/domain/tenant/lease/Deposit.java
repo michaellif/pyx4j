@@ -21,6 +21,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -73,6 +74,7 @@ public interface Deposit extends IEntity {
     @ReadOnly
     @Detached
     @JoinColumn
+    @Indexed
     BillableItem billableItem();
 
     @OrderColumn
