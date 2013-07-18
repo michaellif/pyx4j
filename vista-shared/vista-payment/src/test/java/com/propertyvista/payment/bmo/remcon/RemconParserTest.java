@@ -18,16 +18,22 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
 public class RemconParserTest {
 
+    private static final Logger log = LoggerFactory.getLogger(RemconParserTest.class);
+
     RemconFile loadResource(String name) {
         IOUtils.resourceFileName(name, RemconParserTest.class);
         RemconParser parser = new RemconParser();
         parser.load(Thread.currentThread().getContextClassLoader().getResourceAsStream(IOUtils.resourceFileName(name, RemconParserTest.class)));
-        return parser.getRemconFile();
+        RemconFile remcon = parser.getRemconFile();
+        log.debug("RemconFile {} {}", name, remcon);
+        return remcon;
     }
 
     @Test

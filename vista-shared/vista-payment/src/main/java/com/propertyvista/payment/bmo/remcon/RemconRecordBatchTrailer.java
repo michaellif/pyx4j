@@ -13,6 +13,9 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 
 public class RemconRecordBatchTrailer implements RemconRecord {
@@ -98,4 +101,9 @@ public class RemconRecordBatchTrailer implements RemconRecord {
 
     @RemconField(value = 40, type = RemconFieldType.Filler)
     public String filler;
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }

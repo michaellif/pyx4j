@@ -16,6 +16,8 @@ package com.propertyvista.payment.bmo.remcon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.Validate;
+
 public class RemconFile {
 
     public List<RemconRecord> records = new ArrayList<RemconRecord>();
@@ -28,5 +30,44 @@ public class RemconFile {
             }
         }
         return detailRecords;
+    }
+
+    public void validateStructure() {
+        int totalFileAmount = 0;
+        {
+            RemconRecord headerRecord = records.get(0);
+            Validate.isTrue((headerRecord instanceof RemconRecordFileHeader), "Unexpected file header record type " + headerRecord.getClass().getSimpleName());
+            RemconRecordFileHeader header = (RemconRecordFileHeader) headerRecord;
+
+            RemconRecord trailerRecord = records.get(records.size() - 1);
+            Validate.isTrue((headerRecord instanceof RemconRecordFileTrailer), "Unexpected file trailer record type "
+                    + trailerRecord.getClass().getSimpleName());
+            RemconRecordFileTrailer trailer = (RemconRecordFileTrailer) trailerRecord;
+
+            Validate.isTrue(header.fileSerialNumber.equals(trailer.fileSerialNumber), "header/trailer fileSerialNumber mismatch");
+            Validate.isTrue(header.fileSerialDate.equals(trailer.fileSerialDate), "header/trailer fileSerialNumber mismatch");
+            Validate.isTrue(Integer.valueOf(trailer.recordCount) == records.size(), "records count mismatch");
+            totalFileAmount = Integer.valueOf(trailer.totalAmount);
+        }
+        int fileamount = 0;
+        for (RemconRecord record : records) {
+            if (record instanceof RemconRecordDetailRecord) {
+                int itemAmount = Integer.valueOf(((RemconRecordDetailRecord) record).itemAmount);
+
+                fileamount += itemAmount;
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        buf.append("{\n");
+        for (RemconRecord record : records) {
+            buf.append(record);
+            buf.append("\n");
+        }
+        buf.append("}");
+        return buf.toString();
     }
 }

@@ -13,6 +13,9 @@
  */
 package com.propertyvista.payment.bmo.remcon;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
+
 import com.propertyvista.payment.bmo.remcon.RemconField.RemconFieldType;
 
 public class RemconRecordFileTrailer implements RemconRecord {
@@ -22,9 +25,15 @@ public class RemconRecordFileTrailer implements RemconRecord {
         return '9';
     };
 
-    //Consists of File Serial date followed by File Serial number as defined under File Header
-    @RemconField(12)
-    public String fileSerial;
+    //In spec: fileSerial(12) Consists of File Serial date followed by File Serial number as defined under File Header
+    // We split to tow fileds
+    //Numeric; Date of system assigned file serial #
+    @RemconField(value = 6, type = RemconFieldType.DateYYMMDD)
+    public String fileSerialDate;
+
+    //Numeric; System assigned file serial #
+    @RemconField(6)
+    public String fileSerialNumber;
 
     //Total number of transaction records for the file, including trailers, headers and details
     @RemconField(10)
@@ -36,4 +45,9 @@ public class RemconRecordFileTrailer implements RemconRecord {
 
     @RemconField(value = 113, type = RemconFieldType.Filler)
     public String filler;
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+    }
 }
