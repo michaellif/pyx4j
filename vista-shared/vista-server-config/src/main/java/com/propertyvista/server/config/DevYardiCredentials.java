@@ -23,7 +23,7 @@ public class DevYardiCredentials {
         PmcYardiCredential cr = EntityFactory.create(PmcYardiCredential.class);
         // See http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Yardi
         if (true) {
-            cr.propertyCode().setValue("gran0002");
+            cr.propertyCode().setValue("gran0002, aven2175");
             cr.serviceURLBase().setValue("http://yardi.birchwoodsoftwaregroup.com/Voyager60");
             cr.username().setValue("vista_dev");
             cr.password().number().setValue("vista_dev");
