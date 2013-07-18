@@ -27,6 +27,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.adapters.EntityModificationAdapter;
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.adapters.PersistenceAdapter;
 
 public class AdapterFactory {
 
@@ -35,6 +36,8 @@ public class AdapterFactory {
     private static Map<Class<? extends MemberModificationAdapter<?>>, MemberModificationAdapter<?>> memberModificationAdapters;
 
     private static Map<Class<? extends EntityModificationAdapter<?>>, EntityModificationAdapter<?>> entityModificationAdapters;
+
+    private static Map<Class<? extends PersistenceAdapter<?, ?>>, PersistenceAdapter<?, ?>> persistenceAdapters;
 
     public static IndexAdapter<?> getIndexAdapter(Class<? extends IndexAdapter<?>> adapterClass) {
         IndexAdapter<?> adapter = null;
@@ -104,6 +107,30 @@ public class AdapterFactory {
                 }
             }
             entityModificationAdapters.put(adapterClass, adapter);
+        }
+        return adapter;
+    }
+
+    public static PersistenceAdapter<?, ?> getPersistenceAdapter(Class<? extends PersistenceAdapter<?, ?>> adapterClass) {
+        PersistenceAdapter<?, ?> adapter = null;
+        if (persistenceAdapters == null) {
+            persistenceAdapters = new HashMap<Class<? extends PersistenceAdapter<?, ?>>, PersistenceAdapter<?, ?>>();
+        } else {
+            adapter = persistenceAdapters.get(adapterClass);
+        }
+        if (adapter == null) {
+            if (adapterClass.isInterface()) {
+                adapter = ServerSideFactory.create(adapterClass);
+            } else {
+                try {
+                    adapter = adapterClass.newInstance();
+                } catch (InstantiationException e) {
+                    throw new Error(e);
+                } catch (IllegalAccessException e) {
+                    throw new Error(e);
+                }
+            }
+            persistenceAdapters.put(adapterClass, adapter);
         }
         return adapter;
     }

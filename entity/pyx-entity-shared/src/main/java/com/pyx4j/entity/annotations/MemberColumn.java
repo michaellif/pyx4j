@@ -27,6 +27,7 @@ import java.lang.annotation.Target;
 
 import com.pyx4j.entity.adapters.IndexAdapter;
 import com.pyx4j.entity.adapters.MemberModificationAdapter;
+import com.pyx4j.entity.adapters.PersistenceAdapter;
 
 @Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
@@ -39,6 +40,13 @@ public @interface MemberColumn {
      */
     boolean notNull() default false;
 
+    @SuppressWarnings("rawtypes")
+    Class<? extends PersistenceAdapter> persistenceAdapter() default PersistenceAdapter.class;
+
+    /**
+     * TODO Use Facade to for business value change events.
+     * TODO add Security adapters
+     */
     Class<? extends MemberModificationAdapter<?>>[] modificationAdapters() default {};
 
     @SuppressWarnings("rawtypes")
