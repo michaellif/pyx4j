@@ -942,6 +942,9 @@
                             <directory>${basedir}/war/test</directory>
                         </fileset>
                         <fileset>
+                            <directory>${basedir}/war/WEB-INF/deploy</directory>
+                        </fileset>
+                        <fileset>
                             <directory>${basedir}/war/WEB-INF/classes</directory>
                         </fileset>
                         <fileset>
