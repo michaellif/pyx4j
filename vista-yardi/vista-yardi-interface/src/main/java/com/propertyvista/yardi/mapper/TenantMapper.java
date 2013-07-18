@@ -19,8 +19,10 @@ import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -31,7 +33,12 @@ public class TenantMapper {
     public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
-        tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, EntityFactory.create(Customer.class)));
+        Customer customer = findCustomer(yardiCustomer);
+        if (customer == null) {
+            customer = EntityFactory.create(Customer.class);
+        }
+
+        tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, customer));
         tenant.leaseParticipant().participantId().setValue(yardiCustomer.getCustomerID());
 
         if (yardiCustomer.getLease().isResponsibleForLease()) {
@@ -43,6 +50,15 @@ public class TenantMapper {
         return tenant;
     }
 
+    private Customer findCustomer(YardiCustomer yardiCustomer) {
+        if (!yardiCustomer.getAddress().isEmpty() && CommonsStringUtils.isStringSet(yardiCustomer.getAddress().get(0).getEmail())) {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.eq(criteria.proto().person().email(), yardiCustomer.getAddress().get(0).getEmail().toLowerCase());
+            return Persistence.service().retrieve(criteria);
+        }
+        return null;
+    }
+
     public Customer mapCustomer(YardiCustomer yardiCustomer, Customer customer) {
         // TODO translate plane string to our Name.Prefix enum:
 //      customer.person().name().namePrefix().setValue(yardiCustomer.getName().getNamePrefix());
@@ -52,18 +68,25 @@ public class TenantMapper {
         customer.person().name().maidenName().setValue(yardiCustomer.getName().getMaidenName());
         customer.person().name().nameSuffix().setValue(yardiCustomer.getName().getNameSuffix());
 
+        // set Yardi's phone in case of initial import or corresponding Vista phone is not set:
         for (Phone phone : yardiCustomer.getPhone()) {
             switch (phone.getType()) {
             case CELL:
-                setPhone(phone, customer.person().mobilePhone());
+                if (customer.id().isNull() || customer.person().mobilePhone().isNull()) {
+                    setPhone(phone, customer.person().mobilePhone());
+                }
                 break;
             case FAX:
                 break;
             case HOME:
-                setPhone(phone, customer.person().homePhone());
+                if (customer.id().isNull() || customer.person().homePhone().isNull()) {
+                    setPhone(phone, customer.person().homePhone());
+                }
                 break;
             case OFFICE:
-                setPhone(phone, customer.person().workPhone());
+                if (customer.id().isNull() || customer.person().workPhone().isNull()) {
+                    setPhone(phone, customer.person().workPhone());
+                }
                 break;
             case OTHER:
                 break;
@@ -74,7 +97,8 @@ public class TenantMapper {
             }
         }
 
-        if (!yardiCustomer.getAddress().isEmpty()) {
+        // set Yardi's email just in case of initial import:
+        if (customer.id().isNull() && !yardiCustomer.getAddress().isEmpty()) {
             setEmail(yardiCustomer.getAddress().get(0).getEmail(), customer);
         }
 
