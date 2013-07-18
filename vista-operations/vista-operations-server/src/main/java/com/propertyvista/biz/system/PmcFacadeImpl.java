@@ -40,6 +40,7 @@ import com.propertyvista.operations.domain.scheduler.TriggerPmc;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 import com.propertyvista.portal.server.preloader.PmcCreator;
+import com.propertyvista.server.domain.security.GlobalCrmUserIndex;
 
 public class PmcFacadeImpl implements PmcFacade {
 
@@ -106,6 +107,12 @@ public class PmcFacadeImpl implements PmcFacade {
 
         {
             EntityQueryCriteria<TenantSureSubscribers> criteria = EntityQueryCriteria.create(TenantSureSubscribers.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            Persistence.service().delete(criteria);
+        }
+
+        {
+            EntityQueryCriteria<GlobalCrmUserIndex> criteria = EntityQueryCriteria.create(GlobalCrmUserIndex.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
             Persistence.service().delete(criteria);
         }
