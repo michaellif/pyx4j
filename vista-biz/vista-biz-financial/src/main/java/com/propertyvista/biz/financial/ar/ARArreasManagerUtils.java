@@ -15,11 +15,15 @@ package com.propertyvista.biz.financial.ar;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.EnumMap;
+import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
 
 public class ARArreasManagerUtils {
 
@@ -65,6 +69,39 @@ public class ARArreasManagerUtils {
         agingBuckets.totalBalance().setValue(zero);
 
         return agingBuckets;
+    }
+
+    public static boolean haveDifferentBucketValues(ArrearsSnapshot<?> a, ArrearsSnapshot<?> b) {
+        if (a.agingBuckets().size() != b.agingBuckets().size()) {
+            return true;
+        }
+
+        Map<ARCode.Type, AgingBuckets<?>> bucketsMapOfA = new EnumMap<ARCode.Type, AgingBuckets<?>>(ARCode.Type.class);
+
+        AgingBuckets<?> totalAgingBucketsOfA = null;
+        for (AgingBuckets<?> buckets : a.agingBuckets()) {
+            if (buckets.arCode().isNull()) {
+                totalAgingBucketsOfA = buckets;
+            } else {
+                bucketsMapOfA.put(buckets.arCode().getValue(), buckets);
+            }
+        }
+
+        // WARNING: in this comparison there's an assumption that total buckets (buckets that thave arType == null) are always present)
+        for (AgingBuckets<?> agingBucketsOfB : b.agingBuckets()) {
+            if (agingBucketsOfB.arCode().isNull()) {
+                if (!EntityGraph.fullyEqualValues(totalAgingBucketsOfA, agingBucketsOfB, agingBucketsOfB.arrearsSnapshot())) {
+                    return true;
+                }
+            } else {
+                AgingBuckets<?> agingBucketsOfA = bucketsMapOfA.get(agingBucketsOfB.arCode().getValue());
+                if (agingBucketsOfA == null || !EntityGraph.fullyEqualValues(agingBucketsOfA, agingBucketsOfB, agingBucketsOfB.arrearsSnapshot())) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 }

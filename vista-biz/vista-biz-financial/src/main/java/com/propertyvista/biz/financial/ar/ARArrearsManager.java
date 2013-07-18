@@ -35,7 +35,6 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -281,42 +280,8 @@ public class ARArrearsManager {
         return snapshot;
     }
 
-    private static boolean areDifferent(ArrearsSnapshot<?> currentSnapshot, ArrearsSnapshot<?> previousSnapshot) {
-        if (currentSnapshot.agingBuckets().size() != previousSnapshot.agingBuckets().size()) {
-            return true;
-        }
-
-        Map<ARCode.Type, AgingBuckets<?>> currentBuckets = new EnumMap<ARCode.Type, AgingBuckets<?>>(ARCode.Type.class);
-
-        AgingBuckets<?> curentTotalAgingBuckets = null;
-
-        for (AgingBuckets<?> buckets : currentSnapshot.agingBuckets()) {
-            if (buckets.arCode().isNull()) {
-                curentTotalAgingBuckets = buckets;
-            } else {
-                currentBuckets.put(buckets.arCode().getValue(), buckets);
-            }
-        }
-
-        // WARNING: in this comparison there's an assumption that total buckets (buckets that thave arType == null) are always present)
-        for (AgingBuckets<?> previous : previousSnapshot.agingBuckets()) {
-            if (previous.arCode().isNull()) {
-                if (!EntityGraph.fullyEqualValues(curentTotalAgingBuckets, previous)) {
-                    return true;
-                }
-            } else {
-                AgingBuckets<?> current = currentBuckets.get(previous.arCode().getValue());
-                if (current == null || !EntityGraph.fullyEqualValues(current, previous)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
     private static void persistIfChanged(ArrearsSnapshot<?> currentSnapshot, ArrearsSnapshot<?> previousSnapshot) {
-        if (previousSnapshot == null || areDifferent(currentSnapshot, previousSnapshot)) {
+        if (previousSnapshot == null || ARArreasManagerUtils.haveDifferentBucketValues(currentSnapshot, previousSnapshot)) {
             boolean isSameDaySnapshot = false;
 
             if (previousSnapshot != null) {

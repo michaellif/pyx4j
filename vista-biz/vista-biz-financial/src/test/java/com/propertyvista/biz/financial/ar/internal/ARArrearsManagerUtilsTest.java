@@ -14,13 +14,18 @@
 package com.propertyvista.biz.financial.ar.internal;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import junit.framework.TestCase;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
+import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.billing.AgingBuckets;
+import com.propertyvista.domain.financial.billing.LeaseAgingBuckets;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 
 public class ARArrearsManagerUtilsTest extends TestCase {
 
@@ -59,4 +64,146 @@ public class ARArrearsManagerUtilsTest extends TestCase {
         assertEquals(buckets1.totalBalance().getValue(), new BigDecimal("300000000.00"));
     }
 
+    public void testHaveDifference() {
+        {
+            LeaseArrearsSnapshot a1 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a1.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+            ));//@formatter:on
+            LeaseArrearsSnapshot b1 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b1.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+            ));//@formatter:on
+            assertFalse(ARArreasManagerUtils.haveDifferentBucketValues(a1, b1));
+        }
+
+        {
+            LeaseArrearsSnapshot a2 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a2.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+            ));//@formatter:on
+            LeaseArrearsSnapshot b2 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b2.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("2.00").build()
+            ));//@formatter:on
+            assertTrue(ARArreasManagerUtils.haveDifferentBucketValues(a2, b2));
+        }
+
+        {
+            LeaseArrearsSnapshot a3 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a3.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+            ));//@formatter:on
+            LeaseArrearsSnapshot b3 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b3.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+            ));//@formatter:on
+            assertTrue(ARArreasManagerUtils.haveDifferentBucketValues(a3, b3));
+        }
+
+        {
+            LeaseArrearsSnapshot a4 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a4.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+                    ));//@formatter:on
+            LeaseArrearsSnapshot b4 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b4.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+                    ));//@formatter:on
+            assertFalse(ARArreasManagerUtils.haveDifferentBucketValues(a4, b4));
+        }
+
+        {
+            LeaseArrearsSnapshot a5 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a5.billingAccount().setPrimaryKey(new Key(1));
+            a5.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+                    ));//@formatter:on
+            LeaseArrearsSnapshot b5 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b5.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+                    ));//@formatter:on
+            assertFalse(ARArreasManagerUtils.haveDifferentBucketValues(a5, b5));
+        }
+
+        {
+            LeaseArrearsSnapshot a7 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a7.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build()
+                    ));//@formatter:on
+            a7.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(1));
+            a7.agingBuckets().get(1).arrearsSnapshot().setPrimaryKey(new Key(1));
+            a7.agingBuckets().get(2).arrearsSnapshot().setPrimaryKey(new Key(1));
+            LeaseArrearsSnapshot b7 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b7.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build()
+                    ));//@formatter:on
+            b7.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(3));
+            b7.agingBuckets().get(1).arrearsSnapshot().setPrimaryKey(new Key(3));
+            b7.agingBuckets().get(2).arrearsSnapshot().setPrimaryKey(new Key(3));
+            assertFalse(ARArreasManagerUtils.haveDifferentBucketValues(a7, b7));
+        }
+
+        {
+            LeaseArrearsSnapshot a8 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a8.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build()
+                    ));//@formatter:on
+            a8.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(1));
+            a8.agingBuckets().get(1).arrearsSnapshot().setPrimaryKey(new Key(1));
+            a8.agingBuckets().get(2).arrearsSnapshot().setPrimaryKey(new Key(1));
+            LeaseArrearsSnapshot b8 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b8.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.Deposit).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build()
+                    ));//@formatter:on
+            b8.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(3));
+            b8.agingBuckets().get(1).arrearsSnapshot().setPrimaryKey(new Key(3));
+            b8.agingBuckets().get(2).arrearsSnapshot().setPrimaryKey(new Key(3));
+            assertTrue(ARArreasManagerUtils.haveDifferentBucketValues(a8, b8));
+        }
+
+        {
+            LeaseArrearsSnapshot a6 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            a6.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build()
+                    ));//@formatter:on
+            a6.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(1));
+            a6.agingBuckets().get(1).arrearsSnapshot().setPrimaryKey(new Key(1));
+            a6.agingBuckets().get(2).arrearsSnapshot().setPrimaryKey(new Key(1));
+            LeaseArrearsSnapshot b6 = EntityFactory.create(LeaseArrearsSnapshot.class);
+            b6.agingBuckets().addAll(Arrays.asList(//@formatter:off
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AccountCharge).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build(),                    
+                    new LeaseAgingBucketsBuilder().arCode(ARCode.Type.AddOn).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("5.00").build(),
+                    new LeaseAgingBucketsBuilder().arCode(null).m("1.00").b30("0.00").b60("0.00").b90("0.00").o90("0.00").t("1.00").build()
+                    ));//@formatter:on
+            b6.agingBuckets().get(0).arrearsSnapshot().setPrimaryKey(new Key(3));
+            b6.agingBuckets().get(1).arrearsSnapshot().setPrimaryKey(new Key(3));
+            b6.agingBuckets().get(2).arrearsSnapshot().setPrimaryKey(new Key(3));
+            assertFalse(ARArreasManagerUtils.haveDifferentBucketValues(a6, b6));
+        }
+
+    }
+
+    private static class LeaseAgingBucketsBuilder extends AgingBucketsBuilder<LeaseAgingBuckets> {
+
+        public LeaseAgingBucketsBuilder() {
+            super(LeaseAgingBuckets.class);
+        }
+
+    }
 }
