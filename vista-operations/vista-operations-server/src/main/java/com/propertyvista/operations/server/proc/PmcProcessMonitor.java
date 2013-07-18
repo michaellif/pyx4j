@@ -74,6 +74,10 @@ public class PmcProcessMonitor {
         pendingTerminationExecutions.remove(executionId.getPrimaryKey());
     }
 
+    public static boolean isRunning(Run executionId) {
+        return runningExecutions.containsKey(executionId.getPrimaryKey());
+    }
+
     public static void requestExecutionTermination(Run executionId) {
         pendingTerminationExecutions.add(executionId.getPrimaryKey());
         ProcessMonitorContext mc = runningExecutions.get(executionId.getPrimaryKey());

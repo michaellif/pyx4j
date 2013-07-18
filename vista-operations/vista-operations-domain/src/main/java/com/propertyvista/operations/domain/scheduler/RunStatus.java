@@ -23,6 +23,8 @@ public enum RunStatus implements Serializable {
 
     Running,
 
+    Terminated,
+
     Sleeping,
 
     Completed,
