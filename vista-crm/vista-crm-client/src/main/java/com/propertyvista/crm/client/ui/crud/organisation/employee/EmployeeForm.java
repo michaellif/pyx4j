@@ -93,7 +93,7 @@ public class EmployeeForm extends CrmEntityForm<EmployeeDTO> {
         get(proto().password()).setVisible(isNewEmployee());
         get(proto().passwordConfirm()).setVisible(isNewEmployee());
 
-        buildingsAccessPanel.setVisible(getValue().restrictAccessToSelectedBuildingsAndPortfolios().getValue());
+        buildingsAccessPanel.setVisible(getValue().restrictAccessToSelectedBuildingsAndPortfolios().getValue(false));
     }
 
     public void restrictSecurityRelatedControls(boolean isManager, boolean isSelfEditor) {
