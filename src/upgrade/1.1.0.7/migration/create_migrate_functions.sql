@@ -112,8 +112,8 @@ BEGIN
         -- billing_arrears_snapshot
         
         EXECUTE 'UPDATE '||v_schema_name||'.billing_arrears_snapshot '
-                ||'SET  from_date = (from_date_old - ''01-JAN-2000''::date),'
-                ||'     to_date = (to_date_old - ''01-JAN-2000''::date) ';
+                ||'SET  from_date = (from_date_old - ''01-JAN-1970''::date),'
+                ||'     to_date = (to_date_old - ''01-JAN-1970''::date) ';
                 
         SET CONSTRAINTS billing_arrears_snapshot_billing_account_fk, billing_arrears_snapshot_building_fk IMMEDIATE;
   
