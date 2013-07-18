@@ -32,7 +32,7 @@ public class PasswordStrengthWidget extends SimplePanel {
 
     private Label indicator;
 
-    private final PasswordStrengthRule rule;
+    private PasswordStrengthRule rule;
 
     public PasswordStrengthWidget(PasswordStrengthRule rule) {
         this.rule = rule;
@@ -71,6 +71,10 @@ public class PasswordStrengthWidget extends SimplePanel {
     }
 
     public void ratePassword(String password) {
-        this.setValue(rule.getPasswordVerdict(password));
+        this.setValue(rule != null ? rule.getPasswordVerdict(password) : null);
+    }
+
+    public void setPasswordStrengthRule(PasswordStrengthRule rule) {
+        this.rule = rule;
     }
 }

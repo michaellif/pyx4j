@@ -59,7 +59,7 @@ public interface PasswordChangeRequest extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.password)
-    @Caption(name = "New Password", description = "Password Guidelines:\n(1) Use 8 to 20 characters.\n(2) Don't use your name or email address.\n(3) Use a mix of lowercase and uppercase letters, numbers, and symbols.\n(4) Make your password hard to guess.")
+    @Caption(name = "New Password")
     @LogTransient
     IPrimitive<String> newPassword();
 
