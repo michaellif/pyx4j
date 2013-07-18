@@ -94,6 +94,7 @@ public class CEntityComboBox<E extends IEntity> extends CComboBox<E> implements 
     public CEntityComboBox(String title, Class<E> entityClass, NotInOptionsPolicy policy) {
         super(title, policy);
         this.criteria = new EntityQueryCriteria<E>(entityClass);
+        retriveOptions(null);
     }
 
     public E proto() {
