@@ -22,6 +22,7 @@ package com.pyx4j.forms.client.validators.password;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Set;
 
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -33,9 +34,9 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
 
     private static I18n i18n = I18n.get(PasswordStrengthValueValidator.class);
 
-    private final PasswordStrengthRule rule;
+    private PasswordStrengthRule rule;
 
-    private final Collection<PasswordStrengthVerdict> acceptVerdict;
+    private Collection<PasswordStrengthVerdict> acceptVerdict;
 
     public PasswordStrengthValueValidator(PasswordStrengthRule rule) {
         this(rule, EnumSet.of(PasswordStrengthVerdict.Fair, PasswordStrengthVerdict.Good, PasswordStrengthVerdict.Strong));
@@ -48,12 +49,23 @@ public class PasswordStrengthValueValidator implements EditableValueValidator<St
 
     @Override
     public ValidationError isValid(CComponent<String, ?> component, String value) {
+        if (rule == null) {
+            return null;
+        }
         PasswordStrengthVerdict verdict = rule.getPasswordVerdict(value);
-        if (acceptVerdict.contains(verdict)) {
+        if (acceptVerdict == null || acceptVerdict.contains(verdict)) {
             return null;
         } else {
             return new ValidationError(component, i18n.tr("Password is {0}", verdict));
         }
+    }
+
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
+        this.rule = passwordStrengthRule;
+    }
+
+    public void setAcceptedVerdicts(Set<PasswordStrengthVerdict> acceptedVerdicts) {
+        this.acceptVerdict = acceptedVerdicts;
     }
 
 }
