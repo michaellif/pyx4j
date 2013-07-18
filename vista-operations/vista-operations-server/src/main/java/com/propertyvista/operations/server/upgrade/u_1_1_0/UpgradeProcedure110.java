@@ -40,7 +40,7 @@ import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
-import com.propertyvista.portal.server.preloader.RefferenceDataPreloader;
+import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayChangePolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
@@ -150,7 +150,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
     private void createInternalMaintenancePreloadInNotExists() {
         EntityQueryCriteria<MaintenanceRequestCategory> criteria = new EntityQueryCriteria<MaintenanceRequestCategory>(MaintenanceRequestCategory.class);
         if (Persistence.service().count(criteria) == 0) {
-            new RefferenceDataPreloader().createInternalMaintenancePreload();
+            new ReferenceDataPreloader().createInternalMaintenancePreload();
         }
     }
 

@@ -32,9 +32,9 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase
 import com.propertyvista.domain.ref.PhoneProvider;
 import com.propertyvista.portal.server.preloader.ido.MaintenanceTreeImport;
 
-public class RefferenceDataPreloader extends AbstractDataPreloader {
+public class ReferenceDataPreloader extends AbstractDataPreloader {
 
-    public RefferenceDataPreloader() {
+    public ReferenceDataPreloader() {
 
     }
 
@@ -64,7 +64,7 @@ public class RefferenceDataPreloader extends AbstractDataPreloader {
         // create categories for each level
         MaintenanceRequestCategory root = createMaintenanceCategory("ROOT");
         List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
-                IOUtils.resourceFileName("maintenance-tree.csv", RefferenceDataPreloader.class));
+                IOUtils.resourceFileName("maintenance-tree.csv", ReferenceDataPreloader.class));
 
         Map<String, MaintenanceRequestCategory> categories = new HashMap<String, MaintenanceRequestCategory>();
         for (MaintenanceTreeImport row : data) {

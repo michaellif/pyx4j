@@ -41,24 +41,7 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
                 new MemberColumnDescriptor.Builder(proto.requestId()).build(),
                 new MemberColumnDescriptor.Builder(proto.building().propertyCode()).build(),
                 new MemberColumnDescriptor.Builder(proto.unit()).build(),
-                new ColumnDescriptor(proto.category().getPath().toString(), proto.category().getMeta().getCaption()) {
-                    @Override
-                    public String convert(IEntity entity) {
-                        if (entity instanceof MaintenanceRequestDTO) {
-                            // return slash-separated name list
-                            StringBuilder result = new StringBuilder();
-                            MaintenanceRequestCategory category = ((MaintenanceRequestDTO)entity).category();
-                            while (!category.parent().isNull()) {
-                                if (!category.name().isNull()) {
-                                    result.insert(0, result.length() > 0 ? "/" : "").insert(0, category.name().getValue());
-                                }
-                                category = category.parent();
-                            }
-                            return result.toString();
-                        }
-                        return super.convert(entity);
-                    }
-                },// @formatter:off
+                createCategoryColumn(proto),
                 new MemberColumnDescriptor.Builder(proto.priority()).build(),
                 new MemberColumnDescriptor.Builder(proto.summary()).build(),
                 new MemberColumnDescriptor.Builder(proto.reporterName()).searchable(false).build(),
@@ -69,12 +52,35 @@ public class MaintenanceRequestLister extends AbstractLister<MaintenanceRequestD
                 new MemberColumnDescriptor.Builder(proto.status()).build(),
                 new MemberColumnDescriptor.Builder(proto.updated()).build(),
                 new MemberColumnDescriptor.Builder(proto.surveyResponse().rating()).build(),
-                new MemberColumnDescriptor.Builder(proto.surveyResponse().description(), false).columnTitle(proto.surveyResponse().getMeta().getCaption()).build()
-        }; // @formatter:on
+                new MemberColumnDescriptor.Builder(proto.surveyResponse().description(), false).columnTitle(proto.surveyResponse().getMeta().getCaption())
+                        .build() };
     }
 
     @Override
     public List<Sort> getDefaultSorting() {
         return Arrays.asList(new Sort(proto().submitted().getPath().toString(), false), new Sort(proto().updated().getPath().toString(), false));
+    }
+
+    private static ColumnDescriptor createCategoryColumn(MaintenanceRequestDTO proto) {
+        ColumnDescriptor desc = new ColumnDescriptor(proto.category().getPath().toString(), proto.category().getMeta().getCaption()) {
+            @Override
+            public String convert(IEntity entity) {
+                if (entity instanceof MaintenanceRequestDTO) {
+                    // return slash-separated name list
+                    StringBuilder result = new StringBuilder();
+                    MaintenanceRequestCategory category = ((MaintenanceRequestDTO) entity).category();
+                    while (!category.parent().isNull()) {
+                        if (!category.name().isNull()) {
+                            result.insert(0, result.length() > 0 ? "/" : "").insert(0, category.name().getValue());
+                        }
+                        category = category.parent();
+                    }
+                    return result.toString();
+                }
+                return super.convert(entity);
+            }
+        };
+        desc.setSearchable(false); // do not use if for filtering!..
+        return desc;
     }
 }

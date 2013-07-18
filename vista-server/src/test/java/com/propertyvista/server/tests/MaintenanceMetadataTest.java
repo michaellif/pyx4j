@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.maintenance.MaintenanceMetadataAbstractManager.CategoryTree;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.portal.server.preloader.RefferenceDataPreloader;
+import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
 
 @Ignore
 public class MaintenanceMetadataTest extends VistaDBTestBase {
@@ -40,7 +40,7 @@ public class MaintenanceMetadataTest extends VistaDBTestBase {
         if (((EntityPersistenceServiceRDB) Persistence.service()).getDatabaseType() == DatabaseType.HSQLDB) {
             log.error("This test is intended for benchmarking on a real RDBMS - see VistaTestDBSetup#init()");
             // preload categories if needed
-            new RefferenceDataPreloader().createInternalMaintenancePreload();
+            new ReferenceDataPreloader().createInternalMaintenancePreload();
         }
         EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
         crit.add(PropertyCriterion.eq(crit.proto().name(), "ROOT"));

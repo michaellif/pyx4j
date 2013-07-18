@@ -41,7 +41,7 @@ public class VistaDataPreloaders extends DataPreloaderCollection {
         add(new CrmRolesPreloader());
         add(new PreloadPolicies(production));
         add(new DashboardPreloader());
-        add(new RefferenceDataPreloader());
+        add(new ReferenceDataPreloader());
 
         //DEMO Different data for different PMC
         DemoPmc demoPmc;
