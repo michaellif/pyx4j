@@ -34,6 +34,7 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.adapters.IndexAdapter;
+import com.pyx4j.entity.adapters.PersistenceAdapter;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.DiscriminatorValue;
 import com.pyx4j.entity.annotations.Indexed;
@@ -449,7 +450,18 @@ public class EntityOperationsMeta {
     }
 
     private ValueAdapter createValueAdapter(Dialect dialect, MemberMeta memberMeta) {
-        Class<?> valueClass = memberMeta.getValueClass();
+        MemberColumn memberColumn = memberMeta.getAnnotation(MemberColumn.class);
+        if ((memberColumn != null) && (memberColumn.persistenceAdapter() != null) && (memberColumn.persistenceAdapter() != PersistenceAdapter.class)) {
+            @SuppressWarnings("unchecked")
+            Class<? extends PersistenceAdapter<?, ?>> adapterClass = (Class<? extends PersistenceAdapter<?, ?>>) memberColumn.persistenceAdapter();
+            PersistenceAdapter<?, ?> adapter = AdapterFactory.getPersistenceAdapter(adapterClass);
+            return new ValueAdapterConvertion(createValueAdapter(dialect, adapter.getDatabaseType(), memberMeta), adapter);
+        } else {
+            return createValueAdapter(dialect, memberMeta.getValueClass(), memberMeta);
+        }
+    }
+
+    private ValueAdapter createValueAdapter(Dialect dialect, Class<?> valueClass, MemberMeta memberMeta) {
         if (valueClass.equals(String.class)) {
             return new ValueAdapterString(dialect, memberMeta);
         } else if (valueClass.equals(Double.class)) {

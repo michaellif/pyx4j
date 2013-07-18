@@ -29,7 +29,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 
 abstract class ValueAdapterPrimitive implements ValueAdapter {
 
-    private final Class<?> valueClass;
+    protected final Class<?> valueClass;
 
     protected int sqlType;
 
@@ -47,12 +47,12 @@ abstract class ValueAdapterPrimitive implements ValueAdapter {
 
     @Override
     public boolean isCompatibleType(Dialect dialect, String typeName, MemberOperationsMeta member, String columnName) {
-        return dialect.isCompatibleType(member.getMemberMeta().getValueClass(), member.getMemberMeta().getLength(), typeName);
+        return dialect.isCompatibleType(valueClass, member.getMemberMeta().getLength(), typeName);
     }
 
     @Override
     public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        sql.append(dialect.getSqlType(member.getMemberMeta().getValueClass(), member.getMemberMeta().getLength()));
+        sql.append(dialect.getSqlType(valueClass, member.getMemberMeta().getLength()));
     }
 
     @Override

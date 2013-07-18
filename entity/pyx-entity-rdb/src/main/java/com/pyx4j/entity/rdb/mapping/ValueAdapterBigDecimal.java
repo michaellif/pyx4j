@@ -37,7 +37,7 @@ class ValueAdapterBigDecimal extends ValueAdapterPrimitive {
 
     @Override
     public void appendColumnDefinition(StringBuilder sql, Dialect dialect, MemberOperationsMeta member, String columnName) {
-        sql.append(dialect.getSqlType(member.getMemberMeta().getValueClass(), member.getTypeConfiguration()));
+        sql.append(dialect.getSqlType(valueClass, member.getTypeConfiguration()));
     }
 
     @Override
