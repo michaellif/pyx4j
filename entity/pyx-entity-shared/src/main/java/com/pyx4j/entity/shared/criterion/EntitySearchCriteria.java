@@ -176,7 +176,6 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     // N.B. Do not use @Override for GWT to compile
     //@Override
-    @Override
     public Object clone() {
         EntitySearchCriteria<E> c = create(getEntityClass());
         c.setPageNumber(this.getPageNumber());
