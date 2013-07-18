@@ -17,12 +17,15 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.Inheritance.InheritanceStrategy;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
+
+import com.propertyvista.shared.adapters.LogicalDateAsIntegerPersistenceAdapter;
 
 @Table(prefix = "billing")
 @AbstractEntity
@@ -32,11 +35,13 @@ public interface ArrearsSnapshot<BUCKETS extends AgingBuckets<?>> extends IEntit
     /**
      * a date when this snapshot was taken
      */
+    @MemberColumn(persistenceAdapter = LogicalDateAsIntegerPersistenceAdapter.class)
     IPrimitive<LogicalDate> fromDate();
 
     /**
      * a last day when this snapshot was relevant (equals to OccupancyFacade.MAX_DATE for the most recent snapshot)
      */
+    @MemberColumn(persistenceAdapter = LogicalDateAsIntegerPersistenceAdapter.class)
     IPrimitive<LogicalDate> toDate();
 
     @Owned
