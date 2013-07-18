@@ -35,7 +35,7 @@ public class LogicalDateAsIntegerPersistenceAdapterImpl implements LogicalDateAs
         if (value == null) {
             return null;
         } else {
-            return (int) (value.getTime() / Consts.DAY2MSEC);
+            return (int) Math.ceil((1.0 * value.getTime()) / Consts.DAY2MSEC);
         }
     }
 
