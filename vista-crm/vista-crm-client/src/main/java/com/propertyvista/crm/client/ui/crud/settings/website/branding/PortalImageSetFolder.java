@@ -16,26 +16,34 @@ package com.propertyvista.crm.client.ui.crud.settings.website.branding;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
-import com.pyx4j.entity.shared.IFile;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CImage;
-import com.pyx4j.forms.client.ui.CImage.Type;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.gwt.shared.Dimension;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
+import com.propertyvista.crm.rpc.services.admin.SiteImageResourceUploadService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PortalImageSet;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -45,6 +53,10 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
 
     private final Set<AvailableLocale> usedLocales = new HashSet<AvailableLocale>();
 
+    private Dimension imageSize;
+
+    private Dimension thumbSize;
+
     public PortalImageSetFolder(boolean editable) {
         super(PortalImageSet.class, editable);
         this.addValueChangeHandler(new ValueChangeHandler<IList<PortalImageSet>>() {
@@ -53,6 +65,19 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
                 updateUsedLocales();
             }
         });
+    }
+
+    public void setImageSize(int width, int height) {
+        imageSize = new Dimension(width, height);
+        for (CComponent<?> comp : getComponents()) {
+            if (comp instanceof PortalImageSetEditor) {
+                ((PortalImageSetEditor) comp).setImageSize(width, height);
+            }
+        }
+    }
+
+    public void setThumbSize(int width, int height) {
+        thumbSize = new Dimension(width, height);
     }
 
     private void updateUsedLocales() {
@@ -84,15 +109,49 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof PortalImageSet) {
-            return new PortalImageSetEditor();
+            PortalImageSetEditor editor = new PortalImageSetEditor();
+            if (imageSize != null) {
+                editor.setImageSize(imageSize.width, imageSize.height);
+            }
+            if (thumbSize != null) {
+                editor.setThumbSize(thumbSize.width, thumbSize.height);
+            }
+            return editor;
         }
         return super.create(member);
     }
 
     class PortalImageSetEditor extends CEntityDecoratableForm<PortalImageSet> {
+        private final CImage<SiteImageResource> imageHolder;
 
         public PortalImageSetEditor() {
             super(PortalImageSet.class);
+            imageHolder = new CImage<SiteImageResource>(SiteImageResource.class, CImage.Type.multiple) {
+                @Override
+                protected EntityFolderImages getFolderIcons() {
+                    return VistaImages.INSTANCE;
+                }
+
+                @Override
+                public Widget getImageEntryView(CEntityForm<SiteImageResource> entryForm) {
+                    VerticalPanel infoPanel = new VerticalPanel();
+                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
+                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
+                    infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description())).build());
+                    return infoPanel;
+                }
+            };
+            imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
+            imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
+            imageHolder.setUploadService(GWT.<SiteImageResourceUploadService> create(SiteImageResourceUploadService.class));
+        }
+
+        public void setImageSize(int width, int height) {
+            imageHolder.setImageSize(width, height);
+        }
+
+        public void setThumbSize(int width, int height) {
+            imageHolder.setThumbSize(width, height);
         }
 
         @Override
@@ -102,22 +161,17 @@ public class PortalImageSetFolder extends VistaBoxFolder<PortalImageSet> {
             int row = -1;
             CEntityLabel<AvailableLocale> locale = new CEntityLabel<AvailableLocale>();
             locale.setEditable(false);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale(), locale), 10).build());
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().imageSet(), new CImage<SiteImageResource>(Type.multiple) {
-
-                @Override
-                public String getImageUrl(SiteImageResource file) {
-                    return MediaUtils.createSiteImageResourceUrl(file);
-                }
-
-                @Override
-                public SiteImageResource getNewValue(IFile file) {
-                    return null;
-                }
-            }), 20).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale(), locale), 10, true).build());
+            main.setWidget(++row, 0, 2, inject(proto().imageSet(), imageHolder));
 
             return main;
         }
     }
 
+    class ImageFileURLBuilder implements FileURLBuilder<SiteImageResource> {
+        @Override
+        public String getUrl(SiteImageResource file) {
+            return MediaUtils.createSiteImageResourceUrl(file);
+        }
+    }
 }

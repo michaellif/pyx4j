@@ -132,6 +132,9 @@ public class CrmTheme extends VistaTheme {
         initPmcSignatureFormStyles();
         initLegalTermsContentViewerStyles();
 
+        initPhotoalbomStyle();
+        initSlideshowActionStyle();
+
         initReportsStyles();
         initGadgetStyles();
     }
