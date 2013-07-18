@@ -110,13 +110,19 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
     }
 
     public EntitySearchCriteria<E> asc(IObject<?> member) {
-        return asc(member.getFieldName());
+        return sort(new Sort(member, false));
     }
 
+    @Deprecated
     public EntitySearchCriteria<E> asc(String propertyName) {
         return sort(new Sort(propertyName, false));
     }
 
+    public EntitySearchCriteria<E> desc(IObject<?> member) {
+        return sort(new Sort(member, true));
+    }
+
+    @Deprecated
     public EntitySearchCriteria<E> desc(String propertyName) {
         return sort(new Sort(propertyName, true));
     }
@@ -170,6 +176,7 @@ public class EntitySearchCriteria<E extends IEntity> implements Serializable, IH
 
     // N.B. Do not use @Override for GWT to compile
     //@Override
+    @Override
     public Object clone() {
         EntitySearchCriteria<E> c = create(getEntityClass());
         c.setPageNumber(this.getPageNumber());

@@ -61,6 +61,7 @@ public class EntityQueryCriteria<E extends IEntity> extends FiltersBuilder imple
 
         }
 
+        @Deprecated
         public Sort(String propertyPath, boolean descending) {
             this.propertyPath = propertyPath;
             this.descending = descending;
