@@ -34,9 +34,9 @@ public class AbstractPasswordResetActivity extends AbstractActivity implements P
 
     private static final I18n i18n = I18n.get(AbstractPasswordResetActivity.class);
 
-    private final PasswordResetView view;
+    protected final PasswordResetView view;
 
-    private final AbstractPasswordResetService service;
+    protected final AbstractPasswordResetService service;
 
     public AbstractPasswordResetActivity(Place place, PasswordResetView view, AbstractPasswordResetService service) {
         this.view = view;
@@ -76,4 +76,5 @@ public class AbstractPasswordResetActivity extends AbstractActivity implements P
         service.resetPassword(callback, request);
 
     }
+
 }

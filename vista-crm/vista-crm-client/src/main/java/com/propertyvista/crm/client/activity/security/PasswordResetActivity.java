@@ -14,7 +14,9 @@
 package com.propertyvista.crm.client.activity.security;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
@@ -29,4 +31,9 @@ public class PasswordResetActivity extends AbstractPasswordResetActivity impleme
         super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(CrmPasswordResetService.class));
     }
 
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setPasswordStrengthRule(new CrmUserPasswordRule());
+        super.start(panel, eventBus);
+    }
 }

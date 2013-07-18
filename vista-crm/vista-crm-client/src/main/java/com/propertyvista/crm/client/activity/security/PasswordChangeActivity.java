@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.activity.security;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -35,6 +37,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
@@ -43,7 +46,7 @@ import com.propertyvista.crm.rpc.services.security.CrmPasswordChangeUserService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
 
-    private final static I18n i18n = I18n.get(PasswordChangeActivity.class);
+    final static I18n i18n = I18n.get(PasswordChangeActivity.class);
 
     private final PasswordChangeView view;
 
@@ -78,12 +81,26 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
 
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
-        view.setAskForCurrentPassword(isSelfAdmin());
-        view.setAskForRequireChangePasswordOnNextSignIn(!isSelfAdmin());
-        if (isSelfAdmin()) {
-            view.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
-        } else {
-            view.setDictionary(Arrays.asList(userName));
+        if (principalClass == PrincipalClass.EMPLOYEE) {
+            view.setAskForCurrentPassword(isSelfAdmin());
+            view.setAskForRequireChangePasswordOnNextSignIn(!isSelfAdmin(), !isSelfAdmin() ? true : null, PasswordStrengthVerdict.Weak);
+            view.setEnforcedPasswordStrengths(!isSelfAdmin() ? null : EnumSet.of(PasswordStrengthVerdict.Fair, PasswordStrengthVerdict.Good,
+                    PasswordStrengthVerdict.Strong));
+            view.setMaskPassword(isSelfAdmin());
+            CrmUserPasswordRule strengthRule = new CrmUserPasswordRule();
+            if (isSelfAdmin()) {
+                strengthRule.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
+                view.setPasswordStrengthRule(strengthRule);
+            } else {
+                strengthRule.setDictionary(Arrays.asList(userName));
+                view.setPasswordStrengthRule(strengthRule);
+            }
+        } else if (principalClass == PrincipalClass.TENANT) {
+            view.setAskForCurrentPassword(false);
+            view.setAskForRequireChangePasswordOnNextSignIn(true, true, PasswordStrengthVerdict.Weak);
+            view.setEnforcedPasswordStrengths(null);
+            view.setMaskPassword(false);
+            view.setPasswordStrengthRule(new TenantPasswordStrengthRule(userName, null));
         }
         view.initialize(userPk, userName);
         panel.setWidget(view);

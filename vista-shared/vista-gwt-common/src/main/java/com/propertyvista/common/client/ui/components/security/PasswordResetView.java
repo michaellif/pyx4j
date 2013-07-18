@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.security;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
 
@@ -29,6 +30,8 @@ public interface PasswordResetView extends IsWidget {
     public void setPresenter(Presenter presenter);
 
     public void setQuestion(PasswordResetQuestion question);
+
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule);
 
     void reset();
 

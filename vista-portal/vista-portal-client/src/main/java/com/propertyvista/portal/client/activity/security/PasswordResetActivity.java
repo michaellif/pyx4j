@@ -14,12 +14,16 @@
 package com.propertyvista.portal.client.activity.security;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
+import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
 
@@ -29,4 +33,9 @@ public class PasswordResetActivity extends AbstractPasswordResetActivity {
         super(place, ResidentsViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class));
     }
 
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        view.setPasswordStrengthRule(new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
+        super.start(panel, eventBus);
+    }
 }

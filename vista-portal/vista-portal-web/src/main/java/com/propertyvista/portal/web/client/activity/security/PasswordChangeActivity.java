@@ -20,6 +20,7 @@ import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -45,7 +46,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         view.setAskForCurrentPassword(true);
-        view.setAskForRequireChangePasswordOnNextSignIn(false);
+        view.setAskForRequireChangePasswordOnNextSignIn(false, false, PasswordStrengthVerdict.Weak);
         view.initialize(ClientContext.getUserVisit().getPrincipalPrimaryKey(), null);
         panel.setWidget(view);
     }

@@ -14,7 +14,9 @@
 package com.propertyvista.field.client.activity.security;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
@@ -27,6 +29,11 @@ public class PasswordResetActivity extends AbstractPasswordResetActivity impleme
 
     public PasswordResetActivity(Place place) {
         super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(FieldPasswordResetService.class));
+    }
+
+    @Override
+    public void start(AcceptsOneWidget panel, EventBus eventBus) {
+        super.start(panel, eventBus);
     }
 
 }

@@ -13,10 +13,6 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -28,7 +24,8 @@ import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
-import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
+import com.pyx4j.forms.client.validators.password.HasDescription;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,14 +41,13 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
 
     private PasswordStrengthWidget passwordStrengthWidget;
 
-    private final DefaultPasswordStrengthRule passwordStrengthRule;
+    private PasswordStrengthRule passwordStrengthRule;
 
-    private List<String> dictionary;
+    private PasswordStrengthValueValidator passwordStrengthValidator;
 
-    public PasswordResetForm(List<String> dictionary) {
+    public PasswordResetForm(PasswordStrengthRule passwordStrengthRule) {
         super(PasswordChangeRequest.class);
-        this.passwordStrengthRule = new DefaultPasswordStrengthRule();
-        setDictionary(dictionary);
+        this.passwordStrengthRule = passwordStrengthRule;
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
         asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
         asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
@@ -115,23 +111,23 @@ public class PasswordResetForm extends CEntityDecoratableForm<PasswordChangeRequ
             }
         });
 
-        get(proto().newPassword()).addValueValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+        get(proto().newPassword()).addValueValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
-    public void setDictionary(List<String> dictionary) {
-        if (dictionary != null) {
-            this.dictionary = new ArrayList<String>(dictionary);
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
+        this.passwordStrengthRule = passwordStrengthRule;
+        passwordStrengthWidget.setPasswordStrengthRule(passwordStrengthRule);
+        passwordStrengthValidator.setPasswordStrengthRule(passwordStrengthRule);
+        if (passwordStrengthRule != null && (passwordStrengthRule instanceof HasDescription)) {
+            get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
         } else {
-            this.dictionary = Collections.emptyList();
+            get(proto().newPassword()).setTooltip(null);
         }
-        passwordStrengthRule.setDictionary(this.dictionary);
     }
 
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
-        passwordStrengthRule.setDictionary(dictionary);
     }
 
 }

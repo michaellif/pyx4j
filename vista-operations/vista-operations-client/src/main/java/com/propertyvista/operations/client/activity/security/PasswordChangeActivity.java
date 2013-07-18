@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client.activity.security;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
@@ -24,6 +25,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.Key;
+import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -76,12 +79,17 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setAskForCurrentPassword(isSelfAdmin());
-        view.setAskForRequireChangePasswordOnNextSignIn(!isSelfAdmin());
+        view.setAskForRequireChangePasswordOnNextSignIn(!isSelfAdmin(), !isSelfAdmin() ? true : null, PasswordStrengthVerdict.Weak);
+        view.setEnforcedPasswordStrengths(!isSelfAdmin() ? null : EnumSet.of(PasswordStrengthVerdict.Fair, PasswordStrengthVerdict.Good,
+                PasswordStrengthVerdict.Strong));
+        view.setMaskPassword(isSelfAdmin());
+        DefaultPasswordStrengthRule strengthRule = new DefaultPasswordStrengthRule();
         if (isSelfAdmin()) {
-            view.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
+            strengthRule.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
         } else {
-            view.setDictionary(Arrays.asList(userName));
+            strengthRule.setDictionary(Arrays.asList(userName));
         }
+        view.setPasswordStrengthRule(strengthRule);
         view.initialize(userPk, userName);
         panel.setWidget(view);
     }

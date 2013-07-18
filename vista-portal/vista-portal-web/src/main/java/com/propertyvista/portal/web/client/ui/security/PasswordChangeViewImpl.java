@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.security;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -33,6 +33,8 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.Anchor;
@@ -141,13 +143,26 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     }
 
     @Override
-    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired) {
+    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired, Boolean requireChangePasswordOnNextSignIn,
+            PasswordStrengthVerdict enforcedStrenthThreshold) {
+        // TODO migrate the form
         form.setAskForRequireChangePasswordOnNextSignIn(isRequireChangePasswordOnNextSignInRequired);
     }
 
     @Override
-    public void setDictionary(List<String> dictionary) {
-        form.setDictionary(dictionary);
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
+        // TODO migrate the form
+    }
+
+    @Override
+    public void setMaskPassword(boolean maskPassword) {
+        // TODO Auto-generated method stub        
+    }
+
+    @Override
+    public void setEnforcedPasswordStrengths(Set<PasswordStrengthVerdict> validPasswordStrengths) {
+        // TODO Auto-generated method stub
+
     }
 
 }

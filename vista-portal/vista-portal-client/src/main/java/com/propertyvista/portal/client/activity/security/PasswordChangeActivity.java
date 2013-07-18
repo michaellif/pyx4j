@@ -28,6 +28,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 
@@ -45,7 +46,9 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setPresenter(this);
         view.setAskForCurrentPassword(true);
-        view.setAskForRequireChangePasswordOnNextSignIn(false);
+        view.setAskForRequireChangePasswordOnNextSignIn(false, null, null);
+        view.setMaskPassword(true);
+        view.setPasswordStrengthRule(new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
         view.initialize(ClientContext.getUserVisit().getPrincipalPrimaryKey(), null);
         panel.setWidget(view);
     }

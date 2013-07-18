@@ -13,11 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 
 public interface PasswordChangeView extends IsWidget {
@@ -53,7 +54,32 @@ public interface PasswordChangeView extends IsWidget {
 
     void setAskForCurrentPassword(boolean isCurrentPasswordRequired);
 
-    void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired);
+    /**
+     * @param maskPassword
+     *            enables masking of the password and password confirm field
+     */
+    void setMaskPassword(boolean maskPassword);
 
-    void setDictionary(List<String> dictionary);
+    /**
+     * Display UI that allows to set up require to change password flag.
+     * 
+     * @param isRequireChangePasswordOnNextSignInRequired
+     *            display the UI Display UI that allows to set up require to change password flag
+     * @param requireChangePasswordOnNextSignIn
+     *            use this to set the value of the flag or pass <code>null</code> to leave this value unchanged
+     * @param enforcedStrenthThreshold
+     *            when not <code>null</code>, the password strength that less or equal this value will force the 'Require to change password on next log in
+     *            flag'
+     */
+    void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired, Boolean requireChangePasswordOnNextSignIn,
+            PasswordStrengthRule.PasswordStrengthVerdict enforcedStrenthThreshold);
+
+    void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule);
+
+    /**
+     * @param validPasswordStrengths
+     *            set this value to require validation of password by strength, pass the
+     */
+    void setEnforcedPasswordStrengths(Set<PasswordStrengthRule.PasswordStrengthVerdict> validPasswordStrengths);
+
 }

@@ -20,6 +20,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import com.pyx4j.essentials.client.crud.CrudDebugId;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
 
@@ -73,6 +74,11 @@ public class PasswordResetViewImpl extends VerticalPanel implements PasswordRese
             form.get(form.proto().securityQuestion()).setVisible(false);
             form.get(form.proto().securityAnswer()).setVisible(false);
         }
+    }
+
+    @Override
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
+        form.setPasswordStrengthRule(passwordStrengthRule);
     }
 
     @Override

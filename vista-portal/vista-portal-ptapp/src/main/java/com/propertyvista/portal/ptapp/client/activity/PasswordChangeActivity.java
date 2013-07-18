@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.ptapp.client.activity;
 
-import java.util.Arrays;
-
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -31,6 +29,7 @@ import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.PtAppViewFactory;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 
@@ -48,8 +47,9 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     @Override
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         view.setAskForCurrentPassword(false);
-        view.setAskForRequireChangePasswordOnNextSignIn(true);
-        view.setDictionary(Arrays.asList(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getEmail()));
+        view.setAskForRequireChangePasswordOnNextSignIn(false, null, null);
+        view.setPasswordStrengthRule(new TenantPasswordStrengthRule(ClientContext.getUserVisit().getName(), ClientContext.getUserVisit().getName()));
+
         view.initialize(ClientContext.getUserVisit().getPrincipalPrimaryKey(), null);
         panel.setWidget(view);
     }

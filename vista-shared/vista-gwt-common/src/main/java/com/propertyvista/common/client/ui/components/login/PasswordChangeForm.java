@@ -13,9 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -23,12 +22,18 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.events.NValueChangeEvent;
 import com.pyx4j.forms.client.events.NValueChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CPasswordTextField;
+import com.pyx4j.forms.client.ui.CTextField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.NTextFieldBase;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.password.DefaultPasswordStrengthRule;
+import com.pyx4j.forms.client.validators.password.HasDescription;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthValueValidator;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthWidget;
 import com.pyx4j.i18n.shared.I18n;
@@ -44,20 +49,29 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
 
     private PasswordStrengthWidget passwordStrengthWidget;
 
-    private final DefaultPasswordStrengthRule passwordStrengthRule;
+    private PasswordStrengthRule passwordStrengthRule;
 
     private boolean isCurrentPasswordRequired;
 
     private boolean isRequireChangePasswordOnNextSignInRequired;
 
-    private List<String> dictionary;
+    private PasswordStrengthValueValidator passwordStrengthValidator;
+
+    private PasswordStrengthVerdict enforceRequireChangePasswordThreshold;
+
+    protected Boolean requireChangePasswordOnNextSignInUserDefinedValue;
+
+    private int newPasswordFieldRow;
+
+    private TwoColumnFlexFormPanel mainPanel;
+
+    private NValueChangeHandler<String> passwordValueChangeHandler;
 
     public PasswordChangeForm(List<String> dictionary, boolean isCurrentPasswordRequired, boolean isRequireChangePasswordOnNextSignInRequired) {
         super(PasswordChangeRequest.class);
         this.passwordStrengthRule = new DefaultPasswordStrengthRule();
         this.isCurrentPasswordRequired = isCurrentPasswordRequired;
         this.isRequireChangePasswordOnNextSignInRequired = isRequireChangePasswordOnNextSignInRequired;
-        setDictionary(dictionary);
         asWidget().setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
         asWidget().getElement().getStyle().setMarginTop(50, Unit.PX);
         asWidget().getElement().getStyle().setMarginBottom(50, Unit.PX);
@@ -71,23 +85,24 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
     @Override
     public IsWidget createContent() {
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-        main.setWidth("40em");
-        main.setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
+        mainPanel = new TwoColumnFlexFormPanel();
+        mainPanel.setWidth("40em");
+        mainPanel.setStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name(), true);
 
         int row = -1;
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
-        main.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().currentPassword())).componentWidth(15).labelWidth(15).build());
+        mainPanel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1., Unit.EM);
 
         passwordStrengthWidget = new PasswordStrengthWidget(passwordStrengthRule);
-        main.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15).assistantWidget(passwordStrengthWidget).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
+        mainPanel.setWidget(newPasswordFieldRow = ++row, 0, 2, new FormDecoratorBuilder(inject(proto().newPassword())).componentWidth(15).labelWidth(15)
+                .assistantWidget(passwordStrengthWidget).build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().newPasswordConfirm())).componentWidth(15).labelWidth(15).build());
 
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15).build());
+        mainPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requireChangePasswordOnNextSignIn())).componentWidth(15).labelWidth(15)
+                .build());
 
-        return main;
+        return mainPanel;
     }
 
     @Override
@@ -105,15 +120,25 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
 
         get(proto().newPassword()).addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
 
-        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(new NValueChangeHandler<String>() {
-
+        ((CTextFieldBase<?, ?>) get(proto().newPassword())).addNValueChangeHandler(passwordValueChangeHandler = new NValueChangeHandler<String>() {
             @Override
             public void onNValueChange(NValueChangeEvent<String> event) {
                 passwordStrengthWidget.ratePassword(event.getValue());
+                if (event.getValue() != null && enforceRequireChangePasswordThreshold != null && passwordStrengthRule != null) {
+                    PasswordStrengthVerdict verdict = passwordStrengthRule.getPasswordVerdict(event.getValue());
+                    if (verdict != null && verdict.compareTo(enforceRequireChangePasswordThreshold) <= 0) {
+                        requireChangePasswordOnNextSignInUserDefinedValue = get(proto().requireChangePasswordOnNextSignIn()).getValue();
+                        get(proto().requireChangePasswordOnNextSignIn()).setValue(true);
+                        get(proto().requireChangePasswordOnNextSignIn()).setEnabled(false);
+                    } else {
+                        get(proto().requireChangePasswordOnNextSignIn()).setValue(requireChangePasswordOnNextSignInUserDefinedValue);
+                        get(proto().requireChangePasswordOnNextSignIn()).setEnabled(true);
+                    }
+                }
             }
         });
 
-        get(proto().newPassword()).addValueValidator(new PasswordStrengthValueValidator(passwordStrengthRule));
+        get(proto().newPassword()).addValueValidator(passwordStrengthValidator = new PasswordStrengthValueValidator(passwordStrengthRule));
     }
 
     public void setAskForCurrentPassword(boolean isCurrentPasswordRequired) {
@@ -121,18 +146,18 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
         get(proto().currentPassword()).setVisible(this.isCurrentPasswordRequired);
     }
 
-    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired) {
+    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired, Boolean requirePasswordChangeOnNextSignIn,
+            PasswordStrengthVerdict enforceRequireChangePasswordThreshold) {
         this.isRequireChangePasswordOnNextSignInRequired = isRequireChangePasswordOnNextSignInRequired;
-        get(proto().requireChangePasswordOnNextSignIn()).setVisible(this.isRequireChangePasswordOnNextSignInRequired);
-    }
+        this.enforceRequireChangePasswordThreshold = enforceRequireChangePasswordThreshold;
 
-    public void setDictionary(List<String> dictionary) {
-        if (dictionary != null) {
-            this.dictionary = new ArrayList<String>(dictionary);
-        } else {
-            this.dictionary = Collections.emptyList();
+        if (requirePasswordChangeOnNextSignIn != null && isRequireChangePasswordOnNextSignInRequired) {
+            get(proto().requireChangePasswordOnNextSignIn()).setValue(requirePasswordChangeOnNextSignIn);
+            this.requireChangePasswordOnNextSignInUserDefinedValue = requirePasswordChangeOnNextSignIn;
         }
-        passwordStrengthRule.setDictionary(this.dictionary);
+        get(proto().requireChangePasswordOnNextSignIn()).setVisible(this.isRequireChangePasswordOnNextSignInRequired);
+        get(proto().requireChangePasswordOnNextSignIn()).setEnabled(this.isRequireChangePasswordOnNextSignInRequired);
+
     }
 
     @Override
@@ -142,7 +167,37 @@ public class PasswordChangeForm extends CEntityDecoratableForm<PasswordChangeReq
         get(proto().currentPassword()).setVisible(isCurrentPasswordRequired);
         get(proto().requireChangePasswordOnNextSignIn()).setVisible(isRequireChangePasswordOnNextSignInRequired);
 
-        passwordStrengthRule.setDictionary(dictionary);
+    }
+
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
+        this.passwordStrengthRule = passwordStrengthRule;
+        this.passwordStrengthValidator.setPasswordStrengthRule(passwordStrengthRule);
+        this.passwordStrengthWidget.setPasswordStrengthRule(passwordStrengthRule);
+
+        if ((passwordStrengthRule != null) && (passwordStrengthRule instanceof HasDescription)) {
+            get(proto().newPassword()).setTooltip(((HasDescription) passwordStrengthRule).getDescription());
+        } else {
+            get(proto().newPassword()).setTooltip(null);
+        }
+
+    }
+
+    public void setEnforcedPasswordStrengths(Set<PasswordStrengthVerdict> validPasswordStrengths) {
+        this.passwordStrengthValidator.setAcceptedVerdicts(validPasswordStrengths);
+    }
+
+    public void setMaskPassword(boolean maskPassword) {
+        get(proto().newPasswordConfirm()).setVisible(maskPassword);
+        unbind(proto().newPassword());
+        CTextFieldBase<String, ? extends NTextFieldBase<String, ?, CTextFieldBase<String, ?>>> c = maskPassword ? new CPasswordTextField() : new CTextField();
+        c.addNValueChangeHandler(passwordValueChangeHandler);
+        c.addValueValidator(passwordStrengthValidator);
+        c.addValueChangeHandler(new RevalidationTrigger<String>(get(proto().newPasswordConfirm())));
+
+        mainPanel.setWidget(newPasswordFieldRow, 0, 2, new FormDecoratorBuilder(inject(proto().newPassword(), c)).componentWidth(15).labelWidth(15)
+                .assistantWidget(passwordStrengthWidget).build());
+        setPasswordStrengthRule(passwordStrengthRule); // to redraw tooltip
+
     }
 
 }

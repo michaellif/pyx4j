@@ -13,14 +13,11 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
-import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -33,9 +30,12 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.crud.CrudDebugId;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
+import com.pyx4j.forms.client.validators.password.PasswordStrengthRule.PasswordStrengthVerdict;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.components.login.PasswordChangeForm;
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
@@ -70,9 +70,11 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
 
         FlowPanel footer = new FlowPanel();
 
-        Button submitButton = new Button(i18n.tr("Submit"), new ClickHandler() {
+        Button submitButton = new Button(i18n.tr("Submit"), new Command() {
+
             @Override
-            public void onClick(ClickEvent event) {
+            public void execute() {
+                form.setUnconditionalValidationErrorRendering(true);
                 if (form.isValid()) {
                     presenter.changePassword(form.getValue());
                 } else {
@@ -108,6 +110,7 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+        form.setVisited(false);
         form.populateNew();
     }
 
@@ -141,13 +144,23 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
     }
 
     @Override
-    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired) {
-        form.setAskForRequireChangePasswordOnNextSignIn(isRequireChangePasswordOnNextSignInRequired);
+    public void setAskForRequireChangePasswordOnNextSignIn(boolean isRequireChangePasswordOnNextSignInRequired, Boolean value,
+            PasswordStrengthVerdict enforcePasswordChangeThreshold) {
+        form.setAskForRequireChangePasswordOnNextSignIn(isRequireChangePasswordOnNextSignInRequired, value, enforcePasswordChangeThreshold);
     }
 
     @Override
-    public void setDictionary(List<String> dictionary) {
-        form.setDictionary(dictionary);
+    public void setPasswordStrengthRule(PasswordStrengthRule passwordStrengthRule) {
+        form.setPasswordStrengthRule(passwordStrengthRule);
     }
 
+    @Override
+    public void setMaskPassword(boolean maskPassword) {
+        form.setMaskPassword(maskPassword);
+    }
+
+    @Override
+    public void setEnforcedPasswordStrengths(Set<PasswordStrengthVerdict> validPasswordStrengths) {
+        form.setEnforcedPasswordStrengths(validPasswordStrengths);
+    }
 }
