@@ -34,4 +34,6 @@ public interface PreauthorizedPaymentListDTO extends IEntity {
 
     @Caption(name = "Your next automated payment is scheduled for")
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
+
+    IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
 }

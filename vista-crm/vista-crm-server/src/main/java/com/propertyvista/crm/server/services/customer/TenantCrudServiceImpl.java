@@ -38,6 +38,7 @@ import com.pyx4j.security.shared.SecurityViolationException;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
@@ -105,6 +106,8 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             boolean isPotentialTenant = leaseTerm.status().getValue() != LeaseTerm.Status.Current & leaseTerm.status().getValue() != LeaseTerm.Status.Historic;
             dto.isPotentialTenant().setValue(isPotentialTenant);
         }
+
+        dto.isMoveOutWithinNextBillingCycle().setValue(ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(entity.lease()));
     }
 
     @Override

@@ -172,8 +172,12 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
     }
 
     @Override
+    public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
+        return new LeaseInternalManager().isMoveOutWithinNextBillingCycle(leaseId);
+    }
+
+    @Override
     public void simpleLeaseRenew(Lease leaseId, LogicalDate leaseEndDate) {
         new LeaseInternalManager().simpleLeaseRenew(leaseId, leaseEndDate);
     }
-
 }

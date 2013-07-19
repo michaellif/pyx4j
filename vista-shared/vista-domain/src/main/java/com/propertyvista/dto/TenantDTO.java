@@ -47,4 +47,6 @@ public interface TenantDTO extends LeaseParticipantDTO<LeaseTermTenant> {
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
 
     IPrimitive<LogicalDate> paymentCutOffDate();
+
+    IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
 }

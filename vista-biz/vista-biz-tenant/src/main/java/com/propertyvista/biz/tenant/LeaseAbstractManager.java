@@ -699,6 +699,19 @@ public abstract class LeaseAbstractManager {
         lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().setValue(price);
     }
 
+    public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
+        Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+
+        BillingCycle currentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
+                new LogicalDate(SystemDateManager.getDate()));
+        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currentCycle);
+
+        //@formatter:off
+        return (!lease.expectedMoveOut().isNull() && nextCycle.billingCycleEndDate().getValue().after(lease.expectedMoveOut().getValue()) ||
+                !lease.actualMoveOut().isNull() && nextCycle.billingCycleEndDate().getValue().after(lease.actualMoveOut().getValue()));
+        //@formatter:on
+    }
+
     /**
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
      */

@@ -66,6 +66,13 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         return container;
     }
 
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
+    }
+
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentListDTO.ListItemDTO> {
 
         public PreauthorizedPaymentFolder() {

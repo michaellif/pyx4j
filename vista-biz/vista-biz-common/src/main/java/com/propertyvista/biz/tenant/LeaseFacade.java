@@ -104,6 +104,8 @@ public interface LeaseFacade {
 
     void setLeaseAgreedPrice(Lease lease, BigDecimal price);
 
+    boolean isMoveOutWithinNextBillingCycle(Lease leaseId);
+
     /**
      * This is a temporary solution for lease renewal (see VISTA-1789 and VISTA-2245)
      */

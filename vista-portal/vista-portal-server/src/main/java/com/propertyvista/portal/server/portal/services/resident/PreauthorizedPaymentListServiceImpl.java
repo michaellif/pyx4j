@@ -27,13 +27,14 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PreauthorizedPaymentListServiceImpl extends
-        AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentListDTO.ListItemDTO> implements PreauthorizedPaymentListService {
+public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentListDTO.ListItemDTO> implements
+        PreauthorizedPaymentListService {
 
     public PreauthorizedPaymentListServiceImpl() {
         super(PreauthorizedPayment.class, PreauthorizedPaymentListDTO.ListItemDTO.class);
@@ -83,6 +84,8 @@ public class PreauthorizedPaymentListServiceImpl extends
                 dto.preauthorizedPayments().addAll(result.getData());
                 dto.nextScheduledPaymentDate().setValue(
                         ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLease()));
+                dto.isMoveOutWithinNextBillingCycle().setValue(
+                        ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(TenantAppContext.getCurrentUserLease()));
 
                 callback.onSuccess(dto);
             }

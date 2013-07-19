@@ -44,6 +44,8 @@ public interface LeaseDTO extends Lease {
 
     IPrimitive<Boolean> historyPresent();
 
+    IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
+
     IList<TenantInsuranceCertificateDTO> tenantInsuranceCertificates();
 
     @NotNull
@@ -54,5 +56,4 @@ public interface LeaseDTO extends Lease {
 
     /** this is used for validation of tenants age, comes from restrictions policy */
     IPrimitive<Integer> ageOfMajority();
-
 }

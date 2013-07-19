@@ -86,6 +86,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         }
 
         setTabVisible(autoPaymentsTab, getValue().lease().status().getValue().isCurrent());
+        get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
         updateTenantInsuranceTabControls();
     }

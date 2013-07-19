@@ -116,7 +116,7 @@ public class LeaseViewerViewImplBase<DTO extends LeaseDTO> extends CrmViewerView
 
     private void setupPapsMenu(DTO value) {
         papsMenu.clearItems();
-        papsButton.setVisible(value.status().getValue().isCurrent());
+        papsButton.setVisible(value.status().getValue().isCurrent() && !value.isMoveOutWithinNextBillingCycle().getValue(false));
 
         for (final LeaseTermTenant tenant : value.currentTerm().version().tenants()) {
             papsMenu.addItem(new MenuItem(tenant.getStringView(), new Command() {
