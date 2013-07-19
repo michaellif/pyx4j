@@ -44,6 +44,11 @@ public class OperationsTriggerFacadeMock implements OperationsTriggerFacade {
     }
 
     @Override
+    public Run startProcess(PmcProcessType processType, Pmc pmcId, LogicalDate executionDate) {
+        throw new Error("Not supported");
+    }
+
+    @Override
     public Run startProcess(Trigger triggerId, Pmc pmc, LogicalDate executionDate) {
         throw new Error("Not supported");
     }

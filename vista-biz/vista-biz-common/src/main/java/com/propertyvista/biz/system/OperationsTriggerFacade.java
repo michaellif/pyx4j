@@ -24,6 +24,8 @@ public interface OperationsTriggerFacade {
 
     public void startProcess(PmcProcessType processType);
 
+    public Run startProcess(PmcProcessType processType, Pmc pmcId, LogicalDate executionDate);
+
     public Run startProcess(Trigger triggerId, Pmc pmcId, LogicalDate executionDate);
 
 }

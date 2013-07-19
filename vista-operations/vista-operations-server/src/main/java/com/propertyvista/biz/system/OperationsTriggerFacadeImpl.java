@@ -58,6 +58,20 @@ public class OperationsTriggerFacadeImpl implements OperationsTriggerFacade {
     }
 
     @Override
+    public Run startProcess(PmcProcessType processType, Pmc pmcId, LogicalDate executionDate) {
+        Trigger trigger;
+        {
+            EntityQueryCriteria<Trigger> criteria = EntityQueryCriteria.create(Trigger.class);
+            criteria.eq(criteria.proto().triggerType(), processType);
+            trigger = Persistence.service().retrieve(criteria);
+            if (trigger == null) {
+                throw new UserRuntimeException("The Trigger " + processType + " not found");
+            }
+        }
+        return startProcess(trigger, pmcId, executionDate);
+    }
+
+    @Override
     public Run startProcess(Trigger triggerId, Pmc pmcId, LogicalDate executionDate) {
         Trigger triggerStub = EntityFactory.createIdentityStub(Trigger.class, triggerId.getPrimaryKey());
         {

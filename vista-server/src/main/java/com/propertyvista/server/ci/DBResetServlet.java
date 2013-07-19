@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.concurrent.Callable;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -61,6 +62,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.pyx4j.server.mail.Mail;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.biz.system.PmcFacade;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
@@ -70,10 +72,12 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.shared.config.VistaDemo;
 
 @SuppressWarnings("serial")
@@ -87,10 +91,10 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Drop All and Configure Vista Operations")
         prodReset,
 
-        @Translate("Drop All and Preload all demo PMC (~3 min 30 seconds) [No Mockup]")
+        @Translate("Drop All and Preload all demo PMC (~3 min 24 seconds) [No Mockup]")
         all,
 
-        @Translate("Drop All and Preload all demo PMC (+<b>star</b> tenants and buildings) : Mini version for UI Design (~1 min 45 seconds)")
+        @Translate("Drop All and Preload all demo PMC (+<b>star</b> tenants and buildings) : Mini version for UI Design (~1 min 22 seconds)")
         allMini,
 
         @Translate("Drop All and Preload One 'vista' PMC : Mini version for UI Design (~30 seconds)")
@@ -353,6 +357,7 @@ public class DBResetServlet extends HttpServlet {
                                 case allMini:
                                     for (DemoPmc demoPmc : conf.dbResetPreloadPmc()) {
                                         preloadPmc(req, out, prodPmcNameCorrections(demoPmc.name()), type);
+                                        h(out, "<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                                     }
                                     break;
                                 case vistaMini:
@@ -408,6 +413,7 @@ public class DBResetServlet extends HttpServlet {
                                 Persistence.service().endTransaction();
                             }
                             h(out, "<p style=\"background-color:33FF33\">DONE</p>");
+                            h(out, "<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                         }
                     }
                     h(out, "</body></html>");
@@ -415,6 +421,7 @@ public class DBResetServlet extends HttpServlet {
                     log.error("DB reset error", t);
                     o(out, "\nDB reset error:");
                     o(out, t.getMessage());
+                    h(out, "<script>window.scrollTo(0,document.body.scrollHeight);</script>");
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 } finally {
                     DataGenerator.cleanup();
@@ -458,7 +465,7 @@ public class DBResetServlet extends HttpServlet {
         criteria.add(PropertyCriterion.eq(criteria.proto().dnsName(), pmcDnsName));
         ServerSideFactory.create(PmcFacade.class).deleteAllPmcData(Persistence.service().retrieve(criteria));
 
-        Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
+        final Pmc pmc = PmcCreatorDev.createPmc(pmcDnsName, (type == ResetType.allMini));
         Persistence.service().commit();
 
         VistaDeployment.changePmcContext();
@@ -525,6 +532,8 @@ public class DBResetServlet extends HttpServlet {
                         dpisRun.add(info);
                         break;
                     }
+                default:
+                    break;
                 }
             }
 
@@ -532,6 +541,17 @@ public class DBResetServlet extends HttpServlet {
         } else {
             o(out, preloaders.preloadAll());
         }
+
+        if (pmcDnsName.equals(DemoPmc.star.name()) && (type == ResetType.all)) {
+            TaskRunner.runInOperationsNamespace(new Callable<Void>() {
+                @Override
+                public Void call() {
+                    ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.yardiImportProcess, pmc, null);
+                    return null;
+                }
+            });
+        }
+
         CacheService.reset();
 
         log.info("Preloaded PMC '{}' {}", pmcDnsName, TimeUtils.secSince(pmcStart));
