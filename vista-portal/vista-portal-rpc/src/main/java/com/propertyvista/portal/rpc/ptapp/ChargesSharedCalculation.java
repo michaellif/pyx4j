@@ -109,7 +109,6 @@ public class ChargesSharedCalculation {
         // check % correctness:
         for (TenantCharge charge : charges.paymentSplitCharges().charges()) {
             if (charge.tenant().role().getValue() == LeaseTermParticipant.Role.CoApplicant) {
-                totalSplitPrc = totalSplitPrc.add(charge.tenant().percentage().getValue());
             }
         }
         if (totalSplitPrc.compareTo(new BigDecimal(1)) > 0) {
@@ -125,9 +124,8 @@ public class ChargesSharedCalculation {
                 mainApplicantCharge = charge;
                 break;
             case CoApplicant:
-                charge.amount().setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().getValue().multiply(charge.tenant().percentage().getValue())));
+                charge.amount().setValue(DomainUtil.roundMoney(charges.monthlyCharges().total().getValue()));
 
-                totalSplitPrc = totalSplitPrc.add(charge.tenant().percentage().getValue());
                 totalSplitVal = totalSplitVal.add(charge.amount().getValue());
                 break;
             default:
@@ -137,7 +135,6 @@ public class ChargesSharedCalculation {
 
         if (mainApplicantCharge != null) {
             mainApplicantCharge.amount().setValue(charges.monthlyCharges().total().getValue().subtract(totalSplitVal));
-            mainApplicantCharge.tenant().percentage().setValue(new BigDecimal(1).subtract(totalSplitPrc));
         }
 
         calculateTotal(charges.paymentSplitCharges());

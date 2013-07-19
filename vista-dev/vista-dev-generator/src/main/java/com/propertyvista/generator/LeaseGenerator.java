@@ -101,7 +101,6 @@ public class LeaseGenerator extends DataGenerator {
         mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
         mainTenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
         mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
-        mainTenant.percentage().setValue(new BigDecimal(1));
         lease.currentTerm().version().tenants().add(mainTenant);
 
         addPreathorisedPaymentMethod(mainTenant);
@@ -114,7 +113,6 @@ public class LeaseGenerator extends DataGenerator {
             tenant.leaseParticipant().customer().personScreening().set(screeningGenerator.createScreening());
 
             tenant.role().setValue(RandomUtil.random(EnumSet.of(LeaseTermParticipant.Role.CoApplicant, LeaseTermParticipant.Role.Dependent)));
-            tenant.percentage().setValue(BigDecimal.ZERO);
             tenant.relationship().setValue(RandomUtil.randomEnum(PersonRelationship.class));
             tenant.takeOwnership().setValue(RandomUtil.randomBoolean());
 

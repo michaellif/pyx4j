@@ -13,7 +13,6 @@
  */
 package com.propertyvista.generator;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
@@ -92,7 +91,6 @@ public class TenantsEquifaxTestCasesGenerator {
             mainTenant.leaseParticipant().customer().emergencyContacts().addAll(customerGenerator.createEmergencyContacts());
 
             mainTenant.role().setValue(LeaseTermParticipant.Role.Applicant);
-            mainTenant.percentage().setValue(new BigDecimal(1));
             lease.currentTerm().version().tenants().add(mainTenant);
 
             return true;

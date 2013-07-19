@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.crud.lease.common.term;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -292,7 +291,6 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             nameEditor.get(nameEditor.proto().lastName()).setValue("Lastname");
             get(proto().leaseParticipant().customer().person().birthDate()).setValue(new LogicalDate(80, 1, 1));
             get(proto().role()).setValue(LeaseTermParticipant.Role.Applicant);
-            get(proto().percentage()).setValue(new BigDecimal(1));
         }
 
         void setPreauthorizedPayments(List<PreauthorizedPayment> pads) {

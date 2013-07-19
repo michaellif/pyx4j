@@ -37,9 +37,9 @@ import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseApplication;
+import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.ptapp.ApplicationWizardStep;
 import com.propertyvista.domain.tenant.ptapp.MasterOnlineApplication;
@@ -370,9 +370,7 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         progress.add(createWizardStep(PtSiteMap.Summary.class, ApplicationWizardStep.Status.notVisited));
 // TODO : Charges and Payment steps are closed (removed) so far...        
         if (false) {
-            if (isTenantInSplitCharge(coApplicant)) {
-                progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
-            }
+            progress.add(createWizardStep(PtSiteMap.Payment.class, ApplicationWizardStep.Status.notVisited));
         }
         progress.add(createWizardStep(PtSiteMap.Completion.class, ApplicationWizardStep.Status.notVisited));
         return progress;
@@ -393,7 +391,4 @@ public class OnlineApplicationFacadeImpl implements OnlineApplicationFacade {
         return progress;
     }
 
-    private static boolean isTenantInSplitCharge(LeaseTermTenant tenant) {
-        return !(tenant.percentage().isNull() || tenant.percentage().getValue().signum() > 0);
-    }
 }

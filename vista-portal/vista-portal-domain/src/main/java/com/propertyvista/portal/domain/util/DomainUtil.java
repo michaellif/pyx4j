@@ -22,11 +22,10 @@ import com.propertyvista.portal.domain.ptapp.TenantCharge;
 
 public class DomainUtil {
 
-    public static TenantCharge createTenantCharge(LeaseTermParticipant.Role role, BigDecimal percentage, BigDecimal money) {
+    public static TenantCharge createTenantCharge(LeaseTermParticipant.Role role, BigDecimal money) {
         TenantCharge tc = EntityFactory.create(TenantCharge.class);
 
         tc.tenant().role().setValue(role);
-        tc.tenant().percentage().setValue(percentage);
         tc.amount().setValue(money);
 
         return tc;
