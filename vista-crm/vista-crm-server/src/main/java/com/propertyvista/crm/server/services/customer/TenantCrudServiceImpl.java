@@ -110,7 +110,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     @Override
     protected void enhanceListRetrieved(Tenant entity, TenantDTO dto) {
         super.enhanceListRetrieved(entity, dto);
-
+        Persistence.service().retrieve(dto.lease().unit().building());
         dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
     }
 
