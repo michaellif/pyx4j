@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
@@ -40,6 +41,7 @@ public interface ExecutionReportSection extends IEntity {
     ExecutionReport executionReport();
 
     @Indexed(group = { "u,2" })
+    @Length(120)
     IPrimitive<String> name();
 
     @Indexed(group = { "u,3" })
