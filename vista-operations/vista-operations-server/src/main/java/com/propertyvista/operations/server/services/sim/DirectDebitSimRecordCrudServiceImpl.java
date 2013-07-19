@@ -14,7 +14,12 @@
 package com.propertyvista.operations.server.services.sim;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
+import com.propertyvista.operations.domain.payment.pad.sim.DirectDebitSimFile;
+import com.propertyvista.operations.domain.payment.pad.sim.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.domain.payment.pad.sim.DirectDebitSimRecord;
 import com.propertyvista.operations.rpc.services.sim.DirectDebitSimRecordCrudService;
 
@@ -31,8 +36,18 @@ public class DirectDebitSimRecordCrudServiceImpl extends AbstractCrudServiceImpl
 
     @Override
     protected void create(DirectDebitSimRecord entity, DirectDebitSimRecord dto) {
-        // TODO find or create file
+        // find or create file
+        if (entity.file().isNull()) {
+            EntityQueryCriteria<DirectDebitSimFile> criteria = EntityQueryCriteria.create(DirectDebitSimFile.class);
+            criteria.eq(criteria.proto().status(), DirectDebitSimFileStatus.New);
+            DirectDebitSimFile directDebitSimFile = Persistence.service().retrieve(criteria);
+            if (directDebitSimFile == null) {
+                directDebitSimFile = EntityFactory.create(DirectDebitSimFile.class);
+                directDebitSimFile.status().setValue(DirectDebitSimFileStatus.New);
+                Persistence.service().persist(directDebitSimFile);
+            }
+            entity.file().set(directDebitSimFile);
+        }
         super.create(entity, dto);
     }
-
 }

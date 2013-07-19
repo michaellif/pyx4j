@@ -43,6 +43,7 @@ public class DirectDebitSimFileCrudServiceImpl extends AbstractCrudServiceImpl<D
     public void send(AsyncCallback<VoidSerializable> callback, DirectDebitSimFile directDebitSimFileId) {
         DirectDebitSimFile directDebitSimFile = Persistence.service().retrieve(DirectDebitSimFile.class, directDebitSimFileId.getPrimaryKey());
         directDebitSimFile.status().setValue(DirectDebitSimFileStatus.Sent);
+        Persistence.service().persist(directDebitSimFile);
         Persistence.service().commit();
         callback.onSuccess(null);
     }
