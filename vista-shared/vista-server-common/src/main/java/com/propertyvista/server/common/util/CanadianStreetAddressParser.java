@@ -438,7 +438,7 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
         StreetDirection streetDirection = null;
 
         int streetTypeTokenIndex = -1;
-        for (int i = streetAddressPartLowerBound; (i < streetAddressPartUpperBound) && (streetTypeTokenIndex == -1); ++i) {
+        for (int i = streetAddressPartUpperBound - 1; (i >= streetAddressPartLowerBound) && (streetTypeTokenIndex == -1); --i) {
             String normalizedToken = addressTokens[i].toUpperCase();
             if (streetTypeSet.contains(normalizedToken)) {
                 streetTypeTokenIndex = i;
@@ -458,7 +458,12 @@ public class CanadianStreetAddressParser implements StreetAddressParser {
             // parse street name
             if (streetTypeTokenIndex != streetAddressPartLowerBound) {
                 // deal with English (or French numerical) street name
-                final int streetNameUpperBound = streetTypeTokenIndex != -1 ? streetTypeTokenIndex : streetAddressPartUpperBound;
+                int streetNameUpperBound;
+                if (addressTokens[streetAddressPartLowerBound].toLowerCase().equals("the") & (streetAddressPartLowerBound + 1 == streetTypeTokenIndex)) {
+                    streetNameUpperBound = streetTypeTokenIndex + 1;
+                } else {
+                    streetNameUpperBound = streetTypeTokenIndex != -1 ? streetTypeTokenIndex : streetAddressPartUpperBound;
+                }
                 streetName = StringUtils.join(addressTokens, ' ', streetAddressPartLowerBound, streetNameUpperBound);
             } else {
                 // deal with French street name

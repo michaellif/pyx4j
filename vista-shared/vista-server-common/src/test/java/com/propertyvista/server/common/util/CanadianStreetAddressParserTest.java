@@ -113,6 +113,36 @@ public class CanadianStreetAddressParserTest extends TestCase {
         Assert.assertEquals("1065 1/2", a.streetNumber);
     }
 
+    public void test4AvenueRoad() {
+        StreetAddress a = parse("1065 Avenue Road", null);
+        Assert.assertEquals("Avenue", a.streetName);
+        Assert.assertEquals(StreetType.road, a.streetType);
+    }
+
+    public void testTheStreetName() {
+        StreetAddress a = parse("1065 The Avenue", null);
+        Assert.assertEquals("The Avenue", a.streetName);
+        Assert.assertEquals(StreetType.avenue, a.streetType);
+
+        StreetAddress a2 = parse("1065 The Parkway", null);
+        Assert.assertEquals("The Parkway", a2.streetName);
+        Assert.assertEquals(StreetType.parkway, a2.streetType);
+
+        StreetAddress a3 = parse("1065 The Chunga-Changa Street", null);
+        Assert.assertEquals("The Chunga-Changa", a3.streetName);
+        Assert.assertEquals(StreetType.street, a3.streetType);
+
+        StreetAddress a4 = parse("1065 The Chunga-Changa", null);
+        Assert.assertEquals("The Chunga-Changa", a4.streetName);
+        Assert.assertEquals(StreetType.other, a4.streetType);
+
+        StreetAddress a5 = parse("1065 The Chunga-Changa Street North", null);
+        Assert.assertEquals("The Chunga-Changa", a5.streetName);
+        Assert.assertEquals(StreetType.street, a5.streetType);
+        Assert.assertEquals(StreetDirection.north, a5.streetDirection);
+
+    }
+
     private StreetAddress parse(String address1, String address2) {
         try {
             return parser.parse(address1, address2);
