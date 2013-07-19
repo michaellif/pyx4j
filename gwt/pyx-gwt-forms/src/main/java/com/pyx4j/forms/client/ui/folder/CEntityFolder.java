@@ -142,7 +142,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public IsWidget createContent() {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -22,21 +22,13 @@ package com.pyx4j.forms.client.ui;
 
 import java.text.ParseException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.i18n.shared.I18n;
 
 public abstract class CField<DATA_TYPE, WIDGET_TYPE extends INativeComponent<DATA_TYPE>> extends CComponent<DATA_TYPE> {
-
-    private static final Logger log = LoggerFactory.getLogger(CField.class);
-
-    private static final I18n i18n = I18n.get(CField.class);
 
     private WIDGET_TYPE widget;
 
