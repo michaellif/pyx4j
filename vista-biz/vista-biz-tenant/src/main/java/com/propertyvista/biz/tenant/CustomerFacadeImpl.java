@@ -42,6 +42,7 @@ import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerAcceptedTerms;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.domain.legal.VistaTerms.VistaTermsV;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
@@ -97,7 +98,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         Customer customer;
         {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().user(), customerUser));
+            criteria.eq(criteria.proto().user(), customerUser);
             customer = Persistence.service().retrieve(criteria);
             if (customer == null) {
                 return null;
@@ -107,15 +108,16 @@ public class CustomerFacadeImpl implements CustomerFacade {
         List<Lease> leases = new ArrayList<Lease>();
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer));
+            criteria.in(criteria.proto().status(), Lease.Status.current());
+            criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer);
+            criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
             leases.addAll(Persistence.service().query(criteria));
         }
         // TODO guarantors portal not supported for now
         if (false) {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
-            criteria.add(PropertyCriterion.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer(), customer));
+            criteria.in(criteria.proto().status(), Lease.Status.current());
+            criteria.eq(criteria.proto().currentTerm().version().guarantors().$().leaseParticipant().customer(), customer);
             leases.addAll(Persistence.service().query(criteria));
         }
         return leases;

@@ -28,6 +28,7 @@ import com.pyx4j.gwt.server.deferred.AbstractDeferredProcess;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 
@@ -66,6 +67,8 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
             final EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
             criteria.eq(criteria.proto().lease().status(), Lease.Status.Active);
             criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
+            criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().id(), criteria.proto().id());
+            criteria.in(criteria.proto().lease().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
             criteria.asc(criteria.proto().lease().unit().building());
             criteria.asc(criteria.proto().lease().unit());
             maximum = Persistence.service().count(criteria);
