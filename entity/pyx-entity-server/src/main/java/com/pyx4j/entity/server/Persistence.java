@@ -134,12 +134,7 @@ public class Persistence {
     public static <T extends IEntity> T secureRetrieve(EntityQueryCriteria<T> criteria) {
         SecurityController.assertPermission(new EntityPermission(criteria.getEntityClass(), EntityPermission.READ));
         applyDatasetAccessRule(criteria);
-        T ent;
-        if (criteria instanceof EntityCriteriaByPK) {
-            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria.getEntityClass(), ((EntityCriteriaByPK<?>) criteria).getPrimaryKey());
-        } else {
-            ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
-        }
+        T ent = PersistenceServicesFactory.getPersistenceService().retrieve(criteria);
         if (ent != null) {
             SecurityController.assertPermission(EntityPermission.permissionRead(ent));
         }
