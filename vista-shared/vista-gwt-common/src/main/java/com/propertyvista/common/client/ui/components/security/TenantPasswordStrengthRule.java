@@ -13,6 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
+import com.google.gwt.core.shared.GWT;
+
 import com.pyx4j.forms.client.validators.password.HasDescription;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.i18n.shared.I18n;
@@ -46,11 +48,11 @@ public class TenantPasswordStrengthRule implements PasswordStrengthRule, HasDesc
             return PasswordStrengthVerdict.Weak;
         }
 
-        boolean hasDigit = nPassword.matches(".*\\p{Digit}.*");
-        boolean hasPunctuation = nPassword.matches(".*\\p{Punct}.*");
-        boolean hasLetters = nPassword.matches(".*\\p{Alpha}.*");
+        boolean hasDigit = GWT.isProdMode() ? nPassword.matches(".*\\d.*") : nPassword.matches(".*\\p{Digit}.*");
+        boolean hasPunctuation = GWT.isProdMode() ? nPassword.matches(".*[`~!@#$%^&*()_\\-=+<>/?\\\\|{}\\[\\]].*") : nPassword.matches(".*\\p{Punct}.*");
+        boolean hasLetters = nPassword.matches(".*[A-Za-z].*");
 
-        if (!(hasDigit & hasPunctuation & hasLetters)) {
+        if (!((hasDigit | hasPunctuation) & hasLetters)) {
             return PasswordStrengthVerdict.Weak;
         }
 
@@ -72,7 +74,7 @@ public class TenantPasswordStrengthRule implements PasswordStrengthRule, HasDesc
                 "Password Guidelines:\n" +
                 "(1) Use 6 to 20 characters.\n" +
                 "(2) Don't use your name or email address.\n" +
-                "(3) Use a mix of letters, numbers, and symbols.\n" +
+                "(3) It should consist of letters and at least one digit or symbol.\n" +
                 "(4) Make your password hard to guess."
         );//@formatter:on
     }
