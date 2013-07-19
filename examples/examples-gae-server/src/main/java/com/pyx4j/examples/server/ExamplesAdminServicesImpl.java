@@ -22,7 +22,6 @@ package com.pyx4j.examples.server;
 
 import java.util.Locale;
 
-import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.EntityServicesImpl;
 import com.pyx4j.entity.server.PersistenceServicesFactory;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -73,15 +72,11 @@ public class ExamplesAdminServicesImpl implements ExamplesAdminServices {
 
         @Override
         public IEntity execute(EntityQueryCriteria request) {
-            EntityQueryCriteria<User> criteria;
-            if (request instanceof EntityCriteriaByPK) {
-                criteria = EntityCriteriaByPK.create(User.class, ((EntityCriteriaByPK<?>) request).getPrimaryKey());
-            } else {
-                criteria = new EntityQueryCriteria<User>(User.class);
-                for (Criterion c : ((EntityQueryCriteria<?>) request).getFilters()) {
-                    criteria.add(c);
-                }
+            EntityQueryCriteria<User> criteria = new EntityQueryCriteria<User>(User.class);
+            for (Criterion c : ((EntityQueryCriteria<?>) request).getFilters()) {
+                criteria.add(c);
             }
+
             User user = (User) super.execute(criteria);
 
             EditableUser editableUser = EntityFactory.create(EditableUser.class);
