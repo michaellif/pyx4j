@@ -111,9 +111,9 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useEquifaxSimulator()), 5).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().approveXml()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().declineXml()), 50).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().moreInfoXml()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().approve().xml()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().decline().xml()), 50).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifax().moreInfo().xml()), 50).build());
 
         return content;
     }

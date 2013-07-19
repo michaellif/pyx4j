@@ -29,9 +29,9 @@ public class EquifaxSimulationPreloader extends BaseVistaDevDataPreloader {
         EquifaxSimulatorConfig ec = EntityFactory.create(EquifaxSimulatorConfig.class);
 
         try {
-            ec.approveXml().setValue(IOUtils.getTextResource("simulation/equifax/approve.xml", Charset.forName("UTF-8")));
-            ec.declineXml().setValue(IOUtils.getTextResource("simulation/equifax/decline.xml", Charset.forName("UTF-8")));
-            ec.moreInfoXml().setValue(IOUtils.getTextResource("simulation/equifax/moreInfo.xml", Charset.forName("UTF-8")));
+            ec.approve().xml().setValue(IOUtils.getTextResource("simulation/equifax/approve.xml", Charset.forName("UTF-8")));
+            ec.decline().xml().setValue(IOUtils.getTextResource("simulation/equifax/decline.xml", Charset.forName("UTF-8")));
+            ec.moreInfo().xml().setValue(IOUtils.getTextResource("simulation/equifax/moreInfo.xml", Charset.forName("UTF-8")));
 
         } catch (IOException e) {
             throw new Error(e);

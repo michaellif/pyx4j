@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
@@ -68,6 +69,7 @@ public interface CardServiceSimulationTransaction extends IEntity {
     IPrimitive<BigDecimal> amount();
 
     @Indexed(group = { "r,1" }, uniqueConstraint = true)
+    @Length(60)
     IPrimitive<String> reference();
 
     IPrimitive<String> responseCode();

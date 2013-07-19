@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -43,6 +44,7 @@ public interface CardServiceSimulationMerchantAccount extends IEntity {
     @ToString
     @Indexed(uniqueConstraint = true)
     @NotNull
+    @Length(8)
     IPrimitive<String> terminalID();
 
     @Editor(type = EditorType.money)

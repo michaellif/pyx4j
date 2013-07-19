@@ -27,7 +27,6 @@ import ca.equifax.uat.to.CNConsAndCommRequestType;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerCreditCheck;
 import com.propertyvista.domain.tenant.CustomerCreditCheck.CreditCheckResult;
@@ -36,6 +35,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.equifax.request.EquifaxConsts;
 import com.propertyvista.equifax.request.XmlCreator;
+import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class EquifaxSimulation {
@@ -68,13 +68,13 @@ public class EquifaxSimulation {
         String xml = null;
         switch (simulationDefinition.simulateCheckResult) {
         case Accept:
-            xml = equifaxSimulatorConfig.approveXml().getValue();
+            xml = equifaxSimulatorConfig.approve().xml().getValue();
             break;
         case Decline:
-            xml = equifaxSimulatorConfig.declineXml().getValue();
+            xml = equifaxSimulatorConfig.decline().xml().getValue();
             break;
         case Review:
-            xml = equifaxSimulatorConfig.moreInfoXml().getValue();
+            xml = equifaxSimulatorConfig.moreInfo().xml().getValue();
             break;
         default:
             throw new IllegalArgumentException();

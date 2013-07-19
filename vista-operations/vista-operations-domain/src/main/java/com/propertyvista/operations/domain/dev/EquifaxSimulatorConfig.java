@@ -13,11 +13,9 @@
  */
 package com.propertyvista.operations.domain.dev;
 
-import com.pyx4j.entity.annotations.Editor;
-import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -26,15 +24,12 @@ import com.propertyvista.domain.VistaNamespace;
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 public interface EquifaxSimulatorConfig extends IEntity {
 
-    @Editor(type = Editor.EditorType.textarea)
-    @Length(300000)
-    IPrimitive<String> approveXml();
+    @Owned
+    EquifaxSimulatorData approve();
 
-    @Editor(type = Editor.EditorType.textarea)
-    @Length(300000)
-    IPrimitive<String> declineXml();
+    @Owned
+    EquifaxSimulatorData decline();
 
-    @Editor(type = Editor.EditorType.textarea)
-    @Length(300000)
-    IPrimitive<String> moreInfoXml();
+    @Owned
+    EquifaxSimulatorData moreInfo();
 }

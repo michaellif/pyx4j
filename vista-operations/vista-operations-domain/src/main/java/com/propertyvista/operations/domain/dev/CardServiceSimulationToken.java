@@ -15,6 +15,7 @@ package com.propertyvista.operations.domain.dev;
 
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owner;
@@ -36,6 +37,7 @@ public interface CardServiceSimulationToken extends IEntity {
     CardServiceSimulationCard card();
 
     @ToString
+    @Length(30)
     @Indexed(uniqueConstraint = true)
     IPrimitive<String> token();
 
