@@ -30,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.EntityServices;
 import com.pyx4j.entity.security.EntityPermission;
@@ -195,19 +194,6 @@ public class EntityServicesImpl {
             return Persistence.secureRetrieve(request);
         }
 
-    }
-
-    public static class RetrieveByPKImpl implements EntityServices.RetrieveByPK {
-
-        @Override
-        public IEntity execute(EntityCriteriaByPK<?> request) {
-            SecurityController.assertPermission(new EntityPermission(request.getEntityClass(), EntityPermission.READ));
-            IEntity ent = PersistenceServicesFactory.getPersistenceService().retrieve(request.getEntityClass(), request.getPrimaryKey());
-            if (ent != null) {
-                SecurityController.assertPermission(EntityPermission.permissionRead(ent));
-            }
-            return ent;
-        }
     }
 
     public static class DeleteImpl implements EntityServices.Delete {

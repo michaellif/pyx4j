@@ -22,97 +22,36 @@ package com.pyx4j.entity.rpc;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 /**
  * Special case criteria for EntityServices.RetrieveByPK service.
  */
-public class EntityCriteriaByPK<E extends IEntity> extends EntityQueryCriteria<E> {
+public class EntityCriteriaByPK {
 
-    private static final long serialVersionUID = -3985273227849938461L;
-
-    private Key primaryKey;
-
-    protected EntityCriteriaByPK() {
+    private EntityCriteriaByPK() {
 
     }
 
-    public EntityCriteriaByPK(Class<E> entityClass) {
-        super(entityClass);
-    }
-
-    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass) {
-        return new EntityCriteriaByPK<T>(entityClass);
-    }
-
-    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, Key primaryKey) {
-        EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>(entityClass);
-        c.setPrimaryKey(primaryKey);
+    public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass, Key primaryKey) {
+        EntityQueryCriteria<T> c = new EntityQueryCriteria<T>(entityClass);
+        c.eq(c.proto().id(), primaryKey);
         return c;
     }
 
-    public static <T extends IEntity> EntityCriteriaByPK<T> create(Class<T> entityClass, T entity) {
-        EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>(entityClass);
+    public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass, T entity) {
+        EntityQueryCriteria<T> c = new EntityQueryCriteria<T>(entityClass);
         if ((entity != null) && (entity.getPrimaryKey() != null)) {
-            c.setPrimaryKey(entity.getPrimaryKey());
+            c.eq(c.proto().id(), entity.getPrimaryKey());
         }
         return c;
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends IEntity> EntityCriteriaByPK<T> create(T entity) {
-        EntityCriteriaByPK<T> c = new EntityCriteriaByPK<T>((Class<T>) entity.getValueClass());
-        c.setPrimaryKey(entity.getPrimaryKey());
+    public static <T extends IEntity> EntityQueryCriteria<T> create(T entity) {
+        EntityQueryCriteria<T> c = new EntityQueryCriteria<T>((Class<T>) entity.getValueClass());
+        c.eq(c.proto().id(), entity.getPrimaryKey());
         return c;
     }
 
-    public Key getPrimaryKey() {
-        return primaryKey;
-    }
-
-    public void setPrimaryKey(Key primaryKey) {
-        this.primaryKey = primaryKey;
-        super.add(PropertyCriterion.eq(proto().id(), primaryKey));
-    }
-
-    @Override
-    public EntityQueryCriteria<E> add(Criterion criterion) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public EntityQueryCriteria<E> sort(EntityQueryCriteria.Sort sort) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!super.equals(o)) {
-            return false;
-        }
-
-        if (!(o instanceof EntityCriteriaByPK<?>)) {
-            return false;
-        } else {
-            return primaryKey == ((EntityCriteriaByPK<?>) o).primaryKey;
-        }
-    }
-
-    @Override
-    public int hashCode() {
-        int hashCode = super.hashCode();
-        hashCode *= 0x1F;
-        hashCode += primaryKey.hashCode();
-        return hashCode;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("domainName=").append(proto().getEntityMeta().getCaption());
-        builder.append(" pk=").append(primaryKey);
-        return builder.toString();
-    }
 }

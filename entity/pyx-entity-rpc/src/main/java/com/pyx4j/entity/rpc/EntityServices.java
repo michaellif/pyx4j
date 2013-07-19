@@ -52,9 +52,6 @@ public interface EntityServices {
     public interface Retrieve extends Service<EntityQueryCriteria<?>, IEntity> {
     };
 
-    public interface RetrieveByPK extends Service<EntityCriteriaByPK<?>, IEntity> {
-    };
-
     public interface Count extends Service<EntityQueryCriteria<?>, Long> {
     };
 
