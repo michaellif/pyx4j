@@ -55,7 +55,7 @@ public class PmcCreatorDev {
         } else {
             pmc.features().countryOfOperation().setValue(CountryOfOperation.Canada);
         }
-        if (pmcName.equals(DemoPmc.star.name())) {
+        if (!mini && pmcName.equals(DemoPmc.star.name())) {
             pmc.features().occupancyModel().setValue(Boolean.FALSE);
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
             pmc.features().defaultProductCatalog().setValue(Boolean.TRUE);
