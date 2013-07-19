@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.server.upgrade.u_1_1_0;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -26,14 +27,20 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.dashboard.GadgetStorageFacade;
+import com.propertyvista.biz.financial.ar.ARArreasManagerUtils;
 import com.propertyvista.biz.preloader.DefaultProductCatalogFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.dashboard.GadgetMetadataHolder;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.financial.billing.ArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.BuildingArrearsSnapshot;
+import com.propertyvista.domain.financial.billing.LeaseArrearsSnapshot;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -52,7 +59,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
     @Override
     public int getUpgradeStepsCount() {
-        return 5;
+        return 6;
     }
 
     @Override
@@ -72,6 +79,10 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
             break;
         case 5:
             addYardiInterfacePolicy();
+            break;
+        case 6:
+            removeRedundantArrearsSnapshots();
+            break;
         default:
             throw new IllegalArgumentException();
         }
@@ -190,4 +201,73 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         log.info("Added Yardi Interface Policy: " + policyCreationLog);
     }
 
+    public static void removeRedundantArrearsSnapshots() {
+        int totalRemovedCounter = 0;
+        log.info("Removing redundant lease arrears snapshots");
+        ICursorIterator<BillingAccount> billingAccountIterator = null;
+        try {
+            billingAccountIterator = Persistence.secureQuery(null, EntityQueryCriteria.create(BillingAccount.class), AttachLevel.IdOnly);
+            while (billingAccountIterator.hasNext()) {
+                BillingAccount billingAccount = billingAccountIterator.next();
+                log.info("Removing redundant lease arrears snapshots for billing cycle " + billingAccount.getPrimaryKey().toString());
+                EntityQueryCriteria<LeaseArrearsSnapshot> snapshotCriteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
+                snapshotCriteria.eq(snapshotCriteria.proto().billingAccount(), billingAccount);
+                snapshotCriteria.asc(snapshotCriteria.proto().fromDate());
+                int removedCounter = removeRedundantArrearsSnapshots(Persistence.service().query(snapshotCriteria).iterator());
+                totalRemovedCounter += removedCounter;
+                log.info("Removed " + removedCounter + " redundant lease arrears snapshots for billing cycle " + billingAccount.getPrimaryKey().toString());
+            }
+        } finally {
+            IOUtils.closeQuietly(billingAccountIterator);
+        }
+
+        log.info("Removing redundant building arrears snapshots");
+        ICursorIterator<Building> buildingIterator = null;
+        try {
+            buildingIterator = Persistence.secureQuery(null, EntityQueryCriteria.create(Building.class), AttachLevel.ToStringMembers);
+            while (buildingIterator.hasNext()) {
+                Building building = buildingIterator.next();
+                log.info("Removing redundant building arrears snapshots for building " + building.getStringView());
+                EntityQueryCriteria<BuildingArrearsSnapshot> snapshotCriteria = EntityQueryCriteria.create(BuildingArrearsSnapshot.class);
+                snapshotCriteria.eq(snapshotCriteria.proto().building(), building);
+                snapshotCriteria.asc(snapshotCriteria.proto().fromDate());
+                int counter = removeRedundantArrearsSnapshots(Persistence.service().query(snapshotCriteria).iterator());
+                log.info("Removed " + counter + " redundant building arrears snapshots for building " + building.getStringView());
+            }
+        } finally {
+            IOUtils.closeQuietly(buildingIterator);
+        }
+
+        log.info("Finished removing redundant arrears snapshots, total number of removed snapshots is: " + totalRemovedCounter);
+
+    }
+
+    private static int removeRedundantArrearsSnapshots(Iterator<? extends ArrearsSnapshot<?>> snapshots) {
+        int removedCounter = 0;
+        if (!snapshots.hasNext()) {
+            return removedCounter;
+        }
+        ArrearsSnapshot<?> currentSnapshot = snapshots.next();
+        boolean merged = false;
+        while (snapshots.hasNext()) {
+            ArrearsSnapshot<?> nextSnapshot = snapshots.next();
+            if (!ARArreasManagerUtils.haveDifferentBucketValues(currentSnapshot, nextSnapshot)) {
+                currentSnapshot.toDate().setValue(nextSnapshot.toDate().getValue());
+                Persistence.service().delete(nextSnapshot);
+                removedCounter += 1;
+                merged = true;
+            } else {
+                if (merged) {
+                    Persistence.service().merge(currentSnapshot);
+                }
+                currentSnapshot = nextSnapshot;
+                merged = false;
+            }
+        }
+        if (merged) {
+            Persistence.service().merge(currentSnapshot);
+        }
+
+        return removedCounter;
+    }
 }
