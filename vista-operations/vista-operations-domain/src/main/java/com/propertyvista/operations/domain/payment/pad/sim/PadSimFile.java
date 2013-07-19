@@ -39,7 +39,7 @@ import com.propertyvista.domain.VistaNamespace;
  * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon"/>
  * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf"/>
  */
-@Table(namespace = VistaNamespace.operationsNamespace)
+@Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimFile extends IEntity {
 

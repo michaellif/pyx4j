@@ -13,6 +13,52 @@
  */
 package com.propertyvista.operations.domain.payment.pad.sim;
 
-public interface DirectDebitSimRecord {
+import java.math.BigDecimal;
+import java.util.Date;
+
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Timestamp;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
+
+import com.propertyvista.domain.VistaNamespace;
+
+@Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+public interface DirectDebitSimRecord extends IEntity {
+
+    @Owner
+    @JoinColumn
+    @Indexed
+    DirectDebitSimFile file();
+
+    @NotNull
+    @Length(14)
+    @Indexed
+    IPrimitive<String> accountNumber();
+
+    @NotNull
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> amount();
+
+    @Length(30)
+    IPrimitive<String> paymentReferenceNumber();
+
+    @Length(35)
+    IPrimitive<String> customerName();
+
+    @Timestamp(Timestamp.Update.Created)
+    @Format("yyyy-MM-dd HH:mm")
+    IPrimitive<Date> receivedDate();
 
 }

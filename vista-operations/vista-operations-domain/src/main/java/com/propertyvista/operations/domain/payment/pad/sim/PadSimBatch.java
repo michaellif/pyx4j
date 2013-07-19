@@ -30,7 +30,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
 
-@Table(namespace = VistaNamespace.operationsNamespace)
+@Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimBatch extends IEntity {
 

@@ -14,6 +14,7 @@
 package com.propertyvista.operations.domain.payment.pad.sim;
 
 import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -24,16 +25,17 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 
-@Table(namespace = VistaNamespace.operationsNamespace)
+@Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadSimDebitRecord extends IEntity {
 
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
+    @Indexed
     PadSimBatch padBatch();
 
     @OrderColumn
