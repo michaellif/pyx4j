@@ -65,6 +65,10 @@ public class CaledonPadFileWriter implements Closeable {
 
         //Version Indicator
         writer.append("0010");
+
+        writer.append(",");
+        writer.append(padFile.fundsTransferType().getValue().getCode());
+
         writer.append("\n");
     }
 

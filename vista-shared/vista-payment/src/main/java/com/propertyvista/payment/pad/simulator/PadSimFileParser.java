@@ -23,6 +23,7 @@ import com.pyx4j.essentials.server.csv.CSVLoad;
 import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
@@ -56,7 +57,7 @@ public class PadSimFileParser {
                 padFile.fileCreationDate().setValue(headers[3]);
                 padFile.fileType().setValue(headers[4]);
                 padFile.fileVersion().setValue(headers[5]);
-
+                padFile.fundsTransferType().setValue(FundsTransferType.valueOf(headers[6]));
                 return true;
             }
 

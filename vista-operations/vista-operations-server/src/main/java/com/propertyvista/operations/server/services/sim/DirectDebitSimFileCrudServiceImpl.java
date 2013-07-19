@@ -22,6 +22,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.propertyvista.operations.domain.payment.pad.sim.DirectDebitSimFile;
 import com.propertyvista.operations.domain.payment.pad.sim.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.rpc.services.sim.DirectDebitSimFileCrudService;
+import com.propertyvista.payment.bmo.simulator.DirectDebitSimManager;
 
 public class DirectDebitSimFileCrudServiceImpl extends AbstractCrudServiceImpl<DirectDebitSimFile> implements DirectDebitSimFileCrudService {
 
@@ -41,9 +42,7 @@ public class DirectDebitSimFileCrudServiceImpl extends AbstractCrudServiceImpl<D
 
     @Override
     public void send(AsyncCallback<VoidSerializable> callback, DirectDebitSimFile directDebitSimFileId) {
-        DirectDebitSimFile directDebitSimFile = Persistence.service().retrieve(DirectDebitSimFile.class, directDebitSimFileId.getPrimaryKey());
-        directDebitSimFile.status().setValue(DirectDebitSimFileStatus.Sent);
-        Persistence.service().persist(directDebitSimFile);
+        new DirectDebitSimManager().send(directDebitSimFileId);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

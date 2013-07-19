@@ -96,6 +96,8 @@ public interface PadFile extends IEntity {
 
     IPrimitive<PadFileStatus> status();
 
+    IPrimitive<FundsTransferType> fundsTransferType();
+
     @Owned(cascade = {})
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
