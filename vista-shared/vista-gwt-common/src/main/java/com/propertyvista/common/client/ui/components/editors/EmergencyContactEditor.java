@@ -20,6 +20,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 
 public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyContact> {
@@ -49,5 +50,11 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
         main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
 
         return main;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
     }
 }
