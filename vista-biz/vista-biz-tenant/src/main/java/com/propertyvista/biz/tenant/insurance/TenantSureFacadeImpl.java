@@ -94,7 +94,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             isTooManyPrevClaims = true;
         } catch (CfcApiException e) {
             log.error("failed to get a quote due to CFCAPI error", e);
-            throw new UserRuntimeException(i18n.tr("Failed to get a quote, please try again."));
+            throw new UserRuntimeException(i18n.tr("Failed to get a quote, please try again."), e);
         }
         if (isTooManyPrevClaims) {
             quote = EntityFactory.create(TenantSureQuoteDTO.class);
@@ -196,7 +196,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 if (e instanceof UserRuntimeException) {
                     throw (UserRuntimeException) e;
                 } else {
-                    throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed"));
+                    throw new UserRuntimeException(i18n.tr("Credit Card Authorization failed"), e);
                 }
             }
             transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Authorized);
@@ -218,7 +218,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 if (e instanceof UserRuntimeException) {
                     throw (UserRuntimeException) e;
                 } else {
-                    throw new UserRuntimeException(i18n.tr("Insurance bind failed"));
+                    throw new UserRuntimeException(i18n.tr("Insurance bind failed"), e);
                 }
             }
 
@@ -259,7 +259,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             if (e instanceof UserRuntimeException) {
                 throw (UserRuntimeException) e;
             } else {
-                throw new UserRuntimeException(i18n.tr("Credit Card payment failed, payment transaction would be completed later"));
+                throw new UserRuntimeException(i18n.tr("Credit Card payment failed, payment transaction would be completed later"), e);
             }
         }
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Cleared);
@@ -470,9 +470,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                     ReinstatementType.REINSTATEMENT_PROACTIVE, tenantsEmail);
 
             Persistence.service().commit();
-        } catch (CfcApiException error) {
-            log.error("Failed to reinstate insurace for tenant " + tenantId.getPrimaryKey() + "'", error);
-            throw new UserRuntimeException(i18n.tr("Failed to reinstate due to TenantSure interface error"));
+        } catch (CfcApiException e) {
+            log.error("Failed to reinstate insurance for tenant " + tenantId.getPrimaryKey() + "'", e);
+            throw new UserRuntimeException(i18n.tr("Failed to reinstate due to TenantSure interface error"), e);
         }
     }
 
@@ -488,7 +488,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
                 clientReferenceNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).createClient(tenantId, name, phone);
             } catch (CfcApiException e) {
                 log.error("Failed to register tenant '" + tenantId.getPrimaryKey() + "' via CFC API", e);
-                throw new UserRuntimeException(i18n.tr("Failed to register client via TenantSure interface"));
+                throw new UserRuntimeException(i18n.tr("Failed to register client via TenantSure interface"), e);
             }
             tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
             Persistence.service().persist(tenantSureClient);
@@ -542,7 +542,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             ServerSideFactory.create(CfcApiAdapterFacade.class).requestDocument(quoteId, emails);
         } catch (CfcApiException e) {
             log.error("Failed to send quote to tenant '" + tenantId.getPrimaryKey() + "'", e);
-            throw new UserRuntimeException(i18n.tr("Failed to send email due to TenantSure interface error"));
+            throw new UserRuntimeException(i18n.tr("Failed to send email due to TenantSure interface error"), e);
         }
         return emails.get(0);
     }
