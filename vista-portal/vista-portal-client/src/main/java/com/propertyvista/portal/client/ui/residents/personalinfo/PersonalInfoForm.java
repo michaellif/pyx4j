@@ -33,7 +33,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.components.folders.EmergencyContactFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.validators.PastDateValidator;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -100,7 +100,11 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
     @Override
     public void addValidations() {
-        get(proto().birthDate()).addValueValidator(new PastDateValidator());
+//      get(proto().sex()).setMandatory(true);
+        get(proto().birthDate()).setMandatory(true);
+        get(proto().email()).setMandatory(true);
+
+        get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
         get(proto().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
             public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {

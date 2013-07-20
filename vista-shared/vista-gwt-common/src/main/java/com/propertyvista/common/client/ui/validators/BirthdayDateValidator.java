@@ -18,6 +18,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.client.ClientContext;
 
 public class BirthdayDateValidator implements EditableValueValidator<LogicalDate> {
 
@@ -25,10 +26,7 @@ public class BirthdayDateValidator implements EditableValueValidator<LogicalDate
 
     @Override
     public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-        if (value == null) {
-            return null;
-        }
-        return value.before(new LogicalDate()) ? null : new ValidationError(component, i18n.tr("Future birthday date"));//yuriyl temp note: next birthday date? invalid birthday date?
+        return (value == null) || value.before(new LogicalDate(ClientContext.getServerDate())) ? null : new ValidationError(component,
+                i18n.tr("The Date Must Be Earlier Than Today's Date"));
     }
-
 }
