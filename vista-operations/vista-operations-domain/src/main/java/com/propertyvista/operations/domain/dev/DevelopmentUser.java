@@ -16,6 +16,7 @@ package com.propertyvista.operations.domain.dev;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -34,6 +35,7 @@ public interface DevelopmentUser extends IEntity {
 
     @Caption(name = "E-mail")
     @Indexed
+    @Length(64)
     IPrimitive<String> email();
 
     IPrimitive<String> homePhone();
@@ -45,12 +47,15 @@ public interface DevelopmentUser extends IEntity {
     IPrimitive<Boolean> testCallsOnHosts();
 
     @Indexed
+    @Length(128)
     IPrimitive<String> host1();
 
     @Indexed
+    @Length(128)
     IPrimitive<String> host2();
 
     @Indexed
+    @Length(128)
     IPrimitive<String> host3();
 
     /**
