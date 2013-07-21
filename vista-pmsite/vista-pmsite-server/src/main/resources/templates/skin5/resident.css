@@ -225,18 +225,24 @@ h2 {
 	border-collapse: separate;
 }
 
-.vista-pmsite-residentPage .TextBox, .vista-pmsite-residentPage .ListBox {
-	border-top: 4px solid #7F7F7F;
-	border-left: 3px solid #7F7F7F;
-	outline: 1px solid #ec8e21;
+.vista-pmsite-residentPage .WidgetDecoratorComponentHolder .TextBox, .vista-pmsite-residentPage .WidgetDecoratorComponentHolder .ListBox {
 	min-width: 8em;
 }
 
+.vista-pmsite-residentPage .WidgetDecorator .TextBox, .vista-pmsite-residentPage .WidgetDecorator .ListBox {
+	border-top: 4px solid #7F7F7F;
+	border-left: 3px solid #7F7F7F;
+	outline: 1px solid #ec8e21;
+}
 
 .vista-pmsite-residentPage .LandingTermsAndConditionsBox {
 	margin-left: 60px;
 	margin-right: 60px;
 	color: #B4AFB0;
+}
+
+.vista-pmsite-residentPage .EntityFolderRowItemDecorator{
+	height: auto !important;
 }
 
 .vista-pmsite-residentPage .WidgetDecorator-readOnly .WidgetDecoratorLabel, .vista-pmsite-residentPage .BillingLineItem, .vista-pmsite-residentPage  .WidgetDecoratorLabel {
@@ -301,6 +307,7 @@ h2 {
 .SiteViewAction .Anchor {
 	white-space: nowrap;
 	float: right;
+	text-decoration: none;
 }
 
 .Dialog {
@@ -394,4 +401,8 @@ h2 {
 
 .TSPucrhaseViewMessageText {
     color: #B4AFB0;
+}
+
+.WidgetDecoratorLabel.SignUpGreetingRow1, .WidgetDecoratorLabel.SignUpGreetingRow2 {
+    font-size: 20px;
 }
