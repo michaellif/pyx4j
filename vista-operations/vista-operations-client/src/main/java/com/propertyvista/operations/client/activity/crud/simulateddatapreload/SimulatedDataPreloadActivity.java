@@ -27,7 +27,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.ui.crud.simulateddatapreload.SimulatedDataPreloadView;
 import com.propertyvista.operations.client.viewfactories.MiscViewFactory;
-import com.propertyvista.operations.rpc.services.sim.SimulatedDataPreloadService;
+import com.propertyvista.operations.rpc.services.simulator.SimulatedDataPreloadService;
 
 public class SimulatedDataPreloadActivity extends AbstractActivity {
 

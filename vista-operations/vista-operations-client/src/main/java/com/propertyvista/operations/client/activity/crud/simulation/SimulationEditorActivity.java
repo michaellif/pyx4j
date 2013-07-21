@@ -22,7 +22,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.operations.client.ui.crud.simulation.SimulationEditorView;
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.rpc.SimulationDTO;
-import com.propertyvista.operations.rpc.services.SimulationService;
+import com.propertyvista.operations.rpc.services.simulator.SimulationService;
 
 public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEditorView.Presenter {
 

@@ -136,18 +136,21 @@ public class OperationsSiteMap implements SiteMap {
 
     }
 
-    public static class Simulation extends AppPlace {
+    public static class Simulator extends AppPlace {
 
         public static class CardServiceSimulation extends CrmCrudAppPlace {
 
+            @PlaceProperties(caption = "Simulated Card")
             public static class CardServiceSimulationCard extends CrmCrudAppPlace {
 
             }
 
+            @PlaceProperties(caption = "Simulated Card Transaction")
             public static class CardServiceSimulationTransaction extends CrmCrudAppPlace {
 
             }
 
+            @PlaceProperties(caption = "Simulated Card Merchant")
             public static class CardServiceSimulationMerchantAccount extends CrmCrudAppPlace {
 
             }
@@ -155,11 +158,11 @@ public class OperationsSiteMap implements SiteMap {
 
         public static class PadSimulation extends CrmCrudAppPlace {
 
-            @PlaceProperties(navigLabel = "Simulated PAD", caption = "Simulated PAD")
+            @PlaceProperties(caption = "Simulated PAD")
             public static class PadSimFile extends CrmCrudAppPlace {
             }
 
-            @PlaceProperties(navigLabel = "PAD Batches", caption = "PAD Batch")
+            @PlaceProperties(caption = "PAD Batch")
             public static class PadSimBatch extends CrmCrudAppPlace {
             }
 

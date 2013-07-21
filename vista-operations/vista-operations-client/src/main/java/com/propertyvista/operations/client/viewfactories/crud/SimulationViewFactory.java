@@ -16,18 +16,18 @@ package com.propertyvista.operations.client.viewfactories.crud;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.ui.IPane;
 
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationCardEditorView;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationCardEditorViewImpl;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationCardListerView;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationCardListerViewImpl;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorView;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorViewImpl;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerView;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerViewImpl;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionEditorView;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionEditorViewImpl;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionListerView;
-import com.propertyvista.operations.client.ui.crud.cardservicesimulation.CardServiceSimulationTransactionListerViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardEditorView;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardEditorViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardListerView;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardListerViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationMerchantAccountEditorView;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationMerchantAccountEditorViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerView;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionEditorView;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionEditorViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionListerView;
+import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionListerViewImpl;
 
 public class SimulationViewFactory extends ViewFactoryBase {
 

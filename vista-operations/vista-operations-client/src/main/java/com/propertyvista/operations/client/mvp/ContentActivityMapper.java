@@ -30,12 +30,6 @@ import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserLis
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordViewerActivity;
-import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationCardEditorActivity;
-import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationCardListerActivity;
-import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountEditorActivity;
-import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationMerchantAccountListerActivity;
-import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionEditorActivity;
-import com.propertyvista.operations.client.activity.crud.cardservicesimulation.CardServiceSimulationTransactionListerActivity;
 import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorActivity;
@@ -56,13 +50,19 @@ import com.propertyvista.operations.client.activity.crud.scheduler.TriggerEditor
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerListerActivity;
 import com.propertyvista.operations.client.activity.crud.scheduler.TriggerViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulateddatapreload.SimulatedDataPreloadActivity;
-import com.propertyvista.operations.client.activity.crud.simulatedpad.PadBatchEditorActivity;
-import com.propertyvista.operations.client.activity.crud.simulatedpad.PadBatchViewerActivity;
-import com.propertyvista.operations.client.activity.crud.simulatedpad.PadFileEditorActivity;
-import com.propertyvista.operations.client.activity.crud.simulatedpad.PadFileListerActivity;
-import com.propertyvista.operations.client.activity.crud.simulatedpad.PadFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulation.SimulationEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulation.SimulationViewerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationCardEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationCardListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationMerchantAccountEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationTransactionEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationTransactionListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchViewerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileEditorActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileViewerActivity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsEditorAcitvity;
 import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivty;
 import com.propertyvista.operations.client.activity.login.LoginActivity;
@@ -188,10 +188,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Simulation.SimulatedDataPreload) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.SimulatedDataPreload) {
                         activity = new SimulatedDataPreloadActivity();
 
-                    } else if (place instanceof OperationsSiteMap.Simulation.PadSimulation.PadSimFile) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimFile) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PadFileEditorActivity(crudPlace);
@@ -204,7 +204,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Simulation.PadSimulation.PadSimBatch) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimBatch) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new PadBatchEditorActivity(crudPlace);
@@ -320,7 +320,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 // - Simulation
-                    } else if (place instanceof OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:
@@ -331,7 +331,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:
@@ -342,7 +342,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
                         switch (crudPlace.getType()) {
                         case viewer:
                         case editor:

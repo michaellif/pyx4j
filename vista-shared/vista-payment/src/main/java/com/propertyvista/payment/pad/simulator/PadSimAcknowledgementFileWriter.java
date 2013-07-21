@@ -19,9 +19,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
 public class PadSimAcknowledgementFileWriter implements Closeable {
 

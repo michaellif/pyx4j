@@ -24,9 +24,9 @@ import com.pyx4j.essentials.server.csv.CSVParser;
 import com.pyx4j.essentials.server.csv.CSVReciver;
 
 import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
 public class PadSimFileParser {
 

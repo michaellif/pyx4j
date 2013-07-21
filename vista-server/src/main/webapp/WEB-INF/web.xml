@@ -308,7 +308,7 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
 -->
     <servlet>
         <servlet-name>CardServiceSimulationServlet</servlet-name>
-        <servlet-class>com.propertyvista.operations.server.services.sim.CardServiceSimulationServlet</servlet-class>
+        <servlet-class>com.propertyvista.operations.server.services.simulator.CardServiceSimulationServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

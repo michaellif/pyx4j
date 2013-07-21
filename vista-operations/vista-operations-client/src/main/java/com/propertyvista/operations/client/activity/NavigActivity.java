@@ -108,12 +108,12 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         if (ApplicationMode.isDevelopment()) {
             folder = new NavigFolder("Dev Simulation");
 
-            folder.addNavigItem(new OperationsSiteMap.Simulation.SimulatedDataPreload());
-            folder.addNavigItem(new OperationsSiteMap.Simulation.PadSimulation.PadSimFile());
+            folder.addNavigItem(new OperationsSiteMap.Simulator.SimulatedDataPreload());
+            folder.addNavigItem(new OperationsSiteMap.Simulator.PadSimulation.PadSimFile());
 
-            folder.addNavigItem(new OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount());
-            folder.addNavigItem(new OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard());
-            folder.addNavigItem(new OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction());
+            folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount());
+            folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard());
+            folder.addNavigItem(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction());
 
             list.add(folder);
         }

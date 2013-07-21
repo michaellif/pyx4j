@@ -22,8 +22,8 @@ import com.propertyvista.operations.client.resources.OperationsImages;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimBatch;
-import com.propertyvista.operations.domain.payment.pad.sim.PadSimFile;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
+import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
@@ -41,12 +41,12 @@ public class OperationsEntityMapper {
         register(TriggerDTO.class, OperationsSiteMap.Management.Trigger.class, DEFAULT_IMAGE);
         register(Run.class, OperationsSiteMap.Management.TriggerRun.class, DEFAULT_IMAGE);
         register(RunData.class, OperationsSiteMap.Management.TriggerRunData.class, DEFAULT_IMAGE);
-        register(PadSimFile.class, OperationsSiteMap.Simulation.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
-        register(PadSimBatch.class, OperationsSiteMap.Simulation.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
-        register(CardServiceSimulationMerchantAccount.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,
+        register(PadSimFile.class, OperationsSiteMap.Simulator.PadSimulation.PadSimFile.class, DEFAULT_IMAGE);
+        register(PadSimBatch.class, OperationsSiteMap.Simulator.PadSimulation.PadSimBatch.class, DEFAULT_IMAGE);
+        register(CardServiceSimulationMerchantAccount.class, OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount.class,
                 DEFAULT_IMAGE);
-        register(CardServiceSimulationCard.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationCard.class, DEFAULT_IMAGE);
-        register(CardServiceSimulationTransaction.class, OperationsSiteMap.Simulation.CardServiceSimulation.CardServiceSimulationTransaction.class,
+        register(CardServiceSimulationCard.class, OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard.class, DEFAULT_IMAGE);
+        register(CardServiceSimulationTransaction.class, OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction.class,
                 DEFAULT_IMAGE);
         register(AuditRecordOperationsDTO.class, OperationsSiteMap.Security.AuditRecord.class, DEFAULT_IMAGE);
     }
