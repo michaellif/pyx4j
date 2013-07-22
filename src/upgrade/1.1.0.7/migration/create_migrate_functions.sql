@@ -117,7 +117,16 @@ BEGIN
                 
         SET CONSTRAINTS billing_arrears_snapshot_billing_account_fk, billing_arrears_snapshot_building_fk IMMEDIATE;
   
+        -- customer
         
+        EXECUTE 'UPDATE '||v_schema_name||'.customer '
+                ||'SET  person_email = LOWER(person_email) ';
+                
+                
+        -- employee
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.employee '
+                ||'SET  email = LOWER(email) ';
         
         /**
         ***     ==========================================================================================================
