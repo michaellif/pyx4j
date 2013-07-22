@@ -25,6 +25,10 @@ public class RtCustomerUpdater extends Updater<RTCustomer, RtCustomerUpdater> {
         FirstName, LastName;
     }
 
+    public enum YCUSTOMERADDRESS implements com.propertyvista.yardi.mock.Name {
+        Type, Address1, Address2, City, State, PostalCode, Email;
+    }
+
     public enum YLEASE implements com.propertyvista.yardi.mock.Name {
         CurrentRent, LeaseFromDate, LeaseToDate, ResponsibleForLease;
     }

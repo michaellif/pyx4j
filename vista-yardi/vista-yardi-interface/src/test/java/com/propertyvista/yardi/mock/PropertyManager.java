@@ -211,6 +211,15 @@ public class PropertyManager {
 
                 updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getName(), property);
 
+            } else if (property.getName() instanceof RtCustomerUpdater.YCUSTOMERADDRESS) {
+
+                if (rtCustomer.getCustomers().getCustomer().get(0).getAddress().isEmpty()) {
+                    Address custAddress = new Address();
+                    rtCustomer.getCustomers().getCustomer().get(0).getAddress().add(custAddress);
+                }
+
+                updateProperty(rtCustomer.getCustomers().getCustomer().get(0).getAddress().get(0), property);
+
             } else if (property.getName() instanceof RtCustomerUpdater.YLEASE) {
 
                 if (rtCustomer.getCustomers().getCustomer().get(0).getLease() == null) {
@@ -236,7 +245,6 @@ public class PropertyManager {
                 }
 
                 updateProperty(rtCustomer.getRTUnit().getUnit().getInformation().get(0), property);
-
             }
         }
 
