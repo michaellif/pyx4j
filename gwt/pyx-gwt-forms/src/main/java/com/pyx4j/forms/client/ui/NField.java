@@ -248,17 +248,18 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
         private final SimplePanel triggerButtonHolder;
 
+        private final SimplePanel editorHolder;
+
         public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.FieldEditorPanel.name());
             getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
             setWidth("100%");
 
-            SimplePanel editorHolder = new SimplePanel();
+            editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
             editorHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             editorHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            editorHolder.setWidget(editor);
             add(editorHolder);
 
             focusHandlerManager = new GroupFocusHandler(this);
@@ -275,6 +276,12 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             add(triggerButtonHolder);
 
             setTriggerButton();
+        }
+
+        @Override
+        protected void onLoad() {
+            editorHolder.setWidget(editor);
+            super.onLoad();
         }
 
         public void setTriggerButton() {
@@ -369,7 +376,6 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             viewerLabelHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
             viewerLabelHolder.setWidth("100%");
             viewerLabelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            viewerLabelHolder.setWidget(viewer);
             add(viewerLabelHolder);
 
             viewerLinkHolder = new Link();
@@ -385,6 +391,16 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
 
             setNavigationCommand();
 
+        }
+
+        @Override
+        protected void onLoad() {
+            if (navigationCommand != null) {
+                viewerLinkHolder.setWidget(viewer);
+            } else {
+                viewerLabelHolder.setWidget(viewer);
+            }
+            super.onLoad();
         }
 
         public void setNavigationCommand() {
