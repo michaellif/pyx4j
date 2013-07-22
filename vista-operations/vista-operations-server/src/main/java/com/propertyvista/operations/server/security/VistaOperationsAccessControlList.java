@@ -28,6 +28,8 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAcco
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.ExecutionReportMessage;
@@ -66,6 +68,8 @@ import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationTransactionCrudService;
+import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
+import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordCrudService;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 import com.propertyvista.operations.rpc.services.simulator.SimulatedDataPreloadService;
@@ -138,6 +142,12 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationMerchantAccount.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DirectDebitSimRecordCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitSimRecord.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(DirectDebitSimFileCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitSimFile.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(AuditRecordCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(AuditRecord.class, EntityPermission.READ));

@@ -22,6 +22,7 @@ import com.propertyvista.operations.client.resources.OperationsImages;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -49,5 +50,6 @@ public class OperationsEntityMapper {
         register(CardServiceSimulationTransaction.class, OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction.class,
                 DEFAULT_IMAGE);
         register(AuditRecordOperationsDTO.class, OperationsSiteMap.Security.AuditRecord.class, DEFAULT_IMAGE);
+        register(DirectDebitSimRecord.class, OperationsSiteMap.Simulator.DirectDebitSimRecord.class, DEFAULT_IMAGE);
     }
 }
