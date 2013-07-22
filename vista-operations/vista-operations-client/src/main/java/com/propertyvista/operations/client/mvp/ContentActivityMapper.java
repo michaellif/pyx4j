@@ -58,6 +58,7 @@ import com.propertyvista.operations.client.activity.crud.simulator.cardservice.C
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationTransactionEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.cardservice.CardServiceSimulationTransactionListerActivity;
+import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.dbp.DirectDebitSimRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchEditorActivity;
@@ -196,6 +197,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.Simulator.DirectDebitSimRecord) {
                         switch (crudPlace.getType()) {
                         case editor:
+                            activity = new DirectDebitSimRecordEditorActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new DirectDebitSimRecordViewerActivity(crudPlace);

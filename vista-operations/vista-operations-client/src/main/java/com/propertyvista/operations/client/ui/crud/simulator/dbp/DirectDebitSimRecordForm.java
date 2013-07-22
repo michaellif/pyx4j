@@ -17,17 +17,17 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.site.client.ui.prime.form.IViewer;
+import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 
-public abstract class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSimRecord> {
+public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSimRecord> {
 
-    public DirectDebitSimRecordForm(IViewer<DirectDebitSimRecord> viewer) {
-        super(DirectDebitSimRecord.class, viewer);
+    public DirectDebitSimRecordForm(IForm<DirectDebitSimRecord> view) {
+        super(DirectDebitSimRecord.class, view);
 
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
         int row = -1;

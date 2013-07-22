@@ -34,6 +34,8 @@ import com.propertyvista.operations.client.ui.crud.simulation.SimulationEditorVi
 import com.propertyvista.operations.client.ui.crud.simulation.SimulationEdtiorViewImpl;
 import com.propertyvista.operations.client.ui.crud.simulation.SimulationViewerView;
 import com.propertyvista.operations.client.ui.crud.simulation.SimulationViewerViewImpl;
+import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordEditorView;
+import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordEditorViewImpl;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordListerView;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordListerViewImpl;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordViewerView;
@@ -77,6 +79,8 @@ public class AdministrationVeiwFactory extends ViewFactoryBase {
                 map.put(type, new DirectDebitSimRecordListerViewImpl());
             } else if (DirectDebitSimRecordViewerView.class.equals(type)) {
                 map.put(type, new DirectDebitSimRecordViewerViewImpl());
+            } else if (DirectDebitSimRecordEditorView.class.equals(type)) {
+                map.put(type, new DirectDebitSimRecordEditorViewImpl());
 
             } else if (PadFileViewerView.class.equals(type)) {
                 map.put(type, new PadFileViewerViewImpl());
