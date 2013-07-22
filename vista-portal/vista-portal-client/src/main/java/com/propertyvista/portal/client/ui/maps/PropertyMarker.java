@@ -160,7 +160,7 @@ public class PropertyMarker extends Marker {
 
                 @Override
                 public void onClick(ClickEvent event) {
-                    Window.Location.replace(getDetailsUrl() + "=" + property.propertyCode().getValue());
+                    Window.Location.assign(getDetailsUrl() + "=" + property.propertyCode().getValue());
                 }
             });
             content.add(viewDetailsItem);
