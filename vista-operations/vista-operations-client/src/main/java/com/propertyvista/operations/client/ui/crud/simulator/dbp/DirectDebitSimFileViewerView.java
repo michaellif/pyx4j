@@ -19,4 +19,10 @@ import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimF
 
 public interface DirectDebitSimFileViewerView extends IViewer<DirectDebitSimFile> {
 
+    interface Presenter extends IViewer.Presenter {
+
+        void addNewRecord(DirectDebitSimFile file);
+
+    }
+
 }

@@ -15,12 +15,15 @@ package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileViewerView;
 import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<DirectDebitSimFile> implements DirectDebitSimFileViewerView.Presenter {
@@ -33,5 +36,10 @@ public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<Dir
     @Override
     public boolean canEdit() {
         return false;
+    }
+
+    @Override
+    public void addNewRecord(DirectDebitSimFile file) {
+        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(DirectDebitSimRecord.class).formNewItemPlace(file.getPrimaryKey()));
     }
 }

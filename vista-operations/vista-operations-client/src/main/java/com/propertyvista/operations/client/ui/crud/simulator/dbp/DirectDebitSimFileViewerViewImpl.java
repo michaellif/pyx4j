@@ -13,6 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
+import com.google.gwt.user.client.Command;
+
+import com.pyx4j.widgets.client.Button;
+
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 
@@ -20,5 +24,14 @@ public class DirectDebitSimFileViewerViewImpl extends OperationsViewerViewImplBa
 
     public DirectDebitSimFileViewerViewImpl() {
         setForm(new DirectDebitSimFileForm(this));
+
+        Button addNewRecordActionButton = new Button("Add new record", new Command() {
+
+            @Override
+            public void execute() {
+                ((DirectDebitSimFileViewerView.Presenter) getPresenter()).addNewRecord(getForm().getValue());
+            }
+        });
+        addHeaderToolbarItem(addNewRecordActionButton);
     }
 }
