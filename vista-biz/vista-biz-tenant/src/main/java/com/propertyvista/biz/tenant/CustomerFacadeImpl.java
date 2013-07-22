@@ -67,9 +67,10 @@ public class CustomerFacadeImpl implements CustomerFacade {
             throw new UnRecoverableRuntimeException(i18n.tr("Can't remove e-mail address for {0} ", customer.person().name().getStringView()));
         }
         if (!customer.person().email().isNull()) {
+            customer.person().email().setValue(EmailValidator.normalizeEmailAddress(customer.person().email().getValue()));
             Persistence.service().retrieve(customer.user());
             customer.user().name().setValue(customer.person().name().getStringView());
-            customer.user().email().setValue(EmailValidator.normalizeEmailAddress(customer.person().email().getValue()));
+            customer.user().email().setValue(customer.person().email().getValue());
             if (customer.user().getPrimaryKey() != null) {
                 Persistence.service().merge(customer.user());
             } else {

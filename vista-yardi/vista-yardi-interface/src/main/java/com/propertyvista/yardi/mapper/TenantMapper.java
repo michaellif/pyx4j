@@ -23,6 +23,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.security.server.EmailValidator;
 
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
@@ -53,7 +54,7 @@ public class TenantMapper {
     private Customer findCustomer(YardiCustomer yardiCustomer) {
         if (!yardiCustomer.getAddress().isEmpty() && CommonsStringUtils.isStringSet(yardiCustomer.getAddress().get(0).getEmail())) {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.eq(criteria.proto().person().email(), yardiCustomer.getAddress().get(0).getEmail().toLowerCase());
+            criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(yardiCustomer.getAddress().get(0).getEmail()));
             return Persistence.service().retrieve(criteria);
         }
         return null;
