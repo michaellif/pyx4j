@@ -44,7 +44,7 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
                 onGoToFile();
             }
         });
-        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().file(), new CEntityLabel<DirectDebitSimFile>())).build());
+        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().file(), fileLink)).build());
 
         selectTab(addTab(formPanel));
     }

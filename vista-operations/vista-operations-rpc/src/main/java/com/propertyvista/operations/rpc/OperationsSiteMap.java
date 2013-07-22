@@ -180,6 +180,10 @@ public class OperationsSiteMap implements SiteMap {
 
         }
 
+        public static class DirectDebitSimFile extends CrmCrudAppPlace {
+
+        }
+
     }
 
     @PlaceProperties(navigLabel = "Accounts")
