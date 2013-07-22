@@ -38,7 +38,7 @@ public interface ExecutionReportMessage extends IEntity {
     @Detached
     ExecutionReportSection executionReportSection();
 
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("MM/dd/yyyy HH:mm:ss")
     IPrimitive<Date> eventTime();
 
     @Length(4000)

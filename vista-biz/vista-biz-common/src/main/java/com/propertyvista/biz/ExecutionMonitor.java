@@ -317,6 +317,9 @@ public class ExecutionMonitor {
             return null;
         }
 
+        /**
+         * Ascending order of event time
+         */
         @Override
         public int compareTo(ReportMessage o) {
             return eventTime.compareTo(o.eventTime);

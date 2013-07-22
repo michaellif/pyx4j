@@ -20,13 +20,14 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
@@ -55,5 +56,6 @@ public interface ExecutionReportSection extends IEntity {
     @Owned
     // TODO AttachLevel.CountOnly
     @Detached(level = AttachLevel.IdOnly)
-    ISet<ExecutionReportMessage> messages();
+    @OrderBy(PrimaryKey.class)
+    IList<ExecutionReportMessage> messages();
 }

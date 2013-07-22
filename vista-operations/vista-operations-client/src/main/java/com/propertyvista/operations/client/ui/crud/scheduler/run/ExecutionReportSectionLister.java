@@ -16,8 +16,8 @@ package com.propertyvista.operations.client.ui.crud.scheduler.run;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
+import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,7 +49,7 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
             new MemberColumnDescriptor(new Builder(proto().messages())) {
                 @Override
                 public String convert(IEntity entity) {
-                    return String.valueOf(entity.isEmpty() ? 0 : ((ISet<?>)entity.getMember(getColumnPath())).size());
+                    return String.valueOf(entity.isEmpty() ? 0 : ((ICollection<?,?>)entity.getMember(getColumnPath())).size());
                 }
             }
         );//@formatter:on
