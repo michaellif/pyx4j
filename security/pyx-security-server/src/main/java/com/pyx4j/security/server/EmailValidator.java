@@ -20,6 +20,7 @@
  */
 package com.pyx4j.security.server;
 
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,6 +28,10 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
 public class EmailValidator {
+
+    public static String normalizeEmailAddress(String email) {
+        return email.toLowerCase(Locale.ENGLISH).trim();
+    }
 
     public static boolean isValid(String email) {
         // check email using regular expressions
