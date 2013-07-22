@@ -109,7 +109,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         List<Lease> leases = new ArrayList<Lease>();
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.in(criteria.proto().status(), Lease.Status.current());
+            criteria.in(criteria.proto().status(), Lease.Status.active());
             criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer);
             criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
             leases.addAll(Persistence.service().query(criteria));
