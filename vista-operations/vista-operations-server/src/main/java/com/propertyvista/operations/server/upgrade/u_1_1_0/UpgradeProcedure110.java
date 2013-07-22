@@ -209,13 +209,13 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
             billingAccountIterator = Persistence.secureQuery(null, EntityQueryCriteria.create(BillingAccount.class), AttachLevel.IdOnly);
             while (billingAccountIterator.hasNext()) {
                 BillingAccount billingAccount = billingAccountIterator.next();
-                log.info("Removing redundant lease arrears snapshots for billing cycle " + billingAccount.getPrimaryKey().toString());
+                log.info("Removing redundant lease arrears snapshots for billing account" + billingAccount.getPrimaryKey().toString());
                 EntityQueryCriteria<LeaseArrearsSnapshot> snapshotCriteria = EntityQueryCriteria.create(LeaseArrearsSnapshot.class);
                 snapshotCriteria.eq(snapshotCriteria.proto().billingAccount(), billingAccount);
                 snapshotCriteria.asc(snapshotCriteria.proto().fromDate());
                 int removedCounter = removeRedundantArrearsSnapshots(Persistence.service().query(snapshotCriteria).iterator());
                 totalRemovedCounter += removedCounter;
-                log.info("Removed " + removedCounter + " redundant lease arrears snapshots for billing cycle " + billingAccount.getPrimaryKey().toString());
+                log.info("Removed " + removedCounter + " redundant lease arrears snapshots for billing account" + billingAccount.getPrimaryKey().toString());
             }
         } finally {
             IOUtils.closeQuietly(billingAccountIterator);
@@ -247,25 +247,25 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
         if (!snapshots.hasNext()) {
             return removedCounter;
         }
-        ArrearsSnapshot<?> currentSnapshot = snapshots.next();
-        boolean merged = false;
+        ArrearsSnapshot<?> previousSnapshot = snapshots.next();
+        boolean mergeSnapshots = false;
         while (snapshots.hasNext()) {
-            ArrearsSnapshot<?> nextSnapshot = snapshots.next();
-            if (!ARArreasManagerUtils.haveDifferentBucketValues(currentSnapshot, nextSnapshot)) {
-                currentSnapshot.toDate().setValue(nextSnapshot.toDate().getValue());
-                Persistence.service().delete(nextSnapshot);
+            ArrearsSnapshot<?> snapshot = snapshots.next();
+            if (!ARArreasManagerUtils.haveDifferentBucketValues(previousSnapshot, snapshot)) {
+                mergeSnapshots = true;
+                previousSnapshot.toDate().setValue(snapshot.toDate().getValue());
+                Persistence.service().delete(snapshot);
                 removedCounter += 1;
-                merged = true;
             } else {
-                if (merged) {
-                    Persistence.service().merge(currentSnapshot);
+                if (mergeSnapshots) {
+                    Persistence.service().persist(previousSnapshot);
                 }
-                currentSnapshot = nextSnapshot;
-                merged = false;
+                mergeSnapshots = false;
+                previousSnapshot = snapshot;
             }
         }
-        if (merged) {
-            Persistence.service().merge(currentSnapshot);
+        if (mergeSnapshots) {
+            Persistence.service().persist(previousSnapshot);
         }
 
         return removedCounter;
