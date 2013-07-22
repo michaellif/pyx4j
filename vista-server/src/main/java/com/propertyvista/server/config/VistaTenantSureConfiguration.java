@@ -27,7 +27,11 @@ public class VistaTenantSureConfiguration implements TenantSureConfiguration {
 
     @Override
     public boolean useCfcApiAdapterMockup() {
-        return VistaDemo.isDemo();
+        if (VistaDeployment.isVistaProduction()) {
+            return false;
+        } else {
+            return serverSideConfiguration.getConfigProperties().getBooleanValue("tenantsure.cfcApiMockup", VistaDemo.isDemo());
+        }
     }
 
     @Override
