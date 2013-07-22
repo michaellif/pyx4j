@@ -320,6 +320,7 @@ h2 {
 }
 .DialogContent {
 	background-color: #B4AFB0 !important;
+	height: 178px !important;
 }
 
 .TenantSureManagementStatusDetailsPanel {
