@@ -15,6 +15,7 @@ package com.propertyvista.biz;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -297,10 +298,11 @@ public class ExecutionMonitor {
         private void add(ReportSection otherSection) {
             add(otherSection.accumulator);
             messages.addAll(otherSection.messages);
+            Collections.sort(messages);
         }
     }
 
-    private class ReportMessage {
+    private class ReportMessage implements Comparable<ReportMessage> {
 
         private final String message;
 
@@ -313,6 +315,11 @@ public class ExecutionMonitor {
 
         ExecutionReportMessage createExecutionReportMessage(ExecutionReportSection report) {
             return null;
+        }
+
+        @Override
+        public int compareTo(ReportMessage o) {
+            return eventTime.compareTo(o.eventTime);
         }
 
     }
