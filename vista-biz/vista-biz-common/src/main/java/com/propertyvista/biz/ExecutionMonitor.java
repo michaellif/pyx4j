@@ -322,7 +322,7 @@ public class ExecutionMonitor {
          */
         @Override
         public int compareTo(ReportMessage o) {
-            return eventTime.compareTo(o.eventTime);
+            return o.eventTime.compareTo(eventTime);
         }
 
     }
