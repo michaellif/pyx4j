@@ -70,8 +70,8 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
     private class PaymentMethodFolder extends VistaTableFolder<LeasePaymentMethod> {
 
         public PaymentMethodFolder() {
-            super(LeasePaymentMethod.class, true);
-            setOrderable(false);
+            super(LeasePaymentMethod.class);
+            setViewable(true);
         }
 
         @Override
@@ -110,6 +110,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 
             public LeasePaymentMethodEditor() {
                 super(LeasePaymentMethod.class, columns());
+                setViewable(true);
             }
 
             @SuppressWarnings("rawtypes")
@@ -124,7 +125,6 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                             presenter.viewPaymentMethod(getValue());
                         }
                     });
-                    comp.setViewable(true);
                 } else {
                     comp = super.create(member);
                 }
