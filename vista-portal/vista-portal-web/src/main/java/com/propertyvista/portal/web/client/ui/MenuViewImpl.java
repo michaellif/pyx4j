@@ -122,7 +122,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
                 System.out.println("Logout");
 
             }
-        }, i18n.tr("Logout"), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));
+        }, i18n.tr("Logout"), PortalImages.INSTANCE.logoutMenu(), ThemeColor.background));
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 

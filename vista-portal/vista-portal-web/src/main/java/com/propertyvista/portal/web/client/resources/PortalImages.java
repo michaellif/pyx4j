@@ -349,4 +349,13 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource active();
     }
 
+    LogoutMenuImages logoutMenu();
+
+    interface LogoutMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Logout.png")
+        ImageResource regular();
+    }
+
 }
