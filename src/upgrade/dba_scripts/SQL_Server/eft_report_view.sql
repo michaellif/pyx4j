@@ -9,7 +9,7 @@
 **/
 
 
-USE sl_0628;
+USE sl_0722;
 
 DROP VIEW eft_trans_report;
 
