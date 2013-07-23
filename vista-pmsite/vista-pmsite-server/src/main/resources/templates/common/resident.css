@@ -81,8 +81,9 @@
     box-shadow: none !important;
 }
 
-.EditorPanel .TextBox {
-    min-width: 75px;
+
+.WidgetDecoratorComponentHolder .TextBox, .WidgetDecoratorComponentHolder .ListBox {
+	min-width: 75px;
 }
 
 .Anchor-disabled:hover {
