@@ -29,7 +29,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.widgets.client.RadioGroup.Layout;
 
-public class VersionedLister<E extends IVersionedEntity<?>> extends AbstractLister<E> {
+public abstract class VersionedLister<E extends IVersionedEntity<?>> extends AbstractLister<E> {
 
     @I18n(context = "Version Display Mode")
     public enum VersionDisplayMode {

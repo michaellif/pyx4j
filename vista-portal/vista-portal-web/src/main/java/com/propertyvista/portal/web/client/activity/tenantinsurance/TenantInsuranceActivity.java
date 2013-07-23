@@ -27,8 +27,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 // TODO maybe this dispatching should be done on navig activity level: i.e. put the place that corresponds to current status in the navig bar 
 public class TenantInsuranceActivity extends AbstractActivity {
@@ -57,7 +57,7 @@ public class TenantInsuranceActivity extends AbstractActivity {
                             throw new Error("got unknown insurance status");
                         }
                     } else {
-                        TenantInsuranceCoveredByOtherTenantView view = PortalWebViewFactory.instance(TenantInsuranceCoveredByOtherTenantView.class);
+                        TenantInsuranceCoveredByOtherTenantView view = PortalWebSite.getViewFactory().instantiate(TenantInsuranceCoveredByOtherTenantView.class);
                         view.populate(status);
                         panel.setWidget(view);
                     }

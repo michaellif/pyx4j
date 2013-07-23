@@ -36,8 +36,8 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureAlreadyPurchasedException;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.errors.TenantSureOnMaintenanceException;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantSurePurchaseActivity extends AbstractActivity implements TenantSurePurchaseView.Presenter {
 
@@ -48,7 +48,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
     private final TenantSurePurchaseService service;
 
     public TenantSurePurchaseActivity() {
-        view = PortalWebViewFactory.instance(TenantSurePurchaseView.class);
+        view = PortalWebSite.getViewFactory().instantiate(TenantSurePurchaseView.class);
         service = GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class);
     }
 

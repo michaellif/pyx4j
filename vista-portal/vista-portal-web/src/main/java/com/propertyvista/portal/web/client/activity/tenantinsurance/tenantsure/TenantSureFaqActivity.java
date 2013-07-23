@@ -21,9 +21,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantSureFaqActivity extends AbstractActivity {
 
@@ -33,7 +33,7 @@ public class TenantSureFaqActivity extends AbstractActivity {
 
     public TenantSureFaqActivity() {
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
-        view = PortalWebViewFactory.instance(TermsView.class);
+        view = PortalWebSite.getViewFactory().instantiate(TermsView.class);
     }
 
     @Override

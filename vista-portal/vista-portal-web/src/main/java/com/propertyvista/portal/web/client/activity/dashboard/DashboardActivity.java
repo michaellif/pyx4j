@@ -27,9 +27,9 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class DashboardActivity extends SecurityAwareActivity implements DashboardView.DashboardPresenter {
 
@@ -38,7 +38,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     private final DashboardService srv;
 
     public DashboardActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(DashboardView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(DashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
     }

@@ -13,11 +13,10 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.security.rpc.PasswordRetrievalRequest;
+import com.pyx4j.site.client.IsView;
 
-public interface PasswordResetRequestView extends IsWidget {
+public interface PasswordResetRequestView extends IsView {
 
     public interface PasswordResetRequestPresenter {
 

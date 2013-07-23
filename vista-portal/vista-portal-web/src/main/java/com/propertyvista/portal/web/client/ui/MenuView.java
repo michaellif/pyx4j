@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface MenuView extends IsWidget {
+public interface MenuView extends IsView {
 
     public interface MenuPresenter {
         public void navigTo(AppPlace place);

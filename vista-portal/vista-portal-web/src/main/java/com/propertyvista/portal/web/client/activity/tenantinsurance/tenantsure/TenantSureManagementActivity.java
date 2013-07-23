@@ -26,8 +26,8 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantSureManagementActivity extends AbstractActivity implements TenantSureManagementView.Presenter {
 
@@ -36,7 +36,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
     private final TenantSureManagementService service;
 
     public TenantSureManagementActivity() {
-        view = PortalWebViewFactory.instance(TenantSureManagementView.class);
+        view = PortalWebSite.getViewFactory().instantiate(TenantSureManagementView.class);
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 

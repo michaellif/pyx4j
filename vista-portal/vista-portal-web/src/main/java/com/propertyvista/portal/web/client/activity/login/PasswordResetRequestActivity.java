@@ -22,12 +22,12 @@ import com.propertyvista.common.client.ui.components.login.AbstractPasswordReset
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
+import com.propertyvista.portal.web.client.PortalWebSite;
 
 public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity {
 
     public PasswordResetRequestActivity(Place place) {
-        super(place, PortalWebViewFactory.instance(PasswordResetRequestView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
+        super(place, PortalWebSite.getViewFactory().instantiate(PasswordResetRequestView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
                 new PortalSiteMap.Login());
     }
 

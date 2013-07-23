@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
 
-public interface DashboardView extends IsWidget {
+public interface DashboardView extends IsView {
 
     interface DashboardPresenter {
 

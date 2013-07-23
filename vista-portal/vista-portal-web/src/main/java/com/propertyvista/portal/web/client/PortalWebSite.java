@@ -24,6 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
@@ -55,6 +56,8 @@ public class PortalWebSite extends VistaSite {
     private static PortalSiteServices portalSiteServices = GWT.create(PortalSiteServices.class);
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
+
+    private static SingletonViewFactory viewFactory = new SingletonViewFactory();
 
     public PortalWebSite() {
         super("vista-portal", PortalSiteMap.class, new PortalWebSiteDispatcher());
@@ -131,6 +134,10 @@ public class PortalWebSite extends VistaSite {
 
     public static PortalWebSite instance() {
         return (PortalWebSite) AppSite.instance();
+    }
+
+    public static SingletonViewFactory getViewFactory() {
+        return viewFactory;
     }
 
     public static PortalSiteServices getPortalSiteServices() {

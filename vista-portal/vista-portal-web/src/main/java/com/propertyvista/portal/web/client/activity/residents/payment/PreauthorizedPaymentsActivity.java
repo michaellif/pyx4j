@@ -25,9 +25,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PreauthorizedPaymentsActivity extends SecurityAwareActivity implements PreauthorizedPaymentsView.Presenter {
 
@@ -36,7 +36,7 @@ public class PreauthorizedPaymentsActivity extends SecurityAwareActivity impleme
     private final PreauthorizedPaymentListService srv;
 
     public PreauthorizedPaymentsActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(PreauthorizedPaymentsView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(PreauthorizedPaymentsView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PreauthorizedPaymentListService.class);
     }

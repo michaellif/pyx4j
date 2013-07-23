@@ -25,8 +25,8 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProvideTenantInsuranceActivity extends AbstractActivity implements ProvideTenantInsuranceView.Presenter {
@@ -36,7 +36,7 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
     private final TenantInsuranceService service;
 
     public ProvideTenantInsuranceActivity() {
-        view = PortalWebViewFactory.instance(ProvideTenantInsuranceView.class);
+        view = PortalWebSite.getViewFactory().instantiate(ProvideTenantInsuranceView.class);
         service = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
     }
 

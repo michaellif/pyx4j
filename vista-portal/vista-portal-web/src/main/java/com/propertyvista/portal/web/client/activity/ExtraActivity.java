@@ -26,8 +26,8 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
 import com.propertyvista.common.client.site.ExtraGadget;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.ExtraView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class ExtraActivity extends AbstractActivity {
 
@@ -44,7 +44,7 @@ public class ExtraActivity extends AbstractActivity {
     }
 
     public ExtraActivity(Place place) {
-        view = PortalWebViewFactory.instance(ExtraView.class);
+        view = PortalWebSite.getViewFactory().instantiate(ExtraView.class);
     }
 
     @Override

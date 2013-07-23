@@ -15,13 +15,12 @@ package com.propertyvista.common.client.ui.components.security;
 
 import java.util.Set;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
+import com.pyx4j.site.client.IsView;
 
-public interface PasswordChangeView extends IsWidget {
+public interface PasswordChangeView extends IsView {
 
     public interface Presenter {
 

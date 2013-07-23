@@ -15,11 +15,11 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.common.client.site.ExtraGadget;
 
-public interface ExtraView extends IsWidget {
+public interface ExtraView extends IsView {
 
     public interface ExtraPresenter {
 

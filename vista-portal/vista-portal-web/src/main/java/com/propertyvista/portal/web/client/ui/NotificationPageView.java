@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.common.client.site.Notification;
 
-public interface NotificationPageView extends IsWidget {
+public interface NotificationPageView extends IsView {
 
     interface NotificationPagePresenter {
 

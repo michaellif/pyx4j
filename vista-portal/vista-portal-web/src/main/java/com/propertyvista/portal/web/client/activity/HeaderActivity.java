@@ -18,15 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.HeaderView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class HeaderActivity extends AbstractActivity {
 
     private final HeaderView view;
 
     public HeaderActivity(Place place) {
-        view = PortalWebViewFactory.instance(HeaderView.class);
+        view = PortalWebSite.getViewFactory().instantiate(HeaderView.class);
     }
 
     @Override

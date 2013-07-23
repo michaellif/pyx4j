@@ -27,9 +27,9 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.Chan
 
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.NotificationHeaderView;
 import com.propertyvista.portal.web.client.ui.NotificationHeaderView.NotificationHeaderPresenter;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class NotificationHeaderActivity extends AbstractActivity implements NotificationHeaderPresenter {
 
@@ -47,7 +47,7 @@ public class NotificationHeaderActivity extends AbstractActivity implements Noti
     }
 
     public NotificationHeaderActivity(Place place) {
-        view = PortalWebViewFactory.instance(NotificationHeaderView.class);
+        view = PortalWebSite.getViewFactory().instantiate(NotificationHeaderView.class);
         view.setPresenter(this);
 
     }

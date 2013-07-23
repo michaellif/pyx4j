@@ -30,9 +30,9 @@ import com.propertyvista.portal.domain.dto.BillDataDTO;
 import com.propertyvista.portal.domain.dto.BillListDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.BillingHistoryService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillingHistoryView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class BillingHistoryActivity extends SecurityAwareActivity implements BillingHistoryView.Presenter {
 
@@ -41,7 +41,7 @@ public class BillingHistoryActivity extends SecurityAwareActivity implements Bil
     private final BillingHistoryService srv;
 
     public BillingHistoryActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(BillingHistoryView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(BillingHistoryView.class);
         this.view.setPresenter(this);
         srv = GWT.create(BillingHistoryService.class);
     }

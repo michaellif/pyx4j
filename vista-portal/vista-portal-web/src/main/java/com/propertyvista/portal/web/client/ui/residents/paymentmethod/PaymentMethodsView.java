@@ -15,11 +15,11 @@ package com.propertyvista.portal.web.client.ui.residents.paymentmethod;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 
-public interface PaymentMethodsView extends IsWidget {
+public interface PaymentMethodsView extends IsView {
 
     interface Presenter {
 

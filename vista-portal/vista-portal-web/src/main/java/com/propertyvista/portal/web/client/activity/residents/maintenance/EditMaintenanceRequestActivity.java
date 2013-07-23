@@ -31,9 +31,9 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.maintenance.EditMaintenanceRequestView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class EditMaintenanceRequestActivity extends SecurityAwareActivity implements EditMaintenanceRequestView.Presenter {
 
@@ -47,7 +47,7 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     public EditMaintenanceRequestActivity(AppPlace place) {
         srv = GWT.create(MaintenanceService.class);
-        this.view = PortalWebViewFactory.instance(EditMaintenanceRequestView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(EditMaintenanceRequestView.class);
         this.view.setPresenter(this);
 
         entityId = place.getItemId();

@@ -28,15 +28,15 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.MenuView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class MenuActivity extends AbstractActivity implements MenuView.MenuPresenter {
 
     private final MenuView view;
 
     public MenuActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(MenuView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(MenuView.class);
         view.setPresenter(this);
     }
 

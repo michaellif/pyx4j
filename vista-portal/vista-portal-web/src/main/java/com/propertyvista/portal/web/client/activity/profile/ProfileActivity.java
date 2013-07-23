@@ -23,10 +23,10 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class ProfileActivity extends SecurityAwareActivity implements ProfilePresenter {
 
@@ -35,7 +35,7 @@ public class ProfileActivity extends SecurityAwareActivity implements ProfilePre
     private final PersonalInfoCrudService srv;
 
     public ProfileActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(ProfileView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(ProfileView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PersonalInfoCrudService.class);
     }

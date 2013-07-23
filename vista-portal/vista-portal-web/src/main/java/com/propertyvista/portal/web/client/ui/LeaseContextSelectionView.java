@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
@@ -23,7 +23,7 @@ import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
 /**
  * This view is used to resolve ambiguity when a customer with more than one lease logs in to a portal.
  */
-public interface LeaseContextSelectionView extends IsWidget {
+public interface LeaseContextSelectionView extends IsView {
 
     interface Presenter {
 

@@ -29,8 +29,8 @@ import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.financial.yardi.FinancialSummaryView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 /**
  * Used to display financial status of Tenants from Yardi integrated accounts.
@@ -42,7 +42,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
     private final BillSummaryService service;
 
     public FinancialSummaryActivity(Place place) {
-        view = PortalWebViewFactory.instance(FinancialSummaryView.class);
+        view = PortalWebSite.getViewFactory().instantiate(FinancialSummaryView.class);
         service = GWT.<BillSummaryService> create(BillSummaryService.class);
     }
 

@@ -22,12 +22,12 @@ import com.propertyvista.common.client.ui.components.login.AbstractLoginWithToke
 import com.propertyvista.common.client.ui.components.login.LoginWithTokenView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
+import com.propertyvista.portal.web.client.PortalWebSite;
 
 public class LoginWithTokenActivity extends AbstractLoginWithTokenActivity {
 
     public LoginWithTokenActivity(Place place) {
-        super(place, PortalWebViewFactory.instance(LoginWithTokenView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
+        super(place, PortalWebSite.getViewFactory().instantiate(LoginWithTokenView.class), GWT.<AuthenticationService> create(PortalAuthenticationService.class),
                 new PortalSiteMap.PasswordReset(), new PortalSiteMap.Login());
     }
 

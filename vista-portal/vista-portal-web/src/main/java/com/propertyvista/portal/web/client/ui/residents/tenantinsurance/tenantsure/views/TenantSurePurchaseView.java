@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
@@ -21,7 +21,7 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.Tenant
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
-public interface TenantSurePurchaseView extends IsWidget {
+public interface TenantSurePurchaseView extends IsView {
 
     // TODO rename methods from "on" to action name...
     interface Presenter {

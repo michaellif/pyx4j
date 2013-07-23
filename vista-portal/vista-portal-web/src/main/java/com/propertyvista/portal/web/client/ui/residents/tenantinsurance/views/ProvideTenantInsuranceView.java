@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
-public interface ProvideTenantInsuranceView extends IsWidget {
+public interface ProvideTenantInsuranceView extends IsView {
 
     interface Presenter {
 

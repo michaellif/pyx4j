@@ -31,13 +31,13 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView.Persenter {
 
     public PreauthorizedPaymentWizardActivity(AppPlace place) {
-        super(place, PortalWebViewFactory.instance(PreauthorizedPaymentWizardView.class), GWT
+        super(place, PortalWebSite.getViewFactory().instantiate(PreauthorizedPaymentWizardView.class), GWT
                 .<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), PreauthorizedPaymentDTO.class);
     }
 

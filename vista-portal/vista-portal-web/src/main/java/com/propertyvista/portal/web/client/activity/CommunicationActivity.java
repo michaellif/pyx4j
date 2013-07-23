@@ -25,9 +25,9 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.communication.Message;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.CommunicationView;
 import com.propertyvista.portal.web.client.ui.CommunicationView.CommunicationPresenter;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class CommunicationActivity extends AbstractActivity implements CommunicationPresenter {
 
@@ -49,7 +49,7 @@ public class CommunicationActivity extends AbstractActivity implements Communica
     private final CommunicationView view;
 
     public CommunicationActivity(Place place) {
-        view = PortalWebViewFactory.instance(CommunicationView.class);
+        view = PortalWebSite.getViewFactory().instantiate(CommunicationView.class);
         view.setPresenter(this);
     }
 

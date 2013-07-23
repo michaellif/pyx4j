@@ -15,11 +15,11 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.communication.Message;
 
-public interface CommunicationView extends IsWidget {
+public interface CommunicationView extends IsView {
 
     interface CommunicationPresenter {
     }

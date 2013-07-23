@@ -23,8 +23,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.FooterView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class FooterActivity extends AbstractActivity {
 
@@ -35,7 +35,7 @@ public class FooterActivity extends AbstractActivity {
     private static final FooterActivity instance = new FooterActivity();
 
     private FooterActivity() {
-        view = PortalWebViewFactory.instance(FooterView.class);
+        view = PortalWebSite.getViewFactory().instantiate(FooterView.class);
         service = GWT.<FooterContentService> create(FooterContentService.class);
         service.getFooterContent(new DefaultAsyncCallback<PortalFooterContentDTO>() {
             @Override

@@ -18,13 +18,13 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.RootPane;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel;
 
-import com.propertyvista.portal.web.client.mvp.ExtraActivityMapper;
+import com.propertyvista.portal.web.client.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.web.client.mvp.ContentActivityMapper;
+import com.propertyvista.portal.web.client.mvp.ExtraActivityMapper;
 import com.propertyvista.portal.web.client.mvp.FooterActivityMapper;
 import com.propertyvista.portal.web.client.mvp.HeaderActivityMapper;
 import com.propertyvista.portal.web.client.mvp.MenuActivityMapper;
 import com.propertyvista.portal.web.client.mvp.NotificationActivityMapper;
-import com.propertyvista.portal.web.client.mvp.CommunicationActivityMapper;
 import com.propertyvista.portal.web.client.mvp.StickyHeaderActivityMapper;
 
 public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {

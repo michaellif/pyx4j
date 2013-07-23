@@ -27,9 +27,9 @@ import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDT
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.billing.BillSummaryView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class BillSummaryActivity extends SecurityAwareActivity implements BillSummaryView.Presenter {
 
@@ -38,7 +38,7 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
     private final BillSummaryService srv;
 
     public BillSummaryActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(BillSummaryView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(BillSummaryView.class);
         this.view.setPresenter(this);
         srv = GWT.create(BillSummaryService.class);
     }

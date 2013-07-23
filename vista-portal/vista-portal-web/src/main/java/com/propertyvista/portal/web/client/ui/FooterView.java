@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.web.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 
-public interface FooterView extends IsWidget {
+public interface FooterView extends IsView {
 
     void setContent(PortalFooterContentDTO content);
 

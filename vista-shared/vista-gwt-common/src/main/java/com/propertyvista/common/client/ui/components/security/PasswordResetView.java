@@ -13,13 +13,12 @@
  */
 package com.propertyvista.common.client.ui.components.security;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.validators.password.PasswordStrengthRule;
 import com.pyx4j.security.rpc.PasswordChangeRequest;
 import com.pyx4j.security.rpc.PasswordResetQuestion;
+import com.pyx4j.site.client.IsView;
 
-public interface PasswordResetView extends IsWidget {
+public interface PasswordResetView extends IsView {
 
     public interface Presenter {
 

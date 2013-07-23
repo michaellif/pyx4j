@@ -13,8 +13,8 @@
  */
 package com.propertyvista.common.client.ui.components.login;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
-public interface LoginWithTokenView extends IsWidget {
+public interface LoginWithTokenView extends IsView {
 
 }

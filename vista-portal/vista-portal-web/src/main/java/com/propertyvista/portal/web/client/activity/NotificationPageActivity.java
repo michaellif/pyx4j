@@ -22,14 +22,13 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.NotificationPageView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class NotificationPageActivity extends AbstractActivity implements NotificationPageView.NotificationPagePresenter {
 
     private final NotificationPageView view;
 
     public NotificationPageActivity(Place place) {
-        view = PortalWebViewFactory.instance(NotificationPageView.class);
+        view = PortalWebSite.getViewFactory().instantiate(NotificationPageView.class);
     }
 
     @Override

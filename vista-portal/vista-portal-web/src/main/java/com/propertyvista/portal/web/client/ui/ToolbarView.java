@@ -15,11 +15,11 @@ package com.propertyvista.portal.web.client.ui;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public interface ToolbarView extends IsWidget {
+public interface ToolbarView extends IsView {
 
     void setPresenter(ToolbarPresenter presenter);
 

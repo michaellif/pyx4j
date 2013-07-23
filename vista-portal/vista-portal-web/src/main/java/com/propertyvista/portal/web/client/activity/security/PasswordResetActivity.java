@@ -21,12 +21,12 @@ import com.pyx4j.security.rpc.AbstractPasswordResetService;
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
 import com.propertyvista.portal.rpc.portal.services.PortalPasswordResetService;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
+import com.propertyvista.portal.web.client.PortalWebSite;
 
 public class PasswordResetActivity extends AbstractPasswordResetActivity {
 
     public PasswordResetActivity(Place place) {
-        super(place, PortalWebViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class));
+        super(place, PortalWebSite.getViewFactory().instantiate(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(PortalPasswordResetService.class));
     }
 
 }

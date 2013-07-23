@@ -27,9 +27,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.EditPaymentMethodView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class EditPaymentMethodActivity extends SecurityAwareActivity implements EditPaymentMethodView.Presenter {
 
@@ -40,7 +40,7 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
     private final Key entityId;
 
     public EditPaymentMethodActivity(AppPlace place) {
-        this.view = PortalWebViewFactory.instance(EditPaymentMethodView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(EditPaymentMethodView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PaymentMethodCrudService.class);
 

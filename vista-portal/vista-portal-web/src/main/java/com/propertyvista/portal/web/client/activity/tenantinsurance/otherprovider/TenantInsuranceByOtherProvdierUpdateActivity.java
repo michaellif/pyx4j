@@ -26,9 +26,9 @@ import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareActivity implements TenantInsuranceByOtherProviderUpdateView.Presenter {
 
@@ -39,7 +39,7 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
     private final TenantInsuranceByOtherProviderManagementService insuranceByOtherProviderService;
 
     public TenantInsuranceByOtherProvdierUpdateActivity(Place place) {
-        view = PortalWebViewFactory.instance(TenantInsuranceByOtherProviderUpdateView.class);
+        view = PortalWebSite.getViewFactory().instantiate(TenantInsuranceByOtherProviderUpdateView.class);
         insuranceByOtherProviderService = GWT.<TenantInsuranceByOtherProviderManagementService> create(TenantInsuranceByOtherProviderManagementService.class);
         insuranceService = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
     }

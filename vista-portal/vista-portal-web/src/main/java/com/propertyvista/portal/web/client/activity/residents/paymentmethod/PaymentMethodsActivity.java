@@ -26,9 +26,9 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodsView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class PaymentMethodsActivity extends SecurityAwareActivity implements PaymentMethodsView.Presenter {
 
@@ -37,7 +37,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     private final PaymentMethodCrudService srv;
 
     public PaymentMethodsActivity(Place place) {
-        this.view = PortalWebViewFactory.instance(PaymentMethodsView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(PaymentMethodsView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PaymentMethodCrudService.class);
     }

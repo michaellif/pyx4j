@@ -27,9 +27,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.dto.BillDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.services.resident.ViewBillService;
+import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.residents.billing.ViewBillView;
-import com.propertyvista.portal.web.client.ui.viewfactories.PortalWebViewFactory;
 
 public class ViewBillActivity extends SecurityAwareActivity implements ViewBillView.Presenter {
 
@@ -40,7 +40,7 @@ public class ViewBillActivity extends SecurityAwareActivity implements ViewBillV
     private final Key entityId;
 
     public ViewBillActivity(AppPlace place) {
-        this.view = PortalWebViewFactory.instance(ViewBillView.class);
+        this.view = PortalWebSite.getViewFactory().instantiate(ViewBillView.class);
         this.view.setPresenter(this);
         srv = GWT.create(ViewBillService.class);
 

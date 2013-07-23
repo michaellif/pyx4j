@@ -16,13 +16,14 @@ package com.propertyvista.portal.web.client.ui.signup;
 import java.util.List;
 
 import com.google.gwt.place.shared.Place;
-import com.google.gwt.user.client.ui.IsWidget;
+
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationDTO;
 import com.propertyvista.portal.rpc.shared.EntityValidationException;
 
-public interface SignUpView extends IsWidget {
+public interface SignUpView extends IsView {
 
     interface SignUpPresenter {
 
