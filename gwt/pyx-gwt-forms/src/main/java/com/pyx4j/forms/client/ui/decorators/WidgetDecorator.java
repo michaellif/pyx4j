@@ -362,7 +362,9 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         if (caption == null) {
             caption = component.getTitle();
         }
-        caption += builder.useLabelSemicolon ? ":" : "";
+        if (caption != null && caption.length() > 0) {
+            caption += builder.useLabelSemicolon ? ":" : "";
+        }
         label.setText(caption);
     }
 
