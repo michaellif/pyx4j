@@ -25,6 +25,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
@@ -34,6 +35,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
+import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -49,9 +51,34 @@ public class EftReportGenerator implements ReportExporter {
 
     private volatile boolean aborted;
 
+    private final EntityDtoBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
+
     public EftReportGenerator() {
         aborted = false;
         reportProgressStatusHolder = new ReportProgressStatusHolder();
+
+        dtoBinder = new EntityDtoBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
+
+            @Override
+            protected void bind() {
+                bind(dtoProto.notice(), dboProto.notice());
+                bind(dtoProto.billingCycleStartDate(), dboProto.padBillingCycle().billingCycleStartDate());
+                bind(dtoProto.leaseId(), dboProto.preauthorizedPayment().tenant().lease().leaseId());
+                bind(dtoProto.leaseId_(), dboProto.preauthorizedPayment().tenant().lease());
+                bind(dtoProto.expectedMoveOut(), dboProto.preauthorizedPayment().tenant().lease().expectedMoveOut());
+                bind(dtoProto.building(), dboProto.preauthorizedPayment().tenant().lease().unit().building().propertyCode());
+                bind(dtoProto.building_(), dboProto.preauthorizedPayment().tenant().lease().unit().building());
+                bind(dtoProto.unit(), dboProto.preauthorizedPayment().tenant().lease().unit().info().number());
+                bind(dtoProto.unit_(), dboProto.preauthorizedPayment().tenant().lease().unit());
+                bind(dtoProto.participantId(), dboProto.preauthorizedPayment().tenant().participantId());
+                bind(dtoProto.customer(), dboProto.preauthorizedPayment().tenant().customer());
+                bind(dtoProto.customer_(), dboProto.preauthorizedPayment().tenant());
+                bind(dtoProto.amount(), dboProto.amount());
+                bind(dtoProto.amount_().id(), dboProto.id());
+                bind(dtoProto.paymentType(), dboProto.paymentMethod().type());
+                bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
+            }
+        };
     }
 
     @Override
@@ -59,9 +86,11 @@ public class EftReportGenerator implements ReportExporter {
         reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, 0, 100));
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
 
+        Vector<PaymentRecord> paymentRecords = null;
+
         if (reportMetadata.forthcomingEft().isBooleanTrue()) {
             // Create forthcoming payment records here
-            Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
+            paymentRecords = new Vector<PaymentRecord>();
 
             // Find PadGenerationDate for each BillingCycle in system, they may be different
             Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
@@ -91,7 +120,6 @@ public class EftReportGenerator implements ReportExporter {
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enhancePaymentRecord(paymentRecord);
             }
-            return paymentRecords;
 
         } else {
             EntityQueryCriteria<PaymentRecord> criteria = makeCriteria(reportMetadata);
@@ -99,7 +127,7 @@ public class EftReportGenerator implements ReportExporter {
             int progress = 0;
 
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
-            Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>(count);
+            paymentRecords = new Vector<PaymentRecord>(count);
             try {
                 while (paymentRecordsIter.hasNext() & !aborted) {
                     if (progress % 10 == 0) {
@@ -113,9 +141,9 @@ public class EftReportGenerator implements ReportExporter {
                 IOUtils.closeQuietly(paymentRecordsIter);
             }
 
-            return paymentRecords;
         }
 
+        return toDto(paymentRecords);
     }
 
     @Override
@@ -231,6 +259,14 @@ public class EftReportGenerator implements ReportExporter {
 
         }
         return portfoliosBuildings;
+    }
+
+    private Vector<EftReportRecordDTO> toDto(List<PaymentRecord> paymentRecords) {
+        Vector<EftReportRecordDTO> dtoPaymentRecords = new Vector<EftReportRecordDTO>(paymentRecords.size());
+        for (PaymentRecord paymentRecord : paymentRecords) {
+            dtoPaymentRecords.add(dtoBinder.createDTO(paymentRecord));
+        }
+        return dtoPaymentRecords;
     }
 
     /** this is for testing progress UI */
