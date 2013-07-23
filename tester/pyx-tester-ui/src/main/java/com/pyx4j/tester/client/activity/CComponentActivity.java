@@ -31,7 +31,6 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.tester.client.TesterSite;
-import com.pyx4j.tester.client.TesterVeiwFactory;
 import com.pyx4j.tester.client.ui.event.CComponentBrowserEvent;
 import com.pyx4j.tester.client.ui.event.CComponentBrowserHandler;
 import com.pyx4j.tester.client.view.CComponentView;
@@ -42,7 +41,7 @@ public class CComponentActivity extends AbstractActivity implements ConsolePrese
     private final CComponentView view;
 
     public CComponentActivity(Place place) {
-        this.view = (CComponentView) TesterVeiwFactory.retreive(CComponentView.class);
+        this.view = TesterSite.getViewFactory().instantiate(CComponentView.class);
         withPlace(place);
         TesterSite.getEventBus().addHandler(CComponentBrowserEvent.getType(), new CComponentBrowserHandler() {
 

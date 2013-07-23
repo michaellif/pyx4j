@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.widget.RichTextEditorView;
 
 public class RichTextEditorActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class RichTextEditorActivity extends AbstractActivity {
     private final RichTextEditorView view;
 
     public RichTextEditorActivity(Place place) {
-        this.view = (RichTextEditorView) TesterVeiwFactory.retreive(RichTextEditorView.class);
+        this.view = TesterSite.getViewFactory().instantiate(RichTextEditorView.class);
         withPlace(place);
     }
 

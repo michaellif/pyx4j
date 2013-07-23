@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.widget.NativeWidgetBasicView;
 
 public class NativeWidgetBasicActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class NativeWidgetBasicActivity extends AbstractActivity {
     private final NativeWidgetBasicView view;
 
     public NativeWidgetBasicActivity(Place place) {
-        this.view = (NativeWidgetBasicView) TesterVeiwFactory.retreive(NativeWidgetBasicView.class);
+        this.view = TesterSite.getViewFactory().instantiate(NativeWidgetBasicView.class);
         withPlace(place);
     }
 

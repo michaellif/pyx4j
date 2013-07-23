@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.dashboard.ReportLayoutView;
 
 public class ReportLayoutActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class ReportLayoutActivity extends AbstractActivity {
     private final ReportLayoutView view;
 
     public ReportLayoutActivity(Place place) {
-        this.view = (ReportLayoutView) TesterVeiwFactory.retreive(ReportLayoutView.class);
+        this.view = TesterSite.getViewFactory().instantiate(ReportLayoutView.class);
         withPlace(place);
     }
 

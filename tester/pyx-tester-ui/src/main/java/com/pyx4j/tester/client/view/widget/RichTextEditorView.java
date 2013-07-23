@@ -20,8 +20,8 @@
  */
 package com.pyx4j.tester.client.view.widget;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
-public interface RichTextEditorView extends IsWidget {
+public interface RichTextEditorView extends IsView {
 
 }

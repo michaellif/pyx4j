@@ -20,11 +20,10 @@
  */
 package com.pyx4j.tester.client.view;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.site.client.IsView;
 
-public interface CComponentView extends IsWidget {
+public interface CComponentView extends IsView {
 
     public void setPresenter(ConsolePresenter presenter);
 

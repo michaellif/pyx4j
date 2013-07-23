@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.form.folder.FolderValidationView;
 
 public class FolderValidationActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class FolderValidationActivity extends AbstractActivity {
     private final FolderValidationView view;
 
     public FolderValidationActivity(Place place) {
-        this.view = (FolderValidationView) TesterVeiwFactory.retreive(FolderValidationView.class);
+        this.view = TesterSite.getViewFactory().instantiate(FolderValidationView.class);
         withPlace(place);
     }
 

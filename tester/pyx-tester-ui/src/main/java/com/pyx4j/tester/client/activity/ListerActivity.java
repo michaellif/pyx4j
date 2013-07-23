@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.widget.ListerView;
 
 public class ListerActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class ListerActivity extends AbstractActivity {
     private final ListerView view;
 
     public ListerActivity(Place place) {
-        this.view = (ListerView) TesterVeiwFactory.retreive(ListerView.class);
+        this.view = TesterSite.getViewFactory().instantiate(ListerView.class);
         withPlace(place);
     }
 

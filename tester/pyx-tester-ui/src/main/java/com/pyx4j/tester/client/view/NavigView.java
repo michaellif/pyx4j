@@ -20,11 +20,10 @@
  */
 package com.pyx4j.tester.client.view;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.rpc.AppPlace;
 
-public interface NavigView extends IsWidget {
+public interface NavigView extends IsView {
 
     public void setPresenter(NavigPresenter presenter);
 

@@ -20,8 +20,8 @@
  */
 package com.pyx4j.tester.client.view.form.folder;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
-public interface FolderLayoutView extends IsWidget {
+public interface FolderLayoutView extends IsView {
 
 }

@@ -20,8 +20,8 @@
  */
 package com.pyx4j.tester.client.view.dashboard;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
-public interface ReportLayoutView extends IsWidget {
+public interface ReportLayoutView extends IsView {
 
 }

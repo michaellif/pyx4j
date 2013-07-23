@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.NavigView;
 import com.pyx4j.tester.client.view.NavigView.NavigPresenter;
 
@@ -35,7 +35,7 @@ public class NavigActivity extends AbstractActivity implements NavigPresenter {
     private final NavigView view;
 
     public NavigActivity(AppPlace place) {
-        this.view = (NavigView) TesterVeiwFactory.retreive(NavigView.class);
+        this.view = TesterSite.getViewFactory().instantiate(NavigView.class);
         withPlace(place);
     }
 

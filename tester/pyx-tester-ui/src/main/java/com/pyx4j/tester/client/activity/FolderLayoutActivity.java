@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.form.folder.FolderLayoutView;
 
 public class FolderLayoutActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class FolderLayoutActivity extends AbstractActivity {
     private final FolderLayoutView view;
 
     public FolderLayoutActivity(Place place) {
-        this.view = (FolderLayoutView) TesterVeiwFactory.retreive(FolderLayoutView.class);
+        this.view = TesterSite.getViewFactory().instantiate(FolderLayoutView.class);
         withPlace(place);
     }
 

@@ -25,7 +25,7 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.tester.client.TesterVeiwFactory;
+import com.pyx4j.tester.client.TesterSite;
 import com.pyx4j.tester.client.view.dashboard.DashboardLayoutView;
 
 public class DashboardLayoutActivity extends AbstractActivity {
@@ -33,7 +33,7 @@ public class DashboardLayoutActivity extends AbstractActivity {
     private final DashboardLayoutView view;
 
     public DashboardLayoutActivity(Place place) {
-        this.view = (DashboardLayoutView) TesterVeiwFactory.retreive(DashboardLayoutView.class);
+        this.view = TesterSite.getViewFactory().instantiate(DashboardLayoutView.class);
         withPlace(place);
     }
 

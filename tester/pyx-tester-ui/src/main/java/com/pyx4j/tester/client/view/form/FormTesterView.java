@@ -20,11 +20,10 @@
  */
 package com.pyx4j.tester.client.view.form;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.tester.client.domain.test.EntityI;
 
-public interface FormTesterView extends IsWidget {
+public interface FormTesterView extends IsView {
 
     public enum TestFormType {
 
