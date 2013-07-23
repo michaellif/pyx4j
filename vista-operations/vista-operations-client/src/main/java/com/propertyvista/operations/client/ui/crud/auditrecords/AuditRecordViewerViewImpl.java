@@ -19,6 +19,7 @@ import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 public class AuditRecordViewerViewImpl extends OperationsViewerViewImplBase<AuditRecordOperationsDTO> {
 
     public AuditRecordViewerViewImpl() {
+        super(true);
         setForm(new AuditRecordForm(this));
     }
 }

@@ -13,6 +13,7 @@
  */
 package com.propertyvista.operations.client.themes;
 
+import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Selector;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.ThemeColor;
@@ -43,6 +44,12 @@ public class OperationsTheme extends VistaTheme {
     public static double defaultActionBarHeight = 2.9;
 
     public static double defaultTabHeight = 2.6;
+
+    public static enum OperationsStyles implements IStyleName {
+
+        TextFieldPreformatted
+
+    }
 
     public OperationsTheme() {
         initStyles();
@@ -95,6 +102,8 @@ public class OperationsTheme extends VistaTheme {
         initMenuBarStyles();
 
         initSuggestBoxStyle();
+
+        initOperationsStyle();
     }
 
     @Override
@@ -103,6 +112,12 @@ public class OperationsTheme extends VistaTheme {
 
         Style style = new Style("a");
         style.addProperty("color", "#333");
+        addStyle(style);
+    }
+
+    private void initOperationsStyle() {
+        Style style = new Style(".", OperationsStyles.TextFieldPreformatted, " .", "gwt-HTML");
+        style.addProperty("white-space", "pre !important;");
         addStyle(style);
     }
 

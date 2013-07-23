@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.AuditRecordEventType;
 import com.propertyvista.domain.security.common.VistaApplication;
 
@@ -45,7 +46,9 @@ public interface AuditRecordOperationsDTO extends IEntity {
 
     IPrimitive<AuditRecordEventType> event();
 
-    IPrimitive<String> pmc();
+    IPrimitive<String> namespace();
+
+    Pmc pmc();
 
     IPrimitive<VistaApplication> application();
 

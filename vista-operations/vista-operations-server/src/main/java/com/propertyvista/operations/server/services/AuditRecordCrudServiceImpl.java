@@ -41,7 +41,8 @@ public class AuditRecordCrudServiceImpl extends AbstractCrudServiceDtoImpl<Audit
         bind(dtoProto.worldTime(), dboProto.worldTime());
         bind(dtoProto.sessionId(), dboProto.sessionId());
         bind(dtoProto.event(), dboProto.event());
-        bind(dtoProto.pmc(), dboProto.namespace());
+        bind(dtoProto.namespace(), dboProto.namespace());
+        bind(dtoProto.pmc(), dboProto.pmc());
         bind(dtoProto.application(), dboProto.app());
         bind(dtoProto.details(), dboProto.details());
     }
