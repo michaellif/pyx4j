@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.0.0//EN" "http://google-web-toolkit.googlecode.com/svn/tags/2.0.0/distro-source/core/src/gwt-module.dtd">
+<!-- @version $Revision$ ($Author$) $Date$ -->
+<module>
+    <inherits name='com.google.gwt.user.User'/>
+	<inherits name="com.google.gwt.activity.Activity"/>
+    <inherits name="com.google.gwt.place.Place"/>
+    <inherits name='com.pyx4j.log4gwt.Log4gwt'/>
+    <inherits name='com.pyx4j.forms.Forms'/>
+	<inherits name='com.pyx4j.entity.Entity' />
+    <inherits name='com.pyx4j.site.SiteShared'/>
+    <inherits name='com.pyx4j.security.Security'/>
+    <inherits name='com.google.gwt.storage.Storage'/>
+    <inherits name='com.pyx4j.essentials.Essentials' />
+
+
+    <generate-with class="com.pyx4j.site.rebind.AppPlaceListingGenerator">
+        <when-type-assignable class="com.pyx4j.site.client.place.AppPlaceListing"/>
+    </generate-with>
+
+	<source path='client' />
+    
+    <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.client.*" />
+    
+        <!--  disable class names obfuscation -->
+    <set-configuration-property name="CssResource.style" value="stable-notype"/>
+    
+</module>

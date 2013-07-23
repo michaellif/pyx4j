@@ -65,7 +65,7 @@
 
         <dependency>
             <groupId>com.pyx4j</groupId>
-            <artifactId>pyx-site-gwt</artifactId>
+            <artifactId>pyx-site-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 
