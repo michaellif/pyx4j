@@ -34,7 +34,7 @@ public class OffersGadget extends AbstractGadget<DashboardViewImpl> {
         super(form, PortalImages.INSTANCE.offersIcon(), i18n.tr("My Perks & Offers"), ThemeColor.contrast6);
         setActionsToolbar(new ResidentServicesToolbar());
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(new HTML("Great news! As a resident , we've got some great local offers and deals just for you"));
+        contentPanel.add(new HTML("Great news! As a resident , we've got some great local offers and deals just for you."));
 
         setContent(contentPanel);
     }

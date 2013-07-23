@@ -47,7 +47,6 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -107,9 +106,13 @@ public class MenuViewImpl extends DockPanel implements MenuView {
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             mainHolder.add(new NavigItem(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
         }
-        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
-            mainHolder.add(new NavigItem(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
-        }
+
+        mainHolder.add(new NavigItem(new Resident.Offers(), PortalImages.INSTANCE.offersMenu(), ThemeColor.contrast6));
+
+//TODO Move to Toolbar        
+//        if (SecurityController.checkBehavior(VistaCustomerBehavior.HasMultipleLeases)) {
+//            mainHolder.add(new NavigItem(new PortalSiteMap.LeaseContextSelection(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast5));
+//        }
 
         footerHolder.add(new NavigItem(new Resident.ProfileViewer(), PortalImages.INSTANCE.profileMenu(), ThemeColor.background));
         footerHolder.add(new NavigItem(new PortalSiteMap.Resident.Account(), PortalImages.INSTANCE.accountMenu(), ThemeColor.background));

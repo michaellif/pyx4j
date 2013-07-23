@@ -170,6 +170,10 @@ public class PortalSiteMap implements SiteMap {
         public static class CommunicationCenter extends AppPlace {
         }
 
+        @PlaceProperties(navigLabel = "My Perks & Offers")
+        public static class Offers extends AppPlace {
+        }
+
         public static class TenantInsurance extends AppPlace {
 
             /** this place is displayed to people who don't have tenant insurance */
