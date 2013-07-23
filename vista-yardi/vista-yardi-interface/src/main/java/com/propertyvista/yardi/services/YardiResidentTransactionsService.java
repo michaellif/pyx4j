@@ -120,7 +120,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 propertyCodes.add(yardiPropertyConfiguration.propertyID().getValue());
             }
         } else {
-            propertyCodes = Arrays.asList(yc.propertyCode().getValue().split(","));
+            propertyCodes = Arrays.asList(yc.propertyCode().getValue().trim().split("\\s*,\\s*"));
         }
 
         List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyCodes);
