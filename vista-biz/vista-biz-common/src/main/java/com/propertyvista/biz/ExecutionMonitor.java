@@ -153,6 +153,16 @@ public class ExecutionMonitor {
 
     }
 
+    public BigDecimal getValue(String sectionName, CompletionType type) {
+        ReportSectionId id = new ReportSectionId(sectionName, type);
+        ReportSection section = sections.get(id);
+        if (section != null) {
+            return section.accumulator;
+        } else {
+            return null;
+        }
+    }
+
     public void addEvent(String sectionName, CompletionType type, String message) {
         addEvent(sectionName, type, null, message);
     }
@@ -160,6 +170,11 @@ public class ExecutionMonitor {
     public void addInfoEvent(String sectionName, String message) {
         setExcludedSectionsFromTotals(sectionName, true);
         addEvent(sectionName, CompletionType.processed, message);
+    }
+
+    public void addInfoEvent(String sectionName, String message, BigDecimal value) {
+        setExcludedSectionsFromTotals(sectionName, true);
+        addEvent(sectionName, CompletionType.processed, value, message);
     }
 
     public void addProcessedEvent(String sectionName) {

@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.essentials.j2se.HostConfig.ProxyConfig;
 
 import com.propertyvista.config.SystemConfig;
@@ -53,6 +54,8 @@ public class AbstractYardiStub {
     private int requestCount = 0;
 
     private Long transactionId = 0l;
+
+    protected long requestsTime;
 
     protected final List<String> recordedTracastionsLogs = new ArrayList<String>();
 
@@ -95,6 +98,8 @@ public class AbstractYardiStub {
     protected void addMessageContextListener(final String prefix, Stub stub, final StringBuilder envelopeBuffer) {
         stub._getServiceClient().getAxisService().addMessageContextListener(new MessageContextListener() {
 
+            protected long requestStartTime;
+
             private String fileName() {
                 StringBuilder b = new StringBuilder();
                 if (currentAction != null) {
@@ -113,6 +118,7 @@ public class AbstractYardiStub {
                         recordedTracastionsLogs.add(fileName);
                     }
                     log.debug(prefix + " Service Context", mc.getEnvelope());
+                    requestStartTime = System.currentTimeMillis();
                 }
             }
 
@@ -126,6 +132,7 @@ public class AbstractYardiStub {
                 if (envelopeBuffer != null) {
                     envelopeBuffer.append(mc.getEnvelope());
                 }
+                requestsTime += TimeUtils.since(requestStartTime);
             }
 
         });

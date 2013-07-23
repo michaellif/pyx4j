@@ -31,6 +31,11 @@ import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 public class YardiMockResidentTransactionsStubImpl implements YardiResidentTransactionsStub {
 
     @Override
+    public long getRequestsTime() {
+        return 0;
+    }
+
+    @Override
     public String ping(PmcYardiCredential yc) throws AxisFault {
         // TODO Auto-generated method stub
         return null;

@@ -65,6 +65,11 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
     private final static Logger log = LoggerFactory.getLogger(YardiResidentTransactionsStubImpl.class);
 
     @Override
+    public long getRequestsTime() {
+        return requestsTime;
+    }
+
+    @Override
     public String ping(PmcYardiCredential yc) throws RemoteException {
         init(Action.Ping);
         PingResponse pr = getResidentTransactionsService(yc).ping(new Ping());

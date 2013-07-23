@@ -13,22 +13,27 @@
  */
 package com.propertyvista.server.jobs;
 
+import java.math.BigDecimal;
 import java.rmi.RemoteException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class YardiImportProcess implements PmcProcess {
 
     private static final Logger log = LoggerFactory.getLogger(YardiImportProcess.class);
+
+    private BigDecimal yardiRequestsTimeTotal = BigDecimal.ZERO;
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -51,6 +56,11 @@ public class YardiImportProcess implements PmcProcess {
                 throw new RuntimeException(e);
             } catch (YardiServiceException e) {
                 throw new RuntimeException(e);
+            } finally {
+                BigDecimal yardiTime = executionMonitor.getValue("yardiTime", CompletionType.processed);
+                if (yardiTime != null) {
+                    yardiRequestsTimeTotal = yardiRequestsTimeTotal.add(yardiTime);
+                }
             }
         }
     }
@@ -58,5 +68,6 @@ public class YardiImportProcess implements PmcProcess {
     @Override
     public void complete(PmcProcessContext context) {
         log.info("Yardi Import batch job finished");
+        context.getExecutionMonitor().addInfoEvent("yardiTime", TimeUtils.durationFormat(yardiRequestsTimeTotal.longValue()), yardiRequestsTimeTotal);
     }
 }

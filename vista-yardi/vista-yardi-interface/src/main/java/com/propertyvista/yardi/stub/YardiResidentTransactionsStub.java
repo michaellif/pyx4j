@@ -25,6 +25,8 @@ import com.propertyvista.yardi.bean.Properties;
 
 public interface YardiResidentTransactionsStub {
 
+    long getRequestsTime();
+
     String ping(PmcYardiCredential yc) throws RemoteException;
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;

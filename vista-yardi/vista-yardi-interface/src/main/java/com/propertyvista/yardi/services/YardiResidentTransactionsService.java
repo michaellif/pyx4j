@@ -34,6 +34,7 @@ import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
@@ -112,33 +113,38 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
     public void updateAll(PmcYardiCredential yc, ExecutionMonitor executionMonitor) throws YardiServiceException, RemoteException {
         YardiResidentTransactionsStub stub = ServerSideFactory.create(YardiResidentTransactionsStub.class);
 
-        List<String> propertyCodes;
-        if (yc.propertyCode().isNull()) {
-            List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
-            propertyCodes = new ArrayList<String>();
-            for (YardiPropertyConfiguration yardiPropertyConfiguration : propertyConfigurations) {
-                propertyCodes.add(yardiPropertyConfiguration.propertyID().getValue());
-            }
-        } else {
-            propertyCodes = Arrays.asList(yc.propertyCode().getValue().trim().split("\\s*,\\s*"));
-        }
-
-        List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyCodes);
-        for (ResidentTransactions transaction : allTransactions) {
-            if (executionMonitor.isTerminationRequested()) {
-                break;
+        try {
+            List<String> propertyCodes;
+            if (yc.propertyCode().isNull()) {
+                List<YardiPropertyConfiguration> propertyConfigurations = getPropertyConfigurations(stub, yc);
+                propertyCodes = new ArrayList<String>();
+                for (YardiPropertyConfiguration yardiPropertyConfiguration : propertyConfigurations) {
+                    propertyCodes.add(yardiPropertyConfiguration.propertyID().getValue());
+                }
+            } else {
+                propertyCodes = Arrays.asList(yc.propertyCode().getValue().trim().split("\\s*,\\s*"));
             }
 
-            importTransaction(transaction, executionMonitor);
-        }
+            List<ResidentTransactions> allTransactions = getAllResidentTransactions(stub, yc, executionMonitor, propertyCodes);
+            for (ResidentTransactions transaction : allTransactions) {
+                if (executionMonitor.isTerminationRequested()) {
+                    break;
+                }
 
-        List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyCodes);
-        for (ResidentTransactions leaseCharges : allLeaseCharges) {
-            if (executionMonitor.isTerminationRequested()) {
-                break;
+                importTransaction(transaction, executionMonitor);
             }
 
-            importLeaseCharges(leaseCharges, executionMonitor);
+            List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyCodes);
+            for (ResidentTransactions leaseCharges : allLeaseCharges) {
+                if (executionMonitor.isTerminationRequested()) {
+                    break;
+                }
+
+                importLeaseCharges(leaseCharges, executionMonitor);
+            }
+
+        } finally {
+            executionMonitor.addInfoEvent("yardiTime", TimeUtils.durationFormat(stub.getRequestsTime()), new BigDecimal(stub.getRequestsTime()));
         }
 
         log.info("Update completed.");
