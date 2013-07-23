@@ -57,4 +57,6 @@ public interface DirectDebitRecord extends IEntity {
     @NotNull
     IPrimitive<DirectDebitRecordProcessingStatus> processingStatus();
 
+    DirectDebitRecordTrace trace();
+
 }
