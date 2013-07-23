@@ -32,6 +32,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -54,10 +55,12 @@ public class XLSLoad {
 
     public static String DATE_FORMAT_PATTERN = "yyyy-MM-dd HH:mm:ss.SSS";
 
+    private FormulaEvaluator formulaEvaluator;
+
     public static void loadResourceFile(String resourceName, boolean xlsx, CSVReciver reciver) {
         InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourceName);
         if (is == null) {
-            throw new RuntimeException("Resouce [" + resourceName + "] not found");
+            throw new RuntimeException("Resource [" + resourceName + "] not found");
         }
         loadFile(is, xlsx, reciver);
     }
@@ -102,6 +105,13 @@ public class XLSLoad {
 
     public boolean isSheetHidden(int sheetNumber) {
         return wb.isSheetHidden(sheetNumber);
+    }
+
+    public FormulaEvaluator getFormulaEvaluator() {
+        if (formulaEvaluator == null) {
+            formulaEvaluator = wb.getCreationHelper().createFormulaEvaluator();
+        }
+        return formulaEvaluator;
     }
 
     /**
@@ -176,12 +186,12 @@ public class XLSLoad {
         case Cell.CELL_TYPE_BOOLEAN:
             return Boolean.toString(cell.getBooleanCellValue());
         case Cell.CELL_TYPE_FORMULA:
-            //TODO calculate
-            return "";
+            return getCellStringValue(cellnum, getFormulaEvaluator().evaluateInCell(cell));
         case Cell.CELL_TYPE_ERROR:
-            return "";
+            throw new Error("Cell value error " + cell.getErrorCellValue());
+        default:
+            throw new Error("Unsupported Cell type");
         }
-        return null;
     }
 
     protected String getDateCellStringValue(int cellnum, Cell cell) {
