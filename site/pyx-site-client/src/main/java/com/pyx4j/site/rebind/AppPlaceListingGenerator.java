@@ -170,7 +170,7 @@ public class AppPlaceListingGenerator extends Generator {
                     caption = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(jClassType.getSimpleSourceName()));
                 }
                 if (navigLabel == null || I18nAnnotation.DEFAULT_VALUE.equals(navigLabel)) {
-                    navigLabel = EnglishGrammar.capitalize(EnglishGrammar.classNameToEnglish(jClassType.getSimpleSourceName()));
+                    navigLabel = caption;
                 }
 
                 writer.print("return new ");
