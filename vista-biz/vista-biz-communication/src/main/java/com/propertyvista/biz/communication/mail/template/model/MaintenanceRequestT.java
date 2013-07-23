@@ -26,6 +26,8 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest.DayTime;
 public interface MaintenanceRequestT extends IEntity {
     IPrimitive<String> requestId();
 
+    IPrimitive<String> propertyCode();
+
     IPrimitive<String> category();
 
     IPrimitive<String> description();
@@ -58,4 +60,5 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<String> status();
 
+    IPrimitive<String> requestViewUrl();
 }

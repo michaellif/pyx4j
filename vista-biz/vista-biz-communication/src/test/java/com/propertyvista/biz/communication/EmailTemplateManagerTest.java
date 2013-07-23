@@ -313,7 +313,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             "{6}<br/>";
             break;
         default:
-            throw new Error("Template Type not implemented");
+            // TODO comment out after maintenance templates implemented
+//            throw new Error("Template Type not implemented");
         }//@formatter:on
         return templateFmt;
     }
@@ -519,6 +520,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 fmtArgs = args;
             }
             break;
+        default:
+            fmt = "";
+            fmtArgs = new String[] {};
         }//@formatter:on
         log.info("format template: " + type + " (" + fmtArgs.length + " args)");
         return SimpleMessageFormat.format(fmt, fmtArgs);
