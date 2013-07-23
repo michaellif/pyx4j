@@ -19,9 +19,9 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ReportDialog;
 
 import com.propertyvista.crm.client.ui.crud.settings.tenantsecurity.TenantSecurityView;
 import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;

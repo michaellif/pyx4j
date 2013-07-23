@@ -22,8 +22,8 @@ import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.client.ConfirmCommand;
-import com.pyx4j.essentials.client.ReportDialog;
 import com.pyx4j.essentials.rpc.report.ReportService;
+import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Button.ButtonMenuBar;
