@@ -108,6 +108,11 @@ public class RemconParser {
                 throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
             }
             break;
+        case DateMMDDYY:
+            if (!value.matches("[0-9]+")) {
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+            }
+            break;
         case Filler:
             if (!value.matches("[ ]*")) {
                 throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));

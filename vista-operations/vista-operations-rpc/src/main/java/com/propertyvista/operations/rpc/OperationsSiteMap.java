@@ -88,11 +88,11 @@ public class OperationsSiteMap implements SiteMap {
 
     public static class Legal extends AppPlace {
 
-        @PlaceProperties(navigLabel = "Tenant Portal Terms and Conditions", caption = "Tenant Portal Terms and Conditions")
+        @PlaceProperties(caption = "Tenant Portal Terms and Conditions")
         public static class PortalTerms extends CrmCrudAppPlace {
         }
 
-        @PlaceProperties(navigLabel = "PMC Terms and Conditions", caption = "PMC Terms and Conditions")
+        @PlaceProperties(caption = "PMC Terms and Conditions")
         public static class PmcTerms extends CrmCrudAppPlace {
         }
 

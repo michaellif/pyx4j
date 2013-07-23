@@ -28,6 +28,8 @@ public @interface RemconField {
 
         DateYYMMDD,
 
+        DateMMDDYY,
+
         Alphanumeric,
 
         Filler
