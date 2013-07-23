@@ -26,6 +26,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -38,10 +39,12 @@ import com.propertyvista.shared.config.VistaFeatures;
 
 public class BillingGadget extends AbstractGadget<DashboardViewImpl> {
 
+    private static final I18n i18n = I18n.get(BillingGadget.class);
+
     private final BillingViewer billingViewer;
 
     BillingGadget(DashboardViewImpl viewer) {
-        super(viewer, PortalImages.INSTANCE.billingIcon(), "My Billing Summary", ThemeColor.contrast4);
+        super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
 
         billingViewer = new BillingViewer();

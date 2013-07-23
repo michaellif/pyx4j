@@ -307,6 +307,29 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
         ImageResource active();
     }
 
+    @ImageOptions(repeatStyle = RepeatStyle.Both)
+    @Source("Perks.png")
+    ImageResource offersIcon();
+
+    OffersMenuImages offersMenu();
+
+    interface OffersMenuImages extends ButtonImages {
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Perks-Inactive.png")
+        ImageResource regular();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Perks-Inactive.png")
+        ImageResource hover();
+
+        @Override
+        @ImageOptions(repeatStyle = RepeatStyle.Both)
+        @Source("Nav_Icon_Perks-Active.png")
+        ImageResource active();
+    }
+
     AccountMenuImages accountMenu();
 
     interface AccountMenuImages extends ButtonImages {

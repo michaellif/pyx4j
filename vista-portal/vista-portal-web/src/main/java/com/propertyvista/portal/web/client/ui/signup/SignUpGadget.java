@@ -68,7 +68,7 @@ public class SignUpGadget extends AbstractGadget<SignUpViewImpl> {
     private final Anchor termsAndConditionsAnchor;
 
     SignUpGadget(SignUpViewImpl view) {
-        super(view, null, "Create Your Account", ThemeColor.contrast2);
+        super(view, null, i18n.tr("Create Your Account"), ThemeColor.contrast2);
         setActionsToolbar(new SignUpToolbar());
 
         FlowPanel contentPanel = new FlowPanel();

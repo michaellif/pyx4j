@@ -76,7 +76,7 @@ public class LoginGadget extends AbstractGadget<LandingViewImpl> {
     private final Anchor termsAndConditionsAnchor;
 
     LoginGadget(final LandingViewImpl view) {
-        super(view, null, "Returning Users", ThemeColor.contrast2);
+        super(view, null, i18n.tr("Returning Users"), ThemeColor.contrast2);
 
         loginToolbar = new LoginToolbar();
 

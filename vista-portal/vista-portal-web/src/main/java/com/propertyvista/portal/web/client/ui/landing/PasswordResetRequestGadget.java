@@ -44,7 +44,7 @@ public class PasswordResetRequestGadget extends AbstractGadget<PasswordResetRequ
     private final PasswordResetRequestForm form;
 
     PasswordResetRequestGadget(PasswordResetRequestViewImpl view) {
-        super(view, null, "Reset Password", ThemeColor.contrast3);
+        super(view, null, i18n.tr("Reset Password"), ThemeColor.contrast3);
         getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         setActionsToolbar(new PasswordResetRequestToolbar());

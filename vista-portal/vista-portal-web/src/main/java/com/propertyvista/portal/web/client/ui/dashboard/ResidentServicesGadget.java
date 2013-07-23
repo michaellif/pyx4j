@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
@@ -27,8 +28,10 @@ import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
 public class ResidentServicesGadget extends AbstractGadget<DashboardViewImpl> {
 
+    static final I18n i18n = I18n.get(ResidentServicesGadget.class);
+
     ResidentServicesGadget(DashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.residentServicesIcon(), "Resident Services", ThemeColor.contrast3);
+        super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Resident Services"), ThemeColor.contrast3);
         setActionsToolbar(new ResidentServicesToolbar());
         FlowPanel contentPanel = new FlowPanel();
         contentPanel

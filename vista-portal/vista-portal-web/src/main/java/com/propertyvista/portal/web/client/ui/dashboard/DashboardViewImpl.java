@@ -40,6 +40,8 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
 
     private final ResidentServicesGadget residentServicesGadget;
 
+    private final OffersGadget offersGadget;
+
     public DashboardViewImpl() {
 
         profileGadget = new ProfileGadget(this);
@@ -48,16 +50,20 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
         billingGadget = new BillingGadget(this);
         billingGadget.getElement().getStyle().setFloat(Float.LEFT);
 
+        offersGadget = new OffersGadget(this);
+        offersGadget.getElement().getStyle().setFloat(Float.LEFT);
+
         maintenanceGadget = new MaintenanceGadget(this);
-        maintenanceGadget.getElement().getStyle().setFloat(Float.LEFT);
+        maintenanceGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
         residentServicesGadget = new ResidentServicesGadget(this);
-        residentServicesGadget.getElement().getStyle().setFloat(Float.LEFT);
+        residentServicesGadget.getElement().getStyle().setFloat(Float.RIGHT);
 
         add(profileGadget);
         add(billingGadget);
         add(maintenanceGadget);
         add(residentServicesGadget);
+        add(offersGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
 
@@ -80,11 +86,13 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
             billingGadget.asWidget().setWidth("100%");
             maintenanceGadget.asWidget().setWidth("100%");
             residentServicesGadget.asWidget().setWidth("100%");
+            offersGadget.asWidget().setWidth("100%");
             break;
         default:
             billingGadget.asWidget().setWidth("50%");
             maintenanceGadget.asWidget().setWidth("50%");
             residentServicesGadget.asWidget().setWidth("50%");
+            offersGadget.asWidget().setWidth("50%");
             break;
         }
 

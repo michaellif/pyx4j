@@ -22,35 +22,33 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
+import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class MaintenanceGadget extends AbstractGadget<DashboardViewImpl> {
+public class OffersGadget extends AbstractGadget<DashboardViewImpl> {
 
-    static final I18n i18n = I18n.get(MaintenanceGadget.class);
+    private static final I18n i18n = I18n.get(OffersGadget.class);
 
-    MaintenanceGadget(DashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("My Maintenance Requests"), ThemeColor.contrast5);
-        setActionsToolbar(new MaintenanceToolbar());
-
+    OffersGadget(DashboardViewImpl form) {
+        super(form, PortalImages.INSTANCE.offersIcon(), i18n.tr("My Perks & Offers"), ThemeColor.contrast6);
+        setActionsToolbar(new ResidentServicesToolbar());
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel
-                .add(new HTML(
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+        contentPanel.add(new HTML("Great news! As a resident , we've got some great local offers and deals just for you"));
+
         setContent(contentPanel);
     }
 
-    protected void populate(TenantMaintenanceDTO value) {
+    protected void populate(TenantResidentServicesDTO value) {
 
     }
 
-    class MaintenanceToolbar extends Toolbar {
-        public MaintenanceToolbar() {
+    class ResidentServicesToolbar extends Toolbar {
+        public ResidentServicesToolbar() {
 
-            Button createButton = new Button("Create New Request");
-            createButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast5, 1));
-            add(createButton);
+            Button offersButton = new Button("View my Perks & Offers");
+            offersButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast6, 1));
+            add(offersButton);
 
         }
     }
