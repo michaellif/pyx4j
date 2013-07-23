@@ -20,11 +20,6 @@
  */
 package com.pyx4j.site.client;
 
-import static com.pyx4j.site.shared.meta.NavigNode.ARGS_GROUP_SEPARATOR;
-import static com.pyx4j.site.shared.meta.NavigNode.ARGS_SEPARATOR;
-import static com.pyx4j.site.shared.meta.NavigNode.NAME_VALUE_SEPARATOR;
-import static com.pyx4j.site.shared.meta.NavigNode.PAGE_SEPARATOR;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,17 +71,17 @@ public class NavigationUri {
     }
 
     public static Map<String, String> parsArgs(String queryString) {
-        if (queryString.startsWith(ARGS_GROUP_SEPARATOR)) {
+        if (queryString.startsWith(NavigNode.ARGS_GROUP_SEPARATOR)) {
             queryString = queryString.substring(1);
         }
         Map<String, String> args = new HashMap<String, String>();
         if (queryString.length() == 0) {
             return args;
         }
-        String[] nameValues = queryString.split(ARGS_SEPARATOR);
+        String[] nameValues = queryString.split(NavigNode.ARGS_SEPARATOR);
         if (nameValues.length > 0) {
             for (int i = 0; i < nameValues.length; i++) {
-                String[] nameAndValue = nameValues[i].split(NAME_VALUE_SEPARATOR);
+                String[] nameAndValue = nameValues[i].split(NavigNode.NAME_VALUE_SEPARATOR);
                 if (nameAndValue.length == 2) {
                     args.put(nameAndValue[0], URL.decodeComponent(nameAndValue[1]));
                 } else {
@@ -129,13 +124,13 @@ public class NavigationUri {
             boolean first = true;
             for (Map.Entry<String, String> me : args.entrySet()) {
                 if (first) {
-                    newToken.append(ARGS_GROUP_SEPARATOR);
+                    newToken.append(NavigNode.ARGS_GROUP_SEPARATOR);
                     first = false;
                 } else {
-                    newToken.append(ARGS_SEPARATOR);
+                    newToken.append(NavigNode.ARGS_SEPARATOR);
                 }
                 newToken.append(me.getKey());
-                newToken.append(NAME_VALUE_SEPARATOR);
+                newToken.append(NavigNode.NAME_VALUE_SEPARATOR);
                 newToken.append(URL.encodeComponent(me.getValue()));
             }
             path = newToken.toString();
@@ -145,7 +140,7 @@ public class NavigationUri {
 
     public void setPath(String path) {
         this.path = path;
-        int splitIndex = path.indexOf(ARGS_GROUP_SEPARATOR);
+        int splitIndex = path.indexOf(NavigNode.ARGS_GROUP_SEPARATOR);
         if (splitIndex == -1) {
             pageUri = path.toLowerCase();
         } else {
@@ -157,7 +152,7 @@ public class NavigationUri {
         if (args == null) {
             args = new HashMap<String, String>();
         }
-        int siteIndex = pageUri.indexOf(PAGE_SEPARATOR);
+        int siteIndex = pageUri.indexOf(NavigNode.PAGE_SEPARATOR);
         if (siteIndex > 0) {
             siteName = pageUri.substring(0, siteIndex);
         } else {
@@ -175,7 +170,7 @@ public class NavigationUri {
 
     public void setPageUri(String pageUri) {
         this.pageUri = pageUri;
-        int siteIndex = pageUri.indexOf(PAGE_SEPARATOR);
+        int siteIndex = pageUri.indexOf(NavigNode.PAGE_SEPARATOR);
         if (siteIndex > 0) {
             siteName = pageUri.substring(0, siteIndex);
         } else {

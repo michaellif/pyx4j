@@ -139,7 +139,6 @@
         <module>unit/pyx-unit-selenium</module>
 
         <module>site/pyx-site-shared</module>
-        <module>site/pyx-site-client</module>
         <module>site/pyx-site-gwt</module>
         <module>site/pyx-site-server</module>
 

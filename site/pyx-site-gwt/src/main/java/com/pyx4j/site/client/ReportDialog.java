@@ -18,7 +18,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.pyx4j.essentials.client;
+package com.pyx4j.site.client;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -34,6 +34,7 @@ import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.config.shared.ApplicationBackend;
 import com.pyx4j.config.shared.ApplicationBackend.ApplicationBackendType;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.essentials.client.DownloadFrame;
 import com.pyx4j.essentials.rpc.report.DeferredReportProcessProgressResponse;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
@@ -43,7 +44,6 @@ import com.pyx4j.gwt.commons.UnrecoverableClientError;
 import com.pyx4j.gwt.rpc.deferred.DeferredProcessProgressResponse;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.BlockingAsyncCallback;
-import com.pyx4j.site.client.NavigationUri;
 
 //TODO find name for that - it is used not only for reports
 public class ReportDialog extends DeferredProcessDialog {

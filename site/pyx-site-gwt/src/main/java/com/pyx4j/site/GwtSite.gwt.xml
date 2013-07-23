@@ -12,6 +12,11 @@
     <inherits name='com.pyx4j.security.Security'/>
     <inherits name='com.google.gwt.storage.Storage'/>
     <inherits name='com.pyx4j.essentials.Essentials' />
+    <inherits name='com.pyx4j.site.client.themes.light.LightTheme' />
+    <inherits name='com.pyx4j.site.client.themes.dark.DarkTheme' />
+    <inherits name='com.pyx4j.site.client.themes.business.BusinessTheme' />
+    <inherits name='com.pyx4j.site.client.themes.console.ConsoleTheme' />
+
 
     <generate-with class="com.pyx4j.site.rebind.AppPlaceListingGenerator">
         <when-type-assignable class="com.pyx4j.site.client.place.AppPlaceListing"/>
