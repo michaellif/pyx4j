@@ -24,6 +24,7 @@ import com.propertyvista.domain.media.ThumbnailSize;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.site.SiteImageResource;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.portal.rpc.portal.ImageConsts;
 
@@ -56,6 +57,11 @@ public class MediaUtils {
     public static String createSiteImageResourceUrl(SiteImageResource resource) {
         return ClientNavigUtils.getDeploymentBaseURL() + resource.id().getStringView() + "/" + resource.fileName().getStringView()
                 + DeploymentConsts.siteImageResourceServletMapping;
+    }
+
+    public static String createCustomerPictureUrl(CustomerPicture picture) {
+        return ClientNavigUtils.getDeploymentBaseURL() + picture.id().getStringView() + "/" + picture.fileName().getStringView()
+                + DeploymentConsts.customerPictureServletMapping;
     }
 
     public static String createSiteSmallLogoUrl() {

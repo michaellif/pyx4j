@@ -64,6 +64,10 @@ public interface Customer extends IEntity {
     @Length(3)
     IList<EmergencyContact> emergencyContacts();
 
+    @Owned
+    @Detached
+    IList<CustomerPicture> pictures();
+
     @Timestamp
     IPrimitive<Date> updated();
 

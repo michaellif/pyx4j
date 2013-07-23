@@ -71,6 +71,8 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
         }
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.leaseTermV().holder()));
+
+        Persistence.service().retrieve(dto.customer().pictures());
     }
 
     @Override

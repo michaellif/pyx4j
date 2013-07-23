@@ -16,15 +16,25 @@ package com.propertyvista.crm.client.ui.crud.customer.common;
 import java.util.EnumSet;
 import java.util.Vector;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.forms.client.images.EntityFolderImages;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CImage;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
+import com.pyx4j.gwt.shared.FileURLBuilder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
@@ -34,14 +44,18 @@ import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
+import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.common.client.ui.components.editors.NameEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
+import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
@@ -110,7 +124,31 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }
 
         int row = -1;
+        CImage<CustomerPicture> imageHolder = new CImage<CustomerPicture>(CustomerPicture.class, CImage.Type.single) {
+            @Override
+            protected EntityFolderImages getFolderIcons() {
+                return VistaImages.INSTANCE;
+            }
+
+            @Override
+            public Widget getImageEntryView(CEntityForm<CustomerPicture> entryForm) {
+                VerticalPanel infoPanel = new VerticalPanel();
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
+                return infoPanel;
+            }
+        };
+        imageHolder.setImageFileUrlBuilder(new ImageFileURLBuilder());
+        imageHolder.setThumbnailFileUrlBuilder(new ImageFileURLBuilder());
+        imageHolder.setUploadService(GWT.<CustomerPictureUploadService> create(CustomerPictureUploadService.class));
+        imageHolder.setImageSize(150, 200);
+        imageHolder.setThumbSize(60, 80);
+        imageHolder.setThumbnailPlaceholder(new Image(VistaImages.INSTANCE.profilePicture()));
+
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().participantId()), 7).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().pictures(), imageHolder)).customLabel("").build());
+        main.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_BOTTOM);
+
         main.setWidget(++row, 0, 2, inject(proto().customer().person().name(), new NameEditor(participant)));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().customer().person().sex()), 7).build());
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().customer().person().birthDate()), 9).build());
@@ -192,5 +230,12 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         }));
 
         return main;
+    }
+
+    class ImageFileURLBuilder implements FileURLBuilder<CustomerPicture> {
+        @Override
+        public String getUrl(CustomerPicture pic) {
+            return MediaUtils.createCustomerPictureUrl(pic);
+        }
     }
 }

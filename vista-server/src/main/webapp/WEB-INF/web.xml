@@ -466,6 +466,16 @@ http://static.dev.birchwoodsoftwaregroup.com:8888/vista/o/wsp/yardi.starlightinv
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>CustomerPictureServlet</servlet-name>
+        <servlet-class>com.propertyvista.portal.server.upload.CustomerPictureServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>CustomerPictureServlet</servlet-name>
+        <url-pattern>*.picture</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>CustomSkinProxyServlet</servlet-name>
         <servlet-class>com.propertyvista.portal.server.residentskinproxy.CustomSkinProxyServlet</servlet-class>
     </servlet>

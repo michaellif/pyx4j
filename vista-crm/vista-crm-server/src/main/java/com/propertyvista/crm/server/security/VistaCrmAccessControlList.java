@@ -69,6 +69,7 @@ import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.CustomerCreditCheckLongReportService;
+import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
@@ -386,6 +387,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCrmBehavior.PropertyVistaSupport, new IServiceExecutePermission(TenantPadFileUploadService.class));
 
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PreauthorizedPaymentsVisorService.class));
+
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CustomerPictureUploadService.class));
 
 // - Billing
         grant(VistaCrmBehavior.Billing, new EntityPermission(Bill.class, EntityPermission.READ));
