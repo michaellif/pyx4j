@@ -18,6 +18,10 @@
         <when-type-assignable class="com.pyx4j.site.client.place.AppPlaceListing"/>
     </generate-with>
 
+    <generate-with class="com.pyx4j.site.rebind.ViewFactoryGenerator">
+        <when-type-assignable class="com.pyx4j.site.client.ViewFactory"/>
+    </generate-with>
+    
 	<source path='client' />
     
     <extend-configuration-property name="rpc.blacklist" value="com.pyx4j.site.client.*" />

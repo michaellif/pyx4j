@@ -1,6 +1,6 @@
 /*
  * Pyx4j framework
- * Copyright (C) 2006-2010 pyx4j.com.
+ * Copyright (C) 2008-2013 pyx4j.com.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,14 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Created on 2011-06-09
- * @author Vlad
+ * Created on Jul 23, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.pyx4j.site.client.ui;
+package com.pyx4j.site.client;
 
-import com.pyx4j.site.client.IsView;
-import com.pyx4j.site.client.ui.visor.IVisor;
+import com.google.gwt.user.client.ui.IsWidget;
 
-public interface IPane extends IsView {
-
-    public interface Presenter {
-
-        void populate();
-
-        void refresh();
-    }
-
-    void showVisor(IVisor visor);
-
-    void hideVisor();
-
-    boolean isVisorShown();
+public interface IsView extends IsWidget {
 
 }
