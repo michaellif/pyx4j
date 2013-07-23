@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -90,7 +88,6 @@ public class Slideshow extends LayoutPanel {
         widget.setVisible(false);
         slides.add(widget);
         controlPanel.reset();
-
     }
 
     public void removeAllItems() {
@@ -114,7 +111,7 @@ public class Slideshow extends LayoutPanel {
             @Override
             public void run() {
                 if (getItemCount() > 0) {
-                    show((currentIndex + 1) % getItemCount());
+                    show((currentIndex + 1) % getItemCount(), true);
                 }
             }
         };
@@ -133,7 +130,7 @@ public class Slideshow extends LayoutPanel {
 
     public void init() {
         if (initPosition == -1) {
-            show(initPosition);
+            show(initPosition, false);
             if (runOnInit) {
                 controlPanel.play(true);
             } else {
@@ -151,50 +148,52 @@ public class Slideshow extends LayoutPanel {
         currentIndex = -1;
     }
 
-    public void show(final int index) {
+    public void show(final int index, boolean animated) {
         if (getItemCount() == 0) {
             return;
         }
 
-        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-            @Override
-            public void execute() {
-                if (animationIsRunning) {
-                    return;
-                }
-                int idx = index % getItemCount();
-                final Widget fadeIn = slides.getWidget(idx);
-                setOpacity(fadeIn, 0);
-                fadeIn.setVisible(true);
-                currentIndex = idx;
-                controlPanel.setSelectedItem(idx);
-                animationIsRunning = true;
-                controlPanel.setEnabled(false);
-                Timer animationTimer = new Timer() {
-                    int iterationCounter = 0;
+        if (animated && animationIsRunning) {
+            return;
+        }
 
-                    @Override
-                    public void run() {
-                        setOpacity(fadeIn, ((double) iterationCounter) / ANIMATION_ITTERATIONS);
-                        if (fadeOut != null) {
-                            setOpacity(fadeOut, (1 - ((double) iterationCounter) / ANIMATION_ITTERATIONS));
-                        }
-                        iterationCounter++;
-                        if (iterationCounter == ANIMATION_ITTERATIONS) {
-                            setOpacity(fadeIn, 1);
-                            if (fadeOut != null) {
-                                fadeOut.setVisible(false);
-                            }
-                            this.cancel();
-                            animationIsRunning = false;
-                            controlPanel.setEnabled(true);
-                            fadeOut = fadeIn;
-                        }
+        int idx = index % getItemCount();
+        currentIndex = idx;
+        controlPanel.setSelectedItem(idx);
+        final Widget fadeIn = slides.getWidget(idx);
+        fadeIn.setVisible(true);
+        if (animated) {
+            animationIsRunning = true;
+            controlPanel.setEnabled(false);
+            setOpacity(fadeIn, 0);
+            new Timer() {
+                int iterationCounter = 0;
+
+                @Override
+                public void run() {
+                    setOpacity(fadeIn, ((double) iterationCounter) / ANIMATION_ITTERATIONS);
+                    if (fadeOut != null) {
+                        setOpacity(fadeOut, (1 - ((double) iterationCounter) / ANIMATION_ITTERATIONS));
                     }
-                };
-                animationTimer.scheduleRepeating(500 / ANIMATION_ITTERATIONS);
+                    iterationCounter++;
+                    if (iterationCounter == ANIMATION_ITTERATIONS) {
+                        setOpacity(fadeIn, 1);
+                        if (fadeOut != null) {
+                            fadeOut.setVisible(false);
+                        }
+                        this.cancel();
+                        animationIsRunning = false;
+                        controlPanel.setEnabled(true);
+                        fadeOut = fadeIn;
+                    }
+                }
+            }.scheduleRepeating(500 / ANIMATION_ITTERATIONS);
+        } else {
+            if (fadeOut != null) {
+                fadeOut.setVisible(false);
             }
-        });
+            fadeOut = fadeIn;
+        }
     }
 
     @Override
@@ -242,10 +241,10 @@ public class Slideshow extends LayoutPanel {
                 public void onClick(ClickEvent event) {
                     stop();
                     if (currentIndex == 0) {
-                        show(getItemCount() - 1);
+                        show(getItemCount() - 1, true);
                     } else {
                         if (getItemCount() > 0) {
-                            show((currentIndex - 1) % getItemCount());
+                            show((currentIndex - 1) % getItemCount(), true);
                         }
                     }
                 }
@@ -276,7 +275,7 @@ public class Slideshow extends LayoutPanel {
                 public void onClick(ClickEvent event) {
                     stop();
                     if (getItemCount() > 0) {
-                        show((currentIndex + 1) % getItemCount());
+                        show((currentIndex + 1) % getItemCount(), true);
                     }
                 }
             });
@@ -299,7 +298,7 @@ public class Slideshow extends LayoutPanel {
                     @Override
                     public void onClick(ClickEvent event) {
                         stop();
-                        show(finalI);
+                        show(finalI, true);
                     }
                 });
             }

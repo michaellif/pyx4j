@@ -59,6 +59,7 @@ public abstract class CImage<E extends IFile> extends CField<IList<E>, NImage<E>
 
     public void setThumbnailPlaceholder(Image placeholder) {
         this.placeholder = placeholder;
+        getWidget().reset();
     }
 
     public Image getThumbnailPlaceholder() {

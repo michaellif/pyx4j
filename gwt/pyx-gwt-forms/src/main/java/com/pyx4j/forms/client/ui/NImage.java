@@ -28,6 +28,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -49,7 +50,7 @@ import com.pyx4j.gwt.shared.Dimension;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.ImageHolder;
 import com.pyx4j.widgets.client.ImageHolder.ImageViewport;
-import com.pyx4j.widgets.client.ImageHolder.ImageViewport.Scale;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport.ScaleMode;
 import com.pyx4j.widgets.client.dialog.CancelOption;
 import com.pyx4j.widgets.client.dialog.Custom1Option;
 import com.pyx4j.widgets.client.dialog.Custom2Option;
@@ -63,9 +64,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
 
     private final List<String> imageUrls;
 
-    private ImageHolder editor;
-
-    private ImageHolder viewer;
+    private ImageHolder widget;
 
     protected IEditableComponentFactory factory = new EntityFormComponentFactory();
 
@@ -85,11 +84,11 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
                 imageUrls.add(getCComponent().getImageUrl(value));
             }
         }
-        if (isViewable()) {
-            viewer.reset();
-        } else {
-            editor.reset();
-        }
+        reset();
+    }
+
+    public void reset() {
+        createWidget().reset();
     }
 
     @Override
@@ -99,18 +98,24 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
 
     @Override
     protected ImageHolder createEditor() {
-        if (editor == null) {
-            editor = createWidget();
-        }
-        return editor;
+        return createWidget();
+    }
+
+    @Override
+    protected void onEditorInit() {
+        createWidget().setEditable(true);
+        super.onEditorInit();
     }
 
     @Override
     protected ImageHolder createViewer() {
-        if (viewer == null) {
-            viewer = createWidget();
-        }
-        return viewer;
+        return createWidget();
+    }
+
+    @Override
+    protected void onViewerInit() {
+        createWidget().setEditable(false);
+        super.onViewerInit();
     }
 
     @Override
@@ -126,18 +131,16 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
     }
 
     private ImageHolder createWidget() {
-        Dimension imageSize = getCComponent().getImageSize();
-        return new ImageHolder(imageSize, this);
+        if (widget == null) {
+            Dimension imageSize = getCComponent().getImageSize();
+            widget = new ImageHolder(imageSize, this);
+        }
+        return widget;
     }
 
     public void resizeToFit() {
         Dimension imageSize = getCComponent().getImageSize();
-        if (viewer != null) {
-            viewer.setImageSize(imageSize.width, imageSize.height);
-        }
-        if (editor != null) {
-            editor.setImageSize(imageSize.width, imageSize.height);
-        }
+        createWidget().setImageSize(imageSize.width, imageSize.height);
     }
 
     @Override
@@ -178,14 +181,14 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
         public CComponent<?> create(IObject<?> member) {
             if (member.getObjectClass().equals(imgClass)) {
                 return new CEntityForm<T>(imgClass) {
-                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), Scale.ScaleToFit);
+                    private final ImageViewport thumb = new ImageViewport(getCComponent().getThumbSize(), ScaleMode.ScaleToFit);
 
                     @Override
                     public IsWidget createContent() {
                         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
+                        thumb.setImage(getPlaceholder());
                         content.setWidget(0, 0, thumb);
-                        thumb.setImage(getCComponent().getThumbnailPlaceholder());
                         content.setWidget(0, 1, getCComponent().getImageEntryView(this));
 
                         return content;
@@ -195,7 +198,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
                     protected void onValueSet(boolean populate) {
                         super.onValueSet(populate);
                         if (getValue() != null) {
-                            thumb.setUrl(getCComponent().getImageUrl(getValue()));
+                            thumb.setImage(new Image(getCComponent().getImageUrl(getValue())));
                         }
                     }
 
@@ -262,14 +265,16 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
                 this.folder = folder;
                 ScrollPanel panel = new ScrollPanel();
                 panel.add(folder.getContainer());
-                panel.setHeight("500px");
+                panel.getElement().getStyle().setProperty("maxHeight", "500px");
                 setBody(panel);
             }
 
             @Override
             public boolean onClickCancel() {
-                getCComponent().getValue().clear();
-                getCComponent().getValue().addAll(imageFiles);
+                if (getCComponent().getValue() != null) {
+                    getCComponent().getValue().clear();
+                    getCComponent().getValue().addAll(imageFiles);
+                }
                 return true;
             }
 
@@ -312,5 +317,10 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
                 return null;
             }
         }
+    }
+
+    @Override
+    public Image getPlaceholder() {
+        return getCComponent().getThumbnailPlaceholder();
     }
 }

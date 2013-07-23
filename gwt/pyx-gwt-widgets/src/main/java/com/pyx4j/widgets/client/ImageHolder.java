@@ -31,13 +31,15 @@ import com.google.gwt.event.dom.client.MouseOutEvent;
 import com.google.gwt.event.dom.client.MouseOutHandler;
 import com.google.gwt.event.dom.client.MouseOverEvent;
 import com.google.gwt.event.dom.client.MouseOverHandler;
+import com.google.gwt.event.logical.shared.AttachEvent;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.gwt.shared.Dimension;
-import com.pyx4j.widgets.client.ImageHolder.ImageViewport.Scale;
+import com.pyx4j.widgets.client.ImageHolder.ImageViewport.ScaleMode;
 
 public class ImageHolder extends LayoutPanel implements IWidget {
 
@@ -45,11 +47,15 @@ public class ImageHolder extends LayoutPanel implements IWidget {
 
         List<String> getImageUrls();
 
+        Image getPlaceholder();
+
         void editImage();
 
     }
 
     private Dimension imageSize;
+
+    private ImageViewport placeholder;
 
     private final Slideshow slideshow;
 
@@ -60,7 +66,6 @@ public class ImageHolder extends LayoutPanel implements IWidget {
     private final ImageDataProvider imageList;
 
     public ImageHolder(Dimension dimension, ImageDataProvider imageList) {
-        this.imageSize = dimension;
         this.imageList = imageList;
         this.editable = false;
 
@@ -87,17 +92,24 @@ public class ImageHolder extends LayoutPanel implements IWidget {
         add(editControl);
         setWidgetBottomHeight(editControl, 20, Unit.PCT, 40, Unit.PX);
 
-        setPixelSize(imageSize.width, imageSize.height);
+        setImageSize(dimension.width, dimension.width);
     }
 
     public void onModelChange() {
         slideshow.removeAllItems();
-        for (String url : imageList.getImageUrls()) {
-            final ImageViewport imageViewport = new ImageViewport(imageSize, Scale.ScaleToFill);
-            imageViewport.setUrl(url);
+        if (imageList.getImageUrls().size() == 0) {
+            // set placeholder image
+            final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.ScaleToFill);
+            imageViewport.setImage(imageList.getPlaceholder());
             slideshow.addItem(imageViewport);
+        } else {
+            for (String url : imageList.getImageUrls()) {
+                final ImageViewport imageViewport = new ImageViewport(imageSize, ScaleMode.ScaleToFill);
+                imageViewport.setImage(new Image(url));
+                slideshow.addItem(imageViewport);
+            }
         }
-        slideshow.show(slideshow.getItemCount() - 1);
+        slideshow.show(slideshow.getItemCount() - 1, false);
     }
 
     public void reset() {
@@ -152,79 +164,91 @@ public class ImageHolder extends LayoutPanel implements IWidget {
 
     public static class ImageViewport extends LayoutPanel {
 
-        public enum Scale {
+        public enum ScaleMode {
             None, ScaleToFill, ScaleToFit;
         }
 
-        private Image image;
-
         private final Dimension dimension;
 
-        private final Scale scale;
+        private final ScaleMode scaleMode;
 
-        public ImageViewport(Dimension dimension, Scale scale) {
+        public ImageViewport(Dimension dimension, ScaleMode scaleMode) {
             this.dimension = dimension;
-            this.scale = scale;
-            setSize(dimension.width + "px", dimension.height + "px");
-            setImage(new Image());
+            this.scaleMode = scaleMode;
+            setPixelSize(dimension.width, dimension.height);
         }
 
-        public void setImage(Image image) {
+        public void setImage(final Image img) {
+            if (img == null) {
+                return;
+            }
+
+            clear();
+            add(img);
+            img.addLoadHandler(new LoadHandler() {
+                @Override
+                public void onLoad(LoadEvent event) {
+                    adoptImage(img);
+                }
+            });
+            img.addAttachHandler(new AttachEvent.Handler() {
+                @Override
+                public void onAttachOrDetach(AttachEvent event) {
+                    if (event.isAttached() && img.getWidth() > 0) {
+                        adoptImage(img);
+                    }
+                }
+            });
+        }
+
+        private static void adoptImage(Image img) {
+            Widget parent = img.getParent();
+            if (parent instanceof ImageViewport) {
+                ((ImageViewport) parent).scale(img);
+            }
+        }
+
+        private void scale(Image image) {
             if (image == null) {
                 return;
             }
-            this.image = image;
-            image.addLoadHandler(new LoadHandler() {
-                @Override
-                public void onLoad(LoadEvent event) {
-                    scale();
-                }
-            });
-            insert(image, 0);
-        }
 
-        public void setUrl(String url) {
-            image.setUrl(url);
-        }
-
-        private void scale() {
             float frameRatio = (float) dimension.width / dimension.height;
             float imageRatio = (float) image.getWidth() / image.getHeight();
-            switch (scale) {
+            switch (scaleMode) {
             case ScaleToFill:
                 if (imageRatio >= frameRatio) {
-                    fitVertically();
+                    fitVertically(image);
                 } else {
-                    fitHorizontally();
+                    fitHorizontally(image);
                 }
                 break;
             case ScaleToFit:
                 if (imageRatio >= frameRatio) {
-                    fitHorizontally();
+                    fitHorizontally(image);
                 } else {
-                    fitVertically();
+                    fitVertically(image);
                 }
                 break;
             default:
+                // no-op
             }
         }
 
-        private void fitHorizontally() {
-            // set left-right = 0
-            setWidgetLeftRight(image, 0, Unit.PX, 0, Unit.PX);
+        private void fitHorizontally(Image image) {
             // calculate top-bottom offset
             int ver = (dimension.height - image.getHeight() * dimension.width / image.getWidth()) / 2;
             setWidgetTopBottom(image, ver, Unit.PX, ver, Unit.PX);
-            image.setSize("100%", "auto");
+            // scale to fill container's width
+            image.getElement().getStyle().setProperty("width", "100%");
         }
 
-        private void fitVertically() {
-            // set top-bottom = 0
-            setWidgetTopBottom(image, 0, Unit.PX, 0, Unit.PX);
-            // calculate horizontal offset
+        private void fitVertically(Image image) {
+            // calculate left-right offset
             int hor = (dimension.width - image.getWidth() * dimension.height / image.getHeight()) / 2;
             setWidgetLeftRight(image, hor, Unit.PX, hor, Unit.PX);
-            image.setSize("auto", "100%");
+            // scale to fill container's height
+            image.getElement().getStyle().setProperty("height", "100%");
         }
     }
 
