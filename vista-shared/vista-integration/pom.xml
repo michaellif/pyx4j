@@ -26,6 +26,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.propertyvista</groupId>
+            <artifactId>vista-operations-server</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <scope>test</scope>
