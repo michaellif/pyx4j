@@ -15,6 +15,7 @@ package com.propertyvista.yardi.mapper;
 
 import java.util.List;
 
+import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
 
@@ -98,8 +99,8 @@ public class TenantMapper {
             }
         }
 
-        // set Yardi's email just in case of initial import:
-        if (customer.id().isNull() && !yardiCustomer.getAddress().isEmpty()) {
+        // set Yardi's email just in case of initial import and non-former leases:
+        if (customer.id().isNull() && !yardiCustomer.getAddress().isEmpty() && !isFormerLease(yardiCustomer)) {
             setEmail(yardiCustomer.getAddress().get(0).getEmail(), customer);
         }
 
@@ -131,4 +132,10 @@ public class TenantMapper {
             customer.person().email().setValue(email);
         }
     }
+
+    private boolean isFormerLease(YardiCustomer yardiCustomer) {
+        Customerinfo info = yardiCustomer.getType();
+        return Customerinfo.FORMER_RESIDENT.equals(info);
+    }
+
 }
