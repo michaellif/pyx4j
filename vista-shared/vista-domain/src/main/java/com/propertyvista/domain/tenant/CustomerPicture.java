@@ -13,8 +13,22 @@
  */
 package com.propertyvista.domain.tenant;
 
+import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.OrderColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.shared.IPrimitive;
+
 import com.propertyvista.domain.File;
 
 public interface CustomerPicture extends File {
+    @Owner
+    @Detached
+    @JoinColumn
+    @ReadOnly
+    Customer customer();
 
+    @OrderColumn
+    IPrimitive<Integer> orderId();
 }
