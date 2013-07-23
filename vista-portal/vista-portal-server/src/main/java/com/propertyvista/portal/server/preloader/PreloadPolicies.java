@@ -51,7 +51,7 @@ public class PreloadPolicies extends AbstractPoliciesPreloader {
         add(new AutoPayChangePolicyPreloader());
         add(new YardiInterfacePolicyPreloader());
 
-        if (!VistaTODO.Equifax_Short_VISTA_478) {
+        if (!VistaTODO.Equifax_Off_VISTA_478) {
             add(new BackgroundCheckPolicyPreloader());
         }
 

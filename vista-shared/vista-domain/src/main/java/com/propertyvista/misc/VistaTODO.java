@@ -55,9 +55,7 @@ public class VistaTODO {
 
     public static final boolean VISTA_1588 = true;
 
-    public static final boolean Equifax_Short_VISTA_478 = false;
-
-    public static final boolean Equifax_Long_VISTA_478 = true;
+    public static final boolean Equifax_Off_VISTA_478 = false;
 
     public static final boolean UploadedBlobSecurity = true;
 

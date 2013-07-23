@@ -168,7 +168,7 @@ public class LeaseApplicationViewerViewImpl extends LeaseViewerViewImplBase<Leas
                 });
             }
         });
-        if (!VistaTODO.Equifax_Short_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+        if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             addAction(checkAction);
         }
 
