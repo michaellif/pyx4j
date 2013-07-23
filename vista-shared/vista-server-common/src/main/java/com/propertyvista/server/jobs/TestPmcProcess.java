@@ -46,6 +46,7 @@ public class TestPmcProcess implements PmcProcess {
 
         ExecutionMonitor executionMonitor = context.getExecutionMonitor();
         for (int i = 0; i < max; i++) {
+            executionMonitor.addInfoEvent("message", "message #" + i);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

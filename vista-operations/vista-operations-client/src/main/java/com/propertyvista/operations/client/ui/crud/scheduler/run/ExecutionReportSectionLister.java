@@ -13,11 +13,15 @@
  */
 package com.propertyvista.operations.client.ui.crud.scheduler.run;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.entity.shared.ICollection;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor.Builder;
 import com.pyx4j.i18n.shared.I18n;
@@ -87,6 +91,11 @@ public class ExecutionReportSectionLister extends EntityDataTablePanel<Execution
 
             setDataSource(new ListerDataSource<ExecutionReportMessage>(ExecutionReportMessage.class,
                     GWT.<AbstractListService<ExecutionReportMessage>> create(ExecutionReportMessageService.class)));
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().eventTime(), false));
         }
     }
 }
