@@ -58,12 +58,22 @@ public class VistaContext {
     }
 
     public static AbstractUser getCurrentUser() {
-        Visit v = Context.getVisit();
-        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
+        AbstractUser user = getCurrentUserIfAvalable();
+        if (user == null) {
             log.trace("no session");
             throw new UnRecoverableRuntimeException(i18n.tr("No Session"));
+        } else {
+            return user;
         }
-        return (AbstractUser) v.getAttribute(userAttr);
+    }
+
+    public static AbstractUser getCurrentUserIfAvalable() {
+        Visit v = Context.getVisit();
+        if ((v == null) || (!v.isUserLoggedIn()) || (v.getUserVisit().getPrincipalPrimaryKey() == null)) {
+            return null;
+        } else {
+            return (AbstractUser) v.getAttribute(userAttr);
+        }
     }
 
     public static Class<? extends AbstractUser> getVistaUserClass(VistaUserType userType) {

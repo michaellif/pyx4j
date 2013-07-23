@@ -34,6 +34,7 @@ import com.propertyvista.domain.pmc.PmcPaymentMethod;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureTransaction;
 import com.propertyvista.domain.util.DomainUtil;
+import com.propertyvista.server.common.security.VistaContext;
 
 class PaymentMethodPersister {
 
@@ -95,6 +96,8 @@ class PaymentMethodPersister {
                     origPaymentMethod = null;
                 }
             }
+        } else {
+            paymentMethod.creator().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");

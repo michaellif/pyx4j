@@ -162,7 +162,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
                 // check that nobody is tampering the PV/Tenant managed insurance certificates:
                 InsuranceCertificate preUpdated = Persistence.service().retrieve(InsuranceCertificate.class, insuranceCertificate.getPrimaryKey());
                 if (preUpdated.isPropertyVistaIntegratedProvider().isBooleanTrue() | insuranceCertificate.isManagedByTenant().isBooleanTrue()) {
-                    log.warn(SimpleMessageFormat.format("Evil CRM user {0} has tried to override insurance settting for insurance id={1}", VistaContext
+                    log.warn(SimpleMessageFormat.format("Evil CRM user {0} has tried to override insurance setting for insurance id={1}", VistaContext
                             .getCurrentUser().getPrimaryKey(), preUpdated.getPrimaryKey()));
                     throw new Error();
                 }

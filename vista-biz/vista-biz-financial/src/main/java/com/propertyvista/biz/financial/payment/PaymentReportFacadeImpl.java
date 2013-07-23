@@ -27,7 +27,7 @@ public class PaymentReportFacadeImpl implements PaymentReportFacade {
 
     @Override
     public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
-        return new PreauthorisedPaymentsManager().reportPreauthorisedPayments(reportCriteria);
+        return new PreauthorizedPaymentsManager().reportPreauthorisedPayments(reportCriteria);
     }
 
 }

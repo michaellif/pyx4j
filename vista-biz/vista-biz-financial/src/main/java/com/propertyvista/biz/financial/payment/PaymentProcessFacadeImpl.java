@@ -100,12 +100,12 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        new PreauthorisedPaymentsManager().createPreauthorisedPayments(executionMonitor, runDate);
+        new PreauthorizedPaymentsManager().createPreauthorisedPayments(executionMonitor, runDate);
     }
 
     @Override
     public void updatePmcScheduledPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate runDate) {
-        new PreauthorisedPaymentsManager().updateScheduledPreauthorisedPayments(executionMonitor, runDate);
+        new PreauthorizedPaymentsManager().updateScheduledPreauthorisedPayments(executionMonitor, runDate);
     }
 
     @Override

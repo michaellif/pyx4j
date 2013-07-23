@@ -167,7 +167,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
 
     @Override
     public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
-        return new PreauthorisedPaymentsManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
+        return new PreauthorizedPaymentsManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
     }
 
 }

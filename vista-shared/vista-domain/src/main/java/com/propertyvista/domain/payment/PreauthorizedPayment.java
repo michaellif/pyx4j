@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
@@ -98,6 +99,10 @@ public interface PreauthorizedPayment extends IEntity {
     @JoinColumn
     @MemberColumn(notNull = true)
     Tenant tenant();
+
+    @ReadOnly
+    @Detached
+    AbstractPmcUser creator();
 
     @Timestamp(Timestamp.Update.Created)
     IPrimitive<LogicalDate> creationDate();

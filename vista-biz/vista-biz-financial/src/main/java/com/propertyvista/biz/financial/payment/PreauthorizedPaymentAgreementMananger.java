@@ -46,6 +46,7 @@ import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.server.common.security.VistaContext;
 
 class PreauthorizedPaymentAgreementMananger {
 
@@ -94,7 +95,7 @@ class PreauthorizedPaymentAgreementMananger {
             }
         } else {
             preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
-
+            preauthorizedPayment.creator().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         Persistence.service().merge(preauthorizedPayment);
