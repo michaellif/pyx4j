@@ -21,7 +21,6 @@ import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.MenuItem;
 
@@ -71,7 +70,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
 
     private LayoutType layoutType;
 
-    private final HTML brandLabel;
+    private final Image brandLabel;
 
     private boolean hideLoginButton = false;
 
@@ -159,10 +158,9 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
         brandImage.getElement().getStyle().setFloat(Float.LEFT);
         brandImage.getElement().getStyle().setProperty("borderRadius", "4px");
 
-        brandLabel = new HTML(
-                "<span style='font-weight:bold;font-size:1.2em'><span style='color:#eee'>my</span><span style='color:#bbb'>community</span></span>");
-        brandLabel.getElement().getStyle().setProperty("lineHeight", "60px");
+        brandLabel = new Image(PortalImages.INSTANCE.myCommunityHeaderLogoLabel());
         brandLabel.getElement().getStyle().setFloat(Float.RIGHT);
+        brandLabel.getElement().getStyle().setProperty("margin", "10px 0 0 0");
 
         brandHolder = new FlowPanel();
         brandHolder.setStyleName(PortalWebRootPaneTheme.StyleName.BrandImage.name());
@@ -245,7 +243,7 @@ public class ToolbarViewImpl extends FlowPanel implements ToolbarView {
             tenantButton.setVisible(loggedIn);
             languageButton.setVisible(true);
             brandHolder.getElement().getStyle().setProperty("margin", "0");
-            brandImage.getElement().getStyle().setProperty("margin", "5px 10px 0");
+            brandImage.getElement().getStyle().setProperty("margin", "5px 0 0 10px");
             break;
         }
         loginButton.setVisible(!loggedIn && !hideLoginButton);
