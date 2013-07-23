@@ -33,9 +33,8 @@ public class RevalidationTrigger<E> implements ValueChangeHandler<E> {
 
     @Override
     public void onValueChange(ValueChangeEvent<E> event) {
-        if (targetComponent.isVisited() || (!targetComponent.isValueEmpty())) {
+        if (!targetComponent.isViewable() && (targetComponent.isVisited() || !targetComponent.isValueEmpty())) {
             targetComponent.revalidate();
         }
     }
-
 }
