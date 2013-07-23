@@ -35,7 +35,17 @@ public enum EmailTemplateType {
 
     ApplicationDeclined,
 
-    TenantInvitation;
+    TenantInvitation,
+
+    MaintenanceRequestCreatedPMC,
+
+    MaintenanceRequestCreatedTenant,
+
+    MaintenanceRequestUpdated,
+
+    MaintenanceRequestCompleted,
+
+    MaintenanceRequestEntryNotice;
 
     @Override
     public String toString() {
