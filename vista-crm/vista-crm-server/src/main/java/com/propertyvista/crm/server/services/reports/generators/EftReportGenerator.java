@@ -24,7 +24,9 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
@@ -167,11 +169,17 @@ public class EftReportGenerator implements ReportExporter {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.desc(criteria.proto().padBillingCycle().billingType());
         criteria.desc(criteria.proto().padBillingCycle().billingCycleStartDate());
-        criteria.asc(criteria.proto().billingAccount().lease().unit().building().propertyCode());
-        criteria.asc(criteria.proto().billingAccount().lease().unit().info().number());
-        criteria.asc(criteria.proto().billingAccount().lease().leaseId());
-        criteria.asc(criteria.proto().preauthorizedPayment().tenant().participantId());
-        criteria.asc(criteria.proto().amount());
+        if (reportMetadata.orderBy().isNull()) {
+            criteria.asc(criteria.proto().billingAccount().lease().unit().building().propertyCode());
+            criteria.asc(criteria.proto().billingAccount().lease().unit().info().number());
+            criteria.asc(criteria.proto().billingAccount().lease().leaseId());
+            criteria.asc(criteria.proto().preauthorizedPayment().tenant().participantId());
+            criteria.asc(criteria.proto().amount());
+        } else {
+            Sort orderBy = new Sort(criteria.proto().getMember(dtoBinder.getBoundDboMemberPath(new Path(reportMetadata.orderBy().memberPath().getValue()))),
+                    reportMetadata.orderBy().isDesc().isBooleanTrue());
+            criteria.sort(orderBy);
+        }
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
 

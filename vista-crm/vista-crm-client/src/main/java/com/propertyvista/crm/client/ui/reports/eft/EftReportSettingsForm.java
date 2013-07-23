@@ -13,6 +13,10 @@
  */
 package com.propertyvista.crm.client.ui.reports.eft;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -21,14 +25,24 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.Path;
+import com.pyx4j.entity.shared.meta.EntityMeta;
+import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
+
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.organisation.common.PortfolioFolder;
+import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.reports.EftReportMetadata;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetadata> {
+
+    private static final I18n i18n = I18n.get(EftReportSettingsForm.class);
 
     public EftReportSettingsForm() {
         super(EftReportMetadata.class);
@@ -55,6 +69,8 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
         });
         column1.add(new FormDecoratorBuilder(inject(proto().onlyWithNotice())).contentWidth(CONTENT_WIDTH).build());
         column1.add(new FormDecoratorBuilder(inject(proto().paymentStatus())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH).build());
+        column1.add(new FormDecoratorBuilder(inject(proto().orderBy(), makeOrderByComboBox())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
+                .build());
 
         FlowPanel column2 = new FlowPanel();
         column2.add(new FormDecoratorBuilder(inject(proto().filterByBillingCycle())).componentWidth(CHECKBOX_WIDTH).contentWidth(CONTENT_WIDTH).build());
@@ -133,5 +149,50 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
 
         get(proto().minimum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
         get(proto().maximum()).setVisible(getValue().filterByExpectedMoveOut().isBooleanTrue());
+    }
+
+    private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
+        CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>() {
+            @Override
+            public String getItemName(ReportOrderColumnMetadata o) {
+                if (o != null) {
+                    String direction = o.isDesc().isBooleanTrue() ? "\u21E7" : "\u21E9";
+                    return direction + " "
+                            + EntityFactory.getEntityMeta(EftReportRecordDTO.class).getMemberMeta(new Path(o.memberPath().getValue())).getCaption();
+                } else {
+                    return super.getItemName(o);
+                }
+            }
+        };
+        ArrayList<ReportOrderColumnMetadata> reportColumnOptions = new ArrayList<ReportOrderColumnMetadata>();
+        EftReportRecordDTO reportRecordProto = EntityFactory.getEntityPrototype(EftReportRecordDTO.class);
+        for (String memberName : reportRecordProto.getEntityMeta().getMemberNames()) {
+            if (!memberName.endsWith("_")) {
+                ReportOrderColumnMetadata c = EntityFactory.create(ReportOrderColumnMetadata.class);
+                c.memberPath().setValue(reportRecordProto.getMember(memberName).getPath().toString());
+                reportColumnOptions.add(c);
+                c = c.duplicate();
+                c.isDesc().setValue(true);
+                reportColumnOptions.add(c);
+            }
+        }
+        Collections.sort(reportColumnOptions, new Comparator<ReportOrderColumnMetadata>() {
+
+            @Override
+            public int compare(ReportOrderColumnMetadata o1, ReportOrderColumnMetadata o2) {
+                EntityMeta meta = EntityFactory.getEntityMeta(EftReportRecordDTO.class);
+                int cmp = meta.getMemberMeta(new Path(o1.memberPath().getValue())).getCaption()
+                        .compareTo(meta.getMemberMeta(new Path(o2.memberPath().getValue())).getCaption());
+                if (cmp == 0) {
+                    cmp = -Boolean.valueOf(o1.isDesc().isBooleanTrue()).compareTo(o2.isDesc().isBooleanTrue());
+                }
+                return cmp;
+            }
+
+        });
+        orderByComboBox.setOptions(reportColumnOptions);
+        orderByComboBox.setNoSelectionText(i18n.tr("Default"));
+
+        return orderByComboBox;
     }
 }

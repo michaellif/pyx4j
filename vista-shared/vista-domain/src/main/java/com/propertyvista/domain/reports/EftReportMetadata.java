@@ -21,6 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.site.shared.domain.reports.ExportableReport;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
+import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
@@ -75,4 +76,6 @@ public interface EftReportMetadata extends ReportMetadata, ExportableReport {
     /** maximum of expected move out */
     @NotNull
     IPrimitive<LogicalDate> maximum();
+
+    ReportOrderColumnMetadata orderBy();
 }
