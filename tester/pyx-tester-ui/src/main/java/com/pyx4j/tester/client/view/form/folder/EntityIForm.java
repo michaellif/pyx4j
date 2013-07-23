@@ -45,7 +45,7 @@ import com.pyx4j.tester.client.domain.test.EntityII;
 import com.pyx4j.tester.client.domain.test.EntityIII;
 import com.pyx4j.tester.client.domain.test.EntityIV;
 import com.pyx4j.tester.client.images.Images;
-import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
+import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.tester.client.view.form.EntityIIFormWithVisibilityChange;
 
 public class EntityIForm extends CEntityForm<EntityI> {
@@ -77,9 +77,9 @@ public class EntityIForm extends CEntityForm<EntityI> {
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Main Form"));
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().textBox())));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().textBox())).build());
         //main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().integerBox())));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().integerBox())).build());
 
         main.setH2(++row, 0, 1, i18n.tr("Box Folder"));
         main.setWidget(++row, 0, inject(proto().entityIIList(), new EntityIIFolder()));
@@ -130,8 +130,8 @@ public class EntityIForm extends CEntityForm<EntityI> {
 
             int row = -1;
 
-            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextI())));
-            main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalInteger())));
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTextI())).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalInteger())).build());
             main.setH3(++row, 0, 1, i18n.tr("Box Folder"));
             main.setWidget(++row, 0, inject(proto().entityIIIList(), new EntityIIIFolder()));
             main.setH3(++row, 0, 1, i18n.tr("Table Folder"));
@@ -169,8 +169,8 @@ public class EntityIForm extends CEntityForm<EntityI> {
         @Override
         public IsWidget createContent() {
             FlowPanel main = new FlowPanel();
-            main.add(new TesterWidgetDecorator(inject(proto().stringMember())));
-            main.add(new TesterWidgetDecorator(inject(proto().integerMember())));
+            main.add(new FormDecoratorBuilder(inject(proto().stringMember())).build());
+            main.add(new FormDecoratorBuilder(inject(proto().integerMember())).build());
             return main;
         }
 

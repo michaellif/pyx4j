@@ -29,7 +29,7 @@ import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityII;
-import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
+import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 
 public class EntityIIFormWithVisibilityChange extends CEntityForm<EntityII> {
 
@@ -46,17 +46,17 @@ public class EntityIIFormWithVisibilityChange extends CEntityForm<EntityII> {
 
         int row = -1;
         main.setH1(++row, 0, 1, i18n.tr("Form component Visibility Test"));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalEnum())));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalEnum())).build());
         main.setHR(++row, 0, 1);
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalTextII())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextI())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryTextII())));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTextI())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalTextII())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mandatoryTextI())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mandatoryTextII())).build());
 
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().checkBox())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().optionalPassword())));
-        main.setWidget(++row, 0, new TesterWidgetDecorator(inject(proto().mandatoryPassword())));
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().checkBox())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().optionalPassword())).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mandatoryPassword())).build());
 
         return main;
     }

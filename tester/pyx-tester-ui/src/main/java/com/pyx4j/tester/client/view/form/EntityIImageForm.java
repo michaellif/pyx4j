@@ -34,7 +34,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.tester.client.domain.test.EntityI;
 import com.pyx4j.tester.client.images.Images;
-import com.pyx4j.tester.client.ui.TesterWidgetDecorator;
+import com.pyx4j.tester.client.ui.FormDecoratorBuilder;
 import com.pyx4j.tester.domain.TFile;
 import com.pyx4j.tester.shared.file.TFileUploadService;
 
@@ -69,9 +69,9 @@ public class EntityIImageForm extends CEntityForm<EntityI> {
             @Override
             public Widget getImageEntryView(CEntityForm<TFile> entryForm) {
                 VerticalPanel infoPanel = new VerticalPanel();
-                infoPanel.add(new TesterWidgetDecorator(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())));
-                infoPanel.add(new TesterWidgetDecorator(entryForm.inject(entryForm.proto().caption())));
-                infoPanel.add(new TesterWidgetDecorator(entryForm.inject(entryForm.proto().description())));
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().fileName(), new CLabel<String>())).build());
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().caption())).build());
+                infoPanel.add(new FormDecoratorBuilder(entryForm.inject(entryForm.proto().description())).build());
                 return infoPanel;
             }
         };
