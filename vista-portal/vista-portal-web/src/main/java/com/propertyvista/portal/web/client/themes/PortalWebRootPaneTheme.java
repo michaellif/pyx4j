@@ -102,7 +102,7 @@ public class PortalWebRootPaneTheme extends Theme {
     private void initMainMenuStyles() {
         Style style = new Style(".", StyleName.MainMenu);
         style.addProperty("width", "14em");
-        style.addProperty("margin", "10px 0 ");
+        style.addProperty("margin", "10px 0 0 10px");
         style.addProperty("padding-left", "10px");
         addStyle(style);
 
