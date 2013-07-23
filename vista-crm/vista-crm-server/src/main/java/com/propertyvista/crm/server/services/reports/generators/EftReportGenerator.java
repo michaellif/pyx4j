@@ -34,6 +34,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
+import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -70,6 +71,8 @@ public class EftReportGenerator implements ReportExporter {
             for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
                 padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
             }
+
+            normalizeBuildingsFilter(reportMetadata);
 
             List<Building> selectedBuildings = null;
             if (reportMetadata.filterByBuildings().getValue(false) && (!reportMetadata.selectedBuildings().isEmpty())) {
@@ -157,10 +160,13 @@ public class EftReportGenerator implements ReportExporter {
             criteria.eq(criteria.proto().padBillingCycle().billingType().billingPeriod(), reportMetadata.billingPeriod());
             criteria.eq(criteria.proto().padBillingCycle().billingCycleStartDate(), reportMetadata.billingCycleStartDate());
         }
+
+        normalizeBuildingsFilter(reportMetadata);
         if (reportMetadata.filterByBuildings().isBooleanTrue()) {
             if (!reportMetadata.selectedBuildings().isEmpty()) {
                 criteria.in(criteria.proto().billingAccount().lease().unit().building(), reportMetadata.selectedBuildings());
             } else {
+                // not sure about that but it makes sense mathematically
                 criteria.isNull(criteria.proto().billingAccount().lease().unit().building());
             }
         }
@@ -193,6 +199,38 @@ public class EftReportGenerator implements ReportExporter {
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().set(null);
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().setPrimaryKey(lease.unit().building().getPrimaryKey());
         paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().setValue(lease.unit().building().propertyCode().getValue());
+    }
+
+    private void normalizeBuildingsFilter(EftReportMetadata reportMetadata) {
+        Vector<Building> selectedBuildings = new Vector<Building>();
+        if (reportMetadata.filterByPortfolio().isBooleanTrue()) {
+            selectedBuildings.addAll(getPortfoliosBuildings(reportMetadata.selectedPortfolios()));
+        }
+        if (reportMetadata.filterByBuildings().isBooleanTrue()) {
+            selectedBuildings.addAll(reportMetadata.selectedBuildings());
+        }
+
+        reportMetadata.selectedBuildings().clear();
+        reportMetadata.filterByBuildings().setValue(reportMetadata.filterByBuildings().isBooleanTrue() | reportMetadata.filterByPortfolio().isBooleanTrue());
+        if (reportMetadata.filterByBuildings().isBooleanTrue()) {
+            reportMetadata.selectedBuildings().addAll(selectedBuildings);
+        }
+
+    }
+
+    private Vector<Building> getPortfoliosBuildings(List<Portfolio> portfolios) {
+        Vector<Building> portfoliosBuildings = new Vector<Building>();
+        if (!portfolios.isEmpty()) {
+            EntityQueryCriteria<Portfolio> portfoliosCriteria = EntityQueryCriteria.create(Portfolio.class);
+            portfoliosCriteria.in(portfoliosCriteria.proto().id(), new Vector<Portfolio>(portfolios));
+            for (Portfolio pStub : portfolios) {
+                Portfolio portfolio = Persistence.secureRetrieve(Portfolio.class, pStub.getPrimaryKey());
+                Persistence.service().retrieveMember(portfolio.buildings(), AttachLevel.IdOnly);
+                portfoliosBuildings.addAll(portfolio.buildings());
+            }
+
+        }
+        return portfoliosBuildings;
     }
 
     /** this is for testing progress UI */

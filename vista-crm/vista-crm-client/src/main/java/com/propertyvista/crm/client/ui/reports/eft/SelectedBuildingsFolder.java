@@ -32,7 +32,7 @@ public class SelectedBuildingsFolder extends VistaTableFolder<Building> {
     static {
         Building proto = EntityFactory.getEntityPrototype(Building.class);
         COLUMNS = Arrays.asList(//@formatter:off
-                new EntityFolderColumnDescriptor(proto.propertyCode(), "100%")
+                new EntityFolderColumnDescriptor(proto.propertyCode(), "100px")
         );//@formatter:on
     }
 
