@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 
@@ -45,13 +46,13 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
         profileGadget.asWidget().setWidth("100%");
 
         billingGadget = new BillingGadget(this);
-        billingGadget.asWidget().setWidth("50%");
+        billingGadget.getElement().getStyle().setFloat(Float.LEFT);
 
         maintenanceGadget = new MaintenanceGadget(this);
-        maintenanceGadget.asWidget().setWidth("50%");
+        maintenanceGadget.getElement().getStyle().setFloat(Float.LEFT);
 
         residentServicesGadget = new ResidentServicesGadget(this);
-        residentServicesGadget.asWidget().setWidth("100%");
+        residentServicesGadget.getElement().getStyle().setFloat(Float.LEFT);
 
         add(profileGadget);
         add(billingGadget);
@@ -78,11 +79,12 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
         case tabletPortrait:
             billingGadget.asWidget().setWidth("100%");
             maintenanceGadget.asWidget().setWidth("100%");
+            residentServicesGadget.asWidget().setWidth("100%");
             break;
-
         default:
             billingGadget.asWidget().setWidth("50%");
             maintenanceGadget.asWidget().setWidth("50%");
+            residentServicesGadget.asWidget().setWidth("50%");
             break;
         }
 
