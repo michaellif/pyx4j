@@ -16,7 +16,6 @@ package com.propertyvista.portal.web.client.ui.landing;
 import java.util.List;
 
 import com.google.gwt.dom.client.Style.Display;
-import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.FontStyle;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -50,6 +49,8 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     public LandingViewImpl() {
 
         loginGadget = new LoginGadget(this);
+        loginGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        loginGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         HTML orLabel = new HTML("OR");
         orLabel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
@@ -64,9 +65,12 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
 
         orHolder = new SimplePanel(orLabel);
         orHolder.getElement().getStyle().setTextAlign(TextAlign.CENTER);
-        orHolder.getElement().getStyle().setFloat(Float.LEFT);
+        orHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        orHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         signUpGadget = new SignUpGadget(this);
+        signUpGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        signUpGadget.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
         add(loginGadget);
         add(orHolder);
@@ -91,7 +95,6 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         case tabletPortrait:
             loginGadget.setWidth("100%");
             orHolder.setWidth("100%");
-            orHolder.getElement().getStyle().setMarginTop(0, Unit.PX);
             signUpGadget.setWidth("100%");
             break;
         case tabletLandscape:
@@ -99,7 +102,6 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
         case huge:
             loginGadget.asWidget().setWidth("46%");
             orHolder.asWidget().setWidth("8%");
-            orHolder.getElement().getStyle().setMarginTop(100, Unit.PX);
             signUpGadget.asWidget().setWidth("46%");
             break;
         }

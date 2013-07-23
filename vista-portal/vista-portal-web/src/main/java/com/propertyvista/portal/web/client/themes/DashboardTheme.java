@@ -31,7 +31,6 @@ public class DashboardTheme extends Theme {
 
     public DashboardTheme() {
         Style style = new Style(".", StyleName.Gadget);
-        style.addProperty("float", "left");
         addStyle(style);
 
         style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.TextBox);
