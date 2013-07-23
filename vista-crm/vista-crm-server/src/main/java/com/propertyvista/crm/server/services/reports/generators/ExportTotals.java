@@ -41,7 +41,7 @@ public abstract class ExportTotals<T, DTO> {
 
     public void reportTotalIfKeyChanged(ReportTableXLSXFormatter formatter, String key) {
         if ((currentKey != null) && !currentKey.equals(key)) {
-            exportTotal(formatter, key, get(currentKey));
+            exportTotal(formatter, currentKey, get(currentKey));
         }
     }
 
