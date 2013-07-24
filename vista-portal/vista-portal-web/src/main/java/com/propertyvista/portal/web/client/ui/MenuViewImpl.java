@@ -81,7 +81,7 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         mainHolder.add(new NavigItem(new Resident(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
-        mainHolder.add(new NavigItem(new Resident.Financial.BillingDashboard(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+        mainHolder.add(new NavigItem(new Resident.Financial.BillingDashboard(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
 
         //TODO
 //        if (!VistaFeatures.instance().yardiIntegration()) {
