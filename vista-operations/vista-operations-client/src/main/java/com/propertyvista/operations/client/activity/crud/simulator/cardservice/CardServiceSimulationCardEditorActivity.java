@@ -19,8 +19,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationCardEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.SimulationViewFactory;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
@@ -29,15 +29,15 @@ public class CardServiceSimulationCardEditorActivity extends AbstractEditorActiv
         CardServiceSimulationCardEditorView.Presenter {
 
     public CardServiceSimulationCardEditorActivity(CrudAppPlace place) {
-        super(place, SimulationViewFactory.instance(CardServiceSimulationCardEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(CardServiceSimulationCardEditorView.class), GWT
                 .<CardServiceSimulationCardCrudService> create(CardServiceSimulationCardCrudService.class), CardServiceSimulationCard.class);
     }
 
     @Override
     public void addTransaction() {
-        AppSite.getPlaceController().goTo(
-                new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction()
-                        .formNewItemPlace(getView().getValue().getPrimaryKey()));
+        AppSite.getPlaceController()
+                .goTo(new OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction().formNewItemPlace(getView().getValue()
+                        .getPrimaryKey()));
     }
 
 }

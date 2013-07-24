@@ -24,9 +24,9 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadFileViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
@@ -39,7 +39,8 @@ public class PadFileViewerActivity extends AdminViewerActivity<PadSimFile> imple
 
     @SuppressWarnings("unchecked")
     public PadFileViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(PadFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT.create(PadSimFileCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(PadFileViewerView.class), (AbstractCrudService<PadSimFile>) GWT
+                .create(PadSimFileCrudService.class));
 
         batchLister = new ListerController<PadSimBatch>(((PadFileViewerView) getView()).getBatchListerView(),
                 (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class), PadSimBatch.class);

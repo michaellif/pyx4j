@@ -18,15 +18,15 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileEditorActivity extends AbstractEditorActivity<DirectDebitSimFile> implements DirectDebitSimFileEditorView.Presenter {
 
     public DirectDebitSimFileEditorActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(DirectDebitSimFileEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimFileEditorView.class), GWT
                 .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), DirectDebitSimFile.class);
     }
 }

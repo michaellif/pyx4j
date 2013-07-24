@@ -29,8 +29,8 @@ import com.pyx4j.security.shared.PasswordSerializable;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ui.components.DownloadLinkDialog;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.encryptedstorage.EncryptedStorageView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageDTO;
 import com.propertyvista.operations.rpc.encryption.EncryptedStorageKeyDTO;
 import com.propertyvista.operations.rpc.services.EncryptedStorageService;
@@ -46,7 +46,7 @@ public class EncryptedStorageActivity extends AbstractActivity implements Encryp
 
     public EncryptedStorageActivity(AppPlace place) {
         this.place = place;
-        view = ManagementVeiwFactory.instance(EncryptedStorageView.class);
+        view = OperationsSite.getViewFactory().instantiate(EncryptedStorageView.class);
         service = GWT.<EncryptedStorageService> create(EncryptedStorageService.class);
     }
 

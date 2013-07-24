@@ -15,14 +15,13 @@ package com.propertyvista.common.client.ui.components.login;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.security.rpc.AuthenticationRequest;
 import com.pyx4j.security.rpc.SystemWallMessage;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.domain.DemoData;
 
-public interface LoginView extends IsWidget {
+public interface LoginView extends IsView {
 
     interface DevLoginCredentials {
 

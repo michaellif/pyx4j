@@ -20,16 +20,16 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunDataViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.rpc.services.scheduler.RunDataCrudService;
 
 public class RunDataViewerActivity extends AdminViewerActivity<RunData> implements RunDataViewerView.Presenter {
 
     public RunDataViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(RunDataViewerView.class), GWT.<RunDataCrudService> create(RunDataCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(RunDataViewerView.class), GWT.<RunDataCrudService> create(RunDataCrudService.class));
     }
 
     @Override

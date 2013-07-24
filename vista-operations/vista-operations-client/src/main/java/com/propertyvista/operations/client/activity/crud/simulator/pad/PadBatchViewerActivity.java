@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadBatchViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.rpc.services.simulator.PadSimBatchCrudService;
 
@@ -28,6 +28,7 @@ public class PadBatchViewerActivity extends AdminViewerActivity<PadSimBatch> imp
 
     @SuppressWarnings("unchecked")
     public PadBatchViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(PadBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(PadBatchViewerView.class), (AbstractCrudService<PadSimBatch>) GWT
+                .create(PadSimBatchCrudService.class));
     }
 }

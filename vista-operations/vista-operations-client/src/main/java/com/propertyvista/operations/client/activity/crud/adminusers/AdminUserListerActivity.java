@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserListerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserCrudService;
 
 public class AdminUserListerActivity extends AbstractListerActivity<OperationsUserDTO> {
 
     public AdminUserListerActivity(Place place) {
-        super(place, AdministrationVeiwFactory.instance(AdminUserListerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
+        super(place, OperationsSite.getViewFactory().instantiate(AdminUserListerView.class), GWT.<AdminUserCrudService> create(AdminUserCrudService.class),
                 OperationsUserDTO.class);
     }
 }

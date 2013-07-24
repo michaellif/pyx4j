@@ -25,8 +25,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulateddatapreload.SimulatedDataPreloadView;
-import com.propertyvista.operations.client.viewfactories.MiscViewFactory;
 import com.propertyvista.operations.rpc.services.simulator.SimulatedDataPreloadService;
 
 public class SimulatedDataPreloadActivity extends AbstractActivity {
@@ -36,7 +36,7 @@ public class SimulatedDataPreloadActivity extends AbstractActivity {
     private final SimulatedDataPreloadService service;
 
     public SimulatedDataPreloadActivity() {
-        this.view = MiscViewFactory.instance(SimulatedDataPreloadView.class);
+        this.view = OperationsSite.getViewFactory().instantiate(SimulatedDataPreloadView.class);
         this.view.setPresenter(this);
         this.service = GWT.<SimulatedDataPreloadService> create(SimulatedDataPreloadService.class);
     }

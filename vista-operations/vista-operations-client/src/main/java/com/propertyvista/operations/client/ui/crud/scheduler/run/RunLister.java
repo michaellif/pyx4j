@@ -61,6 +61,10 @@ public class RunLister extends AbstractLister<Run> {
         return c;
     }
 
+    public RunLister() {
+        this(false);
+    }
+
     public RunLister(boolean isInlineMode) {
         super(Run.class, false);
         setColumnDescriptors(isInlineMode ? INLINE_VIEW_COLUMN_DESCRIPTORS : VIEW_COLUMN_DESCRIPTORS);

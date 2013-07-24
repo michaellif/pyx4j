@@ -21,7 +21,7 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 
 public class CardServiceSimulationCardListerViewImpl extends ListerViewImplBase<CardServiceSimulationCard> implements CardServiceSimulationCardListerView {
 
-    private static class CardServiceSimulationLister extends AbstractLister<CardServiceSimulationCard> {
+    public static class CardServiceSimulationLister extends AbstractLister<CardServiceSimulationCard> {
 
         public CardServiceSimulationLister() {
             super(CardServiceSimulationCard.class, true, true);

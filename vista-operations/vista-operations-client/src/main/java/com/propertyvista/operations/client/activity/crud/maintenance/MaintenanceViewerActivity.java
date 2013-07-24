@@ -21,9 +21,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.maintenance.MaintenanceViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.operations.rpc.services.MaintenanceCrudService;
 
@@ -32,7 +32,8 @@ public class MaintenanceViewerActivity extends AdminViewerActivity<VistaSystemMa
     private final static I18n i18n = I18n.get(MaintenanceViewerActivity.class);
 
     public MaintenanceViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(MaintenanceViewerView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(MaintenanceViewerView.class), GWT
+                .<MaintenanceCrudService> create(MaintenanceCrudService.class));
     }
 
     @Override

@@ -22,8 +22,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.MerchantAccountEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
@@ -34,7 +34,7 @@ public class MerchantAccountEditorActivity extends AbstractEditorActivity<PmcMer
     public MerchantAccountEditorActivity(CrudAppPlace place) {
         super(//@formatter:off
                 place,
-                ManagementVeiwFactory.instance(MerchantAccountEditorView.class),
+ OperationsSite.getViewFactory().instantiate(MerchantAccountEditorView.class),
                 GWT.<PmcMerchantAccountCrudService> create(PmcMerchantAccountCrudService.class),
                 PmcMerchantAccountDTO.class
         );//@formatter:on

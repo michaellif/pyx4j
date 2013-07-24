@@ -18,10 +18,11 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.operations.client.activity.NavigFolder;
 
-public interface NavigView extends IsWidget {
+public interface NavigView extends IsWidget, IsView {
 
     public void setPresenter(MainNavigPresenter presenter);
 

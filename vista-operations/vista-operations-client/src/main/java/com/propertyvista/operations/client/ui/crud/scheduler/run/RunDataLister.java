@@ -25,6 +25,10 @@ import com.propertyvista.operations.domain.scheduler.RunData;
 
 public class RunDataLister extends AbstractLister<RunData> {
 
+    public RunDataLister() {
+        this(false);
+    }
+
     public RunDataLister(boolean isInlineMode) {
         super(RunData.class, false);
         setColumnDescriptors((isInlineMode) ? createInlineViewColumnDescriptors() : createViewColumnDescriptors());

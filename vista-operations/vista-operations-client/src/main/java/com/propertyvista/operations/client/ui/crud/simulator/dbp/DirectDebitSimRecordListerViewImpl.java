@@ -27,7 +27,7 @@ public class DirectDebitSimRecordListerViewImpl extends OperationsListerViewImpl
         setLister(new DirectDebitSimRecordLister());
     }
 
-    private static class DirectDebitSimRecordLister extends AbstractLister<DirectDebitSimRecord> {
+    public static class DirectDebitSimRecordLister extends AbstractLister<DirectDebitSimRecord> {
 
         public DirectDebitSimRecordLister() {
             super(DirectDebitSimRecord.class, true);

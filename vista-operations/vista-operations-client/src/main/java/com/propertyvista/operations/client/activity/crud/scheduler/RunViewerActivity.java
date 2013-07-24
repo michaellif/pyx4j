@@ -24,9 +24,9 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.RunStatus;
@@ -43,7 +43,7 @@ public class RunViewerActivity extends AdminViewerActivity<Run> implements RunVi
     private Timer updateViewTimer;
 
     public RunViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(RunViewerView.class), GWT.<RunCrudService> create(RunCrudService.class));
 
         runDataLister = new ListerController<RunData>(((RunViewerView) getView()).getRunDataListerView(),
                 GWT.<RunDataCrudService> create(RunDataCrudService.class), RunData.class);

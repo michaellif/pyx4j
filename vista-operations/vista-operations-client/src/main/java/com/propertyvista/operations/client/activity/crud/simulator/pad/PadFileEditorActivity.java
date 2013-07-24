@@ -19,8 +19,8 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadFileEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
@@ -28,7 +28,7 @@ public class PadFileEditorActivity extends AbstractEditorActivity<PadSimFile> {
 
     @SuppressWarnings("unchecked")
     public PadFileEditorActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(PadFileEditorView.class), (AbstractCrudService<PadSimFile>) GWT.create(PadSimFileCrudService.class),
-                PadSimFile.class);
+        super(place, OperationsSite.getViewFactory().instantiate(PadFileEditorView.class), (AbstractCrudService<PadSimFile>) GWT
+                .create(PadSimFileCrudService.class), PadSimFile.class);
     }
 }

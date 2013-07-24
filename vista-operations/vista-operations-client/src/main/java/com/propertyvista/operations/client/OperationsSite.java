@@ -20,6 +20,7 @@ import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
 import com.pyx4j.essentials.client.SessionInactiveDialog;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
+import com.pyx4j.site.client.SingletonViewFactory;
 
 import com.propertyvista.common.client.site.Notification;
 import com.propertyvista.common.client.site.Notification.NotificationType;
@@ -31,6 +32,8 @@ import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 
 public class OperationsSite extends VistaSite {
+
+    private static SingletonViewFactory viewFactory = new SingletonViewFactory();
 
     public OperationsSite() {
         super("vista-operations", OperationsSiteMap.class, new OperationsSiteAppPlaceDispatcher());
@@ -56,6 +59,10 @@ public class OperationsSite extends VistaSite {
     public void showMessageDialog(String message, String title) {
         setNotification(new Notification(message, NotificationType.ERROR, title));
         //TODO getPlaceController().goTo(new AdminSiteMap.GenericMessage());
+    }
+
+    public static SingletonViewFactory getViewFactory() {
+        return viewFactory;
     }
 
     private void obtainAuthenticationData() {

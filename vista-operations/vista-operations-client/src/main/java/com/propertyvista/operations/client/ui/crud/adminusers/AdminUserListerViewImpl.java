@@ -29,7 +29,7 @@ public class AdminUserListerViewImpl extends OperationsListerViewImplBase<Operat
         setLister(new AdminUserLister());
     }
 
-    private static class AdminUserLister extends AbstractLister<OperationsUserDTO> {
+    public static class AdminUserLister extends AbstractLister<OperationsUserDTO> {
 
         public AdminUserLister() {
             super(OperationsUserDTO.class, true);

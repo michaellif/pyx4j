@@ -22,7 +22,7 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAcco
 public class CardServiceSimulationMerchantAccountListerViewImpl extends ListerViewImplBase<CardServiceSimulationMerchantAccount> implements
         CardServiceSimulationMerchantAccountListerView {
 
-    private static class CardServiceSimulationLister extends AbstractLister<CardServiceSimulationMerchantAccount> {
+    public static class CardServiceSimulationLister extends AbstractLister<CardServiceSimulationMerchantAccount> {
 
         public CardServiceSimulationLister() {
             super(CardServiceSimulationMerchantAccount.class, true, true);

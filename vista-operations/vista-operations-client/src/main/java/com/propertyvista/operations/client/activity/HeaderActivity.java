@@ -29,8 +29,8 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.HeaderView;
-import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 
@@ -39,7 +39,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     private final HeaderView view;
 
     public HeaderActivity(Place place) {
-        view = OperationsVeiwFactory.instance(HeaderView.class);
+        view = OperationsSite.getViewFactory().instantiate(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
     }

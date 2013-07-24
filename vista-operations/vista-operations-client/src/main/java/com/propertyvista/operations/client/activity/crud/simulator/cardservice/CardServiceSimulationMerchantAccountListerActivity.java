@@ -19,15 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationMerchantAccountListerView;
-import com.propertyvista.operations.client.viewfactories.crud.SimulationViewFactory;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationMerchantAccountCrudService;
 
 public class CardServiceSimulationMerchantAccountListerActivity extends AbstractListerActivity<CardServiceSimulationMerchantAccount> {
 
     public CardServiceSimulationMerchantAccountListerActivity(Place place) {
-        super(place, SimulationViewFactory.instance(CardServiceSimulationMerchantAccountListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(CardServiceSimulationMerchantAccountListerView.class), GWT
                 .<AbstractCrudService<CardServiceSimulationMerchantAccount>> create(CardServiceSimulationMerchantAccountCrudService.class),
                 CardServiceSimulationMerchantAccount.class);
     }

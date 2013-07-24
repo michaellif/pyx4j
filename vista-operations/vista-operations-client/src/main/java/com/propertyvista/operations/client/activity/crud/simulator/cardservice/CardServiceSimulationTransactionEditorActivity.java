@@ -22,8 +22,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.cardservice.CardServiceSimulationTransactionEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.SimulationViewFactory;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulationCardCrudService;
@@ -32,7 +32,7 @@ import com.propertyvista.operations.rpc.services.simulator.CardServiceSimulation
 public class CardServiceSimulationTransactionEditorActivity extends AbstractEditorActivity<CardServiceSimulationTransaction> {
 
     public CardServiceSimulationTransactionEditorActivity(CrudAppPlace place) {
-        super(place, SimulationViewFactory.instance(CardServiceSimulationTransactionEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(CardServiceSimulationTransactionEditorView.class), GWT
                 .<CardServiceSimulationTransactionCrudService> create(CardServiceSimulationTransactionCrudService.class),
                 CardServiceSimulationTransaction.class);
     }

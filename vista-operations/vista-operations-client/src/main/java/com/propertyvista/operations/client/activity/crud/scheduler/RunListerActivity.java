@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.run.RunListerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 
@@ -28,7 +28,7 @@ public class RunListerActivity extends AbstractListerActivity<Run> {
 
     @SuppressWarnings("unchecked")
     public RunListerActivity(Place place) {
-        super(place, ManagementVeiwFactory.instance(RunListerView.class), (AbstractCrudService<Run>) GWT.create(RunCrudService.class), Run.class);
+        super(place, OperationsSite.getViewFactory().instantiate(RunListerView.class), (AbstractCrudService<Run>) GWT.create(RunCrudService.class), Run.class);
 
     }
 }

@@ -18,15 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.FooterView;
-import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 
 public class FooterActivity extends AbstractActivity {
 
     private final FooterView view;
 
     public FooterActivity(Place place) {
-        view = OperationsVeiwFactory.instance(FooterView.class);
+        view = OperationsSite.getViewFactory().instantiate(FooterView.class);
         withPlace(place);
     }
 

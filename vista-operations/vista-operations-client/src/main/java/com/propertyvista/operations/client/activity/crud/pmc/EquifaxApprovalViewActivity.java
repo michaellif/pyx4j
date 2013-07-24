@@ -20,17 +20,17 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.EquifaxApprovalView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
 import com.propertyvista.operations.rpc.services.EquifaxApprovalCrudService;
-import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 
 public class EquifaxApprovalViewActivity extends AdminViewerActivity<EquifaxSetupRequestDTO> implements EquifaxApprovalView.Presenter {
 
     public EquifaxApprovalViewActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(EquifaxApprovalView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(EquifaxApprovalView.class), GWT
                 .<AbstractCrudService<EquifaxSetupRequestDTO>> create(EquifaxApprovalCrudService.class));
     }
 

@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerListerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.TriggerDTO;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
@@ -28,7 +28,7 @@ public class TriggerListerActivity extends AbstractListerActivity<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerListerActivity(Place place) {
-        super(place, ManagementVeiwFactory.instance(TriggerListerView.class), (AbstractCrudService<TriggerDTO>) GWT.create(TriggerCrudService.class),
-                TriggerDTO.class);
+        super(place, OperationsSite.getViewFactory().instantiate(TriggerListerView.class), (AbstractCrudService<TriggerDTO>) GWT
+                .create(TriggerCrudService.class), TriggerDTO.class);
     }
 }

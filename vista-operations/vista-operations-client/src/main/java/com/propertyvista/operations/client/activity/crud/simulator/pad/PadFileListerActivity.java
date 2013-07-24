@@ -20,8 +20,8 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.file.PadFileListerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
 
@@ -29,8 +29,8 @@ public class PadFileListerActivity extends AbstractListerActivity<PadSimFile> im
 
     @SuppressWarnings("unchecked")
     public PadFileListerActivity(Place place) {
-        super(place, AdministrationVeiwFactory.instance(PadFileListerView.class), (AbstractCrudService<PadSimFile>) GWT.create(PadSimFileCrudService.class),
-                PadSimFile.class);
+        super(place, OperationsSite.getViewFactory().instantiate(PadFileListerView.class), (AbstractCrudService<PadSimFile>) GWT
+                .create(PadSimFileCrudService.class), PadSimFile.class);
     }
 
     @Override

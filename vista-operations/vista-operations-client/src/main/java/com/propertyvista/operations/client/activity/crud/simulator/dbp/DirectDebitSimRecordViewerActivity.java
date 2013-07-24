@@ -19,9 +19,9 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimRecordViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
@@ -34,7 +34,7 @@ public class DirectDebitSimRecordViewerActivity extends AdminViewerActivity<Dire
     private DirectDebitSimFile file;
 
     public DirectDebitSimRecordViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(DirectDebitSimRecordViewerView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimRecordViewerView.class), GWT
                 .<DirectDebitSimRecordCrudService> create(DirectDebitSimRecordCrudService.class));
     }
 

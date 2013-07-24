@@ -69,8 +69,8 @@ import com.propertyvista.operations.client.activity.crud.simulator.pad.PadBatchV
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileEditorActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileListerActivity;
 import com.propertyvista.operations.client.activity.crud.simulator.pad.PadFileViewerActivity;
-import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsEditorAcitvity;
-import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivty;
+import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsEditorActivity;
+import com.propertyvista.operations.client.activity.crud.systemdefaults.VistaSystemDefaultsViewerActivity;
 import com.propertyvista.operations.client.activity.login.LoginActivity;
 import com.propertyvista.operations.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.operations.client.activity.security.PasswordChangeActivity;
@@ -175,10 +175,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.Management.BillingSetup) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new VistaSystemDefaultsEditorAcitvity(crudPlace);
+                            activity = new VistaSystemDefaultsEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new VistaSystemDefaultsViewerActivty(crudPlace);
+                            activity = new VistaSystemDefaultsViewerActivity(crudPlace);
                             break;
                         default:
                             break;

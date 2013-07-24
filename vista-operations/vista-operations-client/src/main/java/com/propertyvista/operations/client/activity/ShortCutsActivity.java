@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.NavigFolder.Type;
 import com.propertyvista.operations.client.event.CrudNavigateEvent;
 import com.propertyvista.operations.client.event.CrudNavigateHandler;
 import com.propertyvista.operations.client.ui.ShortCutsView;
 import com.propertyvista.operations.client.ui.ShortCutsView.ShortCutsPresenter;
-import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 
 public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter, CrudNavigateHandler {
 
@@ -37,7 +37,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     private final ShortCutsView view;
 
     public ShortCutsActivity() {
-        view = OperationsVeiwFactory.instance(ShortCutsView.class);
+        view = OperationsSite.getViewFactory().instantiate(ShortCutsView.class);
         view.setPresenter(this);
     }
 

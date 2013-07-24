@@ -29,9 +29,9 @@ import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
@@ -46,7 +46,7 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
 
     @SuppressWarnings("unchecked")
     public PmcViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(PmcViewerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class));
 
     }
 

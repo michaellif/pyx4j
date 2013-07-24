@@ -16,19 +16,18 @@ package com.propertyvista.operations.client.activity.crud.systemdefaults;
 import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
-import com.propertyvista.operations.client.ui.crud.systemdefaults.VistaSystemDefaultsEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
+import com.propertyvista.operations.client.OperationsSite;
+import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
+import com.propertyvista.operations.client.ui.crud.systemdefaults.VistaSystemDefaultsViewerView;
 import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 
-public class VistaSystemDefaultsEditorAcitvity extends AbstractEditorActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsEditorView.Presenter {
+public class VistaSystemDefaultsViewerActivity extends AdminViewerActivity<VistaSystemDefaultsDTO> implements VistaSystemDefaultsViewerView.Presenter {
 
-    public VistaSystemDefaultsEditorAcitvity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(VistaSystemDefaultsEditorView.class), GWT
-                .<AbstractCrudService<VistaSystemDefaultsDTO>> create(Vista2PmcService.class), VistaSystemDefaultsDTO.class);
+    public VistaSystemDefaultsViewerActivity(CrudAppPlace place) {
+        super(place, OperationsSite.getViewFactory().instantiate(VistaSystemDefaultsViewerView.class), GWT
+                .<AbstractCrudService<VistaSystemDefaultsDTO>> create(Vista2PmcService.class));
     }
-
 }

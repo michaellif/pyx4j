@@ -15,6 +15,9 @@ package com.propertyvista.operations.client.ui;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface FooterView extends IsWidget {
+import com.pyx4j.site.client.IsView;
+
+public interface FooterView extends IsWidget, IsView {
+
 
 }

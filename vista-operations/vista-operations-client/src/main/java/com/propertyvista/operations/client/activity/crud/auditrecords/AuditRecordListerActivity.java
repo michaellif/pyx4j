@@ -18,16 +18,16 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.auditrecords.AuditRecordListerView;
-import com.propertyvista.operations.client.viewfactories.crud.SecurityViewFactory;
 import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.services.AuditRecordCrudService;
 
 public class AuditRecordListerActivity extends AbstractListerActivity<AuditRecordOperationsDTO> {
 
     public AuditRecordListerActivity(Place place) {
-        super(place, SecurityViewFactory.instance(AuditRecordListerView.class), GWT.<AuditRecordCrudService> create(AuditRecordCrudService.class),
-                AuditRecordOperationsDTO.class);
+        super(place, OperationsSite.getViewFactory().instantiate(AuditRecordListerView.class), GWT
+                .<AuditRecordCrudService> create(AuditRecordCrudService.class), AuditRecordOperationsDTO.class);
     }
 
 }

@@ -4,7 +4,10 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.place.shared.PlaceController;
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface HeaderView extends IsWidget {
+import com.pyx4j.site.client.IsView;
+
+public interface HeaderView extends IsWidget, IsView {
+
 
     public void setPresenter(Presenter presenter);
 

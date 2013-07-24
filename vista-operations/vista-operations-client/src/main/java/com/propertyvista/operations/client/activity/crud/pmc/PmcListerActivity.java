@@ -25,8 +25,8 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
 import com.propertyvista.dto.DownloadableUploadResponseDTO;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcListerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
@@ -38,7 +38,8 @@ public class PmcListerActivity extends AbstractListerActivity<PmcDTO> implements
 
     @SuppressWarnings("unchecked")
     public PmcListerActivity(Place place) {
-        super(place, ManagementVeiwFactory.instance(PmcListerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class), PmcDTO.class);
+        super(place, OperationsSite.getViewFactory().instantiate(PmcListerView.class), (AbstractCrudService<PmcDTO>) GWT.create(PmcCrudService.class),
+                PmcDTO.class);
 
     }
 

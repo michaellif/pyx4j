@@ -27,8 +27,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.security.VistaOperationsBehavior;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.NavigView;
-import com.propertyvista.operations.client.viewfactories.OperationsVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class NavigActivity extends AbstractActivity implements NavigView.MainNavigPresenter {
@@ -36,7 +36,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
     private final NavigView view;
 
     public NavigActivity(Place place) {
-        view = OperationsVeiwFactory.instance(NavigView.class);
+        view = OperationsSite.getViewFactory().instantiate(NavigView.class);
         view.setPresenter(this);
         withPlace(place);
     }

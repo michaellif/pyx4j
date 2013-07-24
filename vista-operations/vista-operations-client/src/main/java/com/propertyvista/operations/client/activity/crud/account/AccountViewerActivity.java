@@ -21,17 +21,17 @@ import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.adminusers.AdminUserViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 import com.propertyvista.operations.rpc.services.AdminUserService;
-import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 
 public class AccountViewerActivity extends AbstractViewerActivity<OperationsUserDTO> implements AdminUserViewerView.Presenter {
 
     public AccountViewerActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(AdminUserViewerView.class), GWT.<AdminUserService> create(AdminUserService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(AdminUserViewerView.class), GWT.<AdminUserService> create(AdminUserService.class));
     }
 
     @Override

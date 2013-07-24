@@ -22,22 +22,22 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerViewerView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.TriggerDTO;
 import com.propertyvista.operations.rpc.services.scheduler.RunCrudService;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
-import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 
 public class TriggerViewerActivity extends AdminViewerActivity<TriggerDTO> implements TriggerViewerView.Presenter {
 
     private final Presenter<Run> runLister;
 
     public TriggerViewerActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(TriggerViewerView.class), GWT.<TriggerCrudService> create(TriggerCrudService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(TriggerViewerView.class), GWT.<TriggerCrudService> create(TriggerCrudService.class));
 
         runLister = new ListerController<Run>(((TriggerViewerView) getView()).getRunListerView(), GWT.<RunCrudService> create(RunCrudService.class), Run.class);
     }

@@ -22,8 +22,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.scheduler.trigger.TriggerEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.ManagementVeiwFactory;
 import com.propertyvista.operations.rpc.TriggerDTO;
 import com.propertyvista.operations.rpc.services.scheduler.TriggerCrudService;
 
@@ -31,8 +31,8 @@ public class TriggerEditorActivity extends AbstractEditorActivity<TriggerDTO> {
 
     @SuppressWarnings("unchecked")
     public TriggerEditorActivity(CrudAppPlace place) {
-        super(place, ManagementVeiwFactory.instance(TriggerEditorView.class), (AbstractCrudService<TriggerDTO>) GWT.create(TriggerCrudService.class),
-                TriggerDTO.class);
+        super(place, OperationsSite.getViewFactory().instantiate(TriggerEditorView.class), (AbstractCrudService<TriggerDTO>) GWT
+                .create(TriggerCrudService.class), TriggerDTO.class);
     }
 
     @Override

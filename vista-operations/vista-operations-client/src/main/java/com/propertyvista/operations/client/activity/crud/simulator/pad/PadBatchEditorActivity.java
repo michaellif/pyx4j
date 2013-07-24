@@ -22,8 +22,8 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.pad.batch.PadBatchEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
 import com.propertyvista.operations.domain.payment.pad.TransactionReconciliationStatus;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
@@ -34,8 +34,8 @@ public class PadBatchEditorActivity extends AbstractEditorActivity<PadSimBatch> 
 
     @SuppressWarnings("unchecked")
     public PadBatchEditorActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(PadBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT.create(PadSimBatchCrudService.class),
-                PadSimBatch.class);
+        super(place, OperationsSite.getViewFactory().instantiate(PadBatchEditorView.class), (AbstractCrudService<PadSimBatch>) GWT
+                .create(PadSimBatchCrudService.class), PadSimBatch.class);
     }
 
     @Override

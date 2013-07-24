@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.legal.VistaTermsEditorView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.legal.VistaTerms;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
 
 public class VistaTermsEditorActivity extends AbstractEditorActivity<VistaTerms> {
 
     public VistaTermsEditorActivity(CrudAppPlace place) {
-        super(place, AdministrationVeiwFactory.instance(VistaTermsEditorView.class), GWT
-                .<VistaTermsCrudService> create(VistaTermsCrudService.class), VistaTerms.class);
+        super(place, OperationsSite.getViewFactory().instantiate(VistaTermsEditorView.class), GWT.<VistaTermsCrudService> create(VistaTermsCrudService.class),
+                VistaTerms.class);
     }
 
 }

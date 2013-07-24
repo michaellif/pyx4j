@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileListerView;
-import com.propertyvista.operations.client.viewfactories.crud.AdministrationVeiwFactory;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileListerActivity extends AbstractListerActivity<DirectDebitSimFile> implements DirectDebitSimFileListerView.Presenter {
 
     public DirectDebitSimFileListerActivity(Place place) {
-        super(place, AdministrationVeiwFactory.instance(DirectDebitSimFileListerView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimFileListerView.class), GWT
                 .<DirectDebitSimFileCrudService> create(DirectDebitSimFileCrudService.class), DirectDebitSimFile.class);
     }
 
