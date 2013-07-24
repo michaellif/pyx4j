@@ -59,6 +59,7 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
         formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().status())).build());
         formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().creatationDate())).build());
         formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().sentDate())).build());
+        formPanel.setH1(++row, 0, 2, "Sim Records");
         formPanel.setWidget(++row, 0, 2, inject(proto().records(), new DirectDebitSimRecordTableFolder()));
         selectTab(addTab(formPanel));
 
