@@ -59,7 +59,7 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable())));
+        panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new ProductTaxPolicyItemFolder(isEditable())));
 
         return panel;
     }
@@ -104,11 +104,11 @@ public class ProductTaxPolicyForm extends PolicyDTOTabPanelBasedForm<ProductTaxP
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode())).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().productCode()), true).build());
                 get(proto().productCode()).setViewable(true);
 
-                content.setH3(++row, 0, 1, proto().taxes().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().taxes(), new TaxFolder(isEditable())));
+                content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());
+                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(isEditable())));
 
                 return content;
             }

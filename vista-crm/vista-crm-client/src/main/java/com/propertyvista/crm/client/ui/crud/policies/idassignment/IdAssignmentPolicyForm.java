@@ -52,7 +52,7 @@ public class IdAssignmentPolicyForm extends PolicyDTOTabPanelBasedForm<IdAssignm
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().editableItems(), new IdAssignmentItemFolder(isEditable())));
+        panel.setWidget(++row, 0, 2, inject(proto().editableItems(), new IdAssignmentItemFolder(isEditable())));
 
         return panel;
     }

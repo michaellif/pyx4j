@@ -79,8 +79,8 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
             TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
             int row = -1;
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).labelWidth(10).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().localizedCaption()), 20).labelWidth(10).build());
+            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale()), true).build());
+            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().localizedCaption()), true).build());
 
             CComponent<?> termsContentComp = null;
             if (isEditable()) {
@@ -90,7 +90,7 @@ public class LegalTermsContentFolder extends VistaBoxFolder<LegalTermsContent> {
             } else {
                 termsContentComp = inject(proto().content(), new CLabel<String>());
             }
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(termsContentComp, 45).labelWidth(10).build());
+            contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(termsContentComp, true).build());
 
             return contentPanel;
         }

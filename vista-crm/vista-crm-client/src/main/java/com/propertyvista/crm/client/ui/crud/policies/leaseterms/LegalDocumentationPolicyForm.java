@@ -52,31 +52,31 @@ public class LegalDocumentationPolicyForm extends PolicyDTOTabPanelBasedForm<Leg
 
     private TwoColumnFlexFormPanel createMainApplicatinoTermsPanel() {
         TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().mainApplication().getMeta().getCaption());
-        container.setWidget(0, 0, inject(proto().mainApplication(), new LegalTermsDescriptorFolder(isEditable())));
+        container.setWidget(0, 0, 2, inject(proto().mainApplication(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createCoApplicatinoTermsPanel() {
         TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().coApplication().getMeta().getCaption());
-        container.setWidget(0, 0, inject(proto().coApplication(), new LegalTermsDescriptorFolder(isEditable())));
+        container.setWidget(0, 0, 2, inject(proto().coApplication(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createGuarantorApplicationPanel() {
         TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().guarantorApplication().getMeta().getCaption());
-        container.setWidget(0, 0, inject(proto().guarantorApplication(), new LegalTermsDescriptorFolder(isEditable())));
+        container.setWidget(0, 0, 2, inject(proto().guarantorApplication(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createLeaseTermsPanel() {
         TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().lease().getMeta().getCaption());
-        container.setWidget(0, 0, inject(proto().lease(), new LegalTermsDescriptorFolder(isEditable())));
+        container.setWidget(0, 0, 2, inject(proto().lease(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 
     private TwoColumnFlexFormPanel createPaymentAuthorizationPanel() {
         TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel(proto().paymentAuthorization().getMeta().getCaption());
-        container.setWidget(0, 0, inject(proto().paymentAuthorization(), new LegalTermsDescriptorFolder(isEditable())));
+        container.setWidget(0, 0, 2, inject(proto().paymentAuthorization(), new LegalTermsDescriptorFolder(isEditable())));
         return container;
     }
 

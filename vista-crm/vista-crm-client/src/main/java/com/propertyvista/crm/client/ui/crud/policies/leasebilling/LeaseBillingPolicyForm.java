@@ -94,10 +94,10 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().prorationMethod()), 10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().confirmationMethod()), 10).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().prorationMethod()), 10, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().confirmationMethod()), 10, true).build());
         panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
-        panel.setWidget(++row, 0, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
 
         if (VistaFeatures.instance().yardiIntegration()) {
             get(proto().prorationMethod()).setVisible(false);
@@ -135,7 +135,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
     private TwoColumnFlexFormPanel createNsfFeesPanel() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("NSF Fee"));
 
-        panel.setWidget(0, 0, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
+        panel.setWidget(0, 0, 2, inject(proto().nsfFees(), new NsfFeeItemFolder(isEditable())));
 
         return panel;
     }

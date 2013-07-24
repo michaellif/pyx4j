@@ -74,8 +74,8 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Header and Footer"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().header()), 30).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().footer()), 30).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().header()), true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().footer()), true).build());
 
         return panel;
     }
@@ -84,7 +84,7 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Templates"));
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().templates(), new EmailTemplateEditorFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().templates(), new EmailTemplateEditorFolder()));
 
         return panel;
     }
@@ -133,13 +133,13 @@ public class EmailTemplatesPolicyForm extends PolicyDTOTabPanelBasedForm<EmailTe
                 int row = -1;
 
                 //content.setH1(++row, 0, 1, proto().type().getMeta().getCaption());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().useHeader())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().useFooter())).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().type()), true).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().subject()), true).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().useHeader()), true).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().useFooter()), true).build());
                 CRichTextArea editor = new CRichTextArea();
                 editor.setImageProvider(new SiteImageResourceProvider());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content(), editor), 60).build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content(), editor), true).build());
                 if (isEditable()) {
                     // create variable selection button
                     final PushButton pb = editor.getWidget().getEditor().getCustomButton();

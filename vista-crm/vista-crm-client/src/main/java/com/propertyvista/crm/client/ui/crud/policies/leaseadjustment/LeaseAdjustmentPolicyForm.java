@@ -53,7 +53,7 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
 
         int row = -1;
-        panel.setWidget(++row, 0, inject(proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable())));
+        panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new LeaseAdjustmentPolicyItemFolder(isEditable())));
 
         return panel;
     }
@@ -110,11 +110,11 @@ public class LeaseAdjustmentPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseA
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().code())).build());
-                get(proto().code()).setViewable(true);
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().code()), 20, true).build());
+                get(proto().code()).setEditable(false);
 
-                content.setH3(++row, 0, 1, proto().taxes().getMeta().getCaption());
-                content.setWidget(++row, 0, inject(proto().taxes(), new TaxFolder(isEditable())));
+                content.setH3(++row, 0, 2, proto().taxes().getMeta().getCaption());
+                content.setWidget(++row, 0, 2, inject(proto().taxes(), new TaxFolder(isEditable())));
 
                 return content;
             }

@@ -66,7 +66,7 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Items"));
         int row = -1;
 
-        panel.setWidget(++row, 0, inject(proto().policyItems(), new DepositPolicyItemEditorFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().policyItems(), new DepositPolicyItemEditorFolder()));
 
         return panel;
     }
@@ -99,16 +99,14 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
                 int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType()), 20).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode()), 20).build());
-                get(proto().productCode()).inheritViewable(false);
-                get(proto().productCode()).setViewable(true);
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode())).build());
+                get(proto().productCode()).setEditable(false);
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().valueType()), 10).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().valueType())).build());
                 content.setWidget(++row, 0, valueHolder);
 
-                row = -1;
-                content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().description()), 20).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override

@@ -287,8 +287,14 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String formatMaintenanceCategory(MaintenanceRequestCategory category) {
-        // TODO
-        return null;
+        StringBuilder result = new StringBuilder();
+        while (!category.parent().isNull()) {
+            if (!category.name().isNull()) {
+                result.insert(0, result.length() > 0 ? " > " : "").insert(0, category.name().getValue());
+            }
+            category = category.parent();
+        }
+        return result.toString();
     }
 
     private static String formatEntryDateTime(LogicalDate date, DayTime time) {

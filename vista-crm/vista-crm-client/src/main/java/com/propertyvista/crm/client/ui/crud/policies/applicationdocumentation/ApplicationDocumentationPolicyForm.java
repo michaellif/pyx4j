@@ -47,9 +47,9 @@ public class ApplicationDocumentationPolicyForm extends PolicyDTOTabPanelBasedFo
     private TwoColumnFlexFormPanel createEdtorFormTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Settings"));
         int row = -1;
-        content.setH3(++row, 0, 1, proto().allowedIDs().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfRequiredIDs()), 3).build());
+        content.setH3(++row, 0, 2, proto().allowedIDs().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().allowedIDs(), new IdentificationDocumentFolder()));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().numberOfRequiredIDs()), 4, true).build());
         return content;
     }
 
