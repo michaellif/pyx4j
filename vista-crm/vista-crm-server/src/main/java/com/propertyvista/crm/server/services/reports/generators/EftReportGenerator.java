@@ -167,8 +167,8 @@ public class EftReportGenerator implements ReportExporter {
     @Override
     public ExportedReport export(Serializable report) {
         @SuppressWarnings("unchecked")
-        Vector<PaymentRecord> paymentRecords = (Vector<PaymentRecord>) report;
-        return new EftReportExport().createReport(paymentRecords, reportProgressStatusHolder);
+        EftReportDataDTO reportData = (EftReportDataDTO) report;
+        return new EftReportExport().createReport(reportData, reportProgressStatusHolder);
     }
 
     private EntityQueryCriteria<PaymentRecord> makeCriteria(EftReportMetadata reportMetadata) {

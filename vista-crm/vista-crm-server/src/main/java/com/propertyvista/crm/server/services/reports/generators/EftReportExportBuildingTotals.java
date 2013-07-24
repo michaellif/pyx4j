@@ -23,16 +23,14 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.financial.PaymentRecord;
+public class EftReportExportBuildingTotals extends ExportTotals<BigDecimal, EftReportExportModel> {
 
-public class EftReportExportTotals extends ExportTotals<BigDecimal, PaymentRecord> {
-
-    private static final I18n i18n = I18n.get(EftReportExportTotals.class);
+    private static final I18n i18n = I18n.get(EftReportExportBuildingTotals.class);
 
     private BigDecimal reportTotal = BigDecimal.ZERO;
 
     @Override
-    protected BigDecimal add(BigDecimal total, PaymentRecord entity) {
+    protected BigDecimal add(BigDecimal total, EftReportExportModel entity) {
         reportTotal = reportTotal.add(entity.amount().getValue());
 
         BigDecimal newTotal;

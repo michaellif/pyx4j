@@ -13,8 +13,7 @@
  */
 package com.propertyvista.crm.server.services.reports.generators;
 
-import java.util.List;
-
+import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
@@ -24,6 +23,8 @@ import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
+import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -32,8 +33,8 @@ public class EftReportExport {
 
     private static final I18n i18n = I18n.get(EftReportExport.class);
 
-    public ExportedReport createReport(List<PaymentRecord> paymentRecords, ReportProgressStatusHolder reportProgressStatusHolder) {
-        int numOfRecords = paymentRecords.size();
+    public ExportedReport createReport(EftReportDataDTO eftReportData, ReportProgressStatusHolder reportProgressStatusHolder) {
+        int numOfRecords = eftReportData.eftReportRecords().size();
         String stageName = i18n.tr("Preparing Excel Spreadsheet");
         reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, 0, numOfRecords));
 
@@ -43,48 +44,52 @@ public class EftReportExport {
 
         int counter = 0;
 
-        EftReportExportTotals buildingsTotals = new EftReportExportTotals();
+        ExportTotals<?, EftReportExportModel> totals = eftReportData.agregateByBuildings().isBooleanTrue() ? new EftReportExportBuildingTotals()
+                : new EftReportOverallTotals();
 
-        for (PaymentRecord paymentRecord : paymentRecords) {
+        for (EftReportRecordDTO paymentRecord : eftReportData.eftReportRecords()) {
             EftReportExportModel model = convertModel(paymentRecord);
-            buildingsTotals.reportTotalIfKeyChanged(formatter, model.building().getValue());
+
+            totals.reportTotalIfKeyChanged(formatter, model.building().getValue());
 
             ++counter;
             entityFormatter.reportEntity(formatter, model);
 
-            buildingsTotals.addToTotal(model.building().getValue(), paymentRecord);
+            totals.addToTotal(model.building().getValue(), model);
 
             if (counter % 50 == 0) {
                 reportProgressStatusHolder.set(new ReportProgressStatus(stageName, 2, 2, counter, numOfRecords));
             }
         }
-        buildingsTotals.reportLastTotal(formatter);
+        totals.reportLastTotal(formatter);
 
         return new ExportedReport("eft-report.xlsx", formatter.getContentType(), formatter.getBinaryData());
     }
 
-    private EftReportExportModel convertModel(PaymentRecord paymentRecord) {
+    private EftReportExportModel convertModel(EftReportRecordDTO eftReportRecord) {
         EftReportExportModel model = EntityFactory.create(EftReportExportModel.class);
-
+        PaymentRecord paymentRecord = Persistence.secureRetrieve(PaymentRecord.class, eftReportRecord.amount_().getPrimaryKey());
+        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
+        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease());
         model.targetDate().setValue(paymentRecord.targetDate().getValue());
 
-        model.building().setValue(paymentRecord.preauthorizedPayment().tenant().lease().unit().building().propertyCode().getValue());
-        model.unit().setValue(paymentRecord.preauthorizedPayment().tenant().lease().unit().info().number().getValue());
-        model.leaseId().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseId().getValue());
+        model.building().setValue(eftReportRecord.building().getValue());
+        model.unit().setValue(eftReportRecord.unit().getValue());
+        model.leaseId().setValue(eftReportRecord.leaseId().getValue());
 
         model.leaseStatus().setValue(paymentRecord.preauthorizedPayment().tenant().lease().status().getValue());
         model.leaseFrom().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseFrom().getValue());
         model.leaseTo().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseTo().getValue());
-        model.expectedMoveOut().setValue(paymentRecord.preauthorizedPayment().tenant().lease().expectedMoveOut().getValue());
+        model.expectedMoveOut().setValue(eftReportRecord.expectedMoveOut().getValue());
 
-        model.participantId().setValue(paymentRecord.preauthorizedPayment().tenant().participantId().getValue());
-        model.customer().setValue(paymentRecord.preauthorizedPayment().tenant().customer().getStringView());
+        model.participantId().setValue(eftReportRecord.participantId().getValue());
+        model.customer().setValue(eftReportRecord.customer().getStringView());
 
-        model.amount().setValue(paymentRecord.amount().getValue());
-        model.paymentType().setValue(paymentRecord.paymentMethod().type().getValue());
+        model.amount().setValue(eftReportRecord.amount().getValue());
+        model.paymentType().setValue(eftReportRecord.paymentType().getValue());
 
         // TODO verify permissions
-        switch (paymentRecord.paymentMethod().type().getValue()) {
+        switch (eftReportRecord.paymentType().getValue()) {
         case Echeck:
             EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
             model.bankId().setValue(echeck.bankId().getValue());
@@ -99,8 +104,8 @@ public class EftReportExport {
             break;
         }
 
-        model.paymentStatus().setValue(paymentRecord.paymentStatus().getValue());
-        model.notice().setValue(paymentRecord.notice().getValue());
+        model.paymentStatus().setValue(eftReportRecord.paymentStatus().getValue());
+        model.notice().setValue(eftReportRecord.notice().getValue());
 
         return model;
     }
