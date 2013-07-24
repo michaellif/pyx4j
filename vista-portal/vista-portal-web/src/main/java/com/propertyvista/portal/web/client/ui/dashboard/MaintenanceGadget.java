@@ -26,11 +26,11 @@ import com.propertyvista.portal.rpc.portal.dto.TenantMaintenanceDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class MaintenanceGadget extends AbstractGadget<DashboardViewImpl> {
+public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     static final I18n i18n = I18n.get(MaintenanceGadget.class);
 
-    MaintenanceGadget(DashboardViewImpl form) {
+    MaintenanceGadget(MainDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("My Maintenance Requests"), ThemeColor.contrast5);
         setActionsToolbar(new MaintenanceToolbar());
 

@@ -25,20 +25,20 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.dashboard.DashboardView;
+import com.propertyvista.portal.web.client.ui.dashboard.MainDashboardView;
 
-public class DashboardActivity extends SecurityAwareActivity implements DashboardView.DashboardPresenter {
+public class MainDashboardActivity extends SecurityAwareActivity implements MainDashboardView.DashboardPresenter {
 
-    private final DashboardView view;
+    private final MainDashboardView view;
 
     private final DashboardService srv;
 
-    public DashboardActivity(Place place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(DashboardView.class);
+    public MainDashboardActivity(Place place) {
+        this.view = PortalWebSite.getViewFactory().instantiate(MainDashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
     }
@@ -49,9 +49,9 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
         panel.setWidget(view);
         view.setPresenter(this);
 
-        srv.retrieveTenantDashboard(new DefaultAsyncCallback<TenantDashboardDTO>() {
+        srv.retrieveMainDashboard(new DefaultAsyncCallback<MainDashboardDTO>() {
             @Override
-            public void onSuccess(TenantDashboardDTO result) {
+            public void onSuccess(MainDashboardDTO result) {
                 view.populate(result);
             }
         });

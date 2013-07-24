@@ -24,10 +24,12 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial.BillingDashboard;
 import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
-import com.propertyvista.portal.web.client.activity.dashboard.DashboardActivity;
+import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
+import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
@@ -79,13 +81,22 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     Activity activity = null;
                     if (appPlace instanceof Resident) {
-                        activity = new DashboardActivity(appPlace);
-                    } else if (appPlace instanceof Resident.ProfileViewer) {
-                        activity = new ProfileActivity(appPlace);
-                    } else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
-                        activity = new PotentialTenantActivity(appPlace);
+                        activity = new MainDashboardActivity(appPlace);
+                    }
 
-                    } else if (appPlace instanceof Resident.PaymentMethods) {
+                    else if (appPlace instanceof BillingDashboard) {
+                        activity = new FinancialDashboardActivity(appPlace);
+                    }
+
+                    else if (appPlace instanceof Resident.ProfileViewer) {
+                        activity = new ProfileActivity(appPlace);
+                    }
+
+                    else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
+                        activity = new PotentialTenantActivity(appPlace);
+                    }
+
+                    else if (appPlace instanceof Resident.PaymentMethods) {
                         activity = new PaymentMethodsActivity(appPlace);
                     } else if (appPlace instanceof Resident.PaymentMethods.ViewPaymentMethod) {
                         activity = new ViewPaymentMethodActivity(appPlace);

@@ -26,7 +26,7 @@ import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface TenantBillingDTO extends IEntity {
+public interface TenantBillingSummaryDTO extends IEntity {
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

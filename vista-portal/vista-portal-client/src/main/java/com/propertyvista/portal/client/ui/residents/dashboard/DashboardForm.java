@@ -46,11 +46,11 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.st
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
+public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
 
     private static final I18n i18n = I18n.get(DashboardForm.class);
 
@@ -61,7 +61,7 @@ public class DashboardForm extends CEntityDecoratableForm<TenantDashboardDTO> {
     private Button payButton;
 
     public DashboardForm() {
-        super(TenantDashboardDTO.class, new VistaViewersComponentFactory());
+        super(MainDashboardDTO.class, new VistaViewersComponentFactory());
     }
 
     public void setPresenter(DashboardView.Presenter presenter) {

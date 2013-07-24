@@ -11,7 +11,7 @@
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.dashboard;
+package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
@@ -37,13 +37,13 @@ import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillingGadget extends AbstractGadget<MainDashboardViewImpl> {
+public class BillingGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
     private static final I18n i18n = I18n.get(BillingGadget.class);
 
     private final BillingViewer billingViewer;
 
-    BillingGadget(MainDashboardViewImpl viewer) {
+    BillingGadget(FinancialDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
 

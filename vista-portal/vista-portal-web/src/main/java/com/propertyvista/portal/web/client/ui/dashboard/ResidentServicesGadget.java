@@ -26,11 +26,11 @@ import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class ResidentServicesGadget extends AbstractGadget<DashboardViewImpl> {
+public class ResidentServicesGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     static final I18n i18n = I18n.get(ResidentServicesGadget.class);
 
-    ResidentServicesGadget(DashboardViewImpl form) {
+    ResidentServicesGadget(MainDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Resident Services"), ThemeColor.contrast3);
         setActionsToolbar(new ResidentServicesToolbar());
         FlowPanel contentPanel = new FlowPanel();

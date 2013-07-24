@@ -32,13 +32,13 @@ import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
-public class ProfileGadget extends AbstractGadget<DashboardViewImpl> {
+public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
     private final PersonInfoPanel personInfoPanel;
 
     private final AddressPanel addressPanel;
 
-    ProfileGadget(DashboardViewImpl form) {
+    ProfileGadget(MainDashboardViewImpl form) {
         super(form, ThemeColor.contrast2);
         asWidget().setStyleName(DashboardTheme.StyleName.Gadget.name());
 

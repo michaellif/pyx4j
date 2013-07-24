@@ -17,10 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
 
 public interface DashboardService extends IService {
 
-    public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback);
+    public void retrieveMainDashboard(AsyncCallback<MainDashboardDTO> callback);
+
+    public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback);
 
 }

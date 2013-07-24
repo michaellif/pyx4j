@@ -31,7 +31,8 @@ import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.dto.TenantMainenanceRequestStatusDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
@@ -41,8 +42,8 @@ import com.propertyvista.shared.config.VistaFeatures;
 public class DashboardServiceImpl implements DashboardService {
 
     @Override
-    public void retrieveTenantDashboard(AsyncCallback<TenantDashboardDTO> callback) {
-        TenantDashboardDTO dashboard = EntityFactory.create(TenantDashboardDTO.class);
+    public void retrieveMainDashboard(AsyncCallback<MainDashboardDTO> callback) {
+        MainDashboardDTO dashboard = EntityFactory.create(MainDashboardDTO.class);
 
         LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
         Persistence.service().retrieve(tenantInLease.leaseTermV());
@@ -80,10 +81,10 @@ public class DashboardServiceImpl implements DashboardService {
 
         // fill stuff for the new web portal
         FinancialSummaryDTO billingSummary = BillSummaryServiceImpl.retrieve();
-        dashboard.billingInfo().currentBalance().setValue(billingSummary.currentBalance().getValue());
+        dashboard.billingSummary().currentBalance().setValue(billingSummary.currentBalance().getValue());
         if (!VistaFeatures.instance().yardiIntegration()) {
             Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
-            dashboard.billingInfo().dueDate().setValue(bill.dueDate().getValue());
+            dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
         }
 
         for (MaintenanceRequestDTO maintenanceRequest : mrList) {
@@ -103,6 +104,12 @@ public class DashboardServiceImpl implements DashboardService {
 
         }
 
+        callback.onSuccess(dashboard);
+    }
+
+    @Override
+    public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback) {
+        FinancialDashboardDTO dashboard = EntityFactory.create(FinancialDashboardDTO.class);
         callback.onSuccess(dashboard);
     }
 }

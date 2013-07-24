@@ -23,12 +23,12 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
 
-public class DashboardViewImpl extends FlowPanel implements DashboardView {
+public class MainDashboardViewImpl extends FlowPanel implements MainDashboardView {
 
     @SuppressWarnings("unused")
-    private static final I18n i18n = I18n.get(DashboardViewImpl.class);
+    private static final I18n i18n = I18n.get(MainDashboardViewImpl.class);
 
     private DashboardPresenter presenter;
 
@@ -42,7 +42,7 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
 
     private final OffersGadget offersGadget;
 
-    public DashboardViewImpl() {
+    public MainDashboardViewImpl() {
 
         profileGadget = new ProfileGadget(this);
         profileGadget.asWidget().setWidth("100%");
@@ -103,14 +103,14 @@ public class DashboardViewImpl extends FlowPanel implements DashboardView {
         this.presenter = presenter;
     }
 
-    protected DashboardView.DashboardPresenter getPresenter() {
+    protected DashboardPresenter getPresenter() {
         return presenter;
     }
 
     @Override
-    public void populate(TenantDashboardDTO result) {
+    public void populate(MainDashboardDTO result) {
         profileGadget.populate(result.profileInfo());
-        billingGadget.populate(result.billingInfo());
+        billingGadget.populate(result.billingSummary());
         maintenanceGadget.populate(result.maintenanceInfo());
         residentServicesGadget.populate(result.residentServicesInfo());
     }

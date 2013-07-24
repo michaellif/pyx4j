@@ -24,13 +24,13 @@ import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceSt
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface TenantDashboardDTO extends IEntity {
+public interface MainDashboardDTO extends IEntity {
 
     TenantProfileDTO profileInfo();
 
     TenantMaintenanceDTO maintenanceInfo();
 
-    TenantBillingDTO billingInfo();
+    TenantBillingSummaryDTO billingSummary();
 
     TenantResidentServicesDTO residentServicesInfo();
 

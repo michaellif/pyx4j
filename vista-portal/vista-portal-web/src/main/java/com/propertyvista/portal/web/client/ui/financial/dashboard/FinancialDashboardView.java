@@ -11,17 +11,26 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.dashboard;
+package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import com.propertyvista.portal.client.ui.residents.View;
-import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
+import com.pyx4j.site.client.IsView;
 
-public interface DashboardView extends View<MainDashboardDTO> {
+import com.propertyvista.portal.rpc.portal.dto.FinancialDashboardDTO;
 
-    interface Presenter extends View.Presenter<MainDashboardDTO> {
+public interface FinancialDashboardView extends IsView {
+
+    public interface FinancialDashboardPresenter {
 
         void viewCurrentBill();
 
         void payNow();
+
+        void setAutopay();
+
     }
+
+    void setPresenter(FinancialDashboardPresenter presenter);
+
+    void populate(FinancialDashboardDTO result);
+
 }

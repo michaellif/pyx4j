@@ -84,6 +84,10 @@ public class PortalSiteMap implements SiteMap {
 
         public static class Financial extends AppPlace {
 
+            @PlaceProperties(navigLabel = "Billing & Payment")
+            public static class BillingDashboard extends AppPlace {
+            }
+
             // Billing* are relevant for users who's financials managed by PV */
             public static class BillSummary extends AppPlace {
             }

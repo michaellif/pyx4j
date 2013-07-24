@@ -11,35 +11,35 @@
  * @author vadims
  * @version $Id$
  */
-package com.propertyvista.portal.client.activity.residents;
+package com.propertyvista.portal.web.client.activity.financial.dashboard;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
-import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
+import com.propertyvista.portal.web.client.PortalWebSite;
+import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
+import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashboardView;
+import com.propertyvista.portal.web.client.ui.financial.dashboard.FinancialDashboardView.FinancialDashboardPresenter;
 
-public class DashboardActivity extends SecurityAwareActivity implements DashboardView.Presenter {
+public class FinancialDashboardActivity extends SecurityAwareActivity implements FinancialDashboardPresenter {
 
-    private final DashboardView view;
+    private final FinancialDashboardView view;
 
     private final DashboardService srv;
 
-    public DashboardActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(DashboardView.class);
+    public FinancialDashboardActivity(Place place) {
+        this.view = PortalWebSite.getViewFactory().instantiate(FinancialDashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
     }
@@ -48,10 +48,11 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
         panel.setWidget(view);
+        view.setPresenter(this);
 
-        srv.retrieveMainDashboard(new DefaultAsyncCallback<MainDashboardDTO>() {
+        srv.retrieveFinancialDashboard(new DefaultAsyncCallback<FinancialDashboardDTO>() {
             @Override
-            public void onSuccess(MainDashboardDTO result) {
+            public void onSuccess(FinancialDashboardDTO result) {
                 view.populate(result);
             }
         });
@@ -70,14 +71,10 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     }
 
     @Override
-    public void edit(Key id) {
-        // TODO Auto-generated method stub
-
+    public void setAutopay() {
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
+        }
     }
 
-    @Override
-    public void back() {
-        // TODO Auto-generated method stub
-
-    }
 }

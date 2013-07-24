@@ -36,7 +36,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
@@ -47,13 +46,11 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.images.ButtonImages;
 
 import com.propertyvista.domain.customizations.CountryOfOperation;
-import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
-import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MenuViewImpl extends DockPanel implements MenuView {
@@ -84,25 +81,31 @@ public class MenuViewImpl extends DockPanel implements MenuView {
 
         mainHolder.add(new NavigItem(new Resident(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast1));
 
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            mainHolder.add(new NavigItem(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
-            mainHolder.add(new NavigItem(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast3));
-        } else {
-            mainHolder.add(new NavigItem(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
-        }
+        mainHolder.add(new NavigItem(new Resident.Financial.BillingDashboard(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+
+        //TODO
+//        if (!VistaFeatures.instance().yardiIntegration()) {
+//            mainHolder.add(new NavigItem(new Resident.Financial.BillSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+//            mainHolder.add(new NavigItem(new Resident.Financial.BillingHistory(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast3));
+//        } else {
+//            mainHolder.add(new NavigItem(new Resident.Financial.FinancialSummary(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast4));
+//        }
+//
+//        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
+//                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
+//
+//            if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
+//                mainHolder.add(new NavigItem(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast1));
+//            }
+//
+//            mainHolder.add(new NavigItem(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
+//        }
+
         mainHolder.add(new NavigItem(new Resident.Maintenance(), PortalImages.INSTANCE.maintenanceMenu(), ThemeColor.contrast5));
         if (VistaTODO.ENABLE_COMMUNCATION_CENTER) {
             mainHolder.add(new NavigItem(new Resident.CommunicationCenter(), PortalImages.INSTANCE.dashboardMenu(), ThemeColor.contrast6));
         }
-        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.CreditCardPaymentsAllowed,
-                VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed)) {
 
-            if (PortalPaymentTypesUtil.isPreauthorizedPaumentAllowed()) {
-                mainHolder.add(new NavigItem(new Resident.Financial.PreauthorizedPayments(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast1));
-            }
-
-            mainHolder.add(new NavigItem(new Resident.PaymentMethods(), PortalImages.INSTANCE.billingMenu(), ThemeColor.contrast2));
-        }
         if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             mainHolder.add(new NavigItem(new Resident.TenantInsurance(), PortalImages.INSTANCE.residentServicesMenu(), ThemeColor.contrast4));
         }

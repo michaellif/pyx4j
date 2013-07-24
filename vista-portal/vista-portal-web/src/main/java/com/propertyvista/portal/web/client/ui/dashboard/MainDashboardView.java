@@ -15,9 +15,9 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantDashboardDTO;
+import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
 
-public interface DashboardView extends IsView {
+public interface MainDashboardView extends IsView {
 
     interface DashboardPresenter {
 
@@ -31,6 +31,6 @@ public interface DashboardView extends IsView {
 
     void setPresenter(DashboardPresenter presenter);
 
-    void populate(TenantDashboardDTO result);
+    void populate(MainDashboardDTO result);
 
 }
