@@ -31,6 +31,9 @@ public interface YardiResidentTransactionsStub {
 
     Properties getPropertyConfigurations(PmcYardiCredential yc) throws YardiServiceException, RemoteException;
 
+    /**
+     * Returns null of there are no tenants in Yardi DB
+     */
     ResidentTransactions getAllResidentTransactions(PmcYardiCredential yc, String propertyId) throws YardiServiceException, YardiPropertyNoAccessException,
             RemoteException;
 

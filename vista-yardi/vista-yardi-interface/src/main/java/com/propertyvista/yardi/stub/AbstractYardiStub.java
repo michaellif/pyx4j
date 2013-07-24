@@ -91,7 +91,7 @@ public class AbstractYardiStub {
             }
         }
         if (!allow) {
-            throw new AssertionError("Write access to " + url + " from test system if forbiden");
+            throw new AssertionError("Write access to " + url + " from test system if forbidden");
         }
     }
 

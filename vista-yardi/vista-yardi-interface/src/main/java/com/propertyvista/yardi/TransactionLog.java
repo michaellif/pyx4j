@@ -15,12 +15,20 @@ package com.propertyvista.yardi;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.StringReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Node;
+import org.w3c.dom.bootstrap.DOMImplementationRegistry;
+import org.w3c.dom.ls.DOMImplementationLS;
+import org.w3c.dom.ls.LSSerializer;
+import org.xml.sax.InputSource;
 
 import com.pyx4j.essentials.server.dev.NumberInFile;
 import com.pyx4j.gwt.server.IOUtils;
@@ -47,6 +55,25 @@ public class TransactionLog {
 
     }
 
+    private static String prettyXmlFormat(String input) {
+        try {
+
+            InputSource src = new InputSource(new StringReader(input));
+            Node document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(src).getDocumentElement();
+            DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
+            DOMImplementationLS impl = (DOMImplementationLS) registry.getDOMImplementation("LS");
+            LSSerializer writer = impl.createLSSerializer();
+
+            writer.getDomConfig().setParameter("format-pretty-print", Boolean.TRUE);
+            writer.getDomConfig().setParameter("xml-declaration", true);
+
+            return writer.writeToString(document);
+        } catch (Throwable e) {
+            log.warn("unable to format xml", e);
+            return input;
+        }
+    }
+
     public static String log(Long transactionId, String contextName, String context, String fileExt) {
         if (transactionId == null) {
             return null;
@@ -69,7 +96,7 @@ public class TransactionLog {
                 out = new File(dir, fname.toString() + "-" + (++repeat) + "." + fileExt);
             }
             writer = new FileWriter(out);
-            writer.write(context);
+            writer.write(prettyXmlFormat(context));
             return out.getAbsolutePath();
         } catch (Throwable t) {
             log.error("failed to create transaction log", t);

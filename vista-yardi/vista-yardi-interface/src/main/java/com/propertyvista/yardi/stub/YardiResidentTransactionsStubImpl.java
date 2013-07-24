@@ -150,6 +150,9 @@ public class YardiResidentTransactionsStubImpl extends AbstractYardiStub impleme
                 if (messages.isError()) {
                     if (messages.getErrorMessage().getValue().startsWith("Invalid or no access to Yardi Property")) {
                         throw new YardiPropertyNoAccessException(messages.getErrorMessage().getValue());
+                    } else if (messages.getErrorMessage().getValue().startsWith("No tenants exist with the given search criteria")) {
+                        success = true;
+                        return null;
                     } else {
                         throw new YardiServiceException(SimpleMessageFormat.format("{0}; PropertyId {1}", messages.toString(), propertyId));
                     }
