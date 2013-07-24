@@ -155,7 +155,7 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
         CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>() {
             @Override
             public String getItemName(ReportOrderColumnMetadata o) {
-                if (o != null) {
+                if (o != null && !o.memberPath().isNull()) {
                     String direction = o.isDesc().isBooleanTrue() ? "\u21E7" : "\u21E9";
                     return direction + " "
                             + EntityFactory.getEntityMeta(EftReportRecordDTO.class).getMemberMeta(new Path(o.memberPath().getValue())).getCaption();
