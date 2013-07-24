@@ -15,7 +15,9 @@ package com.propertyvista.biz.communication.mail.template;
 
 import java.text.SimpleDateFormat;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
@@ -26,6 +28,7 @@ import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
@@ -33,6 +36,9 @@ import com.propertyvista.biz.communication.mail.template.model.PortalLinksT;
 import com.propertyvista.biz.communication.mail.template.model.TenantT;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequest.DayTime;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractUser;
@@ -107,6 +113,9 @@ public class EmailTemplateRootObjectLoader {
             } else if (!context.leaseParticipant().isNull()) {
                 Lease lease = getLease(context.leaseParticipant());
                 bld = getBuilding(lease);
+            } else if (!context.maintenanceRequest().isNull()) {
+                Persistence.ensureRetrieve(context.maintenanceRequest().building(), AttachLevel.Attached);
+                bld = context.maintenanceRequest().building();
             }
             if (bld == null) {
                 throw new Error("Either Building or TenantInLease should be provided in context");
@@ -163,6 +172,38 @@ public class EmailTemplateRootObjectLoader {
             t.ApplicantName().setValue(context.leaseParticipant().leaseParticipant().customer().person().name().getStringView());
             t.StartDate().setValue(context.lease().currentTerm().termFrom().getStringView());
             t.StartDateWeekDay().setValue(new SimpleDateFormat("EEEE").format(context.lease().currentTerm().termFrom().getValue()));
+        } else if (tObj instanceof MaintenanceRequestT) {
+            MaintenanceRequestT t = (MaintenanceRequestT) tObj;
+
+            MaintenanceRequest mr = context.maintenanceRequest();
+            Persistence.ensureRetrieve(mr.building(), AttachLevel.Attached);
+            t.requestId().set(mr.requestId());
+            t.propertyCode().set(mr.building().propertyCode());
+            t.category().setValue(formatMaintenanceCategory(mr.category()));
+            t.description().set(mr.description());
+            t.summary().set(mr.summary());
+            t.permissionToEnter().set(mr.permissionToEnter());
+            t.petInstructions().set(mr.petInstructions());
+            if (!mr.unit().isNull()) {
+                t.unitNo().set(mr.unit().info().number());
+            }
+            if (!mr.originator().isNull()) {
+                t.originatorName().set(mr.originator().name());
+            }
+            t.reporterName().set(mr.reporterName());
+            t.reporterPhone().set(mr.reporterPhone());
+            t.reporterEmail().set(mr.reporterEmail());
+            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate1().getValue(), mr.preferredTime1().getValue()));
+            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate2().getValue(), mr.preferredTime2().getValue()));
+            t.priority().setValue(mr.priority().getStringView());
+            t.status().setValue(mr.status().getStringView());
+            t.submitted().set(mr.submitted());
+            t.updated().set(mr.updated());
+            // generate url for maintenance request viewer in Resident Portal
+            String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true);
+            String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
+                    new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(mr.getPrimaryKey()));
+            t.requestViewUrl().setValue(mrUrl);
         }
         return tObj;
     }
@@ -243,5 +284,15 @@ public class EmailTemplateRootObjectLoader {
 
         Persistence.service().retrieve(lease.unit().building().contacts().propertyContacts());
         return lease.unit().building();
+    }
+
+    private static String formatMaintenanceCategory(MaintenanceRequestCategory category) {
+        // TODO
+        return null;
+    }
+
+    private static String formatEntryDateTime(LogicalDate date, DayTime time) {
+        // TODO
+        return null;
     }
 }

@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -33,4 +34,6 @@ public interface EmailTemplateContext extends IEntity {
     Lease lease();
 
     LeaseTermParticipant leaseParticipant();
+
+    MaintenanceRequest maintenanceRequest();
 }

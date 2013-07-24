@@ -382,6 +382,27 @@ public class MessageTemplates {
         return email;
     }
 
+    public static MailMessage createMaintenanceRequestEmail(EmailTemplateType emailType, MaintenanceRequest request) {
+        EmailTemplate emailTemplate = getEmailTemplate(emailType, request.building());
+
+        // create required data context
+        EmailTemplateContext context = EntityFactory.create(EmailTemplateContext.class);
+        context.maintenanceRequest().set(request);
+
+        // load data objects for template variable lookup
+        ArrayList<IEntity> data = new ArrayList<IEntity>();
+        for (IEntity tObj : EmailTemplateManager.getTemplateDataObjects(emailType)) {
+            data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
+        }
+        MailMessage email = new MailMessage();
+        String toEmail = null; // TODO - may also need CC
+        email.setTo(toEmail);
+        email.setSender(getSender());
+        // set email subject and body from the template
+        buildEmail(email, emailTemplate, data);
+        return email;
+    }
+
     private static String bodyRaw;
 
     public static String getEmailHTMLBody() {

@@ -37,6 +37,7 @@ import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
@@ -76,6 +77,25 @@ public class EmailTemplateManager {
             break;
         case TenantInvitation:
             values.add(EntityFactory.create(PasswordRequestTenantT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
+        case MaintenanceRequestCreatedPMC:
+            values.add(EntityFactory.create(MaintenanceRequestT.class));
+            break;
+        case MaintenanceRequestCreatedTenant:
+            values.add(EntityFactory.create(MaintenanceRequestT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
+        case MaintenanceRequestUpdated:
+            values.add(EntityFactory.create(MaintenanceRequestT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
+        case MaintenanceRequestCompleted:
+            values.add(EntityFactory.create(MaintenanceRequestT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
+        case MaintenanceRequestEntryNotice:
+            values.add(EntityFactory.create(MaintenanceRequestT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
         default:

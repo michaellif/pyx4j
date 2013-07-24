@@ -13,13 +13,12 @@
  */
 package com.propertyvista.biz.communication.mail.template.model;
 
-import com.pyx4j.commons.LogicalDate;
+import java.util.Date;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
-
-import com.propertyvista.domain.maintenance.MaintenanceRequest.DayTime;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
@@ -48,17 +47,17 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<String> reporterEmail();
 
-    IPrimitive<LogicalDate> preferredDate1();
+    IPrimitive<String> preferredDateTime1();
 
-    IPrimitive<DayTime> preferredTime1();
-
-    IPrimitive<LogicalDate> preferredDate2();
-
-    IPrimitive<DayTime> preferredTime2();
+    IPrimitive<String> preferredDateTime2();
 
     IPrimitive<String> priority();
 
     IPrimitive<String> status();
+
+    IPrimitive<Date> submitted();
+
+    IPrimitive<Date> updated();
 
     IPrimitive<String> requestViewUrl();
 }
