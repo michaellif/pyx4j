@@ -13,11 +13,15 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -29,6 +33,8 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     AutoPayAgreementsGadget(FinancialDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("AutoPay Agreements"), ThemeColor.contrast4);
+        setActionsToolbar(new AutoPayAgreementsToolbar());
+
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.add(new HTML("AutoPay Agreements"));
 
@@ -39,4 +45,17 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     }
 
+    class AutoPayAgreementsToolbar extends Toolbar {
+        public AutoPayAgreementsToolbar() {
+            Button autoPayButton = new Button("Setup Auto Pay", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetViewer().getPresenter().setAutopay();
+                }
+            });
+            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            add(autoPayButton);
+        }
+    }
 }

@@ -37,13 +37,13 @@ import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class BillingGadget extends AbstractGadget<MainDashboardViewImpl> {
+public class BillingSummaryGadget extends AbstractGadget<MainDashboardViewImpl> {
 
-    private static final I18n i18n = I18n.get(BillingGadget.class);
+    private static final I18n i18n = I18n.get(BillingSummaryGadget.class);
 
     private final BillingViewer billingViewer;
 
-    BillingGadget(MainDashboardViewImpl viewer) {
+    BillingSummaryGadget(MainDashboardViewImpl viewer) {
         super(viewer, PortalImages.INSTANCE.billingIcon(), i18n.tr("My Billing Summary"), ThemeColor.contrast4);
         setActionsToolbar(new BillingToolbar());
 

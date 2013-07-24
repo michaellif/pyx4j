@@ -34,7 +34,7 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
 
     private final ProfileGadget profileGadget;
 
-    private final BillingGadget billingGadget;
+    private final BillingSummaryGadget billingGadget;
 
     private final MaintenanceGadget maintenanceGadget;
 
@@ -47,7 +47,7 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
         profileGadget = new ProfileGadget(this);
         profileGadget.asWidget().setWidth("100%");
 
-        billingGadget = new BillingGadget(this);
+        billingGadget = new BillingSummaryGadget(this);
         billingGadget.getElement().getStyle().setFloat(Float.LEFT);
 
         offersGadget = new OffersGadget(this);
