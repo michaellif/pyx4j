@@ -7,26 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-22
+ * Created on 2013-07-24
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 
-import com.pyx4j.site.client.ui.prime.form.IViewer;
-
+import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 
-public interface DirectDebitSimFileViewerView extends IViewer<DirectDebitSimFile> {
+public class DirectDebitSimFileEditorViewImpl extends OperationsEditorViewImplBase<DirectDebitSimFile> {
 
-    interface Presenter extends IViewer.Presenter {
-
-        void addNewRecord();
-
-        void send();
-
+    public DirectDebitSimFileEditorViewImpl() {
+        setForm(new DirectDebitSimFileForm(this));
     }
-
-    void reportSendResult(boolean hasFailed, String failureMessage);
 
 }

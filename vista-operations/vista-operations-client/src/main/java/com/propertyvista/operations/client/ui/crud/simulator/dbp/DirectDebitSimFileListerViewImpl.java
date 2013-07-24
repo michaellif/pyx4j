@@ -28,7 +28,7 @@ public class DirectDebitSimFileListerViewImpl extends OperationsListerViewImplBa
     private static class DirectDebitSimFileLister extends AbstractLister<DirectDebitSimFile> {
 
         public DirectDebitSimFileLister() {
-            super(DirectDebitSimFile.class, false);
+            super(DirectDebitSimFile.class, true);
             setColumnDescriptors(//@formatter:off
                     new MemberColumnDescriptor.Builder(proto().creatationDate()).build(),
                     new MemberColumnDescriptor.Builder(proto().sentDate()).build(),

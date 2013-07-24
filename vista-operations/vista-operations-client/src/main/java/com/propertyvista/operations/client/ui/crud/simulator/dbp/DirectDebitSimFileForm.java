@@ -21,8 +21,10 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 
 public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimFile> {
@@ -36,7 +38,8 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
             columns = Arrays.asList(//@formatter:off
                     new EntityFolderColumnDescriptor(proto().accountNumber(), "15em"),
                     new EntityFolderColumnDescriptor(proto().paymentReferenceNumber(), "20em"),
-                    new EntityFolderColumnDescriptor(proto().customerName(), "20em")
+                    new EntityFolderColumnDescriptor(proto().customerName(), "20em"),
+                    new EntityFolderColumnDescriptor(proto().amount(), "10em")
             );//@formatter:off
         }
 
@@ -53,13 +56,18 @@ public class DirectDebitSimFileForm extends OperationsEntityForm<DirectDebitSimF
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         
-        formPanel.setWidget(++row, 0, 2, new DecoratorBuilder(inject(proto().status())).build());
-        formPanel.setWidget(++row, 0, 2, new DecoratorBuilder(inject(proto().creatationDate())).build());
-        formPanel.setWidget(++row, 0, 2, new DecoratorBuilder(inject(proto().sentDate())).build());
+        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().status())).build());
+        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().creatationDate())).build());
+        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().sentDate())).build());
         formPanel.setWidget(++row, 0, 2, inject(proto().records(), new DirectDebitSimRecordTableFolder()));
-
         selectTab(addTab(formPanel));
 
+    }
+    
+    @Override
+    protected void onValueSet(boolean populate) {     
+        super.onValueSet(populate);
+        get(proto().records()).setEnabled(getValue().status().getValue() == DirectDebitSimFileStatus.New | getValue().status().getValue() == null);         
     }
 
 }

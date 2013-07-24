@@ -15,6 +15,10 @@ package com.propertyvista.operations.client.activity.crud.simulator.dbp;
 
 import com.google.gwt.core.client.GWT;
 
+import com.pyx4j.commons.UserRuntimeException;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
+import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
@@ -35,11 +39,30 @@ public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<Dir
 
     @Override
     public boolean canEdit() {
-        return false;
+        return true;
     }
 
     @Override
-    public void addNewRecord(DirectDebitSimFile file) {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(DirectDebitSimRecord.class).formNewItemPlace(file.getPrimaryKey()));
+    public void addNewRecord() {
+        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(DirectDebitSimRecord.class).formNewItemPlace(getEntityId()));
+    }
+
+    @Override
+    public void send() {
+        ((DirectDebitSimFileCrudService) getService()).send(new DefaultAsyncCallback<VoidSerializable>() {
+            @Override
+            public void onSuccess(VoidSerializable result) {
+                ((DirectDebitSimFileViewerView) getView()).reportSendResult(false, null);
+            }
+
+            @Override
+            public void onFailure(Throwable caught) {
+                if (caught instanceof UserRuntimeException) {
+                    ((DirectDebitSimFileViewerView) getView()).reportSendResult(true, caught.getMessage());
+                } else {
+                    super.onFailure(caught);
+                }
+            }
+        }, EntityFactory.createIdentityStub(DirectDebitSimFile.class, getEntityId()));
     }
 }

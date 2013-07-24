@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.dbp;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.operations.client.ui.crud.OperationsViewerViewImplBase;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
@@ -26,12 +27,29 @@ public class DirectDebitSimFileViewerViewImpl extends OperationsViewerViewImplBa
         setForm(new DirectDebitSimFileForm(this));
 
         Button addNewRecordActionButton = new Button("Add new record", new Command() {
-
             @Override
             public void execute() {
-                ((DirectDebitSimFileViewerView.Presenter) getPresenter()).addNewRecord(getForm().getValue());
+                ((DirectDebitSimFileViewerView.Presenter) getPresenter()).addNewRecord();
             }
         });
         addHeaderToolbarItem(addNewRecordActionButton);
+
+        Button sendActionButton = new Button("Send", new Command() {
+            @Override
+            public void execute() {
+                ((DirectDebitSimFileViewerView.Presenter) getPresenter()).send();
+            }
+
+        });
+        addHeaderToolbarItem(sendActionButton);
+    }
+
+    @Override
+    public void reportSendResult(boolean hasFailed, String failureMessage) {
+        if (hasFailed) {
+            MessageDialog.error("Send", failureMessage);
+        } else {
+            MessageDialog.info("File has been sent successfully");
+        }
     }
 }
