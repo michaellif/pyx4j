@@ -150,7 +150,7 @@ public class EftReportGenerator implements ReportExporter {
         reportData.agregateByBuildings().setValue(
                 reportMetadata.orderBy().isEmpty()
                         || reportMetadata.orderBy().memberPath().getValue()
-                                .equals(EntityFactory.getEntityPrototype(EftReportRecordDTO.class).building().getPath()));
+                                .equals(EntityFactory.getEntityPrototype(EftReportRecordDTO.class).building().getPath().toString()));
         return reportData;
     }
 

@@ -16,7 +16,6 @@ package com.propertyvista.crm.client.ui.reports.eft;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
@@ -52,6 +51,7 @@ import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.reports.ITableColumnFormatter;
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
+import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 
 public class EftReportWidget extends Composite implements ReportWidget {
@@ -83,12 +83,15 @@ public class EftReportWidget extends Composite implements ReportWidget {
             reportHtml.setHTML("");
             return;
         }
-        @SuppressWarnings("unchecked")
-        Vector<EftReportRecordDTO> paymentRecords = (Vector<EftReportRecordDTO>) data;
+
+        EftReportDataDTO eftReportData = (EftReportDataDTO) data;
+        List<EftReportRecordDTO> paymentRecords = eftReportData.eftReportRecords();
+
         if (paymentRecords.isEmpty()) {
             reportHtml.setHTML(NoResultsHtml.get());
             return;
         }
+
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
         List<ITableColumnFormatter> columnDescriptors = initColumnDescriptors();
 
@@ -119,54 +122,36 @@ public class EftReportWidget extends Composite implements ReportWidget {
         String currentPropertyCode = paymentRecords.get(0).building().getValue();
         BigDecimal propertyCodeTotal = new BigDecimal("0.00");
         BigDecimal overallTotal = new BigDecimal("0.00");
+
         NumberFormat currencyFormat = NumberFormat.getFormat(paymentRecords.get(0).amount().getMeta().getFormat());
+
         for (EftReportRecordDTO paymentRecord : paymentRecords) {
-            if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
-                builder.appendHtmlConstant("<tr>");
-                builder.appendHtmlConstant("<td colspan='9' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
-                builder.appendEscaped(i18n.tr("Total for Building {0}:", currentPropertyCode));
-                builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("<td style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
-                builder.appendEscaped(currencyFormat.format(propertyCodeTotal));
-                builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("<td colspan='2'>");
-                builder.appendHtmlConstant("</td>");
-                builder.appendHtmlConstant("</tr>");
-                currentPropertyCode = paymentRecord.building().getValue();
-                overallTotal = overallTotal.add(propertyCodeTotal);
-                propertyCodeTotal = new BigDecimal("0.00");
+            if (eftReportData.agregateByBuildings().isBooleanTrue()) {
+                if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
+
+                    appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
+
+                    currentPropertyCode = paymentRecord.building().getValue();
+
+                    propertyCodeTotal = new BigDecimal("0.00");
+                }
+                propertyCodeTotal = propertyCodeTotal.add(paymentRecord.amount().getValue());
             }
+            overallTotal = overallTotal.add(paymentRecord.amount().getValue());
+
             builder.appendHtmlConstant("<tr>");
             for (ITableColumnFormatter desc : columnDescriptors) {
                 builder.appendHtmlConstant("<td style=\"width: " + desc.getWidth() + "px;\">");
                 builder.append(desc.formatContent(paymentRecord));
                 builder.appendHtmlConstant("</td>");
             }
-            propertyCodeTotal = propertyCodeTotal.add(paymentRecord.amount().getValue());
             builder.appendHtmlConstant("</tr>");
         }
-        builder.appendHtmlConstant("<tr>");
-        builder.appendHtmlConstant("<td colspan='9' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
-        builder.appendEscaped(i18n.tr("Total for Building {0}:", currentPropertyCode));
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td class='" + CommonReportStyles.RRowTotal.name() + " " + CommonReportStyles.RCellNumber + "'>");
-        builder.appendEscaped(currencyFormat.format(propertyCodeTotal));
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td colspan='2'>");
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("</tr>");
+        if (eftReportData.agregateByBuildings().isBooleanTrue()) {
+            appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
+        }
 
-        overallTotal = overallTotal.add(propertyCodeTotal);
-        builder.appendHtmlConstant("<tr>");
-        builder.appendHtmlConstant("<td colspan='9' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
-        builder.appendEscaped(i18n.tr("Total:", overallTotal));
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td class='" + CommonReportStyles.RRowTotal.name() + " " + CommonReportStyles.RCellNumber + "'>");
-        builder.appendEscaped(currencyFormat.format(overallTotal));
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("<td colspan='2'>");
-        builder.appendHtmlConstant("</td>");
-        builder.appendHtmlConstant("</tr>");
+        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total:"), overallTotal);
 
         builder.appendHtmlConstant("</tbody>");
         builder.appendHtmlConstant("</table>");
@@ -252,7 +237,7 @@ public class EftReportWidget extends Composite implements ReportWidget {
                             .appendHtmlConstant("<img title='" + SafeHtmlUtils.htmlEscape(r.notice().getValue()) + "'" + 
                                      " src='" + CrmImages.INSTANCE.noticeWarning().getSafeUri().asString() + "'" + 
                                      " border='0' " +
-                                     " style='width:15px; height:15px;text-al'" + 
+                                     " style='width:15px; height:15px;text-align:center'" + 
                                      ">")
                             .appendHtmlConstant("</div>")
                             .toSafeHtml();
@@ -302,5 +287,18 @@ public class EftReportWidget extends Composite implements ReportWidget {
                     new ColumnDescriptorTableColumnFormatter(wideColumnWidth, new MemberColumnDescriptor.Builder(proto.paymentStatus()).build())
         );//@formatter:on
         return columnDescriptors;
+    }
+
+    private final void appendRenderedTotalRow(SafeHtmlBuilder builder, NumberFormat totalFormat, String totalLineDescription, BigDecimal total) {
+        builder.appendHtmlConstant("<tr>");
+        builder.appendHtmlConstant("<td colspan='9' style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendEscaped(totalLineDescription);
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td style='text-align:right' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendEscaped(totalFormat.format(total));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td colspan='2'>");
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("</tr>");
     }
 }
