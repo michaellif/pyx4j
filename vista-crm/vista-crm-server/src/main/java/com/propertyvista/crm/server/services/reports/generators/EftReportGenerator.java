@@ -24,6 +24,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
@@ -37,6 +38,7 @@ import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
+import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -88,11 +90,11 @@ public class EftReportGenerator implements ReportExporter {
         reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, 0, 100));
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
 
-        Vector<PaymentRecord> paymentRecords = null;
+        EftReportDataDTO reportData = EntityFactory.create(EftReportDataDTO.class);
 
         if (reportMetadata.forthcomingEft().isBooleanTrue()) {
             // Create forthcoming payment records here
-            paymentRecords = new Vector<PaymentRecord>();
+            Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
 
             // Find PadGenerationDate for each BillingCycle in system, they may be different
             Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
@@ -121,6 +123,7 @@ public class EftReportGenerator implements ReportExporter {
 
             for (PaymentRecord paymentRecord : paymentRecords) {
                 enhancePaymentRecord(paymentRecord);
+                reportData.eftReportRecords().add(dtoBinder.createDTO(paymentRecord));
             }
 
         } else {
@@ -129,7 +132,6 @@ public class EftReportGenerator implements ReportExporter {
             int progress = 0;
 
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
-            paymentRecords = new Vector<PaymentRecord>(count);
             try {
                 while (paymentRecordsIter.hasNext() & !aborted) {
                     if (progress % 10 == 0) {
@@ -137,7 +139,7 @@ public class EftReportGenerator implements ReportExporter {
                     }
                     PaymentRecord paymentRecord = paymentRecordsIter.next();
                     enhancePaymentRecord(paymentRecord);
-                    paymentRecords.add(paymentRecord);
+                    reportData.eftReportRecords().add(dtoBinder.createDTO(paymentRecord));
                 }
             } finally {
                 IOUtils.closeQuietly(paymentRecordsIter);
@@ -145,7 +147,11 @@ public class EftReportGenerator implements ReportExporter {
 
         }
 
-        return toDto(paymentRecords);
+        reportData.agregateByBuildings().setValue(
+                reportMetadata.orderBy().isEmpty()
+                        || reportMetadata.orderBy().memberPath().getValue()
+                                .equals(EntityFactory.getEntityPrototype(EftReportRecordDTO.class).building().getPath()));
+        return reportData;
     }
 
     @Override
@@ -267,14 +273,6 @@ public class EftReportGenerator implements ReportExporter {
 
         }
         return portfoliosBuildings;
-    }
-
-    private Vector<EftReportRecordDTO> toDto(List<PaymentRecord> paymentRecords) {
-        Vector<EftReportRecordDTO> dtoPaymentRecords = new Vector<EftReportRecordDTO>(paymentRecords.size());
-        for (PaymentRecord paymentRecord : paymentRecords) {
-            dtoPaymentRecords.add(dtoBinder.createDTO(paymentRecord));
-        }
-        return dtoPaymentRecords;
     }
 
     /** this is for testing progress UI */
