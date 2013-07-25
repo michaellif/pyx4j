@@ -24,7 +24,6 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -45,7 +44,6 @@ import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
-import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiLeasePriceEstimatorTest extends YardiTestBase {
 
@@ -126,7 +124,7 @@ public class YardiLeasePriceEstimatorTest extends YardiTestBase {
         }
         setSysDate("25-May-2013");
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTY_CODE), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().serviceItem()).

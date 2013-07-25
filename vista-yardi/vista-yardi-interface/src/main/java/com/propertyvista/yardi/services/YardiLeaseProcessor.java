@@ -35,6 +35,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.Transactions;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.EqualsHelper;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
@@ -150,6 +151,9 @@ public class YardiLeaseProcessor {
         // misc.
         lease.billingAccount().paymentAccepted().setValue(BillingAccount.PaymentAccepted.getPaymentType(rtCustomer.getPaymentAccepted()));
 
+        lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
+        // TODO Need to find another lease to merge with
+
         // tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {
             lease.currentTerm().version().tenants().add(new TenantMapper().createTenant(yardiCustomer, lease.currentTerm().version().tenants()));
@@ -173,6 +177,15 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
+    /**
+     * The <MITS:Description> node is the primary key of the person record. The <CustomerID> node is the tenant code related to the person. When a Unit Transfer
+     * happens, a new person record (MITS:Description node) will be created with the new property info, unit info, etc., but it will still point to that same
+     * tenant code
+     */
+    private String getYardiLeasePk(List<YardiCustomer> yardiCustomers) {
+        return yardiCustomers.get(0).getDescription();
+    }
+
     private Lease updateLease(RTCustomer rtCustomer, String propertyCode, Lease leaseId) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
@@ -183,10 +196,16 @@ public class YardiLeaseProcessor {
         boolean toPersist = false;
         boolean toFinalize = false;
 
+        boolean leaseMove = false;
+        if (!EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
+            // TODO Need to find another lease to merge with
+            leaseMove = true;
+        }
+
         // if unit update is occurred:
         String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
-        if (!unitNumber.equals(lease.unit().info().number().getValue())) {
+        if (leaseMove || (!unitNumber.equals(lease.unit().info().number().getValue()))) {
             Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
             EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
             criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
@@ -228,6 +247,7 @@ public class YardiLeaseProcessor {
             log.debug("        - TenantsChanged...");
         }
 
+        lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
         new TenantMerger().updateTenantsData(rtCustomer, lease);
 
         // persist: 
@@ -330,7 +350,7 @@ public class YardiLeaseProcessor {
 
     public boolean expireLeaseProducts(Lease leaseId) {
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
-        if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue()) < 0) {
+        if (BigDecimal.ZERO.compareTo(lease.currentTerm().version().leaseProducts().serviceItem().agreedPrice().getValue(BigDecimal.ZERO)) < 0) {
             log.info("      Terminating billable items for lease {} ", lease.leaseId().getStringView());
 
             // set service charge to zero

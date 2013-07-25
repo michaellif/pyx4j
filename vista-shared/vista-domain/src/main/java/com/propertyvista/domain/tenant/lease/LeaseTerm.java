@@ -89,6 +89,13 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
     AptUnit unit();
 
+    /**
+     * The <MITS:Description> node is the primary key of the person record. The <CustomerID> node is the tenant code related to the person. When a Unit Transfer
+     * happens, a new person record (MITS:Description node) will be created with the new property info, unit info, etc., but it will still point to that same
+     * tenant code
+     */
+    IPrimitive<String> yardiLeasePk();
+
     @NotNull
     @ReadOnly
     @ToString(index = 2)

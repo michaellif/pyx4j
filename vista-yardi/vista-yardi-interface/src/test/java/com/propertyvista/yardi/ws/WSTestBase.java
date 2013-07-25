@@ -36,8 +36,12 @@ public class WSTestBase {
         endpoint = null;
     }
 
+    private String getAddress(int port) {
+        return "http://localhost:" + port + "/vista/interfaces/ws/ApplicantScreening";
+    }
+
     protected String getAddress() {
-        return "http://localhost:8888/vista/interfaces/ws/ApplicantScreening";
+        return getAddress(7771);
     }
 
     void publish(Class<?> serviceClass) throws Exception {

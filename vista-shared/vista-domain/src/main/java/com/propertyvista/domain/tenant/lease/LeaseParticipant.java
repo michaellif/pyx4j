@@ -60,7 +60,7 @@ public interface LeaseParticipant<E extends LeaseTermParticipant<?>> extends IEn
     @NotNull
     @Length(14)
     @Caption(name = "Id")
-    @Indexed(uniqueConstraint = true, group = { "discriminator+id,1" })
+    @Indexed
     @MemberColumn(sortAdapter = AlphanumIndexAdapter.class)
     IPrimitive<String> participantId();
 

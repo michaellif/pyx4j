@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions 
+<wsdl:definitions
 		xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
 		xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
 		xmlns:s="http://www.w3.org/2001/XMLSchema"
@@ -52,7 +52,7 @@
   <wsdl:service name="ScreeningService">
     <documentation xmlns="http://schemas.xmlsoap.org/wsdl/">Service interface for screening requests processing.</documentation>
     <wsdl:port name="WSScreeningService" binding="tns:WSScreeningService">
-      <soap:address location="http://localhost:8888/vista/interfaces/ws/ApplicantScreening"/>
+      <soap:address location="http://localhost:7771/vista/interfaces/ws/ApplicantScreening"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

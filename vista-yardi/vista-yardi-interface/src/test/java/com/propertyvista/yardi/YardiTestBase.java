@@ -13,6 +13,7 @@
  */
 package com.propertyvista.yardi;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -41,6 +44,7 @@ import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.mock.stub.YardiMockMaintenanceRequestsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockResidentTransactionsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockSystemBatchesStubImpl;
+import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 import com.propertyvista.yardi.stub.YardiMaintenanceRequestsStub;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
 import com.propertyvista.yardi.stub.YardiSystemBatchesStub;
@@ -81,6 +85,13 @@ public class YardiTestBase extends IntegrationTestBase {
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
         return models;
+    }
+
+    protected void yardiImportAll(PmcYardiCredential yardiCredential) throws RemoteException, YardiServiceException {
+        ExecutionMonitor executionMonitor = new ExecutionMonitor();
+        YardiResidentTransactionsService.getInstance().updateAll(yardiCredential, executionMonitor);
+        assertEquals("Import Erred", Long.valueOf(0), executionMonitor.getErred());
+        assertEquals("Import Failed", Long.valueOf(0), executionMonitor.getFailed());
     }
 
     protected Building getBuilding(String propertyCode) {

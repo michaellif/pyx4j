@@ -132,7 +132,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         }
         setSysDate("25-May-2013");
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTY_CODE), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().serviceItem()).
@@ -171,7 +171,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         updater.set(LeaseChargeUpdater.Name.Amount, "55.00");
         MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTY_CODE), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
@@ -209,7 +209,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         updater.set(LeaseChargeUpdater.Name.ServiceToDate, yesterday);
         MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTY_CODE), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
         // Ensure feature removed
         assertEquals(0, getLease().currentTerm().version().leaseProducts().featureItems().size());
 
@@ -259,7 +259,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         updater.set(LeaseChargeUpdater.Name.ServiceToDate, DateUtils.detectDateformat("31-Aug-2014"));
         MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTY_CODE), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
         // @formatter:off
         new BillableItemTester(getLease().currentTerm().version().leaseProducts().featureItems().get(0)).
@@ -311,7 +311,7 @@ public class YardiLeaseChargesTest extends YardiTestBase {
         updater.set(LeaseChargeUpdater.Name.ServiceToDate, yesterday);
         MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential(PROPERTY_CODE), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential(PROPERTY_CODE));
 
         // Ensure rent = 0
         // @formatter:off

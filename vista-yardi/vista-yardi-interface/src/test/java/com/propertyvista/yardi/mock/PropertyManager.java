@@ -245,6 +245,10 @@ public class PropertyManager {
                 }
 
                 updateProperty(rtCustomer.getRTUnit().getUnit().getInformation().get(0), property);
+
+                if (property.getName() == RtCustomerUpdater.UNITINFO.UnitID) {
+                    rtCustomer.getRTUnit().setUnitID(property.getValue().toString());
+                }
             }
         }
 
@@ -420,4 +424,30 @@ public class PropertyManager {
         }
     }
 
+    public void unitTransferSimulation(UnitTransferSimulator simulator) {
+        RTCustomer rtCustomer = getExistingRTCustomer(simulator.getCustomerID());
+
+        // Create waisted Lease
+        RTCustomer rtCustomerTransfered = (RTCustomer) SerializationUtils.clone(rtCustomer);
+
+        rtCustomerTransfered.setCustomerID(simulator.getNewCustomerID());
+        rtCustomerTransfered.getCustomers().getCustomer().get(0).setCustomerID(simulator.getNewCustomerID());
+
+        //
+        rtCustomer.getCustomers().getCustomer().get(0).setDescription(simulator.getNewYardiPersonId());
+
+        if (simulator.getCoTenantCustomerIDs() == null) {
+            // DO not transfer CoTenants.
+            for (int i = rtCustomer.getCustomers().getCustomer().size() - 1; i > 1; i--) {
+                rtCustomer.getCustomers().getCustomer().remove(i);
+            }
+        } else {
+            for (int i = 0; i < simulator.getCoTenantCustomerIDs().length; i++) {
+                rtCustomer.getCustomers().getCustomer().get(i + 1).setCustomerID(simulator.getCoTenantCustomerIDs()[i]);
+            }
+        }
+        transactions.getProperty().get(0).getRTCustomer().add(rtCustomerTransfered);
+
+        // TODO transactions and Lease charges
+    }
 }

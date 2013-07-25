@@ -22,7 +22,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
@@ -32,7 +31,6 @@ import com.propertyvista.yardi.mock.PropertyUpdateEvent;
 import com.propertyvista.yardi.mock.PropertyUpdater;
 import com.propertyvista.yardi.mock.RtCustomerUpdateEvent;
 import com.propertyvista.yardi.mock.RtCustomerUpdater;
-import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 public class YardiLeaseImportTest extends YardiTestBase {
 
@@ -129,7 +127,7 @@ public class YardiLeaseImportTest extends YardiTestBase {
         setSysDate("2010-11-01");
 
         // Initial Import 
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential("prop123"));
 
         Lease lease1, lease2;
 

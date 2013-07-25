@@ -24,7 +24,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.test.mock.MockEventBus;
 
 public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, PropertyUpdateEvent.Handler, RtCustomerUpdateEvent.Handler,
-        CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler {
+        CoTenantUpdateEvent.Handler, LeaseChargeUpdateEvent.Handler, UnitTransferSimulatorEvent.Handler {
 
     static final ThreadLocal<YardiMockServer> threadLocalContext = new ThreadLocal<YardiMockServer>() {
         @Override
@@ -49,6 +49,7 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
         MockEventBus.addHandler(RtCustomerUpdateEvent.class, this);
         MockEventBus.addHandler(CoTenantUpdateEvent.class, this);
         MockEventBus.addHandler(LeaseChargeUpdateEvent.class, this);
+        MockEventBus.addHandler(UnitTransferSimulatorEvent.class, this);
     }
 
     public void cleanup() {
@@ -155,6 +156,12 @@ public class YardiMockServer implements TransactionChargeUpdateEvent.Handler, Pr
     public void removeLeaseCharge(LeaseChargeUpdateEvent event) {
         LeaseChargeUpdater updater = event.getUpdater();
         getExistingPropertyManager(updater.getPropertyID()).removeLeaseCharge(updater);
+    }
+
+    @Override
+    public void unitTransferSimulation(UnitTransferSimulatorEvent event) {
+        UnitTransferSimulator updater = event.getUpdater();
+        getExistingPropertyManager(updater.getPropertyID()).unitTransferSimulation(updater);
     }
 
 }

@@ -20,7 +20,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
-import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
@@ -34,7 +33,6 @@ import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
 import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
 import com.propertyvista.yardi.mock.LeaseChargeUpdater;
-import com.propertyvista.yardi.services.YardiResidentTransactionsService;
 
 /**
  * 
@@ -50,7 +48,7 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
         super.setUp();
         createYardiLease("prop123", "t000111");
         setSysDate("2011-01-01");
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential("prop123"));
         lease = loadLeaseToModel("t000111");
         Tenant tenant = lease.leaseParticipants().iterator().next().cast();
         getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
@@ -74,7 +72,7 @@ public class PreauthorizedPaymentChangeReviewYardiTest extends PaymentYardiTestB
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
-        YardiResidentTransactionsService.getInstance().updateAll(getYardiCredential("prop123"), new ExecutionMonitor());
+        yardiImportAll(getYardiCredential("prop123"));
 
         // PAP is suspended
         new PaymentAgreementTester(lease.billingAccount()).count(1)//
