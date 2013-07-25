@@ -25,11 +25,14 @@ import com.yardi.entity.mits.YardiLease;
 import com.yardi.entity.resident.RTCustomer;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.ARCode.ActionType;
 import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -154,6 +157,27 @@ public class LeaseMerger {
             }
         }
         return null;
+    }
+
+    public Lease updateUnit(AptUnit unit, Lease lease) {
+        LeaseTerm newTerm = ServerSideFactory.create(LeaseFacade.class).createOffer(lease, unit, LeaseTerm.Type.FixedEx);
+        newTerm.termFrom().setValue(lease.currentTerm().termFrom().getValue());
+        newTerm.termTo().setValue(lease.currentTerm().termTo().getValue());
+
+        // process old term:
+        if (lease.currentTerm().unit().isNull()) {
+            lease.currentTerm().unit().set(lease.unit());
+        }
+        lease.currentTerm().status().setValue(LeaseTerm.Status.Historic);
+        lease.currentTerm().version().setValueDetached(); // TRICK (saving just non-versioned part)!..
+        ServerSideFactory.create(LeaseFacade.class).persist(lease.currentTerm());
+
+        // set new term:
+        lease.unit().set(unit);
+        lease.currentTerm().set(newTerm);
+        lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+
+        return ServerSideFactory.create(LeaseFacade.class).persist(lease);
     }
 
     // internals

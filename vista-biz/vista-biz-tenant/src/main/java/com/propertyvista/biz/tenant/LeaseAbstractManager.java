@@ -494,19 +494,21 @@ public abstract class LeaseAbstractManager {
         Persistence.service().merge(lease);
     }
 
-    public LeaseTerm createOffer(Lease leaseId, Type type) {
+    public LeaseTerm createOffer(Lease leaseId, AptUnit unitId, Type type) {
         Lease lease = load(leaseId, false);
+        AptUnit unit = (unitId != null ? Persistence.service().retrieve(AptUnit.class, unitId.getPrimaryKey()) : lease.unit());
 
         LeaseTerm term = EntityFactory.create(LeaseTerm.class);
         term.status().setValue(LeaseTerm.Status.Offer);
 
         term.type().setValue(type);
         term.lease().set(lease);
+        term.unit().set(unit);
 
         // set from date to next day after current term:
         term.termFrom().setValue(DateUtils.daysAdd(lease.currentTerm().termTo().getValue(), 1));
 
-        updateTermUnitRelatedData(term, lease.unit(), lease.type().getValue());
+        updateTermUnitRelatedData(term);
 
         // migrate participants:
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
@@ -742,6 +744,7 @@ public abstract class LeaseAbstractManager {
             Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
 
             lease.unit().set(unit);
+            lease.currentTerm().unit().set(unit);
 
             // set LeaseBillingPolicy offsets
             LeaseBillingPolicy billingPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(unit.building(), LeaseBillingPolicy.class);
@@ -759,7 +762,7 @@ public abstract class LeaseAbstractManager {
                 throw new IllegalArgumentException(i18n.tr("No Billing policy found for: {0}", lease.billingAccount().billingPeriod().getValue()));
             }
 
-            updateTermUnitRelatedData(leaseTerm, lease.unit(), lease.type().getValue());
+            updateTermUnitRelatedData(leaseTerm);
         } else {
             throw new IllegalArgumentException(i18n.tr("Invalid Lease/Term pair supplied"));
         }
@@ -1073,9 +1076,9 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, ARCode.Type leaseType) {
-        Persistence.ensureRetrieve(unit, AttachLevel.Attached);
-        Persistence.ensureRetrieve(unit.building(), AttachLevel.Attached);
+    protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm) {
+        Persistence.ensureRetrieve(leaseTerm.unit(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(leaseTerm.unit().building(), AttachLevel.Attached);
         Persistence.ensureRetrieve(leaseTerm.lease(), AttachLevel.Attached);
 
         boolean succeeded = false;
@@ -1084,15 +1087,15 @@ public abstract class LeaseAbstractManager {
         boolean useDefaultCatalog = (VistaFeatures.instance().defaultProductCatalog() || leaseTerm.lease().status().getValue() == Lease.Status.ExistingLease);
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), unit.building().productCatalog()));
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), leaseType));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), leaseTerm.unit().building().productCatalog()));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), leaseTerm.lease().type().getValue()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
 
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
-            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), unit));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), leaseTerm.unit()));
 
             ProductItem serviceItem = Persistence.service().retrieve(productCriteria);
             if (serviceItem != null) {
@@ -1103,8 +1106,8 @@ public abstract class LeaseAbstractManager {
         }
 
         if (!succeeded) {
-            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", leaseType.toString(),
-                    unit.getStringView(), unit.building().getStringView()));
+            throw new UserRuntimeException(i18n.tr("There no service ''{0}'' for selected unit: {1} from Building: {2}", leaseTerm.lease().type().getValue()
+                    .toString(), leaseTerm.unit().getStringView(), leaseTerm.unit().building().getStringView()));
         }
 
         return leaseTerm;
@@ -1133,7 +1136,7 @@ public abstract class LeaseAbstractManager {
         }
     }
 
-    private <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
+    protected <P extends LeaseTermParticipant<?>> P businessDuplicate(P leaseParticipant) {
         // There are no own entities for now,
         Persistence.retrieveOwned(leaseParticipant);
         P copy = EntityGraph.businessDuplicate(leaseParticipant);

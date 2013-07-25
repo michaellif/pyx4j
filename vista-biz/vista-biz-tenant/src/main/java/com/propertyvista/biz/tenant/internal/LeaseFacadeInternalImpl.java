@@ -128,7 +128,12 @@ public class LeaseFacadeInternalImpl implements LeaseFacade {
 
     @Override
     public LeaseTerm createOffer(Lease leaseId, Type type) {
-        return new LeaseInternalManager().createOffer(leaseId, type);
+        return new LeaseInternalManager().createOffer(leaseId, null, type);
+    }
+
+    @Override
+    public LeaseTerm createOffer(Lease leaseId, AptUnit unitId, Type type) {
+        return new LeaseInternalManager().createOffer(leaseId, unitId, type);
     }
 
     @Override

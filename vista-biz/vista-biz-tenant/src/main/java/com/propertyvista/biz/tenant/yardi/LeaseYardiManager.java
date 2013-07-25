@@ -24,12 +24,10 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.tenant.LeaseAbstractManager;
 import com.propertyvista.domain.company.Employee;
-import com.propertyvista.domain.financial.ARCode.Type;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.policy.framework.PolicyNode;
-import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
@@ -174,7 +172,7 @@ public class LeaseYardiManager extends LeaseAbstractManager {
     }
 
     @Override
-    protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm, AptUnit unit, Type leaseType) {
+    protected LeaseTerm updateTermUnitRelatedData(LeaseTerm leaseTerm) {
         // Do nothing in Yardi mode!
         return leaseTerm;
     }

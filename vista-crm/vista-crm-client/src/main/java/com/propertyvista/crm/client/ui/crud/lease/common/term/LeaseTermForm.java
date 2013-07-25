@@ -99,7 +99,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
             ClientPolicyManager.setIdComponentEditabilityByPolicy(IdTarget.lease, get(proto().lease().leaseId()), getValue().lease().getPrimaryKey());
 
             get(proto().building()).setEditable(isDraft);
-            get(proto().lease().unit()).setEditable(isDraft);
+            get(proto().unit()).setEditable(isDraft);
 
             get(proto().termFrom()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
             get(proto().termTo()).setEditable(isDraft || !isCurrent || getValue().status().getValue() == Status.Offer);
@@ -181,7 +181,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }), 25).build());
         get(proto().building()).setMandatory(true);
 
-        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().lease().unit(), new CEntitySelectorHyperlink<AptUnit>() {
+        flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().unit(), new CEntitySelectorHyperlink<AptUnit>() {
             @Override
             protected AppPlace getTargetPlace() {
                 return AppPlaceEntityMapper.resolvePlace(AptUnit.class, getValue().getPrimaryKey());
@@ -414,12 +414,12 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
     void setUnitNote(String note) {
         String fullNote = note;
-        if (get(proto().lease().unit()).isEditable() && getValue().lease().status().getValue() != Lease.Status.ExistingLease) {
+        if (get(proto().unit()).isEditable() && getValue().lease().status().getValue() != Lease.Status.ExistingLease) {
             fullNote = i18n.tr("Note: Building/Unit availability depends on 'Term From' date selected!");
             if (note != null) {
                 fullNote += note;
             }
         }
-        get(proto().lease().unit()).setNote(fullNote, NoteStyle.Warn);
+        get(proto().unit()).setNote(fullNote, NoteStyle.Warn);
     }
 }

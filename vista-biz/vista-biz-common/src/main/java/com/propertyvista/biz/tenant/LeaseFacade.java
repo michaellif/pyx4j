@@ -84,6 +84,8 @@ public interface LeaseFacade {
 
     LeaseTerm createOffer(Lease leaseId, LeaseTerm.Type type);
 
+    LeaseTerm createOffer(Lease leaseId, AptUnit unitId, LeaseTerm.Type type);
+
     void acceptOffer(Lease leaseId, LeaseTerm leaseTermId);
 
     // Start notice/evict, cancel/terminate/etc...

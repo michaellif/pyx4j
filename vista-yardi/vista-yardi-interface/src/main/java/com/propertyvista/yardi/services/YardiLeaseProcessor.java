@@ -90,7 +90,7 @@ public class YardiLeaseProcessor {
         Lease existingLease = findLease(getLeaseId(rtCustomer), propertyCode);
         if (existingLease != null) {
             log.info("      = Updating lease {}", getLeaseId(rtCustomer));
-            return updateLease(rtCustomer, existingLease);
+            return updateLease(rtCustomer, propertyCode, existingLease);
         } else {
             log.info("      = Creating new lease {}", getLeaseId(rtCustomer));
             return createLease(rtCustomer, propertyCode);
@@ -101,7 +101,7 @@ public class YardiLeaseProcessor {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
-        Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "propertyCode required");
+        Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
         String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
         Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
 
@@ -173,21 +173,35 @@ public class YardiLeaseProcessor {
         return lease;
     }
 
-    private Lease updateLease(RTCustomer rtCustomer, Lease leaseId) {
-
+    private Lease updateLease(RTCustomer rtCustomer, String propertyCode, Lease leaseId) {
         List<YardiCustomer> yardiCustomers = rtCustomer.getCustomers().getCustomer();
         YardiLease yardiLease = yardiCustomers.get(0).getLease();
 
         Lease lease = ServerSideFactory.create(LeaseFacade.class).load(leaseId, true);
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
 
-        // Validations
-        String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
-        Validate.isTrue(unitNumber.equals(lease.unit().info().number().getValue()), "Unit number change unsupported; LaaseId " + leaseId.leaseId().getValue()
-                + ", new unit.number " + unitNumber);
-
         boolean toPersist = false;
         boolean toFinalize = false;
+
+        // if unit update is occurred:
+        String unitNumber = YardiARIntegrationAgent.getUnitId(rtCustomer);
+        Validate.isTrue(CommonsStringUtils.isStringSet(unitNumber), "Unit number required");
+        if (!unitNumber.equals(lease.unit().info().number().getValue())) {
+            Validate.isTrue(CommonsStringUtils.isStringSet(propertyCode), "Property Code required");
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.eq(criteria.proto().building().propertyCode(), propertyCode);
+            criteria.eq(criteria.proto().info().number(), unitNumber);
+            List<AptUnit> units = Persistence.service().query(criteria);
+            if (units.size() != 1) {
+                throw new Error("Non unique unit " + unitNumber + " found in building " + propertyCode);
+            }
+            AptUnit unit = units.get(0);
+            log.debug("updating unit {} for lease {}", unit.getStringView(), getLeaseId(rtCustomer));
+
+            lease = new LeaseMerger().updateUnit(unit, lease);
+            toFinalize = true;
+            log.debug("        - LeaseUnitChanged...");
+        }
 
         if (new LeaseMerger().isLeaseDatesChanged(yardiLease, lease)) {
             lease = new LeaseMerger().mergeLeaseDates(yardiLease, lease);

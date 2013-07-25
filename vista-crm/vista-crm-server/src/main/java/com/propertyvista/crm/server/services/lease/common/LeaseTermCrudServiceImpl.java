@@ -86,6 +86,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         if (VersionedEntityUtils.equalsIgnoreVersion(dbo, dbo.lease().currentTerm())) {
             dbo.lease().currentTerm().set(dbo);
+            dbo.lease().unit().set(dbo.unit());
             ServerSideFactory.create(LeaseFacade.class).persist(dbo.lease());
         } else {
             ServerSideFactory.create(LeaseFacade.class).persist(dbo);
@@ -126,9 +127,9 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         loadDetachedProducts(dto);
 
-        if (!dto.lease().unit().isNull()) {
-            Persistence.ensureRetrieve(dto.lease().unit().building(), AttachLevel.ToStringMembers);
-            dto.building().set(dto.lease().unit().building());
+        if (!dto.unit().isNull()) {
+            Persistence.ensureRetrieve(dto.unit().building(), AttachLevel.ToStringMembers);
+            dto.building().set(dto.unit().building());
 
             if (RetrieveTarget == RetrieveTarget.Edit) {
                 // fill runtime editor data:
@@ -137,12 +138,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             }
 
             checkUnitMoveOut(dto);
-        }
 
-        RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class)
-                .obtainEffectivePolicy(dto.lease().unit(), RestrictionsPolicy.class);
-        if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-            dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
+            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+                dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            }
         }
     }
 
@@ -185,14 +185,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     @Override
     public void createBillableItem(AsyncCallback<BillableItem> callback, ProductItem productItemId, LeaseTermDTO currentValue) {
-        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(currentValue.lease(), productItemId,
-                currentValue.lease().unit().building()));
+        callback.onSuccess(ServerSideFactory.create(LeaseFacade.class).createBillableItem(currentValue.lease(), productItemId, currentValue.unit().building()));
     }
 
     @Override
     public void createDeposit(AsyncCallback<Deposit> callback, DepositType depositType, BillableItem item, LeaseTermDTO currentValue) {
-        assert !currentValue.lease().unit().isNull();
-        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.lease().unit().building()));
+        assert !currentValue.unit().isNull();
+        callback.onSuccess(ServerSideFactory.create(DepositFacade.class).createDeposit(depositType, item, currentValue.unit().building()));
     }
 
     @Override
@@ -216,11 +215,11 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         currentValue.selectedFeatureItems().clear();
         currentValue.selectedConcessions().clear();
 
-        assert !currentValue.lease().unit().isNull();
+        assert !currentValue.unit().isNull();
 
-        Persistence.ensureRetrieve(currentValue.lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(currentValue.unit().building(), AttachLevel.Attached);
 
-        Building building = currentValue.lease().unit().building();
+        Building building = currentValue.unit().building();
         if (building == null || building.isNull()) {
             return false;
         }
@@ -261,13 +260,13 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     private void fillserviceItems(LeaseTermDTO currentValue) {
         currentValue.selectedServiceItems().clear();
 
-        Persistence.ensureRetrieve(currentValue.lease().unit().building(), AttachLevel.Attached);
+        Persistence.ensureRetrieve(currentValue.unit().building(), AttachLevel.Attached);
 
         // use default product catalog items for specific cases:
         boolean useDefaultCatalog = (VistaFeatures.instance().defaultProductCatalog() || currentValue.lease().status().getValue() == Lease.Status.ExistingLease);
 
         EntityQueryCriteria<Service> serviceCriteria = new EntityQueryCriteria<Service>(Service.class);
-        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.lease().unit().building().productCatalog()));
+        serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().catalog(), currentValue.unit().building().productCatalog()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().type(), currentValue.lease().type()));
         serviceCriteria.add(PropertyCriterion.eq(serviceCriteria.proto().isDefaultCatalogItem(), useDefaultCatalog));
         serviceCriteria.isCurrent(serviceCriteria.proto().version());
@@ -275,7 +274,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
-            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), currentValue.lease().unit()));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), currentValue.lease()));
 
             currentValue.selectedServiceItems().addAll(Persistence.service().query(productCriteria));
         }
@@ -324,7 +323,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
     void checkUnitMoveOut(LeaseTermDTO dto) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.lease().unit()));
+        criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
         criteria.add(PropertyCriterion.ne(criteria.proto().id(), dto.lease().getPrimaryKey()));
         criteria.isNotNull(criteria.proto().completion());
