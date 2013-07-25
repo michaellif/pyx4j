@@ -197,7 +197,8 @@ public class YardiLeaseProcessor {
         boolean toFinalize = false;
 
         boolean leaseMove = false;
-        if (!EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
+        if (!lease.currentTerm().yardiLeasePk().isNull()
+                && !EqualsHelper.equals(lease.currentTerm().yardiLeasePk().getValue(), getYardiLeasePk(yardiCustomers))) {
             // TODO Need to find another lease to merge with
             leaseMove = true;
         }
