@@ -75,6 +75,10 @@ BEGIN
         
         ALTER TABLE custom_skin_resource_blob OWNER TO vista;
         
+        -- lease_term
+        
+        ALTER TABLE lease_term ADD COLUMN unit BIGINT;
+        
         -- yardi_interface_policy
         
         CREATE TABLE yardi_interface_policy
@@ -128,6 +132,14 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.employee '
                 ||'SET  email = LOWER(email) ';
         
+        
+        -- lease_term
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.lease_term AS lt '
+                'SET    unit = l.unit '
+                'FROM   '||v_schema_name||'.lease AS l '
+                'WHERE  l.id = lt.lease ';
+        
         /**
         ***     ==========================================================================================================
         ***
@@ -151,6 +163,7 @@ BEGIN
         
         -- foreign keys
         
+        ALTER TABLE lease_term ADD CONSTRAINT lease_term_unit_fk FOREIGN KEY(unit) REFERENCES apt_unit(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE yardi_interface_policy_charge_code_ignore ADD CONSTRAINT yardi_interface_policy_charge_code_ignore_policy_fk FOREIGN KEY(policy) 
                 REFERENCES yardi_interface_policy(id)  DEFERRABLE INITIALLY DEFERRED;
                 
