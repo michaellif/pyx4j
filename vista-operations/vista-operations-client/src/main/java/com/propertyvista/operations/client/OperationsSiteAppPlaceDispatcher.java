@@ -22,8 +22,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher {
 
@@ -47,7 +47,7 @@ public class OperationsSiteAppPlaceDispatcher extends AbstractAppPlaceDispatcher
 
     @Override
     protected void obtainDefaultAuthenticatedPlace(AsyncCallback<AppPlace> callback) {
-        callback.onSuccess(new OperationsSiteMap.Management());
+        callback.onSuccess(new OperationsSiteMap.Management.PMC());
     }
 
     @Override
