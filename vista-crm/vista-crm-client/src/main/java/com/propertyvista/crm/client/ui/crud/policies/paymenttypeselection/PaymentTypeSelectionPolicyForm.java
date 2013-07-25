@@ -17,11 +17,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Layout;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
@@ -44,83 +43,101 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
     }
 
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
-        TwoColumnFlexFormPanel accepted = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel accepted = new BasicFlexFormPanel();
+
+        String hdrW = "120px";
+        String contW = "120px";
+        String lblW = "120px";
         int col = -1;
-        accepted.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Accepted:") + "</i>"));
-        accepted.getWidget(0, col).setWidth("10em");
-        accepted.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_LEFT, HasVerticalAlignment.ALIGN_MIDDLE);
+        accepted.setH4(0, ++col, 1, i18n.tr("Accepted:"));
+        accepted.getWidget(0, col).setWidth(hdrW);
 
-        accepted.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().acceptedCash()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        accepted.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().acceptedCheck()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        accepted.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().acceptedEcheck()), 6).labelWidth(6).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        accepted.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().acceptedEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        accepted.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().acceptedCreditCard()), 7).labelWidth(7).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        accepted.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().acceptedInterac()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
+        accepted.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().acceptedCash())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        accepted.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().acceptedCheck())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        accepted.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().acceptedEcheck())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        accepted.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().acceptedEFT())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
+        accepted.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().acceptedCreditCard())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        accepted.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().acceptedInterac())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
 
-        TwoColumnFlexFormPanel residentPortal = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel residentPortal = new BasicFlexFormPanel();
         col = -1;
-        residentPortal.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Resident Portal:") + "</i>"));
-        residentPortal.getWidget(0, col).setWidth("10em");
-        residentPortal.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_LEFT, HasVerticalAlignment.ALIGN_MIDDLE);
+        residentPortal.setH4(0, ++col, 1, i18n.tr("Resident Portal:"));
+        residentPortal.getWidget(0, col).setWidth(hdrW);
 
         residentPortal.setWidget(0, ++col, new HTML());
-        residentPortal.getWidget(0, col).setWidth("5em");
+        residentPortal.getWidget(0, col).setWidth(lblW);
         residentPortal.setWidget(0, ++col, new HTML());
-        residentPortal.getWidget(0, col).setWidth("5em");
+        residentPortal.getWidget(0, col).setWidth(lblW);
 
-        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalEcheck()), 6).labelWidth(6).layout(Layout.vertical)
-                .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
-        residentPortal.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().residentPortalEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalCreditCard()), 7).labelWidth(7).layout(Layout.vertical)
-                .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
-        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalInterac()), 5).labelWidth(5).layout(Layout.vertical)
-                .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
+        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalEcheck())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
+        residentPortal.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().residentPortalEFT())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalCreditCard())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
+        residentPortal.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().residentPortalInterac())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
 
-        TwoColumnFlexFormPanel cashEquivalent = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel cashEquivalent = new BasicFlexFormPanel();
         col = -1;
-        cashEquivalent.setWidget(0, ++col, new HTML("<i>" + i18n.tr("Cash Equivalent:") + "</i>"));
-        cashEquivalent.getWidget(0, col).setWidth("10em");
-        cashEquivalent.getCellFormatter().setAlignment(0, col, HasHorizontalAlignment.ALIGN_LEFT, HasVerticalAlignment.ALIGN_MIDDLE);
+        cashEquivalent.setH4(0, ++col, 1, i18n.tr("Cash Equivalent:"));
+        cashEquivalent.getWidget(0, col).setWidth(hdrW);
 
-        cashEquivalent.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().cashEquivalentCash()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().cashEquivalentCheck()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentEcheck()), 6).labelWidth(6).layout(Layout.vertical)
-                .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col,
-                new FormDecoratorBuilder(inject(proto().cashEquivalentEFT()), 5).labelWidth(5).layout(Layout.vertical).labelAlignment(Alignment.center)
-                        .componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentCreditCard()), 7).labelWidth(7).layout(Layout.vertical)
-                .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
-        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentInterac()), 5).labelWidth(5).layout(Layout.vertical)
-                .labelAlignment(Alignment.center).componentAlignment(Alignment.center).build());
+        cashEquivalent.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().cashEquivalentCash())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        cashEquivalent.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().cashEquivalentCheck())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentEcheck())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
+        cashEquivalent.setWidget(
+                0,
+                ++col,
+                new FormDecoratorBuilder(inject(proto().cashEquivalentEFT())).contentWidth(contW).labelWidth(lblW).labelAlignment(Alignment.left)
+                        .layout(Layout.vertical).build());
+        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentCreditCard())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
+        cashEquivalent.setWidget(0, ++col, new FormDecoratorBuilder(inject(proto().cashEquivalentInterac())).contentWidth(contW).labelWidth(lblW)
+                .labelAlignment(Alignment.left).layout(Layout.vertical).build());
 
         // put all together:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("Selection"));
         int row = -1;
 
-        main.setWidget(++row, 0, accepted);
-        main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, residentPortal);
-        main.setHR(++row, 0, 1);
-        main.setWidget(++row, 0, cashEquivalent);
+        main.setWidget(++row, 0, 2, accepted);
+        main.setHR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, residentPortal);
+        main.setHR(++row, 0, 2);
+        main.setWidget(++row, 0, 2, cashEquivalent);
 
         return main;
     }
