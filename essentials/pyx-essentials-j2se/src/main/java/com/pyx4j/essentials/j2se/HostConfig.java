@@ -121,7 +121,7 @@ public abstract class HostConfig {
                 if (itf.isLoopback() || itf.isVirtual() || !itf.isUp() || (itf.getName() == null) || itf.isPointToPoint()) {
                     continue;
                 }
-                if (!itf.getName().startsWith("eth") || itf.getInterfaceAddresses().isEmpty()) {
+                if ((!itf.getName().startsWith("eth") && !itf.getName().startsWith("bond")) || itf.getInterfaceAddresses().isEmpty()) {
                     continue;
                 }
                 if (debug) {
