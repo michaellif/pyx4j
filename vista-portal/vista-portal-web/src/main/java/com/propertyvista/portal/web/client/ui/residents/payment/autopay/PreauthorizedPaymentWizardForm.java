@@ -43,6 +43,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -57,7 +58,6 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFo
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
-import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -78,7 +78,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
-    private final VistaWizardStep detailsStep, paymentMethodStep, comfirmationStep;
+    private final WizardStep detailsStep, paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -248,7 +248,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
+    protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().equals(detailsStep)) {
             switchTotal(detailsTotalHolder, 38);

@@ -20,13 +20,12 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme;
 import com.pyx4j.site.client.ui.IPane;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
-
-public abstract class VistaAbstractView extends VerticalPanel implements IPane {
+public abstract class VistaWizardDecorator extends VerticalPanel implements IPane {
 
     private final FlowPanel header;
 
@@ -40,20 +39,20 @@ public abstract class VistaAbstractView extends VerticalPanel implements IPane {
 
     private String footerHeight = "auto";
 
-    public VistaAbstractView() {
+    public VistaWizardDecorator() {
         captionLabel = new Label();
-        captionLabel.setStyleName(VistaWizardPaneTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(CEntityWizardTheme.StyleName.HeaderCaption.name());
 
         header = new FlowPanel();
         header.add(captionLabel);
-        header.setStyleName(VistaWizardPaneTheme.StyleName.Header.name());
+        header.setStyleName(CEntityWizardTheme.StyleName.Header.name());
         add(header);
 
         add(contentHolder = new SimplePanel());
 
         footerToolbar = new Toolbar();
         footer = new SimplePanel();
-        footer.setStyleName(VistaWizardPaneTheme.StyleName.FooterToolbar.name());
+        footer.setStyleName(CEntityWizardTheme.StyleName.FooterToolbar.name());
         footer.setWidget(footerToolbar);
         add(footer);
 

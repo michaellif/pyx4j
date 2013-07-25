@@ -13,19 +13,25 @@
  */
 package com.propertyvista.common.client.ui.wizard;
 
+import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.ui.prime.IPrimePane;
+import com.pyx4j.site.client.ui.prime.misc.IMemento;
+import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstractPrimePane implements IWizard<E> {
+public abstract class VistaAbstractWizard<E extends IEntity> extends VistaWizardDecorator implements IPrimePane, IWizard<E> {
 
     private static final I18n i18n = I18n.get(VistaAbstractWizard.class);
+
+    private final IMemento memento = new MementoImpl();
 
     private VistaWizardForm<E> form;
 
@@ -153,5 +159,19 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends VistaAbstra
     public void onStepChange() {
         setCaption(form.getSelectedStep().getStepTitle());
         calculateButtonsState();
+    }
+
+    @Override
+    public IMemento getMemento() {
+        return memento;
+    }
+
+    @Override
+    public void storeState(Place place) {
+        memento.setCurrentPlace(place);
+    }
+
+    @Override
+    public void restoreState() {
     }
 }

@@ -40,6 +40,7 @@ import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -52,7 +53,6 @@ import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
-import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -67,7 +67,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
-    private final VistaWizardStep paymentMethodSelectionStep, paymentMethodStep, comfirmationStep;
+    private final WizardStep paymentMethodSelectionStep, paymentMethodStep, comfirmationStep;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -234,7 +234,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
+    protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();

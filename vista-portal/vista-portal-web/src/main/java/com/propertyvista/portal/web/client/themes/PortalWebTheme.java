@@ -23,6 +23,7 @@ import com.pyx4j.forms.client.ui.datatable.DefaultDataTableTheme;
 import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
+import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -32,7 +33,6 @@ import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.theme.HorizontalAlignCenterMixin;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
-import com.propertyvista.common.client.theme.VistaWizardPaneTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
@@ -169,7 +169,7 @@ public class PortalWebTheme extends Theme {
         });
         addTheme(new DefaultDialogTheme());
 
-        addTheme(new VistaWizardPaneTheme());
+        addTheme(new CEntityWizardTheme());
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());
         addTheme(new NewPaymentMethodEditorTheme());

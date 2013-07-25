@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
@@ -39,7 +40,6 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
-import com.propertyvista.common.client.ui.wizard.VistaWizardStep;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -52,7 +52,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodWizardForm.class);
 
-    private final VistaWizardStep comfirmationStep;
+    private final WizardStep comfirmationStep;
 
     private final SimplePanel confirmationDetailsHolder = new SimplePanel();
 
@@ -109,7 +109,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
     }
 
     @Override
-    protected void onStepChange(SelectionEvent<VistaWizardStep> event) {
+    protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
