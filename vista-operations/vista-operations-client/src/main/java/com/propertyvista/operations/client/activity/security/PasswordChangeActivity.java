@@ -37,7 +37,7 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
-import com.propertyvista.operations.client.viewfactories.SecurityViewFactory;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeManagedService;
 import com.propertyvista.operations.rpc.services.AdminPasswordChangeUserService;
@@ -55,7 +55,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     private final String userName;
 
     public PasswordChangeActivity(Place place) {
-        view = SecurityViewFactory.instance(PasswordChangeView.class);
+        view = OperationsSite.getViewFactory().instantiate(PasswordChangeView.class);
         view.setPresenter(this);
 
         try {

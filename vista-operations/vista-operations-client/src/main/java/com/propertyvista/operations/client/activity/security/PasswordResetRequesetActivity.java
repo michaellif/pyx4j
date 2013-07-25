@@ -18,17 +18,17 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.security.rpc.AuthenticationService;
 
-import com.propertyvista.operations.client.viewfactories.SecurityViewFactory;
-import com.propertyvista.operations.rpc.OperationsSiteMap;
-import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
+import com.propertyvista.operations.client.OperationsSite;
+import com.propertyvista.operations.rpc.OperationsSiteMap;
+import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 
 public class PasswordResetRequesetActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     public PasswordResetRequesetActivity(Place place) {
-        super(place, SecurityViewFactory.instance(PasswordResetRequestView.class), GWT.<AuthenticationService> create(OperationsAuthenticationService.class),
-                new OperationsSiteMap.Login());
+        super(place, OperationsSite.getViewFactory().instantiate(PasswordResetRequestView.class), GWT
+                .<AuthenticationService> create(OperationsAuthenticationService.class), new OperationsSiteMap.Login());
     }
 
 }

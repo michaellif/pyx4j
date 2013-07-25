@@ -23,13 +23,14 @@ import com.pyx4j.security.rpc.AbstractPasswordResetService;
 
 import com.propertyvista.common.client.ui.components.security.AbstractPasswordResetActivity;
 import com.propertyvista.common.client.ui.components.security.PasswordResetView;
-import com.propertyvista.operations.client.viewfactories.SecurityViewFactory;
+import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.rpc.services.AdminPasswordResetService;
 
 public class PasswordResetActivity extends AbstractPasswordResetActivity {
 
     public PasswordResetActivity(Place place) {
-        super(place, SecurityViewFactory.instance(PasswordResetView.class), GWT.<AbstractPasswordResetService> create(AdminPasswordResetService.class));
+        super(place, OperationsSite.getViewFactory().instantiate(PasswordResetView.class), GWT
+                .<AbstractPasswordResetService> create(AdminPasswordResetService.class));
     }
 
     @Override
