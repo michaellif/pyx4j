@@ -43,25 +43,26 @@ public class RestrictionsPolicyForm extends PolicyDTOTabPanelBasedForm<Restricti
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Restrictions"));
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxParkingSpots())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxLockers())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maxPets())).labelWidth(20).componentWidth(3).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().occupantsPerBedRoom())).labelWidth(20).componentWidth(3).build());
+        String lbw = "220px";
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxParkingSpots()), 3, true).labelWidth(lbw).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxLockers()), 3, true).labelWidth(lbw).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maxPets()), 3, true).labelWidth(lbw).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().occupantsPerBedRoom()), 3, true).labelWidth(lbw).build());
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().occupantsOver18areApplicants())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().occupantsOver18areApplicants()), 3, true).labelWidth(lbw).build());
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enforceAgeOfMajority())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().enforceAgeOfMajority()), 3, true).labelWidth(lbw).build());
         get(proto().enforceAgeOfMajority()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().ageOfMajority()).setVisible(event.getValue() == true);
             }
         });
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ageOfMajority())).labelWidth(20).componentWidth(2).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().ageOfMajority()), 3, true).labelWidth(lbw).build());
 
         return content;
     }

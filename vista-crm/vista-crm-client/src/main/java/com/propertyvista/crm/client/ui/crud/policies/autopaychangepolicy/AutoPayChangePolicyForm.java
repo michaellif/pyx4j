@@ -40,7 +40,7 @@ public class AutoPayChangePolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayC
     private TwoColumnFlexFormPanel createPolicyEditorPanel() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel("Settings");
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rule())).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().rule()), 15, true).build());
         return panel;
     }
 

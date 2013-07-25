@@ -51,14 +51,14 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     private TwoColumnFlexFormPanel createInsuranceRequirementsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Insurance Requirements"));
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireMinimumLiability()), 5).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requireMinimumLiability()), 5, true).build());
         get(proto().requireMinimumLiability()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {
                 get(proto().minimumRequiredLiability()).setVisible(event.getValue());
             }
         });
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), 20).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), 20, true).build());
         get(proto().minimumRequiredLiability()).addValueValidator(new EditableValueValidator<BigDecimal>() {
             @Override
             public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
@@ -81,9 +81,10 @@ public class TenantInsurancePolicyForm extends PolicyDTOTabPanelBasedForm<Tenant
     private TwoColumnFlexFormPanel createPortalConfigurationTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Portal Configuration"));
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50).build());
+        String lbw = "200px";
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().noInsuranceStatusMessage()), 50, true).labelWidth(lbw).build());
         if (VistaFeatures.instance().tenantSure()) {
-            panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50).build());
+            panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().tenantInsuranceInvitation()), 50, true).labelWidth(lbw).build());
         }
         return panel;
     }
