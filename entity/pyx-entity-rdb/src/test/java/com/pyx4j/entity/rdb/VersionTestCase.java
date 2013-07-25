@@ -26,6 +26,7 @@ import java.util.List;
 import junit.framework.Assert;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.entity.rpc.EntityCriteriaByPK;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -187,12 +188,18 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("VersionData.size()", 3, srv.query(criteria).size());
         }
 
-        // Retrieval of item as draft
+        // Retrieval of item as draft by Pk
         {
             ItemA itemA1r = EntityFactory.create(ItemA.class);
             itemA1r.setPrimaryKey(itemA1.getPrimaryKey().asDraftKey());
 
             srv.retrieve(itemA1r);
+            assertTrue("version is not null", !itemA1r.version().isNull());
+            assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
+        }
+        //Retrieval of item as draft by Query
+        {
+            ItemA itemA1r = srv.retrieve(EntityCriteriaByPK.create(ItemA.class, itemA1.getPrimaryKey().asDraftKey()));
             assertTrue("version is not null", !itemA1r.version().isNull());
             assertEquals("getDraft", draftName, itemA1r.version().name().getValue());
         }
@@ -203,17 +210,34 @@ public abstract class VersionTestCase extends DatastoreTestBase {
             assertEquals("ToStringMembers getStringView", " - " + draftName, itemA1r.getStringView());
         }
 
-        // Retrieval of item before current existed
+        // Retrieval of item before current existed by Pk
         {
             setDBTime("2010-01-01");
             ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asCurrentKey());
             assertTrue("current is null", itemA1r.version().isNull());
         }
+        // Retrieval of item before current existed by Query
+        {
+            setDBTime("2010-01-01");
+            ItemA itemA1r = srv.retrieve(EntityCriteriaByPK.create(ItemA.class, itemA1.getPrimaryKey().asCurrentKey()));
+            assertTrue("current is null", itemA1r.version().isNull());
+        }
 
-        // Retrieval of item for specific date
+        // Retrieval of item for specific date by Pk
         {
             setDBTime("2011-03-02");
             ItemA itemA1r = srv.retrieve(ItemA.class, itemA1.getPrimaryKey().asVersionKey(DateUtils.detectDateformat("2011-01-11")));
+
+            srv.retrieve(itemA1r);
+            assertTrue("version is not null", !itemA1r.version().isNull());
+            assertEquals("getSpecific", v1Name, itemA1r.version().name().getValue());
+
+            //assertEquals("version of Pk", DateUtils.detectDateformat("2011-01-01").getTime(), itemA1r.getPrimaryKey().getVersion());
+        }
+        // Retrieval of item for specific date by Query
+        {
+            setDBTime("2011-03-02");
+            ItemA itemA1r = srv.retrieve(EntityCriteriaByPK.create(ItemA.class, itemA1.getPrimaryKey().asVersionKey(DateUtils.detectDateformat("2011-01-11"))));
 
             srv.retrieve(itemA1r);
             assertTrue("version is not null", !itemA1r.version().isNull());

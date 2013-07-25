@@ -60,7 +60,6 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 import com.pyx4j.i18n.shared.I18n;
@@ -873,13 +872,13 @@ public class TableModel {
             rs = stmt.executeQuery();
 
             List<T> rc = new Vector<T>();
+
+            PrimaryKeyCriteriaHelper primaryKeyCriteriaHelper = new PrimaryKeyCriteriaHelper(criteria);
+
             while (rs.next()) {
                 @SuppressWarnings("unchecked")
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
-                entity.setPrimaryKey(new Key(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
-                if (criteria.getVersionedCriteria() == VersionedCriteria.onlyDraft) {
-                    entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
-                }
+                entity.setPrimaryKey(primaryKeyCriteriaHelper.getRetrievedKey(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
                 if ((dialect.isMultitenantSharedSchema())
                         && !rs.getString(dialect.getNamingConvention().sqlNameSpaceColumnName()).equals(NamespaceManager.getNamespace())) {
                     throw new RuntimeException("namespace access error");
@@ -903,7 +902,7 @@ public class TableModel {
         }
     }
 
-    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, final EntityQueryCriteria<T> criteria,
+    public <T extends IEntity> ResultSetIterator<T> queryIterable(final PersistenceContext persistenceContext, EntityQueryCriteria<T> criteria,
             final AttachLevel attachLevel) {
         String sql = null;
         QueryBuilder<T> qb = new QueryBuilder<T>(persistenceContext, mappings, "m1", entityOperationsMeta, criteria);
@@ -958,6 +957,8 @@ public class TableModel {
             throw new RuntimeException(e);
         }
 
+        final PrimaryKeyCriteriaHelper primaryKeyCriteriaHelper = new PrimaryKeyCriteriaHelper(criteria);
+
         return new ResultSetIterator<T>(stmt, rs) {
 
             @Override
@@ -966,10 +967,7 @@ public class TableModel {
                 T entity = (T) EntityFactory.create(entityMeta.getEntityClass());
                 TableModel subclassModel;
                 try {
-                    entity.setPrimaryKey(new Key(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
-                    if (criteria.getVersionedCriteria() == VersionedCriteria.onlyDraft) {
-                        entity.setPrimaryKey(entity.getPrimaryKey().asDraftKey());
-                    }
+                    entity.setPrimaryKey(primaryKeyCriteriaHelper.getRetrievedKey(rs.getLong(dialect.getNamingConvention().sqlIdColumnName())));
                     subclassModel = retrieveDiscriminator(persistenceContext, rs, entity);
                     if (attachLevel.ordinal() > AttachLevel.IdOnly.ordinal()) {
                         subclassModel.retrieveValues(rs, entity.cast());
