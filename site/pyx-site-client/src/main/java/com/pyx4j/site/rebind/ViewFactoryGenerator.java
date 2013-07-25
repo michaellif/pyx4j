@@ -46,8 +46,11 @@ public class ViewFactoryGenerator extends Generator {
         List<JClassType> classes = new ArrayList<JClassType>();
 
         for (JClassType classType : oracle.getTypes()) {
-            if (classType.isAssignableTo(instantiableType) && classType.isInterface() == null && !classType.isAbstract()
-                    && classType.getSimpleSourceName().endsWith("Impl")) {
+            if (classType.isAssignableTo(instantiableType) //@formatter:off
+                    && classType.isInterface() == null 
+                    && !classType.isAbstract()
+                    && classType.getSimpleSourceName().endsWith("Impl") 
+                    && hasInterfaceWithTheSameName(oracle, classType, instantiableType)) {//@formatter:on
                 classes.add(classType);
             }
         }
@@ -73,6 +76,11 @@ public class ViewFactoryGenerator extends Generator {
         }
 
         return composer.getCreatedClassName();
+    }
+
+    private boolean hasInterfaceWithTheSameName(TypeOracle oracle, JClassType classType, JClassType instantiableType) {
+        JClassType classTypeInterface = oracle.findType(classType.getQualifiedSourceName().replaceFirst("Impl$", ""));
+        return (classTypeInterface != null) && (classTypeInterface.isInterface() != null) && classTypeInterface.isAssignableTo(instantiableType);
     }
 
     private void printFactoryMethod(List<JClassType> clazzes, SourceWriter sourceWriter) {
