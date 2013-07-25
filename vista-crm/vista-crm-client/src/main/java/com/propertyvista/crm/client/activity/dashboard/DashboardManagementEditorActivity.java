@@ -24,20 +24,20 @@ import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace.Type;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementEditorView;
-import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.dashboard.DashboardColumnLayoutFormat;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
-import com.propertyvista.domain.dashboard.DashboardMetadata;
 import com.propertyvista.domain.dashboard.DashboardMetadata.LayoutType;
+import com.propertyvista.domain.dashboard.DashboardMetadata;
 
 public class DashboardManagementEditorActivity extends AbstractEditorActivity<DashboardMetadata> {
 
     @SuppressWarnings("unchecked")
     public DashboardManagementEditorActivity(CrudAppPlace place) {
-        super(place, DashboardViewFactory.instance(DashboardManagementEditorView.class), (AbstractCrudService<DashboardMetadata>) GWT
+        super(place,  CrmSite.getViewFactory().instantiate(DashboardManagementEditorView.class), (AbstractCrudService<DashboardMetadata>) GWT
                 .create(DashboardMetadataCrudService.class), DashboardMetadata.class);
 
     }

@@ -19,9 +19,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.portfolio.PortfolioViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.services.organization.PortfolioCrudService;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -30,7 +30,7 @@ public class PortfolioViewerActivity extends CrmViewerActivity<Portfolio> {
 
     @SuppressWarnings("unchecked")
     public PortfolioViewerActivity(CrudAppPlace place) {
-        super(place, OrganizationViewFactory.instance(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(PortfolioViewerView.class), (AbstractCrudService<Portfolio>) GWT.create(PortfolioCrudService.class));
     }
 
     @Override

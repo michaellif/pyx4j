@@ -40,6 +40,7 @@ import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientNavigUtils;
@@ -70,6 +71,8 @@ public class CrmSite extends VistaSite {
     private static final Logger log = LoggerFactory.getLogger(CrmSite.class);
 
     private static final I18n i18n = I18n.get(CrmSite.class);
+
+    private static SingletonViewFactory viewFactory = new SingletonViewFactory();
 
     public CrmSite() {
         super("vista-crm", CrmSiteMap.class, new CrmSiteAppPlaceDispatcher());
@@ -116,6 +119,10 @@ public class CrmSite extends VistaSite {
     @Override
     public void showMessageDialog(String message, String title) {
         setNotification(new Notification(message, NotificationType.ERROR, title));
+    }
+
+    public static SingletonViewFactory getViewFactory() {
+        return viewFactory;
     }
 
     private void initialize() {

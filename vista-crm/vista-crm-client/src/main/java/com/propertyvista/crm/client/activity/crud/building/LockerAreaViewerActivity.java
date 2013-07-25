@@ -19,9 +19,9 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
 import com.propertyvista.crm.rpc.services.building.LockerCrudService;
 import com.propertyvista.domain.property.asset.Locker;
@@ -32,7 +32,7 @@ public class LockerAreaViewerActivity extends CrmViewerActivity<LockerAreaDTO> i
     private final ILister.Presenter<?> lockerLister;
 
     public LockerAreaViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(LockerAreaViewerView.class), GWT.<LockerAreaCrudService> create(LockerAreaCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(LockerAreaViewerView.class), GWT.<LockerAreaCrudService> create(LockerAreaCrudService.class));
 
         lockerLister = new ListerController<Locker>(((LockerAreaViewerView) getView()).getLockerView(),
                 GWT.<LockerCrudService> create(LockerCrudService.class), Locker.class);

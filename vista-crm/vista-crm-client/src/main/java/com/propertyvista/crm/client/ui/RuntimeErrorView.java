@@ -17,7 +17,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.common.client.site.Notification;
 
-public interface RuntimeErrorView extends IsWidget {
+
+import com.pyx4j.site.client.IsView;
+
+public interface RuntimeErrorView extends IsWidget, IsView {
+
 
     void setPresenter(Presenter presenter);
 

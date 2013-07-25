@@ -17,15 +17,15 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.branding.BrandingViewer;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
 import com.propertyvista.dto.SiteDescriptorDTO;
 
 public class BrandingViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements BrandingViewer.Presenter {
 
     public BrandingViewerActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(BrandingViewer.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(BrandingViewer.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class));
     }
 }

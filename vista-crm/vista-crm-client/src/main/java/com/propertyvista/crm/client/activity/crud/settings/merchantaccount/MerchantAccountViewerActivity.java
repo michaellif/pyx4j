@@ -22,10 +22,10 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.ui.prime.lister.ILister.Presenter;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.ListerControllerFactory;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.merchantaccount.MerchantAccountViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.MerchantAccountCrudService;
 import com.propertyvista.crm.rpc.services.selections.SelectBuildingListService;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -37,7 +37,7 @@ public class MerchantAccountViewerActivity extends CrmViewerActivity<MerchantAcc
     private final Presenter<Building> buildingLister;
 
     public MerchantAccountViewerActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(MerchantAccountViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(MerchantAccountViewerView.class), GWT
                 .<AbstractCrudService<MerchantAccount>> create(MerchantAccountCrudService.class));
 
         buildingLister = ListerControllerFactory.create(((MerchantAccountViewerView) getView()).getBuildingListerView(),

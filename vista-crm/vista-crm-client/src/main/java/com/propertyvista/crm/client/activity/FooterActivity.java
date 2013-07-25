@@ -18,15 +18,15 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.FooterView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class FooterActivity extends AbstractActivity {
 
     private final FooterView view;
 
     public FooterActivity(Place place) {
-        view = CrmVeiwFactory.instance(FooterView.class);
+        view = CrmSite.getViewFactory().instantiate(FooterView.class);
         withPlace(place);
     }
 

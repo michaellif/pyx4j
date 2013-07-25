@@ -18,17 +18,17 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.complex.ComplexEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.dto.ComplexDTO;
 
-public class ComplexEditorAcitvity extends CrmEditorActivity<ComplexDTO> implements ComplexEditorView.Presenter {
+public class ComplexEditorActivity extends CrmEditorActivity<ComplexDTO> implements ComplexEditorView.Presenter {
 
     @SuppressWarnings("unchecked")
-    public ComplexEditorAcitvity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(ComplexEditorView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class),
+    public ComplexEditorActivity(CrudAppPlace place) {
+        super(place, CrmSite.getViewFactory().instantiate(ComplexEditorView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class),
                 ComplexDTO.class);
 
     }

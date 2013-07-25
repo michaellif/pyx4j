@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.DepositPolicyCrudService;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
 public class DepositPolicyListerActivity extends AbstractListerActivity<DepositPolicyDTO> {
 
     public DepositPolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(DepositPolicyListerView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(DepositPolicyListerView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class),
                 DepositPolicyDTO.class);
     }
 

@@ -23,12 +23,12 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.NavigFolder.Type;
 import com.propertyvista.crm.client.event.CrudNavigateEvent;
 import com.propertyvista.crm.client.event.CrudNavigateHandler;
 import com.propertyvista.crm.client.ui.ShortCutsView;
 import com.propertyvista.crm.client.ui.ShortCutsView.ShortCutsPresenter;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class ShortCutsActivity extends AbstractActivity implements ShortCutsPresenter, CrudNavigateHandler {
 
@@ -37,7 +37,7 @@ public class ShortCutsActivity extends AbstractActivity implements ShortCutsPres
     private final ShortCutsView view;
 
     public ShortCutsActivity() {
-        view = CrmVeiwFactory.instance(ShortCutsView.class);
+        view = CrmSite.getViewFactory().instantiate(ShortCutsView.class);
         view.setPresenter(this);
     }
 

@@ -24,8 +24,8 @@ import com.pyx4j.site.client.activity.AbstractListerActivity;
 
 import com.propertyvista.common.client.ui.components.UploadDialogBase;
 import com.propertyvista.common.client.ui.components.UploadResponseDownloadableReciver;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.ActiveTenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.crm.rpc.services.customer.TenantPadFileUploadService;
@@ -38,7 +38,7 @@ public class TenantListerActivity extends AbstractListerActivity<TenantDTO> impl
     private static final I18n i18n = I18n.get(TenantListerView.class);
 
     public TenantListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(TenantListerView.class), GWT.<TenantCrudService> create(ActiveTenantCrudService.class), TenantDTO.class);
+        super(place,  CrmSite.getViewFactory().instantiate(TenantListerView.class), GWT.<TenantCrudService> create(ActiveTenantCrudService.class), TenantDTO.class);
         ((TenantListerView) getView()).setTenantPadFileUploadEnabled(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
     }
 

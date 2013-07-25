@@ -24,7 +24,7 @@ public class PaymentTypeSelectionPolicyListerViewImpl extends CrmListerViewImplB
         setLister(new PaymentTypeSelectionPolicyLister());
     }
 
-    private static class PaymentTypeSelectionPolicyLister extends PolicyListerBase<PaymentTypeSelectionPolicyDTO> {
+    public static class PaymentTypeSelectionPolicyLister extends PolicyListerBase<PaymentTypeSelectionPolicyDTO> {
 
         public PaymentTypeSelectionPolicyLister() {
             super(PaymentTypeSelectionPolicyDTO.class);

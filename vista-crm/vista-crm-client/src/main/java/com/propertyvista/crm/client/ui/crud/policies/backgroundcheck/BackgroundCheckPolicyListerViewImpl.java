@@ -23,7 +23,7 @@ public class BackgroundCheckPolicyListerViewImpl extends CrmListerViewImplBase<B
         setLister(new BackgroundCheckPolicyLister());
     }
 
-    private static class BackgroundCheckPolicyLister extends PolicyListerBase<BackgroundCheckPolicyDTO> {
+    public static class BackgroundCheckPolicyLister extends PolicyListerBase<BackgroundCheckPolicyDTO> {
 
         public BackgroundCheckPolicyLister() {
             super(BackgroundCheckPolicyDTO.class);

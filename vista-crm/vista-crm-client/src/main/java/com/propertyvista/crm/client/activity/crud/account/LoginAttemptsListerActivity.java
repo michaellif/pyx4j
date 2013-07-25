@@ -24,8 +24,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.LoginAttemptsListerView;
-import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.dto.account.LoginAttemptDTO;
 import com.propertyvista.crm.rpc.services.security.CrmLoginAttemptsListerService;
 
@@ -34,7 +34,7 @@ public class LoginAttemptsListerActivity extends AbstractListerActivity<LoginAtt
     private Key userKey;
 
     public LoginAttemptsListerActivity(CrudAppPlace place) {
-        super(place, SecurityViewFactory.instance(LoginAttemptsListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(LoginAttemptsListerView.class), GWT
                 .<CrmLoginAttemptsListerService> create(CrmLoginAttemptsListerService.class), LoginAttemptDTO.class);
 
         String val;

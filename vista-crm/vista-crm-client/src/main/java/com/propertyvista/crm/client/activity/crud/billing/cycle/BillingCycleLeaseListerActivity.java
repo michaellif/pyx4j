@@ -21,8 +21,8 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleLeaseListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleLeaseListService;
 import com.propertyvista.domain.financial.billing.BillingType;
@@ -35,7 +35,7 @@ public class BillingCycleLeaseListerActivity extends AbstractListerActivity<Leas
     private Key billingTypeId;
 
     public BillingCycleLeaseListerActivity(AppPlace place) {
-        super(place, FinancialViewFactory.instance(BillingCycleLeaseListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(BillingCycleLeaseListerView.class), GWT
                 .<BillingCycleLeaseListService> create(BillingCycleLeaseListService.class), LeaseDTO.class);
 
         String val;

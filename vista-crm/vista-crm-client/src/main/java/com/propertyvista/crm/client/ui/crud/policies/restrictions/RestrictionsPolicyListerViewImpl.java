@@ -25,7 +25,7 @@ public class RestrictionsPolicyListerViewImpl extends CrmListerViewImplBase<Rest
         setLister(new RestrictionsPolicyLister());
     }
 
-    private static class RestrictionsPolicyLister extends PolicyListerBase<RestrictionsPolicyDTO> {
+    public static class RestrictionsPolicyLister extends PolicyListerBase<RestrictionsPolicyDTO> {
 
         public RestrictionsPolicyLister() {
             super(RestrictionsPolicyDTO.class);

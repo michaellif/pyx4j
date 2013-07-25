@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.cityintro.CityIntroPageEditor;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.CityIntroPageCrudService;
 import com.propertyvista.domain.site.CityIntroPage;
 
@@ -28,7 +28,7 @@ public class CityIntroPageEditorActivity extends CrmEditorActivity<CityIntroPage
 
     @SuppressWarnings("unchecked")
     public CityIntroPageEditorActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(CityIntroPageEditor.class), (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(CityIntroPageEditor.class), (AbstractCrudService<CityIntroPage>) GWT.create(CityIntroPageCrudService.class),
                 CityIntroPage.class);
     }
 }

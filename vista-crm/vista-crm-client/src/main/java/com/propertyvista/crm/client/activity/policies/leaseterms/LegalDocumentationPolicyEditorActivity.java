@@ -20,9 +20,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.leaseterms.LegalDocumentationPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.LegalDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.LegalDocumentationPolicyDTO;
@@ -34,7 +34,7 @@ public class LegalDocumentationPolicyEditorActivity extends PolicyEditorActivity
 
     @SuppressWarnings("unchecked")
     public LegalDocumentationPolicyEditorActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(LegalDocumentationPolicyEditorView.class), (AbstractPolicyCrudService<LegalDocumentationPolicyDTO>) GWT
+        super(place,  CrmSite.getViewFactory().instantiate(LegalDocumentationPolicyEditorView.class), (AbstractPolicyCrudService<LegalDocumentationPolicyDTO>) GWT
                 .create(LegalDocumentationPolicyCrudService.class), LegalDocumentationPolicyDTO.class);
     }
 

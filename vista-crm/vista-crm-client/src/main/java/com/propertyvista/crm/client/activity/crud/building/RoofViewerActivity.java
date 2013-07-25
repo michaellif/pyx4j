@@ -19,9 +19,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.RoofViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.mech.RoofCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.RoofDTO;
@@ -30,7 +30,7 @@ public class RoofViewerActivity extends CrmViewerActivity<RoofDTO> {
 
     @SuppressWarnings("unchecked")
     public RoofViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(RoofViewerView.class), (AbstractCrudService<RoofDTO>) GWT.create(RoofCrudService.class));
     }
 
     @Override

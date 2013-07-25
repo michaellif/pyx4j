@@ -22,14 +22,13 @@ import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.RuntimeErrorView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class RuntimeErrorActivity extends AbstractActivity implements RuntimeErrorView.Presenter {
 
     private final RuntimeErrorView view;
 
     public RuntimeErrorActivity(Place place) {
-        view = CrmVeiwFactory.instance(RuntimeErrorView.class);
+        view = CrmSite.getViewFactory().instantiate(RuntimeErrorView.class);
         view.setPresenter(this);
     }
 

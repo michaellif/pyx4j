@@ -25,17 +25,17 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.domain.financial.offering.ProductItem;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.BillableItem;
-import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.domain.tenant.lease.Deposit.DepositType;
+import com.propertyvista.domain.tenant.lease.Deposit;
 import com.propertyvista.dto.LeaseTermDTO;
 
 public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> implements LeaseTermEditorView.Presenter {
@@ -50,7 +50,7 @@ public class LeaseTermEditorActivity extends CrmEditorActivity<LeaseTermDTO> imp
     private final ReturnBehaviour returnBehaviour;
 
     public LeaseTermEditorActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class), LeaseTermDTO.class);
+        super(place,  CrmSite.getViewFactory().instantiate(LeaseTermEditorView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class), LeaseTermDTO.class);
 
         String val;
         if ((val = place.getFirstArg(ARG_NAME_RETURN_BH)) != null) {

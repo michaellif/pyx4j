@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
@@ -29,7 +29,7 @@ public class PetPolicyEditorActivity extends PolicyEditorActivityBase<PetPolicyD
     public PetPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
-        PolicyViewFactory.instance(PetPolicyEditorView.class),
+         CrmSite.getViewFactory().instantiate(PetPolicyEditorView.class),
 
         GWT.<AbstractPolicyCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class),
 

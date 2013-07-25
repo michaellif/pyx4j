@@ -19,15 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.auditrecord.CrmAuditRecordListerView;
-import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
 import com.propertyvista.crm.rpc.services.security.CrmAuditRecordsListerService;
 import com.propertyvista.dto.AuditRecordDTO;
 
 public class CrmAuditRecordsListerActivity extends AbstractListerActivity<AuditRecordDTO> {
 
     public CrmAuditRecordsListerActivity(Place place) {
-        super(place, (ILister<AuditRecordDTO>) SecurityViewFactory.instance(CrmAuditRecordListerView.class), GWT
+        super(place, (ILister<AuditRecordDTO>)  CrmSite.getViewFactory().instantiate(CrmAuditRecordListerView.class), GWT
                 .<CrmAuditRecordsListerService> create(CrmAuditRecordsListerService.class), AuditRecordDTO.class);
     }
 

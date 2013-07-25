@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.lead.LeadListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.tenant.lead.Lead;
 
@@ -28,6 +28,6 @@ public class LeadListerActivity extends AbstractListerActivity<Lead> {
 
     @SuppressWarnings("unchecked")
     public LeadListerActivity(Place place) {
-        super(place, MarketingViewFactory.instance(LeadListerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
+        super(place,  CrmSite.getViewFactory().instantiate(LeadListerView.class), (AbstractCrudService<Lead>) GWT.create(LeadCrudService.class), Lead.class);
     }
 }

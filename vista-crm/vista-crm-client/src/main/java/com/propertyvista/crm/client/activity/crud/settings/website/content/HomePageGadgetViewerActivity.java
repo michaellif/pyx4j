@@ -19,16 +19,16 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.gadgets.HomePageGadgetViewer;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetViewerActivity extends CrmViewerActivity<HomePageGadget> implements HomePageGadgetViewer.Presenter {
 
     public HomePageGadgetViewerActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(HomePageGadgetViewer.class), GWT.<HomePageGadgetCrudService> create(HomePageGadgetCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(HomePageGadgetViewer.class), GWT.<HomePageGadgetCrudService> create(HomePageGadgetCrudService.class));
     }
 
     @Override

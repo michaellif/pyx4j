@@ -19,9 +19,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.BoilerDTO;
@@ -30,7 +30,7 @@ public class BoilerViewerActivity extends CrmViewerActivity<BoilerDTO> {
 
     @SuppressWarnings("unchecked")
     public BoilerViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(BoilerViewerView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class));
     }
 
     @Override

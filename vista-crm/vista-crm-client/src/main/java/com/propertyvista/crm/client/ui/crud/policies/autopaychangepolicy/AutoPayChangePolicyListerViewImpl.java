@@ -23,7 +23,7 @@ public class AutoPayChangePolicyListerViewImpl extends CrmListerViewImplBase<Aut
         setLister(new AutoPayChangePolicyLister());
     }
 
-    private static class AutoPayChangePolicyLister extends PolicyListerBase<AutoPayChangePolicyDTO> {
+    public static class AutoPayChangePolicyLister extends PolicyListerBase<AutoPayChangePolicyDTO> {
 
         public AutoPayChangePolicyLister() {
             super(AutoPayChangePolicyDTO.class);

@@ -21,15 +21,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.website.general.AvailableLocaleSelectorDialog;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.PageContent;
-import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
+import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor;
 
 public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implements PageEditor.Presenter {
@@ -37,7 +37,7 @@ public class PageEditorActivity extends CrmEditorActivity<PageDescriptor> implem
     private PageParent pageParentArg = null;
 
     public PageEditorActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(PageEditor.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(PageEditor.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class),
                 PageDescriptor.class);
 
         String val = place.getFirstArg(PageEditor.Presenter.URL_PARAM_PAGE_PARENT);

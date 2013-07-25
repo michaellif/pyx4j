@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.FormerGuarantorListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.FormerGuarantorCrudService;
 import com.propertyvista.dto.GuarantorDTO;
 
@@ -28,7 +28,7 @@ public class FormerGuarantorListerActivity extends AbstractListerActivity<Guaran
 
     @SuppressWarnings("unchecked")
     public FormerGuarantorListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(FormerGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT
+        super(place,  CrmSite.getViewFactory().instantiate(FormerGuarantorListerView.class), (AbstractCrudService<GuarantorDTO>) GWT
                 .create(FormerGuarantorCrudService.class), GuarantorDTO.class);
     }
 

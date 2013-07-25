@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.PaymentTypeSelectionPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
 public class PaymentTypeSelectionPolicyViewerActivity extends CrmViewerActivity<PaymentTypeSelectionPolicyDTO> {
 
     public PaymentTypeSelectionPolicyViewerActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(PaymentTypeSelectionPolicyViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(PaymentTypeSelectionPolicyViewerView.class), GWT
                 .<AbstractCrudService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class));
     }
 }

@@ -22,9 +22,9 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.EmployeeCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -33,7 +33,7 @@ public class EmployeeEditorActivity extends CrmEditorActivity<EmployeeDTO> imple
 
     @SuppressWarnings("unchecked")
     public EmployeeEditorActivity(CrudAppPlace place) {
-        super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(EmployeeEditorView.class), (AbstractCrudService<EmployeeDTO>) GWT.create(EmployeeCrudService.class),
                 EmployeeDTO.class);
     }
 

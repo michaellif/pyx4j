@@ -20,15 +20,15 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.reports.AutoPayReviewUpdaterView;
-import com.propertyvista.crm.client.ui.viewfactories.ReportsViewFactory;
 
 public class AutoPayReviewUpdaterActivity extends AbstractActivity implements AutoPayReviewUpdaterView.Presenter {
 
     private final AutoPayReviewUpdaterView view;
 
     public AutoPayReviewUpdaterActivity(Place place) {
-        view = ReportsViewFactory.instance(AutoPayReviewUpdaterView.class);
+        view = CrmSite.getViewFactory().instantiate(AutoPayReviewUpdaterView.class);
     }
 
     @Override

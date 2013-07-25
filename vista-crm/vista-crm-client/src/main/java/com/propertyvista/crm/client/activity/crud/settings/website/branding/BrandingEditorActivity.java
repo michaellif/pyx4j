@@ -19,9 +19,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.ReferenceDataManager;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.branding.BrandingEditor;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.admin.SiteBrandingCrudService;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.dto.SiteDescriptorDTO;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class BrandingEditorActivity extends CrmEditorActivity<SiteDescriptorDTO> implements BrandingEditor.Presenter {
 
     public BrandingEditorActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(BrandingEditor.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(BrandingEditor.class), GWT.<SiteBrandingCrudService> create(SiteBrandingCrudService.class),
                 SiteDescriptorDTO.class);
     }
 

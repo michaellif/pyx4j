@@ -19,14 +19,14 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxListerActivity extends AbstractListerActivity<Tax> {
 
     public TaxListerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class), Tax.class);
+        super(place,  CrmSite.getViewFactory().instantiate(TaxListerView.class), GWT.<AbstractListService<Tax>> create(TaxCrudService.class), Tax.class);
     }
 }

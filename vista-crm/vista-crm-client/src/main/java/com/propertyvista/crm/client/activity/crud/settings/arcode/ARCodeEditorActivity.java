@@ -19,10 +19,10 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.ARCodeEditorView;
 import com.propertyvista.crm.client.ui.crud.settings.financial.arcode.HasYardiIntegrationMode;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.ARCodeCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -31,7 +31,7 @@ public class ARCodeEditorActivity extends CrmEditorActivity<ARCode> {
 
     @SuppressWarnings("unchecked")
     public ARCodeEditorActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(ARCodeEditorView.class), (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(ARCodeEditorView.class), (AbstractCrudService<ARCode>) GWT.create(ARCodeCrudService.class),
                 ARCode.class);
     }
 

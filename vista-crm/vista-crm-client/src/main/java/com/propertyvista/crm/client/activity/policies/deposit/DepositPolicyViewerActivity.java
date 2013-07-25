@@ -17,15 +17,15 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.deposit.DepositPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.DepositPolicyCrudService;
 import com.propertyvista.domain.policy.dto.DepositPolicyDTO;
 
 public class DepositPolicyViewerActivity extends CrmViewerActivity<DepositPolicyDTO> {
 
     public DepositPolicyViewerActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(DepositPolicyViewerView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(DepositPolicyViewerView.class), GWT.<DepositPolicyCrudService> create(DepositPolicyCrudService.class));
     }
 }

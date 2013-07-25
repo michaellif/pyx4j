@@ -24,9 +24,9 @@ import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.dashboard.DashboardView;
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.DashboardPrinterDialog;
-import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
 
@@ -42,7 +42,7 @@ public class DashboardActivity extends AbstractActivity implements DashboardView
 
     public DashboardActivity(AppPlace place) {
         this.place = place;
-        view = DashboardViewFactory.instance(DashboardView.class);
+        view = CrmSite.getViewFactory().instantiate(DashboardView.class);
         dashboardId = getIdFromPlace(place);
     }
 

@@ -13,10 +13,11 @@
  */
 package com.propertyvista.crm.client.ui.reports.availability;
 
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.reports.IReportsView;
 
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 
-public interface AvailabilityReportView extends IReportsView<AvailabilityReportMetadata> {
+public interface AvailabilityReportView extends IReportsView<AvailabilityReportMetadata>, IsView {
 
 }

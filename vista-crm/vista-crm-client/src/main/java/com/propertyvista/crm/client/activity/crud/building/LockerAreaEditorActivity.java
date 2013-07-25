@@ -20,9 +20,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.lockers.LockerAreaEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.LockerAreaCrudService;
 import com.propertyvista.dto.LockerAreaDTO;
 
@@ -30,7 +30,7 @@ public class LockerAreaEditorActivity extends CrmEditorActivity<LockerAreaDTO> i
 
     @SuppressWarnings("unchecked")
     public LockerAreaEditorActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(LockerAreaEditorView.class), (AbstractCrudService<LockerAreaDTO>) GWT.create(LockerAreaCrudService.class),
                 LockerAreaDTO.class);
     }
 

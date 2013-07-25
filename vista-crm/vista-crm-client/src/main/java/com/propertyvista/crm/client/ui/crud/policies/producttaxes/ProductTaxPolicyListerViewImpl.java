@@ -23,7 +23,7 @@ public class ProductTaxPolicyListerViewImpl extends CrmListerViewImplBase<Produc
         setLister(new ChargePolicyLister());
     }
 
-    private static class ChargePolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {
+    public static class ChargePolicyLister extends PolicyListerBase<ProductTaxPolicyDTO> {
 
         public ChargePolicyLister() {
             super(ProductTaxPolicyDTO.class);

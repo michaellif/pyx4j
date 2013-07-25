@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.criterion.EntityFiltersBuilder;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.PaymentRecordListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -29,7 +29,7 @@ import com.propertyvista.domain.financial.PaymentRecord;
 public class PaymentListerActivity extends AbstractListerActivity<PaymentRecord> {
 
     public PaymentListerActivity(AppPlace place) {
-        super(place, FinancialViewFactory.instance(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(PaymentRecordListerView.class), GWT.<PaymentRecordListService> create(PaymentRecordListService.class),
                 PaymentRecord.class);
 
     }

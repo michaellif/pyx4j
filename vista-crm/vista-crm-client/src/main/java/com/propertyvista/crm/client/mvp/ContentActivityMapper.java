@@ -69,7 +69,7 @@ import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureEditor
 import com.propertyvista.crm.client.activity.crud.building.catalog.FeatureViewerActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceEditorActivity;
 import com.propertyvista.crm.client.activity.crud.building.catalog.ServiceViewerActivity;
-import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorAcitvity;
+import com.propertyvista.crm.client.activity.crud.complex.ComplexEditorActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexListerActivity;
 import com.propertyvista.crm.client.activity.crud.complex.ComplexViewerActivity;
 import com.propertyvista.crm.client.activity.crud.customer.creditcheck.CustomerCreditCheckLongReportViewerActivity;
@@ -117,7 +117,7 @@ import com.propertyvista.crm.client.activity.crud.organisation.VendorEditorActiv
 import com.propertyvista.crm.client.activity.crud.organisation.VendorListerActivity;
 import com.propertyvista.crm.client.activity.crud.organisation.VendorViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeEditorActivity;
-import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeListerViewActivity;
+import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.arcode.ARCodeViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.creditcheck.CustomerCreditCheckViewerActivity;
@@ -133,7 +133,7 @@ import com.propertyvista.crm.client.activity.crud.settings.tax.GlCodeCategoryVie
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxListerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.tax.TaxViewerActivity;
-import com.propertyvista.crm.client.activity.crud.settings.tenantsecurity.TenantSecurityActivity;
+import com.propertyvista.crm.client.activity.crud.settings.tenantsecurity.TenantSecurityViewerActivity;
 import com.propertyvista.crm.client.activity.crud.settings.website.branding.BrandingActivity;
 import com.propertyvista.crm.client.activity.crud.settings.website.branding.BrandingEditorActivity;
 import com.propertyvista.crm.client.activity.crud.settings.website.branding.BrandingViewerActivity;
@@ -163,7 +163,7 @@ import com.propertyvista.crm.client.activity.dashboard.DashboardManagementViewer
 import com.propertyvista.crm.client.activity.login.LoginActivity;
 import com.propertyvista.crm.client.activity.login.LoginWithTokenActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivicty;
+import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.applicationdocumentation.ApplicationDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyListerActivity;
@@ -193,7 +193,7 @@ import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerm
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leasetermination.LeaseTerminationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyListerActivicty;
+import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.leaseterms.LegalDocumentationPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.misc.DatesPolicyListerActivity;
@@ -227,7 +227,7 @@ import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetRequestActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckActivity;
-import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusActivity;
+import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckStatusViewerActivity;
 import com.propertyvista.crm.client.activity.wizard.creditcheck.CreditCheckWizardActivity;
 import com.propertyvista.crm.client.activity.wizard.onlinepayment.OnlinePaymentWizardActivity;
 import com.propertyvista.crm.rpc.CrmSiteMap;
@@ -261,7 +261,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     if (crudPlace instanceof CrmSiteMap.Properties.Complex) {
                         switch (crudPlace.getType()) {
                         case editor:
-                            activity = new ComplexEditorAcitvity(crudPlace);
+                            activity = new ComplexEditorActivity(crudPlace);
                             break;
                         case viewer:
                             activity = new ComplexViewerActivity(crudPlace);
@@ -888,7 +888,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof Financial.ARCode) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new ARCodeListerViewActivity(crudPlace);
+                            activity = new ARCodeListerActivity(crudPlace);
                             break;
                         case editor:
                             activity = new ARCodeEditorActivity(crudPlace);
@@ -955,7 +955,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.ApplicationDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new ApplicationDocumentationPolicyListerActivicty(crudPlace);
+                            activity = new ApplicationDocumentationPolicyListerActivity(crudPlace);
                             break;
                         case editor:
                             activity = new ApplicationDocumentationPolicyEditorActivity(crudPlace);
@@ -968,7 +968,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.LegalDocumentation) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new LegalDocumentationPolicyListerActivicty(crudPlace);
+                            activity = new LegalDocumentationPolicyListerActivity(crudPlace);
                             break;
                         case editor:
                             activity = new LegalDocumentationPolicyEditorActivity(crudPlace);
@@ -1195,7 +1195,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new CrmAuditRecordsListerActivity(place);
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Settings.CreditCheck.Status) {
-                        activity = new CreditCheckStatusActivity(crudPlace);
+                        activity = new CreditCheckStatusViewerActivity(crudPlace);
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Profile.PaymentMethods) {
                         switch (crudPlace.getType()) {
@@ -1210,7 +1210,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         }
 
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Security.TenantSecurity) {
-                        activity = new TenantSecurityActivity(place);
+                        activity = new TenantSecurityViewerActivity(place);
 
                         // reports
                     } else if (place instanceof CrmSiteMap.Reports.AutoPayChanges) {

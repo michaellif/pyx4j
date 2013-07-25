@@ -29,7 +29,7 @@ public class CrmRoleListerViewImpl extends CrmListerViewImplBase<CrmRole> implem
         setLister(new CrmRoleLister());
     }
 
-    private static class CrmRoleLister extends AbstractLister<CrmRole> {
+    public static class CrmRoleLister extends AbstractLister<CrmRole> {
 
         public CrmRoleLister() {
             super(CrmRole.class, true);

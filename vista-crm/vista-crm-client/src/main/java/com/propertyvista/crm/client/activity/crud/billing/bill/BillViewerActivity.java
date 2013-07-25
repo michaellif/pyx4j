@@ -21,9 +21,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.bill.BillViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillCrudService;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
@@ -32,7 +32,7 @@ import com.propertyvista.domain.financial.billing.Bill;
 public class BillViewerActivity extends CrmViewerActivity<BillDataDTO> implements BillViewerView.Presenter {
 
     public BillViewerActivity(CrudAppPlace place) {
-        super(place, FinancialViewFactory.instance(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(BillViewerView.class), GWT.<BillCrudService> create(BillCrudService.class));
     }
 
     @Override

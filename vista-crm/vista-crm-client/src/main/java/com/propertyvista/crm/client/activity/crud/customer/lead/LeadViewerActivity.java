@@ -26,21 +26,21 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.LeadViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.lead.LeadCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lead.Appointment;
-import com.propertyvista.domain.tenant.lead.Lead;
 import com.propertyvista.domain.tenant.lead.Lead.ConvertToLeaseAppraisal;
+import com.propertyvista.domain.tenant.lead.Lead;
 
 public class LeadViewerActivity extends CrmViewerActivity<Lead> implements LeadViewerView.Presenter {
 
     private final ILister.Presenter<Appointment> appointmentsLister;
 
     public LeadViewerActivity(CrudAppPlace place) {
-        super(place, MarketingViewFactory.instance(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(LeadViewerView.class), GWT.<LeadCrudService> create(LeadCrudService.class));
 
         appointmentsLister = new AppointmentListerController(place, ((LeadViewerView) getView()).getAppointmentsListerView());
     }

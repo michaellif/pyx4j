@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService;
 import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
 
@@ -29,7 +29,7 @@ public class DatesPolicyListerActivity extends AbstractListerActivity<DatesPolic
     public DatesPolicyListerActivity(Place place) {
         super(place,
 
-        PolicyViewFactory.instance(DatesPolicyListerView.class),
+         CrmSite.getViewFactory().instantiate(DatesPolicyListerView.class),
 
         GWT.<AbstractListService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
 

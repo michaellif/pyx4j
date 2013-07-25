@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.YardiInterfacePolicyCrudService;
 import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
 public class YardiInterfacePolicyListerActivity extends AbstractListerActivity<YardiInterfacePolicyDTO> {
 
     public YardiInterfacePolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(YardiInterfacePolicyListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(YardiInterfacePolicyListerView.class), GWT
                 .<YardiInterfacePolicyCrudService> create(YardiInterfacePolicyCrudService.class), YardiInterfacePolicyDTO.class);
     }
 

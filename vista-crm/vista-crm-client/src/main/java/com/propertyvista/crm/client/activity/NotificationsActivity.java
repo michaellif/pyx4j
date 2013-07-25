@@ -23,16 +23,16 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.CrmRootPane;
 import com.propertyvista.crm.client.ui.NotificationsView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 
 public class NotificationsActivity extends AbstractActivity implements NotificationsView.Presenter {
 
     private final NotificationsView view;
 
     public NotificationsActivity(Place place) {
-        view = CrmVeiwFactory.instance(NotificationsView.class);
+        view = CrmSite.getViewFactory().instantiate(NotificationsView.class);
         withPlace(place);
     }
 

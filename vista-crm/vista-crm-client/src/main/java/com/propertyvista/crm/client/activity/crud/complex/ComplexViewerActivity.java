@@ -21,9 +21,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.complex.ComplexViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.client.visor.dashboard.DashboardVisorController;
 import com.propertyvista.crm.client.visor.dashboard.IDashboardVisorController;
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
@@ -36,7 +36,7 @@ public class ComplexViewerActivity extends CrmViewerActivity<ComplexDTO> impleme
 
     @SuppressWarnings("unchecked")
     public ComplexViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(ComplexViewerView.class), (AbstractCrudService<ComplexDTO>) GWT.create(ComplexCrudService.class));
 
     }
 

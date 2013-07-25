@@ -20,9 +20,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.term.LeaseTermViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.client.visor.charges.ChargesVisorController;
 import com.propertyvista.crm.rpc.services.lease.common.LeaseTermCrudService;
 import com.propertyvista.dto.LeaseTermDTO;
@@ -34,7 +34,7 @@ public class LeaseTermViewerActivity extends CrmViewerActivity<LeaseTermDTO> imp
     private Key currentLeaseId;
 
     public LeaseTermViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseTermViewerView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(LeaseTermViewerView.class), GWT.<LeaseTermCrudService> create(LeaseTermCrudService.class));
     }
 
     @Override

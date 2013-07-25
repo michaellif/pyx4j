@@ -23,7 +23,7 @@ public class LeaseAdjustmentPolicyListerViewImpl extends CrmListerViewImplBase<L
         setLister(new ChargePolicyLister());
     }
 
-    private static class ChargePolicyLister extends PolicyListerBase<LeaseAdjustmentPolicyDTO> {
+    public static class ChargePolicyLister extends PolicyListerBase<LeaseAdjustmentPolicyDTO> {
 
         public ChargePolicyLister() {
             super(LeaseAdjustmentPolicyDTO.class);

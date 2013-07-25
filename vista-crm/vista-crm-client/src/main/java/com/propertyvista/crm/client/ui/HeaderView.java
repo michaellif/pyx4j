@@ -6,7 +6,11 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.propertyvista.shared.i18n.CompiledLocale;
 
-public interface HeaderView extends IsWidget {
+
+import com.pyx4j.site.client.IsView;
+
+public interface HeaderView extends IsWidget, IsView {
+
 
     void setPresenter(Presenter presenter);
 

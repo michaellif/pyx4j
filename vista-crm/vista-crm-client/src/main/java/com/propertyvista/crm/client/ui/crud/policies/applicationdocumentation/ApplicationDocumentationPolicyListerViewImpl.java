@@ -26,7 +26,7 @@ public class ApplicationDocumentationPolicyListerViewImpl extends CrmListerViewI
         setLister(new ApplicationDocumentationPolicyLister());
     }
 
-    private static class ApplicationDocumentationPolicyLister extends PolicyListerBase<ApplicationDocumentationPolicyDTO> {
+    public static class ApplicationDocumentationPolicyLister extends PolicyListerBase<ApplicationDocumentationPolicyDTO> {
 
         public ApplicationDocumentationPolicyLister() {
             super(ApplicationDocumentationPolicyDTO.class);

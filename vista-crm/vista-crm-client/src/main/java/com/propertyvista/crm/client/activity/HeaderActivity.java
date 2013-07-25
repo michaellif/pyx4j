@@ -38,7 +38,6 @@ import com.propertyvista.common.client.config.VistaFeaturesCustomizationClient;
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.login.GetSatisfaction;
 import com.propertyvista.crm.client.ui.HeaderView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Financial;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
@@ -51,7 +50,7 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
     private final HeaderView view;
 
     public HeaderActivity(Place place) {
-        view = CrmVeiwFactory.instance(HeaderView.class);
+        view = CrmSite.getViewFactory().instantiate(HeaderView.class);
         view.setPresenter(this);
         withPlace(place);
     }

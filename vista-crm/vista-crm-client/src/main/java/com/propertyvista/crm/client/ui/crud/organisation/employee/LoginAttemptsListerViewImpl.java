@@ -31,7 +31,7 @@ public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAtte
         setLister(new LoginAttemptsLister());
     }
 
-    private class LoginAttemptsLister extends AbstractLister<LoginAttemptDTO> {
+    public static class LoginAttemptsLister extends AbstractLister<LoginAttemptDTO> {
 
         public LoginAttemptsLister() {
             super(LoginAttemptDTO.class);

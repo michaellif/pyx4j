@@ -19,9 +19,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.BuildingEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.BuildingCrudService;
 import com.propertyvista.domain.PublicVisibilityType;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -30,7 +30,7 @@ import com.propertyvista.dto.BuildingDTO;
 public class BuildingEditorActivity extends CrmEditorActivity<BuildingDTO> implements BuildingEditorView.Presenter {
 
     public BuildingEditorActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class), BuildingDTO.class);
+        super(place,  CrmSite.getViewFactory().instantiate(BuildingEditorView.class), GWT.<BuildingCrudService> create(BuildingCrudService.class), BuildingDTO.class);
     }
 
     @Override

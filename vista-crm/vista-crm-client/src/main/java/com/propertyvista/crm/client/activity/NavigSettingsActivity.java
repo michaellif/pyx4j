@@ -26,8 +26,8 @@ import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.NavigView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Security;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Settings;
@@ -43,7 +43,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
     private final NavigView view;
 
     public NavigSettingsActivity(Place place) {
-        view = CrmVeiwFactory.instance(NavigView.class);
+        view = CrmSite.getViewFactory().instantiate(NavigView.class);
         view.setPresenter(this);
         withPlace(place);
     }

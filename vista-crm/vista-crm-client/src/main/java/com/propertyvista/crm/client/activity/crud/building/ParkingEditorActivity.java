@@ -20,9 +20,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.dto.ParkingDTO;
 
@@ -30,7 +30,7 @@ public class ParkingEditorActivity extends CrmEditorActivity<ParkingDTO> impleme
 
     @SuppressWarnings("unchecked")
     public ParkingEditorActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(ParkingEditorView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(ParkingEditorView.class), (AbstractCrudService<ParkingDTO>) GWT.create(ParkingCrudService.class),
                 ParkingDTO.class);
     }
 

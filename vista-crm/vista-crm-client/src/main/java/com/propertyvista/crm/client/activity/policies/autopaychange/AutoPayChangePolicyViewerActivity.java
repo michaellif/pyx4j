@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy.AutoPayChangePolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.AutoPayChangePolicyCrudService;
 import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
 
@@ -28,7 +28,7 @@ public class AutoPayChangePolicyViewerActivity extends CrmViewerActivity<AutoPay
     public AutoPayChangePolicyViewerActivity(CrudAppPlace place) {
         super(place,
 
-        PolicyViewFactory.instance(AutoPayChangePolicyViewerView.class),
+         CrmSite.getViewFactory().instantiate(AutoPayChangePolicyViewerView.class),
 
         GWT.<AutoPayChangePolicyCrudService> create(AutoPayChangePolicyCrudService.class));
     }

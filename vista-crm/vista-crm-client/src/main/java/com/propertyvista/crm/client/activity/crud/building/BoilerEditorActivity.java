@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.mech.BoilerEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.mech.BoilerCrudService;
 import com.propertyvista.dto.BoilerDTO;
 
@@ -28,7 +28,7 @@ public class BoilerEditorActivity extends CrmEditorActivity<BoilerDTO> {
 
     @SuppressWarnings("unchecked")
     public BoilerEditorActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(BoilerEditorView.class), (AbstractCrudService<BoilerDTO>) GWT.create(BoilerCrudService.class),
                 BoilerDTO.class);
 
     }

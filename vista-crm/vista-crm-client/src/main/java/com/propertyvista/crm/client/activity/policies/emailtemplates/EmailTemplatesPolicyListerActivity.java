@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
 public class EmailTemplatesPolicyListerActivity extends AbstractListerActivity<EmailTemplatesPolicyDTO> {
 
     public EmailTemplatesPolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(EmailTemplatesPolicyListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(EmailTemplatesPolicyListerView.class), GWT
                 .<EmailTemplatesPolicyCrudService> create(EmailTemplatesPolicyCrudService.class), EmailTemplatesPolicyDTO.class);
     }
 

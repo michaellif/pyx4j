@@ -38,7 +38,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
-import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.TenantPasswordChangeService;
 import com.propertyvista.crm.rpc.services.organization.ManagedCrmUserService;
@@ -57,7 +57,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     private final String userName;
 
     public PasswordChangeActivity(Place place) {
-        view = SecurityViewFactory.instance(PasswordChangeView.class);
+        view = CrmSite.getViewFactory().instantiate(PasswordChangeView.class);
         view.setPresenter(this);
 
         try {

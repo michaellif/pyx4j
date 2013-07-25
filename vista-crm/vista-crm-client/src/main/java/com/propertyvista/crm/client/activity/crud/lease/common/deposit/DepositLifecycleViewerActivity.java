@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.lease.common.deposit.DepositLifecycleViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.common.DepositLifecycleCrudService;
 import com.propertyvista.dto.DepositLifecycleDTO;
 
 public class DepositLifecycleViewerActivity extends CrmViewerActivity<DepositLifecycleDTO> implements DepositLifecycleViewerView.Presenter {
 
     public DepositLifecycleViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(DepositLifecycleViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(DepositLifecycleViewerView.class), GWT
                 .<AbstractCrudService<DepositLifecycleDTO>> create(DepositLifecycleCrudService.class));
     }
 }

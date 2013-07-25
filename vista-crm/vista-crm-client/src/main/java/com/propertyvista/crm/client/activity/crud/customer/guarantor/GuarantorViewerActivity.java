@@ -23,9 +23,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.guarantor.GuarantorViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.customer.GuarantorCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -38,7 +38,7 @@ public class GuarantorViewerActivity extends CrmViewerActivity<GuarantorDTO> imp
     private Customer screeningCustomer;
 
     public GuarantorViewerActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(GuarantorViewerView.class), GWT.<GuarantorCrudService> create(GuarantorCrudService.class));
     }
 
     @Override

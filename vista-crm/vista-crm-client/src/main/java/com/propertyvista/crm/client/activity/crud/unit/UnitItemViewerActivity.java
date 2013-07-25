@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.unit.UnitItemViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.unit.UnitItemCrudService;
 import com.propertyvista.domain.property.asset.unit.AptUnitItem;
 
@@ -28,6 +28,6 @@ public class UnitItemViewerActivity extends CrmViewerActivity<AptUnitItem> {
 
     @SuppressWarnings("unchecked")
     public UnitItemViewerActivity(CrudAppPlace place) {
-        super(place, UnitViewFactory.instance(UnitItemViewerView.class), (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(UnitItemViewerView.class), (AbstractCrudService<AptUnitItem>) GWT.create(UnitItemCrudService.class));
     }
 }

@@ -28,11 +28,11 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.HandledErrorAsyncCallback;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.lease.common.LeaseViewerActivityBase;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
-import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO.Action;
+import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -46,7 +46,7 @@ public class LeaseApplicationViewerActivity extends LeaseViewerActivityBase<Leas
 
     @SuppressWarnings("unchecked")
     public LeaseApplicationViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
+        super(place,  CrmSite.getViewFactory().instantiate(LeaseApplicationViewerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationViewerCrudService.class));
     }
 

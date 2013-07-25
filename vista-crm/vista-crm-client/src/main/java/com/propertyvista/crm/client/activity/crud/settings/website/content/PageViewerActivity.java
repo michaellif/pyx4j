@@ -19,17 +19,17 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageEditor;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageViewer;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.PageDescriptorCrudService;
 import com.propertyvista.domain.site.PageDescriptor;
 
 public class PageViewerActivity extends CrmViewerActivity<PageDescriptor> implements PageViewer.Presenter {
 
     public PageViewerActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(PageViewer.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(PageViewer.class), GWT.<PageDescriptorCrudService> create(PageDescriptorCrudService.class));
     }
 
     @Override

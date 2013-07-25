@@ -25,7 +25,7 @@ public class MerchantAccountListerViewImpl extends CrmListerViewImplBase<Merchan
         setLister(new MerchantAccountLister());
     }
 
-    private static class MerchantAccountLister extends AbstractLister<MerchantAccount> {
+    public static class MerchantAccountLister extends AbstractLister<MerchantAccount> {
 
         public MerchantAccountLister() {
             super(MerchantAccount.class, false);

@@ -23,7 +23,7 @@ public class EmailTemplatesPolicyListerViewImpl extends CrmListerViewImplBase<Em
         setLister(new EmailTemplatesPolicyLister());
     }
 
-    private static class EmailTemplatesPolicyLister extends PolicyListerBase<EmailTemplatesPolicyDTO> {
+    public static class EmailTemplatesPolicyLister extends PolicyListerBase<EmailTemplatesPolicyDTO> {
 
         public EmailTemplatesPolicyLister() {
             super(EmailTemplatesPolicyDTO.class);

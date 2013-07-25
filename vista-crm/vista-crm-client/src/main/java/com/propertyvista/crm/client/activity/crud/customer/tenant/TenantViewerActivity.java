@@ -24,9 +24,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.TenantViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.client.visor.maintenance.MaintenanceRequestVisorController;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
@@ -50,7 +50,7 @@ public class TenantViewerActivity extends CrmViewerActivity<TenantDTO> implement
     private Customer screeningCustomer;
 
     public TenantViewerActivity(CrudAppPlace place) {
-        super(place, CustomerViewFactory.instance(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(TenantViewerView.class), GWT.<TenantCrudService> create(TenantCrudService.class));
     }
 
     @Override

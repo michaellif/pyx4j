@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
 public class ProductTaxPolicyViewerActivity extends CrmViewerActivity<ProductTaxPolicyDTO> {
 
     public ProductTaxPolicyViewerActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(ProductTaxPolicyViewerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(ProductTaxPolicyViewerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class));
     }
 
 }

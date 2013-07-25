@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.building.catalog.concession.ConcessionEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.UnitViewFactory;
 import com.propertyvista.crm.rpc.services.building.catalog.ConcessionCrudService;
 import com.propertyvista.domain.financial.offering.Concession;
 
@@ -28,7 +28,7 @@ public class ConcessionEditorActivity extends CrmEditorActivity<Concession> {
 
     @SuppressWarnings("unchecked")
     public ConcessionEditorActivity(CrudAppPlace place) {
-        super(place, UnitViewFactory.instance(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(ConcessionEditorView.class), (AbstractCrudService<Concession>) GWT.create(ConcessionCrudService.class),
                 Concession.class);
     }
 

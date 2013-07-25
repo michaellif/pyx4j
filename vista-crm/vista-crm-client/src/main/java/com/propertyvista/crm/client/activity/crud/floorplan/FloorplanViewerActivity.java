@@ -19,9 +19,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.floorplan.FloorplanViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.FloorplanCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.FloorplanDTO;
@@ -30,7 +30,7 @@ public class FloorplanViewerActivity extends CrmViewerActivity<FloorplanDTO> imp
 
     @SuppressWarnings("unchecked")
     public FloorplanViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(FloorplanViewerView.class), (AbstractCrudService<FloorplanDTO>) GWT.create(FloorplanCrudService.class));
     }
 
     @Override

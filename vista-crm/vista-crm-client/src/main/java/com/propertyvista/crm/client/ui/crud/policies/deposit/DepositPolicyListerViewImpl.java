@@ -23,7 +23,7 @@ public class DepositPolicyListerViewImpl extends CrmListerViewImplBase<DepositPo
         setLister(new DepositPolicyLister());
     }
 
-    private static class DepositPolicyLister extends PolicyListerBase<DepositPolicyDTO> {
+    public static class DepositPolicyLister extends PolicyListerBase<DepositPolicyDTO> {
 
         public DepositPolicyLister() {
             super(DepositPolicyDTO.class);

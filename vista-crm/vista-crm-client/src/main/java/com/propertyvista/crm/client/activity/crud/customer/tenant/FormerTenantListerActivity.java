@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.FormerTenantListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.CustomerViewFactory;
 import com.propertyvista.crm.rpc.services.customer.FormerTenantCrudService;
 import com.propertyvista.dto.TenantDTO;
 
 public class FormerTenantListerActivity extends AbstractListerActivity<TenantDTO> {
 
     public FormerTenantListerActivity(Place place) {
-        super(place, CustomerViewFactory.instance(FormerTenantListerView.class), GWT.<FormerTenantCrudService> create(FormerTenantCrudService.class), TenantDTO.class);
+        super(place,  CrmSite.getViewFactory().instantiate(FormerTenantListerView.class), GWT.<FormerTenantCrudService> create(FormerTenantCrudService.class), TenantDTO.class);
     }
 
     @Override

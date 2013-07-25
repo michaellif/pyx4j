@@ -19,15 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
 public class PetPolicyListerActivity extends AbstractListerActivity<PetPolicyDTO> {
 
     public PetPolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(PetPolicyListerView.class), GWT.<AbstractListService<PetPolicyDTO>> create(PetPolicyCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(PetPolicyListerView.class), GWT.<AbstractListService<PetPolicyDTO>> create(PetPolicyCrudService.class),
                 PetPolicyDTO.class);
     }
 

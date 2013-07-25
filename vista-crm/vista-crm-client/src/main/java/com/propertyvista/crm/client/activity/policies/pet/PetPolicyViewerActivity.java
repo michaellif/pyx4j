@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.pet.PetPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.PetPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PetPolicyDTO;
 
 public class PetPolicyViewerActivity extends CrmViewerActivity<PetPolicyDTO> {
 
     public PetPolicyViewerActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(PetPolicyViewerView.class), GWT.<AbstractCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(PetPolicyViewerView.class), GWT.<AbstractCrudService<PetPolicyDTO>> create(PetPolicyCrudService.class));
     }
 
 }

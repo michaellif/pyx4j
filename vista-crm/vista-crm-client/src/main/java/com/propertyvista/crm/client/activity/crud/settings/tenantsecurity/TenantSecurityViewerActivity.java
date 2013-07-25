@@ -23,12 +23,12 @@ import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ReportDialog;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.settings.tenantsecurity.TenantSecurityView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.customer.ExportTenantsService;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 
-public class TenantSecurityActivity extends AbstractActivity implements TenantSecurityView.Presenter {
+public class TenantSecurityViewerActivity extends AbstractActivity implements TenantSecurityView.Presenter {
 
     private final I18n i18n = I18n.get(TenantSecurityView.class);
 
@@ -36,9 +36,9 @@ public class TenantSecurityActivity extends AbstractActivity implements TenantSe
 
     private final TenantSecurityView view;
 
-    public TenantSecurityActivity(Place place) {
+    public TenantSecurityViewerActivity(Place place) {
         this.place = place;
-        this.view = SettingsViewFactory.instance(TenantSecurityView.class);
+        this.view = CrmSite.getViewFactory().instantiate(TenantSecurityView.class);
     }
 
     @Override

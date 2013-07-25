@@ -18,14 +18,14 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.lease.LeaseListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseViewerCrudService;
 import com.propertyvista.dto.LeaseDTO;
 
 public class LeaseListerActivity extends AbstractListerActivity<LeaseDTO> {
 
     public LeaseListerActivity(Place place) {
-        super(place, LeaseViewFactory.instance(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
+        super(place,  CrmSite.getViewFactory().instantiate(LeaseListerView.class), GWT.<LeaseViewerCrudService> create(LeaseViewerCrudService.class), LeaseDTO.class);
     }
 }

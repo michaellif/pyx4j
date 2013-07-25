@@ -20,9 +20,9 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -33,7 +33,7 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
     private MaintenanceRequestMetadata meta;
 
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
-        super(place, MaintenanceViewFactory.instance(MaintenanceRequestEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(MaintenanceRequestEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
                 MaintenanceRequestDTO.class);
     }
 

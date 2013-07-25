@@ -15,13 +15,13 @@ package com.propertyvista.crm.client.activity.reports;
 
 import com.pyx4j.site.rpc.ReportsAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.reports.customercreditcheck.CustomerCreditCheckReportView;
-import com.propertyvista.crm.client.ui.viewfactories.ReportsViewFactory;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 
 public class CustomerCreditCheckReportActivity extends CrmReportsActivity<CustomerCreditCheckReportMetadata> {
 
     public CustomerCreditCheckReportActivity(ReportsAppPlace<CustomerCreditCheckReportMetadata> reportPlace) {
-        super(CustomerCreditCheckReportMetadata.class, reportPlace, ReportsViewFactory.instance(CustomerCreditCheckReportView.class));
+        super(CustomerCreditCheckReportMetadata.class, reportPlace, CrmSite.getViewFactory().instantiate(CustomerCreditCheckReportView.class));
     }
 }

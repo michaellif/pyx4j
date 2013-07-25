@@ -18,15 +18,15 @@ import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.producttaxes.ProductTaxPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.ProductTaxPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ProductTaxPolicyDTO;
 
 public class ProductTaxPolicyListerActivity extends AbstractListerActivity<ProductTaxPolicyDTO> {
 
     public ProductTaxPolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(ProductTaxPolicyListerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(ProductTaxPolicyListerView.class), GWT.<ProductTaxPolicyCrudService> create(ProductTaxPolicyCrudService.class),
                 ProductTaxPolicyDTO.class);
     }
 

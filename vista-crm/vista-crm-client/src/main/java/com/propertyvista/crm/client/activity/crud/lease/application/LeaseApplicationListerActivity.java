@@ -19,8 +19,8 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.lease.application.LeaseApplicationListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.services.lease.LeaseApplicationViewerCrudService;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
@@ -28,7 +28,7 @@ public class LeaseApplicationListerActivity extends AbstractListerActivity<Lease
 
     @SuppressWarnings("unchecked")
     public LeaseApplicationListerActivity(Place place) {
-        super(place, LeaseViewFactory.instance(LeaseApplicationListerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
+        super(place,  CrmSite.getViewFactory().instantiate(LeaseApplicationListerView.class), (AbstractCrudService<LeaseApplicationDTO>) GWT
                 .create(LeaseApplicationViewerCrudService.class), LeaseApplicationDTO.class);
     }
 }

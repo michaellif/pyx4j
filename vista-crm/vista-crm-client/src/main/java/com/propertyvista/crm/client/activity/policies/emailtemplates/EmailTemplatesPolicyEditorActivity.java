@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.emailtemplates.EmailTemplatesPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.EmailTemplatesPolicyCrudService;
 import com.propertyvista.domain.policy.dto.EmailTemplatesPolicyDTO;
 
 public class EmailTemplatesPolicyEditorActivity extends PolicyEditorActivityBase<EmailTemplatesPolicyDTO> {
 
     public EmailTemplatesPolicyEditorActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(EmailTemplatesPolicyEditorView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(EmailTemplatesPolicyEditorView.class), GWT
                 .<EmailTemplatesPolicyCrudService> create(EmailTemplatesPolicyCrudService.class), EmailTemplatesPolicyDTO.class);
     }
 }

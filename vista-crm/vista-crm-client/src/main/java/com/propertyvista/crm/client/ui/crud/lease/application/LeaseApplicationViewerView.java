@@ -19,6 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.rpc.shared.VoidSerializable;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.crm.client.ui.crud.lease.common.LeaseViewerViewBase;
 import com.propertyvista.crm.rpc.dto.LeaseApplicationActionDTO;
@@ -26,7 +27,7 @@ import com.propertyvista.domain.pmc.PmcEquifaxStatus;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseApplicationDTO;
 
-public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApplicationDTO> {
+public interface LeaseApplicationViewerView extends LeaseViewerViewBase<LeaseApplicationDTO>, IsView {
 
     interface Presenter extends LeaseViewerViewBase.Presenter {
 

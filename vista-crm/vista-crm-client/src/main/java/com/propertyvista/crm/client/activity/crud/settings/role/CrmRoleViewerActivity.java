@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleViewerActivity extends CrmViewerActivity<CrmRole> {
 
     public CrmRoleViewerActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(CrmRoleViewerView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(CrmRoleViewerView.class), GWT.<AbstractCrudService<CrmRole>> create(CrmRoleCrudService.class));
     }
 
 }

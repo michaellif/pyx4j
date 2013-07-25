@@ -23,7 +23,7 @@ public class LeaseBillingPolicyListerViewImpl extends CrmListerViewImplBase<Leas
         setLister(new LateFeePolicyLister());
     }
 
-    private static class LateFeePolicyLister extends PolicyListerBase<LeaseBillingPolicyDTO> {
+    public static class LateFeePolicyLister extends PolicyListerBase<LeaseBillingPolicyDTO> {
 
         public LateFeePolicyLister() {
             super(LeaseBillingPolicyDTO.class);

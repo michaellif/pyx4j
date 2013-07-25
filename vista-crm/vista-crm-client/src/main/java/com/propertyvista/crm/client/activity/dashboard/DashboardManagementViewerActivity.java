@@ -22,9 +22,9 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.dashboard.DashboardManagementViewerView;
-import com.propertyvista.crm.client.ui.viewfactories.DashboardViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataService;
@@ -37,7 +37,7 @@ public class DashboardManagementViewerActivity extends CrmViewerActivity<Dashboa
     private boolean canEdit;
 
     public DashboardManagementViewerActivity(CrudAppPlace place) {
-        super(place, DashboardViewFactory.instance(DashboardManagementViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(DashboardManagementViewerView.class), GWT
                 .<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class));
         canEdit = false;
     }

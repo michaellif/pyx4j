@@ -17,9 +17,9 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.misc.DatesPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.DatesPolicyCrudService;
 import com.propertyvista.domain.policy.dto.DatesPolicyDTO;
@@ -29,7 +29,7 @@ public class DatesPolicyEditorActivity extends PolicyEditorActivityBase<DatesPol
     public DatesPolicyEditorActivity(CrudAppPlace place) {
         super(place,
 
-        PolicyViewFactory.instance(DatesPolicyEditorView.class),
+         CrmSite.getViewFactory().instantiate(DatesPolicyEditorView.class),
 
         GWT.<AbstractPolicyCrudService<DatesPolicyDTO>> create(DatesPolicyCrudService.class),
 

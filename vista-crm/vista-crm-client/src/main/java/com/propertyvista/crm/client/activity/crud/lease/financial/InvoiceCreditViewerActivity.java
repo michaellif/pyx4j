@@ -19,15 +19,15 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.lease.financial.InvoiceCreditViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.LeaseViewFactory;
 import com.propertyvista.crm.rpc.dto.lease.financial.InvoiceCreditDTO;
 import com.propertyvista.crm.rpc.services.lease.financial.InvoiceCreditCrudService;
 
 public class InvoiceCreditViewerActivity extends AbstractViewerActivity<InvoiceCreditDTO> {
 
     public InvoiceCreditViewerActivity(CrudAppPlace place) {
-        super(place, LeaseViewFactory.instance(InvoiceCreditViewerView.class), GWT.<AbstractCrudService<InvoiceCreditDTO>> create(InvoiceCreditCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(InvoiceCreditViewerView.class), GWT.<AbstractCrudService<InvoiceCreditDTO>> create(InvoiceCreditCrudService.class));
     }
 
 }

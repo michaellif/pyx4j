@@ -18,9 +18,9 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.domain.property.vendor.Vendor;
 
@@ -29,7 +29,7 @@ public class VendorEditorActivity extends CrmEditorActivity<Vendor> {
     public VendorEditorActivity(CrudAppPlace place) {
         super(place,
 
-        OrganizationViewFactory.instance(VendorEditorView.class),
+         CrmSite.getViewFactory().instantiate(VendorEditorView.class),
 
         GWT.<AbstractCrudService<Vendor>> create(VendorCrudService.class),
 

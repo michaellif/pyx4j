@@ -19,9 +19,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.leasebilling.LeaseBillingPolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.LeaseBillingPolicyCrudService;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
@@ -29,7 +29,7 @@ import com.propertyvista.domain.policy.dto.LeaseBillingPolicyDTO;
 public class LeaseBillingPolicyEditorActivity extends PolicyEditorActivityBase<LeaseBillingPolicyDTO> {
 
     public LeaseBillingPolicyEditorActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(LeaseBillingPolicyEditorView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(LeaseBillingPolicyEditorView.class), GWT
                 .<LeaseBillingPolicyCrudService> create(LeaseBillingPolicyCrudService.class), LeaseBillingPolicyDTO.class);
     }
 

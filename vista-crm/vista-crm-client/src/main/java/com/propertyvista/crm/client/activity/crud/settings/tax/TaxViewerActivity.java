@@ -18,15 +18,15 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.tax.TaxViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.TaxCrudService;
 import com.propertyvista.domain.financial.tax.Tax;
 
 public class TaxViewerActivity extends CrmViewerActivity<Tax> {
 
     public TaxViewerActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(TaxViewerView.class), GWT.<AbstractCrudService<Tax>> create(TaxCrudService.class));
     }
 }

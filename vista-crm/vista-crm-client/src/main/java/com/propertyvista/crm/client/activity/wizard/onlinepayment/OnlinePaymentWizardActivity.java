@@ -17,8 +17,8 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmWizardActivity;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WizardViewFactory;
 import com.propertyvista.crm.client.ui.wizard.onlinepayment.OnlinePaymentWizardView;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
 import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
@@ -26,8 +26,8 @@ import com.propertyvista.dto.vista2pmc.OnlinePaymentSetupDTO;
 public class OnlinePaymentWizardActivity extends CrmWizardActivity<OnlinePaymentSetupDTO> implements OnlinePaymentWizardView.Persenter {
 
     public OnlinePaymentWizardActivity(AppPlace place) {
-        super(place, WizardViewFactory.instance(OnlinePaymentWizardView.class), GWT.<OnlinePaymentWizardService> create(OnlinePaymentWizardService.class),
-                OnlinePaymentSetupDTO.class);
+        super(place, CrmSite.getViewFactory().instantiate(OnlinePaymentWizardView.class), GWT
+                .<OnlinePaymentWizardService> create(OnlinePaymentWizardService.class), OnlinePaymentSetupDTO.class);
     }
 
 }

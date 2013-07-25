@@ -18,11 +18,12 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.activity.NavigFolder;
 
-public interface ShortCutsView extends IsWidget {
+public interface ShortCutsView extends IsWidget, IsView {
 
     public interface ShortCutsPresenter {
     }

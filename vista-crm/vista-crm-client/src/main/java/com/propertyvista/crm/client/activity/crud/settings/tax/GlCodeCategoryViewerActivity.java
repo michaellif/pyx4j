@@ -18,16 +18,16 @@ import com.google.gwt.core.client.GWT;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.financial.glcode.GlCodeCategoryViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.GlCodeCategoryCrudService;
 import com.propertyvista.domain.financial.GlCodeCategory;
 
 public class GlCodeCategoryViewerActivity extends CrmViewerActivity<GlCodeCategory> {
 
     public GlCodeCategoryViewerActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(GlCodeCategoryViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(GlCodeCategoryViewerView.class), GWT
                 .<AbstractCrudService<GlCodeCategory>> create(GlCodeCategoryCrudService.class));
     }
 }

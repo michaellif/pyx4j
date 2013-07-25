@@ -17,15 +17,15 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.dto.billing.BillingCycleDTO;
 import com.propertyvista.crm.rpc.services.billing.BillingCycleCrudService;
 
 public class BillingCycleViewerActivity extends CrmViewerActivity<BillingCycleDTO> implements BillingCycleView.Presenter {
 
     public BillingCycleViewerActivity(CrudAppPlace place) {
-        super(place, FinancialViewFactory.instance(BillingCycleView.class), GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(BillingCycleView.class), GWT.<BillingCycleCrudService> create(BillingCycleCrudService.class));
     }
 }

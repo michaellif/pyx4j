@@ -20,9 +20,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.lead.appointment.AppointmentEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.lead.AppointmentCrudService;
 import com.propertyvista.domain.tenant.lead.Appointment;
 
@@ -30,7 +30,7 @@ public class AppointmentEditorActivity extends CrmEditorActivity<Appointment> {
 
     @SuppressWarnings("unchecked")
     public AppointmentEditorActivity(CrudAppPlace place) {
-        super(place, MarketingViewFactory.instance(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(AppointmentEditorView.class), (AbstractCrudService<Appointment>) GWT.create(AppointmentCrudService.class),
                 Appointment.class);
     }
 

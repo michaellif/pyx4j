@@ -23,9 +23,9 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.billing.transfer.AggregatedTransferViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.services.financial.AggregatedTransferCrudService;
 import com.propertyvista.crm.rpc.services.financial.PaymentRecordListService;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -40,7 +40,7 @@ public class AggregatedTransferViewerActivity extends CrmViewerActivity<Aggregat
     private final ILister.Presenter<PaymentRecord> rejectedBatchPaymentsLister;
 
     public AggregatedTransferViewerActivity(CrudAppPlace place) {
-        super(place, FinancialViewFactory.instance(AggregatedTransferViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(AggregatedTransferViewerView.class), GWT
                 .<AggregatedTransferCrudService> create(AggregatedTransferCrudService.class));
 
         paymentLister = new ListerController<PaymentRecord>(((AggregatedTransferViewerView) getView()).getPaymentsListerView(),

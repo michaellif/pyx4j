@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.idassignment.IdAssignmentPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.IdAssignmentPolicyCrudService;
 import com.propertyvista.domain.policy.dto.IdAssignmentPolicyDTO;
 
 public class IdAssignmentPolicyViewerActivity extends CrmViewerActivity<IdAssignmentPolicyDTO> {
 
     public IdAssignmentPolicyViewerActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(IdAssignmentPolicyViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(IdAssignmentPolicyViewerView.class), GWT
                 .<IdAssignmentPolicyCrudService> create(IdAssignmentPolicyCrudService.class));
     }
 }

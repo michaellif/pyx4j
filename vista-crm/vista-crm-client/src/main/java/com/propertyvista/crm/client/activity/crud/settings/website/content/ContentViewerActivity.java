@@ -19,10 +19,10 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.ContentViewer;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.pages.PageEditor;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 import com.propertyvista.crm.rpc.CrmSiteMap.Administration.Website;
 import com.propertyvista.crm.rpc.services.admin.SiteContentCrudService;
@@ -31,7 +31,7 @@ import com.propertyvista.dto.SiteDescriptorDTO;
 public class ContentViewerActivity extends CrmViewerActivity<SiteDescriptorDTO> implements ContentViewer.Presenter {
 
     public ContentViewerActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(ContentViewer.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(ContentViewer.class), GWT.<SiteContentCrudService> create(SiteContentCrudService.class));
     }
 
     @Override

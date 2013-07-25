@@ -32,6 +32,10 @@ public class TenantLister extends AbstractLister<TenantDTO> {
 
     private Button padFileUpload;
 
+    public TenantLister() {
+        this(false);
+    }
+
     public TenantLister(boolean addDownloadListOfTenantsWithouPortalAccess) {
         super(TenantDTO.class, false);
 

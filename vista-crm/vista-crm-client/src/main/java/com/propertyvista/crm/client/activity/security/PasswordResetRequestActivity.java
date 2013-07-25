@@ -20,14 +20,14 @@ import com.pyx4j.security.rpc.AuthenticationService;
 
 import com.propertyvista.common.client.ui.components.login.AbstractPasswordResetRequestActivity;
 import com.propertyvista.common.client.ui.components.login.PasswordResetRequestView;
-import com.propertyvista.crm.client.ui.viewfactories.SecurityViewFactory;
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.pub.CrmAuthenticationService;
 
 public class PasswordResetRequestActivity extends AbstractPasswordResetRequestActivity implements PasswordResetRequestView.PasswordResetRequestPresenter {
 
     public PasswordResetRequestActivity(Place place) {
-        super(place, SecurityViewFactory.instance(PasswordResetRequestView.class), GWT.<AuthenticationService> create(CrmAuthenticationService.class),
+        super(place, CrmSite.getViewFactory().instantiate(PasswordResetRequestView.class), GWT.<AuthenticationService> create(CrmAuthenticationService.class),
                 new CrmSiteMap.Login());
     }
 }

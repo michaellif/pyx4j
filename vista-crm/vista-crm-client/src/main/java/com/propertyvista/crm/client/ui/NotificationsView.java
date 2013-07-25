@@ -17,7 +17,11 @@ import java.util.List;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-public interface NotificationsView extends IsWidget {
+
+import com.pyx4j.site.client.IsView;
+
+public interface NotificationsView extends IsWidget, IsView {
+
 
     public interface Presenter {
 

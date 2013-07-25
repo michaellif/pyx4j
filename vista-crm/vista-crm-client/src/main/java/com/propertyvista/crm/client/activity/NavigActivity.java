@@ -34,11 +34,11 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.event.BoardUpdateEvent;
 import com.propertyvista.crm.client.event.BoardUpdateHandler;
 import com.propertyvista.crm.client.resources.CrmImages;
 import com.propertyvista.crm.client.ui.NavigView;
-import com.propertyvista.crm.client.ui.viewfactories.CrmVeiwFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.services.dashboard.DashboardMetadataCrudService;
 import com.propertyvista.domain.dashboard.DashboardMetadata;
@@ -74,7 +74,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
 
         dashboardMetadataCrudService = GWT.<DashboardMetadataCrudService> create(DashboardMetadataCrudService.class);
 
-        view = CrmVeiwFactory.instance(NavigView.class);
+        view = CrmSite.getViewFactory().instantiate(NavigView.class);
         view.setPresenter(this);
     }
 

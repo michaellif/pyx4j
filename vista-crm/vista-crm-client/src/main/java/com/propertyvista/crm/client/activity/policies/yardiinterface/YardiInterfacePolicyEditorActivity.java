@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
 import com.propertyvista.crm.client.ui.crud.policies.yardiinterface.YardiInterfacePolicyEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.YardiInterfacePolicyCrudService;
 import com.propertyvista.domain.policy.dto.YardiInterfacePolicyDTO;
 
 public class YardiInterfacePolicyEditorActivity extends PolicyEditorActivityBase<YardiInterfacePolicyDTO> {
 
     public YardiInterfacePolicyEditorActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(YardiInterfacePolicyEditorView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(YardiInterfacePolicyEditorView.class), GWT
                 .<YardiInterfacePolicyCrudService> create(YardiInterfacePolicyCrudService.class), YardiInterfacePolicyDTO.class);
 
     }

@@ -19,9 +19,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.organisation.employee.EmployeeEditorView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.dto.company.EmployeeDTO;
 import com.propertyvista.crm.rpc.services.organization.CrmUserService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
@@ -29,7 +29,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 public class AccountEditorActivity extends CrmEditorActivity<EmployeeDTO> implements EmployeeEditorView.Presenter {
 
     public AccountEditorActivity(CrudAppPlace place) {
-        super(place, OrganizationViewFactory.instance(EmployeeEditorView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(EmployeeEditorView.class), GWT.<AbstractCrudService<EmployeeDTO>> create(CrmUserService.class),
                 EmployeeDTO.class);
     }
 

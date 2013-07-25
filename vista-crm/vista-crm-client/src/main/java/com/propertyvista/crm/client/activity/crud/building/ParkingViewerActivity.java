@@ -19,9 +19,9 @@ import com.pyx4j.site.client.activity.ListerController;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.building.parking.ParkingViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.ParkingCrudService;
 import com.propertyvista.crm.rpc.services.building.ParkingSpotCrudService;
 import com.propertyvista.domain.property.asset.ParkingSpot;
@@ -32,7 +32,7 @@ public class ParkingViewerActivity extends CrmViewerActivity<ParkingDTO> impleme
     private final ILister.Presenter<ParkingSpot> spotLister;
 
     public ParkingViewerActivity(CrudAppPlace place) {
-        super(place, BuildingViewFactory.instance(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));
+        super(place,  CrmSite.getViewFactory().instantiate(ParkingViewerView.class), GWT.<ParkingCrudService> create(ParkingCrudService.class));
 
         spotLister = new ListerController<ParkingSpot>(((ParkingViewerView) getView()).getSpotView(),
                 GWT.<ParkingSpotCrudService> create(ParkingSpotCrudService.class), ParkingSpot.class);

@@ -20,8 +20,8 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MaintenanceViewFactory;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -30,7 +30,7 @@ public class MaintenanceRequestListerActivity extends AbstractListerActivity<Mai
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestListerActivity(Place place) {
-        super(place, MaintenanceViewFactory.instance(MaintenanceRequestListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
+        super(place,  CrmSite.getViewFactory().instantiate(MaintenanceRequestListerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
     }
 

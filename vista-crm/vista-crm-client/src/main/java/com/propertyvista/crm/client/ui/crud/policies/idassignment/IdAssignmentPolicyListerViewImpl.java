@@ -23,7 +23,7 @@ public class IdAssignmentPolicyListerViewImpl extends CrmListerViewImplBase<IdAs
         setLister(new IdAssignmentPolicyLister());
     }
 
-    private static class IdAssignmentPolicyLister extends PolicyListerBase<IdAssignmentPolicyDTO> {
+    public static class IdAssignmentPolicyLister extends PolicyListerBase<IdAssignmentPolicyDTO> {
 
         public IdAssignmentPolicyLister() {
             super(IdAssignmentPolicyDTO.class);

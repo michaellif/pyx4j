@@ -28,8 +28,8 @@ import com.pyx4j.site.client.ReportDialog;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.billing.cycle.BillingCycleBillListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.FinancialViewFactory;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.crm.rpc.dto.billing.BillDataDTO;
 import com.propertyvista.crm.rpc.services.billing.BillPrintService;
@@ -44,7 +44,7 @@ public class BillingCycleBillListerActivity extends AbstractListerActivity<BillD
     private Bill.BillStatus billStatusValue;
 
     public BillingCycleBillListerActivity(AppPlace place) {
-        super(place, FinancialViewFactory.instance(BillingCycleBillListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(BillingCycleBillListerView.class), GWT
                 .<BillingCycleBillListService> create(BillingCycleBillListService.class), BillDataDTO.class);
 
         String val;

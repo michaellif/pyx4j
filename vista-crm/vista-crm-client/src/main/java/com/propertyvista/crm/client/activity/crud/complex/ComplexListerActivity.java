@@ -21,8 +21,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 import com.pyx4j.site.client.ui.prime.lister.ILister;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.complex.ComplexListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.BuildingViewFactory;
 import com.propertyvista.crm.rpc.services.building.ComplexCrudService;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.ComplexDTO;
@@ -31,7 +31,7 @@ public class ComplexListerActivity extends AbstractListerActivity<ComplexDTO> {
 
     @SuppressWarnings("unchecked")
     public ComplexListerActivity(Place place) {
-        super(place, (ILister<ComplexDTO>) BuildingViewFactory.instance(ComplexListerView.class), (AbstractCrudService<ComplexDTO>) GWT
+        super(place, (ILister<ComplexDTO>)  CrmSite.getViewFactory().instantiate(ComplexListerView.class), (AbstractCrudService<ComplexDTO>) GWT
                 .create(ComplexCrudService.class), ComplexDTO.class);
     }
 

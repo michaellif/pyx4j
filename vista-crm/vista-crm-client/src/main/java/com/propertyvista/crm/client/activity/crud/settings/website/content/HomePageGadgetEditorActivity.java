@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.settings.website.content.gadgets.HomePageGadgetEditor;
-import com.propertyvista.crm.client.ui.crud.viewfactories.WebsiteViewFactory;
 import com.propertyvista.crm.rpc.services.HomePageGadgetCrudService;
 import com.propertyvista.domain.site.gadgets.HomePageGadget;
 
 public class HomePageGadgetEditorActivity extends CrmEditorActivity<HomePageGadget> implements HomePageGadgetEditor.Presenter {
 
     public HomePageGadgetEditorActivity(CrudAppPlace place) {
-        super(place, WebsiteViewFactory.instance(HomePageGadgetEditor.class), GWT.<HomePageGadgetCrudService> create(HomePageGadgetCrudService.class),
+        super(place,  CrmSite.getViewFactory().instantiate(HomePageGadgetEditor.class), GWT.<HomePageGadgetCrudService> create(HomePageGadgetCrudService.class),
                 HomePageGadget.class);
     }
 }

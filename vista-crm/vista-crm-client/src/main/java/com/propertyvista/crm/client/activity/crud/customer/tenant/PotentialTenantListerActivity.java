@@ -20,8 +20,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.customer.tenant.PotentialTenantListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.MarketingViewFactory;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.TenantDTO;
@@ -29,7 +29,7 @@ import com.propertyvista.dto.TenantDTO;
 public class PotentialTenantListerActivity extends AbstractListerActivity<TenantDTO> {
 
     public PotentialTenantListerActivity(Place place) {
-        super(place, MarketingViewFactory.instance(PotentialTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
+        super(place,  CrmSite.getViewFactory().instantiate(PotentialTenantListerView.class), GWT.<TenantCrudService> create(TenantCrudService.class), TenantDTO.class);
 
         // filter out just potential tenants:
         TenantDTO proto = EntityFactory.getEntityPrototype(TenantDTO.class);

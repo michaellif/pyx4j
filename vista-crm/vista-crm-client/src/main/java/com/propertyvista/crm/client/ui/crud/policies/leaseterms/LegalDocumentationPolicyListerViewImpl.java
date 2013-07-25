@@ -23,7 +23,7 @@ public class LegalDocumentationPolicyListerViewImpl extends CrmListerViewImplBas
         setLister(new LegalDocumentationPolicyLister());
     }
 
-    private static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalDocumentationPolicyDTO> {
+    public static class LegalDocumentationPolicyLister extends PolicyListerBase<LegalDocumentationPolicyDTO> {
 
         public LegalDocumentationPolicyLister() {
             super(LegalDocumentationPolicyDTO.class);

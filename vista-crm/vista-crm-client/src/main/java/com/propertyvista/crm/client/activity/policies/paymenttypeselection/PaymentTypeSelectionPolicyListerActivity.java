@@ -19,15 +19,15 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.policies.paymenttypeselection.PaymentTypeSelectionPolicyListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.PaymentTypeSelectionPolicyCrudService;
 import com.propertyvista.domain.policy.dto.PaymentTypeSelectionPolicyDTO;
 
 public class PaymentTypeSelectionPolicyListerActivity extends AbstractListerActivity<PaymentTypeSelectionPolicyDTO> {
 
     public PaymentTypeSelectionPolicyListerActivity(Place place) {
-        super(place, PolicyViewFactory.instance(PaymentTypeSelectionPolicyListerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(PaymentTypeSelectionPolicyListerView.class), GWT
                 .<AbstractListService<PaymentTypeSelectionPolicyDTO>> create(PaymentTypeSelectionPolicyCrudService.class), PaymentTypeSelectionPolicyDTO.class);
     }
 

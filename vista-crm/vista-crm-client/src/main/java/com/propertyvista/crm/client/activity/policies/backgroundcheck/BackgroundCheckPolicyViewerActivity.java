@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.policies.backgroundcheck.BackgroundCheckPolicyViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.PolicyViewFactory;
 import com.propertyvista.crm.rpc.services.policies.policy.BackgroundCheckPolicyCrudService;
 import com.propertyvista.domain.policy.dto.BackgroundCheckPolicyDTO;
 
 public class BackgroundCheckPolicyViewerActivity extends CrmViewerActivity<BackgroundCheckPolicyDTO> {
 
     public BackgroundCheckPolicyViewerActivity(CrudAppPlace place) {
-        super(place, PolicyViewFactory.instance(BackgroundCheckPolicyViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(BackgroundCheckPolicyViewerView.class), GWT
                 .<BackgroundCheckPolicyCrudService> create(BackgroundCheckPolicyCrudService.class));
     }
 }

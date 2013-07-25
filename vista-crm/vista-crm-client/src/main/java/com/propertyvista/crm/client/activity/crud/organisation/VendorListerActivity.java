@@ -19,14 +19,14 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.organisation.vendor.VendorListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.OrganizationViewFactory;
 import com.propertyvista.crm.rpc.services.organization.VendorCrudService;
 import com.propertyvista.domain.property.vendor.Vendor;
 
 public class VendorListerActivity extends AbstractListerActivity<Vendor> {
 
     public VendorListerActivity(Place place) {
-        super(place, OrganizationViewFactory.instance(VendorListerView.class), GWT.<AbstractListService<Vendor>> create(VendorCrudService.class), Vendor.class);
+        super(place,  CrmSite.getViewFactory().instantiate(VendorListerView.class), GWT.<AbstractListService<Vendor>> create(VendorCrudService.class), Vendor.class);
     }
 }

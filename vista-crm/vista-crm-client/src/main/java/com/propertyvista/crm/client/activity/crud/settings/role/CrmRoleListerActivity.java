@@ -19,14 +19,14 @@ import com.google.gwt.place.shared.Place;
 import com.pyx4j.entity.rpc.AbstractListService;
 import com.pyx4j.site.client.activity.AbstractListerActivity;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.ui.crud.settings.role.CrmRoleListerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.services.admin.CrmRoleCrudService;
 import com.propertyvista.domain.security.CrmRole;
 
 public class CrmRoleListerActivity extends AbstractListerActivity<CrmRole> {
 
     public CrmRoleListerActivity(Place place) {
-        super(place, SettingsViewFactory.instance(CrmRoleListerView.class), GWT.<AbstractListService<CrmRole>> create(CrmRoleCrudService.class), CrmRole.class);
+        super(place,  CrmSite.getViewFactory().instantiate(CrmRoleListerView.class), GWT.<AbstractListService<CrmRole>> create(CrmRoleCrudService.class), CrmRole.class);
     }
 }

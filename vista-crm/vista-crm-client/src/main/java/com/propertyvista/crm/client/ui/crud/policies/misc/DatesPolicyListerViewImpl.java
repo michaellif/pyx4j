@@ -25,7 +25,7 @@ public class DatesPolicyListerViewImpl extends CrmListerViewImplBase<DatesPolicy
         setLister(new DatesPolicyLister());
     }
 
-    private static class DatesPolicyLister extends PolicyListerBase<DatesPolicyDTO> {
+    public static class DatesPolicyLister extends PolicyListerBase<DatesPolicyDTO> {
 
         public DatesPolicyLister() {
             super(DatesPolicyDTO.class);

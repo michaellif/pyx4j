@@ -23,7 +23,7 @@ public class LeaseTerminationPolicyListerViewImpl extends CrmListerViewImplBase<
         setLister(new LeaseTerminationPolicyLister());
     }
 
-    private static class LeaseTerminationPolicyLister extends PolicyListerBase<LeaseTerminationPolicyDTO> {
+    public static class LeaseTerminationPolicyLister extends PolicyListerBase<LeaseTerminationPolicyDTO> {
 
         public LeaseTerminationPolicyLister() {
             super(LeaseTerminationPolicyDTO.class);

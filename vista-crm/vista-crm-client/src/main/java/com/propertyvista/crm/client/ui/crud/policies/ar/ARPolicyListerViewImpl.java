@@ -25,7 +25,7 @@ public class ARPolicyListerViewImpl extends CrmListerViewImplBase<ARPolicyDTO> i
         setLister(new ARPolicyLister());
     }
 
-    private static class ARPolicyLister extends PolicyListerBase<ARPolicyDTO> {
+    public static class ARPolicyLister extends PolicyListerBase<ARPolicyDTO> {
 
         public ARPolicyLister() {
             super(ARPolicyDTO.class);

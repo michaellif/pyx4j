@@ -17,16 +17,16 @@ import com.google.gwt.core.client.GWT;
 
 import com.pyx4j.site.rpc.CrudAppPlace;
 
+import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.profile.paymentmethods.PmcPaymentMethodsViewerView;
-import com.propertyvista.crm.client.ui.crud.viewfactories.SettingsViewFactory;
 import com.propertyvista.crm.rpc.dto.admin.PmcPaymentMethodsDTO;
 import com.propertyvista.crm.rpc.services.admin.PmcPaymentMethodsCrudService;
 
 public class PmcPaymentMethodsViewerActivity extends CrmViewerActivity<PmcPaymentMethodsDTO> implements PmcPaymentMethodsViewerView.Presenter {
 
     public PmcPaymentMethodsViewerActivity(CrudAppPlace place) {
-        super(place, SettingsViewFactory.instance(PmcPaymentMethodsViewerView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(PmcPaymentMethodsViewerView.class), GWT
                 .<PmcPaymentMethodsCrudService> create(PmcPaymentMethodsCrudService.class));
     }
 

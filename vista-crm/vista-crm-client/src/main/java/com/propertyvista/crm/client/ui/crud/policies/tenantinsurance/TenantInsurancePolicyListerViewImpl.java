@@ -23,7 +23,7 @@ public class TenantInsurancePolicyListerViewImpl extends CrmListerViewImplBase<T
         setLister(new TenantInsurancePolicyLister());
     }
 
-    private static class TenantInsurancePolicyLister extends PolicyListerBase<TenantInsurancePolicyDTO> {
+    public static class TenantInsurancePolicyLister extends PolicyListerBase<TenantInsurancePolicyDTO> {
 
         public TenantInsurancePolicyLister() {
             super(TenantInsurancePolicyDTO.class);
