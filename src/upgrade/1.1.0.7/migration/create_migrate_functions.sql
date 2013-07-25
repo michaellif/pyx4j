@@ -33,6 +33,7 @@ BEGIN
         
         
         DROP INDEX billing_cycle_start_date_building_type_idx;
+        DROP INDEX lease_participant_participant_id_idx;
         
         /**
         ***     ======================================================================================================
@@ -77,7 +78,8 @@ BEGIN
         
         -- lease_term
         
-        ALTER TABLE lease_term ADD COLUMN unit BIGINT;
+        ALTER TABLE lease_term  ADD COLUMN unit BIGINT,
+                                ADD COLUMN yardi_lease_pk VARCHAR(500);
         
         -- yardi_interface_policy
         
@@ -192,6 +194,7 @@ BEGIN
         CREATE INDEX aging_buckets_arrears_snapshot_idx ON aging_buckets USING btree (arrears_snapshot);
         CREATE INDEX deposit_billable_item_idx ON deposit USING btree (billable_item);
         CREATE INDEX emergency_contact_customer_idx ON emergency_contact USING btree (customer);
+        CREATE INDEX lease_participant_participant_id_idx ON lease_participant USING btree (participant_id);
         CREATE INDEX lease_term_lease_idx ON lease_term USING btree (lease);
         CREATE INDEX lease_unit_idx ON lease USING btree (unit);
         CREATE INDEX product_item_product_discriminator_idx ON product_item USING btree (product_discriminator);
