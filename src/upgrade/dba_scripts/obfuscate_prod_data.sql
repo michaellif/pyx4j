@@ -101,6 +101,10 @@ BEGIN
         UPDATE  _admin_.pad_debit_record
         SET     account_number = LPAD(id::text,12,'0');
         
+        UPDATE  _admin_.tenant_sure_merchant_account 
+        SET     merchant_terminal_id = 'BIRCHWT6';
+
+        
         FOR v_schema_name IN 
         SELECT  namespace 
         FROM    _admin_.admin_pmc
