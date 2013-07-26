@@ -100,11 +100,33 @@ BEGIN
         
         UPDATE  _admin_.pad_debit_record
         SET     account_number = LPAD(id::text,12,'0');
-        
-        UPDATE  _admin_.tenant_sure_merchant_account 
-        SET     merchant_terminal_id = 'BIRCHWT6';
 
         
+        UPDATE  _admin_.scheduler_trigger
+        SET     schedule_suspended = true;
+        
+        DELETE  FROM _admin_.scheduler_trigger_notification
+        WHERE   usr = 6;
+        
+        UPDATE  _admin_.admin_pmc_yardi_credential
+        SET     service_urlbase = 'http://yardi.birchwoodsoftwaregroup.com/Voyager60/',
+                resident_transactions_service_url = NULL,
+                sys_batch_service_url = NULL,
+                maintenance_requests_service_url = NULL;
+                
+        UPDATE  _admin_.tenant_sure_merchant_account 
+        SET     merchant_terminal_id = 'BIRCHWT6';
+        
+        UPDATE  _admin_.payment_payment_details
+        SET     token = 'X';
+        
+        UPDATE  _admin_.vista_merchant_account
+        SET     merchant_terminal_id = 'BIRCHWT6',
+                bank_id = '007',
+                branch_transit_number = '65985',
+                account_number = '154587459';
+           
+                
         FOR v_schema_name IN 
         SELECT  namespace 
         FROM    _admin_.admin_pmc
@@ -113,7 +135,7 @@ BEGIN
         
                 EXECUTE 'UPDATE '||v_schema_name||'.payment_payment_details '
                         ||'SET  account_no_number = regexp_replace(account_no_obfuscated_number,''X'',''0'',''g''), '
-                        ||'     token = NULL ';
+                        ||'     token = ''X'' ';
                         
                 EXECUTE 'UPDATE '||v_schema_name||'.merchant_account m '
                         ||'SET  account_number = LPAD(m.id::text,12,''0''),'
@@ -131,23 +153,8 @@ LANGUAGE plpgsql VOLATILE;
 
 BEGIN TRANSACTION;
 
-        -- disable scheduled triggers
+       
         
-        UPDATE  _admin_.scheduler_trigger
-        SET     schedule_suspended = true;
-        
-        -- remove email notification for Yuriy
-        
-        DELETE  FROM _admin_.scheduler_trigger_notification
-        WHERE   usr = 6;
-        
-        -- set yardi to test env
-        
-        UPDATE  _admin_.admin_pmc_yardi_credential
-        SET     service_urlbase = 'http://yardi.birchwoodsoftwaregroup.com/Voyager60/',
-                resident_transactions_service_url = NULL,
-                sys_batch_service_url = NULL,
-                maintenance_requests_service_url = NULL;
                 
 COMMIT;
 
