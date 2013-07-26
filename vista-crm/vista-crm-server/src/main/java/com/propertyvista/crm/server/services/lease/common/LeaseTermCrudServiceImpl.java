@@ -69,6 +69,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         if (!dto.newParentLease().isNull()) {
             dbo.lease().set(dto.newParentLease());
             dbo.lease().currentTerm().set(dbo);
+            dbo.lease().unit().set(dbo.unit());
 
             ServerSideFactory.create(LeaseFacade.class).init(dto.newParentLease());
             dbo.lease().billingAccount().carryforwardBalance().setValue(dto.carryforwardBalance().getValue());
