@@ -20,6 +20,9 @@
  */
 package com.pyx4j.entity.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -31,6 +34,8 @@ import com.pyx4j.rpc.shared.UnRecoverableRuntimeException;
 
 public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends IEntity> extends AbstractListServiceDtoImpl<E, DTO> implements
         AbstractCrudService<DTO> {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractCrudServiceDtoImpl.class);
 
     private static final I18n i18n = I18n.get(AbstractCrudServiceDtoImpl.class);
 
@@ -60,6 +65,7 @@ public abstract class AbstractCrudServiceDtoImpl<E extends IEntity, DTO extends 
     protected E retrieve(Key entityId, RetrieveTarget retrieveTarget) {
         E entity = Persistence.secureRetrieve(entityClass, entityId);
         if (entity == null) {
+            log.error("Entity {} {} not found", entityClass, entityId);
             throw new UnRecoverableRuntimeException(i18n.tr("{0} not found", EntityFactory.getEntityMeta(entityClass).getCaption()));
         }
         return entity;
