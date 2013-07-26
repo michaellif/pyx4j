@@ -33,10 +33,10 @@ import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
@@ -54,50 +54,56 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     @Override
     public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildingsFilter, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         Vector<PaymentsSummary> summariesVector = new Vector<PaymentsSummary>();
 
         PaymentsSummaryHelper summaryHelper = new PaymentsSummaryHelper();
 
-        Iterator<Building> buildingIterator = !buildingsFilter.isEmpty() ? buildingsFilter.iterator() : Persistence.service().query(null,
-                EntityQueryCriteria.create(Building.class), AttachLevel.IdOnly);
-
-        if (PaymentsSummary.summaryByBuilding) {
-            while (buildingIterator.hasNext()) {
-                Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers);
-                for (PaymentStatus paymentStatus : paymentStatusCriteria) {
-                    PaymentsSummary summary = summaryHelper.calculateSummary(building, paymentStatus, targetDate);
-                    if (summaryHelper.hasPayments(summary)) {
-                        summariesVector.add(summary);
-                    }
-                    summary.building().set(building);
-                }
-            }
-        } else {
-            Iterator<MerchantAccount> merchantAccounts = merchantAccountIterator(buildingIterator);
-            while (merchantAccounts.hasNext()) {
-                MerchantAccount merchantAccount = merchantAccounts.next();
-                for (PaymentStatus paymentStatus : paymentStatusCriteria) {
-                    PaymentsSummary summary = summaryHelper.calculateSummary(merchantAccount, paymentStatus, targetDate);
-                    if (summaryHelper.hasPayments(summary)) {
-                        summariesVector.add(summary);
+        EntityQueryCriteria<Building> buildingCriteria = EntityQueryCriteria.create(Building.class);
+        if (!buildingsFilter.isEmpty()) {
+            buildingCriteria.in(buildingCriteria.proto().id(), buildingsFilter);
+        }
+        Iterator<Building> buildingIterator = Persistence.secureQuery(null, buildingCriteria, AttachLevel.IdOnly);
+        try {
+            if (PaymentsSummary.summaryByBuilding) {
+                while (buildingIterator.hasNext()) {
+                    Building building = Persistence.service().retrieve(Building.class, buildingIterator.next().getPrimaryKey(), AttachLevel.ToStringMembers);
+                    for (PaymentStatus paymentStatus : paymentStatusCriteria) {
+                        PaymentsSummary summary = summaryHelper.calculateSummary(building, paymentStatus, targetDate);
+                        if (summaryHelper.hasPayments(summary)) {
+                            summariesVector.add(summary);
+                        }
+                        summary.building().set(building);
                     }
                 }
+            } else {
+                Iterator<MerchantAccount> merchantAccounts = merchantAccountIterator(buildingIterator);
+                while (merchantAccounts.hasNext()) {
+                    MerchantAccount merchantAccount = merchantAccounts.next();
+                    for (PaymentStatus paymentStatus : paymentStatusCriteria) {
+                        PaymentsSummary summary = summaryHelper.calculateSummary(merchantAccount, paymentStatus, targetDate);
+                        if (summaryHelper.hasPayments(summary)) {
+                            summariesVector.add(summary);
+                        }
+                    }
+                }
+                // load detached merchant accounts
+                for (PaymentsSummary paymentsSummary : summariesVector) {
+                    paymentsSummary.merchantAccount().set(
+                            Persistence.service().retrieve(MerchantAccount.class, paymentsSummary.merchantAccount().getPrimaryKey()));
+                }
             }
-            // load detached merchant accounts
-            for (PaymentsSummary paymentsSummary : summariesVector) {
-                paymentsSummary.merchantAccount().set(Persistence.service().retrieve(MerchantAccount.class, paymentsSummary.merchantAccount().getPrimaryKey()));
-            }
+        } finally {
+            IOUtils.closeQuietlyIfCloseable(buildingIterator);
         }
 
-        EntityListCriteria<PaymentsSummary> criteria = EntityListCriteria.create(PaymentsSummary.class);
-        criteria.setSorts(sortingCriteria);
-        criteria.setPageNumber(pageNumber);
-        criteria.setPageSize(pageSize);
+        EntityListCriteria<PaymentsSummary> paymentsCriteria = EntityListCriteria.create(PaymentsSummary.class);
+        paymentsCriteria.setSorts(sortingCriteria);
+        paymentsCriteria.setPageNumber(pageNumber);
+        paymentsCriteria.setPageSize(pageSize);
 
         InMemeoryListService<PaymentsSummary> inMemoryService = new InMemeoryListService<PaymentsSummary>(summariesVector);
-        inMemoryService.list(callback, criteria);
+        inMemoryService.list(callback, paymentsCriteria);
     }
 
     @Override

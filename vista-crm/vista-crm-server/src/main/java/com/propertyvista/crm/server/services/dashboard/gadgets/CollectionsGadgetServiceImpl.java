@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.crm.rpc.dto.gadgets.CollectionsGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
@@ -44,8 +45,6 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
     @Override
     public void countData(AsyncCallback<CollectionsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         CollectionsGadgetDataDTO data = EntityFactory.create(CollectionsGadgetDataDTO.class);
 
         count(data.leasesPaidThisMonth(), buildingsFilter);
@@ -121,7 +120,9 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
         IObject<?> filter = proto.getMember(member.getPath());
 
         if (proto.leasesPaidThisMonth() == filter) {
-            member.setValue(Persistence.service().count(leasesCriteria(EntityQueryCriteria.create(Lease.class), buildingsFilter)));
+            EntityQueryCriteria<Lease> criteria = leasesCriteria(EntityQueryCriteria.create(Lease.class), buildingsFilter);
+            Persistence.applyDatasetAccessRule(criteria);
+            member.setValue(Persistence.service().count(criteria));
         } else {
             throw new RuntimeException("unknown filter preset: " + member.getPath().toString());
         }
@@ -129,15 +130,18 @@ public class CollectionsGadgetServiceImpl implements CollectionsGadgetService {
 
     private void summarize(IPrimitive<BigDecimal> member, Vector<Building> buildingsFilter) {
         BigDecimal sum = new BigDecimal("0.00");
+        EntityQueryCriteria<PaymentRecord> criteria = paymentRecordsCriteria(EntityQueryCriteria.create(PaymentRecord.class), buildingsFilter, member.getPath()
+                .toString());
 
-        ICursorIterator<PaymentRecord> i = Persistence.service().query(null,
-                paymentRecordsCriteria(EntityQueryCriteria.create(PaymentRecord.class), buildingsFilter, member.getPath().toString()), AttachLevel.Attached);
+        ICursorIterator<PaymentRecord> i = null;
         try {
+            Persistence.applyDatasetAccessRule(criteria);
+            i = Persistence.service().query(null, criteria, AttachLevel.Attached);
             while (i.hasNext()) {
                 sum = sum.add(i.next().amount().getValue());
             }
         } finally {
-            i.close();
+            IOUtils.closeQuietly(i);
         }
         member.setValue(sum);
 

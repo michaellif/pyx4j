@@ -34,6 +34,7 @@ public class CommonQueries {
         if (buildings != null && !buildings.isEmpty()) {
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
         }
+        Persistence.applyDatasetAccessRule(criteria);
         return Persistence.service().count(criteria);
     }
 }

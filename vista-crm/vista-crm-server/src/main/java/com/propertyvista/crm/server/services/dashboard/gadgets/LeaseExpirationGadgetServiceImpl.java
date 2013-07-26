@@ -44,12 +44,9 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
 
     @Override
     public void countData(AsyncCallback<LeaseExpirationGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         LeaseExpirationGadgetDataDTO gadgetData = EntityFactory.create(LeaseExpirationGadgetDataDTO.class);
 
         count(gadgetData.numOfLeasesOnMonthToMonth(), buildingsFilter);
-
         count(gadgetData.numOfLeasesEndingThisMonth(), buildingsFilter);
         count(gadgetData.numOfLeasesEndingNextMonth(), buildingsFilter);
         count(gadgetData.numOfLeasesEnding60to90Days(), buildingsFilter);
@@ -73,7 +70,9 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
     }
 
     private void count(IPrimitive<Integer> counter, Vector<Building> buildings) {
-        counter.setValue(Persistence.service().count(fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, counter)));
+        EntityQueryCriteria<Lease> criteria = fillLeaseFilterCriteria(EntityQueryCriteria.create(Lease.class), buildings, counter);
+        Persistence.applyDatasetAccessRule(criteria);
+        counter.setValue(Persistence.service().count(criteria));
     }
 
     private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillLeaseFilterCriteria(Criteria leaseCriteria, Vector<Building> buildings,
@@ -101,13 +100,15 @@ public class LeaseExpirationGadgetServiceImpl implements LeaseExpirationGadgetSe
             leaseCriteria.add(PropertyCriterion.eq(leaseCriteria.proto().currentTerm().type(), LeaseTerm.Type.Periodic));
             leaseCriteria.add(PropertyCriterion.isNull(leaseCriteria.proto().leaseTo()));
         } else {
-            throw new RuntimeException("it's unknown to to iterpret the lease filter '" + leaseFilter.getPath().toString() + "'");
+            throw new RuntimeException("it's unknown to to interpret the lease filter '" + leaseFilter.getPath().toString() + "'");
         }
         return leaseCriteria;
     }
 
     private int numOfOccupiedUnits(Vector<Building> buildings) {
-        return Persistence.service().count(fillOccupiedUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildings));
+        EntityQueryCriteria<AptUnit> criteria = fillOccupiedUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildings);
+        Persistence.applyDatasetAccessRule(criteria);
+        return Persistence.service().count(criteria);
     }
 
     private <Criteria extends EntityQueryCriteria<? extends AptUnit>> Criteria fillOccupiedUnitsCriteria(Criteria criteria, Vector<Building> buildings) {

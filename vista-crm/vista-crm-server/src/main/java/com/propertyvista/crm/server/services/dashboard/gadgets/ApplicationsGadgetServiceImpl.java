@@ -38,8 +38,6 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
 
     @Override
     public void countData(AsyncCallback<ApplicationsGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         ApplicationsGadgetDataDTO data = EntityFactory.create(ApplicationsGadgetDataDTO.class);
 
         count(data.applications(), buildingsFilter);
@@ -81,14 +79,15 @@ public class ApplicationsGadgetServiceImpl implements ApplicationsGadgetService 
         } else if (proto.cancelled() == applicationsFilterMember) {
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseApplication().status(), LeaseApplication.Status.Cancelled));
         } else {
-            throw new IllegalStateException("its uknown to to handle the following filter context: '" + applicationsFilterMember.getPath().toString() + "'");
+            throw new IllegalStateException("It's unknown to to handle the following filter context: '" + applicationsFilterMember.getPath().toString() + "'");
         }
 
         return criteria;
     }
 
     private void count(IPrimitive<Integer> member, Vector<Building> buildingsFilter) {
-        member.setValue(Persistence.service()
-                .count(applicationsCriteria(EntityQueryCriteria.create(Lease.class), buildingsFilter, member.getPath().toString())));
+        EntityQueryCriteria<Lease> criteria = applicationsCriteria(EntityQueryCriteria.create(Lease.class), buildingsFilter, member.getPath().toString());
+        Persistence.applyDatasetAccessRule(criteria);
+        member.setValue(Persistence.service().count(criteria));
     }
 }

@@ -14,22 +14,14 @@
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
 import java.util.LinkedList;
-import java.util.Vector;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractListServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsGadgetListService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentRecordForReportDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoImpl<PaymentRecord, PaymentRecordForReportDTO> implements
         PaymentRecordsGadgetListService {
@@ -52,7 +44,6 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
         bind(dtoProto.target(), dboProto.targetDate());
         bind(dtoProto.amount(), dboProto.amount());
         bind(dtoProto.lastStatusChangeDate(), dboProto.lastStatusChangeDate());
-
         bind(dtoProto.buildingFilterAnchor(), dboProto.billingAccount().lease().unit().building());
     }
 
@@ -72,19 +63,6 @@ public class PaymentRecordsGadgetListServiceImpl extends AbstractListServiceDtoI
 
         Persistence.service().retrieve(entity.merchantAccount());
         dto.merchantAccount().setValue(entity.merchantAccount().accountNumber().getValue());
-
-    }
-
-    @Override
-    public void list(AsyncCallback<EntitySearchResult<PaymentRecordForReportDTO>> callback, EntityListCriteria<PaymentRecordForReportDTO> dtoCriteria) {
-        Vector<Building> bulidings = Util.enforcePortfolio(new Vector<Building>());
-        if (bulidings.isEmpty()) {
-            //TODO Return nothing!  Fix security properly
-            dtoCriteria.eq(dtoCriteria.proto().buildingFilterAnchor(), -1L);
-        } else {
-            dtoCriteria.add(PropertyCriterion.in(dtoCriteria.proto().buildingFilterAnchor(), bulidings));
-        }
-        super.list(callback, dtoCriteria);
     }
 
     @Override

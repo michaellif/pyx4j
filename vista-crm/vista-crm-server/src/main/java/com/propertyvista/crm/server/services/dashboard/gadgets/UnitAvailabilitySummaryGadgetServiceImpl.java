@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitAvailabilitySummaryGadgetService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.RentedStatus;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitAvailabilityStatus.Vacancy;
@@ -36,38 +35,44 @@ public class UnitAvailabilitySummaryGadgetServiceImpl implements UnitAvailabilit
 
     @Override
     public void summary(AsyncCallback<Vector<UnitAvailabilityStatusSummaryLineDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
         Vector<UnitAvailabilityStatusSummaryLineDTO> summary = new Vector<UnitAvailabilityStatusSummaryLineDTO>();
 
         EntityQueryCriteria<UnitAvailabilityStatus> totalCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
+        Persistence.applyDatasetAccessRule(totalCriteria);
         int total = Persistence.service().count(totalCriteria);
 
         EntityQueryCriteria<UnitAvailabilityStatus> occupiedCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
         occupiedCriteria.add(PropertyCriterion.eq(occupiedCriteria.proto().vacancyStatus(), (Vacancy) null));
+        Persistence.applyDatasetAccessRule(occupiedCriteria);
         int occupied = Persistence.service().count(occupiedCriteria);
 
         EntityQueryCriteria<UnitAvailabilityStatus> vacantCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
         vacantCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Vacant));
+        Persistence.applyDatasetAccessRule(vacantCriteria);
         int vacant = Persistence.service().count(vacantCriteria);
 
         EntityQueryCriteria<UnitAvailabilityStatus> vacantRentedCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
         vacantRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Vacant));
         vacantRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().rentedStatus(), RentedStatus.Rented));
+        Persistence.applyDatasetAccessRule(vacantRentedCriteria);
         int vacantRented = Persistence.service().count(vacantRentedCriteria);
 
         EntityQueryCriteria<UnitAvailabilityStatus> noticeCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
         noticeCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Notice));
+        Persistence.applyDatasetAccessRule(noticeCriteria);
         int notice = Persistence.service().count(noticeCriteria);
 
         EntityQueryCriteria<UnitAvailabilityStatus> noticeRentedCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
         noticeRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Notice));
         noticeRentedCriteria.add(PropertyCriterion.eq(vacantCriteria.proto().rentedStatus(), RentedStatus.Rented));
+        Persistence.applyDatasetAccessRule(noticeRentedCriteria);
         int noticeRented = Persistence.service().count(noticeRentedCriteria);
 
         EntityQueryCriteria<UnitAvailabilityStatus> netExposureCriteria = makeAvaiabilityStatusCriteria(buildingsFilter, asOf);
         netExposureCriteria.or(PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Vacant),
                 PropertyCriterion.eq(vacantCriteria.proto().vacancyStatus(), Vacancy.Notice));
         netExposureCriteria.add(PropertyCriterion.ne(vacantCriteria.proto().rentedStatus(), RentedStatus.Rented));
+        Persistence.applyDatasetAccessRule(netExposureCriteria);
         int netExposure = Persistence.service().count(netExposureCriteria);
 
         summary.add(makeSummaryRecord(AvailabilityCategory.total, total, 1d));

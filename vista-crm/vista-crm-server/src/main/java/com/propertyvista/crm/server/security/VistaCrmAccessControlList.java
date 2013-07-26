@@ -153,7 +153,6 @@ import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusCrudService
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckStatusService;
 import com.propertyvista.crm.rpc.services.vista2pmc.CreditCheckWizardService;
 import com.propertyvista.crm.rpc.services.vista2pmc.OnlinePaymentWizardService;
-import com.propertyvista.crm.server.security.gadgets.UnitAvailabilityStatusDatasetAccessRule;
 import com.propertyvista.domain.company.Company;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Portfolio;
@@ -526,15 +525,20 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseTermParticipantDatasetAccessRule(), LeaseTermGuarantor.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseTermParticipantDatasetAccessRule(), LeaseTermTenant.class);
 
-        grant(VistaDataAccessBehavior.BuildingsAssigned, new MaintenanceDatasetAccessRule(), MaintenanceRequest.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new MaintenanceRequestDatasetAccessRule(), MaintenanceRequest.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new AggregatedTransferDatasetAccessRule(), AggregatedTransfer.class);
 
         // Data Access for Gadgets & Reports
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AptUnitDatasetAccessRule(), AptUnit.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AptUnitOccupancySegmentDatasetAccessRule(), AptUnitOccupancySegment.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new UnitAvailabilityStatusDatasetAccessRule(), UnitAvailabilityStatus.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new LeaseAgingBucketsDatasetAccessRule(), LeaseAgingBuckets.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingAgingBucketsDatasetAccessRule(), BuildingAgingBuckets.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingArrearsSnapshotDatasetAccessRule(), BuildingArrearsSnapshot.class);
+
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new LeadDatasetAccessRule(), Lead.class);
+        grant(VistaDataAccessBehavior.BuildingsAssigned, new AppointmentDatasetAccessRule(), Appointment.class);
 
         grant(VistaDataAccessBehavior.BuildingsAssigned, new CustomerCreditCheckDatasetAccessRule(), CustomerCreditCheck.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new PaymentRecordDatasetAccessRule(), PaymentRecord.class);

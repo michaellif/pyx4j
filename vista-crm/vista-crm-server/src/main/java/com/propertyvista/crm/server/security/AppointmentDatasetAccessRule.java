@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 18, 2013
- * @author VLadL
+ * Created on 2013-07-25
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.crm.server.security;
@@ -18,14 +18,17 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.contexts.Context;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.tenant.lead.Appointment;
 
-public class MaintenanceDatasetAccessRule implements DatasetAccessRule<MaintenanceRequest> {
+public class AppointmentDatasetAccessRule implements DatasetAccessRule<Appointment> {
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void applyRule(EntityQueryCriteria<MaintenanceRequest> criteria) {
-        criteria.add(PropertyCriterion.eq(criteria.proto().building().userAccess(), Context.getVisit().getUserVisit().getPrincipalPrimaryKey()));
+    public void applyRule(EntityQueryCriteria<Appointment> criteria) {
+        criteria.add(PropertyCriterion.eq(criteria.proto().lead().floorplan().building().userAccess(), Context.getVisit().getUserVisit()
+                .getPrincipalPrimaryKey()));
+
     }
+
 }

@@ -26,7 +26,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.occupancy.UnitTurnoverAnalysisManager;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.UnitTurnoverAnalysisGadgetService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerInterval;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO;
 import com.propertyvista.domain.dashboard.gadgets.availability.UnitTurnoversPerIntervalDTO.AnalysisResolution;
@@ -37,8 +36,6 @@ public class UnitTurnoverAnalysisGadgetServiceImpl implements UnitTurnoverAnalys
 
     @Override
     public void turnoverAnalysis(AsyncCallback<Vector<UnitTurnoversPerIntervalDTO>> callback, Vector<Building> buildingsFilter, LogicalDate reportDate) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         GregorianCalendar twelveMonthsAgo = new GregorianCalendar();
         twelveMonthsAgo.setTime(reportDate);
         twelveMonthsAgo.add(Calendar.MONTH, -12);

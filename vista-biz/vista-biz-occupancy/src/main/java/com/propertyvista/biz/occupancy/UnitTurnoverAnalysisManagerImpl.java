@@ -61,6 +61,7 @@ public class UnitTurnoverAnalysisManagerImpl implements UnitTurnoverAnalysisMana
         }
         criteria.ge(criteria.proto().dateTo(), from);
         criteria.le(criteria.proto().dateTo(), to);
+        Persistence.applyDatasetAccessRule(criteria);
         return Persistence.service().count(criteria);
     }
 }

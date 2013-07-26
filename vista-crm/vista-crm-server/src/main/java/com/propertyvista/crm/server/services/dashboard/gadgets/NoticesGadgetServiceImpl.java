@@ -42,8 +42,6 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
 
     @Override
     public void countData(AsyncCallback<NoticesGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
-
         NoticesGadgetDataDTO gadgetData = EntityFactory.create(NoticesGadgetDataDTO.class);
 
         countNotices(gadgetData.noticesLeavingThisMonth(), buildingsFilter);
@@ -52,7 +50,7 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         countNotices(gadgetData.noticesLeavingOver90Days(), buildingsFilter);
 
         gadgetData.totalUnits().setValue(CommonQueries.numOfUnits(buildingsFilter));
-        gadgetData.vacantUnits().setValue(Persistence.service().count(vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter)));
+        gadgetData.vacantUnits().setValue(numOfVacantUnits(buildingsFilter));
 
         callback.onSuccess(gadgetData);
     }
@@ -69,7 +67,9 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
     }
 
     private void countNotices(IPrimitive<Integer> member, Vector<Building> buildingsFilter) {
-        member.setValue(Persistence.service().count(fillNoticesCriteria(EntityListCriteria.create(Lease.class), member, buildingsFilter)));
+        EntityListCriteria<Lease> criteria = fillNoticesCriteria(EntityListCriteria.create(Lease.class), member, buildingsFilter);
+        Persistence.applyDatasetAccessRule(criteria);
+        member.setValue(Persistence.service().count(criteria));
     }
 
     private <Criteria extends EntityQueryCriteria<? extends Lease>> Criteria fillNoticesCriteria(Criteria criteria, IObject<?> noticesFilterPreset,
@@ -119,6 +119,12 @@ public class NoticesGadgetServiceImpl implements NoticesGadgetService {
         LogicalDate today = new LogicalDate(SystemDateManager.getDate());
         criteria.add(PropertyCriterion.le(criteria.proto()._availableForRent(), today));
         return criteria;
+    }
+
+    private Integer numOfVacantUnits(Vector<Building> buildingsFilter) {
+        EntityQueryCriteria<AptUnit> criteria = vacantUnitsCriteria(EntityQueryCriteria.create(AptUnit.class), buildingsFilter);
+        Persistence.applyDatasetAccessRule(criteria);
+        return Persistence.service().count(criteria);
     }
 
 }

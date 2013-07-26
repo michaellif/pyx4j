@@ -89,7 +89,6 @@ public class ArrearsReportServiceImpl implements ArrearsReportService {
     @Override
     public void leaseArrearsRoster(AsyncCallback<EntitySearchResult<LeaseArrearsSnapshotDTO>> callback, Vector<Building> buildingsFilter, LogicalDate asOf,
             ARCode.Type arrearsCategory, Vector<Sort> sortingCriteria, int pageNumber, int pageSize) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         EntityDto2DboCriteriaConverter<LeaseArrearsSnapshot, LeaseArrearsSnapshotDTO> criteriaConverter = createCriteriaConverter(arrearsCategory);
         Collection<Criterion> customCriteria = new Vector<Criterion>(); // reserved for future use

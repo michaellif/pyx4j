@@ -14,35 +14,11 @@
 package com.propertyvista.crm.server.services.dashboard.util;
 
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Vector;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
-
-import com.propertyvista.domain.property.asset.building.Building;
 
 public class Util {
-
-    /**
-     * @return building stubs that are in portfolio of the current user
-     * @deprecated TODO remove this function. Each class should have its own security adapter
-     */
-    @Deprecated
-    public static Vector<Building> enforcePortfolio(List<Building> buildingsFilter) {
-        Vector<Building> enforcedBuildingsFilter = new Vector<Building>();
-
-        EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
-        if (!buildingsFilter.isEmpty()) {
-            criteria.add(PropertyCriterion.in(criteria.proto().id(), buildingsFilter));
-        }
-        enforcedBuildingsFilter.addAll(Persistence.secureQuery(criteria, AttachLevel.IdOnly));
-        return enforcedBuildingsFilter;
-    }
 
     public static LogicalDate dayOfCurrentTransaction() {
         return new LogicalDate(SystemDateManager.getDate());

@@ -31,7 +31,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.crm.rpc.dto.gadgets.MaintenanceGadgetDataDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.MaintenanceGadgetService;
-import com.propertyvista.crm.server.services.dashboard.util.Util;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -42,7 +41,6 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
 
     @Override
     public void countData(AsyncCallback<MaintenanceGadgetDataDTO> callback, Vector<Building> buildingsFilter) {
-        buildingsFilter = Util.enforcePortfolio(buildingsFilter);
 
         MaintenanceGadgetDataDTO summary = EntityFactory.create(MaintenanceGadgetDataDTO.class);
 
@@ -63,7 +61,10 @@ public class MaintenanceGadgetServiceImpl implements MaintenanceGadgetService {
 
     private void count(IPrimitive<Integer> member, Vector<Building> buildingsFilter) {
         IObject<?> protoMember = EntityFactory.getEntityPrototype(MaintenanceGadgetDataDTO.class).getMember(member.getPath());
-        member.setValue(Persistence.service().count(fillCriteria(EntityQueryCriteria.create(MaintenanceRequest.class), buildingsFilter, protoMember)));
+        EntityQueryCriteria<MaintenanceRequest> criteria = fillCriteria(EntityQueryCriteria.create(MaintenanceRequest.class), buildingsFilter, protoMember);
+
+        Persistence.applyDatasetAccessRule(criteria);
+        member.setValue(Persistence.service().count(criteria));
     }
 
     <Criteria extends EntityQueryCriteria<? extends MaintenanceRequest>> Criteria fillCriteria(Criteria criteria, Vector<Building> buildingsFilter,
