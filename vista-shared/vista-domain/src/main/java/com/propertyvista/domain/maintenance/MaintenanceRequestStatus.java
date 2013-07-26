@@ -37,6 +37,17 @@ public interface MaintenanceRequestStatus extends IEntity {
             return EnumSet.of(Resolved, Cancelled);
         }
 
+        public Set<StatusPhase> transitions() {
+            switch (this) {
+            case Submitted:
+                return EnumSet.of(Scheduled, Resolved, Cancelled);
+            case Scheduled:
+                return EnumSet.of(Resolved, Cancelled);
+            default:
+                return EnumSet.noneOf(StatusPhase.class);
+            }
+        }
+
         @Override
         public String toString() {
             return I18nEnum.toString(this);

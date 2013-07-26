@@ -13,6 +13,9 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.MenuItem;
@@ -42,38 +45,12 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     private MaintenanceRequestMetadata categoryMeta;
 
-    private final MenuItem scheduleAction;
-
-    private final MenuItem resolveAction;
+    private final Map<StatusPhase, MenuItem> transitionActions;
 
     private final MenuItem rateAction;
 
-    private final MenuItem cancelAction;
-
     public MaintenanceRequestViewerViewImpl() {
         setForm(new MaintenanceRequestForm(this));
-
-        scheduleAction = new MenuItem(i18n.tr("Schedule..."), new Command() {
-            @Override
-            public void execute() {
-                new ScheduleBox() {
-                    @Override
-                    public boolean onClickOk() {
-                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue().date().getValue(), getValue().time().getValue());
-                        return true;
-                    }
-                }.show();
-            }
-        });
-        addAction(scheduleAction);
-
-        resolveAction = new MenuItem(i18n.tr("Resolve"), new Command() {
-            @Override
-            public void execute() {
-                ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction();
-            }
-        });
-        addAction(resolveAction);
 
         rateAction = new MenuItem(i18n.tr("Rate..."), new Command() {
             @Override
@@ -89,7 +66,26 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         });
         addAction(rateAction);
 
-        cancelAction = new MenuItem(i18n.tr("Cancel"), new Command() {
+        transitionActions = new HashMap<StatusPhase, MenuItem>();
+        transitionActions.put(StatusPhase.Scheduled, new MenuItem(i18n.tr("Schedule..."), new Command() {
+            @Override
+            public void execute() {
+                new ScheduleBox() {
+                    @Override
+                    public boolean onClickOk() {
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue().date().getValue(), getValue().time().getValue());
+                        return true;
+                    }
+                }.show();
+            }
+        }));
+        transitionActions.put(StatusPhase.Resolved, new MenuItem(i18n.tr("Resolve"), new Command() {
+            @Override
+            public void execute() {
+                ((MaintenanceRequestViewerView.Presenter) getPresenter()).resolveAction();
+            }
+        }));
+        transitionActions.put(StatusPhase.Cancelled, new MenuItem(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 MessageDialog.confirm(i18n.tr("Cancel"), i18n.tr("Do you really want to cancel the request?"), new Command() {
@@ -99,8 +95,11 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     }
                 });
             }
-        });
-        addAction(cancelAction);
+        }));
+
+        for (MenuItem action : transitionActions.values()) {
+            addAction(action);
+        }
     }
 
     @Override
@@ -121,10 +120,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     @Override
     public void reset() {
-        setActionVisible(scheduleAction, false);
-        setActionVisible(resolveAction, false);
         setActionVisible(rateAction, false);
-        setActionVisible(cancelAction, false);
+        for (MenuItem action : transitionActions.values()) {
+            setActionVisible(action, false);
+        }
         super.reset();
     }
 
@@ -134,11 +133,10 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
         StatusPhase phase = value.status().phase().getValue();
         setEditingVisible(!StatusPhase.closed().contains(phase));
-
-        setActionVisible(scheduleAction, phase == StatusPhase.Submitted || phase == StatusPhase.Scheduled);
-        setActionVisible(resolveAction, phase == StatusPhase.Scheduled);
+        for (StatusPhase transition : phase.transitions()) {
+            setActionVisible(transitionActions.get(transition), true);
+        }
         setActionVisible(rateAction, phase == StatusPhase.Resolved);
-        setActionVisible(cancelAction, phase != StatusPhase.Cancelled && phase != StatusPhase.Resolved);
     }
 
     // Internals:
@@ -161,8 +159,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 public IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().date()), 10).labelWidth(7).build());
-                    main.setWidget(2, 0, new FormDecoratorBuilder(inject(proto().time()), 10).labelWidth(7).build());
+                    main.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().date()), 10, true).build());
+                    main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().time()), 10, true).build());
 
                     return main;
                 }
@@ -202,8 +200,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 public IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().rating()), 3).labelWidth(7).build());
-                    main.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().description()), 20).labelWidth(7).build());
+                    main.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().rating()), 3, true).build());
+                    main.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 20, true).build());
 
                     // tweaking:
                     get(proto().rating()).setTooltip(i18n.tr("Set value in range from 1 to 5..."));
