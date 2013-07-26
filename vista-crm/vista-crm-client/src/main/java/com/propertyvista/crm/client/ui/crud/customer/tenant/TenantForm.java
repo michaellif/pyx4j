@@ -140,7 +140,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     private TwoColumnFlexFormPanel createTenantInsuranceTab(String title) {
         TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel(title);
         int row = -1;
-        tabPanel.setH1(++row, 0, 1, i18n.tr("Requirements"));
+        tabPanel.setH1(++row, 0, 2, i18n.tr("Requirements"));
         tabPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().minimumRequiredLiability()), true).build());
         get(proto().minimumRequiredLiability()).setEditable(false);
 
@@ -148,7 +148,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
         noRequirementsLabel.setVisible(false);
         tabPanel.setWidget(++row, 0, 2, noRequirementsLabel);
 
-        tabPanel.setH1(++row, 0, 1, i18n.tr("Insurance Certificates"));
+        tabPanel.setH1(++row, 0, 2, i18n.tr("Insurance Certificates"));
         tabPanel.setWidget(++row, 0, 2, inject(proto().insuranceCertificates(), new TenantInsuranceCertificateFolder(null)));
         return tabPanel;
     }
