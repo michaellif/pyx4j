@@ -24,12 +24,15 @@ import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Vector;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.entity.rdb.PersistenceContext;
 import com.pyx4j.entity.rdb.dialect.Dialect;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion.Restriction;
 import com.pyx4j.entity.shared.meta.MemberMeta;
 
 class ValueAdapterString extends ValueAdapterPrimitive {
@@ -85,6 +88,48 @@ class ValueAdapterString extends ValueAdapterPrimitive {
             return null;
         } else {
             return value;
+        }
+    }
+
+    /**
+     * Adapter without size validation for Query
+     * 
+     */
+
+    private class QueryStringValueBindAdapter implements ValueBindAdapter {
+
+        @Override
+        public List<String> getColumnNames(String memberSqlName) {
+            List<String> columnNames = new Vector<String>();
+            columnNames.add(memberSqlName);
+            return columnNames;
+        }
+
+        @Override
+        public int bindValue(PersistenceContext persistenceContext, PreparedStatement stmt, int parameterIndex, Object value) throws SQLException {
+            String str = (String) value;
+            if (str == null) {
+                stmt.setNull(parameterIndex, sqlType);
+            } else {
+                int size = str.length();
+                if (size == 0) {
+                    stmt.setNull(parameterIndex, sqlType);
+                } else {
+                    stmt.setString(parameterIndex, str);
+                }
+            }
+            return 1;
+        }
+
+    }
+
+    @Override
+    public ValueBindAdapter getQueryValueBindAdapter(Restriction restriction, Object value) {
+        if (restriction == Restriction.RDB_LIKE) {
+            return new QueryStringValueBindAdapter();
+        } else {
+            // TODO Add validation  in UI.
+            return new QueryStringValueBindAdapter();
         }
     }
 
