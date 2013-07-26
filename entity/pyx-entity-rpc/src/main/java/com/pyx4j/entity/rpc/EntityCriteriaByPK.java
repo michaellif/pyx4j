@@ -23,9 +23,10 @@ package com.pyx4j.entity.rpc;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 
 /**
- * Special case criteria for EntityServices.RetrieveByPK service.
+ * Special criteria builder for retrieve by PK.
  */
 public class EntityCriteriaByPK {
 
@@ -36,22 +37,15 @@ public class EntityCriteriaByPK {
     public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass, Key primaryKey) {
         EntityQueryCriteria<T> c = new EntityQueryCriteria<T>(entityClass);
         c.eq(c.proto().id(), primaryKey);
-        return c;
-    }
-
-    public static <T extends IEntity> EntityQueryCriteria<T> create(Class<T> entityClass, T entity) {
-        EntityQueryCriteria<T> c = new EntityQueryCriteria<T>(entityClass);
-        if ((entity != null) && (entity.getPrimaryKey() != null)) {
-            c.eq(c.proto().id(), entity.getPrimaryKey());
+        if (primaryKey.isDraft()) {
+            c.setVersionedCriteria(VersionedCriteria.onlyDraft);
         }
         return c;
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends IEntity> EntityQueryCriteria<T> create(T entity) {
-        EntityQueryCriteria<T> c = new EntityQueryCriteria<T>((Class<T>) entity.getValueClass());
-        c.eq(c.proto().id(), entity.getPrimaryKey());
-        return c;
+        return create((Class<T>) entity.getValueClass(), entity.getPrimaryKey());
     }
 
 }
