@@ -59,13 +59,14 @@ public class PasswordChangeViewImpl implements PasswordChangeView {
         int row = -1;
 
         userNameLabel = new HTML();
-        content.setWidget(++row, 0, userNameLabel);
+        content.setWidget(++row, 0, 2, new HTML("&nbsp;"));
+        content.setWidget(++row, 0, 2, userNameLabel);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         form = new PasswordChangeForm();
         form.initContent();
         form.asWidget().setWidth("100%");
-        content.setWidget(++row, 0, form);
+        content.setWidget(++row, 0, 2, form);
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         FlowPanel footer = new FlowPanel();
