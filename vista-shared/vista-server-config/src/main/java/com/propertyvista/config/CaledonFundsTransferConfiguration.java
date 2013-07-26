@@ -7,33 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jul 19, 2013
+ * Created on 2013-03-01
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.domain.payment.pad;
+package com.propertyvista.config;
 
-import java.util.Locale;
+import com.pyx4j.config.server.Credentials;
 
-public enum FundsTransferType {
+public interface CaledonFundsTransferConfiguration {
 
-    PreAuthorizedDebit("PAD"),
+    String sftpHost();
 
-    DirectBankingPayment("DBP"),
+    int sftpPort();
 
-    InteracOnlinePayment("IOP");
-
-    private final String code;
-
-    FundsTransferType(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getDirectoryName(String name) {
-        return getCode().toLowerCase(Locale.ENGLISH) + "_" + name;
-    }
+    Credentials sftpCredentials();
 }

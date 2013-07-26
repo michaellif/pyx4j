@@ -43,6 +43,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaCookieLocaleResolver;
@@ -105,6 +106,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
     }
 
+    @Override
     public PropertiesConfiguration getConfigProperties() {
         if (configProperties == null) {
             configProperties = new PropertiesConfiguration(null, PropertiesConfiguration.loadProperties(new File(getConfigDirectory(), "config.properties")));
@@ -203,6 +205,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     public String getCardServiceSimulatorUrl() {
         return getConfigProperties().getValue("simulator.cardServiceSimulatorUrl",
                 "http://" + "operations" + getApplicationURLNamespace(false) + "o/" + "CardServiceSimulation");
+    }
+
+    @Override
+    public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
+        return new CaledonFundsTransferConfigurationSimulator(this);
     }
 
     @Override
@@ -430,6 +437,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         } else {
             return new File(vistaWorkDir(), "tenant-sure");
         }
+    }
+
+    @Override
+    public File getCaledonSimulatorSftpDirectory() {
+        return new File(vistaWorkDir(), "caledon-simulator-sftp");
     }
 
     @Override

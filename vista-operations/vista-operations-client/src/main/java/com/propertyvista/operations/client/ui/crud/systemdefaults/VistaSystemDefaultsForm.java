@@ -35,12 +35,13 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
 
     private void createTabs() {
         selectTab(addTab(makeEquifaxSettingsTab()));
+        addTab(makeMistaMerchantAccountTab());
         addTab(makeCaledonSettingsTab());
         addTab(makeTenantSureSettingsTab());
     }
 
     private TwoColumnFlexFormPanel makeCaledonSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Caledon"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer (Caledon)"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
         // TODO inject fees form
@@ -58,7 +59,13 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxLimit().dailyReports())).componentWidth(6).build());
         panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxLimit().dailyRequests())).componentWidth(6).build());
 
-        panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel makeMistaMerchantAccountTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Vista Accounts"));
+        int row = -1;
+        panel.setH1(++row, 0, 1, i18n.tr("Vista Merchant Account"));
         panel.setWidget(++row, 0, inject(proto().vistaMerchantAccount(), new MerchantAccountForm()));
         return panel;
     }

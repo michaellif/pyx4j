@@ -14,9 +14,12 @@
 package com.propertyvista.sshd;
 
 import java.io.File;
-import java.text.MessageFormat;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.sshd.SshServer;
 import org.apache.sshd.common.NamedFactory;
@@ -27,10 +30,16 @@ import org.apache.sshd.server.sftp.SftpSubsystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
+import com.pyx4j.essentials.j2se.CredentialsFileStorage;
+import com.pyx4j.essentials.j2se.util.FileUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.sshd.fs.SimpleFileSystemFactory;
+import com.propertyvista.config.VistaInterfaceCredentials;
+import com.propertyvista.payment.pad.simulator.PadSimSftpHelper;
+import com.propertyvista.sshd.fs.UsersFileSystemFactory;
 
 public class InterfaceSSHDServer {
 
@@ -50,9 +59,36 @@ public class InterfaceSSHDServer {
             sshd.setPort(port);
             sshd.setKeyPairProvider(new SimpleGeneratorHostKeyProvider(new File(config.getConfigDirectory(), "sshd-key.ser").getAbsolutePath()));
 
-            sshd.setPasswordAuthenticator(new SSHDPasswordAuthenticator());
+            Map<String, File> usersRootDirectories = new HashMap<String, File>();
+            Collection<Credentials> users = new ArrayList<Credentials>();
 
-            sshd.setFileSystemFactory(new SimpleFileSystemFactory(getRootDir(config)));
+            // Tenant Sure
+            {
+                Credentials credentials = CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(),
+                        VistaInterfaceCredentials.tenantSureSftpInterface));
+                users.add(credentials);
+                usersRootDirectories.put(credentials.userName, buildTenantSureRootDir(config));
+            }
+
+            if (ApplicationMode.isDevelopment()) {
+                // Caledon simulator
+                {
+                    File file = new File(config.getConfigDirectory(), VistaInterfaceCredentials.caledonSimulatorFundsTransfer);
+                    if (file.canRead()) {
+                        Credentials credentials = CredentialsFileStorage.getCredentials(file);
+                        users.add(credentials);
+                        usersRootDirectories.put(credentials.userName, PadSimSftpHelper.buildSftpRootDir());
+                    }
+                }
+                // BMO Simulator
+                {
+
+                }
+            }
+
+            sshd.setPasswordAuthenticator(new SSHDPasswordAuthenticator(users));
+
+            sshd.setFileSystemFactory(new UsersFileSystemFactory(usersRootDirectories));
 
             sshd.setCommandFactory(new ScpCommandFactory());
 
@@ -84,31 +120,16 @@ public class InterfaceSSHDServer {
         }
     }
 
-    private static File getRootDir(AbstractVistaServerSideConfiguration config) {
-        //TODO make directory configuration per user
-        File dir = config.getTenantSureInterfaceSftpDirectory();
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) {
-                log.error("Unable to create directory {}", dir.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", dir.getAbsolutePath()));
-            }
+    private static File buildTenantSureRootDir(AbstractVistaServerSideConfiguration config) {
+        try {
+            File dir = config.getTenantSureInterfaceSftpDirectory();
+            FileUtils.forceMkdir(dir);
+            FileUtils.forceMkdir(new File(dir, "hq-update"));
+            FileUtils.forceMkdir(new File(dir, "reports"));
+            return dir;
+        } catch (IOException e) {
+            throw new Error(e);
         }
 
-        File dirHqUpdate = new File(dir, "hq-update");
-        if (!dirHqUpdate.exists()) {
-            if (!dirHqUpdate.mkdirs()) {
-                log.error("Unable to create directory {}", dirHqUpdate.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", dirHqUpdate.getAbsolutePath()));
-            }
-        }
-        File dirReports = new File(dir, "reports");
-        if (!dirReports.exists()) {
-            if (!dirReports.mkdirs()) {
-                log.error("Unable to create directory {}", dirReports.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", dirReports.getAbsolutePath()));
-            }
-        }
-
-        return dir;
     }
 }

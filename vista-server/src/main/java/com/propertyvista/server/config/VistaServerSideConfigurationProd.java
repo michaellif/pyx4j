@@ -15,10 +15,12 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContext;
 
+import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.shared.config.VistaSettings;
@@ -156,5 +158,14 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     @Override
     public String getGoogleAnalyticsKey() {
         return VistaSettings.googleAnalyticsProdKey;
+    }
+
+    @Override
+    public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
+        if (VistaDeployment.isVistaProduction()) {
+            return new CaledonFundsTransferConfigurationProd(this);
+        } else {
+            throw new UserRuntimeException("FundsTransfer is disabled");
+        }
     }
 }

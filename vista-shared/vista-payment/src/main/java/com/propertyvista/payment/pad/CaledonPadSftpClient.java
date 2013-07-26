@@ -32,21 +32,18 @@ import com.jcraft.jsch.SftpException;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
 
 public class CaledonPadSftpClient {
 
     private static final Logger log = LoggerFactory.getLogger(CaledonPadSftpClient.class);
-
-    private static final String hostProd = "apato.caledoncard.com";
-
-    private static final String hostTests = "dev.birchwoodsoftwaregroup.com";
 
     private final String postDst = "in";
 
@@ -61,33 +58,17 @@ public class CaledonPadSftpClient {
         Reconciliation;
     }
 
+    private final CaledonFundsTransferConfiguration configuration;
+
+    public CaledonPadSftpClient() {
+        configuration = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonFundsTransferConfiguration();
+    }
+
     private static boolean usePadSimulator() {
-        return VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.FALSE);
+        return VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.TRUE);
     }
 
-    private static Credentials getCredentials() {
-        AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
-        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), (usePadSimulator() ? "caledon-simulator-credentials.properties"
-                : "caledon-credentials.properties")));
-    }
-
-    private static String sftpHost() {
-        if (usePadSimulator()) {
-            return hostTests;
-        } else {
-            return hostProd;
-        }
-    }
-
-    private static int sftpPort() {
-        if (usePadSimulator()) {
-            return 3322;
-        } else {
-            return 22;
-        }
-    }
-
-    private static class SftpClient implements Closeable {
+    private class SftpClient implements Closeable {
 
         JSch jsch = new JSch();
 
@@ -95,7 +76,7 @@ public class CaledonPadSftpClient {
 
         ChannelSftp channel = null;
 
-        Credentials credentials = getCredentials();
+        Credentials credentials = configuration.sftpCredentials();
 
         void connect() throws JSchException {
             File knownHosts = new File(System.getProperty("user.home") + "/.ssh", "known_hosts");
@@ -103,7 +84,7 @@ public class CaledonPadSftpClient {
                 jsch.setKnownHosts(knownHosts.getAbsolutePath());
             }
 
-            session = jsch.getSession(credentials.userName, sftpHost(), sftpPort());
+            session = jsch.getSession(credentials.userName, configuration.sftpHost(), configuration.sftpPort());
             session.setPassword(credentials.password);
             session.connect();
 
@@ -122,15 +103,15 @@ public class CaledonPadSftpClient {
         }
     }
 
-    public String sftpPut(File file) {
-        return sftpPut(file, postDst);
+    public String sftpPut(FundsTransferType fundsTransferType, File file) {
+        return sftpPut(file, fundsTransferType.getDirectoryName(postDst));
     }
 
-    public String sftpPutSim(File file) {
-        if (!CaledonPadSftpClient.usePadSimulator()) {
+    public String sftpPutSim(FundsTransferType fundsTransferType, File file) {
+        if (!usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
-        return sftpPut(file, getSrc);
+        return sftpPut(file, fundsTransferType.getDirectoryName(getSrc));
     }
 
     private String sftpPut(File file, String dst) {
@@ -141,7 +122,7 @@ public class CaledonPadSftpClient {
             client.channel.cd(dst);
             client.channel.put(file.getAbsolutePath(), file.getName());
 
-            log.info("SFTP file {} transfer completed to {}", file.getAbsolutePath(), sftpHost());
+            log.info("SFTP file {} transfer completed to {}", file.getAbsolutePath(), configuration.sftpHost());
             return null;
         } catch (SftpException e) {
             log.error("SFTP error", e);
@@ -159,7 +140,7 @@ public class CaledonPadSftpClient {
     }
 
     public List<File> receiveFilesSim(File targetDirectory) throws EFTTransportConnectionException {
-        if (!CaledonPadSftpClient.usePadSimulator()) {
+        if (!usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
         return receiveFiles(postDst, null, PadFileType.PadFile, targetDirectory);
@@ -208,7 +189,7 @@ public class CaledonPadSftpClient {
                     if ((!dst.exists()) && (!dst2.exists())) {
                         client.channel.get(rFile.getFilename(), dst.getAbsolutePath());
                         lFiles.add(dst);
-                        log.info("SFTP file {} received from {}", dst.getAbsolutePath(), sftpHost());
+                        log.info("SFTP file {} received from {}", dst.getAbsolutePath(), configuration.sftpHost());
                         // Only one file  
                         break;
                     } else {

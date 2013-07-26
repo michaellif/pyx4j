@@ -33,6 +33,7 @@ import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.domain.security.PasswordIdentity;
 
 public class PasswordEncryptorFacadeImpl implements PasswordEncryptorFacade {
@@ -44,7 +45,7 @@ public class PasswordEncryptorFacadeImpl implements PasswordEncryptorFacade {
     @Override
     public void activateDecryption() {
         AbstractVistaServerSideConfiguration serverSideConfiguration = (AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance();
-        File credentialsFile = new File(serverSideConfiguration.getConfigDirectory(), "master-credentials.properties");
+        File credentialsFile = new File(serverSideConfiguration.getConfigDirectory(), VistaInterfaceCredentials.passwordEncryptor);
         if (!credentialsFile.canRead() || credentialsFile.length() == 0) {
             saveCredentialsFile(credentialsFile, generateMasterPassword());
         }

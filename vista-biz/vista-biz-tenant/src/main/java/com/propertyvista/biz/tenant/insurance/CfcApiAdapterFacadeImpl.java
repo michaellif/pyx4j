@@ -48,6 +48,7 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
+import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
@@ -246,7 +247,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     private static Credentials getCredentials() {
         AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
-        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), "cfcprograms-tenantsure-credentials.properties"));
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), VistaInterfaceCredentials.tenantSurecCfcApi));
     }
 
     private boolean isSuccessfulCode(String code) {

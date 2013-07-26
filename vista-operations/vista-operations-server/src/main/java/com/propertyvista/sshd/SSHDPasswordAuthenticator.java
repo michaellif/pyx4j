@@ -13,29 +13,33 @@
  */
 package com.propertyvista.sshd;
 
-import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.sshd.server.PasswordAuthenticator;
 import org.apache.sshd.server.session.ServerSession;
 
 import com.pyx4j.config.server.Credentials;
-import com.pyx4j.config.server.ServerSideConfiguration;
-import com.pyx4j.essentials.j2se.CredentialsFileStorage;
-
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 class SSHDPasswordAuthenticator implements PasswordAuthenticator {
 
-    private final Credentials tenantSureCredentials;
+    Map<String, Credentials> users = new HashMap<String, Credentials>();
 
-    SSHDPasswordAuthenticator() {
-        tenantSureCredentials = CredentialsFileStorage.getCredentials(new File(((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance())
-                .getConfigDirectory(), "sftp-tenantsure-credentials.properties"));
+    SSHDPasswordAuthenticator(Collection<Credentials> credentials) {
+        for (Credentials credential : credentials) {
+            users.put(credential.userName, credential);
+        }
     }
 
     @Override
     public boolean authenticate(String username, String password, ServerSession session) {
-        return tenantSureCredentials.userName.equals(username) && tenantSureCredentials.password.equals(password);
+        Credentials credential = users.get(username);
+        if (credential == null) {
+            return false;
+        } else {
+            return credential.userName.equals(username) && credential.password.equals(password);
+        }
     }
 
 }

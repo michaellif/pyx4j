@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.NamespaceResolver;
+import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.entity.rdb.cfg.Configuration.DatabaseType;
 import com.pyx4j.essentials.server.AbstractAntiBot;
@@ -30,6 +31,7 @@ import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.shared.AclCreator;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -217,6 +219,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public File getCaledonSimulatorSftpDirectory() {
+        return null;
+    }
+
+    @Override
     public String getCardServiceSimulatorUrl() {
         return null;
     }
@@ -250,6 +257,16 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
                 return null;
             }
         };
+    }
+
+    @Override
+    public PropertiesConfiguration getConfigProperties() {
+        throw new Error("not supported in tests");
+    }
+
+    @Override
+    public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
+        throw new Error("not supported in tests");
     }
 
 }

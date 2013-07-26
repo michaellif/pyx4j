@@ -143,7 +143,7 @@ public class PadSim {
             log.error("pad write error", e);
             throw new Error(e.getMessage());
         }
-        String errorMessage = new CaledonPadSftpClient().sftpPutSim(file);
+        String errorMessage = new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
         if (errorMessage != null) {
             throw new Error(errorMessage);
         }
@@ -242,7 +242,7 @@ public class PadSim {
             log.error("pad write error", e);
             throw new Error(e.getMessage());
         }
-        String errorMessage = new CaledonPadSftpClient().sftpPutSim(file);
+        String errorMessage = new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
         if (errorMessage != null) {
             throw new Error(errorMessage);
         }
@@ -350,7 +350,7 @@ public class PadSim {
             log.error("pad write error", e);
             throw new Error(e.getMessage());
         }
-        String errorMessage = new CaledonPadSftpClient().sftpPutSim(file);
+        String errorMessage = new CaledonPadSftpClient().sftpPutSim(padFile.fundsTransferType().getValue(), file);
         if (errorMessage != null) {
             throw new Error(errorMessage);
         }

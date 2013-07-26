@@ -31,6 +31,7 @@ public class VistaSystemsSimulationConfig {
         configuration.useEquifaxSimulator().setValue(VistaDemo.isDemo() || ApplicationMode.isDevelopment());
         configuration.usePadSimulator().setValue(
                 !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification()));
+        configuration.useCardServiceSimulator().setValue(configuration.usePadSimulator().getValue());
     }
 
     public static VistaSystemsSimulationConfigDTO getConfiguration() {

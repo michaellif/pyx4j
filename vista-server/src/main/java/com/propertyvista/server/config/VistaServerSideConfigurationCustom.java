@@ -18,6 +18,9 @@ import javax.servlet.ServletContext;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
+import com.propertyvista.config.CaledonFundsTransferConfiguration;
+import com.propertyvista.config.VistaSystemsSimulationConfig;
+
 public class VistaServerSideConfigurationCustom extends VistaServerSideConfiguration {
 
     @Override
@@ -58,5 +61,14 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     @Override
     public int interfaceSSHDPort() {
         return getConfigProperties().getIntegerValue("interfaceSSHDPort", 0);
+    }
+
+    @Override
+    public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
+        if (VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.TRUE)) {
+            return new CaledonFundsTransferConfigurationCustom(this);
+        } else {
+            return new CaledonFundsTransferConfigurationProd(this);
+        }
     }
 }

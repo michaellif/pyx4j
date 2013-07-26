@@ -42,9 +42,9 @@ public class V2BPreloader extends AbstractDataPreloader {
         {
             VistaMerchantAccount ma = EntityFactory.create(VistaMerchantAccount.class);
             ma.merchantTerminalId().setValue("BIRCHWT6");
-            ma.bankId().setValue("000");
-            ma.branchTransitNumber().setValue("00000");
-            ma.accountNumber().setValue("000000000000");
+            ma.bankId().setValue("007");
+            ma.branchTransitNumber().setValue("65985");
+            ma.accountNumber().setValue("154587459");
             Persistence.service().persist(ma);
         }
         {

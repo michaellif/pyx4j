@@ -20,6 +20,7 @@ import java.util.Set;
 
 import com.pyx4j.config.server.IMailServiceConfigConfiguration;
 import com.pyx4j.config.server.LifecycleListener;
+import com.pyx4j.config.server.PropertiesConfiguration;
 import com.pyx4j.essentials.server.EssentialsServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
@@ -32,6 +33,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public File getConfigDirectory() {
         return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
     }
+
+    public abstract PropertiesConfiguration getConfigProperties();
 
     @Override
     public Collection<LifecycleListener> getLifecycleListeners() {
@@ -106,11 +109,15 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract File getTenantSureInterfaceSftpDirectory();
 
+    public abstract File getCaledonSimulatorSftpDirectory();
+
     public abstract String getTenantSureEmailSender();
 
     public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration();
 
     public abstract TenantSureConfiguration getTenantSureConfiguration();
+
+    public abstract CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration();
 
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;

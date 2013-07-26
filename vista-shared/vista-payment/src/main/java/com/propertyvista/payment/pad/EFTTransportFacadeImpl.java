@@ -62,7 +62,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
                 writer.close();
             }
 
-            String errorMessage = new CaledonPadSftpClient().sftpPut(file);
+            String errorMessage = new CaledonPadSftpClient().sftpPut(padFile.fundsTransferType().getValue(), file);
             if (errorMessage != null) {
                 throw new Error(errorMessage);
             }

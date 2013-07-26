@@ -25,6 +25,7 @@ import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 import com.pyx4j.server.mail.SMTPMailServiceConfig;
 
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.operations.domain.dev.DevelopmentUser;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.shared.config.VistaDemo;
@@ -39,7 +40,7 @@ class VistaSMTPMailServiceConfig extends SMTPMailServiceConfig {
         config.port = 465;
         config.starttls = true;
 
-        File credentialsFile = new File(sideConfiguration.getConfigDirectory(), "mail-credentials.properties");
+        File credentialsFile = new File(sideConfiguration.getConfigDirectory(), VistaInterfaceCredentials.mailSMTPvista);
 
         Map<String, String> configProperties = PropertiesConfiguration.loadProperties(credentialsFile);
         config.readProperties("mail", configProperties);
