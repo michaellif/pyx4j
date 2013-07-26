@@ -13,10 +13,24 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.test.mock.MockConfig;
 
 public class PaymentMethodPersistenceCardsTest extends PaymentMethodPersistenceTestBase {
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().setValue(Boolean.FALSE);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().setValue(Boolean.TRUE);
+        super.tearDown();
+
+    }
 
     @Override
     protected void preloadData() {
