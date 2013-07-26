@@ -67,6 +67,7 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
         }
         switch (VistaDeployment.getSystemIdentification()) {
         case production:
+            // TODO Add ".my-community.co/"
             return protocol + pmcDnsName + ".residentportalsite.com/";
         case staging:
             return protocol + pmcDnsName + "-portal-staging03.residentportalsite.com/";

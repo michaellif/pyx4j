@@ -74,6 +74,7 @@ public class VistaAntiBot extends ReCaptchaAntiBot {
                 case prospectPortal:
                     return "prospectportalsite.com";
                 case residentPortal:
+                    //TODO "my-community.co"
                     return "residentportalsite.com";
                 default:
                     return "propertyvista.com";

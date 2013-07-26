@@ -50,6 +50,7 @@ public class VistaNamespaceResolver implements NamespaceResolver {
     private final static String prodPmcAppEnvRegex = "^.*prod\\d*$|^.*staging\\d*$";
 
     static {
+        prodSystemDnsBase.add("my-community.co");
         prodSystemDnsBase.add("residentportalsite.com");
         prodSystemDnsBase.add("residentportalsite.ca");
         prodSystemDnsBase.add("prospectportalsite.com");
