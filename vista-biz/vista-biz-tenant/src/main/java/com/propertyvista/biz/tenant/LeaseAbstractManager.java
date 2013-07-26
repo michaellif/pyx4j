@@ -452,6 +452,7 @@ public abstract class LeaseAbstractManager {
             lease.currentTerm().set(lease.nextTerm());
             Persistence.service().retrieve(lease.currentTerm());
             lease.currentTerm().status().setValue(LeaseTerm.Status.Current);
+            lease.unit().set(lease.currentTerm().unit());
             updateLeaseDeposits(lease);
 
             // clear next reference:

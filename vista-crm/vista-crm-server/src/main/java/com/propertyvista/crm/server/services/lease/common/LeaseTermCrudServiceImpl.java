@@ -274,7 +274,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         for (Service service : Persistence.service().query(serviceCriteria)) {
             EntityQueryCriteria<ProductItem> productCriteria = EntityQueryCriteria.create(ProductItem.class);
             productCriteria.add(PropertyCriterion.eq(productCriteria.proto().product(), service.version()));
-            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), currentValue.lease()));
+            productCriteria.add(PropertyCriterion.eq(productCriteria.proto().element(), currentValue.unit()));
 
             currentValue.selectedServiceItems().addAll(Persistence.service().query(productCriteria));
         }

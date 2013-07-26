@@ -31,7 +31,7 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
         form.get(form.proto().building()).setValue(value);
 
         // just clear all unit-related data:
-        form.get(form.proto().lease().unit()).reset();
+        form.get(form.proto().unit()).reset();
 
         resetServiceData();
     }
@@ -40,8 +40,8 @@ public class LeaseTermEditorViewImpl extends CrmEditorViewImplBase<LeaseTermDTO>
     public void updateUnitValue(LeaseTermDTO value) {
         LeaseTermForm form = (LeaseTermForm) getForm();
 
-        form.get(form.proto().lease().unit()).setValue(value.lease().unit());
-        form.get(form.proto().building()).setValue(value.lease().unit().building());
+        form.get(form.proto().unit()).setValue(value.unit());
+        form.get(form.proto().building()).setValue(value.unit().building());
 
         form.setUnitNote(value.unitMoveOutNote().getValue());
 
