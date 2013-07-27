@@ -18,11 +18,14 @@ import java.util.List;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EnglishGrammar;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
@@ -36,6 +39,8 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.components.boxes.TenantSelectorDialog;
@@ -43,8 +48,10 @@ import com.propertyvista.crm.client.ui.components.boxes.UnitSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
+import com.propertyvista.domain.maintenance.NoticeOfEntry;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -78,8 +85,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
 
-        setTabBarVisible(false);
         selectTab(addTab(createGeneralTab()));
+        addTab(createWorkHistoryTab());
 
         initSelectors();
 
@@ -96,7 +103,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
@@ -161,7 +168,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         innerRow = 0;
         statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 1, new FormDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 10).build());
 
         panel.setWidget(++row, 0, 2, statusPanel);
 
@@ -177,6 +185,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         // --------------------------------------------------------------------------------------------------------------------
 
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel createWorkHistoryTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Work History"));
+        panel.setWidget(0, 0, 2, inject(proto().workHistory(), new MaintenanceRequestScheduleFolder()));
         return panel;
     }
 
@@ -228,7 +242,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         StatusPhase phase = mr.status().phase().getValue();
         get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
-        get(proto().scheduledTime()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTimeFrom()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTimeTo()).setVisible(phase == StatusPhase.Scheduled);
 
         get(proto().submitted()).setVisible(!mr.submitted().isNull());
         get(proto().updated()).setVisible(!mr.updated().isNull());
@@ -354,6 +369,75 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         @Override
         public boolean isValuesEquals(MaintenanceRequestStatus value1, MaintenanceRequestStatus value2) {
             return value1 != null && value2 != null && value1.name().equals(value2.name());
+        }
+    }
+
+    class MaintenanceRequestScheduleFolder extends VistaBoxFolder<MaintenanceRequestSchedule> {
+        public MaintenanceRequestScheduleFolder() {
+            super(MaintenanceRequestSchedule.class, false);
+        }
+
+        @Override
+        public CComponent<?> create(IObject<?> member) {
+            if (member instanceof MaintenanceRequestSchedule) {
+                return new MaintenanceRequestScheduleViewer();
+            }
+            return super.create(member);
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+        }
+
+        class MaintenanceRequestScheduleViewer extends CEntityDecoratableForm<MaintenanceRequestSchedule> {
+
+            public MaintenanceRequestScheduleViewer() {
+                super(MaintenanceRequestSchedule.class);
+                setViewable(true);
+                setEditable(false);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                int row = -1;
+                // left side
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().progressNote())).build());
+                // right side
+                content.setWidget(0, 1, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
+                content.getFlexCellFormatter().setRowSpan(0, 1, row);
+
+                return content;
+            }
+
+            @Override
+            protected void onValueSet(boolean populate) {
+                super.onValueSet(populate);
+            }
+        }
+
+        class NoticeOfEntryViewer extends CEntityDecoratableForm<NoticeOfEntry> {
+
+            public NoticeOfEntryViewer() {
+                super(NoticeOfEntry.class);
+                setViewable(true);
+                setEditable(false);
+            }
+
+            @Override
+            public IsWidget createContent() {
+                TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                int row = -1;
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageId())).build());
+                content.setWidget(++row, 0, inject(proto().text()));
+
+                return content;
+            }
         }
     }
 }

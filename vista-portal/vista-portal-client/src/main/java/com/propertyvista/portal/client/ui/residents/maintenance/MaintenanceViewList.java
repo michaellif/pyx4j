@@ -180,7 +180,9 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
             break;
         case Scheduled:
             result.append("<p><i style='font-size:0.8em'>");
-            result.append(request.scheduledTime().getStringView());
+            result.append(request.scheduledTimeFrom().getStringView());
+            result.append(" - ");
+            result.append(request.scheduledTimeTo().getStringView());
             result.append(",&nbsp");
             result.append(request.scheduledDate().getStringView());
             result.append("</i>");

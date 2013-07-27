@@ -31,6 +31,7 @@ import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -85,6 +86,13 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
         dto.reportedForOwnUnit().setValue(TenantAppContext.getCurrentCustomerUnit().id().equals(dto.unit().id()));
+        // populate latest scheduled info
+        if (!dto.workHistory().isEmpty()) {
+            MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
+            dto.scheduledDate().set(latest.scheduledDate());
+            dto.scheduledTimeFrom().set(latest.scheduledTimeFrom());
+            dto.scheduledTimeTo().set(latest.scheduledTimeTo());
+        }
     }
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
@@ -95,6 +103,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
         }
+        Persistence.ensureRetrieve(dbo.workHistory(), AttachLevel.Attached);
     }
 
     @Override

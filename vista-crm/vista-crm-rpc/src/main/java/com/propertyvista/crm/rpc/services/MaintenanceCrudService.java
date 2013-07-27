@@ -30,7 +30,7 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
-    void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time time, Key entityId);
+    void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time timeFrom, Time timeTo, Key entityId);
 
     void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId);
 

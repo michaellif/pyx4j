@@ -28,7 +28,7 @@ public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequest
 
     interface Presenter extends IViewer.Presenter {
 
-        void scheduleAction(LogicalDate date, Time time);
+        void scheduleAction(LogicalDate date, Time timeFrom, Time timeTo);
 
         void resolveAction();
 

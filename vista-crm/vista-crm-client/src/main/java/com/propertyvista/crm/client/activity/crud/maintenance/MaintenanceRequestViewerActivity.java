@@ -39,7 +39,7 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestViewerActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
+        super(place, CrmSite.getViewFactory().instantiate(MaintenanceRequestViewerView.class), (AbstractCrudService<MaintenanceRequestDTO>) GWT
                 .create(MaintenanceCrudService.class));
     }
 
@@ -49,13 +49,13 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void scheduleAction(LogicalDate date, Time time) {
+    public void scheduleAction(LogicalDate date, Time timeFrom, Time timeTo) {
         ((MaintenanceCrudService) getService()).sheduleAction(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
                 populate();
             }
-        }, date, time, getEntityId());
+        }, date, timeFrom, timeTo, getEntityId());
     }
 
     @Override

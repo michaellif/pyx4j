@@ -52,7 +52,6 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.PolicyNode;
@@ -575,9 +574,6 @@ public class MessageTemplates {
             // TODO add email html
             String body = IOUtils.getTextResource("email/" + templateRC + ".html");
             String status = request.status().getStringView();
-            if (StatusPhase.Scheduled.equals(request.status().phase().getValue())) {
-                status += ": " + request.scheduledDate().getStringView() + " " + request.scheduledTime().getStringView();
-            }
             body = body //@formatter:off
                     .replace("${name}", userName)
                     .replace("${status}", status)

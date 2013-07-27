@@ -73,7 +73,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
-                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue().date().getValue(), getValue().time().getValue());
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue().date().getValue(),
+                                getValue().timeFrom().getValue(), getValue().timeTo().getValue());
                         return true;
                     }
                 }.show();
@@ -160,7 +161,8 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
                     main.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().date()), 10, true).build());
-                    main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().time()), 10, true).build());
+                    main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().timeFrom()), 10, true).build());
+                    main.setWidget(3, 0, 2, new FormDecoratorBuilder(inject(proto().timeTo()), 10, true).build());
 
                     return main;
                 }

@@ -21,6 +21,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -28,6 +29,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
 import com.propertyvista.biz.system.YardiMaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -89,12 +91,15 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time timeFrom, Time timeTo) {
         MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Scheduled);
         if (status != null) {
             request.status().set(status);
-            request.scheduledDate().setValue(date);
-            request.scheduledTime().setValue(time);
+            MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
+            schedule.scheduledDate().setValue(date);
+            schedule.scheduledTimeFrom().setValue(timeFrom);
+            schedule.scheduledTimeTo().setValue(timeTo);
+            request.workHistory().add(schedule);
             postRequest(request);
 
             sendReporterNote(request, false);

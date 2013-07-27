@@ -34,6 +34,7 @@ import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
@@ -106,9 +107,12 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().merge(request);
     }
 
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
-        request.scheduledDate().setValue(date);
-        request.scheduledTime().setValue(time);
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time timeFrom, Time timeTo) {
+        MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
+        schedule.scheduledDate().setValue(date);
+        schedule.scheduledTimeFrom().setValue(timeFrom);
+        schedule.scheduledTimeTo().setValue(timeTo);
+        request.workHistory().add(schedule);
         request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
         Persistence.service().merge(request);
 

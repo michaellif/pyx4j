@@ -13,7 +13,6 @@
  */
 package com.propertyvista.domain.maintenance;
 
-import java.sql.Time;
 import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
@@ -28,11 +27,14 @@ import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
@@ -139,11 +141,10 @@ public interface MaintenanceRequest extends IEntity {
 
     // --------------------------------------
 
-    IPrimitive<LogicalDate> scheduledDate();
-
-    @Editor(type = EditorType.timepicker)
-    @Format("h:mm a")
-    IPrimitive<Time> scheduledTime();
+    @Owned
+    @Detached
+    @OrderBy(PrimaryKey.class)
+    IList<MaintenanceRequestSchedule> workHistory();
 
     // --------------------------------------
 

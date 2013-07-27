@@ -112,7 +112,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().submitted(), new CDateLabel()), 10).build());
         statusPanel.setBR(++innerRow, 0, 1);
         statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10).build());
-        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTime(), new CTimeLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom(), new CTimeLabel()), 10).build());
+        statusPanel.setWidget(++innerRow, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo(), new CTimeLabel()), 10).build());
         content.setWidget(++row, 0, statusPanel);
 
         // tweaks:
@@ -150,7 +151,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
         StatusPhase phase = getValue().status().phase().getValue();
         get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
-        get(proto().scheduledTime()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTimeFrom()).setVisible(phase == StatusPhase.Scheduled);
+        get(proto().scheduledTimeTo()).setVisible(phase == StatusPhase.Scheduled);
 
         get(proto().submitted()).setVisible(!getValue().submitted().isNull());
         get(proto().updated()).setVisible(!getValue().updated().isNull());

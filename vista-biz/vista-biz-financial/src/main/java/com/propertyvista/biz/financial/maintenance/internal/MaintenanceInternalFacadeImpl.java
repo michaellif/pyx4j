@@ -70,8 +70,8 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time time) {
-        MaintenanceInternalManager.instance().sheduleMaintenanceRequest(request, date, time);
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time timeFrom, Time timeTo) {
+        MaintenanceInternalManager.instance().sheduleMaintenanceRequest(request, date, timeFrom, timeTo);
     }
 
     @Override

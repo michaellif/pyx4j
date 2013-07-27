@@ -35,5 +35,9 @@ public interface ScheduleDataDTO extends IEntity {
 
     @NotNull
     @Editor(type = EditorType.timepicker)
-    IPrimitive<Time> time();
+    IPrimitive<Time> timeFrom();
+
+    @NotNull
+    @Editor(type = EditorType.timepicker)
+    IPrimitive<Time> timeTo();
 }

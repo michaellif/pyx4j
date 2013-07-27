@@ -32,6 +32,7 @@ import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -60,6 +61,13 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     protected void enhanceAll(MaintenanceRequestDTO dto) {
         enhanceDbo(dto);
+        // populate latest scheduled info
+        if (!dto.workHistory().isEmpty()) {
+            MaintenanceRequestSchedule latest = dto.workHistory().get(dto.workHistory().size() - 1);
+            dto.scheduledDate().set(latest.scheduledDate());
+            dto.scheduledTimeFrom().set(latest.scheduledTimeFrom());
+            dto.scheduledTimeTo().set(latest.scheduledTimeTo());
+        }
     }
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
@@ -71,6 +79,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
             Persistence.ensureRetrieve(parent, AttachLevel.Attached);
             parent = parent.parent();
         }
+        Persistence.ensureRetrieve(dbo.workHistory(), AttachLevel.Attached);
     }
 
     @Override
@@ -86,10 +95,10 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time time, Key entityId) {
+    public void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time timeFrom, Time timeTo, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         enhanceDbo(request);
-        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, date, time);
+        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, date, timeFrom, timeTo);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

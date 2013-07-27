@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,31 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2011-06-29
- * @author Vlad
+ * Created on Jul 26, 2013
+ * @author stanp
  * @version $Id$
  */
-package com.propertyvista.dto;
+package com.propertyvista.domain.maintenance;
 
 import java.sql.Time;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Caption;
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
-import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.annotations.Indexed;
+import com.pyx4j.entity.annotations.JoinColumn;
+import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
+import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
+public interface MaintenanceRequestSchedule extends IEntity {
 
-@Transient
-@ExtendsDBO
-public interface MaintenanceRequestDTO extends MaintenanceRequest {
-
-    @Caption(name = "Problem in my Apartment")
-    IPrimitive<Boolean> reportedForOwnUnit();
+    @Owner
+    @NotNull
+    @MemberColumn(notNull = true)
+    @ReadOnly
+    @Detached
+    @Indexed
+    @JoinColumn
+    MaintenanceRequest request();
 
     IPrimitive<LogicalDate> scheduledDate();
 
@@ -43,4 +51,8 @@ public interface MaintenanceRequestDTO extends MaintenanceRequest {
     @Format("h:mm a")
     IPrimitive<Time> scheduledTimeTo();
 
+    IPrimitive<String> progressNote();
+
+    @EmbeddedEntity
+    NoticeOfEntry noticeOfEntry();
 }
