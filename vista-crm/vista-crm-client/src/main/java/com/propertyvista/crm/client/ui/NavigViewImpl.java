@@ -299,6 +299,9 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
 
             private StackHeaderWidget() {
 
+                Label label = new Label(folder.getTitle());
+                label.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Folder, folder.getTitle()).toString());
+
                 if (folder.getImageNormal() != null) {
                     image = new Image(folder.getImageNormal());
 
@@ -324,10 +327,10 @@ public class NavigViewImpl extends StackLayoutPanel implements NavigView {
                     image.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
                     add(image);
                     setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
+                } else {
+                    label.getElement().getStyle().setMarginLeft(10, Unit.PX);
                 }
 
-                Label label = new Label(folder.getTitle());
-                label.ensureDebugId(new CompositeDebugId(NavigationIDs.Navigation_Folder, folder.getTitle()).toString());
                 add(label);
                 setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);
                 setCellWidth(label, "100%");
