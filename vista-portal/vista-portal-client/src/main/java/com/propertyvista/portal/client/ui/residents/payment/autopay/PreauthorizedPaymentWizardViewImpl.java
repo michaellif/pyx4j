@@ -15,17 +15,16 @@ package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.wizard.VistaAbstractWizard;
+import com.propertyvista.common.client.ui.wizard.VistaAbstractWizardPane;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-public class PreauthorizedPaymentWizardViewImpl extends VistaAbstractWizard<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView {
+public class PreauthorizedPaymentWizardViewImpl extends VistaAbstractWizardPane<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardViewImpl.class);
 
     public PreauthorizedPaymentWizardViewImpl() {
-        super(i18n.tr("Automatic Payment Setup"));
-        setForm(new PreauthorizedPaymentWizardForm(this));
+        super();
+        setWizard(new PreauthorizedPaymentWizardForm(this, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit")));
 
-        setEndButtonCaption(i18n.tr("Submit"));
     }
 }

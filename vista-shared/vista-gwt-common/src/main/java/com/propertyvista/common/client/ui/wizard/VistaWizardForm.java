@@ -16,7 +16,9 @@ package com.propertyvista.common.client.ui.wizard;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
+import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
@@ -24,9 +26,17 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityWizard<E
 
     private final IWizard<? extends IEntity> view;
 
-    public VistaWizardForm(Class<E> rootClass, final IWizard<? extends IEntity> view) {
+    private WizardDecorator<E> decorator;
+
+    private final String caption;
+
+    private final String endButtonCaption;
+
+    public VistaWizardForm(Class<E> rootClass, final IWizard<? extends IEntity> view, String caption, String endButtonCaption) {
         super(rootClass);
         this.view = view;
+        this.caption = caption;
+        this.endButtonCaption = endButtonCaption;
     }
 
     @Override
@@ -41,6 +51,36 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityWizard<E
     @Override
     protected void onFinish() {
         view.getPresenter().finish();
+    }
+
+    @Override
+    protected IDecorator<?> createDecorator() {
+        decorator = new WizardDecorator<E>() {
+            @Override
+            protected void onFinish() {
+                view.getPresenter().finish();
+            };
+
+            @Override
+            protected void onCancel() {
+                view.getPresenter().cancel();
+            };
+        };
+        decorator.setCaption(caption);
+        decorator.setEndButtonCaption(endButtonCaption);
+        return decorator;
+    }
+
+    public void calculateButtonsState() {
+        if (decorator != null) {
+            decorator.calculateButtonsState();
+        }
+    }
+
+    public void setCaption(String stepTitle) {
+        if (decorator != null) {
+            decorator.setCaption(stepTitle);
+        }
     }
 
 }

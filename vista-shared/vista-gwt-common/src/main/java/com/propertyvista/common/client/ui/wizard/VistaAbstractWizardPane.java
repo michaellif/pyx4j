@@ -14,10 +14,10 @@
 package com.propertyvista.common.client.ui.wizard;
 
 import com.google.gwt.place.shared.Place;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
-import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
@@ -26,32 +26,36 @@ import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class VistaAbstractWizard<E extends IEntity> extends WizardDecorator<E> implements IPrimePane, IWizard<E> {
+public abstract class VistaAbstractWizardPane<E extends IEntity> extends SimplePanel implements IPrimePane, IWizard<E> {
 
-    private static final I18n i18n = I18n.get(VistaAbstractWizard.class);
+    private static final I18n i18n = I18n.get(VistaAbstractWizardPane.class);
 
     private final IMemento memento = new MementoImpl();
 
     private IWizard.Presenter presenter;
 
-    public VistaAbstractWizard(String caption) {
-        super();
-        setCaption(caption);
+    private VistaWizardForm<E> wizardForm;
 
+    public VistaAbstractWizardPane() {
+        super();
+    }
+
+    public void setWizard(VistaWizardForm<E> wizardForm) {
+        this.wizardForm = wizardForm;
+        setWidget(wizardForm);
+        wizardForm.initContent();
     }
 
     @Override
     public void populate(E value) {
-        assert (getForm() != null);
-        getForm().populate(value);
-        calculateButtonsState();
+        wizardForm.populate(value);
+        wizardForm.calculateButtonsState();
     }
 
     @Override
     public void reset() {
-        assert (getForm() != null);
-        getForm().reset();
-        calculateButtonsState();
+        wizardForm.reset();
+        wizardForm.calculateButtonsState();
     }
 
     @Override
@@ -66,18 +70,8 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends WizardDecor
 
     @Override
     public E getValue() {
-        return getForm().getValue();
+        return wizardForm.getValue();
     }
-
-    @Override
-    protected void onFinish() {
-        getPresenter().finish();
-    };
-
-    @Override
-    protected void onCancel() {
-        getPresenter().cancel();
-    };
 
     @Override
     public boolean onSaveFail(Throwable caught) {
@@ -95,8 +89,8 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends WizardDecor
 
     @Override
     public void onStepChange() {
-        setCaption(getForm().getSelectedStep().getStepTitle());
-        calculateButtonsState();
+        wizardForm.setCaption(wizardForm.getSelectedStep().getStepTitle());
+        wizardForm.calculateButtonsState();
     }
 
     @Override
@@ -127,5 +121,10 @@ public abstract class VistaAbstractWizard<E extends IEntity> extends WizardDecor
     public boolean isVisorShown() {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    @Override
+    public boolean isDirty() {
+        return wizardForm.isDirty();
     }
 }

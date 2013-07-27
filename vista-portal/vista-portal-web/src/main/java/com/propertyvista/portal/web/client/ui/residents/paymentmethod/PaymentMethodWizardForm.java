@@ -78,8 +78,8 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         }
     };
 
-    public PaymentMethodWizardForm(IWizard<PaymentMethodDTO> view) {
-        super(PaymentMethodDTO.class, view);
+    public PaymentMethodWizardForm(IWizard<PaymentMethodDTO> view, String caption, String endButtonCaption) {
+        super(PaymentMethodDTO.class, view, caption, endButtonCaption);
 
         addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());

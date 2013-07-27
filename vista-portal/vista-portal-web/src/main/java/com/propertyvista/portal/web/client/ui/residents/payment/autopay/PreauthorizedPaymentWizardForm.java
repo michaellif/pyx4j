@@ -110,8 +110,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         }
     };
 
-    public PreauthorizedPaymentWizardForm(IWizard<PreauthorizedPaymentDTO> view) {
-        super(PreauthorizedPaymentDTO.class, view);
+    public PreauthorizedPaymentWizardForm(IWizard<PreauthorizedPaymentDTO> view, String caption, String endButtonCaption) {
+        super(PreauthorizedPaymentDTO.class, view, caption, endButtonCaption);
 
         detailsStep = addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());

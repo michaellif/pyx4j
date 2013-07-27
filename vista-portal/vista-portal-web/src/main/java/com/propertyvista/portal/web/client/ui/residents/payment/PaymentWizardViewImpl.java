@@ -15,17 +15,16 @@ package com.propertyvista.portal.web.client.ui.residents.payment;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.wizard.VistaAbstractWizard;
+import com.propertyvista.common.client.ui.wizard.VistaAbstractWizardPane;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentWizardViewImpl extends VistaAbstractWizard<PaymentRecordDTO> implements PaymentWizardView {
+public class PaymentWizardViewImpl extends VistaAbstractWizardPane<PaymentRecordDTO> implements PaymentWizardView {
 
     private static final I18n i18n = I18n.get(PaymentWizardViewImpl.class);
 
     public PaymentWizardViewImpl() {
-        super(i18n.tr("Payment Setup"));
-        setForm(new PaymentWizardForm(this));
+        super();
+        setWizard(new PaymentWizardForm(this, i18n.tr("Payment Setup"), i18n.tr("Submit")));
 
-        setEndButtonCaption(i18n.tr("Submit"));
     }
 }
