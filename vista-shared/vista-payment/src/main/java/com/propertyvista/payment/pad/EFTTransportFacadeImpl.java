@@ -17,7 +17,6 @@ import java.io.File;
 import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +24,11 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.payment.pad.CaledonPadSftpClient.PadFileType;
 import com.propertyvista.payment.pad.data.PadAckFile;
+import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 /**
  * Caledon SFTP interface implementation
@@ -45,7 +45,7 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             File fileSent;
             do {
                 String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(padFile.sent().getValue());
-                file = new File(padWorkdir, filename + "." + padFile.companyId().getValue());
+                file = new File(padWorkdir, filename + "." + padFile.companyId().getValue() + "." + padFile.fundsTransferType().getValue().getFileNamePart());
                 fileSent = new File(new File(padWorkdir, "processed"), file.getName());
                 if (file.exists() || fileSent.exists()) {
                     padFile.sent().setValue(new Date());
@@ -78,59 +78,59 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public PadAckFile receivePadAcknowledgementFile(String companyId) throws EFTTransportConnectionException {
+    public PadAckFile receivePadAcknowledgementFile(String companyId) throws SftpTransportConnectionException {
         File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Acknowledgement, padWorkdir);
-        if (files.size() == 0) {
+        CaledonFundsTransferSftpFile sftpFile = new CaledonPadSftpClient().receiveFiles(companyId, CaledonFundsTransferFileType.Acknowledgement, padWorkdir);
+        if (sftpFile == null) {
             return null;
         }
-        final File file = files.get(0);
         boolean parsOk = false;
         try {
-            if (!file.getName().endsWith(PadAckFile.FileNameSufix)) {
-                throw new Error("Invalid acknowledgment file name" + file.getName());
+            if (sftpFile.fileType != CaledonFundsTransferFileType.Acknowledgement) {
+                throw new Error("Invalid acknowledgment file name" + sftpFile.localFile.getName());
             }
-            PadAckFile padAkFile = new CaledonPadAcknowledgmentParser().parsReport(file);
+            PadAckFile padAkFile = new CaledonPadAcknowledgmentParser().parsReport(sftpFile.localFile);
+            padAkFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
             parsOk = true;
             return padAkFile;
         } finally {
             if (!parsOk) {
-                move(file, padWorkdir, "error");
+                move(sftpFile.localFile, padWorkdir, "error");
             }
         }
     }
 
     @Override
-    public PadReconciliationFile receivePadReconciliation(String companyId) throws EFTTransportConnectionException {
+    public PadReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException {
         File padWorkdir = getPadBaseDir();
-        List<File> files = new CaledonPadSftpClient().receiveFiles(companyId, PadFileType.Reconciliation, padWorkdir);
-        if (files.size() == 0) {
+        CaledonFundsTransferSftpFile sftpFile = new CaledonPadSftpClient().receiveFiles(companyId, CaledonFundsTransferFileType.Reconciliation, padWorkdir);
+        if (sftpFile == null) {
             return null;
         }
-        final File file = files.get(0);
         boolean parsOk = false;
         try {
-            if (!file.getName().endsWith(PadReconciliationFile.FileNameSufix + companyId)) {
-                throw new Error("Invalid Reconciliation file name" + file.getName());
+            if (sftpFile.fileType != CaledonFundsTransferFileType.Reconciliation) {
+                throw new Error("Invalid Reconciliation file name" + sftpFile.localFile.getName());
             }
-            PadReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(file);
+            PadReconciliationFile reconciliationFile = new CaledonPadReconciliationParser().parsReport(sftpFile.localFile);
+            reconciliationFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
             parsOk = true;
             return reconciliationFile;
         } finally {
             if (!parsOk) {
-                move(file, padWorkdir, "error");
+                move(sftpFile.localFile, padWorkdir, "error");
             }
         }
     }
 
     @Override
-    public void confirmReceivedFile(String fileName, boolean protocolErrorFlag) {
+    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
         File padWorkdir = getPadBaseDir();
         if (protocolErrorFlag) {
             move(new File(padWorkdir, fileName), padWorkdir, "error");
         } else {
             move(new File(padWorkdir, fileName), padWorkdir, "processed");
-            new CaledonPadSftpClient().removeFile(fileName);
+            new CaledonPadSftpClient().removeFile(fundsTransferType, fileName);
         }
     }
 

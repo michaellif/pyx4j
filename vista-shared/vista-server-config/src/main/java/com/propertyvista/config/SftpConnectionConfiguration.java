@@ -7,17 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-05-13
+ * Created on Jul 26, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.payment.pad;
+package com.propertyvista.config;
 
-public class EFTTransportConnectionException extends Exception {
+import com.pyx4j.config.server.Credentials;
 
-    private static final long serialVersionUID = 1L;
+public interface SftpConnectionConfiguration {
 
-    public EFTTransportConnectionException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
+    String sftpHost();
+
+    int sftpPort();
+
+    Credentials sftpCredentials();
 }

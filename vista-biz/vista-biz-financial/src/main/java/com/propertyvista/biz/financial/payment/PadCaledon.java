@@ -41,10 +41,10 @@ import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
-import com.propertyvista.payment.pad.EFTTransportConnectionException;
 import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.jobs.TaskRunner;
+import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public class PadCaledon {
 
@@ -220,7 +220,7 @@ public class PadCaledon {
         final PadAckFile padAkFile;
         try {
             padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
-        } catch (EFTTransportConnectionException e) {
+        } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
             return false;
         }
@@ -245,7 +245,8 @@ public class PadCaledon {
 
             processedOk = true;
         } finally {
-            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(padAkFile.fileName().getValue(), !processedOk);
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(padAkFile.fundsTransferType().getValue(), padAkFile.fileName().getValue(),
+                    !processedOk);
         }
 
         return true;
@@ -255,7 +256,7 @@ public class PadCaledon {
         final PadReconciliationFile reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
-        } catch (EFTTransportConnectionException e) {
+        } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
             return false;
         }
@@ -279,7 +280,8 @@ public class PadCaledon {
 
             processedOk = true;
         } finally {
-            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(reconciliationFile.fileName().getValue(), !processedOk);
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedFile(reconciliationFile.fundsTransferType().getValue(),
+                    reconciliationFile.fileName().getValue(), !processedOk);
         }
 
         return true;

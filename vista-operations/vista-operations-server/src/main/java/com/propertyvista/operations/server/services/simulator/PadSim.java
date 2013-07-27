@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
@@ -38,13 +37,14 @@ import com.propertyvista.operations.domain.payment.pad.TransactionReconciliation
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
+import com.propertyvista.payment.pad.CaledonFundsTransferSftpFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadUtils;
-import com.propertyvista.payment.pad.EFTTransportConnectionException;
 import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
 import com.propertyvista.payment.pad.simulator.PadSimFileParser;
 import com.propertyvista.payment.pad.simulator.PadSimReconciliationFileWriter;
+import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public class PadSim {
 
@@ -63,21 +63,19 @@ public class PadSim {
 
     public PadSimFile loadPadFile() {
         File padWorkdir = getPadBaseDir();
-        List<File> files;
+        CaledonFundsTransferSftpFile sftpFile;
         try {
-            files = new CaledonPadSftpClient().receiveFilesSim(padWorkdir);
-        } catch (EFTTransportConnectionException e) {
+            sftpFile = new CaledonPadSftpClient().receiveFilesSim(padWorkdir);
+        } catch (SftpTransportConnectionException e) {
             throw new UserRuntimeException(e.getMessage(), e);
         }
-        if (files.size() == 0) {
+        if (sftpFile == null) {
             return null;
         }
 
-        File file = files.get(0);
-        files.remove(0);
-
-        PadSimFile padFile = new PadSimFileParser().parsReport(file);
-        padFile.fileName().setValue(file.getName());
+        PadSimFile padFile = new PadSimFileParser().parsReport(sftpFile.localFile);
+        padFile.fileName().setValue(sftpFile.remoteName);
+        padFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
         padFile.batchRecordsCount().setValue(padFile.batches().size());
         Persistence.service().persist(padFile);
         for (PadSimBatch padBatch : padFile.batches()) {
@@ -85,14 +83,8 @@ public class PadSim {
         }
         Persistence.service().commit();
         // remove the loaded file from server
-        {
-            new CaledonPadSftpClient().removeFilesSim(file.getName());
-        }
+        new CaledonPadSftpClient().removeFilesSim(sftpFile.fundsTransferType, sftpFile.remoteName);
 
-        // Ignore other files received if any
-        for (File otherFiles : files) {
-            otherFiles.delete();
-        }
         return padFile;
     }
 

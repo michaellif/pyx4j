@@ -13,6 +13,7 @@
  */
 package com.propertyvista.payment.pad.mock;
 
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
@@ -41,7 +42,7 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     }
 
     @Override
-    public void confirmReceivedFile(String fileName, boolean protocolErrorFlag) {
+    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
     }
 
 }

@@ -158,7 +158,7 @@ public class OperationsSiteMap implements SiteMap {
 
         public static class PadSimulation extends CrmCrudAppPlace {
 
-            @PlaceProperties(caption = "Simulated PAD")
+            @PlaceProperties(caption = "Simulated Funds Transfer")
             public static class PadSimFile extends CrmCrudAppPlace {
             }
 

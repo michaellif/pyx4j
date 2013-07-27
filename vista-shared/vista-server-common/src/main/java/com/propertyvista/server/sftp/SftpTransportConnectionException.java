@@ -7,13 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-03-01
+ * Created on 2013-05-13
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.server.sftp;
 
+public class SftpTransportConnectionException extends Exception {
 
-public interface CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+    private static final long serialVersionUID = 1L;
 
+    public SftpTransportConnectionException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

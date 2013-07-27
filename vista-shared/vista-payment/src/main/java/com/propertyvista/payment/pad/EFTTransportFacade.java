@@ -13,20 +13,22 @@
  */
 package com.propertyvista.payment.pad;
 
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
+import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public interface EFTTransportFacade {
 
     public void sendPadFile(PadFile padFile);
 
-    public PadAckFile receivePadAcknowledgementFile(String companyId) throws EFTTransportConnectionException;
+    public PadAckFile receivePadAcknowledgementFile(String companyId) throws SftpTransportConnectionException;
 
-    public PadReconciliationFile receivePadReconciliation(String companyId) throws EFTTransportConnectionException;
+    public PadReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException;
 
     /**
      * Remove the file from remote server directory in success.
      */
-    public void confirmReceivedFile(String fileName, boolean protocolErrorFlag);
+    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
 }

@@ -7,13 +7,17 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-03-01
+ * Created on Jul 26, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.payment.pad;
 
+public enum CaledonFundsTransferFileType {
 
-public interface CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+    PadFile,
 
+    Acknowledgement,
+
+    Reconciliation;
 }

@@ -7,13 +7,20 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-03-01
+ * Created on Jul 26, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.server.sftp;
 
+import java.io.File;
 
-public interface CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+public class SftpFile {
+
+    public File localFile;
+
+    public String remotePath;
+
+    public String remoteName;
 
 }

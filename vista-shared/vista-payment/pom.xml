@@ -20,6 +20,12 @@
 
         <dependency>
             <groupId>com.propertyvista</groupId>
+            <artifactId>vista-server-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.propertyvista</groupId>
             <artifactId>vista-server-config</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -38,11 +44,6 @@
 		    <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient-contrib-ssl</artifactId>
             <version>3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
         </dependency>
 
         <dependency>

@@ -13,27 +13,33 @@
  */
 package com.propertyvista.operations.domain.payment.pad;
 
-import java.util.Locale;
 
 public enum FundsTransferType {
 
-    PreAuthorizedDebit("PAD"),
+    PreAuthorizedDebit("PAD", "pad"),
 
-    DirectBankingPayment("DBP"),
+    DirectBankingPayment("DBP", "dbp"),
 
-    InteracOnlinePayment("IOP");
+    InteracOnlinePayment("IOP", "iop");
 
     private final String code;
 
-    FundsTransferType(String code) {
+    private final String fileNamePart;
+
+    FundsTransferType(String code, String fileNamePart) {
         this.code = code;
+        this.fileNamePart = fileNamePart;
     }
 
     public String getCode() {
         return code;
     }
 
+    public String getFileNamePart() {
+        return fileNamePart;
+    }
+
     public String getDirectoryName(String name) {
-        return getCode().toLowerCase(Locale.ENGLISH) + "_" + name;
+        return fileNamePart + "_" + name;
     }
 }

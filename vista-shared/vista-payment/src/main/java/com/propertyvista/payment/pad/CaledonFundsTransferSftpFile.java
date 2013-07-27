@@ -7,13 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-03-01
+ * Created on Jul 26, 2013
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.config;
+package com.propertyvista.payment.pad;
 
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.server.sftp.SftpFile;
 
-public interface CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+public class CaledonFundsTransferSftpFile extends SftpFile {
+
+    public FundsTransferType fundsTransferType;
+
+    public CaledonFundsTransferFileType fileType;
 
 }
