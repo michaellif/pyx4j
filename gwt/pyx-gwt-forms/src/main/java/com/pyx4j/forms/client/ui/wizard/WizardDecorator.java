@@ -28,13 +28,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public abstract class WizardDecorator<E extends IEntity> extends VerticalPanel {
+public class WizardDecorator<E extends IEntity> extends VerticalPanel implements IDecorator<CEntityWizard<E>> {
 
     private static final I18n i18n = I18n.get(WizardDecorator.class);
 
@@ -54,7 +56,7 @@ public abstract class WizardDecorator<E extends IEntity> extends VerticalPanel {
 
     private String endButtonCaption = i18n.tr("Finish");
 
-    private CEntityWizard<E> form;
+    private CEntityWizard<E> component;
 
     private String footerHeight = "auto";
 
@@ -86,7 +88,7 @@ public abstract class WizardDecorator<E extends IEntity> extends VerticalPanel {
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
             public void execute() {
-                form.previous();
+                component.previous();
                 calculateButtonsState();
             }
         });
@@ -95,10 +97,10 @@ public abstract class WizardDecorator<E extends IEntity> extends VerticalPanel {
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
             public void execute() {
-                if (form.isLast()) {
+                if (component.isLast()) {
                     onFinish();
                 } else {
-                    form.next();
+                    component.next();
                     calculateButtonsState();
                 }
             }
@@ -108,31 +110,25 @@ public abstract class WizardDecorator<E extends IEntity> extends VerticalPanel {
         setWidth("100%");
     }
 
-    protected abstract void onCancel();
-
-    protected abstract void onFinish();
-
-    protected void setForm(CEntityWizard<E> form) {
-        if (getForm() == form) {
-            return; // already!?.
-        }
-
-        this.form = form;
-        this.form.initContent();
-
-        setContent(this.form.asWidget());
+    @Override
+    public void setComponent(CEntityWizard<E> component) {
+        assert this.component == null;
+        this.component = component;
+        setContent(component.createContent());
     }
 
-    protected CEntityWizard<E> getForm() {
-        return form;
+    public CEntityWizard<E> getComponent() {
+        return component;
+    }
+
+    protected void onCancel() {
+    }
+
+    protected void onFinish() {
     }
 
     protected IsWidget getContent() {
         return contentHolder.getWidget();
-    }
-
-    public boolean isDirty() {
-        return form.isDirty();
     }
 
     protected void setContent(IsWidget widget) {
@@ -164,14 +160,19 @@ public abstract class WizardDecorator<E extends IEntity> extends VerticalPanel {
         this.endButtonCaption = endButtonCaption;
     }
 
-    protected void calculateButtonsState() {
-        if (form.isLast()) {
+    public void calculateButtonsState() {
+        if (component.isLast()) {
             btnNext.setCaption(endButtonCaption);
         } else {
             btnNext.setCaption(i18n.tr("Next"));
         }
 
-        btnPrevious.setEnabled(!form.isFirst());
+        btnPrevious.setEnabled(!component.isFirst());
+    }
+
+    @Override
+    public void onSetDebugId(IDebugId parentDebugId) {
+
     }
 
 }

@@ -264,7 +264,7 @@ public class NImage<T extends IFile> extends NField<IList<T>, ImageHolder, CImag
             public void setComponent(CEntityFolder<T> folder) {
                 this.folder = folder;
                 ScrollPanel panel = new ScrollPanel();
-                panel.add(folder.getContainer());
+                panel.add(folder.createContent());
                 panel.getElement().getStyle().setProperty("maxHeight", "500px");
                 setBody(panel);
             }

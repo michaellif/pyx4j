@@ -55,7 +55,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     private static final Logger log = LoggerFactory.getLogger(CEntityFolder.class);
 
-    private final FlowPanel container;
+    private FlowPanel container;
 
     private boolean orderable = true;
 
@@ -73,7 +73,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     public CEntityFolder(Class<E> rowClass) {
         this.rowClass = rowClass;
-        container = new FlowPanel();
         asWidget().setStyleName(EntityFolder.name());
         itemsList = new ArrayList<CEntityFolderItem<E>>();
         if (rowClass != null) {
@@ -142,7 +141,7 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
 
     @Override
     public IsWidget createContent() {
-        return null;
+        return container = new FlowPanel();
     }
 
     protected abstract IFolderItemDecorator<E> createItemDecorator();
@@ -334,10 +333,6 @@ public abstract class CEntityFolder<E extends IEntity> extends CEntityContainer<
     @Override
     public Collection<? extends CComponent<?>> getComponents() {
         return itemsList;
-    }
-
-    public FlowPanel getContainer() {
-        return container;
     }
 
     public int getItemCount() {
