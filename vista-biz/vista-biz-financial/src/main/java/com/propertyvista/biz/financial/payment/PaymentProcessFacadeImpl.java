@@ -26,13 +26,14 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
-    public PadFile preparePadFile() {
-        return new PadCaledon().preparePadFile();
+    public PadFile preparePadFile(FundsTransferType fundsTransferType) {
+        return new PadCaledon().preparePadFile(fundsTransferType);
     }
 
     @Override

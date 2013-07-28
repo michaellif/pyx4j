@@ -28,6 +28,7 @@ import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 
 import com.pyx4j.config.server.Credentials;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.config.SftpConnectionConfiguration;
@@ -56,6 +57,12 @@ public class SftpClient implements Closeable {
         if (knownHosts.canRead()) {
             jsch.setKnownHosts(knownHosts.getAbsolutePath());
         }
+        if (ServerSideConfiguration.isStartedUnderEclipse()) {
+            knownHosts = new File("src/scripts/sftp", "known_hosts");
+            if (knownHosts.canRead()) {
+                jsch.setKnownHosts(knownHosts.getAbsolutePath());
+            }
+        }
 
         session = jsch.getSession(credentials.userName, configuration.sftpHost(), configuration.sftpPort());
         session.setPassword(credentials.password);
@@ -68,7 +75,7 @@ public class SftpClient implements Closeable {
     @Override
     public void close() {
         if (channel != null) {
-            channel.exit();
+            channel.disconnect();
             channel = null;
         }
         if (session != null) {

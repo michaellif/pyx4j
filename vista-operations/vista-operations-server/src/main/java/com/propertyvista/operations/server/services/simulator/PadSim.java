@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Iterator;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +76,10 @@ public class PadSim {
 
         PadSimFile padFile = new PadSimFileParser().parsReport(sftpFile.localFile);
         padFile.fileName().setValue(sftpFile.remoteName);
-        padFile.fundsTransferType().setValue(sftpFile.fundsTransferType);
+
+        Validate.isTrue(padFile.fundsTransferType().getValue() == sftpFile.fundsTransferType, "Unexpected fundsTransferType "
+                + padFile.fundsTransferType().getValue());
+
         padFile.batchRecordsCount().setValue(padFile.batches().size());
         Persistence.service().persist(padFile);
         for (PadSimBatch padBatch : padFile.batches()) {
@@ -123,7 +127,12 @@ public class PadSim {
         Persistence.service().retrieveMember(padFile.batches());
         updateAcknowledgments(padFile);
 
-        File file = new File(getPadBaseDir(), padFile.fileName().getValue() + PadAckFile.FileNameSufix);
+        //YYYYMMDDhhmmss.COMPANYID_pad_acknowledgement.csv
+        String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("."));
+        fileName += "." + padFile.companyId().getValue();
+        fileName += "_" + padFile.fundsTransferType().getValue().getFileNamePart();
+        fileName += PadAckFile.FileNameSufix;
+        File file = new File(getPadBaseDir(), fileName);
         try {
             PadSimAcknowledgementFileWriter writer = new PadSimAcknowledgementFileWriter(padFile, file);
             try {
@@ -222,7 +231,7 @@ public class PadSim {
         padFile.reconciliationSent().setValue(SystemDateManager.getDate());
         updateReconciliation(padFile);
 
-        File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", PadReconciliationFile.FileNameSufix));
+        File file = new File(getPadBaseDir(), reconciliationReportFileName(padFile));
         try {
             PadSimReconciliationFileWriter writer = new PadSimReconciliationFileWriter(padFile, file);
             try {
@@ -322,6 +331,15 @@ public class PadSim {
         }
     }
 
+    String reconciliationReportFileName(PadSimFile padFile) {
+        // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
+        String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("."));
+        fileName += PadReconciliationFile.FileNameSufix;
+        fileName += "_" + padFile.fundsTransferType().getValue().getFileNamePart();
+        fileName += "." + padFile.companyId().getValue();
+        return fileName;
+    }
+
     public void replyReturns(PadSimFile padStub) {
         PadSimFile padFile = Persistence.service().retrieve(PadSimFile.class, padStub.getPrimaryKey());
         Persistence.service().retrieveMember(padFile.batches());
@@ -330,7 +348,7 @@ public class PadSim {
         padFile.returnSent().setValue(SystemDateManager.getDate());
         updateReturns(padFile);
 
-        File file = new File(getPadBaseDir(), padFile.fileName().getValue().replace(".", PadReconciliationFile.FileNameSufix));
+        File file = new File(getPadBaseDir(), reconciliationReportFileName(padFile));
         try {
             PadSimReconciliationFileWriter writer = new PadSimReconciliationFileWriter(padFile, file);
             try {

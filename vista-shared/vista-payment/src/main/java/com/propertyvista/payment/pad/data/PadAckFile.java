@@ -27,12 +27,13 @@ import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
  * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments
  * 
  * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/display/VISTA/Caledon"/>
- * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/CCS-PAD-File-Specifications.pdf"/>
+ * @see <a href="http://jira.birchwoodsoftwaregroup.com/wiki/download/attachments/4587553/FUNDS_TRANSFER_FILE_SPECIFICATIONS_V1.8_20130716.pdf"/>
  */
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface PadAckFile extends IEntity {
 
+    // YYYYMMDDhhmmss.COMPANYID_pad_acknowledgement.csv
     public static String FileNameSufix = "_acknowledgement.csv";
 
     IPrimitive<String> fileName();

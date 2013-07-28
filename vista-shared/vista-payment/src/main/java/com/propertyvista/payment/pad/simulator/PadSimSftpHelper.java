@@ -24,7 +24,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.j2se.util.FileUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.payment.pad.CaledonFundsTransferDirectories;
 
 public class PadSimSftpHelper {
 
@@ -42,13 +42,15 @@ public class PadSimSftpHelper {
             }
         }
 
-        for (FundsTransferType fundsTransferType : FundsTransferType.values()) {
-            try {
-                FileUtils.forceMkdir(new File(dir, fundsTransferType.getDirectoryName("in")));
-                FileUtils.forceMkdir(new File(dir, fundsTransferType.getDirectoryName("out")));
-            } catch (IOException e) {
-                throw new Error(e);
+        try {
+            for (String dirName : CaledonFundsTransferDirectories.allPostDirectories()) {
+                FileUtils.forceMkdir(new File(dir, dirName));
             }
+            for (String dirName : CaledonFundsTransferDirectories.allGetDirectories()) {
+                FileUtils.forceMkdir(new File(dir, dirName));
+            }
+        } catch (IOException e) {
+            throw new Error(e);
         }
 
         return dir;

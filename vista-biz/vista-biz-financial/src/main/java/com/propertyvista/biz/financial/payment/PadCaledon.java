@@ -36,6 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
@@ -52,12 +53,13 @@ public class PadCaledon {
 
     private final String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
 
-    public PadFile preparePadFile() {
+    public PadFile preparePadFile(final FundsTransferType fundsTransferType) {
         return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
             @Override
             public PadFile call() {
                 EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
                 criteria.eq(criteria.proto().companyId(), companyId);
+                criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
                 criteria.in(criteria.proto().status(), PadFile.PadFileStatus.Creating, PadFile.PadFileStatus.SendError);
                 PadFile padFile = Persistence.service().retrieve(criteria);
                 if (padFile == null) {
@@ -65,6 +67,7 @@ public class PadCaledon {
                     padFile.status().setValue(PadFile.PadFileStatus.Creating);
                     padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
                     padFile.companyId().setValue(companyId);
+                    padFile.fundsTransferType().setValue(fundsTransferType);
                     Persistence.service().persist(padFile);
                     Persistence.service().commit();
                 }
@@ -75,7 +78,7 @@ public class PadCaledon {
 
     public boolean sendPadFile(final PadFile padFile) {
         EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().padBatch().padFile(), padFile));
+        criteria.eq(criteria.proto().padBatch().padFile(), padFile);
         int records = Persistence.service().count(criteria);
         if (records == 0) {
             return false;

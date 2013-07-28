@@ -17,11 +17,12 @@ import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public interface PaymentProcessFacade {
 
-    PadFile preparePadFile();
+    PadFile preparePadFile(FundsTransferType fundsTransferType);
 
     void prepareEcheckPayments(ExecutionMonitor executionMonitor, PadFile padFile);
 

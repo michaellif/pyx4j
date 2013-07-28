@@ -17,6 +17,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.csv.CSVLoad;
@@ -29,6 +31,24 @@ import com.propertyvista.operations.domain.payment.pad.simulator.PadSimDebitReco
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
 public class PadSimFileParser {
+
+    private static final Map<String, FundsTransferType> fundsTransferTypeCodes = buildFundsTransferTypeCodes();
+
+    private static Map<String, FundsTransferType> buildFundsTransferTypeCodes() {
+        Map<String, FundsTransferType> codes = new HashMap<String, FundsTransferType>();
+        for (FundsTransferType fundsTransferType : FundsTransferType.values()) {
+            codes.put(fundsTransferType.getCode(), fundsTransferType);
+        }
+        return codes;
+    }
+
+    public static FundsTransferType getFundsTransferTypeByCode(String code) {
+        FundsTransferType fundsTransferType = fundsTransferTypeCodes.get(code);
+        if (fundsTransferType == null) {
+            throw new Error("Unknown FundsTransferType code " + code);
+        }
+        return fundsTransferType;
+    }
 
     public PadSimFile parsReport(File file) {
         final PadSimFile padFile = EntityFactory.create(PadSimFile.class);
@@ -57,7 +77,7 @@ public class PadSimFileParser {
                 padFile.fileCreationDate().setValue(headers[3]);
                 padFile.fileType().setValue(headers[4]);
                 padFile.fileVersion().setValue(headers[5]);
-                padFile.fundsTransferType().setValue(FundsTransferType.valueOf(headers[6]));
+                padFile.fundsTransferType().setValue(getFundsTransferTypeByCode(headers[6]));
                 return true;
             }
 
