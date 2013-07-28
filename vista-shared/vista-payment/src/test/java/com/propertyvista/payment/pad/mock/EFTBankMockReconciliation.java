@@ -44,7 +44,7 @@ class EFTBankMockReconciliation {
 
         Map<String, PadReconciliationSummary> byMID = new HashMap<String, PadReconciliationSummary>();
 
-        log.debug("Creatig Reconciliation for {} records", records.size());
+        log.debug("Creating Reconciliation for {} records", records.size());
 
         for (PadDebitRecord padRecord : records) {
             PadReconciliationSummary summary = getSummary(reconciliationFile, byMID, padRecord.padBatch().merchantTerminalId().getValue());

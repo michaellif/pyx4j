@@ -101,6 +101,7 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
         }
 
         ackFile.companyId().setValue(unacknowledgedFile.companyId().getValue());
+        ackFile.fundsTransferType().setValue(unacknowledgedFile.fundsTransferType().getValue());
         ackFile.fileCreationNumber().setValue(unacknowledgedFile.fileCreationNumber().getValue());
         String fileCreationDate = new SimpleDateFormat("yyyyMMdd").format(unacknowledgedFile.created().getValue());
         ackFile.fileCreationDate().setValue(fileCreationDate);

@@ -44,7 +44,7 @@ class EFTBankMock {
 
     private final List<PadFile> receivedPadFile = new ArrayList<PadFile>();
 
-    private final List<PadDebitRecord> uprocessedRecords = new ArrayList<PadDebitRecord>();
+    private final List<PadDebitRecord> unprocessedRecords = new ArrayList<PadDebitRecord>();
 
     private final List<PadDebitRecord> reconciliationRecords = new ArrayList<PadDebitRecord>();
 
@@ -60,7 +60,7 @@ class EFTBankMock {
 
     void addAcknowledgedRecord(PadDebitRecord padDebitRecord) {
         log.debug("Acknowledged transactionId:{}", padDebitRecord.transactionId().getValue());
-        uprocessedRecords.add(padDebitRecord);
+        unprocessedRecords.add(padDebitRecord);
     }
 
     PadAckFile acknowledgeFile(String companyId) {
@@ -86,7 +86,7 @@ class EFTBankMock {
 
     public PadReconciliationFile reconciliationFile(String companyId) {
         List<PadDebitRecord> records = new ArrayList<PadDebitRecord>();
-        Iterator<PadDebitRecord> it = uprocessedRecords.iterator();
+        Iterator<PadDebitRecord> it = unprocessedRecords.iterator();
         while (it.hasNext()) {
             PadDebitRecord padRecord = it.next();
             if (padRecord.padBatch().padFile().companyId().getValue().equals(companyId)) {
@@ -95,11 +95,13 @@ class EFTBankMock {
             }
         }
         if (records.size() == 0) {
-            log.debug("No uprocessed records for companyId {} ", companyId);
+            log.debug("No unprocessed records for companyId {} ", companyId);
             return null;
         } else {
             reconciliationRecords.addAll(records);
             PadReconciliationFile rec = reconciliation.createReconciliationFile(records);
+            //TODO
+            rec.fundsTransferType().setValue(records.get(0).padBatch().padFile().fundsTransferType().getValue());
             DataDump.dumpToDirectory("eft", "reconciliation", rec);
             return rec;
         }
