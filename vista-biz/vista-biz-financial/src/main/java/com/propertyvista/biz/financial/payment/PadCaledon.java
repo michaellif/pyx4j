@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
@@ -219,19 +219,20 @@ public class PadCaledon {
         }
     }
 
-    public boolean receivePadAcknowledgementFile(final ExecutionMonitor executionMonitor) {
+    public FundsTransferType receiveFundsTransferAcknowledgementFile(final ExecutionMonitor executionMonitor) {
         final PadAckFile padAkFile;
         try {
             padAkFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadAcknowledgementFile(companyId);
         } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
-            return false;
+            return null;
         }
         if (padAkFile == null) {
             executionMonitor.addInfoEvent("Pooled, No file found on server", null);
-            return false;
+            return null;
         } else {
             executionMonitor.addInfoEvent("received file", padAkFile.fileName().getValue());
+            executionMonitor.addInfoEvent("fundsTransferType " + padAkFile.fundsTransferType().getStringView(), null);
             executionMonitor.addInfoEvent("fileCreationNumber", padAkFile.fileCreationNumber().getValue());
         }
 
@@ -252,22 +253,23 @@ public class PadCaledon {
                     !processedOk);
         }
 
-        return true;
+        return padAkFile.fundsTransferType().getValue();
     }
 
-    public boolean receivePadReconciliation(final ExecutionMonitor executionMonitor) {
+    public FundsTransferType receiveFundsTransferReconciliation(final ExecutionMonitor executionMonitor) {
         final PadReconciliationFile reconciliationFile;
         try {
             reconciliationFile = ServerSideFactory.create(EFTTransportFacade.class).receivePadReconciliation(companyId);
         } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
-            return false;
+            return null;
         }
         if (reconciliationFile == null) {
             executionMonitor.addInfoEvent("Pooled, No file found on server", null);
-            return false;
+            return null;
         } else {
             executionMonitor.addInfoEvent("received file", reconciliationFile.fileName().getValue());
+            executionMonitor.addInfoEvent("fundsTransferType " + reconciliationFile.fundsTransferType().getStringView(), null);
         }
 
         boolean processedOk = false;
@@ -287,7 +289,7 @@ public class PadCaledon {
                     reconciliationFile.fileName().getValue(), !processedOk);
         }
 
-        return true;
+        return reconciliationFile.fundsTransferType().getValue();
     }
 
 }

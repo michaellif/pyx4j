@@ -37,6 +37,7 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentDate()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fundsTransferType()), 20).build());
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().netAmount()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().adjustments()), 10).build());

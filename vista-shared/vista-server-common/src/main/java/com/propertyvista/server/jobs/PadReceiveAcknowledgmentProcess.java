@@ -18,17 +18,21 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
 public class PadReceiveAcknowledgmentProcess implements PmcProcess {
+
+    private FundsTransferType fundsTransferType;
 
     @Override
     public boolean start(PmcProcessContext context) {
         if (VistaDeployment.isVistaStaging()) {
             return false;
         } else {
-            return ServerSideFactory.create(PaymentProcessFacade.class).receivePadAcknowledgementFile(context.getExecutionMonitor());
+            fundsTransferType = ServerSideFactory.create(PaymentProcessFacade.class).receiveFundsTransferAcknowledgementFile(context.getExecutionMonitor());
+            return (fundsTransferType != null);
         }
     }
 
@@ -44,7 +48,16 @@ public class PadReceiveAcknowledgmentProcess implements PmcProcess {
 
     @Override
     public void complete(PmcProcessContext context) {
-        ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcesAcknowledgment);
+        switch (fundsTransferType) {
+        case PreAuthorizedDebit:
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcesAcknowledgment);
+            break;
+        case DirectBankingPayment:
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcesAcknowledgment);
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
 }

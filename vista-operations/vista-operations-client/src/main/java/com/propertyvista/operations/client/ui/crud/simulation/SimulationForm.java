@@ -60,10 +60,12 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private TwoColumnFlexFormPanel createCaledonTab() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Caledon (Payments)"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Payments"));
         int row = -1;
 
+        content.setH2(++row, 0, 1, i18n.tr("Funds Transfer"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().usePadSimulator()), 5).build());
+        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useDirectBankingSimulator()), 5).build());
 
         content.setH2(++row, 0, 1, i18n.tr("Credit Cards"));
         content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5).build());

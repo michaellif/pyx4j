@@ -22,6 +22,8 @@ public interface VistaSystemsSimulationConfigDTO extends IEntity {
 
     IPrimitive<Boolean> usePadSimulator();
 
+    IPrimitive<Boolean> useDirectBankingSimulator();
+
     IPrimitive<Boolean> useCardServiceSimulator();
 
     IPrimitive<Boolean> useEquifaxSimulator();

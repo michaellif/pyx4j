@@ -35,35 +35,44 @@ public enum PmcProcessType implements Serializable {
 
     depositInterestAdjustment,
 
-    @Translate("PAD 1 - Issue PreAuthorized Payments")
-    paymentsIssue(PmcProcessOptions.RunForDay),
-
-    @Translate("PAD 2 - Update PreAuthorized Payments")
-    paymentsUpdate(PmcProcessOptions.RunForDay),
-
-    @Translate("PAD 3 - Process Scheduled eCheque Payments")
-    paymentsScheduledEcheck(PmcProcessOptions.RunForDay),
-
-    @Translate("PAD 4 - Process Scheduled CreditCards Payments")
-    paymentsScheduledCreditCards(PmcProcessOptions.RunForDay),
-
-    @Translate("PAD 5 - Send eCheque Payments to Caledon")
-    paymentsPadSend,
-
-    @Translate("PAD 6A - Payments Pad Receive Acknowledgment from Caledon")
-    paymentsPadReceiveAcknowledgment(PmcProcessOptions.GlobalOnly),
-
-    @Translate("PAD 6B - Payments Pad Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
-    paymentsPadProcesAcknowledgment,
-
-    @Translate("PAD 7A - Payments Pad Receive Reconciliation from Caledon")
-    paymentsPadReceiveReconciliation(PmcProcessOptions.GlobalOnly),
-
-    @Translate("PAD 7B - Receive Payments from BMO")
+    @Translate("P 0 - Receive Direct Banking Payments from BMO")
     paymentsBmoReceive(PmcProcessOptions.GlobalOnly),
 
-    @Translate("PAD 7C - Payments Pad Process Reconciliation (auto triggered by ReceiveReconciliation)")
+    @Translate("P 1 - Issue PreAuthorized Payments")
+    paymentsIssue(PmcProcessOptions.RunForDay),
+
+    @Translate("P 2 - Update PreAuthorized Payments")
+    paymentsUpdate(PmcProcessOptions.RunForDay),
+
+    @Translate("P 3 - Process Scheduled eCheque Payments")
+    paymentsScheduledEcheck(PmcProcessOptions.RunForDay),
+
+    @Translate("P 4 - Process Scheduled CreditCards Payments")
+    paymentsScheduledCreditCards(PmcProcessOptions.RunForDay),
+
+    @Translate("P 5A - Send eCheque(PAD) Funds Transfer to Caledon")
+    paymentsPadSend,
+
+    @Translate("P 5B - Send Direct Banking (BMO) Funds Transfer to Caledon")
+    paymentsDbpSend,
+
+    @Translate("P 6A - Payments Receive Funds Transfer Acknowledgment from Caledon (PAD,DBP)")
+    paymentsReceiveAcknowledgment(PmcProcessOptions.GlobalOnly),
+
+    @Translate("P 6B - Payments Pad Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
+    paymentsPadProcesAcknowledgment,
+
+    @Translate("P 6C - Payments Direct Banking Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
+    paymentsDbpProcesAcknowledgment,
+
+    @Translate("P 7A - Payments Receive Funds Transfer Reconciliation from Caledon (PAD,DBP)")
+    paymentsReceiveReconciliation(PmcProcessOptions.GlobalOnly),
+
+    @Translate("P 7B - Payments Pad Process Reconciliation (auto triggered by ReceiveReconciliation)")
     paymentsPadProcesReconciliation,
+
+    @Translate("P 7C - Payments Direct Banking Process Reconciliation (auto triggered by ReceiveReconciliation)")
+    paymentsDbpProcesReconciliation,
 
     paymentsTenantSure(PmcProcessOptions.RunForDay),
 

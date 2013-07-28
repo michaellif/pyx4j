@@ -197,7 +197,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.Simulator.SimulatedDataPreload) {
                         activity = new SimulatedDataPreloadActivity();
 
-                    } else if (place instanceof OperationsSiteMap.Simulator.DirectDebitSimRecord) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.DirectBankingSimRecord) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new DirectDebitSimRecordEditorActivity(crudPlace);
@@ -210,7 +210,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Simulator.DirectDebitSimFile) {
+                    } else if (place instanceof OperationsSiteMap.Simulator.DirectBankingSimFile) {
                         switch (crudPlace.getType()) {
                         case editor:
                             activity = new DirectDebitSimFileEditorActivity(crudPlace);

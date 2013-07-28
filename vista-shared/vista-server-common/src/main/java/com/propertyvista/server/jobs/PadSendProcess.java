@@ -17,8 +17,8 @@ import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PadSendProcess implements PmcProcess {

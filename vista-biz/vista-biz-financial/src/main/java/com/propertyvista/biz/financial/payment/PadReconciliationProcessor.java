@@ -38,6 +38,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
@@ -70,6 +71,7 @@ class PadReconciliationProcessor {
             @Override
             public List<PadReconciliationSummary> call() throws Exception {
                 EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
+                criteria.eq(criteria.proto().reconciliationFile().fundsTransferType(), FundsTransferType.PreAuthorizedDebit);
                 criteria.eq(criteria.proto().processingStatus(), Boolean.FALSE);
                 criteria.eq(criteria.proto().merchantAccount().pmc(), pmc);
                 return Persistence.service().query(criteria);
@@ -111,6 +113,7 @@ class PadReconciliationProcessor {
             at.status().setValue(AggregatedTransferStatus.Paid);
             break;
         }
+        at.fundsTransferType().setValue(summary.reconciliationFile().fundsTransferType().getValue());
         at.paymentDate().setValue(summary.paymentDate().getValue());
         at.grossPaymentAmount().setValue(summary.grossPaymentAmount().getValue());
         at.grossPaymentFee().setValue(summary.grossPaymentFee().getValue());

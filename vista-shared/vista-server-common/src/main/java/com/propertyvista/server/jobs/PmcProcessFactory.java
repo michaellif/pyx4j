@@ -53,11 +53,11 @@ public class PmcProcessFactory {
 // Caledon            
         case paymentsPadSend:
             return new PadSendProcess();
-        case paymentsPadReceiveAcknowledgment:
+        case paymentsReceiveAcknowledgment:
             return new PadReceiveAcknowledgmentProcess();
         case paymentsPadProcesAcknowledgment:
             return new PadProcessAcknowledgmentProcess();
-        case paymentsPadReceiveReconciliation:
+        case paymentsReceiveReconciliation:
             return new PadReceiveReconciliationProcess();
         case paymentsPadProcesReconciliation:
             return new PadProcessReconciliationProcess();

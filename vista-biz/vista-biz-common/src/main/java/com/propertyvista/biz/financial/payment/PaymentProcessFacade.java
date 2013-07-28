@@ -16,8 +16,8 @@ package com.propertyvista.biz.financial.payment;
 import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public interface PaymentProcessFacade {
@@ -28,11 +28,12 @@ public interface PaymentProcessFacade {
 
     boolean sendPadFile(PadFile padFile);
 
-    boolean receivePadAcknowledgementFile(ExecutionMonitor executionMonitor);
+    //Funds Transfer
+    FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor);
 
     void processPmcPadAcknowledgement(ExecutionMonitor executionMonitor);
 
-    boolean receivePadReconciliation(ExecutionMonitor executionMonitor);
+    FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor);
 
     void processPmcPadReconciliation(ExecutionMonitor executionMonitor);
 

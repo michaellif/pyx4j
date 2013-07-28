@@ -21,7 +21,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.domain.financial.FundsTransferType;
 
 /**
  * e-Cheque or PAD (pre-authorized debit transactions) / EFT Batch payments

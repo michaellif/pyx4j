@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;

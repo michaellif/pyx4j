@@ -37,6 +37,8 @@ public class AggregatedTransferLister extends AbstractLister<AggregatedTransfer>
                 new MemberColumnDescriptor.Builder(proto().merchantAccount().accountNumber()).searchableOnly().columnTitle(i18n.tr("Merchant Account Number")).build(),
                 new MemberColumnDescriptor.Builder(proto().merchantAccount()).searchable(false).build(),
                 
+                new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
+                
                 new MemberColumnDescriptor.Builder(proto().grossPaymentCount()).build(),
                 new MemberColumnDescriptor.Builder(proto().grossPaymentAmount()).build(),
                 

@@ -32,6 +32,7 @@ public class VistaSystemsSimulationConfig {
         configuration.usePadSimulator().setValue(
                 !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification()));
         configuration.useCardServiceSimulator().setValue(configuration.usePadSimulator().getValue());
+        configuration.useDirectBankingSimulator().setValue(configuration.usePadSimulator().getValue());
     }
 
     public static VistaSystemsSimulationConfigDTO getConfiguration() {

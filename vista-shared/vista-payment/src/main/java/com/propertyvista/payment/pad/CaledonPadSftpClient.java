@@ -21,7 +21,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.server.sftp.SftpClient;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 

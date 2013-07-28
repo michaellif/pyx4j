@@ -39,6 +39,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecordProcessing;
@@ -68,6 +69,7 @@ class PadAcknowledgementProcessor {
             @Override
             public List<PadBatch> call() {
                 EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+                criteria.eq(criteria.proto().padFile().fundsTransferType(), FundsTransferType.PreAuthorizedDebit);
                 criteria.eq(criteria.proto().pmc(), pmc);
                 criteria.eq(criteria.proto().processingStatus(), PadBatchProcessingStatus.AcknowledgedReceived);
                 List<PadBatch> batchList = Persistence.service().query(criteria);

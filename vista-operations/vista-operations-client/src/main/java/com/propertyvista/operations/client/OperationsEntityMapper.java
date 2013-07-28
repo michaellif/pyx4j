@@ -51,7 +51,7 @@ public class OperationsEntityMapper {
         register(CardServiceSimulationTransaction.class, OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction.class,
                 DEFAULT_IMAGE);
         register(AuditRecordOperationsDTO.class, OperationsSiteMap.Security.AuditRecord.class, DEFAULT_IMAGE);
-        register(DirectDebitSimRecord.class, OperationsSiteMap.Simulator.DirectDebitSimRecord.class, DEFAULT_IMAGE);
-        register(DirectDebitSimFile.class, OperationsSiteMap.Simulator.DirectDebitSimFile.class, DEFAULT_IMAGE);
+        register(DirectDebitSimRecord.class, OperationsSiteMap.Simulator.DirectBankingSimRecord.class, DEFAULT_IMAGE);
+        register(DirectDebitSimFile.class, OperationsSiteMap.Simulator.DirectBankingSimFile.class, DEFAULT_IMAGE);
     }
 }

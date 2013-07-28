@@ -24,9 +24,9 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
@@ -80,8 +80,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public boolean receivePadAcknowledgementFile(ExecutionMonitor executionMonitor) {
-        return new PadCaledon().receivePadAcknowledgementFile(executionMonitor);
+    public FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor) {
+        return new PadCaledon().receiveFundsTransferAcknowledgementFile(executionMonitor);
     }
 
     @Override
@@ -90,8 +90,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
-    public boolean receivePadReconciliation(ExecutionMonitor executionMonitor) {
-        return new PadCaledon().receivePadReconciliation(executionMonitor);
+    public FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor) {
+        return new PadCaledon().receiveFundsTransferReconciliation(executionMonitor);
     }
 
     @Override

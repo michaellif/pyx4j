@@ -13,7 +13,7 @@
  */
 package com.propertyvista.payment.pad;
 
-import com.propertyvista.operations.domain.payment.pad.FundsTransferType;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.server.sftp.SftpFile;
 
 public class CaledonFundsTransferSftpFile extends SftpFile {

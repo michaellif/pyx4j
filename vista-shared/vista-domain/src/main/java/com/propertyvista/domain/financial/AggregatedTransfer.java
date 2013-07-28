@@ -59,6 +59,8 @@ public interface AggregatedTransfer extends IEntity {
 
     MerchantAccount merchantAccount();
 
+    IPrimitive<FundsTransferType> fundsTransferType();
+
     IPrimitive<Key> padReconciliationSummaryKey();
 
     @NotNull

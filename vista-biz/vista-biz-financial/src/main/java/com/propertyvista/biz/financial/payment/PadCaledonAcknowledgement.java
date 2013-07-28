@@ -43,7 +43,8 @@ class PadCaledonAcknowledgement {
         PadFile padFile;
         {
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
-            criteria.eq(criteria.proto().fileCreationNumber(), ackFile.fileCreationNumber().getValue());
+            criteria.eq(criteria.proto().fileCreationNumber(), ackFile.fileCreationNumber());
+            criteria.eq(criteria.proto().fundsTransferType(), ackFile.fundsTransferType());
             padFile = Persistence.service().retrieve(criteria);
             if (padFile == null) {
                 throw new Error("Unexpected fileCreationNumber '" + ackFile.fileCreationNumber().getValue() + "' in file " + ackFile.fileName().getValue());

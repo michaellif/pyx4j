@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.domain.payment.pad;
+package com.propertyvista.domain.financial;
 
 
 public enum FundsTransferType {
