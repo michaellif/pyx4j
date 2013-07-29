@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,9 +36,9 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
 
     private List<E> options;
 
-    private String noSelectionText = "";
-
     private NotInOptionsPolicy policy;
+
+    private IFormat<E> format;
 
     public enum NotInOptionsPolicy {
         KEEP, DISCARD;
@@ -61,7 +62,29 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     public CComboBox(String title, NotInOptionsPolicy policy) {
+        this(title, policy, new IFormat<E>() {
+
+            @Override
+            public String format(E o) {
+                if (o == null) {
+                    return "";
+                } else {
+                    return o.toString();
+                }
+
+            }
+
+            @Override
+            public E parse(String string) throws ParseException {
+                // TODO Auto-generated method stub
+                return null;
+            }
+        });
+    }
+
+    public CComboBox(String title, NotInOptionsPolicy policy, IFormat<E> format) {
         super(title);
+        this.format = format;
         if (policy == null) {
             this.policy = NotInOptionsPolicy.KEEP;
         } else {
@@ -150,11 +173,13 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
     }
 
     public String getItemName(E o) {
-        if (o == null) {
-            return this.noSelectionText;
-        } else {
-            return o.toString();
-        }
+        return format.format(o);
+    }
+
+    public void setFormat(IFormat<E> format) {
+        this.format = format;
+        setValue(getValue(), false);
+        getWidget().refreshOptions();
     }
 
     @Override
@@ -163,15 +188,6 @@ public class CComboBox<E> extends CFocusComponent<E, NComboBox<E>> implements Ha
             super.setMandatory(mandatory);
             getWidget().refreshOptions();
         }
-    }
-
-    public String getNoSelectionText() {
-        return this.noSelectionText;
-    }
-
-    public void setNoSelectionText(String noSelectionText) {
-        this.noSelectionText = noSelectionText;
-        getWidget().refreshOptions();
     }
 
     public NotInOptionsPolicy getPolicy() {
