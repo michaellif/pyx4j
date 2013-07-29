@@ -94,8 +94,8 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentWizardForm(PaymentWizardView view, String caption, String endButtonCaption) {
-        super(PaymentRecordDTO.class, view, caption, endButtonCaption);
+    public PaymentWizardForm(PaymentWizardView view, String endButtonCaption) {
+        super(PaymentRecordDTO.class, view, endButtonCaption);
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());

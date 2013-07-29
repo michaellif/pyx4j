@@ -27,14 +27,11 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
 
     private WizardDecorator<E> decorator;
 
-    private final String caption;
-
     private final String endButtonCaption;
 
-    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String caption, String endButtonCaption) {
+    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String endButtonCaption) {
         super(rootClass);
         this.view = view;
-        this.caption = caption;
         this.endButtonCaption = endButtonCaption;
     }
 
@@ -65,19 +62,12 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
                 view.getPresenter().cancel();
             };
         };
-        decorator.setCaption(caption);
         return decorator;
     }
 
     public void calculateButtonsState() {
         if (decorator != null) {
             decorator.calculateButtonsState();
-        }
-    }
-
-    public void setCaption(String stepTitle) {
-        if (decorator != null) {
-            decorator.setCaption(stepTitle);
         }
     }
 

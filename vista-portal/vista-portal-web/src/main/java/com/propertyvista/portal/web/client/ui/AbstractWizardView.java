@@ -81,7 +81,6 @@ public abstract class AbstractWizardView<E extends IEntity> extends SimplePanel 
 
     @Override
     public void onStepChange() {
-        wizardForm.setCaption(wizardForm.getSelectedStep().getStepTitle());
         wizardForm.calculateButtonsState();
     }
 

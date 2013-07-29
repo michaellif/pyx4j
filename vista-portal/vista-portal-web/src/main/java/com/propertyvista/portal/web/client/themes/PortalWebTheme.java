@@ -172,6 +172,31 @@ public class PortalWebTheme extends Theme {
         addTheme(new DefaultDialogTheme());
 
         addTheme(new CEntityWizardTheme() {
+
+            @Override
+            protected void initHeaderStyles() {
+                Style style = new Style(".", StyleName.WizardHeader);
+                addStyle(style);
+
+                style = new Style(".", StyleName.WizardHeaderCaption);
+                addStyle(style);
+            }
+
+            @Override
+            protected void initContentPanelStyles() {
+                Style style = new Style(".", StyleName.WizardContent);
+                style.addProperty("background", ThemeColor.foreground, 0.01);
+                style.addProperty("border-color", ThemeColor.foreground, 0.3);
+                style.addProperty("border-style", "solid");
+                style.addProperty("border-width", "1px");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("padding", "10px");
+                style.addProperty("margin", "10px");
+                style.addProperty("overflow", "hidden");
+                addStyle(style);
+                super.initContentPanelStyles();
+            }
+
             @Override
             protected void initFooterStyles() {
                 Style style = new Style(".", StyleName.WizardFooter);
