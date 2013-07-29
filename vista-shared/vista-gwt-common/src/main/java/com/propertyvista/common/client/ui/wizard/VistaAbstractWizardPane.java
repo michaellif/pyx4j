@@ -19,14 +19,13 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.UniqueConstraintUserRuntimeException;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.site.client.ui.prime.IPrimePane;
 import com.pyx4j.site.client.ui.prime.misc.IMemento;
 import com.pyx4j.site.client.ui.prime.misc.MementoImpl;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.site.client.ui.visor.IVisor;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-public abstract class VistaAbstractWizardPane<E extends IEntity> extends SimplePanel implements IPrimePane, IWizard<E> {
+public abstract class VistaAbstractWizardPane<E extends IEntity> extends SimplePanel implements IWizard<E> {
 
     private static final I18n i18n = I18n.get(VistaAbstractWizardPane.class);
 
