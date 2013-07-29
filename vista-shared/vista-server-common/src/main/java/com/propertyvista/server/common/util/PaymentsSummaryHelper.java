@@ -66,7 +66,7 @@ public final class PaymentsSummaryHelper {
             bind(PaymentType.Check, proto.check());
             bind(PaymentType.Echeck, proto.eCheck());
             bind(PaymentType.CreditCard, proto.cc());
-            bind(PaymentType.EFT, proto.eft());
+            bind(PaymentType.DirectBanking, proto.eft());
             bind(PaymentType.Interac, proto.interac());
         }
 

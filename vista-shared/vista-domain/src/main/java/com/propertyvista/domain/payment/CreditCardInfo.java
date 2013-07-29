@@ -39,6 +39,8 @@ public interface CreditCardInfo extends PaymentDetails {
 
         Visa("4"),
 
+        VisaDebit("4"),
+
         @Translate("MasterCard")
         MasterCard("51", "52", "53", "54", "55");
 

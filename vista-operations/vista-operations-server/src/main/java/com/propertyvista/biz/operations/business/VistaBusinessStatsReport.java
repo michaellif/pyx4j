@@ -194,7 +194,7 @@ class VistaBusinessStatsReport {
         {
             EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
             criteria.eq(criteria.proto().paymentStatus(), PaymentStatus.Cleared);
-            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.EFT);
+            criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
             criteria.ge(criteria.proto().finalizeDate(), monthlyPeriod);
             List<PaymentRecord> records = Persistence.service().query(criteria);
             BigDecimal amount = BigDecimal.ZERO;

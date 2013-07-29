@@ -64,7 +64,7 @@ public class PortalPaymentTypesUtil {
                     allowedTypes.add(PaymentType.Interac);
                     break;
                 case EFTPaymentsAllowed:
-                    allowedTypes.add(PaymentType.EFT);
+                    allowedTypes.add(PaymentType.DirectBanking);
                     break;
                 }
             }

@@ -211,7 +211,7 @@ public class YardiARIntegrationAgent {
             return YardiPaymentType.Check.name();
         case Echeck:
             return YardiPaymentType.Other.name();
-        case EFT:
+        case DirectBanking:
             return YardiPaymentType.ACH.name();
         case CreditCard:
             return YardiPaymentType.CreditCard.name();

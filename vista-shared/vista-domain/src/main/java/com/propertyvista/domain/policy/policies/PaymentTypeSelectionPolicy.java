@@ -43,7 +43,17 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     IPrimitive<Boolean> acceptedEFT();
 
     @Caption(name = "Credit Card")
+    @Deprecated
     IPrimitive<Boolean> acceptedCreditCard();
+
+    @Caption(name = "Visa Credit Card")
+    IPrimitive<Boolean> acceptedCreditCardVisa();
+
+    @Caption(name = "MasterCard")
+    IPrimitive<Boolean> acceptedCreditCardMasterCard();
+
+    @Caption(name = "Visa Debit Card")
+    IPrimitive<Boolean> acceptedVisaDebit();
 
     @Caption(name = "Interac")
     IPrimitive<Boolean> acceptedInterac();
@@ -57,7 +67,17 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     IPrimitive<Boolean> residentPortalEFT();
 
     @Caption(name = "Credit Card")
+    @Deprecated
     IPrimitive<Boolean> residentPortalCreditCard();
+
+    @Caption(name = "Visa Credit Card")
+    IPrimitive<Boolean> residentPortalCreditCardVisa();
+
+    @Caption(name = "MasterCard")
+    IPrimitive<Boolean> residentPortalCreditCardMasterCard();
+
+    @Caption(name = "Visa Debit Card")
+    IPrimitive<Boolean> residentPortalVisaDebit();
 
     @Caption(name = "Interac")
     IPrimitive<Boolean> residentPortalInterac();
@@ -78,7 +98,17 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     IPrimitive<Boolean> cashEquivalentEFT();
 
     @Caption(name = "Credit Card")
+    @Deprecated
     IPrimitive<Boolean> cashEquivalentCreditCard();
+
+    @Caption(name = "Visa Credit Card")
+    IPrimitive<Boolean> cashEquivalentCreditCardVisa();
+
+    @Caption(name = "MasterCard")
+    IPrimitive<Boolean> cashEquivalentCreditCardMasterCard();
+
+    @Caption(name = "Visa Debit Card")
+    IPrimitive<Boolean> cashEquivalentVisaDebit();
 
     @Caption(name = "Interac")
     IPrimitive<Boolean> cashEquivalentInterac();

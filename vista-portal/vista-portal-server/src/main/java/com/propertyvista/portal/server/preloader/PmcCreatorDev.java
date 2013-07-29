@@ -102,7 +102,7 @@ public class PmcCreatorDev {
         fees.eChequeFee().setValue(new BigDecimal("0.20"));
 
         fees.eftPaymentAvailable().setValue(Boolean.FALSE);
-        fees.eftFee().setValue(new BigDecimal("0.40"));
+        fees.directBankingFee().setValue(new BigDecimal("0.40"));
 
         fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
         fees.interacCaledonFee().setValue(new BigDecimal("1.50"));

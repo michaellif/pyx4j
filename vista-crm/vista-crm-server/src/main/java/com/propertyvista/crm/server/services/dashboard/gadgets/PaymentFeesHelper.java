@@ -30,7 +30,7 @@ public class PaymentFeesHelper {
             fees.cash().setValue(null);
             fees.check().setValue(null);
             fees.eCheck().setValue(typeInfo.eChequeFee().getValue());
-            fees.eft().setValue(typeInfo.eftFee().getValue());
+            fees.eft().setValue(typeInfo.directBankingFee().getValue());
             fees.interacCaledon().setValue(typeInfo.interacCaledonFee().getValue());
             fees.interacVisa().setValue(typeInfo.interacCaledonFee().getValue());
             break;

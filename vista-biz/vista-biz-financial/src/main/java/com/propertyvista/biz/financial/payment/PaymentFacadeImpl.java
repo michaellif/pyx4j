@@ -182,7 +182,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         case Echeck:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             break;
-        case EFT:
+        case DirectBanking:
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
             break;
         case Interac:
@@ -257,7 +257,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Echeck:
-        case EFT:
+        case DirectBanking:
         case CreditCard:
         case Interac:
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());
@@ -282,7 +282,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         }
         switch (paymentRecord.paymentMethod().type().getValue()) {
         case Echeck:
-        case EFT:
+        case DirectBanking:
         case CreditCard:
         case Interac:
             throw new IllegalArgumentException("Electronic PaymentMethod:" + paymentRecord.paymentMethod().type().getStringView());

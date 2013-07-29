@@ -213,7 +213,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                     details.set(EntityFactory.create(InteracInfo.class));
                 }
                 break;
-            case EFT:
+            case DirectBanking:
                 break;
             default:
                 break;

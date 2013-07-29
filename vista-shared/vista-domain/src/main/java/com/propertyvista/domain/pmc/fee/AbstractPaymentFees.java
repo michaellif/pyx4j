@@ -31,19 +31,26 @@ public interface AbstractPaymentFees extends IEntity {
 
     IPrimitive<BigDecimal> ccMasterCardFee();
 
+    //Not implemented
     IPrimitive<BigDecimal> ccDiscoverFee();
 
+    //Not implemented
     IPrimitive<BigDecimal> ccAmexFee();
+
+    IPrimitive<BigDecimal> visaDebitFee();
 
     //--
 
     IPrimitive<BigDecimal> eChequeFee();
 
-    IPrimitive<BigDecimal> eftFee();
+    IPrimitive<BigDecimal> directBankingFee();
 
+    //Not implemented
     IPrimitive<BigDecimal> interacCaledonFee();
 
+    //Not implemented
     IPrimitive<BigDecimal> interacPaymentPadFee();
 
+    //Not implemented
     IPrimitive<BigDecimal> interacVisaFee();
 }

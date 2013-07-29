@@ -127,12 +127,13 @@ public class PaymentAcceptanceUtils {
         require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.residentPortalCreditCard(), p
                 .cashEquivalentCreditCard()));
 
+        require.add(new Acceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.cashEquivalentEFT()));
+
         if (!VistaTODO.removedForProduction && false) {
             require.add(new Acceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p.notCashEquivalent()));
             require.add(new Acceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p.cashEquivalentInterac()));
 
-            require.add(new Acceptance(PaymentType.EFT, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.notCashEquivalent()));
-            require.add(new Acceptance(PaymentType.EFT, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.cashEquivalentEFT()));
         }
 
         return require;

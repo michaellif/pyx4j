@@ -29,7 +29,7 @@ public enum PaymentType {
     @Translate("eCheck (ACH)")
     Echeck,
 
-    EFT,
+    DirectBanking,
 
     CreditCard,
 
@@ -67,7 +67,7 @@ public enum PaymentType {
     }
 
     public static EnumSet<PaymentType> avalableForNsf() {
-        return EnumSet.of(Check, Echeck, EFT, CreditCard);
+        return EnumSet.of(Check, Echeck, DirectBanking, CreditCard);
     }
 
     public static EnumSet<PaymentType> notAllowedInProfile() {
@@ -79,7 +79,7 @@ public enum PaymentType {
     }
 
     public static EnumSet<PaymentType> transactable() {
-        return EnumSet.of(Echeck, EFT, CreditCard);
+        return EnumSet.of(Echeck, DirectBanking, CreditCard);
     }
 
     public static EnumSet<PaymentType> schedulable() {
