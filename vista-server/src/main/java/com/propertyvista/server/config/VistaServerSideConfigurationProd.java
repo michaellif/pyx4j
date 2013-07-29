@@ -20,6 +20,7 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.log4j.LoggerConfig;
 
+import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -164,6 +165,15 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
         if (VistaDeployment.isVistaProduction()) {
             return new CaledonFundsTransferConfigurationProd(this);
+        } else {
+            throw new UserRuntimeException("FundsTransfer is disabled");
+        }
+    }
+
+    @Override
+    public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
+        if (VistaDeployment.isVistaProduction()) {
+            return new BmoInterfaceConfigurationProd(this);
         } else {
             throw new UserRuntimeException("FundsTransfer is disabled");
         }

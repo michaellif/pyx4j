@@ -80,7 +80,7 @@ public class RemconParser {
                     throw new Error("Invalid or truncated field '" + field.getName() + "'");
                 }
             }
-            String value = line.substring(cIndex, endIndex);
+            String value = line.substring(cIndex, endIndex).trim();
             validate(field, remconField, value);
 
             try {

@@ -43,6 +43,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
@@ -210,6 +211,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
         return new CaledonFundsTransferConfigurationSimulator(this);
+    }
+
+    @Override
+    public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
+        return new BmoInterfaceConfigurationSimulator(this);
     }
 
     @Override
@@ -442,6 +448,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public File getCaledonSimulatorSftpDirectory() {
         return new File(vistaWorkDir(), "caledon-simulator-sftp");
+    }
+
+    @Override
+    public File getBmoSimulatorSftpDirectory() {
+        return new File(vistaWorkDir(), "bmo-simulator-sftp");
     }
 
     @Override

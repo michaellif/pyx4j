@@ -11,11 +11,11 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.operations.server.services.simulator;
+package com.propertyvista.payment.pad.simulator;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
@@ -29,6 +29,7 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityGraph;
+import com.pyx4j.essentials.j2se.util.FileUtils;
 import com.pyx4j.log4j.LoggerConfig;
 
 import com.propertyvista.operations.domain.payment.pad.MerchantReconciliationStatus;
@@ -42,22 +43,18 @@ import com.propertyvista.payment.pad.CaledonFundsTransferSftpFile;
 import com.propertyvista.payment.pad.CaledonPadSftpClient;
 import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.data.PadAckFile;
-import com.propertyvista.payment.pad.simulator.PadSimAcknowledgementFileWriter;
-import com.propertyvista.payment.pad.simulator.PadSimFileParser;
-import com.propertyvista.payment.pad.simulator.PadSimReconciliationFileWriter;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
-public class PadSim {
+public class PadSimulationManager {
 
-    private static final Logger log = LoggerFactory.getLogger(PadSim.class);
+    private static final Logger log = LoggerFactory.getLogger(PadSimulationManager.class);
 
     private File getPadBaseDir() {
         File padWorkdir = new File(new File("vista-sim"), LoggerConfig.getContextName());
-        if (!padWorkdir.exists()) {
-            if (!padWorkdir.mkdirs()) {
-                log.error("Unable to create directory {}", padWorkdir.getAbsolutePath());
-                throw new Error(MessageFormat.format("Unable to create directory {0}", padWorkdir.getAbsolutePath()));
-            }
+        try {
+            FileUtils.forceMkdir(padWorkdir);
+        } catch (IOException e) {
+            throw new Error(e);
         }
         return padWorkdir;
     }

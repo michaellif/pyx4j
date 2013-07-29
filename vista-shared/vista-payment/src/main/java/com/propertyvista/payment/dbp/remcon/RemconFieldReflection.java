@@ -25,11 +25,14 @@ import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
 
-class RemconFieldReflection {
+public class RemconFieldReflection {
 
     private static final Map<Class<? extends RemconRecord>, List<Field>> registry = new HashMap<Class<? extends RemconRecord>, List<Field>>();
 
-    static List<Field> getFileds(Class<? extends RemconRecord> klass) {
+    public static List<Field> getFileds(Class<? extends RemconRecord> klass) {
+        if (registry.isEmpty()) {
+            RemconRecordFactory.instance();
+        }
         List<Field> list = registry.get(klass);
         if (list == null) {
             throw new Error("RemconRecord class '" + klass.getName() + "' not registered");

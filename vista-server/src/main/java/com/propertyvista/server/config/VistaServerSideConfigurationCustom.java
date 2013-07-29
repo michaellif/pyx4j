@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
+import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 
@@ -66,9 +67,18 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     @Override
     public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
         if (VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.TRUE)) {
-            return new CaledonFundsTransferConfigurationCustom(this);
+            return new CaledonFundsTransferConfigurationSimulatorCustom(this);
         } else {
             return new CaledonFundsTransferConfigurationProd(this);
+        }
+    }
+
+    @Override
+    public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
+        if (VistaSystemsSimulationConfig.getConfiguration().useDirectBankingSimulator().getValue(Boolean.TRUE)) {
+            return new BmoInterfaceConfigurationSimulatorCustom(this);
+        } else {
+            return new BmoInterfaceConfigurationProd(this);
         }
     }
 }

@@ -22,27 +22,29 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 
-public class CaledonFundsTransferConfigurationSimulator implements CaledonFundsTransferConfiguration {
+class CaledonFundsTransferConfigurationSimulatorCustom implements CaledonFundsTransferConfiguration {
 
     private final AbstractVistaServerSideConfiguration config;
 
-    CaledonFundsTransferConfigurationSimulator(AbstractVistaServerSideConfiguration config) {
+    CaledonFundsTransferConfigurationSimulatorCustom(AbstractVistaServerSideConfiguration config) {
         this.config = config;
     }
 
     @Override
     public String sftpHost() {
-        return "interfaces.dev.birchwoodsoftwaregroup.com";
+        return config.getConfigProperties().getValue("simulator.fundsTransfer.sftpHost", "qa.birchwoodsoftwaregroup.com");
     }
 
     @Override
     public int sftpPort() {
-        return config.interfaceSSHDPort();
+        return config.getConfigProperties().getIntegerValue("simulator.fundsTransfer.sftpPort", 8823);
     }
 
     @Override
     public Credentials sftpCredentials() {
-        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), VistaInterfaceCredentials.caledonFundsTransferSimulator));
+        String fileName = config.getConfigProperties().getValue("simulator.fundsTransfer.sftpCredentialsFileName",
+                VistaInterfaceCredentials.caledonFundsTransferSimulator);
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), fileName));
     }
 
 }

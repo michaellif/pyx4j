@@ -21,7 +21,11 @@ public class VistaInterfaceCredentials {
 
     public static final String caledonFundsTransfer = "caledon-credentials.properties";
 
-    public static final String caledonSimulatorFundsTransfer = "caledon-simulator-credentials.properties";
+    public static final String caledonFundsTransferSimulator = "caledon-simulator-credentials.properties";
+
+    public static final String bmoMailBoxPool = "bmo-credentials.properties";
+
+    public static final String bmoMailBoxPoolSimulator = "bmo-simulator-credentials.properties";
 
     public static final String passwordEncryptor = "master-credentials.properties";
 

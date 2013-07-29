@@ -32,12 +32,12 @@ class CaledonFundsTransferConfigurationProd implements CaledonFundsTransferConfi
 
     @Override
     public String sftpHost() {
-        return "apato.caledoncard.com";
+        return config.getConfigProperties().getValue("fundsTransfer.sftpHost", "apato.caledoncard.com");
     }
 
     @Override
     public int sftpPort() {
-        return 22;
+        return config.getConfigProperties().getIntegerValue("fundsTransfer.sftpPort", 22);
     }
 
     @Override

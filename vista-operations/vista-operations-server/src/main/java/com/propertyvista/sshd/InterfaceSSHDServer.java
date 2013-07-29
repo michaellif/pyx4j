@@ -38,6 +38,7 @@ import com.pyx4j.essentials.j2se.util.FileUtils;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
+import com.propertyvista.payment.dbp.simulator.DirectDebitSimManager;
 import com.propertyvista.payment.pad.simulator.PadSimSftpHelper;
 import com.propertyvista.sshd.fs.UsersFileSystemFactory;
 
@@ -73,7 +74,7 @@ public class InterfaceSSHDServer {
             if (ApplicationMode.isDevelopment()) {
                 // Caledon simulator
                 {
-                    File file = new File(config.getConfigDirectory(), VistaInterfaceCredentials.caledonSimulatorFundsTransfer);
+                    File file = new File(config.getConfigDirectory(), VistaInterfaceCredentials.caledonFundsTransferSimulator);
                     if (file.canRead()) {
                         Credentials credentials = CredentialsFileStorage.getCredentials(file);
                         users.add(credentials);
@@ -82,7 +83,12 @@ public class InterfaceSSHDServer {
                 }
                 // BMO Simulator
                 {
-
+                    File file = new File(config.getConfigDirectory(), VistaInterfaceCredentials.bmoMailBoxPoolSimulator);
+                    if (file.canRead()) {
+                        Credentials credentials = CredentialsFileStorage.getCredentials(file);
+                        users.add(credentials);
+                        usersRootDirectories.put(credentials.userName, DirectDebitSimManager.getSftpRootDir());
+                    }
                 }
             }
 

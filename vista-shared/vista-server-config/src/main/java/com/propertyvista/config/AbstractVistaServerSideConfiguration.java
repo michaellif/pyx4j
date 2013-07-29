@@ -111,6 +111,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract File getCaledonSimulatorSftpDirectory();
 
+    public abstract File getBmoSimulatorSftpDirectory();
+
     public abstract String getTenantSureEmailSender();
 
     public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration();
@@ -118,6 +120,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract TenantSureConfiguration getTenantSureConfiguration();
 
     public abstract CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration();
+
+    public abstract BmoInterfaceConfiguration getBmoInterfaceConfiguration();
 
     public boolean isGoogleAnalyticDisableForEmployee() {
         return false;

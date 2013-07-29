@@ -20,6 +20,7 @@ import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.rpc.services.simulator.PadSimFileCrudService;
+import com.propertyvista.payment.pad.simulator.PadSimulationManager;
 
 public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFile> implements PadSimFileCrudService {
 
@@ -34,29 +35,29 @@ public class PadSimFileCrudServiceImpl extends AbstractCrudServiceImpl<PadSimFil
 
     @Override
     public void loadPadFile(AsyncCallback<PadSimFile> callback) {
-        callback.onSuccess(new PadSim().loadPadFile());
+        callback.onSuccess(new PadSimulationManager().loadPadFile());
     }
 
     @Override
     public void replyAcknowledgment(AsyncCallback<VoidSerializable> callback, PadSimFile padStub) {
-        new PadSim().replyAcknowledgment(padStub);
+        new PadSimulationManager().replyAcknowledgment(padStub);
         callback.onSuccess(null);
     }
 
     @Override
     public void replyReconciliation(AsyncCallback<VoidSerializable> callback, PadSimFile padStub) {
-        new PadSim().replyReconciliation(padStub);
+        new PadSimulationManager().replyReconciliation(padStub);
         callback.onSuccess(null);
     }
 
     @Override
     public void createReturnReconciliation(AsyncCallback<PadSimFile> callback, PadSimFile padStub) {
-        callback.onSuccess(new PadSim().createReturnReconciliation(padStub));
+        callback.onSuccess(new PadSimulationManager().createReturnReconciliation(padStub));
     }
 
     @Override
     public void replyReturns(AsyncCallback<VoidSerializable> callback, PadSimFile padStub) {
-        new PadSim().replyReturns(padStub);
+        new PadSimulationManager().replyReturns(padStub);
         callback.onSuccess(null);
     }
 

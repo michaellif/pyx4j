@@ -19,31 +19,35 @@ import com.pyx4j.config.server.Credentials;
 import com.pyx4j.essentials.j2se.CredentialsFileStorage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
-import com.propertyvista.config.CaledonFundsTransferConfiguration;
+import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 
-class CaledonFundsTransferConfigurationCustom implements CaledonFundsTransferConfiguration {
+public class BmoInterfaceConfigurationSimulator implements BmoInterfaceConfiguration {
 
     private final AbstractVistaServerSideConfiguration config;
 
-    CaledonFundsTransferConfigurationCustom(AbstractVistaServerSideConfiguration config) {
+    BmoInterfaceConfigurationSimulator(AbstractVistaServerSideConfiguration config) {
         this.config = config;
     }
 
     @Override
+    public String bmoMailboxNumber() {
+        return "TST12345";
+    }
+
+    @Override
     public String sftpHost() {
-        return config.getConfigProperties().getValue("fundsTransfer.sftpHost", "dev.birchwoodsoftwaregroup.com");
+        return "interfaces.dev.birchwoodsoftwaregroup.com";
     }
 
     @Override
     public int sftpPort() {
-        return config.getConfigProperties().getIntegerValue("fundsTransfer.sftpPort", 3322);
+        return config.interfaceSSHDPort();
     }
 
     @Override
     public Credentials sftpCredentials() {
-        String fileName = config.getConfigProperties().getValue("fundsTransfer.sftpCredentialsFileName", VistaInterfaceCredentials.caledonFundsTransfer);
-        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), fileName));
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), VistaInterfaceCredentials.bmoMailBoxPoolSimulator));
     }
 
 }
