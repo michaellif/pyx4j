@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
@@ -324,10 +325,14 @@ public abstract class CComponent<DATA_TYPE> implements HasHandlers, HasPropertyC
             if (mandatory) {
                 addValueValidator(new MandatoryValidator<DATA_TYPE>(mandatoryValidationMessage));
             } else {
+                Collection<MandatoryValidator<DATA_TYPE>> validatorsForRemoval = new LinkedList<MandatoryValidator<DATA_TYPE>>();
                 for (EditableValueValidator<DATA_TYPE> validator : validators) {
                     if (validator instanceof MandatoryValidator) {
-                        removeValueValidator(validator);
+                        validatorsForRemoval.add((MandatoryValidator<DATA_TYPE>) validator);
                     }
+                }
+                for (MandatoryValidator<DATA_TYPE> validator : validatorsForRemoval) {
+                    removeValueValidator(validator);
                 }
             }
             PropertyChangeEvent.fire(this, PropertyChangeEvent.PropertyName.mandatory);
