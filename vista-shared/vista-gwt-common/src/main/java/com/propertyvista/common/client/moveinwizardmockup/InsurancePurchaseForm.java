@@ -33,12 +33,12 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.moveinwizardmockup.components.FormattableCombo;
 import com.propertyvista.common.client.moveinwizardmockup.components.LegalTermsFolder;
 import com.propertyvista.common.client.moveinwizardmockup.components.MoneyLabeledCombo;
 import com.propertyvista.common.client.moveinwizardmockup.components.MultiDisclosurePanel;
@@ -335,10 +335,10 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         }
     }
 
-    private class DeductibleCombo extends FormattableCombo<BigDecimal> {
+    private class DeductibleCombo extends CComboBox<BigDecimal> {
 
         public DeductibleCombo() {
-            super(new IFormat<BigDecimal>() {
+            super(null, null, new IFormat<BigDecimal>() {
                 @Override
                 public String format(BigDecimal value) {
                     if (value.compareTo(new BigDecimal("250")) <= 0) {
@@ -367,10 +367,10 @@ public class InsurancePurchaseForm extends CEntityDecoratableForm<PurchaseInsura
         }
     }
 
-    private class NumberOfPreviousClaimsCombo extends FormattableCombo<Integer> {
+    private class NumberOfPreviousClaimsCombo extends CComboBox<Integer> {
 
         public NumberOfPreviousClaimsCombo() {
-            super(new IFormat<Integer>() {
+            super(null, null, new IFormat<Integer>() {
 
                 @Override
                 public String format(Integer value) {

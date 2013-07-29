@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.website.branding;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -93,7 +95,17 @@ class SocialLinkFolder extends VistaBoxFolder<SocialLink> {
 
             VerticalPanel panel = new VerticalPanel();
             CComboBox<SocialSite> selector = new CComboBox<SocialSite>();
-            selector.setNoSelectionText("Select Social Site");
+            selector.setFormat(new IFormat<SocialLink.SocialSite>() {
+                @Override
+                public SocialSite parse(String string) throws ParseException {
+                    return null;
+                }
+
+                @Override
+                public String format(SocialSite value) {
+                    return value != null ? value.toString() : i18n.tr("Select Social Site");
+                }
+            });
             ArrayList<SocialSite> options = new ArrayList<SocialSite>(Arrays.asList(SocialSite.values()));
             options.removeAll(usedSites);
             selector.setOptions(options);

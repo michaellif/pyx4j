@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.crud.settings.website.general;
 
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.pyx4j.forms.client.events.AsyncValueChangeEvent;
 import com.pyx4j.forms.client.events.AsyncValueChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityComboBox;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.CancelOption;
@@ -35,20 +37,31 @@ import com.propertyvista.shared.i18n.CompiledLocale;
 public class AvailableLocaleSelectorDialog extends Dialog implements CancelOption {
     private final static I18n i18n = I18n.get(AvailableLocaleSelectorDialog.class);
 
-    private final static String title = "Select Locale";
+    private final static String title = i18n.tr("Select Locale");
 
     private final Set<AvailableLocale> usedLocales;
 
     private final VerticalPanel panel = new VerticalPanel();
 
     public AvailableLocaleSelectorDialog(final Set<AvailableLocale> usedLocales, final ValueChangeHandler<AvailableLocale> selectHandler) {
-        super(i18n.tr(title));
+        super(title);
         setDialogOptions(this);
 
         this.usedLocales = usedLocales;
 
         final CEntityComboBox<AvailableLocale> localeSelector = new CEntityComboBox<AvailableLocale>(AvailableLocale.class);
-        localeSelector.setNoSelectionText(i18n.tr(title));
+        localeSelector.setFormat(new IFormat<AvailableLocale>() {
+
+            @Override
+            public AvailableLocale parse(String string) throws ParseException {
+                return null;
+            }
+
+            @Override
+            public String format(AvailableLocale value) {
+                return value != null ? value.toString() : title;
+            }
+        });
         // this triggers option load
         localeSelector.setValueByString("");
         if (localeSelector.isOptionsLoaded()) {

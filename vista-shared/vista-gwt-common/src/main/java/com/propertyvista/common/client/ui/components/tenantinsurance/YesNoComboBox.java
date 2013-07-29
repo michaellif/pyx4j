@@ -11,20 +11,21 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.tenantinsurance.components;
+package com.propertyvista.common.client.ui.components.tenantinsurance;
 
 import java.text.ParseException;
 import java.util.Arrays;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-public class YesNoComboBox extends FormattableCombo<Boolean> {
+public class YesNoComboBox extends CComboBox<Boolean> {
 
     private static final I18n i18n = I18n.get(YesNoComboBox.class);
 
     public YesNoComboBox() {
-        super(new IFormat<Boolean>() {
+        super(null, null, new IFormat<Boolean>() {
             @Override
             public String format(Boolean value) {
                 if (value == null) {
@@ -48,7 +49,16 @@ public class YesNoComboBox extends FormattableCombo<Boolean> {
             }
 
         });
-        setOptions(Arrays.asList(new Boolean(false), new Boolean(true)));
+        setOptions(Arrays.asList(Boolean.FALSE, Boolean.TRUE));
+    }
+
+    @Override
+    public boolean isValuesEquals(Boolean value1, Boolean value2) {
+        if (value1 == null | value2 == null) {
+            return value1 == value2;
+        } else {
+            return value1.equals(value2);
+        }
     }
 
 }

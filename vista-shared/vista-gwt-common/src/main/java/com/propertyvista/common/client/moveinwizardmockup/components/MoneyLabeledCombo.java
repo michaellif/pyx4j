@@ -17,13 +17,14 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.NotImplementedException;
 
-public class MoneyLabeledCombo extends FormattableCombo<BigDecimal> {
+public class MoneyLabeledCombo extends CComboBox<BigDecimal> {
 
     public MoneyLabeledCombo(final String label, BigDecimal... options) {
-        super(new IFormat<BigDecimal>() {
+        super(null, null, new IFormat<BigDecimal>() {
 
             @Override
             public String format(BigDecimal value) {

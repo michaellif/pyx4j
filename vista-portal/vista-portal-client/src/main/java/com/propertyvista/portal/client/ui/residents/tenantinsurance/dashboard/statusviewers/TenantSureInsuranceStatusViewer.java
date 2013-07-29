@@ -27,7 +27,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.client.ui.residents.tenantinsurance.components.MoneyComboBox;
+import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;

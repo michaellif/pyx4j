@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.reports.eft;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.meta.EntityMeta;
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.shared.domain.reports.ReportOrderColumnMetadata;
 
@@ -152,18 +154,25 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
     }
 
     private CComboBox<ReportOrderColumnMetadata> makeOrderByComboBox() {
-        CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>() {
+        CComboBox<ReportOrderColumnMetadata> orderByComboBox = new CComboBox<ReportOrderColumnMetadata>();
+        orderByComboBox.setFormat(new IFormat<ReportOrderColumnMetadata>() {
             @Override
-            public String getItemName(ReportOrderColumnMetadata o) {
+            public ReportOrderColumnMetadata parse(String string) throws ParseException {
+                return null;
+            }
+
+            @Override
+            public String format(ReportOrderColumnMetadata o) {
                 if (o != null && !o.memberPath().isNull()) {
                     String direction = o.isDesc().isBooleanTrue() ? "\u21E7" : "\u21E9";
                     return direction + " "
                             + EntityFactory.getEntityMeta(EftReportRecordDTO.class).getMemberMeta(new Path(o.memberPath().getValue())).getCaption();
                 } else {
-                    return super.getItemName(o);
+                    return i18n.tr("Default");
                 }
             }
-        };
+        });
+
         ArrayList<ReportOrderColumnMetadata> reportColumnOptions = new ArrayList<ReportOrderColumnMetadata>();
         EftReportRecordDTO reportRecordProto = EntityFactory.getEntityPrototype(EftReportRecordDTO.class);
         for (String memberName : reportRecordProto.getEntityMeta().getMemberNames()) {
@@ -191,7 +200,6 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
 
         });
         orderByComboBox.setOptions(reportColumnOptions);
-        orderByComboBox.setNoSelectionText(i18n.tr("Default"));
 
         return orderByComboBox;
     }

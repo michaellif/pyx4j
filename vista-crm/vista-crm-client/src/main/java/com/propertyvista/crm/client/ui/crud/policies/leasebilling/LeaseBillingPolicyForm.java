@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.policies.leasebilling;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -35,6 +36,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.CPercentageField;
+import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -274,7 +276,18 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                 super(LeaseBillingTypePolicyItem.class);
 
                 startDay = new CComboBox<Integer>();
-                startDay.setNoSelectionText(i18n.tr("Same as Lease Start Day"));
+                startDay.setFormat(new IFormat<Integer>() {
+
+                    @Override
+                    public Integer parse(String string) throws ParseException {
+                        return null;
+                    }
+
+                    @Override
+                    public String format(Integer value) {
+                        return value == null ? i18n.tr("Same as Lease Start Day") : value.toString();
+                    }
+                });
                 dueDayOffset = new CComboBox<Integer>();
                 finalDueDayOffset = new CComboBox<Integer>();
                 billDayOffset = new CComboBox<Integer>();

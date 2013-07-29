@@ -30,11 +30,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
+import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSurePaymentItemTaxDTO;
 import com.propertyvista.portal.web.client.themes.TenantSureTheme;
-import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.components.MoneyComboBox;
 
 public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
 

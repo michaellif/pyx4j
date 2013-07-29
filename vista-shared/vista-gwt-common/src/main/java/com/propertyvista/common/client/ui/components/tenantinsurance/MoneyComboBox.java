@@ -11,17 +11,18 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.components;
+package com.propertyvista.common.client.ui.components.tenantinsurance;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 
 import com.google.gwt.i18n.client.NumberFormat;
 
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.i18n.shared.I18n;
 
-public class MoneyComboBox extends FormattableCombo<BigDecimal> {
+public class MoneyComboBox extends CComboBox<BigDecimal> {
 
     private static final I18n i18n = I18n.get(MoneyComboBox.class);
 
@@ -46,7 +47,16 @@ public class MoneyComboBox extends FormattableCombo<BigDecimal> {
     }
 
     public MoneyComboBox() {
-        super(new MoneyComboBoxFormat());
+        super(null, null, new MoneyComboBoxFormat());
+    }
+
+    @Override
+    public boolean isValuesEquals(BigDecimal value1, BigDecimal value2) {
+        if (value1 == null | value2 == null) {
+            return value1 == value2;
+        } else {
+            return value1.equals(value2);
+        }
     }
 
 }
