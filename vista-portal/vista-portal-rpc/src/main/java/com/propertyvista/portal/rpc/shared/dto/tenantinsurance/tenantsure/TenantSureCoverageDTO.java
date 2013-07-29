@@ -28,6 +28,8 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
+
 @Transient
 public interface TenantSureCoverageDTO extends IEntity {
 
@@ -98,5 +100,9 @@ public interface TenantSureCoverageDTO extends IEntity {
     @Caption(name = "Is any one of the tenants a smoker?")
     @NotNull
     IPrimitive<Boolean> smoker();
+
+    @Caption
+    @NotNull
+    IPrimitive<TenantSurePaymentSchedule> paymentSchedule();
 
 }

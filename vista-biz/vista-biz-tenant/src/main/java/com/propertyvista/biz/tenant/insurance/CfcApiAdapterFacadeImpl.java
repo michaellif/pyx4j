@@ -15,7 +15,6 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -46,6 +45,8 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureC
 import com.propertyvista.biz.tenant.insurance.tenantsure.apiadapters.TenantSureTenantAdapter;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
+import com.propertyvista.biz.tenant.insurance.tenantsure.rules.ITenantSurePaymentSchedule;
+import com.propertyvista.biz.tenant.insurance.tenantsure.rules.TenantSurePaymentScheduleFactory;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
@@ -147,23 +148,8 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
             totalAnnualTax = TenantSureCfcMoneyAdapter.adoptMoney(quoteResponse.getQuoteData().getApplicableTaxes().getOutputTax().get(0).getAbsoluteAmount());
         }
 
-        RoundingMode rm = TenantSureCfcMoneyAdapter.getRoundingMode();
-
-        BigDecimal annualGross = annualPremium.add(totalAnnualTax);
-
-        // Make  the total of the monthly payments to be equal the annual total.
-        BigDecimal monthlyPayment = annualGross.divide(new BigDecimal("12.00"), rm);
-        BigDecimal firstPayment = annualGross.subtract(monthlyPayment.multiply(new BigDecimal("11.00")));
-        tenantSureQuote.totalAnniversaryFirstMonthPayable().setValue(firstPayment);
-
-        firstPayment = firstPayment.add(underwritingFee);
-
-        tenantSureQuote.annualPremium().setValue(annualPremium);
-        tenantSureQuote.underwriterFee().setValue(underwritingFee);
-        tenantSureQuote.totalAnnualTax().setValue(totalAnnualTax);
-        tenantSureQuote.totalAnnualPayable().setValue(annualPremium.add(underwritingFee).add(totalAnnualTax));
-        tenantSureQuote.totalMonthlyPayable().setValue(monthlyPayment);
-        tenantSureQuote.totalFirstPayable().setValue(firstPayment);
+        ITenantSurePaymentSchedule paymentSchedule = TenantSurePaymentScheduleFactory.create(coverageRequest.paymentSchedule().getValue());
+        paymentSchedule.prepareQuote(tenantSureQuote, annualPremium, underwritingFee, totalAnnualTax);
 
         // not even sure we need this
         tenantSureQuote.coverage().set(coverageRequest.duplicate(TenantSureCoverageDTO.class));

@@ -98,6 +98,8 @@ public interface InsuranceTenantSure extends InsuranceCertificate {
     /** a date when cancellation command has been issued */
     IPrimitive<LogicalDate> cancellationDate();
 
+    IPrimitive<TenantSurePaymentSchedule> paymentSchedule();
+
     @Format("#,##0.00")
     IPrimitive<BigDecimal> annualPremium();
 

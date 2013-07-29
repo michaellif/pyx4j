@@ -30,6 +30,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -58,6 +59,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
         service.getQuotationRequestParams(new DefaultAsyncCallback<TenantSureQuotationRequestParamsDTO>() {
             @Override
             public void onSuccess(TenantSureQuotationRequestParamsDTO quotationRequestParams) {
+                quotationRequestParams.defaultPaymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
 
                 InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
                 paymentMethod.type().setValue(PaymentType.CreditCard);

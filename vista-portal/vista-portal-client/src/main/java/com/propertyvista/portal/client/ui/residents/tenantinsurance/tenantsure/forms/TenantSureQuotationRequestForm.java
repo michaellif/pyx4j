@@ -58,16 +58,20 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
         contentPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().numberOfPreviousClaims())).labelWidth("25em").componentWidth("5em")
                 .contentWidth("5em").labelAlignment(Alignment.left).build());
 
+        contentPanel.setH2(++row, 0, 2, i18n.tr("Payment"));
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentSchedule())).build());
+
         return contentPanel;
     }
 
     /** resets the form and sets pre-defined options for filling the from */
     public void setCoverageParams(TenantSureQuotationRequestParamsDTO params) {
         TenantSureCoverageDTO coverageRequest = EntityFactory.create(TenantSureCoverageDTO.class);
-        setValue(coverageRequest, false);
+        coverageRequest.tenantName().setValue(params.tenantName().getValue());
+        coverageRequest.tenantPhone().setValue(params.tenantPhone().getValue());
+        coverageRequest.paymentSchedule().setValue(params.defaultPaymentSchedule().getValue());
 
-        (get(proto().tenantName())).setValue(params.tenantName().getValue());
-        (get(proto().tenantPhone())).setValue(params.tenantPhone().getValue());
+        setValue(coverageRequest, false);
 
         ((CComboBox<BigDecimal>) (get(proto().personalLiabilityCoverage()))).setOptions(params.generalLiabilityCoverageOptions());
         ((CComboBox<BigDecimal>) (get(proto().contentsCoverage()))).setOptions(params.contentsCoverageOptions());

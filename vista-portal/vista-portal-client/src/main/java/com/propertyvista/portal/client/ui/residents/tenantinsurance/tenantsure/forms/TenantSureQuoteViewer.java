@@ -34,6 +34,7 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.common.client.theme.BillingTheme;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
 public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
@@ -68,19 +69,24 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
                 paymentBreakdownPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
                 paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
-                if (!quote.totalFirstPayable().isNull()) {
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*:"));
+                if (quote.paymentSchedule().getValue() == TenantSurePaymentSchedule.Monthly) {
+                    if (!quote.totalFirstPayable().isNull()) {
+                        paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*:"));
 
-                    addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
+                        addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
+                    }
+
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments:"));
+
+                    addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
+
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment:"));
+                    addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
+                } else {
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Annual Payment:"));
+                    addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 }
 
-                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments:"));
-
-                addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
-
-                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment:"));
-                paymentBreakdownPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
-                addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 if (!quote.underwriterFee().isNull()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Underwriter Fee*"), quote.underwriterFee().getValue());
                 }

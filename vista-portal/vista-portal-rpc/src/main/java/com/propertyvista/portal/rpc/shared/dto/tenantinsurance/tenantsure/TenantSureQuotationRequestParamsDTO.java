@@ -20,12 +20,16 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
+
 @Transient
 public interface TenantSureQuotationRequestParamsDTO extends IEntity {
 
     IPrimitive<String> tenantName();
 
     IPrimitive<String> tenantPhone();
+
+    IPrimitive<TenantSurePaymentSchedule> defaultPaymentSchedule();
 
     IPrimitiveSet<BigDecimal> generalLiabilityCoverageOptions();
 

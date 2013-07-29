@@ -30,6 +30,7 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSurePurchaseView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -61,7 +62,7 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
                 InsurancePaymentMethod paymentMethod = EntityFactory.create(InsurancePaymentMethod.class);
                 paymentMethod.type().setValue(PaymentType.CreditCard);
-
+                quotationRequestParams.defaultPaymentSchedule().setValue(TenantSurePaymentSchedule.Monthly);
                 view.init(quotationRequestParams, paymentMethod);
 
                 panel.setWidget(view);

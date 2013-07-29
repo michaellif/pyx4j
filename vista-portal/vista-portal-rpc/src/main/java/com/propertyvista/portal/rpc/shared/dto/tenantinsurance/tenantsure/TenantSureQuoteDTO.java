@@ -20,6 +20,8 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
+
 /**
  * This entity contains information that is interesting for tenant and that is mostly retrieved from <code>retrieveCodeInformation</code>.
  * 
@@ -32,6 +34,8 @@ public interface TenantSureQuoteDTO extends IEntity {
     TenantSureCoverageDTO coverage();
 
     IPrimitive<String> quoteId();
+
+    IPrimitive<TenantSurePaymentSchedule> paymentSchedule();
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> annualPremium();

@@ -42,6 +42,7 @@ import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.tenant.insurance.CfcApiAdapterFacade.ReinstatementType;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.CfcApiException;
 import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousClaimsException;
+import com.propertyvista.biz.tenant.insurance.tenantsure.rules.TenantSurePaymentScheduleFactory;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.pmc.Pmc;
@@ -157,6 +158,7 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         insuranceTenantSure.contentsCoverage().setValue(quote.coverage().contentsCoverage().getValue());
         insuranceTenantSure.deductible().setValue(quote.coverage().deductible().getValue());
 
+        insuranceTenantSure.paymentSchedule().setValue(quote.paymentSchedule().getValue());
         insuranceTenantSure.annualPremium().setValue(quote.annualPremium().getValue());
         insuranceTenantSure.underwriterFee().setValue(quote.underwriterFee().getValue());
         insuranceTenantSure.totalAnnualTax().setValue(quote.totalAnnualTax().getValue());
@@ -167,12 +169,9 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         Persistence.service().persist(insuranceTenantSure);
 
         // Start payment
-        InsuranceTenantSureTransaction transaction = EntityFactory.create(InsuranceTenantSureTransaction.class);
-        transaction.insurance().set(insuranceTenantSure);
-        transaction.paymentMethod().set(TenantSurePayments.getPaymentMethod(tenantId));
-        transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Draft);
-        transaction.amount().setValue(insuranceTenantSure.totalFirstPayable().getValue());
-        transaction.paymentDue().setValue(insuranceTenantSure.inceptionDate().getValue());
+        InsurancePaymentMethod paymentMethod = TenantSurePayments.getPaymentMethod(tenantId);
+        InsuranceTenantSureTransaction transaction = TenantSurePaymentScheduleFactory.create(insuranceTenantSure.paymentSchedule().getValue())
+                .initFirstTransaction(insuranceTenantSure, paymentMethod);
         Persistence.service().persist(transaction);
 
         Persistence.service().commit();
@@ -228,7 +227,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
             insuranceTenantSure.isDeleted().setValue(Boolean.FALSE);
             Persistence.service().persist(insuranceTenantSure);
 
-            createInsuranceCertificate(tenantId, tenantSureCertificateNumber, insuranceTenantSure);
             createTenantSureSubscriberRecord(tenantSureCertificateNumber);
 
             InsuranceTenantSureReport tsReportStatusHolder = EntityFactory.create(InsuranceTenantSureReport.class);
@@ -265,10 +263,6 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
         transaction.status().setValue(InsuranceTenantSureTransaction.TransactionStatus.Cleared);
         Persistence.service().persist(transaction);
         Persistence.service().commit();
-
-    }
-
-    private void createInsuranceCertificate(Tenant tenantId, String insuranceCertifiateNumber, InsuranceTenantSure ts) {
 
     }
 
