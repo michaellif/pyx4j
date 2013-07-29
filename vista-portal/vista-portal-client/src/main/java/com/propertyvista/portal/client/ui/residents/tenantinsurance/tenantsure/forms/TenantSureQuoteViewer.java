@@ -28,7 +28,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -56,11 +56,13 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
     @Override
     public IsWidget createContent(TenantSureQuoteDTO quote) {
         FlowPanel contentPanel = new FlowPanel();
-        TwoColumnFlexFormPanel paymentBreakdownPanel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel paymentBreakdownPanel = new BasicFlexFormPanel();
+        paymentBreakdownPanel.setWidth("100%");
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
                 paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Quote Number:"));
+
                 paymentBreakdownPanel.setWidget(++row, 0, new HTML(quote.quoteId().getValue()));
                 paymentBreakdownPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
                 paymentBreakdownPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
@@ -68,13 +70,16 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
 
                 if (!quote.totalFirstPayable().isNull()) {
                     paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*:"));
+
                     addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
                 }
 
                 paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments:"));
+
                 addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
 
                 paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment:"));
+                paymentBreakdownPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
                 addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 if (!quote.underwriterFee().isNull()) {
                     addDetailRecord(paymentBreakdownPanel, ++row, i18n.tr("Underwriter Fee*"), quote.underwriterFee().getValue());
@@ -93,6 +98,7 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
                     underwriterFeeLabel.setText(i18n.tr("*A one time underwriter fee (plus applicable taxes) will be charged upon enrollment."));
                     contentPanel.add(underwriterFeeLabel);
                 }
+
             } else {
                 Label specialQuoteText = new Label();
                 specialQuoteText.getElement().getStyle().setTextAlign(TextAlign.CENTER);

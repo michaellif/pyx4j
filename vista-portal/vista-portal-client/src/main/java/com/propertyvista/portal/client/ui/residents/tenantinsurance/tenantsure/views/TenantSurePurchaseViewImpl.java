@@ -282,13 +282,13 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         quotationRequestStepPanel = new TwoColumnFlexFormPanel();
         quotationRequestStepPanel.getElement().getStyle().setMarginBottom(2, Unit.EM);
         int qrpRow = -1;
-        quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Coverage"));
+        quotationRequestStepPanel.setH1(++qrpRow, 0, 2, i18n.tr("Coverage"));
         quoteRequestForm = new TenantSureQuotationRequestForm();
         quoteRequestForm.initContent();
         quoteRequestForm.asWidget().addStyleName(TenantSureTheme.StyleName.TSPurchaseViewSection.name());
-        quotationRequestStepPanel.setWidget(++qrpRow, 0, quoteRequestForm);
+        quotationRequestStepPanel.setWidget(++qrpRow, 0, 2, quoteRequestForm);
 
-        quotationRequestStepPanel.setH1(++qrpRow, 0, 1, i18n.tr("Quote"));
+        quotationRequestStepPanel.setH1(++qrpRow, 0, 2, i18n.tr("Quote"));
         FlowPanel quoteSection = new FlowPanel();
         quoteSection.addStyleName(TenantSureTheme.StyleName.TSPurchaseViewSection.name());
 
@@ -315,7 +315,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         retrievingQuoteMessage.setText(i18n.tr("Please wait while we preparing your quote..."));
         quoteSection.add(retrievingQuoteMessage);
 
-        quotationRequestStepPanel.setWidget(++qrpRow, 0, quoteSection);
+        quotationRequestStepPanel.setWidget(++qrpRow, 0, 2, quoteSection);
         quotationRequestStepPanel.getCellFormatter().setVerticalAlignment(qrpRow, 0, HasVerticalAlignment.ALIGN_MIDDLE);
         quotationRequestStepPanel.getCellFormatter().getElement(qrpRow, 0).getStyle().setProperty("height", "10em");
 
@@ -379,10 +379,10 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
         int row = -1;
         paymentStepPanel = new TwoColumnFlexFormPanel();
         paymentStepQuoteViewer = new TenantSureQuoteViewer(true);
-        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Quote"));
-        paymentStepPanel.setWidget(++row, 0, paymentStepQuoteViewer);
+        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Quote"));
+        paymentStepPanel.setWidget(++row, 0, 2, paymentStepQuoteViewer);
 
-        paymentStepPanel.setH1(++row, 0, 1, i18n.tr("Payment"));
+        paymentStepPanel.setH1(++row, 0, 2, i18n.tr("Payment"));
         paymentMethodForm = new TenantSurePaymentMethodForm(new Command() {
             @Override
             public void execute() {
@@ -390,19 +390,19 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             }
         });
         paymentMethodForm.initContent();
-        paymentStepPanel.setWidget(++row, 0, paymentMethodForm);
+        paymentStepPanel.setWidget(++row, 0, 2, paymentMethodForm);
 
         processingPaymentMessage = new Label();
         processingPaymentMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         processingPaymentMessage.setText(i18n.tr("Processing payment..."));
-        paymentStepPanel.setWidget(++row, 0, processingPaymentMessage);
+        paymentStepPanel.setWidget(++row, 0, 2, processingPaymentMessage);
 
         paymentProcessingErrorMessage = new Label();
         paymentProcessingErrorMessage.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
         paymentProcessingErrorMessage.addStyleName(TenantSureTheme.StyleName.TSPurchaseViewError.name());
 
         paymentProcessingErrorMessage.setText("");
-        paymentStepPanel.setWidget(++row, 0, paymentProcessingErrorMessage);
+        paymentStepPanel.setWidget(++row, 0, 2, paymentProcessingErrorMessage);
 
         return new Step() {
 
@@ -457,7 +457,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
 
         Label label = new Label();
         label.addStyleName(TenantSureTheme.StyleName.TSPucrhaseViewMessageText.name());
-        label.setText(i18n.tr("Payment Processed Successfuly: an email with your insurance policy has been sent to your email."));
+        label.setText(i18n.tr("Payment Processed Successfully: an email with your insurance policy has been sent to your email."));
         finishStepPanel.add(label);
 
         Anchor returnToInsuranceManagement = new Anchor(i18n.tr("Return to Tenant Insurance"), new Command() {
