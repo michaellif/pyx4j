@@ -73,7 +73,7 @@ class AccountNumberSequence {
 
         sequence.number().setValue(0l);
         sequence.maximum().setValue(9999l);
-        final Pmc pmc = VistaDeployment.getCurrentPmc().duplicate();
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
 
         Long newPrefix = TaskRunner.runInOperationsNamespace(new Callable<Long>() {
             @Override
