@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.PmcDTO;
@@ -38,22 +39,22 @@ public class PmcFormNewItem extends OperationsEntityForm<PmcDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().firstName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().lastName()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().email()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().onboardingUser().password()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dnsName()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().firstName()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().lastName()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().email()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().onboardingUser().password()), 15).build());
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().leases()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
 
         final CComponent<Boolean> yardiIntegrationSwitch = get(proto().features().yardiIntegration());
         final CComponent<Boolean> yardiMaintenanceSwitch = get(proto().features().yardiMaintenance());

@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
@@ -31,10 +32,10 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
             TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel("Merchant Account");
             int row = -1;
 
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().terminalID())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().balance())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().responseCode())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().created())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().terminalID())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balance())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
 
             selectTab(addTab(tabPanel));
         }

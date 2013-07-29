@@ -17,6 +17,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.components.MerchantAccountForm;
 import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
@@ -55,8 +56,8 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
 
         panel.setH1(++row, 0, 1, i18n.tr("Default  Usage Limits"));
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxLimit().dailyReports())).componentWidth(6).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxLimit().dailyRequests())).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyReports())).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyRequests())).componentWidth(6).build());
 
         return panel;
     }

@@ -16,6 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.components.OperationsEditorsComponentFactory;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
@@ -34,16 +35,16 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             int row = -1;
 
             tabPanel.setWidget(++row, 0,
-                    new DecoratorBuilder(inject(proto().card(), OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)), 18)
-                            .build());
+                    new FormDecoratorBuilder(inject(proto().card(), OperationsEditorsComponentFactory.createEntityHyperlink(CardServiceSimulationCard.class)),
+                            18).build());
 
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transactionType())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().scheduledSimulatedResponce())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().amount())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reference())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().responseCode())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().authorizationNumber())).build());
-            tabPanel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().transactionDate())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionType())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledSimulatedResponce())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reference())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().authorizationNumber())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionDate())).build());
 
             selectTab(addTab(tabPanel));
         }

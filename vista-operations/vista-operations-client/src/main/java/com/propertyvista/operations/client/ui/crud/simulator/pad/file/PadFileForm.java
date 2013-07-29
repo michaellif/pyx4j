@@ -21,6 +21,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 
@@ -48,29 +49,31 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileName()), 25).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().fileCreationNumber()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fileName()), 25).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().fileCreationNumber()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fundsTransferType()), 25).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fundsTransferType()), 25).build());
 
-        main.setWidget(++row, 0,
-                new DecoratorBuilder(inject(proto().originalFile(), new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))),
-                        35).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().returnSent()), 10).build());
+        main.setWidget(
+                ++row,
+                0,
+                new FormDecoratorBuilder(inject(proto().originalFile(),
+                        new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))), 35).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().returnSent()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().state()), 25).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().state()), 25).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().received()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage()), 40).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().received()), 10).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentRejectReasonMessage()), 40).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().acknowledged()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().reconciliationSent()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().acknowledged()), 10).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().reconciliationSent()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().batchRecordsCount()), 10).build());
-        main.setWidget(row, 1, new DecoratorBuilder(inject(proto().recordsCount()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().batchRecordsCount()), 10).build());
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().recordsCount()), 10).build());
 
-        main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().fileAmount()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fileAmount()), 10).build());
 
         return main;
     }

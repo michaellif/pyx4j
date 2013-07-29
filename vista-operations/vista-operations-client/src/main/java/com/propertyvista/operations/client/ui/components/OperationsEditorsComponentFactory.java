@@ -14,19 +14,12 @@
 package com.propertyvista.operations.client.ui.components;
 
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IObject;
-import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
 
 public class OperationsEditorsComponentFactory extends VistaEditorsComponentFactory {
-
-    @Override
-    public CComponent<?> create(IObject<?> member) {
-        return super.create(member);
-    }
 
     public static <E extends IEntity> CEntityCrudHyperlink<E> createEntityHyperlink(Class<E> entityClass) {
         CEntityCrudHyperlink<E> link = new CEntityCrudHyperlink<E>(AppPlaceEntityMapper.resolvePlace(entityClass));

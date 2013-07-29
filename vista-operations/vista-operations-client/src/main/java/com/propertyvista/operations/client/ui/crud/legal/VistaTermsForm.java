@@ -22,11 +22,12 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 
 public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
     private final static I18n i18n = I18n.get(VistaTermsForm.class);
@@ -69,11 +70,11 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
             int row = -1;
             // locale
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().locale()), 10).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).build());
             // content
             CComponent<?> editor = null;
             editor = new CRichTextArea();
-            main.setWidget(++row, 0, new DecoratorBuilder(inject(proto().content(), editor), 60).build());
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content(), editor), 60).build());
 
             return main;
         }

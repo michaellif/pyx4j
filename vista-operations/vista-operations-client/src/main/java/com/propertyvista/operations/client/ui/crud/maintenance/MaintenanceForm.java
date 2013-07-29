@@ -22,6 +22,7 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.shared.VistaSystemIdentification;
@@ -36,15 +37,15 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().systemIdentification()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().inEffect()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().type()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().externalConnections()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startDate()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().startTime()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().gracePeriod()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().duration()), 10).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().message()), 20).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systemIdentification()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().inEffect()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().externalConnections()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().startDate()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().startTime()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().gracePeriod()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().duration()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().message()), 20).build());
 
         get(proto().inEffect()).setViewable(true);
 
@@ -58,7 +59,7 @@ public class MaintenanceForm extends OperationsEntityForm<VistaSystemMaintenance
 
         TwoColumnFlexFormPanel tenantSureMaintenanceTab = new TwoColumnFlexFormPanel(i18n.tr("Vista Interfaces"));
         row = -1;
-        tenantSureMaintenanceTab.setWidget(++row, 0, new DecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
+        tenantSureMaintenanceTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().enableTenantSureMaintenance())).labelWidth(30).build());
         addTab(tenantSureMaintenanceTab);
 
     }

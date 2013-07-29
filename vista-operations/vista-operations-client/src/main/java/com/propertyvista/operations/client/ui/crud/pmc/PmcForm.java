@@ -33,6 +33,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 import com.pyx4j.widgets.client.Anchor;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
@@ -93,12 +94,12 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         int row = -1;
         content.setH1(++row, 0, 2, i18n.tr("General"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().status()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().namespace()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().dnsName()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().namespace()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dnsName()), 15).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().vistaCrmUrl(), new CLabel<String>()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().vistaCrmUrl(), new CLabel<String>()), 50).build());
         ((CField) get(proto().vistaCrmUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -115,7 +116,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().residentPortalUrl(), new CLabel<String>()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().residentPortalUrl(), new CLabel<String>()), 50).build());
         ((CField) get(proto().residentPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -132,7 +133,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         });
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().prospectPortalUrl(), new CLabel<String>()), 50).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().prospectPortalUrl(), new CLabel<String>()), 50).build());
         ((CField) get(proto().prospectPortalUrl())).setNavigationCommand(new Command() {
             @Override
             public void execute() {
@@ -150,15 +151,15 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         });
 
         content.setH1(++row, 0, 2, proto().features().getMeta().getCaption());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().leases()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().features().tenantSureIntegration()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().countryOfOperation()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().occupancyModel()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().productCatalog()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().leases()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().onlineApplication()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().defaultProductCatalog()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().yardiIntegration()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().yardiMaintenance()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().features().tenantSureIntegration()), 5).build());
 
         content.setH1(++row, 0, 2, proto().dnsNameAliases().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().dnsNameAliases(), new PmcDnsNameFolder(isEditable())));
@@ -196,18 +197,18 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
         content.setH1(++row, 0, 2, i18n.tr("Equifax"));
         int row2 = row; // save this row for other column
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().status()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().reportType()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().status()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().reportType()), 15).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerNumber()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().securityCode()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerCode()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().customerReferenceNumber()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerNumber()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().securityCode()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerCode()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().customerReferenceNumber()), 15).build());
 
-        content.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().equifaxInfo().equifaxSignUpFee())).labelWidth(25).componentWidth(6).build());
+        content.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().equifaxInfo().equifaxSignUpFee())).labelWidth(25).componentWidth(6).build());
         get(proto().equifaxInfo().equifaxSignUpFee()).setViewable(true);
-        content.setWidget(++row2, 1, new DecoratorBuilder(inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee())).labelWidth(25).componentWidth(6)
-                .build());
+        content.setWidget(++row2, 1,
+                new FormDecoratorBuilder(inject(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee())).labelWidth(25).componentWidth(6).build());
         get(proto().equifaxInfo().equifaxPerApplicantCreditCheckFee()).setViewable(true);
 
         approvalLink = new Anchor(i18n.tr("Go to Approval Screen"));
@@ -222,8 +223,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         content.setH1(++row, 0, 2, i18n.tr("Equifax Usage Limits"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().limit().dailyReports()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().equifaxInfo().limit().dailyRequests()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().limit().dailyReports()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxInfo().limit().dailyRequests()), 15).build());
 
         return content;
     }

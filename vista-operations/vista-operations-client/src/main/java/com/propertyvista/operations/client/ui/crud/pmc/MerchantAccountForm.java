@@ -28,6 +28,7 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.financial.MerchantAccount.MerchantAccountActivationStatus;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -68,18 +69,18 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))),
-                10).build());
+        content.setWidget(++row, 0,
+                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))), 10).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().status()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().paymentsStatus()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().invalid()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().status()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().paymentsStatus()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().invalid()), 25).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().bankId()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().branchTransitNumber()), 5).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().merchantAccount().chargeDescription()), 30).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().bankId()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().branchTransitNumber()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().chargeDescription()), 30).build());
 
         content.setH2(++row, 0, 1, i18n.tr("Assigned Buildings"));
         content.setWidget(++row, 0, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));

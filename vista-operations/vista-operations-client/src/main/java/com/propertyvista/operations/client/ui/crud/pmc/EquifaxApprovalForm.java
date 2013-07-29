@@ -16,10 +16,11 @@ package com.propertyvista.operations.client.ui.crud.pmc;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
-import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
-import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.BusinessInformationForm;
 import com.propertyvista.common.client.ui.components.editors.dto.wizards.PersonalInformationForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.rpc.EquifaxSetupRequestDTO;
 
 public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupRequestDTO> {
 
@@ -30,9 +31,9 @@ public class EquifaxApprovalForm extends OperationsEntityForm<EquifaxSetupReques
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
         panel.setH1(++row, 0, 1, "Credit Pricing Option");
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().reportType())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().setupFee())).build());
-        panel.setWidget(++row, 0, new DecoratorBuilder(inject(proto().perApplicantFeee())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportType())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().setupFee())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().perApplicantFeee())).build());
 
         panel.setH1(++row, 0, 1, "Business Information");
         panel.setWidget(++row, 0, inject(proto().businessInformation(), new BusinessInformationForm(null, null)));

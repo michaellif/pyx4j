@@ -23,6 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
 import com.propertyvista.operations.rpc.OperationsUserDTO;
 
@@ -61,18 +62,18 @@ public class AdminUserForm extends OperationsEntityForm<OperationsUserDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
         content.setH1(++row, 0, 1, i18n.tr("General"));
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().name())).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().email())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email())).build());
 
         content.setH1(++row, 0, 1, i18n.tr("Security"));
-        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().password()), isNewUserCondition)).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().passwordConfirm()), isNewUserCondition)).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().enabled()), isSelfManagedUserCondition)).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(addVisibilityCondition(inject(proto().role()), isSelfManagedUserCondition)).build());
-        content.setWidget(++row, 0, new DecoratorBuilder(
-                addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn()), isSelfManagedUserCondition)).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().password()), isNewUserCondition)).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().passwordConfirm()), isNewUserCondition)).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().enabled()), isSelfManagedUserCondition)).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(addVisibilityCondition(inject(proto().role()), isSelfManagedUserCondition)).build());
+        content.setWidget(++row, 0,
+                new FormDecoratorBuilder(addVisibilityCondition(inject(proto().requiredPasswordChangeOnNextLogIn()), isSelfManagedUserCondition)).build());
 
-        content.setWidget(++row, 0, new DecoratorBuilder(inject(proto().credentialUpdated())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().credentialUpdated())).build());
 
         selectTab(addTab(content));
     }
