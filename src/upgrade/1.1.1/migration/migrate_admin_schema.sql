@@ -56,6 +56,7 @@ SET search_path = '_admin_';
         ALTER TABLE pad_sim_batch DROP CONSTRAINT pad_sim_batch_reconciliation_status_e_ck;
         ALTER TABLE pad_sim_debit_record DROP CONSTRAINT pad_sim_debit_record_reconciliation_status_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
+        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
 
         
         /**
@@ -192,19 +193,33 @@ SET search_path = '_admin_';
         ALTER TABLE development_user ALTER COLUMN host3 TYPE VARCHAR(128);
         
         
+        -- direct_debit_file
+        
+        CREATE TABLE direct_debit_file
+        (
+                id                              BIGINT                  NOT NULL,
+                file_name                       VARCHAR(500),
+                created                         TIMESTAMP,
+                file_serial_number              VARCHAR(500),
+                file_serial_date                VARCHAR(500),
+                        CONSTRAINT direct_debit_file_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE direct_debit_file OWNER TO vista;
+        
         -- direct_debit_record
         
         CREATE TABLE direct_debit_record
         (
                 id                              BIGINT                  NOT NULL,
+                file                            BIGINT                  NOT NULL,
                 account_number                  VARCHAR(14),
+                pmc                             BIGINT,
                 amount                          NUMERIC(18,2),
                 payment_reference_number        VARCHAR(30),
                 customer_name                   VARCHAR(35),
                 received_date                   TIMESTAMP,
                 processing_status               VARCHAR(50),
-                trace_file_serial_number        VARCHAR(500),
-                trace_file_serial_date          VARCHAR(500),
                 trace_location_code             VARCHAR(500),
                 trace_collection_date           VARCHAR(500),
                 trace_source_code               VARCHAR(500),
@@ -241,7 +256,8 @@ SET search_path = '_admin_';
         
         -- pad_reconciliation_file
         
-        ALTER TABLE pad_reconciliation_file ADD COLUMN funds_transfer_type VARCHAR(50);
+        ALTER TABLE pad_reconciliation_file     ADD COLUMN funds_transfer_type VARCHAR(50),
+                                                ADD COLUMN created TIMESTAMP;
         
         
         -- pmc_document_file
@@ -281,6 +297,18 @@ SET search_path = '_admin_';
         SET     funds_transfer_type = 'PreAuthorizedDebit';
                
         
+        -- scheduler_trigger
+        
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsReceiveAcknowledgment'
+        WHERE   trigger_type = 'paymentsPadReceiveAcknowledgment';
+        
+        
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsReceiveReconciliation'
+        WHERE   trigger_type = 'paymentsPadReceiveReconciliation';
+        
+        
         
         /**
         ***     ==========================================================================================================
@@ -297,6 +325,13 @@ SET search_path = '_admin_';
         -- admin_pmc_vista_features
         
         ALTER TABLE admin_pmc_vista_features DROP COLUMN xml_site_export;
+        
+        
+        -- dev_equifax_simulator_config
+        
+        ALTER TABLE dev_equifax_simulator_config        DROP COLUMN approve_xml,
+                                                        DROP COLUMN decline_xml,
+                                                        DROP COLUMN more_info_xml;
         
         -- onboarding_user
         
@@ -344,6 +379,9 @@ SET search_path = '_admin_';
                 REFERENCES dev_pad_sim_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE dev_pad_sim_file ADD CONSTRAINT dev_pad_sim_file_original_file_fk FOREIGN KEY(original_file) 
                 REFERENCES dev_pad_sim_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_file_fk FOREIGN KEY(file) REFERENCES direct_debit_file(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
+
 
 
         -- check constraints
@@ -369,6 +407,14 @@ SET search_path = '_admin_';
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE pad_reconciliation_file ADD CONSTRAINT pad_reconciliation_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
+        ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
+                CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'initializeFutureBillingCycles', 
+                'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcesAcknowledgment', 'paymentsDbpProcesReconciliation', 
+                'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 'paymentsPadProcesAcknowledgment', 'paymentsPadProcesReconciliation', 'paymentsPadSend', 
+                'paymentsReceiveAcknowledgment', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 
+                'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 
+                'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
+
         
 
                 
@@ -384,8 +430,10 @@ SET search_path = '_admin_';
         CREATE INDEX dev_direct_debit_sim_record_file_idx ON dev_direct_debit_sim_record USING btree (file);
         CREATE INDEX dev_pad_sim_batch_pad_file_idx ON dev_pad_sim_batch USING btree (pad_file);
         CREATE INDEX dev_pad_sim_debit_record_pad_batch_idx ON dev_pad_sim_debit_record USING btree (pad_batch);
-        CREATE INDEX "dev_pad_sim_file$state_owner_idx" ON "dev_pad_sim_file$state" USING btree (owner);
+        CREATE INDEX dev_pad_sim_file$state_owner_idx ON dev_pad_sim_file$state USING btree (owner);
         CREATE INDEX direct_debit_record_account_number_idx ON direct_debit_record USING btree (account_number);
+        CREATE INDEX direct_debit_record_file_idx ON direct_debit_record USING btree (file);
+        CREATE INDEX direct_debit_record_pmc_idx ON direct_debit_record USING btree (pmc);
         CREATE INDEX global_crm_user_index_email_idx ON global_crm_user_index USING btree (email);
         CREATE INDEX global_crm_user_index_pmc_crm_user_idx ON global_crm_user_index USING btree (pmc, crm_user);
         CREATE INDEX onboarding_user_email_idx ON onboarding_user USING btree (lower(email));

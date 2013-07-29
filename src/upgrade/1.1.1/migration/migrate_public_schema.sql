@@ -30,6 +30,7 @@ BEGIN TRANSACTION;
 
  -- New sequences
  CREATE SEQUENCE customer_picture_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE direct_debit_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_direct_debit_sim_file_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_direct_debit_sim_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE dev_equifax_simulator_data_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
@@ -43,6 +44,7 @@ BEGIN TRANSACTION;
   
  -- Change owner to vista
  ALTER SEQUENCE customer_picture_seq OWNER TO vista ;
+ ALTER SEQUENCE direct_debit_file_seq OWNER TO vista ;
  ALTER SEQUENCE dev_direct_debit_sim_file_seq OWNER TO vista ;
  ALTER SEQUENCE dev_direct_debit_sim_record_seq OWNER TO vista ;
  ALTER SEQUENCE dev_equifax_simulator_data_seq OWNER TO vista ;
