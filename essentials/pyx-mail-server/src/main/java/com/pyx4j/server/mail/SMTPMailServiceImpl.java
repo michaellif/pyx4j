@@ -235,6 +235,8 @@ class SMTPMailServiceImpl implements IMailService {
         try {
             Address[] allRecipients = message.getAllRecipients();
             transport.sendMessage(message, allRecipients);
+            mailMessage.setHeader("Date", message.getHeader("Date", null));
+            mailMessage.setHeader("Message-ID", message.getMessageID());
 
             StringBuffer sendTo = new StringBuffer();
             for (Address a : allRecipients) {

@@ -175,6 +175,10 @@ public class MailMessage implements Serializable {
         return headers.entrySet();
     }
 
+    public String getHeader(String name) {
+        return headers == null || name == null ? null : headers.get(name);
+    }
+
     public void setHeader(String name, String value) {
         if (headers == null) {
             headers = new HashMap<String, String>();
