@@ -25,16 +25,16 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface NotificationImages extends ClientBundle {
 
-    @Source("dialogConfirm.gif")
+    @Source("Messages_Icon_Success.png")
     ImageResource confirm();
 
-    @Source("dialogError.gif")
+    @Source("Messages_Icon_Error.png")
     ImageResource error();
 
-    @Source("dialogInformation.gif")
+    @Source("Messages_Icon_Information.png")
     ImageResource info();
 
-    @Source("dialogWarning.gif")
+    @Source("Messages_Icon_Warning.png")
     ImageResource warning();
 
 }
