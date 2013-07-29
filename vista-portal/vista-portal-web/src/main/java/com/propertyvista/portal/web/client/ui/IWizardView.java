@@ -7,22 +7,39 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-24
- * @author VladL
+ * Created on Jul 29, 2013
+ * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents;
+package com.propertyvista.portal.web.client.ui;
 
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.web.client.ui.IEntityView;
+public interface IWizardView<E extends IEntity> extends IsView {
 
-public interface Edit<E extends IEntity> extends IEntityView<E> {
+    public interface WizardPresenter<E extends IEntity> {
 
-    interface Presenter<E extends IEntity> extends IEntityView.EntityPresenter<E> {
-
-        void save(E entity);
+        void finish();
 
         void cancel();
+
     }
+
+    void setPresenter(WizardPresenter<E> presenter);
+
+    void populate(E value);
+
+    void reset();
+
+    public E getValue();
+
+    public boolean isDirty();
+
+    WizardPresenter<E> getPresenter();
+
+    boolean onSaveFail(Throwable caught);
+
+    void onStepChange();
+
 }

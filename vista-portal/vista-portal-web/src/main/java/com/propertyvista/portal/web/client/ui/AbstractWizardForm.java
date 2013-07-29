@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.common.client.ui.wizard;
+package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 
@@ -20,11 +20,10 @@ import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
 import com.pyx4j.forms.client.ui.wizard.WizardDecorator;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
-public abstract class VistaWizardForm<E extends IEntity> extends CEntityWizard<E> {
+public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizard<E> {
 
-    private final IWizard<? extends IEntity> view;
+    private final IWizardView<? extends IEntity> view;
 
     private WizardDecorator<E> decorator;
 
@@ -32,7 +31,7 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityWizard<E
 
     private final String endButtonCaption;
 
-    public VistaWizardForm(Class<E> rootClass, final IWizard<? extends IEntity> view, String caption, String endButtonCaption) {
+    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String caption, String endButtonCaption) {
         super(rootClass);
         this.view = view;
         this.caption = caption;
@@ -44,7 +43,7 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityWizard<E
         view.onStepChange();
     }
 
-    public IWizard<? extends IEntity> getView() {
+    public IWizardView<? extends IEntity> getView() {
         return view;
     }
 

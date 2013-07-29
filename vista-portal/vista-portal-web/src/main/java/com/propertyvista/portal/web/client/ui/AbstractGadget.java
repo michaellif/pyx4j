@@ -69,21 +69,17 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
         containerPanel.setContentPanel(widget);
     }
 
-    class ContainerPanel extends SimplePanel {
-
-        private final FlowPanel mainPanel;
+    class ContainerPanel extends FlowPanel {
 
         private final SimplePanel contentHolder;
 
         private final SimplePanel actionsToolbarHolder;
 
         public ContainerPanel() {
-            asWidget().setStyleName(DashboardTheme.StyleName.GadgetDecorator.name());
 
-            mainPanel = new FlowPanel();
-            mainPanel.setStyleName(DashboardTheme.StyleName.GadgetContent.name());
-            mainPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
-            mainPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+            setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            getElement().getStyle().setProperty("borderTopWidth", "5px");
+            getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
 
             FlowPanel containerPanel = new FlowPanel();
             containerPanel.setWidth("100%");
@@ -116,12 +112,11 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
 
             containerPanel.add(contentHolder);
 
-            mainPanel.add(containerPanel);
+            add(containerPanel);
 
             actionsToolbarHolder = new SimplePanel();
-            mainPanel.add(actionsToolbarHolder);
+            add(actionsToolbarHolder);
 
-            add(mainPanel);
         }
 
         public void setActionsToolbar(Toolbar actionsToolbar) {

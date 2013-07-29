@@ -23,15 +23,11 @@ import com.pyx4j.commons.css.ThemeId;
 public class EntityViewTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        EntityView, EntityViewContainer, EntityViewContent
+        EntityView, EntityViewContent
     }
 
     public EntityViewTheme() {
         Style style = new Style(".", StyleName.EntityView);
-        addStyle(style);
-
-        style = new Style(".", StyleName.EntityViewContainer);
-        style.addProperty("padding", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.EntityViewContent);
@@ -41,6 +37,7 @@ public class EntityViewTheme extends Theme {
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");
         style.addProperty("padding", "10px");
+        style.addProperty("margin", "10px");
         addStyle(style);
 
     }

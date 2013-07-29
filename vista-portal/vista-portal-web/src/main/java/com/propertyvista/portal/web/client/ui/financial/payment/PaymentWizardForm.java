@@ -43,7 +43,6 @@ import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -51,7 +50,6 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -59,11 +57,12 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog.TermsType;
 
-public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
+public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
@@ -95,7 +94,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentWizardForm(IWizard<PaymentRecordDTO> view, String caption, String endButtonCaption) {
+    public PaymentWizardForm(PaymentWizardView view, String caption, String endButtonCaption) {
         super(PaymentRecordDTO.class, view, caption, endButtonCaption);
 
         addStep(createDetailsStep());

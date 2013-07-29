@@ -17,15 +17,14 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
-
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public interface PaymentWizardView extends IWizard<PaymentRecordDTO> {
+public interface PaymentWizardView extends IWizardView<PaymentRecordDTO> {
 
-    interface Persenter extends IWizard.Presenter {
+    interface Persenter extends WizardPresenter<PaymentRecordDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressStructured> callback);
 

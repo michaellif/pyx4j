@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.site.client.IsView;
 
-public interface EntityView<E extends IEntity> extends IsView {
+public interface IEntityView<E extends IEntity> extends IsView {
 
     interface EntityPresenter<E extends IEntity> {
 

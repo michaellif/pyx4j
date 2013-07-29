@@ -32,7 +32,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-public class EntityViewImpl<E extends IEntity> extends FlowPanel implements EntityView<E> {
+public class EntityViewImpl<E extends IEntity> extends FlowPanel implements IEntityView<E> {
 
     protected static final I18n i18n = I18n.get(EntityViewImpl.class);
 

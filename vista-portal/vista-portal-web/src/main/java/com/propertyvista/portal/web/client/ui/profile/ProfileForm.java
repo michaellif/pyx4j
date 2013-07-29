@@ -77,12 +77,9 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         SimplePanel contentPanel = new SimplePanel(mainPanel);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
 
-        SimplePanel containerPanel = new SimplePanel(contentPanel);
-        containerPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContainer.name());
-
         view.doLayout();
 
-        return containerPanel;
+        return contentPanel;
     }
 
     @Override

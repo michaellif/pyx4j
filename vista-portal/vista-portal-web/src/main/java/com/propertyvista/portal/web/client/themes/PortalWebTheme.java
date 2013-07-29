@@ -169,7 +169,26 @@ public class PortalWebTheme extends Theme {
         });
         addTheme(new DefaultDialogTheme());
 
-        addTheme(new CEntityWizardTheme());
+        addTheme(new CEntityWizardTheme() {
+            @Override
+            protected void initFooterStyles() {
+                Style style = new Style(".", StyleName.WizardFooter);
+                style.addProperty("background", ThemeColor.foreground, 0.01);
+                style.addProperty("border-color", ThemeColor.foreground, 0.3);
+                style.addProperty("border-style", "solid");
+                style.addProperty("border-width", "1px");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("padding", "10px");
+                style.addProperty("margin", "10px");
+                style.addProperty("overflow", "hidden");
+                addStyle(style);
+
+                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style.addProperty("float", "right");
+                addStyle(style);
+            }
+        });
+
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());
         addTheme(new NewPaymentMethodEditorTheme());

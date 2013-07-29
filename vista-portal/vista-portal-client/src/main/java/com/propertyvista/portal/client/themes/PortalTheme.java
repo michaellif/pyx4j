@@ -150,7 +150,16 @@ public class PortalTheme extends VistaTheme {
         });
         addTheme(new DefaultDialogTheme());
 
-        addTheme(new CEntityWizardTheme());
+        addTheme(new CEntityWizardTheme() {
+            @Override
+            protected void initContentPanelStyles() {
+                super.initContentPanelStyles();
+                Style style = new Style(".", StyleName.WizardPanel);
+                style.addProperty("min-height", "25em");
+                addStyle(style);
+            }
+
+        });
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());
         addTheme(new NewPaymentMethodEditorTheme());
