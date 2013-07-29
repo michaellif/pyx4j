@@ -80,6 +80,17 @@ public class ServerSideConfiguration {
         return instance;
     }
 
+    /**
+     * Convenience method to access custom ServerSideConfiguration
+     * 
+     * @param serverSideConfigurationClass
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends ServerSideConfiguration> E instance(Class<E> serverSideConfigurationClass) {
+        return (E) instance();
+    }
+
     public static final void setInstance(ServerSideConfiguration instance) {
         if (ServerSideConfiguration.instance != null) {
             if (ServerSideConfiguration.instance == instance) {
