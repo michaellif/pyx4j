@@ -115,6 +115,17 @@ public class CommonsStringUtils {
         return str.concat(padding(pads, padChar));
     }
 
+    public static String paddingLeft(String str, int size, char padChar) {
+        if (str == null) {
+            return null;
+        }
+        int pads = size - str.length();
+        if (pads <= 0) {
+            return str; // returns original String when possible
+        }
+        return padding(pads, padChar).concat(str);
+    }
+
     public static String padding(int repeat, char padChar) throws IndexOutOfBoundsException {
         if (repeat < 0) {
             throw new IndexOutOfBoundsException("Cannot pad a negative amount: " + repeat);
