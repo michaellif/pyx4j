@@ -27,23 +27,6 @@ public interface PortalImages extends ClientBundle, EntityFolderImages, WidgetsI
 
     PortalImages INSTANCE = GWT.create(PortalImages.class);
 
-    // ================= Notification images ================= 
-    @Override
-    @Source("Messages_Icon_Success.png")
-    ImageResource confirm();
-
-    @Override
-    @Source("Messages_Icon_Error.png")
-    ImageResource error();
-
-    @Override
-    @Source("Messages_Icon_Information.png")
-    ImageResource info();
-
-    @Override
-    @Source("Messages_Icon_Warning.png")
-    ImageResource warning();
-
     // ==================================  
 
     @ImageOptions(repeatStyle = RepeatStyle.Both)
