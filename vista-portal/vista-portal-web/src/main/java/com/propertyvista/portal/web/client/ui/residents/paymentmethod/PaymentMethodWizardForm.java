@@ -44,9 +44,9 @@ import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
+import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog.TermsType;
-import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTypesUtil;
 
 public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
 

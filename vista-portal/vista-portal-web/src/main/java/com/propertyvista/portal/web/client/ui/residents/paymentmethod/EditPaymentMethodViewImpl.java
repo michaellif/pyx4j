@@ -23,8 +23,8 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.residents.EditImpl;
-import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTypesUtil;
 
 public class EditPaymentMethodViewImpl extends EditImpl<LeasePaymentMethod> implements EditPaymentMethodView {
 

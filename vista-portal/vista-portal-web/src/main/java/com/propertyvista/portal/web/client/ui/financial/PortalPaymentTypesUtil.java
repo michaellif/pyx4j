@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment;
+package com.propertyvista.portal.web.client.ui.financial;
 
 import java.util.ArrayList;
 import java.util.Collection;

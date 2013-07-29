@@ -11,20 +11,25 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment;
+package com.propertyvista.portal.web.client.ui.financial.payment;
 
-import com.pyx4j.i18n.shared.I18n;
+import java.util.List;
 
-import com.propertyvista.common.client.ui.wizard.VistaAbstractWizardPane;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.client.ui.prime.wizard.IWizard;
+
+import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public class PaymentWizardViewImpl extends VistaAbstractWizardPane<PaymentRecordDTO> implements PaymentWizardView {
+public interface PaymentWizardView extends IWizard<PaymentRecordDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentWizardViewImpl.class);
+    interface Persenter extends IWizard.Presenter {
 
-    public PaymentWizardViewImpl() {
-        super();
-        setWizard(new PaymentWizardForm(this, i18n.tr("Payment Setup"), i18n.tr("Submit")));
+        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+
+        void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 
     }
 }

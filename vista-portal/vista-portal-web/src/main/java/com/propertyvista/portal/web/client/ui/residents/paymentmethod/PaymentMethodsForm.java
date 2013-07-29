@@ -37,7 +37,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
-import com.propertyvista.portal.web.client.ui.residents.payment.PortalPaymentTypesUtil;
+import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 
 public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 
