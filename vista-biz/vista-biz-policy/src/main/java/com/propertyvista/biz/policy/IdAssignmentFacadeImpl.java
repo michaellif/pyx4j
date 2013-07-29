@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.policies.IdAssignmentPolicy;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem;
@@ -112,6 +113,11 @@ public class IdAssignmentFacadeImpl implements IdAssignmentFacade {
     @Override
     public String createAccountNumber() {
         return AccountNumberSequence.getNextSequence();
+    }
+
+    @Override
+    public Pmc getPmcByAccountNumber(String accountNumber) {
+        return AccountNumberSequence.getPmcByAccountNumber(accountNumber);
     }
 
     // internals:

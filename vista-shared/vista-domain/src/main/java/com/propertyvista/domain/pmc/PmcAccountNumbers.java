@@ -34,14 +34,25 @@ import com.propertyvista.domain.VistaNamespace;
 public interface PmcAccountNumbers extends IEntity {
 
     public enum AccountNumbersRangeType {
-        // From:  800-ppp-ppp-ttt-tc    to: 999-ppp-ppp-ppp-tc
-        Small,
+        // From:  800-ppp-ppp-ttt-tc    to: 999-ppp-ppp-ttt-tc
+        Small(9),
 
-        // From:  500-ppp-ctt-ttt-tc    to: 799-ppp-ppp-tttt-tc
-        Medium,
+        // From:  500-ppp-ptt-ttt-tc    to: 799-ppp-ptt-tttt-tc
+        Medium(7),
 
         // From:  000-ppp-ttt-ttt-tc    to: 499-ppp-ttt-ttt-tc
-        Large
+        Large(6);
+
+        private final int accountPrefixLenght;
+
+        private AccountNumbersRangeType(int accountPrefixLenght) {
+            this.accountPrefixLenght = accountPrefixLenght;
+        }
+
+        public int getAccountPrefixLenght() {
+            return accountPrefixLenght;
+        }
+
     }
 
     @NotNull

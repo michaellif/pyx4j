@@ -15,6 +15,7 @@ package com.propertyvista.biz.policy;
 
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lead.Lead;
@@ -41,4 +42,6 @@ public interface IdAssignmentFacade {
     void assignId(MaintenanceRequest maintenanceRequest);
 
     String createAccountNumber();
+
+    Pmc getPmcByAccountNumber(String accountNumber);
 }

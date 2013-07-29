@@ -78,6 +78,11 @@ public class ValidationUtils extends com.pyx4j.commons.ValidationUtils {
         return num.matches("^\\d{3,4}$");
     }
 
+    public static boolean isVistaAccountNumberValid(String num) {
+        num = num.trim().replaceAll("\\s", "");
+        return num.matches("^\\d{14}$") && isLuhnValid(num);
+    }
+
     // cheque/e-cheque validation:
     public static boolean isAccountNumberValid(String num) {
         num = num.trim().replaceAll("\\s", "");

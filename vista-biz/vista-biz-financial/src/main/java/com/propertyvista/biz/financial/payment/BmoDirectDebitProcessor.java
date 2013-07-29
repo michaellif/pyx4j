@@ -13,17 +13,24 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.util.concurrent.Callable;
+
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.policy.IdAssignmentFacade;
+import com.propertyvista.domain.financial.BillingAccount;
+import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecordProcessingStatus;
 import com.propertyvista.payment.pad.EFTTransportFacade;
+import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 class BmoDirectDebitProcessor {
@@ -59,8 +66,35 @@ class BmoDirectDebitProcessor {
 
     private void validateAndPersistFile(DirectDebitFile directDebitFile) {
         Persistence.service().persist(directDebitFile);
-        for (DirectDebitRecord record : directDebitFile.records()) {
-            record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Received);
+        for (final DirectDebitRecord record : directDebitFile.records()) {
+
+            // Verify and find PMC and account
+            if (ValidationUtils.isVistaAccountNumberValid(record.accountNumber().getValue())) {
+                record.pmc().set(ServerSideFactory.create(IdAssignmentFacade.class).getPmcByAccountNumber(record.accountNumber().getValue()));
+                if (record.pmc().isNull()) {
+                    record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Invalid);
+                } else {
+                    // verify we actually have the account
+
+                    BillingAccount billingAccount = TaskRunner.runInTargetNamespace(record.pmc(), new Callable<BillingAccount>() {
+                        @Override
+                        public BillingAccount call() {
+                            EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+                            criteria.eq(criteria.proto().accountNumber(), record.accountNumber());
+                            return Persistence.service().retrieve(criteria);
+                        }
+                    });
+
+                    if (billingAccount == null) {
+                        record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Invalid);
+                    } else {
+                        record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Received);
+                    }
+                }
+            } else {
+                record.processingStatus().setValue(DirectDebitRecordProcessingStatus.Invalid);
+            }
+
             Persistence.service().persist(record);
         }
     }
