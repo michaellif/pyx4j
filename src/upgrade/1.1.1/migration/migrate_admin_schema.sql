@@ -51,10 +51,13 @@ SET search_path = '_admin_';
         -- check constraints
         
         ALTER TABLE admin_pmc_dns_name DROP CONSTRAINT admin_pmc_dns_name_target_e_ck;
+        ALTER TABLE admin_pmc_payment_method DROP CONSTRAINT admin_pmc_payment_method_payment_type_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
+        ALTER TABLE dev_card_service_simulation_card DROP CONSTRAINT dev_card_service_simulation_card_card_type_e_ck;
         ALTER TABLE pad_sim_batch DROP CONSTRAINT pad_sim_batch_reconciliation_status_e_ck;
         ALTER TABLE pad_sim_debit_record DROP CONSTRAINT pad_sim_debit_record_reconciliation_status_e_ck;
+        ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
 
@@ -105,6 +108,12 @@ SET search_path = '_admin_';
         ***
         ***     =======================================================================================================
         **/
+        
+        -- admin_pmc_payment_type_info
+        
+        ALTER TABLE admin_pmc_payment_type_info ADD COLUMN direct_banking_fee NUMERIC(18,2),
+                                                ADD COLUMN visa_debit_fee NUMERIC(18,2);
+        
         
         -- admin_pmc_yardi_credential
         
@@ -228,6 +237,12 @@ SET search_path = '_admin_';
         );
         
         ALTER TABLE direct_debit_record OWNER TO vista;
+        
+        
+        -- fee_default_payment_fees
+        
+        ALTER TABLE fee_default_payment_fees    ADD COLUMN direct_banking_fee NUMERIC(18,2),
+                                                ADD COLUMN visa_debit_fee NUMERIC(18,2);
                                     
         -- global_crm_user_index
         
@@ -388,12 +403,15 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck 
                 CHECK ((target) IN ('field', 'prospectPortal', 'resident', 'residentPortal', 'vistaCrm'));
+        ALTER TABLE admin_pmc_payment_method ADD CONSTRAINT admin_pmc_payment_method_payment_type_e_ck 
+                CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck 
                 CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'residentPortal'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_event_e_ck 
                 CHECK ((event) IN ('Create', 'CredentialUpdate', 'EquifaxReadReport', 'EquifaxRequest', 'Info', 'Login', 
                 'LoginFailed', 'Logout', 'PermitionsUpdate', 'Read', 'SessionExpiration', 'System', 'Update'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_user_type_e_ck CHECK ((user_type) IN ('crm', 'customer', 'operations'));
+        ALTER TABLE dev_card_service_simulation_card ADD CONSTRAINT dev_card_service_simulation_card_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
         ALTER TABLE dev_direct_debit_sim_file ADD CONSTRAINT dev_direct_debit_sim_file_status_e_ck CHECK ((status) IN ('New', 'Sent'));
         ALTER TABLE dev_pad_sim_batch ADD CONSTRAINT dev_pad_sim_batch_reconciliation_status_e_ck CHECK ((reconciliation_status) IN ('HOLD', 'PAID'));
         ALTER TABLE dev_pad_sim_debit_record ADD CONSTRAINT dev_pad_sim_debit_record_reconciliation_status_e_ck 
@@ -407,6 +425,7 @@ SET search_path = '_admin_';
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE pad_reconciliation_file ADD CONSTRAINT pad_reconciliation_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
+        ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'initializeFutureBillingCycles', 
                 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcesAcknowledgment', 'paymentsDbpProcesReconciliation', 
