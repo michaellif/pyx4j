@@ -29,7 +29,7 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
     }
 
     public FormDecoratorBuilder(CComponent<?> component, String componentWidth) {
-        this(component, "150px", componentWidth, "220px");
+        this(component, "150px", componentWidth, "250px");
     }
 
 }

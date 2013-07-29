@@ -17,7 +17,6 @@ import com.pyx4j.commons.css.ClassBasedThemeId;
 import com.pyx4j.commons.css.IStyleName;
 import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
-import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
 public class EntityViewTheme extends Theme {
@@ -31,13 +30,6 @@ public class EntityViewTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityViewContent);
-        style.addProperty("background", ThemeColor.foreground, 0.01);
-        style.addProperty("border-color", ThemeColor.foreground, 0.3);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-radius", "5px");
-        style.addProperty("padding", "10px");
-        style.addProperty("margin", "10px");
         addStyle(style);
 
     }

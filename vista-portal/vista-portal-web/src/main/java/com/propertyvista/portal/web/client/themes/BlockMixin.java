@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-01-29
- * @author ArtyomB
+ * Created on Jul 29, 2013
+ * @author michaellif
  * @version $Id$
  */
 package com.propertyvista.portal.web.client.themes;
@@ -20,23 +20,21 @@ import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
 
-public class LandingPagesTheme extends Theme {
+public class BlockMixin extends Theme {
 
     public static enum StyleName implements IStyleName {
-        LandingPage
+        PortalBlock
     }
 
-    public LandingPagesTheme() {
-        Style style = new Style(".", StyleName.LandingPage);
-        style.addProperty("margin", "40px auto");
-        style.addProperty("padding", "30px");
-        style.addProperty("text-align", "center");
-        style.addProperty("max-width", "300px");
+    public BlockMixin() {
+        Style style = new Style(".", StyleName.PortalBlock);
         style.addProperty("background", ThemeColor.foreground, 0.01);
         style.addProperty("border-color", ThemeColor.foreground, 0.3);
         style.addProperty("border-style", "solid");
         style.addProperty("border-width", "1px");
         style.addProperty("border-radius", "5px");
+        style.addProperty("padding", "10px");
+        style.addProperty("margin", "10px");
         addStyle(style);
     }
 
@@ -44,5 +42,4 @@ public class LandingPagesTheme extends Theme {
     public final ThemeId getId() {
         return new ClassBasedThemeId(getClass());
     }
-
 }

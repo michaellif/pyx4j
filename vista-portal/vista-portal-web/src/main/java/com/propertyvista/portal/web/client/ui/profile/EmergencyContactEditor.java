@@ -41,7 +41,7 @@ public class EmergencyContactEditor extends CEntityForm<EmergencyContact> {
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name")).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "200px").build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "230px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "200px").build());

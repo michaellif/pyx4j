@@ -28,6 +28,7 @@ import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
+import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
@@ -78,6 +79,7 @@ public abstract class AbstractGadget<T extends IsWidget> extends SimplePanel {
         public ContainerPanel() {
 
             setStyleName(DashboardTheme.StyleName.GadgetContent.name());
+            addStyleName(BlockMixin.StyleName.PortalBlock.name());
             getElement().getStyle().setProperty("borderTopWidth", "5px");
             getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
 

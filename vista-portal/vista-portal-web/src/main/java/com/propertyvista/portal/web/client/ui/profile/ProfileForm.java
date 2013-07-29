@@ -31,6 +31,7 @@ import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactor
 import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
+import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.profile.ProfileView.ProfilePresenter;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -62,20 +63,21 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         mainPanel.setH1(++row, 0, 1, i18n.tr("Basic Information"));
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name(), new CEntityLabel<Name>()), "200px").customLabel(i18n.tr("Full Name"))
                 .build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), "50px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), "100px").build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), "150px").build());
 
         mainPanel.setH1(++row, 0, 1, i18n.tr("Contact Information"));
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), "200px").build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().mobilePhone()), "200px").build());
         mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workPhone()), "200px").build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "200px").build());
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), "230px").build());
 
         mainPanel.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
         mainPanel.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(view)));
 
         SimplePanel contentPanel = new SimplePanel(mainPanel);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
+        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
 
         view.doLayout();
 

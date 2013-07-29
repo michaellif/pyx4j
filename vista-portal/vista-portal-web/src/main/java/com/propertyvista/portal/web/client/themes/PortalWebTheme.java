@@ -61,6 +61,8 @@ public class PortalWebTheme extends Theme {
 
         addTheme(new HorizontalAlignCenterMixin());
 
+        addTheme(new BlockMixin());
+
         addTheme(new DefaultWidgetsTheme());
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
@@ -194,7 +196,6 @@ public class PortalWebTheme extends Theme {
         addTheme(new NewPaymentMethodEditorTheme());
         addTheme(new BillingTheme());
         addTheme(new TransactionHistoryViewerTheme());
-        addTheme(new LandingPagesTheme());
         addTheme(new DashboardTheme());
         addTheme(new EntityViewTheme());
         addTheme(new TenantInsuranceTheme());
