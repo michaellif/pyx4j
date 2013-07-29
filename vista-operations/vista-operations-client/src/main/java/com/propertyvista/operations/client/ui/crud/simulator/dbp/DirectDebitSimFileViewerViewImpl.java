@@ -23,23 +23,16 @@ import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimF
 
 public class DirectDebitSimFileViewerViewImpl extends OperationsViewerViewImplBase<DirectDebitSimFile> implements DirectDebitSimFileViewerView {
 
+    private final Button sendActionButton;
+
     public DirectDebitSimFileViewerViewImpl() {
         setForm(new DirectDebitSimFileForm(this));
 
-        Button addNewRecordActionButton = new Button("Add new record", new Command() {
-            @Override
-            public void execute() {
-                ((DirectDebitSimFileViewerView.Presenter) getPresenter()).addNewRecord();
-            }
-        });
-        addHeaderToolbarItem(addNewRecordActionButton);
-
-        Button sendActionButton = new Button("Send", new Command() {
+        sendActionButton = new Button("Send", new Command() {
             @Override
             public void execute() {
                 ((DirectDebitSimFileViewerView.Presenter) getPresenter()).send();
             }
-
         });
         addHeaderToolbarItem(sendActionButton);
     }
@@ -51,5 +44,10 @@ public class DirectDebitSimFileViewerViewImpl extends OperationsViewerViewImplBa
         } else {
             MessageDialog.info("File has been sent successfully");
         }
+    }
+
+    @Override
+    public void setEnableSendAction(boolean isEnabled) {
+        sendActionButton.setEnabled(isEnabled);
     }
 }

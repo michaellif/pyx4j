@@ -19,18 +19,18 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
-import com.pyx4j.site.client.AppPlaceEntityMapper;
-import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractViewerActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.ui.crud.simulator.dbp.DirectDebitSimFileViewerView;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 
 public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<DirectDebitSimFile> implements DirectDebitSimFileViewerView.Presenter {
+
+    private DirectDebitSimFile simFile;
 
     public DirectDebitSimFileViewerActivity(CrudAppPlace place) {
         super(place, OperationsSite.getViewFactory().instantiate(DirectDebitSimFileViewerView.class), GWT
@@ -39,12 +39,7 @@ public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<Dir
 
     @Override
     public boolean canEdit() {
-        return true;
-    }
-
-    @Override
-    public void addNewRecord() {
-        AppSite.getPlaceController().goTo(AppPlaceEntityMapper.resolvePlace(DirectDebitSimRecord.class).formNewItemPlace(getEntityId()));
+        return simFile != null && simFile.status().getValue() != DirectDebitSimFileStatus.Sent;
     }
 
     @Override
@@ -52,17 +47,29 @@ public class DirectDebitSimFileViewerActivity extends AbstractViewerActivity<Dir
         ((DirectDebitSimFileCrudService) getService()).send(new DefaultAsyncCallback<VoidSerializable>() {
             @Override
             public void onSuccess(VoidSerializable result) {
-                ((DirectDebitSimFileViewerView) getView()).reportSendResult(false, null);
+                populate();
             }
 
             @Override
             public void onFailure(Throwable caught) {
                 if (caught instanceof UserRuntimeException) {
-                    ((DirectDebitSimFileViewerView) getView()).reportSendResult(true, caught.getMessage());
+                    getDirectDebitSimFileViewerView().reportSendResult(true, caught.getMessage());
                 } else {
                     super.onFailure(caught);
                 }
             }
         }, EntityFactory.createIdentityStub(DirectDebitSimFile.class, getEntityId()));
     }
+
+    @Override
+    protected void onPopulateSuccess(DirectDebitSimFile simFile) {
+        this.simFile = simFile;
+        super.onPopulateSuccess(simFile);
+        getDirectDebitSimFileViewerView().setEnableSendAction(simFile != null && simFile.status().getValue() != DirectDebitSimFileStatus.Sent);
+    }
+
+    private DirectDebitSimFileViewerView getDirectDebitSimFileViewerView() {
+        return ((DirectDebitSimFileViewerView) getView());
+    }
+
 }

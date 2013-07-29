@@ -21,12 +21,12 @@ public interface DirectDebitSimFileViewerView extends IViewer<DirectDebitSimFile
 
     interface Presenter extends IViewer.Presenter {
 
-        void addNewRecord();
-
         void send();
 
     }
 
     void reportSendResult(boolean hasFailed, String failureMessage);
+
+    void setEnableSendAction(boolean isEnabled);
 
 }
