@@ -13,21 +13,18 @@
  */
 package com.propertyvista.domain.maintenance;
 
-import java.util.Date;
-
-import com.pyx4j.entity.annotations.ReadOnly;
-import com.pyx4j.entity.annotations.Timestamp;
-import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 public interface NoticeOfEntry extends IEntity {
 
-    @Timestamp(Update.Created)
-    IPrimitive<Date> created();
-
+    @Length(10000)
+    @Editor(type = Editor.EditorType.richtextarea)
     IPrimitive<String> text();
 
-    @ReadOnly
+    IPrimitive<String> messageDate();
+
     IPrimitive<String> messageId();
 }

@@ -17,7 +17,9 @@ import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.commons.EnglishGrammar;
@@ -30,12 +32,16 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CTimeLabel;
+import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
+import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
+import com.pyx4j.widgets.client.dialog.OkCancelDialog;
+import com.pyx4j.widgets.client.images.HelperImages;
 
 import com.propertyvista.common.client.policy.ClientPolicyManager;
 import com.propertyvista.common.client.ui.components.MaintenanceRequestCategoryChoice;
@@ -386,6 +392,24 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
 
         @Override
+        protected CEntityFolderItem<MaintenanceRequestSchedule> createItem(boolean first) {
+            CEntityFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
+            item.addAction(ActionType.Cust1, "Add Progress Note", HelperImages.INSTANCE.editButton(), new Command() {
+                @Override
+                public void execute() {
+                    new OkCancelDialog("Enter Progress Note") {
+                        @Override
+                        public boolean onClickOk() {
+                            // TODO Auto-generated method stub
+                            return false;
+                        }
+                    }.show();
+                }
+            });
+            return item;
+        }
+
+        @Override
         protected void onValueSet(boolean populate) {
             super.onValueSet(populate);
         }
@@ -406,10 +430,12 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().progressNote())).build());
                 // right side
                 content.setWidget(0, 1, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
                 content.getFlexCellFormatter().setRowSpan(0, 1, row);
+                content.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
                 return content;
             }
@@ -432,8 +458,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageId())).build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageDate()), 40).contentWidth("500px").labelWidth("100px").build());
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageId()), 40).contentWidth("500px").labelWidth("100px").build());
                 content.setWidget(++row, 0, inject(proto().text()));
 
                 return content;

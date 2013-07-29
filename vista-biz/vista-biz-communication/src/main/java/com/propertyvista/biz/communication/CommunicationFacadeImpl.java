@@ -294,12 +294,13 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     @Override
-    public void sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
+    public MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
         if (disabled) {
-            return;
+            return null;
         }
         MailMessage m = MessageTemplates.createMaintenanceRequestEmail(userName, request, isNewRequest, toAdmin);
         m.setTo(sendTo);
         Mail.send(m);
+        return m;
     }
 }

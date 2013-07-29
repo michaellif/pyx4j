@@ -13,12 +13,9 @@
  */
 package com.propertyvista.crm.rpc.services;
 
-import java.sql.Time;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -27,10 +24,11 @@ import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
 
-    void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time timeFrom, Time timeTo, Key entityId);
+    void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO schedule, Key entityId);
 
     void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId);
 

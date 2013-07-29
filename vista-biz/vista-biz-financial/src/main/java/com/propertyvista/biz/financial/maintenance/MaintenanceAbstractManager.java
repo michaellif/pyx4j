@@ -13,14 +13,12 @@
  */
 package com.propertyvista.biz.financial.maintenance;
 
-import java.sql.Time;
 import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
@@ -28,6 +26,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.communication.NotificationFacade;
@@ -107,16 +106,18 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().merge(request);
     }
 
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time timeFrom, Time timeTo) {
-        MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
-        schedule.scheduledDate().setValue(date);
-        schedule.scheduledTimeFrom().setValue(timeFrom);
-        schedule.scheduledTimeTo().setValue(timeTo);
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
+        MailMessage email = sendReporterNote(request, false);
+
+        if (email != null) {
+            schedule.noticeOfEntry().text().setValue(email.getHtmlBody() != null ? email.getHtmlBody() : email.getTextBody());
+            schedule.noticeOfEntry().messageId().setValue(email.getHeader("Message-ID"));
+            schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
+        }
         request.workHistory().add(schedule);
         request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
-        Persistence.service().merge(request);
 
-        sendReporterNote(request, false);
+        Persistence.service().merge(request);
     }
 
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
@@ -153,9 +154,9 @@ public abstract class MaintenanceAbstractManager {
         return null;
     }
 
-    protected void sendReporterNote(MaintenanceRequest request, boolean isNewRequest) {
+    protected MailMessage sendReporterNote(MaintenanceRequest request, boolean isNewRequest) {
         if (request.reporter().isNull() || request.reporter().customer().person().email().isNull()) {
-            return;
+            return null;
         }
 
         String sendTo = request.reporter().customer().person().email().getValue();
@@ -164,9 +165,10 @@ public abstract class MaintenanceAbstractManager {
             userName = request.reporter().customer().person().name().getStringView();
         }
         try {
-            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(sendTo, userName, request, isNewRequest, false);
+            return ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(sendTo, userName, request, isNewRequest, false);
         } catch (Exception e) {
             log.warn("Email communication failed: {}", e);
+            return null;
         }
     }
 }

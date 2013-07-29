@@ -41,18 +41,25 @@ public interface MaintenanceRequestSchedule extends IEntity {
     @JoinColumn
     MaintenanceRequest request();
 
+    @NotNull
     IPrimitive<LogicalDate> scheduledDate();
 
     @Editor(type = EditorType.timepicker)
     @Format("h:mm a")
+    @NotNull
     IPrimitive<Time> scheduledTimeFrom();
 
     @Editor(type = EditorType.timepicker)
     @Format("h:mm a")
+    @NotNull
     IPrimitive<Time> scheduledTimeTo();
+
+    @NotNull
+    IPrimitive<String> workDescription();
 
     IPrimitive<String> progressNote();
 
     @EmbeddedEntity
+    @ReadOnly
     NoticeOfEntry noticeOfEntry();
 }

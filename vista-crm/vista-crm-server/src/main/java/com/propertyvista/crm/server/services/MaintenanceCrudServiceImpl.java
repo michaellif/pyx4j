@@ -13,17 +13,15 @@
  */
 package com.propertyvista.crm.server.services;
 
-import java.sql.Time;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
@@ -37,6 +35,7 @@ import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceCrudService {
 
@@ -95,10 +94,15 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void sheduleAction(AsyncCallback<VoidSerializable> callback, LogicalDate date, Time timeFrom, Time timeTo, Key entityId) {
+    public void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO scheduleDTO, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         enhanceDbo(request);
-        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, date, timeFrom, timeTo);
+        MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
+        schedule.scheduledDate().set(scheduleDTO.scheduledDate());
+        schedule.scheduledTimeFrom().set(scheduleDTO.scheduledTimeFrom());
+        schedule.scheduledTimeTo().set(scheduleDTO.scheduledTimeTo());
+        schedule.workDescription().set(scheduleDTO.workDescription());
+        ServerSideFactory.create(MaintenanceFacade.class).sheduleMaintenanceRequest(request, schedule);
         Persistence.service().commit();
         callback.onSuccess(null);
     }

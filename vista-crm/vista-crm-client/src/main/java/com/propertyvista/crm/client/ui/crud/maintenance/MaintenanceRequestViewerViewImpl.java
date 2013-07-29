@@ -33,11 +33,11 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
 
@@ -73,9 +73,12 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
                 new ScheduleBox() {
                     @Override
                     public boolean onClickOk() {
-                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue().date().getValue(),
-                                getValue().timeFrom().getValue(), getValue().timeTo().getValue());
-                        return true;
+                        if (validate()) {
+                            ((MaintenanceRequestViewerView.Presenter) getPresenter()).scheduleAction(getValue());
+                            return true;
+                        } else {
+                            return false;
+                        }
                     }
                 }.show();
             }
@@ -144,7 +147,7 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
 
     private abstract class ScheduleBox extends OkCancelDialog {
 
-        private CEntityDecoratableForm<ScheduleDataDTO> content;
+        private CEntityDecoratableForm<MaintenanceRequestScheduleDTO> content;
 
         public ScheduleBox() {
             super(i18n.tr("Schedule"));
@@ -155,14 +158,16 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         protected Widget createBody() {
             getOkButton().setEnabled(true);
 
-            content = new CEntityDecoratableForm<ScheduleDataDTO>(ScheduleDataDTO.class) {
+            content = new CEntityDecoratableForm<MaintenanceRequestScheduleDTO>(MaintenanceRequestScheduleDTO.class) {
                 @Override
                 public IsWidget createContent() {
                     TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-                    main.setWidget(1, 0, 2, new FormDecoratorBuilder(inject(proto().date()), 10, true).build());
-                    main.setWidget(2, 0, 2, new FormDecoratorBuilder(inject(proto().timeFrom()), 10, true).build());
-                    main.setWidget(3, 0, 2, new FormDecoratorBuilder(inject(proto().timeTo()), 10, true).build());
+                    int row = -1;
+                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledDate()), 10, true).build());
+                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom()), 10, true).build());
+                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledTimeTo()), 10, true).build());
+                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().workDescription()), 40, true).build());
 
                     return main;
                 }
@@ -175,11 +180,21 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
             };
 
             content.initContent();
-            content.populate(EntityFactory.create(ScheduleDataDTO.class));
+            content.populate(EntityFactory.create(MaintenanceRequestScheduleDTO.class));
             return content.asWidget();
         }
 
-        public ScheduleDataDTO getValue() {
+        public boolean validate() {
+            if (content.isValid()) {
+                return true;
+            } else {
+                content.setUnconditionalValidationErrorRendering(true);
+                MessageDialog.error(i18n.tr("Error"), content.getValidationResults().getValidationMessage(true, true));
+                return false;
+            }
+        }
+
+        public MaintenanceRequestScheduleDTO getValue() {
             return content.getValue();
         }
     }

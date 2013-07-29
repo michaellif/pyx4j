@@ -13,15 +13,13 @@
  */
 package com.propertyvista.biz.financial.maintenance.yardi;
 
-import java.sql.Time;
 import java.util.List;
 import java.util.Set;
-
-import com.pyx4j.commons.LogicalDate;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -70,8 +68,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void sheduleMaintenanceRequest(MaintenanceRequest request, LogicalDate date, Time timeFrom, Time timeTo) {
-        MaintenanceYardiManager.instance().sheduleMaintenanceRequest(request, date, timeFrom, timeTo);
+    public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
+        MaintenanceYardiManager.instance().sheduleMaintenanceRequest(request, schedule);
     }
 
     @Override

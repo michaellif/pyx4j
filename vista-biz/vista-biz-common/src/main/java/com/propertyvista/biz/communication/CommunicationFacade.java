@@ -16,6 +16,7 @@ package com.propertyvista.biz.communication;
 import java.util.List;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -76,6 +77,6 @@ public interface CommunicationFacade {
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
 
-    void sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin);
+    MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin);
 
 }
