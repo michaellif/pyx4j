@@ -506,8 +506,12 @@ public abstract class LeaseAbstractManager {
         term.lease().set(lease);
         term.unit().set(unit);
 
-        // set from date to next day after current term:
-        term.termFrom().setValue(DateUtils.daysAdd(lease.currentTerm().termTo().getValue(), 1));
+        // set from date to next day after current term (or today if termTo is not set):
+        if (lease.currentTerm().termTo().isNull()) {
+            term.termFrom().setValue(new LogicalDate(SystemDateManager.getDate()));
+        } else {
+            term.termFrom().setValue(DateUtils.daysAdd(lease.currentTerm().termTo().getValue(), 1));
+        }
 
         updateTermUnitRelatedData(term);
 
