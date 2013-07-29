@@ -14,6 +14,9 @@
 package com.propertyvista.payment.dbp.remcon;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,12 +26,17 @@ import java.util.List;
 
 import javax.validation.ValidationException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.payment.dbp.remcon.RemconField.RemconFieldType;
 
 public class RemconParser {
+
+    private static final Logger log = LoggerFactory.getLogger(RemconParser.class);
 
     private final RemconFile remconFile = new RemconFile();
 
@@ -40,11 +48,25 @@ public class RemconParser {
         return remconFile;
     }
 
+    public static RemconFile pars(File file) {
+        RemconParser parser = new RemconParser();
+
+        InputStream is;
+        try {
+            is = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("File not found");
+        }
+        parser.load(is);
+
+        return parser.getRemconFile();
+    }
+
     public void load(InputStream in) {
         int lineNumber = 0;
+        String line = null;
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in, Charset.forName("ISO-8859-1")));
-            String line = null;
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
                 parse(line);
@@ -53,6 +75,7 @@ public class RemconParser {
         } catch (IOException ioe) {
             throw new RuntimeException("Remcon read error", ioe);
         } catch (Exception e) {
+            log.debug("erred remcon line `{}`", line);
             throw new RuntimeException("Remcon read error, Line# " + lineNumber + "; " + e.getMessage(), e);
         } finally {
             IOUtils.closeQuietly(in);
@@ -100,22 +123,22 @@ public class RemconParser {
             break;
         case Numeric:
             if (!value.matches("[0-9]+")) {
-                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value `{1}`", field.getName(), value));
             }
             break;
         case DateYYMMDD:
             if (!value.matches("[0-9]+")) {
-                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value `{1}`", field.getName(), value));
             }
             break;
         case DateMMDDYY:
             if (!value.matches("[0-9]+")) {
-                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value `{1}`", field.getName(), value));
             }
             break;
         case Filler:
             if (!value.matches("[ ]*")) {
-                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value", field.getName()));
+                throw new ValidationException(SimpleMessageFormat.format("Invalid field `{0}` value `{1}`", field.getName(), value));
             }
             break;
 

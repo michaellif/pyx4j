@@ -20,18 +20,22 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.dev.DataDump;
 
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
+import com.propertyvista.test.mock.MockEventBus;
 
-class EFTBankMock {
+class EFTBankMock implements ScheduledBmoPayment.Handler {
 
     private static final Logger log = LoggerFactory.getLogger(EFTBankMockReconciliation.class);
 
     private EFTBankMock() {
+        MockEventBus.addHandler(ScheduledBmoPayment.class, this);
     }
 
     private static class SingletonHolder {
@@ -51,6 +55,8 @@ class EFTBankMock {
     private final EFTBankMockAck acknowledgment = new EFTBankMockAck();
 
     private final EFTBankMockReconciliation reconciliation = new EFTBankMockReconciliation();
+
+    private final List<DirectDebitRecord> scheduledBmoRecords = new ArrayList<DirectDebitRecord>();
 
     void receivedPadFile(PadFile padFile) {
         log.debug("receivedPadFile {}, records {}", padFile.fileCreationNumber().getValue(), padFile.recordsCount().getValue());
@@ -105,5 +111,15 @@ class EFTBankMock {
             DataDump.dumpToDirectory("eft", "reconciliation", rec);
             return rec;
         }
+    }
+
+    @Override
+    public void scheduleTransactionReconciliationResponse(ScheduledBmoPayment event) {
+        DirectDebitRecord directDebitRecord = EntityFactory.create(DirectDebitRecord.class);
+        directDebitRecord.amount().setValue(event.amount);
+        directDebitRecord.paymentReferenceNumber().setValue(event.paymentReferenceNumber);
+        directDebitRecord.accountNumber().setValue(event.accountNumber);
+        scheduledBmoRecords.add(directDebitRecord);
+
     }
 }

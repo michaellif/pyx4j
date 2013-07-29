@@ -38,8 +38,8 @@ public class RemconFileConvertor {
         RemconRecordFileTrailer trailer = new RemconRecordFileTrailer();
 
         header.fileSerialNumber = "1";
-        header.fileSerialDate = new SimpleDateFormat("yyyyMMdd").format(debitFile.creatationDate().getValue());
-        header.currentDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        header.fileSerialDate = new SimpleDateFormat("yyMMdd").format(debitFile.creatationDate().getValue());
+        header.currentDate = new SimpleDateFormat("yyMMdd").format(new Date());
         trailer.fileSerialNumber = header.fileSerialNumber;
         trailer.fileSerialDate = header.fileSerialDate;
 

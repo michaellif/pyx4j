@@ -50,11 +50,18 @@ public class RemconFile {
             totalFileAmount = Integer.valueOf(trailer.totalAmount);
         }
         int fileamount = 0;
+        RemconRecordBatchHeader currentBatchHeader = null;
         for (RemconRecord record : records) {
-            if (record instanceof RemconRecordDetailRecord) {
+            if (record instanceof RemconRecordBatchHeader) {
+                currentBatchHeader = (RemconRecordBatchHeader) record;
+            } else if (record instanceof RemconRecordDetailRecord) {
+                Validate.notNull(currentBatchHeader, "Remcon BatchHeader is missing");
                 int itemAmount = Integer.valueOf(((RemconRecordDetailRecord) record).itemAmount);
 
                 fileamount += itemAmount;
+            } else if (record instanceof RemconRecordBatchTrailer) {
+                Validate.notNull(currentBatchHeader, "Remcon BatchHeader is missing");
+                currentBatchHeader = null;
             }
         }
     }

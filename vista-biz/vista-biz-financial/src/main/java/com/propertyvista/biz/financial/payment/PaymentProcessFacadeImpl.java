@@ -123,4 +123,9 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     public void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate) {
         new ScheduledPaymentsManager().verifyYardiPaymentIntegration(executionMonitor, forDate);
     }
+
+    @Override
+    public boolean receiveBmoFiles(ExecutionMonitor executionMonitor) {
+        return new BmoDirectDebitProcessor().receiveBmoFiles(executionMonitor);
+    }
 }

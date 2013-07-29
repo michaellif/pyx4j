@@ -22,10 +22,6 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface DirectDebitRecordTrace extends IEntity {
 
-    IPrimitive<String> fileSerialNumber();
-
-    IPrimitive<String> fileSerialDate();
-
     IPrimitive<String> locationCode();
 
     IPrimitive<String> collectionDate();

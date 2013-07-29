@@ -14,10 +14,12 @@
 package com.propertyvista.payment.pad.mock;
 
 import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.data.PadAckFile;
+import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public class EFTTransportFacadeMock implements EFTTransportFacade {
 
@@ -45,4 +47,9 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
     }
 
+    @Override
+    public DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

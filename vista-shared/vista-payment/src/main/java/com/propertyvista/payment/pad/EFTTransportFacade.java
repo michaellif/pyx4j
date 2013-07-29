@@ -14,6 +14,7 @@
 package com.propertyvista.payment.pad;
 
 import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.data.PadAckFile;
@@ -21,14 +22,17 @@ import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public interface EFTTransportFacade {
 
-    public void sendPadFile(PadFile padFile);
+    void sendPadFile(PadFile padFile);
 
-    public PadAckFile receivePadAcknowledgementFile(String companyId) throws SftpTransportConnectionException;
+    PadAckFile receivePadAcknowledgementFile(String companyId) throws SftpTransportConnectionException;
 
-    public PadReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException;
+    PadReconciliationFile receivePadReconciliation(String companyId) throws SftpTransportConnectionException;
 
     /**
      * Remove the file from remote server directory in success.
      */
-    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
+    void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
+
+    DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException;
+
 }

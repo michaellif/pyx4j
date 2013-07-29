@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.pmc.PmcMerchantAccountIndex;
@@ -45,7 +44,7 @@ class PadCaledonReconciliation {
             summary.reconciliationFile().set(reconciliationFile);
 
             EntityQueryCriteria<PmcMerchantAccountIndex> criteria = EntityQueryCriteria.create(PmcMerchantAccountIndex.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
+            criteria.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId());
             PmcMerchantAccountIndex macc = Persistence.service().retrieve(criteria);
             if (macc == null) {
                 throw new Error("Unexpected TerminalId '" + summary.merchantTerminalId().getValue() + "' in file " + reconciliationFile.fileName().getValue());

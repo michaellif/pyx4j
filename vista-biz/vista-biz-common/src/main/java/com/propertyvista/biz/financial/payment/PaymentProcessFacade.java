@@ -46,4 +46,6 @@ public interface PaymentProcessFacade {
     void suspendPmcScheduledLastMonthPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate);
 
     void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate);
+
+    boolean receiveBmoFiles(ExecutionMonitor executionMonitor);
 }

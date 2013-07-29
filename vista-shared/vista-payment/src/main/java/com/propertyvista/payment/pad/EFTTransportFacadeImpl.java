@@ -25,9 +25,15 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
+import com.propertyvista.payment.dbp.BmoSftpClient;
+import com.propertyvista.payment.dbp.RemconFileInterpreter;
+import com.propertyvista.payment.dbp.remcon.RemconFile;
+import com.propertyvista.payment.dbp.remcon.RemconParser;
 import com.propertyvista.payment.pad.data.PadAckFile;
+import com.propertyvista.server.sftp.SftpFile;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 /**
@@ -118,6 +124,28 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             return reconciliationFile;
         } finally {
             if (!parsOk) {
+                move(sftpFile.localFile, padWorkdir, "error");
+            }
+        }
+    }
+
+    @Override
+    public DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException {
+        File padWorkdir = getPadBaseDir();
+        SftpFile sftpFile = new BmoSftpClient().receiveFile(padWorkdir);
+        if (sftpFile == null) {
+            return null;
+        }
+        boolean parsOk = false;
+        try {
+            RemconFile remconFile = RemconParser.pars(sftpFile.localFile);
+            DirectDebitFile directDebitFile = RemconFileInterpreter.interpreter(sftpFile, remconFile);
+            parsOk = true;
+            return directDebitFile;
+        } finally {
+            if (parsOk) {
+                move(sftpFile.localFile, padWorkdir, "processed");
+            } else {
                 move(sftpFile.localFile, padWorkdir, "error");
             }
         }

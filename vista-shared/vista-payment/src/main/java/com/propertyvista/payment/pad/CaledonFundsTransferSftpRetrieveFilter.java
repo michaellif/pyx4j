@@ -34,22 +34,22 @@ public class CaledonFundsTransferSftpRetrieveFilter implements SftpRetrieveFilte
     }
 
     @Override
-    public CaledonFundsTransferSftpFile accept(String directoryName, String name) {
+    public CaledonFundsTransferSftpFile accept(String directoryName, String fileName) {
         // file name match;
         switch (fileType) {
         case PadFile:
             // Used for simulator only
-            if (!name.contains("." + companyId + ".")) {
+            if (!fileName.contains("." + companyId + ".")) {
                 return null;
             }
             break;
         case Acknowledgement:
-            if (!(name.contains("." + companyId + "_") && name.contains(PadAckFile.FileNameSufix))) {
+            if (!(fileName.contains("." + companyId + "_") && fileName.contains(PadAckFile.FileNameSufix))) {
                 return null;
             }
             break;
         case Reconciliation:
-            if (!(name.contains(PadReconciliationFile.FileNameSufix) && name.endsWith("." + companyId))) {
+            if (!(fileName.contains(PadReconciliationFile.FileNameSufix) && fileName.endsWith("." + companyId))) {
                 return null;
             }
             break;
@@ -57,8 +57,8 @@ public class CaledonFundsTransferSftpRetrieveFilter implements SftpRetrieveFilte
             return null;
         }
 
-        File dst = new File(targetDirectory, name);
-        File dst2 = new File(new File(targetDirectory, "processed"), name);
+        File dst = new File(targetDirectory, fileName);
+        File dst2 = new File(new File(targetDirectory, "processed"), fileName);
         if ((dst.exists()) || (dst2.exists())) {
             return null;
         } else {

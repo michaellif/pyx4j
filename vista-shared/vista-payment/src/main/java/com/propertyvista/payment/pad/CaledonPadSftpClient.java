@@ -30,7 +30,7 @@ public class CaledonPadSftpClient {
     private final CaledonFundsTransferConfiguration configuration;
 
     public CaledonPadSftpClient() {
-        configuration = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonFundsTransferConfiguration();
+        configuration = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration();
     }
 
     private static boolean usePadSimulator() {

@@ -50,6 +50,10 @@ public class PmcProcessFactory {
         case paymentsLastMonthSuspend:
             return new PaymentsLastMonthSuspendProcess();
 
+        case paymentsBmoReceive:
+            return new PaymentsBmoReceiveProcess();
+        case paymentsDbpSend:
+            return new PaymentsDbpSendProcess();
 // Caledon            
         case paymentsPadSend:
             return new PadSendProcess();

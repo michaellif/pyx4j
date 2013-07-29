@@ -97,6 +97,9 @@ public class RemconFileWriter implements Closeable {
 
     private String padValue(String value, RemconField remconField) {
         int filedLength = remconField.value();
+        if (value.length() > filedLength) {
+            throw new IllegalArgumentException("invalid filed length");
+        }
         switch (remconField.type()) {
         case Alphanumeric:
             return CommonsStringUtils.paddingRight(value, filedLength, ' ');

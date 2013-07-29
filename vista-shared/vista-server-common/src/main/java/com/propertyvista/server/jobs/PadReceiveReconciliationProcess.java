@@ -43,7 +43,7 @@ public class PadReceiveReconciliationProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-
+        throw new Error("this should not be called");
     }
 
     @Override
