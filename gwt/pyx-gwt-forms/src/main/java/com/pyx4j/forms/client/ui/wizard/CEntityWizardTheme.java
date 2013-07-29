@@ -30,22 +30,19 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class CEntityWizardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        //@formatter:off
-        
-        Header, 
-        HeaderCaption, 
-        
-        FooterToolbar, 
-        
-        WizardPanel, 
-        WizardStep
 
-        //@formatter:on
+        WizardPanel, WizardContent, WizardStep,
+
+        WizardHeader, WizardHeaderCaption,
+
+        WizardFooter
+
     }
 
     public CEntityWizardTheme() {
-        initGeneralStyles();
-        initWizardPanelStyles();
+        initHeaderStyles();
+        initFooterStyles();
+        initContentPanelStyles();
     }
 
     @Override
@@ -53,10 +50,8 @@ public class CEntityWizardTheme extends Theme {
         return new ClassBasedThemeId(getClass());
     }
 
-    protected void initGeneralStyles() {
-        Style style = new Style(".", StyleName.Header);
-//        style.addProperty("background-color", ThemeColor.object1, 1);
-//        style.addProperty("color", ThemeColor.object1, 0.1);
+    protected void initHeaderStyles() {
+        Style style = new Style(".", StyleName.WizardHeader);
         style.addProperty("width", "100%");
         style.addProperty("height", "2em");
         style.addProperty("border-bottom", "1px solid");
@@ -66,37 +61,31 @@ public class CEntityWizardTheme extends Theme {
         style.addProperty("font-weight", "bold");
         addStyle(style);
 
-        style = new Style(".", StyleName.HeaderCaption);
+        style = new Style(".", StyleName.WizardHeaderCaption);
         style.addProperty("float", "left");
         style.addProperty("padding", "0 1em");
         addStyle(style);
 
-        style = new Style(".", StyleName.FooterToolbar);
-        style.addProperty("float", "right");
+    }
+
+    protected void initFooterStyles() {
+        Style style = new Style(".", StyleName.WizardFooter);
         style.addProperty("padding", "2px 0");
         style.addProperty("margin", "0.5em 0");
         style.addProperty("border-top", "4px solid");
-//        style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
         addStyle(style);
 
-        style = new Style(".", StyleName.FooterToolbar, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+        style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
         style.addProperty("padding", "2px");
-        style.addProperty("float", "right");
         addStyle(style);
     }
 
-    protected void initWizardPanelStyles() {
+    protected void initContentPanelStyles() {
         Style style = new Style(".", StyleName.WizardPanel);
-        style.addProperty("min-height", "25em");
         addStyle(style);
 
         style = new Style(".", StyleName.WizardPanel, " .", StyleName.WizardStep);
         style.addProperty("height", "auto");
-//        style.addProperty("border", "1px solid");
-//        style.addProperty("border-color", ThemeColor.foreground, 0.6);
-//        style.addProperty("margin-top", "5px");
-//        style.addProperty("margin-left", "4px");
-//        style.addProperty("margin-right", "4px");
         addStyle(style);
     }
 }

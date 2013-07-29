@@ -25,7 +25,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
@@ -36,7 +35,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-public class WizardDecorator<E extends IEntity> extends VerticalPanel implements IDecorator<CEntityWizard<E>> {
+public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDecorator<CEntityWizard<E>> {
 
     private static final I18n i18n = I18n.get(WizardDecorator.class);
 
@@ -54,26 +53,32 @@ public class WizardDecorator<E extends IEntity> extends VerticalPanel implements
 
     private final Button btnNext;
 
-    private String endButtonCaption = i18n.tr("Finish");
+    private String endButtonCaption;
 
     private CEntityWizard<E> component;
 
-    private String footerHeight = "auto";
+    private final String footerHeight = "auto";
 
     public WizardDecorator() {
+        this(i18n.tr("Finish"));
+    }
+
+    public WizardDecorator(String endButtonCaption) {
+        this.endButtonCaption = endButtonCaption;
         captionLabel = new Label();
-        captionLabel.setStyleName(CEntityWizardTheme.StyleName.HeaderCaption.name());
+        captionLabel.setStyleName(CEntityWizardTheme.StyleName.WizardHeaderCaption.name());
 
         header = new FlowPanel();
         header.add(captionLabel);
-        header.setStyleName(CEntityWizardTheme.StyleName.Header.name());
+        header.setStyleName(CEntityWizardTheme.StyleName.WizardHeader.name());
         add(header);
 
         add(contentHolder = new SimplePanel());
+        contentHolder.setStyleName(CEntityWizardTheme.StyleName.WizardContent.name());
 
         footerToolbar = new Toolbar();
         footer = new SimplePanel();
-        footer.setStyleName(CEntityWizardTheme.StyleName.FooterToolbar.name());
+        footer.setStyleName(CEntityWizardTheme.StyleName.WizardFooter.name());
         footer.setWidget(footerToolbar);
         add(footer);
 
@@ -147,17 +152,6 @@ public class WizardDecorator<E extends IEntity> extends VerticalPanel implements
     public void addFooterItem(Widget widget) {
         footer.setHeight(footerHeight);
         footerToolbar.add(widget);
-    }
-
-    public void setFooterHeight(String footerToolbarHeight) {
-        this.footerHeight = footerToolbarHeight;
-        if (footerToolbar.getWidgetCount() == 0) {
-            footer.setHeight(footerToolbarHeight);
-        }
-    }
-
-    public void setEndButtonCaption(String endButtonCaption) {
-        this.endButtonCaption = endButtonCaption;
     }
 
     public void calculateButtonsState() {
