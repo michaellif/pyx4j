@@ -23,12 +23,12 @@ import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
 import com.propertyvista.operations.domain.scheduler.TriggerNotification;
 import com.propertyvista.operations.domain.scheduler.TriggerNotificationEvent;
+import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 
 public class JobNotifications {

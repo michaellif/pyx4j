@@ -27,7 +27,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.operations.domain.security.OperationsUser;
 
 @ToStringFormat("{0} {1}")
 @Table(prefix = "scheduler", namespace = VistaNamespace.operationsNamespace)

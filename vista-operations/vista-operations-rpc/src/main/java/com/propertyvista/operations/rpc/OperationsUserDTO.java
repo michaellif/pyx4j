@@ -18,9 +18,9 @@ import com.pyx4j.entity.annotations.ExtendsDBO;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.UserCredentialEditDTO;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
+import com.propertyvista.operations.domain.security.OperationsUser;
 
 @Transient
 @Caption(name = "User")

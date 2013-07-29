@@ -23,11 +23,11 @@ import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.OnboardingUser;
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.operations.domain.security.OperationsUser;
 
 /**
  * to Tenant/Applicant (Lease)
@@ -40,6 +40,7 @@ public interface CommunicationFacade {
 
     boolean isDisabled();
 
+    //TODO move to OprationsNotificationFacade
     void sendAdminPasswordRetrievalToken(OperationsUser user);
 
     void sendCrmPasswordRetrievalToken(CrmUser user);
@@ -67,6 +68,7 @@ public interface CommunicationFacade {
 
     void sendTenantSurePaymentsResumedEmail(String tenantEmail);
 
+    //TODO move to OprationsNotificationFacade
     void sendOnlinePaymentSetupCompletedEmail(String userName, String userEmail);
 
     void sendPaymentReversalWithNsfNotification(List<String> targetEmail, PaymentRecord paymentRecord);

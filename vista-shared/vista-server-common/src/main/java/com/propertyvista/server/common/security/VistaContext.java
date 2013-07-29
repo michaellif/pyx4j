@@ -24,9 +24,9 @@ import com.pyx4j.server.contexts.Visit;
 
 import com.propertyvista.domain.security.CrmUser;
 import com.propertyvista.domain.security.CustomerUser;
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.common.AbstractUser;
 import com.propertyvista.domain.security.common.VistaUserType;
+import com.propertyvista.operations.domain.security.OperationsUser;
 
 public class VistaContext {
 

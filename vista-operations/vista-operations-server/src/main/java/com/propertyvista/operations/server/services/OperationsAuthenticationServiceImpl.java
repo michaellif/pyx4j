@@ -21,9 +21,9 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.security.shared.Behavior;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
+import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.domain.security.OperationsUserCredential;
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.server.common.security.VistaAuthenticationServicesImpl;

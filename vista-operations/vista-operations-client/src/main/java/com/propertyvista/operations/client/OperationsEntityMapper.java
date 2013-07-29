@@ -17,7 +17,6 @@ import static com.pyx4j.site.client.AppPlaceEntityMapper.register;
 
 import com.google.gwt.resources.client.ImageResource;
 
-import com.propertyvista.domain.security.OperationsUser;
 import com.propertyvista.operations.client.resources.OperationsImages;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationCard;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAccount;
@@ -28,6 +27,7 @@ import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimFile;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.RunData;
+import com.propertyvista.operations.domain.security.OperationsUser;
 import com.propertyvista.operations.rpc.AuditRecordOperationsDTO;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;

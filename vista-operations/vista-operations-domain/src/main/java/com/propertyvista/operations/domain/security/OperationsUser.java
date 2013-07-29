@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.domain.security;
+package com.propertyvista.operations.domain.security;
 
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Table;

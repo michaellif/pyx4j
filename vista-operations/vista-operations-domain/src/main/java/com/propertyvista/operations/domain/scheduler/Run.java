@@ -36,7 +36,7 @@ import com.pyx4j.entity.shared.ISet;
 import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
-import com.propertyvista.domain.security.OperationsUser;
+import com.propertyvista.operations.domain.security.OperationsUser;
 
 @ToStringFormat("{0},{1}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
