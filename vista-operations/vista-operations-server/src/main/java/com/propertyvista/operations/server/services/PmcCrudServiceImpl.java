@@ -52,6 +52,7 @@ import com.propertyvista.ob.server.PmcActivationDeferredProcess;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.domain.scheduler.Trigger;
+import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -87,6 +88,11 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.crm, true));
         dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.residentPortal, false));
         dto.prospectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.prospect, true));
+
+        dto.defaultPaymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
+        Persistence.service().retrieveMember(entity.paymentTypeInfo());
+        dto.paymentTypeInfo().set(entity.paymentTypeInfo());
+
     }
 
     @Override

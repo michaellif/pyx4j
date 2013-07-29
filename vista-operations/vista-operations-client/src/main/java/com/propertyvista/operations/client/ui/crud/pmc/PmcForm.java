@@ -36,8 +36,11 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
+import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
+import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
@@ -57,6 +60,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         setTabEnabled(addTab(createOnboardingMerchantAccountsTab()), !isEditable());
         addTab(createEquifaxlTab());
         addTab(createYardiTab());
+        addTab(createFundsTransferTab());
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
@@ -228,6 +232,18 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
         int row = -1;
         content.setWidget(++row, 0, inject(proto().yardiCredential(), new YardiCredentialEditor()));
+        return content;
+    }
+
+    private TwoColumnFlexFormPanel createFundsTransferTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer"));
+        int row = 0;
+        content.setH2(row, 0, 1, i18n.tr("Default"));
+        content.setH2(row, 1, 1, i18n.tr("Override"));
+        ++row;
+        content.setWidget(row, 0, 1, inject(proto().defaultPaymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class)));
+        get(proto().defaultPaymentFees()).setViewable(true);
+        content.setWidget(row, 1, 1, inject(proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class)));
         return content;
     }
 }

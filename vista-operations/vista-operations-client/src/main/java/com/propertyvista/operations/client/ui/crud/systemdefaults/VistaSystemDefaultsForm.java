@@ -13,15 +13,15 @@
  */
 package com.propertyvista.operations.client.ui.crud.systemdefaults;
 
-import com.google.gwt.user.client.ui.HTML;
-
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.components.MerchantAccountForm;
+import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
 
 public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDefaultsDTO> {
@@ -43,9 +43,8 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     private TwoColumnFlexFormPanel makePaymentSettingsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer"));
         int row = -1;
-        panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
-        // TODO inject fees form
-        panel.setWidget(++row, 0, new HTML(i18n.tr("TODO: setupFees")));
+        panel.setH1(++row, 0, 2, i18n.tr("Default Fees"));
+        panel.setWidget(++row, 0, 2, inject(proto().paymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class)));
         return panel;
     }
 

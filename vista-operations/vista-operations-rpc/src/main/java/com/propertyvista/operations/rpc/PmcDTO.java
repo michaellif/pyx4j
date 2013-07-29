@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.security.OnboardingUser;
+import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 
 @Transient
 @Caption(name = "Property Management Company (PMC)")
@@ -33,5 +34,7 @@ public interface PmcDTO extends Pmc {
     IPrimitive<String> residentPortalUrl();
 
     IPrimitive<String> prospectPortalUrl();
+
+    DefaultPaymentFees defaultPaymentFees();
 
 }
