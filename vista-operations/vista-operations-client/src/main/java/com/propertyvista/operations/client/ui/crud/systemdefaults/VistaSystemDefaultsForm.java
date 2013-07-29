@@ -36,12 +36,12 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     private void createTabs() {
         selectTab(addTab(makeEquifaxSettingsTab()));
         addTab(makeMistaMerchantAccountTab());
-        addTab(makeCaledonSettingsTab());
+        addTab(makePaymentSettingsTab());
         addTab(makeTenantSureSettingsTab());
     }
 
-    private TwoColumnFlexFormPanel makeCaledonSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer (Caledon)"));
+    private TwoColumnFlexFormPanel makePaymentSettingsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
         // TODO inject fees form
