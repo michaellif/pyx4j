@@ -41,6 +41,7 @@ import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.operations.client.ui.components.EquifaxFeeQuoteForm;
 import com.propertyvista.operations.client.ui.components.PaymentFeesForm;
 import com.propertyvista.operations.client.ui.crud.OperationsEntityForm;
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
@@ -51,6 +52,8 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     private static final I18n i18n = I18n.get(PmcForm.class);
 
     private MerchantAccountsLister onboardingMerchantAccountsLister;
+
+    private DirectDebitRecordLister directDebitRecordLister;
 
     private Anchor approvalLink;
 
@@ -68,6 +71,10 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         this.onboardingMerchantAccountsLister.setDataSource(onboardingMerchantAccountsSource);
     }
 
+    public void setDirectDebitRecordsSource(ListerDataSource<DirectDebitRecord> directDebitRecordsDataSource) {
+        this.directDebitRecordLister.setDataSource(directDebitRecordsDataSource);
+    }
+
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
@@ -80,8 +87,12 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         get(proto().prospectPortalUrl()).setVisible(isVisible);
 
         if (!isEditable() & getValue().getPrimaryKey() != null) {
-            onboardingMerchantAccountsLister.setParentPmc(EntityFactory.createIdentityStub(Pmc.class, getValue().getPrimaryKey()));
+            Pmc listerPmcContext = EntityFactory.createIdentityStub(Pmc.class, getValue().getPrimaryKey());
+            onboardingMerchantAccountsLister.setParentPmc(listerPmcContext);
             onboardingMerchantAccountsLister.obtain(0);
+
+            directDebitRecordLister.setParentPmc(listerPmcContext);
+            directDebitRecordLister.obtain(0);
         }
 
         approvalLink.setVisible(true || !isEditable() & getValue().equifaxInfo().status().getValue() == PmcEquifaxStatus.PendingVistaApproval);
@@ -178,7 +189,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
 
     private TwoColumnFlexFormPanel createOnboardingMerchantAccountsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Merchant Accounts"));
-        panel.setWidget(0, 0, onboardingMerchantAccountsLister = new MerchantAccountsLister());
+        panel.setWidget(0, 0, 2, onboardingMerchantAccountsLister = new MerchantAccountsLister());
         return panel;
     }
 
@@ -245,6 +256,9 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(row, 0, 1, inject(proto().defaultPaymentFees(), new PaymentFeesForm<DefaultPaymentFees>(DefaultPaymentFees.class)));
         get(proto().defaultPaymentFees()).setViewable(true);
         content.setWidget(row, 1, 1, inject(proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class)));
+
+        content.setH2(++row, 0, 2, i18n.tr("Direct Debit Records"));
+        content.setWidget(++row, 0, 2, directDebitRecordLister = new DirectDebitRecordLister());
         return content;
     }
 }

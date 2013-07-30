@@ -32,12 +32,14 @@ import com.propertyvista.crm.rpc.dto.ScheduleDataDTO;
 import com.propertyvista.operations.client.OperationsSite;
 import com.propertyvista.operations.client.activity.crud.AdminViewerActivity;
 import com.propertyvista.operations.client.ui.crud.pmc.PmcViewerView;
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.domain.scheduler.Run;
 import com.propertyvista.operations.rpc.OperationsSiteMap;
 import com.propertyvista.operations.rpc.PmcDTO;
 import com.propertyvista.operations.rpc.PmcMerchantAccountDTO;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
+import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 
 public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements PmcViewerView.Presenter {
@@ -124,4 +126,9 @@ public class PmcViewerActivity extends AdminViewerActivity<PmcDTO> implements Pm
                 GWT.<AbstractListService<PmcMerchantAccountDTO>> create(PmcMerchantAccountCrudService.class));
     }
 
+    @Override
+    public ListerDataSource<DirectDebitRecord> getDirectDebitRecordsSource() {
+        return new ListerDataSource<DirectDebitRecord>(DirectDebitRecord.class,
+                GWT.<AbstractListService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class));
+    }
 }

@@ -27,6 +27,7 @@ import com.propertyvista.operations.domain.dev.CardServiceSimulationMerchantAcco
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction;
 import com.propertyvista.operations.domain.legal.LegalDocument;
 import com.propertyvista.operations.domain.legal.VistaTerms;
+import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.payment.pad.simulator.PadSimBatch;
@@ -56,6 +57,7 @@ import com.propertyvista.operations.rpc.services.MerchantAccountFileUploadServic
 import com.propertyvista.operations.rpc.services.OperationsAuthenticationService;
 import com.propertyvista.operations.rpc.services.PmcCrudService;
 import com.propertyvista.operations.rpc.services.PmcDataReportService;
+import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 import com.propertyvista.operations.rpc.services.PmcMerchantAccountCrudService;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 import com.propertyvista.operations.rpc.services.VistaTermsCrudService;
@@ -133,6 +135,9 @@ public class VistaOperationsAccessControlList extends ServletContainerAclBuilder
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcMerchantAccountCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(PmcMerchantAccountIndex.class, EntityPermission.ALL));
+
+        grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(PmcDirectDebitRecordCrudService.class));
+        grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(DirectDebitRecord.class, EntityPermission.ALL));
 
         grant(VistaOperationsBehavior.SystemAdmin, new IServiceExecutePermission(CardServiceSimulationCardCrudService.class));
         grant(VistaOperationsBehavior.SystemAdmin, new EntityPermission(CardServiceSimulationCard.class, EntityPermission.ALL));
