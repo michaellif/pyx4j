@@ -107,12 +107,15 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
-        MailMessage email = sendReporterNote(request, false);
+        if (!request.unit().isNull() && request.permissionToEnter().isBooleanTrue()) {
+            // send notice of entry if permission to access unit is granted
+            MailMessage email = sendReporterNote(request, false);
 
-        if (email != null) {
-            schedule.noticeOfEntry().text().setValue(email.getHtmlBody() != null ? email.getHtmlBody() : email.getTextBody());
-            schedule.noticeOfEntry().messageId().setValue(email.getHeader("Message-ID"));
-            schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
+            if (email != null) {
+                schedule.noticeOfEntry().text().setValue(email.getHtmlBody() != null ? email.getHtmlBody() : email.getTextBody());
+                schedule.noticeOfEntry().messageId().setValue(email.getHeader("Message-ID"));
+                schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
+            }
         }
         request.workHistory().add(schedule);
         request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));

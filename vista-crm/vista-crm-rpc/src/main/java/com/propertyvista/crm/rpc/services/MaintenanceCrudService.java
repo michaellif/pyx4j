@@ -30,6 +30,8 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
 
     void sheduleAction(AsyncCallback<VoidSerializable> callback, MaintenanceRequestScheduleDTO schedule, Key entityId);
 
+    void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId);
+
     void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId);
 
     void rateAction(AsyncCallback<VoidSerializable> callback, SurveyResponse rate, Key entityId);

@@ -19,6 +19,7 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -393,15 +394,44 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         @Override
         protected CEntityFolderItem<MaintenanceRequestSchedule> createItem(boolean first) {
-            CEntityFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
+            final CEntityFolderItem<MaintenanceRequestSchedule> item = super.createItem(first);
             item.addAction(ActionType.Cust1, "Add Progress Note", HelperImages.INSTANCE.editButton(), new Command() {
                 @Override
                 public void execute() {
                     new OkCancelDialog("Enter Progress Note") {
+                        private final CEntityDecoratableForm<MaintenanceRequestSchedule> content = createContent();
+
+                        private CEntityDecoratableForm<MaintenanceRequestSchedule> createContent() {
+                            CEntityDecoratableForm<MaintenanceRequestSchedule> content = new CEntityDecoratableForm<MaintenanceRequestSchedule>(
+                                    MaintenanceRequestSchedule.class) {
+
+                                @Override
+                                public IsWidget createContent() {
+                                    TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+
+                                    int row = -1;
+                                    main.setWidget(++row, 0, 2,
+                                            new FormDecoratorBuilder(inject(proto().workDescription(), new CLabel<String>()), 40, true).build());
+                                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().scheduledDate(), new CDateLabel()), 10, true).build());
+                                    main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().progressNote()), 40, true).build());
+
+                                    return main;
+                                }
+                            };
+
+                            content.initContent();
+                            content.populate(item.getValue());
+
+                            setBody(content.asWidget());
+                            setHeight("100px");
+
+                            return content;
+                        }
+
                         @Override
                         public boolean onClickOk() {
-                            // TODO Auto-generated method stub
-                            return false;
+                            ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).updateProgressAction(content.getValue());
+                            return true;
                         }
                     }.show();
                 }
@@ -427,14 +457,18 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                 int row = -1;
                 // left side
+                content.setH2(++row, 0, 1, "Work Order");
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledDate())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeFrom())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().scheduledTimeTo())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().workDescription())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().progressNote())).build());
+                // add spacer
+                content.setWidget(++row, 0, new HTML());
+                content.getCellFormatter().setHeight(row, 0, "120px");
                 // right side
                 content.setWidget(0, 1, inject(proto().noticeOfEntry(), new NoticeOfEntryViewer()));
-                content.getFlexCellFormatter().setRowSpan(0, 1, row);
+                content.getFlexCellFormatter().setRowSpan(0, 1, row + 1);
                 content.getCellFormatter().setVerticalAlignment(0, 1, HasVerticalAlignment.ALIGN_TOP);
 
                 return content;
@@ -443,6 +477,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             @Override
             protected void onValueSet(boolean populate) {
                 super.onValueSet(populate);
+
+                boolean noticeVisible = !getValue().noticeOfEntry().messageId().isNull();
+                get(proto().noticeOfEntry()).asWidget().setVisible(noticeVisible);
             }
         }
 
@@ -457,10 +494,13 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             @Override
             public IsWidget createContent() {
                 TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+                content.setWidth("400px");
                 int row = -1;
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageDate()), 40).contentWidth("500px").labelWidth("100px").build());
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().messageId()), 40).contentWidth("500px").labelWidth("100px").build());
-                content.setWidget(++row, 0, inject(proto().text()));
+                content.setH2(++row, 0, 2, "Notice Of Entry");
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().messageDate()), true).contentWidth("350px").labelWidth("100px").build());
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().messageId()), true).contentWidth("350px").labelWidth("100px").build());
+                content.setWidget(++row, 0, 2, inject(proto().text()));
+                get(proto().text()).asWidget().setWidth("450px");
 
                 return content;
             }

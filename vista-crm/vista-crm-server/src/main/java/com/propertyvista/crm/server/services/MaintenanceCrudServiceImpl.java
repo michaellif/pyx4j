@@ -108,6 +108,15 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
+    public void updateProgressAction(AsyncCallback<VoidSerializable> callback, String progressNote, Key scheduleId) {
+        MaintenanceRequestSchedule schedule = Persistence.service().retrieve(MaintenanceRequestSchedule.class, scheduleId);
+        schedule.progressNote().setValue(progressNote);
+        Persistence.service().persist(schedule);
+        Persistence.service().commit();
+        callback.onSuccess(null);
+    }
+
+    @Override
     public void resolveAction(AsyncCallback<VoidSerializable> callback, Key entityId) {
         MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
         enhanceDbo(request);

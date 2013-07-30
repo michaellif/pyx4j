@@ -18,6 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
@@ -27,6 +28,8 @@ public interface MaintenanceRequestViewerView extends IViewer<MaintenanceRequest
     interface Presenter extends IViewer.Presenter {
 
         void scheduleAction(MaintenanceRequestScheduleDTO schedule);
+
+        void updateProgressAction(MaintenanceRequestSchedule schedule);
 
         void resolveAction();
 
