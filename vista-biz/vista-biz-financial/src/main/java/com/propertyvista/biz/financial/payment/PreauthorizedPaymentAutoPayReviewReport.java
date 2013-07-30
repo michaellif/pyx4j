@@ -335,6 +335,9 @@ class PreauthorizedPaymentAutoPayReviewReport {
         case keepPercentage:
             if (originalPaymentAmount.compareTo(BigDecimal.ZERO) == 0) {
                 return BigDecimal.ZERO;
+            } else if (originalPrice.compareTo(BigDecimal.ZERO) == 0) {
+                // 100% for payments that was base on 0$ charges
+                return newPrice;
             } else {
                 return DomainUtil.roundMoney(originalPaymentAmount.multiply(newPrice).divide(originalPrice, RoundingMode.HALF_UP));
             }
