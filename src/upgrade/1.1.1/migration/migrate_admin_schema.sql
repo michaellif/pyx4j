@@ -292,6 +292,45 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        -- admin_pmc_payment_type_info
+        
+        DELETE FROM admin_pmc_payment_type_info;
+        
+        INSERT INTO admin_pmc_payment_type_info (id,pmc,direct_banking_fee)
+        (SELECT nextval('public.admin_pmc_payment_type_info_seq') AS id,
+                a.id AS pmc, 0.60
+         FROM   admin_pmc a 
+         JOIN   admin_pmc_vista_features f ON (a.features = f.id)
+         WHERE  f.yardi_integration 
+         AND    a.namespace NOT IN ('propertyvistatest','vic'));
+        
+        SET CONSTRAINTS _admin_.admin_pmc_payment_type_info_pmc_fk IMMEDIATE;
+       
+       
+        -- audit_record
+        
+        UPDATE  audit_record AS r
+        SET     pmc = a.id
+        FROM    admin_pmc a
+        WHERE   r.namespace = a.namespace;
+        
+        UPDATE  audit_record
+        SET     user_type = 'operations'
+        WHERE   namespace = '_admin_';
+        
+        -- fee_default_payment_fees
+        
+        UPDATE  fee_default_payment_fees
+        SET     cc_visa_fee = 1.50,
+                cc_master_card_fee = 2.22,
+                visa_debit_fee = 1.77,
+                e_cheque_fee = 1.50,
+                direct_banking_fee = 1.50,
+                interac_caledon_fee = 1.50,
+                interac_payment_pad_fee = 19.99,
+                interac_visa_fee = 1.50;
+                
+        
         -- onboarding_user
         
         UPDATE  onboarding_user AS u
@@ -337,6 +376,12 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc DROP COLUMN onboarding_account_id;
         
+        
+        -- admin_pmc_payment_type_info
+              
+        ALTER TABLE admin_pmc_payment_type_info DROP COLUMN eft_fee;
+        
+        
         -- admin_pmc_vista_features
         
         ALTER TABLE admin_pmc_vista_features DROP COLUMN xml_site_export;
@@ -347,6 +392,11 @@ SET search_path = '_admin_';
         ALTER TABLE dev_equifax_simulator_config        DROP COLUMN approve_xml,
                                                         DROP COLUMN decline_xml,
                                                         DROP COLUMN more_info_xml;
+                                                        
+                                                        
+        -- fee_default_payment_fees
+        
+        ALTER TABLE fee_default_payment_fees DROP COLUMN eft_fee;
         
         -- onboarding_user
         
@@ -428,8 +478,8 @@ SET search_path = '_admin_';
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'initializeFutureBillingCycles', 
-                'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcesAcknowledgment', 'paymentsDbpProcesReconciliation', 
-                'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 'paymentsPadProcesAcknowledgment', 'paymentsPadProcesReconciliation', 'paymentsPadSend', 
+                'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess','paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 
+                'paymentsDbpSend', 'paymentsIssue', 'paymentsLastMonthSuspend', 'paymentsPadProcessAcknowledgment', 'paymentsPadProcessReconciliation', 'paymentsPadSend', 
                 'paymentsReceiveAcknowledgment', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 
                 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 
                 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));

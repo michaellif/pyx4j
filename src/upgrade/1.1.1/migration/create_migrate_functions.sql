@@ -31,6 +31,10 @@ BEGIN
         -- check constraints
         
         ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
+        ALTER TABLE nsf_fee_item DROP CONSTRAINT nsf_fee_item_payment_type_e_ck;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_payment_type_e_ck;
+        ALTER TABLE payment_method DROP CONSTRAINT payment_method_payment_type_e_ck;
+        ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
         ALTER TABLE recipient DROP CONSTRAINT recipient_recipient_type_e_ck;
         
         
@@ -105,6 +109,11 @@ BEGIN
                                 ADD COLUMN description VARCHAR(500);   
         
         
+        -- insurance_certificate
+        
+        ALTER TABLE insurance_certificate ADD COLUMN payment_schedule VARCHAR(50);
+        
+        
         -- maintenance_request_schedule
         
         CREATE TABLE maintenance_request_schedule
@@ -114,9 +123,10 @@ BEGIN
                 scheduled_date                  DATE,
                 scheduled_time_from             TIME,
                 scheduled_time_to               TIME,
+                work_description                VARCHAR(500),
                 progress_note                   VARCHAR(500),
-                notice_of_entry_created         TIMESTAMP,
-                notice_of_entry_text            VARCHAR(500),
+                notice_of_entry_message_date    VARCHAR(500),
+                notice_of_entry_text            VARCHAR(10000),
                 notice_of_entry_message_id      VARCHAR(500),
                         CONSTRAINT maintenance_request_schedule_pk PRIMARY KEY(id)
         );
@@ -136,8 +146,8 @@ BEGIN
         CREATE TABLE notice_of_entry
         (
                 id                              BIGINT                  NOT NULL,
-                created                         TIMESTAMP,
-                text                            VARCHAR(500),
+                message_date                    VARCHAR(500),
+                text                            VARCHAR(10000),
                 message_id                      VARCHAR(500),
                         CONSTRAINT notice_of_entry_pk PRIMARY KEY(id)
         );
@@ -155,6 +165,18 @@ BEGIN
         
         ALTER TABLE payment_method      ADD COLUMN creator BIGINT,
                                         ADD COLUMN creator_discriminator VARCHAR(50);
+                                        
+        -- payment_type_selection_policy
+        
+        ALTER TABLE payment_type_selection_policy       ADD COLUMN accepted_credit_card_master_card BOOLEAN,
+                                                        ADD COLUMN accepted_credit_card_visa BOOLEAN,
+                                                        ADD COLUMN accepted_visa_debit BOOLEAN,
+                                                        ADD COLUMN cash_equivalent_credit_card_master_card BOOLEAN,
+                                                        ADD COLUMN cash_equivalent_credit_card_visa BOOLEAN,
+                                                        ADD COLUMN cash_equivalent_visa_debit BOOLEAN,
+                                                        ADD COLUMN resident_portal_credit_card_master_card BOOLEAN,
+                                                        ADD COLUMN resident_portal_credit_card_visa BOOLEAN,
+                                                        ADD COLUMN resident_portal_visa_debit BOOLEAN;
                                         
         -- preauthorized_payment
         
@@ -202,6 +224,30 @@ BEGIN
         ***     =====================================================================================================
         **/
         
+        -- _admin_.audit_record
+        
+        UPDATE  _admin_.audit_record 
+        SET     namespace = LOWER(namespace);
+        
+        DELETE FROM _admin_.audit_record 
+        WHERE   (namespace NOT IN (SELECT namespace FROM _admin_.admin_pmc)
+        AND     namespace != '_admin_');
+        
+        
+        EXECUTE 'UPDATE _admin_.audit_record AS a '
+                ||'SET  user_type = ''crm'' '
+                ||'FROM '||v_schema_name||'.crm_user u '
+                ||'WHERE a.namespace = '||quote_literal(v_schema_name)||' '
+                ||'AND  a.usr = u.id ';
+              
+                               
+        EXECUTE 'UPDATE _admin_.audit_record AS a '
+                ||'SET  user_type = ''customer'' '
+                ||'FROM '||v_schema_name||'.customer_user u '
+                ||'WHERE a.namespace = '||quote_literal(v_schema_name)||' '
+                ||'AND  a.usr = u.id ';
+                
+        
         -- _admin_.global_crm_user_index
         
         EXECUTE 'INSERT INTO _admin_.global_crm_user_index(id,pmc,crm_user,email) '
@@ -216,6 +262,28 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer '
                 ||'SET  funds_transfer_type = ''PreAuthorizedDebit'' ';
+        
+        
+        -- emergency_contact
+        EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact '
+                ||'SET  address_street1 = address_street_number|| '
+                ||'CASE WHEN address_street_number_suffix IS NOT NULL THEN '' ''||address_street_number_suffix ELSE '''' END || '
+                ||''' ''||address_street_name || '
+                ||'CASE WHEN address_street_type IS NOT NULL AND address_street_type != ''other'' THEN '' ''||address_street_type ELSE '''' END ||'
+                ||'CASE WHEN address_street_direction IS NOT NULL THEN '' ''||address_street_direction ELSE '''' END, '
+                ||'     address_street2 = address_suite_number ';
+        
+               
+        -- insurance_certificate
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate '
+                ||'SET  payment_schedule = ''Monthly'' '
+                ||'WHERE        id_discriminator = ''InsuranceTenantSure'' ';
+                
+        
+        -- nsf_fee_item
+        
+        EXECUTE 'DELETE FROM '||v_schema_name||'.nsf_fee_item';
         
         /**
         ***     ==========================================================================================================
@@ -297,9 +365,15 @@ BEGIN
                 CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 'ApplicationCreatedGuarantor', 
                 'ApplicationDeclined', 'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 'MaintenanceRequestCreatedTenant', 'MaintenanceRequestEntryNotice', 
                 'MaintenanceRequestUpdated', 'PasswordRetrievalCrm', 'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'TenantInvitation'));
+        ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_payment_schedule_e_ck CHECK ((payment_schedule) IN ('Annual', 'Monthly'));
+        ALTER TABLE nsf_fee_item ADD CONSTRAINT nsf_fee_item_payment_type_e_ck CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
+        ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_payment_type_e_ck 
+                CHECK ((payment_method_payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_creator_discriminator_d_ck 
                 CHECK ((payment_method_creator_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_payment_type_e_ck CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));     
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE recipient ADD CONSTRAINT recipient_recipient_type_e_ck CHECK ((recipient_type) IN ('company', 'group', 'person'));
   
