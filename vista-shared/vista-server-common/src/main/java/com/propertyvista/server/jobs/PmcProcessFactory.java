@@ -59,11 +59,11 @@ public class PmcProcessFactory {
             return new PadSendProcess();
         case paymentsReceiveAcknowledgment:
             return new PadReceiveAcknowledgmentProcess();
-        case paymentsPadProcesAcknowledgment:
+        case paymentsPadProcessAcknowledgment:
             return new PadProcessAcknowledgmentProcess();
         case paymentsReceiveReconciliation:
             return new PadReceiveReconciliationProcess();
-        case paymentsPadProcesReconciliation:
+        case paymentsPadProcessReconciliation:
             return new PadProcessReconciliationProcess();
 
         case paymentsTenantSure:

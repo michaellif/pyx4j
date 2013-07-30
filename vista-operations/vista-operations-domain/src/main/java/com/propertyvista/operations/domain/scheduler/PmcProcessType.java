@@ -35,8 +35,11 @@ public enum PmcProcessType implements Serializable {
 
     depositInterestAdjustment,
 
-    @Translate("P 0 - Receive Direct Banking Payments from BMO")
+    @Translate("P 0A - Receive Direct Banking Payments from BMO")
     paymentsBmoReceive(PmcProcessOptions.GlobalOnly),
+
+    @Translate("P 0B - Process Direct Banking Payments, post to yardi (auto triggered by ReceiveReconciliation)")
+    paymentsDbpProcess,
 
     @Translate("P 1 - Issue PreAuthorized Payments")
     paymentsIssue(PmcProcessOptions.RunForDay),
@@ -60,19 +63,19 @@ public enum PmcProcessType implements Serializable {
     paymentsReceiveAcknowledgment(PmcProcessOptions.GlobalOnly),
 
     @Translate("P 6B - Payments Pad Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
-    paymentsPadProcesAcknowledgment,
+    paymentsPadProcessAcknowledgment,
 
     @Translate("P 6C - Payments Direct Banking Process Acknowledgment (auto triggered by ReceiveAcknowledgment)")
-    paymentsDbpProcesAcknowledgment,
+    paymentsDbpProcessAcknowledgment,
 
     @Translate("P 7A - Payments Receive Funds Transfer Reconciliation from Caledon (PAD,DBP)")
     paymentsReceiveReconciliation(PmcProcessOptions.GlobalOnly),
 
     @Translate("P 7B - Payments Pad Process Reconciliation (auto triggered by ReceiveReconciliation)")
-    paymentsPadProcesReconciliation,
+    paymentsPadProcessReconciliation,
 
     @Translate("P 7C - Payments Direct Banking Process Reconciliation (auto triggered by ReceiveReconciliation)")
-    paymentsDbpProcesReconciliation,
+    paymentsDbpProcessReconciliation,
 
     paymentsTenantSure(PmcProcessOptions.RunForDay),
 

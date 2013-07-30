@@ -50,10 +50,10 @@ public class PadReceiveAcknowledgmentProcess implements PmcProcess {
     public void complete(PmcProcessContext context) {
         switch (fundsTransferType) {
         case PreAuthorizedDebit:
-            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcesAcknowledgment);
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcessAcknowledgment);
             break;
         case DirectBankingPayment:
-            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcesAcknowledgment);
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcessAcknowledgment);
             break;
         default:
             throw new IllegalArgumentException();
