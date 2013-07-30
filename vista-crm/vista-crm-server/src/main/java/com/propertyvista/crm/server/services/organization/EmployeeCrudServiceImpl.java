@@ -191,5 +191,6 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
         Persistence.service().retrieve(emp.user());
         ServerSideFactory.create(CommunicationFacade.class).sendCrmPasswordRetrievalToken(emp.user());
         Persistence.service().commit();
+        asyncCallback.onSuccess(null);
     }
 }
