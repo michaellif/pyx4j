@@ -272,7 +272,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
-        throw new Error("not supported in tests");
+        return new CaledonFundsTransferConfigurationTests();
     }
 
     @Override
