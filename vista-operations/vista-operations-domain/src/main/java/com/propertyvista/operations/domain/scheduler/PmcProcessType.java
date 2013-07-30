@@ -38,7 +38,7 @@ public enum PmcProcessType implements Serializable {
     @Translate("P 0A - Receive Direct Banking Payments from BMO")
     paymentsBmoReceive(PmcProcessOptions.GlobalOnly),
 
-    @Translate("P 0B - Process Direct Banking Payments, post to yardi (auto triggered by ReceiveReconciliation)")
+    @Translate("P 0B - Process Direct Banking, create payment records and post to yardi (auto triggered by PaymentsBmoReceive)")
     paymentsDbpProcess,
 
     @Translate("P 1 - Issue PreAuthorized Payments")

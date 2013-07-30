@@ -48,4 +48,6 @@ public interface PaymentProcessFacade {
     void verifyYardiPaymentIntegration(ExecutionMonitor executionMonitor, LogicalDate forDate);
 
     boolean receiveBmoFiles(ExecutionMonitor executionMonitor);
+
+    void processDirectDebitRecords(ExecutionMonitor executionMonitor);
 }

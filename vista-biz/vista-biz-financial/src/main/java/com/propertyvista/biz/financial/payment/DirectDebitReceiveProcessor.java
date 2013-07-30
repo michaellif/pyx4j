@@ -33,9 +33,9 @@ import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
-class BmoDirectDebitProcessor {
+class DirectDebitReceiveProcessor {
 
-    boolean receiveBmoFiles(ExecutionMonitor executionMonitor) {
+    boolean receiveBmoFiles(final ExecutionMonitor executionMonitor) {
         final DirectDebitFile directDebitFile;
         try {
             directDebitFile = ServerSideFactory.create(EFTTransportFacade.class).receiveBmoFiles();
@@ -56,7 +56,7 @@ class BmoDirectDebitProcessor {
 
             @Override
             public Void execute() {
-                validateAndPersistFile(directDebitFile);
+                validateAndPersistFile(executionMonitor, directDebitFile);
                 return null;
             }
         });
@@ -64,7 +64,7 @@ class BmoDirectDebitProcessor {
         return true;
     }
 
-    private void validateAndPersistFile(DirectDebitFile directDebitFile) {
+    private void validateAndPersistFile(ExecutionMonitor executionMonitor, DirectDebitFile directDebitFile) {
         Persistence.service().persist(directDebitFile);
         for (final DirectDebitRecord record : directDebitFile.records()) {
 
@@ -96,6 +96,12 @@ class BmoDirectDebitProcessor {
             }
 
             Persistence.service().persist(record);
+
+            if (record.processingStatus().getValue() == DirectDebitRecordProcessingStatus.Received) {
+                executionMonitor.addProcessedEvent("payment", record.amount().getValue());
+            } else {
+                executionMonitor.addFailedEvent("payment", record.amount().getValue());
+            }
         }
     }
 }

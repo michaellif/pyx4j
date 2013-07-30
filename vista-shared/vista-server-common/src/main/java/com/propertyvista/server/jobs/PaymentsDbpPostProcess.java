@@ -7,7 +7,7 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-28
+ * Created on Jul 30, 2013
  * @author vlads
  * @version $Id$
  */
@@ -18,7 +18,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
-public class PadProcessReconciliationProcess implements PmcProcess {
+public class PaymentsDbpPostProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -32,7 +32,7 @@ public class PadProcessReconciliationProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).processPmcPadReconciliation(context.getExecutionMonitor());
+        ServerSideFactory.create(PaymentProcessFacade.class).processDirectDebitRecords(context.getExecutionMonitor());
     }
 
     @Override

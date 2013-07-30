@@ -52,6 +52,8 @@ public class PmcProcessFactory {
 
         case paymentsBmoReceive:
             return new PaymentsBmoReceiveProcess();
+        case paymentsDbpProcess:
+            return new PaymentsDbpPostProcess();
         case paymentsDbpSend:
             return new PaymentsDbpSendProcess();
 // Caledon            

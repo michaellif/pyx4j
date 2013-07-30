@@ -126,6 +126,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public boolean receiveBmoFiles(ExecutionMonitor executionMonitor) {
-        return new BmoDirectDebitProcessor().receiveBmoFiles(executionMonitor);
+        return new DirectDebitReceiveProcessor().receiveBmoFiles(executionMonitor);
+    }
+
+    @Override
+    public void processDirectDebitRecords(ExecutionMonitor executionMonitor) {
+        new DirectDebitPostProcessor().processDirectDebitRecords(executionMonitor);
     }
 }
