@@ -59,5 +59,7 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<Date> updated();
 
+    IPrimitive<String> cancellationNote();
+
     IPrimitive<String> requestViewUrl();
 }

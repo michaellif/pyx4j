@@ -23,7 +23,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.propertyvista.domain.company.Employee;
 import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeImpl implements NotificationFacade {
@@ -47,14 +46,6 @@ public class NotificationFacadeImpl implements NotificationFacade {
         List<Employee> employees = NotificationsUtils.getNotificationTraget(leaseId, Notification.NotificationType.PreauthorizedPaymentSuspension);
         if (!employees.isEmpty()) {
             ServerSideFactory.create(CommunicationFacade.class).sendPapSuspensionNotification(NotificationsUtils.toEmails(employees), leaseId);
-        }
-    }
-
-    @Override
-    public void maintenanceRequest(MaintenanceRequest request, boolean isNewRequest) {
-        for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
-            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(employee.email().getValue(), employee.name().getStringView(),
-                    request, isNewRequest, true);
         }
     }
 }

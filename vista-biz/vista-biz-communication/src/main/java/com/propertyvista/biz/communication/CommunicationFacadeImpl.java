@@ -27,6 +27,8 @@ import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.communication.EmailTemplateType;
+import com.propertyvista.domain.company.Employee;
+import com.propertyvista.domain.company.Notification;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.pmc.Pmc;
@@ -293,14 +295,63 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         Mail.send(m);
     }
 
+//    @Override
+//    public MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
+//        if (disabled) {
+//            return null;
+//        }
+//        MailMessage m = MessageTemplates.createMaintenanceRequestEmail(userName, request, isNewRequest, toAdmin);
+//        m.setTo(sendTo);
+//        Mail.send(m);
+//        return m;
+//    }
+
     @Override
-    public MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
+    public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
+        for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {
+            sendMaintenanceRequestEmail(employee.email().getValue(), EmailTemplateType.MaintenanceRequestCreatedPMC, request);
+        }
+    }
+
+    @Override
+    public void sendMaintenanceRequestCreatedTenant(MaintenanceRequest request) {
+        String sendTo = request.reporter().customer().person().email().getValue();
+        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestCreatedTenant, request);
+    }
+
+    @Override
+    public void sendMaintenanceRequestUpdated(MaintenanceRequest request) {
+        String sendTo = request.reporter().customer().person().email().getValue();
+        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestUpdated, request);
+    }
+
+    @Override
+    public void sendMaintenanceRequestCompleted(MaintenanceRequest request) {
+        String sendTo = request.reporter().customer().person().email().getValue();
+        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestCompleted, request);
+    }
+
+    @Override
+    public void sendMaintenanceRequestCancelled(MaintenanceRequest request) {
+        String sendTo = request.reporter().customer().person().email().getValue();
+        sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestCancelled, request);
+    }
+
+    @Override
+    public MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request) {
+        String sendTo = request.reporter().customer().person().email().getValue();
+        return sendMaintenanceRequestEmail(sendTo, EmailTemplateType.MaintenanceRequestEntryNotice, request);
+    }
+
+    private MailMessage sendMaintenanceRequestEmail(String sendTo, EmailTemplateType emailType, MaintenanceRequest request) {
         if (disabled) {
             return null;
         }
-        MailMessage m = MessageTemplates.createMaintenanceRequestEmail(userName, request, isNewRequest, toAdmin);
+        MailMessage m = MessageTemplates.createMaintenanceRequestEmail(emailType, request);
         m.setTo(sendTo);
-        Mail.send(m);
+        if (MailDeliveryStatus.Success != Mail.send(m)) {
+            throw new UserRuntimeException(i18n.tr("Mail Service Is Temporary Unavailable. Please Try Again Later"));
+        }
         return m;
     }
 }

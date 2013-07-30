@@ -29,7 +29,6 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
-import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.policy.IdAssignmentFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -88,8 +87,8 @@ public abstract class MaintenanceAbstractManager {
         Persistence.service().merge(request);
 
         if (isNewRequest) {
-            ServerSideFactory.create(NotificationFacade.class).maintenanceRequest(request, true);
-            sendReporterNote(request, true);
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
         }
     }
 
@@ -98,7 +97,7 @@ public abstract class MaintenanceAbstractManager {
         request.updated().setValue(SystemDateManager.getDate());
         Persistence.service().merge(request);
 
-        sendReporterNote(request, false);
+        ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
     }
 
     public void rateMaintenanceRequest(MaintenanceRequest request, SurveyResponse rate) {
@@ -107,9 +106,12 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
+        request.workHistory().add(schedule);
+        request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
+
         if (!request.unit().isNull() && request.permissionToEnter().isBooleanTrue()) {
             // send notice of entry if permission to access unit is granted
-            MailMessage email = sendReporterNote(request, false);
+            MailMessage email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
 
             if (email != null) {
                 schedule.noticeOfEntry().text().setValue(email.getHtmlBody() != null ? email.getHtmlBody() : email.getTextBody());
@@ -117,8 +119,6 @@ public abstract class MaintenanceAbstractManager {
                 schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
             }
         }
-        request.workHistory().add(schedule);
-        request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
 
         Persistence.service().merge(request);
     }
@@ -127,7 +127,7 @@ public abstract class MaintenanceAbstractManager {
         request.status().set(getMaintenanceStatus(StatusPhase.Resolved));
         Persistence.service().merge(request);
 
-        sendReporterNote(request, false);
+        ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
     }
 
     public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
@@ -155,23 +155,5 @@ public abstract class MaintenanceAbstractManager {
             }
         }
         return null;
-    }
-
-    protected MailMessage sendReporterNote(MaintenanceRequest request, boolean isNewRequest) {
-        if (request.reporter().isNull() || request.reporter().customer().person().email().isNull()) {
-            return null;
-        }
-
-        String sendTo = request.reporter().customer().person().email().getValue();
-        String userName = "Tenant";
-        if (!request.reporter().isNull() && !request.reporter().customer().person().email().isNull()) {
-            userName = request.reporter().customer().person().name().getStringView();
-        }
-        try {
-            return ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEmail(sendTo, userName, request, isNewRequest, false);
-        } catch (Exception e) {
-            log.warn("Email communication failed: {}", e);
-            return null;
-        }
     }
 }

@@ -79,6 +79,18 @@ public interface CommunicationFacade {
 
     //void sendEmployeeMessage(EmployeeMessageType employeeMessageType, Employee employee);
 
-    MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin);
+//    MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin);
+
+    void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request);
+
+    void sendMaintenanceRequestCreatedTenant(MaintenanceRequest request);
+
+    void sendMaintenanceRequestUpdated(MaintenanceRequest request);
+
+    void sendMaintenanceRequestCompleted(MaintenanceRequest request);
+
+    void sendMaintenanceRequestCancelled(MaintenanceRequest request);
+
+    MailMessage sendMaintenanceRequestEntryNotice(MaintenanceRequest request);
 
 }

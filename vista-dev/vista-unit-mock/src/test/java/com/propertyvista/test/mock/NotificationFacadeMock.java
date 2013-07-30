@@ -15,7 +15,6 @@ package com.propertyvista.test.mock;
 
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class NotificationFacadeMock implements NotificationFacade {
@@ -26,10 +25,6 @@ public class NotificationFacadeMock implements NotificationFacade {
 
     @Override
     public void papSuspension(Lease leaseId) {
-    }
-
-    @Override
-    public void maintenanceRequest(MaintenanceRequest request, boolean isNewRequest) {
     }
 
 }

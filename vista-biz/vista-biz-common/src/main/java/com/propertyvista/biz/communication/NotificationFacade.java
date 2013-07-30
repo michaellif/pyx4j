@@ -14,7 +14,6 @@
 package com.propertyvista.biz.communication;
 
 import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public interface NotificationFacade {
@@ -22,7 +21,5 @@ public interface NotificationFacade {
     public void rejectPayment(PaymentRecord paymentRecord, boolean applyNSF);
 
     public void papSuspension(Lease leaseId);
-
-    public void maintenanceRequest(MaintenanceRequest request, boolean isNewRequest);
 
 }

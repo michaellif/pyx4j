@@ -372,15 +372,6 @@ public class MessageTemplates {
         return email;
     }
 
-    public static MailMessage createMaintenanceRequestEmail(String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
-        EmailTemplate emailTemplate = emailMaintenanceRequestNote(userName, request, isNewRequest, toAdmin);
-        MailMessage email = new MailMessage();
-        email.setSender(getSender());
-        buildSimpleEmail(email, emailTemplate);
-
-        return email;
-    }
-
     public static MailMessage createMaintenanceRequestEmail(EmailTemplateType emailType, MaintenanceRequest request) {
         EmailTemplate emailTemplate = getEmailTemplate(emailType, request.building());
 
@@ -394,8 +385,6 @@ public class MessageTemplates {
             data.add(EmailTemplateRootObjectLoader.loadRootObject(tObj, context));
         }
         MailMessage email = new MailMessage();
-        String toEmail = null; // TODO - may also need CC
-        email.setTo(toEmail);
         email.setSender(getSender());
         // set email subject and body from the template
         buildEmail(email, emailTemplate, data);
@@ -565,41 +554,4 @@ public class MessageTemplates {
             throw new UserRuntimeException("Unable to send TenantSure email");
         }
     }
-
-    private static EmailTemplate emailMaintenanceRequestNote(String userName, MaintenanceRequest request, boolean isNewTicket, boolean toAdmin) {
-        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
-        template.subject().setValue(i18n.tr("Maintenance Request " + (isNewTicket ? "Created" : "Updated") + ": {0}", request.requestId().getValue()));
-        String templateRC = "maintenance-request-" + (isNewTicket ? "created" : "updated") + "-" + (toAdmin ? "superintendent" : "reporter");
-        try {
-            // TODO add email html
-            String body = IOUtils.getTextResource("email/" + templateRC + ".html");
-            String status = request.status().getStringView();
-            body = body //@formatter:off
-                    .replace("${name}", userName)
-                    .replace("${status}", status)
-                    .replace("${requestId}", request.requestId().getValue())
-                    .replace("${propertyCode}", request.building().propertyCode().getValue())
-                    .replace("${summary}", request.summary().getStringView())
-                    .replace("${description}", request.description().getStringView())
-                    .replace("${unit}", request.unit().getStringView())
-                    .replace("${priority}", request.priority().getStringView())
-            ;// @formatter:on
-            String mrUrl = null;
-            if (toAdmin) {
-                String crmUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.crm, true);
-                mrUrl = AppPlaceInfo.absoluteUrl(crmUrl, true, new CrmSiteMap.Tenants.MaintenanceRequest().formViewerPlace(request.getPrimaryKey()));
-            } else {
-                String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true);
-                mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
-                        new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(request.getPrimaryKey()));
-            }
-            body = body.replace("${mrUrl}", mrUrl);
-            // TODO i18n body
-            template.content().setValue(wrapAdminHtml(body));
-            return template;
-        } catch (IOException e) {
-            throw new UserRuntimeException("Could not generate email template");
-        }
-    }
-
 }

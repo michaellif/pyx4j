@@ -45,6 +45,8 @@ public enum EmailTemplateType {
 
     MaintenanceRequestCompleted,
 
+    MaintenanceRequestCancelled,
+
     MaintenanceRequestEntryNotice;
 
     @Override

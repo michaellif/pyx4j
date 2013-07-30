@@ -15,12 +15,12 @@ package com.propertyvista.biz.communication.mail.template;
 
 import java.text.SimpleDateFormat;
 
-import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
@@ -29,6 +29,7 @@ import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.EmailTemplateContext;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
@@ -37,8 +38,8 @@ import com.propertyvista.biz.communication.mail.template.model.TenantT;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.crm.rpc.CrmSiteMap;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequest.DayTime;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.property.PropertyContact;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.AbstractUser;
@@ -52,6 +53,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.ptapp.PtSiteMap;
 
 public class EmailTemplateRootObjectLoader {
+    private static final I18n i18n = I18n.get(EmailTemplateRootObjectLoader.class);
 
     public static <T extends IEntity> T loadRootObject(T tObj, EmailTemplateContext context) {
         if (tObj == null || context == null) {
@@ -193,17 +195,27 @@ public class EmailTemplateRootObjectLoader {
             t.reporterName().set(mr.reporterName());
             t.reporterPhone().set(mr.reporterPhone());
             t.reporterEmail().set(mr.reporterEmail());
-            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate1().getValue(), mr.preferredTime1().getValue()));
-            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate2().getValue(), mr.preferredTime2().getValue()));
+            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate1().getStringView(), mr.preferredTime1().getStringView()));
+            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate2().getStringView(), mr.preferredTime2().getStringView()));
             t.priority().setValue(mr.priority().getStringView());
             t.status().setValue(mr.status().getStringView());
             t.submitted().set(mr.submitted());
             t.updated().set(mr.updated());
+            t.cancellationNote().set(mr.cancellationNote());
             // generate url for maintenance request viewer in Resident Portal
             String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true);
             String mrUrl = AppPlaceInfo.absoluteUrl(residentUrl, true,
                     new PortalSiteMap.Resident.Maintenance.ViewMaintenanceRequest().formPlace(mr.getPrimaryKey()));
             t.requestViewUrl().setValue(mrUrl);
+        } else if (tObj instanceof MaintenanceRequestWOT) {
+            MaintenanceRequestWOT t = (MaintenanceRequestWOT) tObj;
+
+            MaintenanceRequest mr = context.maintenanceRequest();
+            MaintenanceRequestSchedule wo = mr.workHistory().get(mr.workHistory().size() - 1);
+            Persistence.ensureRetrieve(wo, AttachLevel.Attached);
+            t.scheduledDate().setValue(wo.scheduledDate().getStringView());
+            t.scheduledTimeSlot().setValue(i18n.tr("between {0} and {1}", wo.scheduledTimeFrom().getStringView(), wo.scheduledTimeTo().getStringView()));
+            t.workDescription().set(wo.workDescription());
         }
         return tObj;
     }
@@ -297,8 +309,7 @@ public class EmailTemplateRootObjectLoader {
         return result.toString();
     }
 
-    private static String formatEntryDateTime(LogicalDate date, DayTime time) {
-        // TODO
-        return null;
+    private static String formatEntryDateTime(String date, String time) {
+        return date + ", " + time;
     }
 }

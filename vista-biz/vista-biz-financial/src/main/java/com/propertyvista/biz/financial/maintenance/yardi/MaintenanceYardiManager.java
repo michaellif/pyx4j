@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.mail.MailMessage;
 
-import com.propertyvista.biz.communication.NotificationFacade;
+import com.propertyvista.biz.communication.CommunicationFacade;
 import com.propertyvista.biz.financial.maintenance.MaintenanceAbstractManager;
 import com.propertyvista.biz.system.YardiMaintenanceFacade;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
@@ -66,8 +66,8 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         postRequest(request);
 
         if (isNewRequest) {
-            ServerSideFactory.create(NotificationFacade.class).maintenanceRequest(request, true);
-            sendReporterNote(request, true);
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedPMC(request);
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCreatedTenant(request);
         }
     }
 
@@ -78,7 +78,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             request.status().set(status);
             postRequest(request);
 
-            sendReporterNote(request, false);
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCancelled(request);
         }
     }
 
@@ -92,9 +92,12 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
         MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Scheduled);
         if (status != null) {
+            request.workHistory().add(schedule);
+            request.status().set(status);
+
             if (!request.unit().isNull() && request.permissionToEnter().isBooleanTrue()) {
                 // send notice of entry if permission to access unit is granted
-                MailMessage email = sendReporterNote(request, false);
+                MailMessage email = ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestEntryNotice(request);
 
                 if (email != null) {
                     schedule.noticeOfEntry().text().setValue(email.getHtmlBody() != null ? email.getHtmlBody() : email.getTextBody());
@@ -102,8 +105,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
                     schedule.noticeOfEntry().messageDate().setValue(email.getHeader("Date"));
                 }
             }
-            request.workHistory().add(schedule);
-            request.status().set(status);
+
             postRequest(request);
         }
     }
@@ -115,7 +117,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
             request.status().set(status);
             postRequest(request);
 
-            sendReporterNote(request, false);
+            ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
         }
     }
 

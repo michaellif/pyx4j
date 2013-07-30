@@ -38,6 +38,7 @@ import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
@@ -94,8 +95,13 @@ public class EmailTemplateManager {
             values.add(EntityFactory.create(MaintenanceRequestT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
+        case MaintenanceRequestCancelled:
+            values.add(EntityFactory.create(MaintenanceRequestT.class));
+            values.add(EntityFactory.create(BuildingT.class));
+            break;
         case MaintenanceRequestEntryNotice:
             values.add(EntityFactory.create(MaintenanceRequestT.class));
+            values.add(EntityFactory.create(MaintenanceRequestWOT.class));
             values.add(EntityFactory.create(BuildingT.class));
             break;
         default:

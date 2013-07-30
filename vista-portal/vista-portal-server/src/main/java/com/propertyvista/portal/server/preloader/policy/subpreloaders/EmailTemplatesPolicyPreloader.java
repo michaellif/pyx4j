@@ -28,6 +28,7 @@ import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
 import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
@@ -70,6 +71,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         policy.templates().add(defaultEmailTemplateMaintenanceRequestCreatedTenant());
         policy.templates().add(defaultEmailTemplateMaintenanceRequestUpdated());
         policy.templates().add(defaultEmailTemplateMaintenanceRequestCompleted());
+        policy.templates().add(defaultEmailTemplateMaintenanceRequestCancelled());
         policy.templates().add(defaultEmailTemplateMaintenanceRequestEntryNotice());
 
         return policy;
@@ -405,7 +407,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href='{13}'>Request ID: {10}</a><br/>" +
+                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -460,7 +462,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "on a priority basis. Generally items related to safety, heat, etc. are addressed first. We thank you " +
                 "for your patience.<br/>" +
                 "To review your request please login to your account at:<br/>" +
-                "  {10}<br/>" +
+                "  {13}<br/>" +
                 "The following Maintenance Request has been registered:<br/>" +
                 "<br/>" +
                 "Building: {14}<br/>" +
@@ -483,7 +485,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href='{13}'>Request ID: {10}</a><br/>" +
+                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -510,6 +512,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         EmailTemplateType type = EmailTemplateType.MaintenanceRequestEntryNotice;
 
         MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+        MaintenanceRequestWOT woT = EmailTemplateManager.getProto(type, MaintenanceRequestWOT.class);
         BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
 
         EmailTemplate template = EntityFactory.create(EmailTemplate.class);
@@ -520,9 +523,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" +
                 "<br/>" +
-                // TODO - Actual Date of Entry handling?
-                "This is to inform You that your landlord/agent will be entering your rental unit on {16} to " +
-                "repair/investigate the following Maintenance Request:<br/>" +
+                "This is to inform You that your landlord/agent will be entering your rental unit on {16} {17} to " +
+                "perform maintenance or repair ({18}) in accordance with the following Maintenance Request:<br/>" +
                 "<br/>" +
                 "Building: {14}<br/>" +
                 "Address: {15}<br/>" +
@@ -544,7 +546,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href='{13}'>Request ID: {10}</a><br/>" +
+                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -563,7 +565,9 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(requestT.requestViewUrl()),
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address()),
-                "DateOfEntry" // TODO
+                EmailTemplateManager.getVarname(woT.scheduledDate()),
+                EmailTemplateManager.getVarname(woT.scheduledTimeSlot()),
+                EmailTemplateManager.getVarname(woT.workDescription())
         ));//@formatter:on
         return template;
     }
@@ -604,7 +608,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href='{13}'>Request ID: {10}</a><br/>" +
+                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -668,7 +672,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
-                "<a href='{13}'>Request ID: {10}</a><br/>" +
+                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
                 "Request Submitted: {11}<br/>" +
                 "Current Status: {12}<br/>",
                 EmailTemplateManager.getVarname(requestT.propertyCode()),
@@ -688,6 +692,67 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
                 EmailTemplateManager.getVarname(bldT.Address()),
                 "SurveyURL" // TODO
+        ));//@formatter:on
+        return template;
+    }
+
+    private EmailTemplate defaultEmailTemplateMaintenanceRequestCancelled() {
+        EmailTemplateType type = EmailTemplateType.MaintenanceRequestCancelled;
+
+        MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+        BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+
+        EmailTemplate template = EntityFactory.create(EmailTemplate.class);
+        template.useHeader().setValue(Boolean.TRUE);
+        template.useFooter().setValue(Boolean.TRUE);
+        template.type().setValue(type);
+        template.subject().setValue(i18n.tr("Maintenance Request Completed"));
+        template.content().setValue(i18n.tr(//@formatter:off
+                "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
+                "<br/>" +
+                "This is to inform You that the Maintenance Request below has been cancelled for the following reason: " +
+                "<br/>{16}<br/>" +
+                "<br/>" +
+                "Building: {14}<br/>" +
+                "Address: {15}<br/>" +
+                "Unit: {1}<br/>" +
+                "Tenant: {2}<br/>" +
+                "<br/>" +
+                "Summary: {3}<br/>" +
+                "<br/>" +
+                "Issue: {4}<br/>" +
+                "Priority: {5}<br/>" +
+                "<br/>" +
+                "Description: {6}<br/>" +
+                "<br/>" +
+                "Permission to enter: {7}<br/>" +
+                "Preferred Times:<br/>" +
+                " - {8}<br/>" +
+                " - {9}<br/>" +
+                "<br/>" +
+                // TODO
+                // WO # : 01 <----- this should be a link to actual work order request
+                // WO Created: June 6, 2013
+                "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+                "Request Submitted: {11}<br/>" +
+                "Current Status: {12}<br/>",
+                EmailTemplateManager.getVarname(requestT.propertyCode()),
+                EmailTemplateManager.getVarname(requestT.unitNo()),
+                EmailTemplateManager.getVarname(requestT.reporterName()),
+                EmailTemplateManager.getVarname(requestT.summary()),
+                EmailTemplateManager.getVarname(requestT.category()),
+                EmailTemplateManager.getVarname(requestT.priority()),
+                EmailTemplateManager.getVarname(requestT.description()),
+                EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                EmailTemplateManager.getVarname(requestT.requestId()),
+                EmailTemplateManager.getVarname(requestT.submitted()),
+                EmailTemplateManager.getVarname(requestT.status()),
+                EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                EmailTemplateManager.getVarname(bldT.Address()),
+                EmailTemplateManager.getVarname(requestT.cancellationNote())
         ));//@formatter:on
         return template;
     }

@@ -152,6 +152,10 @@ public interface MaintenanceRequest extends IEntity {
     @Editor(type = Editor.EditorType.textarea)
     IPrimitive<String> resolution();
 
+    @Length(2048)
+    @Editor(type = Editor.EditorType.textarea)
+    IPrimitive<String> cancellationNote();
+
     // --------------------------------------
 
     @EmbeddedEntity
