@@ -52,7 +52,7 @@ import com.propertyvista.common.client.ui.validators.PastDateIncludeTodayValidat
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -188,17 +188,17 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         main.setWidget(0, 0, 2, inject(proto().paymentMethods(), new PaymentMethodFolder(isEditable()) {
             @SuppressWarnings("unchecked")
             @Override
-            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
+            protected void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
                 if (set) {
                     ((LeaseParticipantEditorPresenter<P>) ((IEditor<P>) getParentView()).getPresenter())
-                            .getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                            .getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                                 @Override
-                                public void onSuccess(AddressStructured result) {
+                                public void onSuccess(AddressSimple result) {
                                     comp.setValue(result, false);
                                 }
                             });
                 } else {
-                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                    comp.setValue(EntityFactory.create(AddressSimple.class), false);
                 }
             }
 

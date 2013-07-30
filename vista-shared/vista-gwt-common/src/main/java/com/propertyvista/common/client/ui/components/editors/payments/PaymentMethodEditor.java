@@ -34,9 +34,9 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.RadioGroup;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
@@ -87,7 +87,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setH3(++row, 0, 2, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
         main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), true).build());
-        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressStructuredEditor(true)));
+        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 2);
@@ -345,7 +345,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         }
     }
 
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
         // Implements meaningful in derived classes...
     }
 

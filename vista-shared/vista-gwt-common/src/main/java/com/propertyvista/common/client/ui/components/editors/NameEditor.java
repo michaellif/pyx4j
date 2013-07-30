@@ -39,12 +39,23 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
 
     private final CrudAppPlace linkPlace;
 
+    private boolean oneColumn = false;
+
     public NameEditor() {
         this(null);
     }
 
+    public NameEditor(boolean oneColumn) {
+        this(null, oneColumn);
+    }
+
     public NameEditor(String customViewLabel) {
         this(customViewLabel, null);
+    }
+
+    public NameEditor(String customViewLabel, boolean oneColumn) {
+        this(customViewLabel, null);
+        this.oneColumn = oneColumn;
     }
 
     @SuppressWarnings("rawtypes")
@@ -86,12 +97,13 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName()), 15).build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().middleName()), 5).build());
 
-            row = -1;
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().namePrefix()), 5).build());
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().nameSuffix()), 5).build());
-            main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().maidenName()), 15).build());
+            row = (oneColumn ? row : -1);
+            int col = (oneColumn ? 0 : 1);
+            main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().namePrefix()), 5).build());
+            main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().nameSuffix()), 5).build());
+            main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().maidenName()), 15).build());
         } else {
-            main.setWidget(0, 0, 2, new FormDecoratorBuilder(viewComp, 15, true).customLabel(customViewLabel).build());
+            main.setWidget(0, 0, (oneColumn ? 1 : 2), new FormDecoratorBuilder(viewComp, 15, !oneColumn).customLabel(customViewLabel).build());
         }
 
         return main;

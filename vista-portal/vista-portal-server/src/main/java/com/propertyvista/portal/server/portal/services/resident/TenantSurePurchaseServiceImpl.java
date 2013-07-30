@@ -38,7 +38,7 @@ import com.propertyvista.biz.tenant.insurance.TenantSureDeductibleOption;
 import com.propertyvista.biz.tenant.insurance.TenantSureFacade;
 import com.propertyvista.biz.tenant.insurance.TenantSureOptionCode;
 import com.propertyvista.biz.tenant.insurance.TenantSureTextFacade;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.person.Person;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
@@ -196,8 +196,8 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
+    public void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback) {
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
     }
     
     @Override

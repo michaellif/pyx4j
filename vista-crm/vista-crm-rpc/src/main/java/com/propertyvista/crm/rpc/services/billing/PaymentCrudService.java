@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -30,7 +30,7 @@ public interface PaymentCrudService extends AbstractCrudService<PaymentRecordDTO
 
     void initNewEntity(AsyncCallback<PaymentRecordDTO> callback, Key parentId);
 
-    void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
+    void getCurrentAddress(AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 
     void getProfiledPaymentMethods(AsyncCallback<Vector<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 

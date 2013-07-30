@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 
@@ -27,5 +27,5 @@ public interface LeaseParticipantEditorPresenter<E extends LeaseParticipant<?>> 
 
     void getAllowedPaymentTypes(AsyncCallback<Vector<PaymentType>> callback);
 
-    void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+    void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 }

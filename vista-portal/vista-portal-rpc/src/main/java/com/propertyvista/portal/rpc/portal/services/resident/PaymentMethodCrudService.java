@@ -17,10 +17,10 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 
 public interface PaymentMethodCrudService extends AbstractCrudService<LeasePaymentMethod> {
 
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 }

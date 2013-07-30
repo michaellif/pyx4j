@@ -18,7 +18,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.shared.IService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -33,7 +33,7 @@ public interface TenantSurePurchaseService extends IService {
     void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod);
 
-    void getCurrentTenantAddress(AsyncCallback<AddressStructured> callback);
+    void getCurrentTenantAddress(AsyncCallback<AddressSimple> callback);
 
     void sendQuoteDetails(AsyncCallback<String> asyncCallback, String quoteId);
 }

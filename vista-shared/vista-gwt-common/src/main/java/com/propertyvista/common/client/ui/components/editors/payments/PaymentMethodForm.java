@@ -36,7 +36,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.VistaEditorsComponentFactory;
-import com.propertyvista.common.client.ui.components.editors.AddressStructuredEditor;
+import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -45,15 +45,8 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
     private static final I18n i18n = I18n.get(PaymentMethodForm.class);
 
-    private final boolean twoColumns;
-
     public PaymentMethodForm(Class<E> clazz) {
-        this(clazz, false);
-    }
-
-    public PaymentMethodForm(Class<E> clazz, boolean twoColumns) {
         super(clazz, new VistaEditorsComponentFactory());
-        this.twoColumns = twoColumns;
     }
 
     @Override
@@ -85,7 +78,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         billingAddressHeader = content.getWidget(row, 0);
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());
-        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressStructuredEditor(twoColumns)));
+        content.setWidget(++row, 0, inject(proto().billingAddress(), new AddressSimpleEditor()));
 
         // tweaks:
         get(proto().type()).asWidget().getElement().getStyle().setMarginLeft(15, Unit.EM);

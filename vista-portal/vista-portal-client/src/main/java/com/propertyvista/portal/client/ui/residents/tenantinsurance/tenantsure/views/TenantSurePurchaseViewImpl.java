@@ -35,7 +35,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.Label;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.tenant.insurance.TenantSureConstants;
 import com.propertyvista.portal.client.themes.TenantSureTheme;
@@ -179,7 +179,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     @Override
-    public void setBillingAddress(AddressStructured billingAddress) {
+    public void setBillingAddress(AddressSimple billingAddress) {
         InsurancePaymentMethod pm = paymentMethodForm.getValue();
         pm.billingAddress().set(billingAddress);
         paymentMethodForm.populate(pm);

@@ -27,8 +27,15 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
 
     private static final I18n i18n = I18n.get(EmergencyContactEditor.class);
 
+    private final boolean oneColumn;
+
     public EmergencyContactEditor() {
+        this(false);
+    }
+
+    public EmergencyContactEditor(boolean oneColumn) {
         super(EmergencyContact.class);
+        this.oneColumn = oneColumn;
     }
 
     @Override
@@ -36,18 +43,19 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"))));
+        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"), oneColumn)));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().email()), 22).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 22).build());
         get(proto().birthDate()).setMandatory(false);
 
-        row = 0;
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
+        row = (oneColumn ? row : -1);
+        int col = (oneColumn ? 0 : 1);
+        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
 
-        main.setWidget(++row, 0, 2, inject(proto().address(), new AddressSimpleEditor()));
+        main.setWidget(++row, 0, (oneColumn ? 1 : 2), inject(proto().address(), new AddressSimpleEditor()));
 
         return main;
     }

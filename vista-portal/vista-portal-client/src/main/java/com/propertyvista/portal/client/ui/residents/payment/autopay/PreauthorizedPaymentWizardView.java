@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
@@ -28,7 +28,7 @@ public interface PreauthorizedPaymentWizardView extends IWizard<PreauthorizedPay
 
     interface Persenter extends IWizard.Presenter {
 
-        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 

@@ -58,7 +58,7 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
         int row = -1;
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
-        container.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"))));
+        container.setWidget(++row, 0, inject(proto().name(), new NameEditor(i18n.tr("Resident"), true)));
         container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
         container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
@@ -70,7 +70,7 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
         container.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 20).build());
 
         container.setH1(++row, 0, 1, proto().emergencyContacts().getMeta().getCaption());
-        container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true)));
+        container.setWidget(++row, 0, inject(proto().emergencyContacts(), new EmergencyContactFolder(isEditable(), true, true)));
         container.getCellFormatter().getElement(row, 0).getStyle().setPadding(10, Unit.PX);
 
         if (isViewable()) {

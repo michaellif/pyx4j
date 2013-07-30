@@ -20,7 +20,7 @@ import com.pyx4j.widgets.client.dialog.Dialog.Type;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.pyx4j.widgets.client.dialog.OkOption;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.web.client.ui.IEntityView;
 import com.propertyvista.portal.web.client.ui.residents.EditImpl;
@@ -59,7 +59,7 @@ public class TenantSureCreditCardUpdateViewImpl extends EditImpl<InsurancePaymen
     }
 
     @Override
-    public void setTenantAddress(AddressStructured tenantAddress) {
+    public void setTenantAddress(AddressSimple tenantAddress) {
         InsurancePaymentMethod paymentMethod = ((TenantSurePaymentMethodForm) getForm()).getValue();
         paymentMethod.billingAddress().set(tenantAddress);
         ((TenantSurePaymentMethodForm) getForm()).setValue(paymentMethod);

@@ -53,7 +53,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfo
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -82,17 +82,17 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         }
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 ((PaymentEditorView.Presenter) ((PaymentEditorView) getParentView()).getPresenter()).getCurrentAddress(
-                        new DefaultAsyncCallback<AddressStructured>() {
+                        new DefaultAsyncCallback<AddressSimple>() {
                             @Override
-                            public void onSuccess(AddressStructured result) {
+                            public void onSuccess(AddressSimple result) {
                                 comp.setValue(result, false);
                             }
                         }, PaymentForm.this.getValue().leaseTermParticipant());
             } else {
-                comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                comp.setValue(EntityFactory.create(AddressSimple.class), false);
             }
 
         }

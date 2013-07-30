@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.web.client.ui.residents.Edit;
 
@@ -29,7 +29,7 @@ public interface TenantSureCreditCardUpdateView extends Edit<InsurancePaymentMet
 
     void reportCCUpdateSuccess();
 
-    void setTenantAddress(AddressStructured tenantAddress);
+    void setTenantAddress(AddressSimple tenantAddress);
 
     void setPreAuthorizedDebitAgreement(String agreementTextHml);
 

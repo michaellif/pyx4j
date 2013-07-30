@@ -34,7 +34,7 @@ import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -154,8 +154,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> participant) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(participant));
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> participant) {
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(participant));
     }
 
     @Override

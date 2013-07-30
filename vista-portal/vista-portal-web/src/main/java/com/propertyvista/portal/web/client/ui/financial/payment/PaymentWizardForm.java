@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -49,7 +48,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -80,17 +79,16 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
         }
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                ((PaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                     @Override
-                    public void onSuccess(AddressStructured result) {
+                    public void onSuccess(AddressSimple result) {
                         comp.setValue(result, false);
                     }
                 });
             } else {
-                comp.setValue(EntityFactory.create(AddressStructured.class), false);
             }
         }
     };

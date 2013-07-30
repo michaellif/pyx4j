@@ -26,7 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.LegalDocumentation;
@@ -40,6 +40,7 @@ import com.propertyvista.portal.server.campaign.CampaignManager;
 import com.propertyvista.portal.server.ptapp.PtAppContext;
 import com.propertyvista.portal.server.ptapp.services.ApplicationEntityServiceImpl;
 import com.propertyvista.portal.server.ptapp.services.util.LegalStuffUtils;
+import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.CustomerRetriever;
 import com.propertyvista.server.domain.CampaignTrigger;
 
@@ -112,8 +113,10 @@ public class PaymentServiceImpl extends ApplicationEntityServiceImpl implements 
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
         CustomerRetriever r = new CustomerRetriever(PtAppContext.retrieveCurrentUserCustomer().getPrimaryKey());
-        callback.onSuccess(r.getScreening().version().currentAddress().duplicate(AddressStructured.class));
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(r.getScreening().version().currentAddress(), address);
+        callback.onSuccess(address);
     }
 }

@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
@@ -64,7 +64,7 @@ public interface TenantSurePurchaseView extends IsWidget {
 
     void populateSendQuoteDetailSuccess(String email);
 
-    void setBillingAddress(AddressStructured billingAddress);
+    void setBillingAddress(AddressSimple billingAddress);
 
     TenantSureCoverageDTO getCoverageRequest();
 

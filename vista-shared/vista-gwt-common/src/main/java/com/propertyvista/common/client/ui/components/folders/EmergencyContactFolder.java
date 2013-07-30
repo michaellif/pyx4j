@@ -28,14 +28,21 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
 
     private final boolean collapsed;
 
+    private final boolean oneColumn;
+
     public EmergencyContactFolder(boolean modifyable) {
         this(modifyable, false);
     }
 
-    public EmergencyContactFolder(boolean modifyable, boolean collapsed) {
+    public EmergencyContactFolder(boolean modifyable, boolean oneColumn) {
+        this(modifyable, false, false);
+    }
+
+    public EmergencyContactFolder(boolean modifyable, boolean collapsed, boolean oneColumn) {
         super(EmergencyContact.class, modifyable);
         this.modifyable = modifyable;
         this.collapsed = collapsed;
+        this.oneColumn = oneColumn;
     }
 
     @Override
@@ -48,7 +55,7 @@ public class EmergencyContactFolder extends VistaBoxFolder<EmergencyContact> {
     @Override
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof EmergencyContact) {
-            return new EmergencyContactEditor();
+            return new EmergencyContactEditor(oneColumn);
         } else {
             return super.create(member);
         }

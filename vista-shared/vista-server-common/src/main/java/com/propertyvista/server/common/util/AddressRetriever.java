@@ -17,6 +17,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -46,4 +47,25 @@ public class AddressRetriever {
 
         return address;
     }
+
+    // Simple form address retrieving: 
+
+    public static AddressSimple getLeaseParticipantCurrentAddressSimple(LeaseParticipant<?> participant) {
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(getLeaseParticipantCurrentAddress(participant), address);
+        return address;
+    }
+
+    public static AddressSimple getLeaseParticipantCurrentAddressSimple(LeaseTermParticipant<?> participant) {
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(getLeaseParticipantCurrentAddress(participant), address);
+        return address;
+    }
+
+    public static AddressSimple getLeaseAddressSimple(Lease lease) {
+        AddressSimple address = EntityFactory.create(AddressSimple.class);
+        new AddressConverter.StructuredToSimpleAddressConverter().copyDBOtoDTO(getLeaseAddress(lease), address);
+        return address;
+    }
+
 }

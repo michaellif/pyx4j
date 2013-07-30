@@ -27,7 +27,7 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.billing.payment.PaymentEditorView;
 import com.propertyvista.crm.rpc.services.billing.PaymentCrudService;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -36,8 +36,8 @@ import com.propertyvista.dto.PaymentRecordDTO;
 public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> implements PaymentEditorView.Presenter {
 
     public PaymentEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(PaymentEditorView.class), GWT.<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class),
-                PaymentRecordDTO.class);
+        super(place, CrmSite.getViewFactory().instantiate(PaymentEditorView.class), GWT
+                .<AbstractCrudService<PaymentRecordDTO>> create(PaymentCrudService.class), PaymentRecordDTO.class);
     }
 
     @Override
@@ -52,10 +52,10 @@ public class PaymentEditorActivity extends CrmEditorActivity<PaymentRecordDTO> i
 
     @SuppressWarnings("unchecked")
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
-        ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer) {
+        ((PaymentCrudService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         }, (LeaseTermParticipant<? extends LeaseParticipant<?>>) payer.createIdentityStub());

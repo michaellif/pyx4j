@@ -25,7 +25,7 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantEditorPresenter;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.LeaseParticipantDTO;
@@ -50,10 +50,10 @@ public abstract class LeaseParticipantEditorActivity<DTO extends LeaseParticipan
 
     @SuppressWarnings("unchecked")
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        ((CS) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        ((CS) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         }, EntityFactory.createIdentityStub(getEntityClass(), getEntityId()));

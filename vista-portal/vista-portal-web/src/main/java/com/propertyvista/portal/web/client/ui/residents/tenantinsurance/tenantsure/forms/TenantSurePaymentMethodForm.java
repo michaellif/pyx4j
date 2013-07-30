@@ -32,7 +32,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
@@ -105,7 +105,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     @Override
-    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressStructured> comp) {
+    protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
         if (set) {
             onSameAsCurrentAddressSelected.execute();
         }

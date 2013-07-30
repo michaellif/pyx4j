@@ -15,7 +15,7 @@ package com.propertyvista.portal.ptapp.client.ui.steps.payment;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepPresenter;
 import com.propertyvista.portal.ptapp.client.ui.steps.WizardStepView;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
@@ -25,6 +25,6 @@ public interface PaymentView extends WizardStepView<PaymentInformationDTO, Payme
 
     public interface PaymentPresenter extends WizardStepPresenter<PaymentInformationDTO> {
 
-        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
     }
 }

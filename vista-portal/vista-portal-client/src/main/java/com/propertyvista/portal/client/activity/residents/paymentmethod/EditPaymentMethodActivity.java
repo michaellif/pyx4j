@@ -24,7 +24,7 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.EditPaymentMethodView;
@@ -81,10 +81,10 @@ public class EditPaymentMethodActivity extends SecurityAwareActivity implements 
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        srv.getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        srv.getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         });

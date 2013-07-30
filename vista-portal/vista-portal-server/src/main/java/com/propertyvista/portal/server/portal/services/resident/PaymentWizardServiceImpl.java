@@ -35,7 +35,7 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.payment.PaymentException;
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -138,8 +138,8 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
     }
 
     @Override

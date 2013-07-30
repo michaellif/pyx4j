@@ -362,12 +362,12 @@ public class LeaseLifecycleSimulator {
             Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);
 
             LogicalDate billingRunDay = ServerSideFactory.create(BillingFacade.class).getNextBillBillingCycle(lease).targetBillExecutionDate().getValue();
-            if (billingRunDay.before(lease.currentTerm().termFrom().getValue())) {        		
-        		Calendar cal = GregorianCalendar.getInstance();
-        		cal.setTime(billingRunDay);
-        		cal.add(Calendar.MONTH, 1);
-        		billingRunDay = new LogicalDate(cal.getTime());        		
-        	}
+            if (billingRunDay.before(lease.currentTerm().termFrom().getValue())) {
+                Calendar cal = GregorianCalendar.getInstance();
+                cal.setTime(billingRunDay);
+                cal.add(Calendar.MONTH, 1);
+                billingRunDay = new LogicalDate(cal.getTime());
+            }
             queueEvent(billingRunDay, new RunBillingRecurrent(lease));
 
 //            new RunBillingRecurrent(lease).exec();
@@ -468,7 +468,7 @@ public class LeaseLifecycleSimulator {
             m.customer().set(tenant.leaseParticipant().customer());
             m.isProfiledMethod().setValue(Boolean.FALSE);
             m.sameAsCurrent().setValue(Boolean.FALSE);
-            m.billingAddress().set(CommonsGenerator.createAddressStructured());
+            m.billingAddress().set(CommonsGenerator.createAddressSimple());
 
             return m;
         }
@@ -483,12 +483,12 @@ public class LeaseLifecycleSimulator {
 
         @Override
         public void exec() {
-        	if (now().before(lease.currentTerm().termFrom().getValue())) {
-        		return;
-        	}
+            if (now().before(lease.currentTerm().termFrom().getValue())) {
+                return;
+            }
             numOfBills--;
             if (numOfBills != 0) {
-            	
+
                 if (now().before(lease.currentTerm().termTo().getValue()) & lease.status().getValue() != Lease.Status.Completed) {
 
                     Bill lastBill = ServerSideFactory.create(BillingFacade.class).getLatestBill(lease);

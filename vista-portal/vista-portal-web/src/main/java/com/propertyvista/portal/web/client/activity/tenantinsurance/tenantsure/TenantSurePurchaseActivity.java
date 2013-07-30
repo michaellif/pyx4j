@@ -27,7 +27,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
@@ -129,9 +129,9 @@ public class TenantSurePurchaseActivity extends AbstractActivity implements Tena
 
     @Override
     public void onBillingAddressSameAsCurrentSelected() {
-        service.getCurrentTenantAddress(new DefaultAsyncCallback<AddressStructured>() {
+        service.getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured tenantsAddress) {
+            public void onSuccess(AddressSimple tenantsAddress) {
                 view.setBillingAddress(tenantsAddress);
             }
 

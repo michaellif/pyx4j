@@ -25,7 +25,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.payment.PaymentWizardView;
@@ -41,10 +41,10 @@ public class PaymentWizardActivity extends AbstractWizardActivity<PaymentRecordD
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        ((PaymentWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        ((PaymentWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         });

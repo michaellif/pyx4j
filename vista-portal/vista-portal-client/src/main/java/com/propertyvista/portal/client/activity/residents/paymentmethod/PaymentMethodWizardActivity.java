@@ -22,7 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodWizardView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods;
@@ -37,10 +37,10 @@ public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentM
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         });

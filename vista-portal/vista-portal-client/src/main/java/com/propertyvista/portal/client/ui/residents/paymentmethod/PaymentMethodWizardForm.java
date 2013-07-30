@@ -41,7 +41,7 @@ import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
@@ -64,17 +64,17 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         }
 
         @Override
-        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
+        public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PaymentMethodWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                ((PaymentMethodWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                     @Override
-                    public void onSuccess(AddressStructured result) {
+                    public void onSuccess(AddressSimple result) {
                         comp.setValue(result, false);
                     }
                 });
             } else {
-                comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                comp.setValue(EntityFactory.create(AddressSimple.class), false);
             }
         }
 

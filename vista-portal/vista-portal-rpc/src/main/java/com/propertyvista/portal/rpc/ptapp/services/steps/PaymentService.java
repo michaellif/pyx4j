@@ -15,10 +15,10 @@ package com.propertyvista.portal.rpc.ptapp.services.steps;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.ptapp.dto.PaymentInformationDTO;
 
 public interface PaymentService extends AbstractWizardService<PaymentInformationDTO> {
 
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 }

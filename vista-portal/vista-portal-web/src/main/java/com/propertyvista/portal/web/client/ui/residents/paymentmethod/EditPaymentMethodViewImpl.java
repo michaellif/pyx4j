@@ -20,7 +20,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
@@ -36,17 +36,17 @@ public class EditPaymentMethodViewImpl extends EditImpl<LeasePaymentMethod> impl
             }
 
             @Override
-            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressStructured> comp) {
+            public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
                 if (set) {
                     assert (getPresenter() != null);
-                    ((EditPaymentMethodView.Presenter) getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+                    ((EditPaymentMethodView.Presenter) getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                         @Override
-                        public void onSuccess(AddressStructured result) {
+                        public void onSuccess(AddressSimple result) {
                             comp.setValue(result, false);
                         }
                     });
                 } else {
-                    comp.setValue(EntityFactory.create(AddressStructured.class), false);
+                    comp.setValue(EntityFactory.create(AddressSimple.class), false);
                 }
             }
         });

@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -29,7 +29,7 @@ public interface PaymentEditorView extends IEditor<PaymentRecordDTO> {
 
     interface Presenter extends IEditor.Presenter {
 
-        void getCurrentAddress(AsyncCallback<AddressStructured> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
+        void getCurrentAddress(AsyncCallback<AddressSimple> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback, LeaseTermParticipant<? extends LeaseParticipant<?>> payer);
     }

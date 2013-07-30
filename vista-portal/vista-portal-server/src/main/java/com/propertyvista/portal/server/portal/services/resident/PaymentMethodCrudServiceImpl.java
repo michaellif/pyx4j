@@ -28,7 +28,7 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -89,7 +89,7 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
     }
 }

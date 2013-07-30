@@ -17,7 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.ui.IWizardView;
@@ -26,7 +26,7 @@ public interface PaymentWizardView extends IWizardView<PaymentRecordDTO> {
 
     interface Persenter extends WizardPresenter<PaymentRecordDTO> {
 
-        void getCurrentAddress(AsyncCallback<AddressStructured> callback);
+        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 
         void getProfiledPaymentMethods(AsyncCallback<List<LeasePaymentMethod>> callback);
 

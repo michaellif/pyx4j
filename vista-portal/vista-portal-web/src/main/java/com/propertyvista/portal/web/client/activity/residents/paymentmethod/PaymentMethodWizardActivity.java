@@ -22,7 +22,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
@@ -32,15 +32,15 @@ import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMet
 public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Persenter {
 
     public PaymentMethodWizardActivity(AppPlace place) {
-        super(place, PortalWebSite.getViewFactory().instantiate(PaymentMethodWizardView.class), GWT.<PaymentMethodWizardService> create(PaymentMethodWizardService.class),
-                PaymentMethodDTO.class);
+        super(place, PortalWebSite.getViewFactory().instantiate(PaymentMethodWizardView.class), GWT
+                .<PaymentMethodWizardService> create(PaymentMethodWizardService.class), PaymentMethodDTO.class);
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
-        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
+        ((PaymentMethodWizardService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         });

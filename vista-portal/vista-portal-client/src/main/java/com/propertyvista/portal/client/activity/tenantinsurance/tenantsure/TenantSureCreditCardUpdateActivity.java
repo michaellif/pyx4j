@@ -23,7 +23,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
@@ -84,10 +84,10 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     @Override
     public void onTenantAddressRequested() {
         // TODO there should be some generic service to do this in Portal APP
-        GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class).getCurrentTenantAddress(new DefaultAsyncCallback<AddressStructured>() {
+        GWT.<TenantSurePurchaseService> create(TenantSurePurchaseService.class).getCurrentTenantAddress(new DefaultAsyncCallback<AddressSimple>() {
 
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 view.setTenantAddress(result);
             }
 

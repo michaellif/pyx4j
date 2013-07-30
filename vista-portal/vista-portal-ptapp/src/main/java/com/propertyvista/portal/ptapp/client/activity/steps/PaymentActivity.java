@@ -19,7 +19,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.AppPlace;
 
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView;
 import com.propertyvista.portal.ptapp.client.ui.steps.payment.PaymentView.PaymentPresenter;
 import com.propertyvista.portal.ptapp.client.ui.viewfactories.WizardStepsViewFactory;
@@ -34,11 +34,11 @@ public class PaymentActivity extends WizardStepActivity<PaymentInformationDTO, P
     }
 
     @Override
-    public void getCurrentAddress(final AsyncCallback<AddressStructured> callback) {
+    public void getCurrentAddress(final AsyncCallback<AddressSimple> callback) {
         final PaymentInformationDTO currentValue = getView().getValue();
-        ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressStructured>() {
+        ((PaymentService) getService()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
             @Override
-            public void onSuccess(AddressStructured result) {
+            public void onSuccess(AddressSimple result) {
                 callback.onSuccess(result);
             }
         });

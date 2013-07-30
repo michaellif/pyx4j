@@ -35,7 +35,7 @@ import com.pyx4j.rpc.shared.ServiceExecution;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -133,8 +133,8 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(TenantAppContext.getCurrentUserTenant()));
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback) {
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(TenantAppContext.getCurrentUserTenant()));
     }
 
     @Override

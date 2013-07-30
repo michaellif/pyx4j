@@ -30,7 +30,7 @@ import com.propertyvista.biz.financial.payment.PaymentFacade;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.CustomerFacade;
 import com.propertyvista.crm.rpc.services.customer.LeaseParticipantCrudServiceBase;
-import com.propertyvista.domain.contact.AddressStructured;
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -114,8 +114,8 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    public void getCurrentAddress(AsyncCallback<AddressStructured> callback, DTO participantId) {
-        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddress(EntityFactory.createIdentityStub(dboClass, participantId.getPrimaryKey())));
+    public void getCurrentAddress(AsyncCallback<AddressSimple> callback, DTO participantId) {
+        callback.onSuccess(AddressRetriever.getLeaseParticipantCurrentAddressSimple(EntityFactory.createIdentityStub(dboClass, participantId.getPrimaryKey())));
     }
 
     private LeaseTerm.LeaseTermV retrieveLeaseTerm(DBO leaseParticipant) {
