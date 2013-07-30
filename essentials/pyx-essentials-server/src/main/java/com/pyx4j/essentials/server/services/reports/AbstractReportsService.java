@@ -23,6 +23,9 @@ package com.pyx4j.essentials.server.services.reports;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.UserRuntimeException;
@@ -48,7 +51,9 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
     private static final I18n i18n = I18n.get(AbstractReportsService.class);
 
-    public final class GenerateReportDeferredProcess implements IDeferredProcess {
+    public static final class GenerateReportDeferredProcess implements IDeferredProcess {
+
+        private static final Logger log = LoggerFactory.getLogger(GenerateReportDeferredProcess.class);
 
         private static final long serialVersionUID = 8173598149198655557L;
 
@@ -113,6 +118,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
                     isReady = true;
                 } catch (Throwable error) {
                     this.error = error;
+                    log.error("Error during report generation:", error);
                 }
             }
         }
@@ -125,7 +131,9 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
 
     }
 
-    public final class ExportReportDeferredProcess implements IDeferredProcess {
+    public static final class ExportReportDeferredProcess implements IDeferredProcess {
+
+        private static final Logger log = LoggerFactory.getLogger(ExportReportDeferredProcess.class);
 
         public static final long serialVersionUID = 1L;
 
@@ -163,7 +171,7 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
                         if (error instanceof UserRuntimeException) {
                             r.setErrorStatusMessage(error.getMessage());
                         } else {
-                            r.setErrorStatusMessage(i18n.tr("A server side error occured during report generation."));
+                            r.setErrorStatusMessage(i18n.tr("A server side error occured during report export."));
                         }
                     } else if (status != null) {
                         r.setMessage(status.stage);
@@ -181,17 +189,23 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
         @Override
         public void execute() {
             if (!cancelled) {
-                new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing).execute(new Executable<Void, RuntimeException>() {
-                    @Override
-                    public Void execute() {
-                        Serializable reportData = reportGenerator.generateReport(reportMetadata);
-                        exported = ((ReportExporter) reportGenerator).export(reportData);
-                        return null;
-                    }
+                try {
+                    new UnitOfWork(TransactionScopeOption.RequiresNew, ConnectionTarget.TransactionProcessing)
+                            .execute(new Executable<Void, RuntimeException>() {
+                                @Override
+                                public Void execute() {
+                                    Serializable reportData = reportGenerator.generateReport(reportMetadata);
+                                    exported = ((ReportExporter) reportGenerator).export(reportData);
+                                    return null;
+                                }
 
-                });
-                new Downloadable(exported.data, exported.contentType).save(exported.fileName);
-                isReady = true;
+                            });
+                    new Downloadable(exported.data, exported.contentType).save(exported.fileName);
+                    isReady = true;
+                } catch (Exception e) {
+                    this.error = e;
+                    log.error("Error during report export:", e);
+                }
             }
         }
 
