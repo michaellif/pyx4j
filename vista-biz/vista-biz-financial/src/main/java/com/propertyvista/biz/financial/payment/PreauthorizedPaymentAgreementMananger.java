@@ -116,10 +116,11 @@ class PreauthorizedPaymentAgreementMananger {
         return Persistence.service().query(criteria);
     }
 
-    List<PreauthorizedPayment> retrievePreauthorizedPayments(Lease leaseId) {
+    private List<PreauthorizedPayment> retrieveActivePreauthorizedPayments(Lease leaseId) {
         EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
         criteria.eq(criteria.proto().tenant().lease(), leaseId);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        criteria.isNull(criteria.proto().expiring());
         return Persistence.service().query(criteria);
     }
 
@@ -141,8 +142,6 @@ class PreauthorizedPaymentAgreementMananger {
         LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(preauthorizedPayment.tenant().lease());
         preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
         Persistence.service().merge(preauthorizedPayment);
-
-        ServerSideFactory.create(NotificationFacade.class).papSuspension(preauthorizedPayment.tenant().lease());
     }
 
     public void renewPreauthorizedPayments(Lease lease) {
@@ -225,12 +224,15 @@ class PreauthorizedPaymentAgreementMananger {
                 Persistence.service().merge(pap);
             }
         }
+        if (suspend) {
+            ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
+        }
     }
 
     public void suspendPreauthorisedPaymentsInLastMonth(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.lt(criteria.proto().billingCycleStartDate(), forDate);
-        criteria.gt(criteria.proto().billingCycleEndDate(), forDate);
+        criteria.le(criteria.proto().billingCycleStartDate(), forDate);
+        criteria.ge(criteria.proto().billingCycleEndDate(), forDate);
 
         ICursorIterator<BillingCycle> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
@@ -252,15 +254,20 @@ class PreauthorizedPaymentAgreementMananger {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                             @Override
                             public Void execute() {
-                                for (PreauthorizedPayment item : retrievePreauthorizedPayments(account.lease())) {
+                                boolean suspended = false;
+                                for (PreauthorizedPayment item : retrieveActivePreauthorizedPayments(account.lease())) {
                                     suspendPreauthorizedPayment(item);
-                                    executionMonitor.addProcessedEvent("Pad suspended");
+                                    executionMonitor.addProcessedEvent("Pad suspend");
+                                    suspended = true;
+                                }
+                                if (suspended) {
+                                    ServerSideFactory.create(NotificationFacade.class).papSuspension(account.lease());
                                 }
                                 return null;
                             }
                         });
                     } catch (Throwable error) {
-                        executionMonitor.addFailedEvent("Pad suspension", error);
+                        executionMonitor.addFailedEvent("Pad suspend", error);
                     }
 
                     if (executionMonitor.isTerminationRequested()) {
