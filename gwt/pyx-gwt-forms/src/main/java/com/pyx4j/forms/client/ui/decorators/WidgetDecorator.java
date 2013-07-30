@@ -186,10 +186,9 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         add(labelHolder);
         add(containerPanel);
 
-        setLabelAlignment(builder.labelAlignment);
-
         setLayout(builder.layout);
 
+        updateLabelAlignment();
         updateNote();
         updateCaption();
         updateViewable();
@@ -244,31 +243,12 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         return component;
     }
 
-    public void setLabelAlignment(Alignment alignment) {
-        builder.labelAlignment = alignment;
-        switch (alignment) {
-        case left:
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
-            break;
-        case center:
-            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
-            break;
-        case right:
-            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
-            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
-            break;
-        }
-
-    }
-
     public void setLayout(Layout layout) {
         builder.layout = layout;
         switch (layout) {
         case horisontal:
             labelHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            labelHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             containerPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             containerPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.verticalAlign.name());
@@ -315,6 +295,24 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
 
     }
 
+    public void updateLabelAlignment() {
+        switch (builder.labelAlignment) {
+        case left:
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            break;
+        case center:
+            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            break;
+        case right:
+            labelHolder.removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignCenter.name());
+            labelHolder.addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.labelAlignRight.name());
+            break;
+        }
+
+    }
+
     private void updateVisibility() {
         setVisible(component.isVisible());
     }
@@ -345,7 +343,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         }
     }
 
-    private void updateViewable() {
+    protected void updateViewable() {
         if (component.isViewable()) {
             addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.viewable.name());
             mandatoryImageHolder.setVisible(false);
@@ -357,7 +355,7 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         }
     }
 
-    private void updateCaption() {
+    protected void updateCaption() {
         String caption = builder.customLabel;
         if (caption == null) {
             caption = component.getTitle();

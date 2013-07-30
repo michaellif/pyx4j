@@ -30,7 +30,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CEntityForm;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -61,7 +61,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
 
     }
 
-    public WizardStep addStep(final TwoColumnFlexFormPanel panel) {
+    public WizardStep addStep(final BasicFlexFormPanel panel) {
         final WizardStep step = addStep(panel, panel.getTitle());
         panel.addPropertyChangeHandler(new PropertyChangeHandler() {
             @Override

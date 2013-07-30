@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui.panels;
 import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanel;
 import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelActionWidget;
 import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH1;
+import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH1Image;
 import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH1Label;
 import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH2;
 import static com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName.FormFlexPanelH2Label;
@@ -37,10 +38,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -85,8 +89,16 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
         setH1(row, col, span, caption, null);
     }
 
+    public void setH1(int row, int col, int span, ImageResource image, String caption) {
+        setH1(row, col, span, image, caption, null);
+    }
+
     public void setH1(int row, int col, int span, String caption, Widget actionWidget) {
-        setHX(row, col, span, caption, actionWidget, FormFlexPanelH1Label, FormFlexPanelH1);
+        setHX(row, col, span, caption, actionWidget, FormFlexPanelH1Image, FormFlexPanelH1Label, FormFlexPanelH1);
+    }
+
+    public void setH1(int row, int col, int span, ImageResource image, String caption, Widget actionWidget) {
+        setHX(row, col, span, image, caption, actionWidget, FormFlexPanelH1Image, FormFlexPanelH1Label, FormFlexPanelH1);
     }
 
     public void setH2(int row, int col, int span, String caption) {
@@ -94,7 +106,7 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
     }
 
     public void setH2(int row, int col, int span, String caption, Widget actionWidget) {
-        setHX(row, col, span, caption, actionWidget, FormFlexPanelH2Label, FormFlexPanelH2);
+        setHX(row, col, span, caption, actionWidget, null, FormFlexPanelH2Label, FormFlexPanelH2);
     }
 
     public void setH3(int row, int col, int span, String caption) {
@@ -102,7 +114,7 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
     }
 
     public void setH3(int row, int col, int span, String caption, Widget actionWidget) {
-        setHX(row, col, span, caption, actionWidget, FormFlexPanelH3Label, FormFlexPanelH3);
+        setHX(row, col, span, caption, actionWidget, null, FormFlexPanelH3Label, FormFlexPanelH3);
     }
 
     public void setH4(int row, int col, int span, String caption) {
@@ -110,17 +122,31 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
     }
 
     public void setH4(int row, int col, int span, String caption, Widget actionWidget) {
-        setHX(row, col, span, caption, actionWidget, FormFlexPanelH4Label, FormFlexPanelH4);
+        setHX(row, col, span, caption, actionWidget, null, FormFlexPanelH4Label, FormFlexPanelH4);
     }
 
-    private void setHX(int row, int col, int span, String caption, Widget actionWidget, StyleName labelStyle, StyleName headerStyle) {
+    private void setHX(int row, int col, int span, String caption, Widget actionWidget, StyleName imageStyle, StyleName labelStyle, StyleName headerStyle) {
+        setHX(row, col, span, null, caption, actionWidget, imageStyle, labelStyle, headerStyle);
+    }
+
+    private void setHX(int row, int col, int span, ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle,
+            StyleName labelStyle, StyleName headerStyle) {
         getFlexCellFormatter().setColSpan(row, col, span);
         HorizontalPanel header = new HorizontalPanel();
         header.setStyleName(headerStyle.name());
 
+        if (imageResource != null) {
+            Image image = new Image(imageResource);
+            image.setStyleName(imageStyle.name());
+            header.add(image);
+            header.setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
+            header.setCellWidth(image, "1px");
+        }
+
         Label label = new Label(caption);
         label.setStyleName(labelStyle.name());
         header.add(label);
+        header.setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);
 
         if (actionWidget != null) {
             SimplePanel actionWidgetHolder = new SimplePanel();
