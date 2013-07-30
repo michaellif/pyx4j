@@ -39,6 +39,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
@@ -47,9 +48,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -57,10 +56,12 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
 
@@ -103,36 +104,36 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private TwoColumnFlexFormPanel createDetailsStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+    private BasicFlexFormPanel createDetailsStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), 22)
+        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Make a Payment"));
+
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), "200px")
                 .customLabel(i18n.tr("Tenant")).build());
 
+        get(proto().leaseTermParticipant()).setViewable(true);
+
         panel.setBR(++row, 0, 1);
-        panel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
-
-        panel.setHR(++row, 0, 1);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
-
-        // tweak UI:
-        get(proto().address()).setViewable(true);
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), "100px").build());
 
         return panel;
     }
 
     private TwoColumnFlexFormPanel createSelectPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method Selection"));
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
+
+        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Payment Method"));
 
         panel.setWidget(
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL))).build());
+                        RadioGroup.Layout.HORISONTAL)), "200px").build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 22).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), "200px").build());
 
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
@@ -200,7 +201,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), "200px").build());
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {

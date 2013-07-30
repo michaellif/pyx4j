@@ -23,9 +23,26 @@ public class FormDecoratorBuilder extends WidgetDecorator.Builder {
         labelWidth(labelWidth);
         contentWidth(contentWidth);
         componentWidth(componentWidth);
-        labelAlignment(Alignment.left);
-        useLabelSemicolon(false);
+    }
 
+    @Override
+    public WidgetDecorator build() {
+        WidgetDecorator decorator = new WidgetDecorator(this) {
+            @Override
+            protected void updateViewable() {
+                if (getComnponent().isViewable()) {
+                    labelAlignment(Alignment.left);
+                    useLabelSemicolon(false);
+                } else {
+                    labelAlignment(Alignment.right);
+                    useLabelSemicolon(true);
+                }
+                updateCaption();
+                updateLabelAlignment();
+                super.updateViewable();
+            }
+        };
+        return decorator;
     }
 
     public FormDecoratorBuilder(CComponent<?> component, String componentWidth) {

@@ -104,7 +104,6 @@ public class PortalWebTheme extends Theme {
 
                 style = new Style(".", StyleName.FormFlexPanelH1Label);
                 style.addProperty("color", ThemeColor.foreground, 1);
-                style.addProperty("padding", "15px");
                 style.addProperty("font-size", "1.2em");
                 addStyle(style);
 
