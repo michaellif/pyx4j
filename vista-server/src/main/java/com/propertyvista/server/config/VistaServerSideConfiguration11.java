@@ -43,6 +43,11 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
     }
 
     @Override
+    public Integer enviromentId() {
+        return 11;
+    }
+
+    @Override
     public boolean openIdrequired() {
         return true;
     }

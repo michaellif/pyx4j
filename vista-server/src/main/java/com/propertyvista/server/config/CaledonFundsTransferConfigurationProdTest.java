@@ -22,38 +22,32 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 
-class CaledonFundsTransferConfigurationSimulatorCustom implements CaledonFundsTransferConfiguration {
+class CaledonFundsTransferConfigurationProdTest implements CaledonFundsTransferConfiguration {
 
     private final AbstractVistaServerSideConfiguration config;
 
-    CaledonFundsTransferConfigurationSimulatorCustom(AbstractVistaServerSideConfiguration config) {
+    CaledonFundsTransferConfigurationProdTest(AbstractVistaServerSideConfiguration config) {
         this.config = config;
     }
 
     @Override
     public String getIntefaceCompanyId() {
-        String companyId = "Test";
-        if (config.enviromentId() != null) {
-            companyId += config.enviromentId();
-        }
-        return config.getConfigProperties().getValue("simulator.fundsTransfer.intefaceCompanyId", companyId);
+        return config.getConfigProperties().getValue("fundsTransfer.intefaceCompanyId", "BIRCHWOODTEST");
     }
 
     @Override
     public String sftpHost() {
-        return config.getConfigProperties().getValue("simulator.fundsTransfer.sftpHost", "qa.birchwoodsoftwaregroup.com");
+        return config.getConfigProperties().getValue("fundsTransfer.sftpHost", "apato.caledoncard.com");
     }
 
     @Override
     public int sftpPort() {
-        return config.getConfigProperties().getIntegerValue("simulator.fundsTransfer.sftpPort", 8823);
+        return config.getConfigProperties().getIntegerValue("fundsTransfer.sftpPort", 22);
     }
 
     @Override
     public Credentials sftpCredentials() {
-        String fileName = config.getConfigProperties().getValue("simulator.fundsTransfer.sftpCredentialsFileName",
-                VistaInterfaceCredentials.caledonFundsTransferSimulator);
-        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), fileName));
+        return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), VistaInterfaceCredentials.caledonFundsTransfer));
     }
 
 }

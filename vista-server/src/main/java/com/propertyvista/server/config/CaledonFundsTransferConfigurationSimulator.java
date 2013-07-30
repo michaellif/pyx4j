@@ -31,6 +31,11 @@ public class CaledonFundsTransferConfigurationSimulator implements CaledonFundsT
     }
 
     @Override
+    public String getIntefaceCompanyId() {
+        return "Test";
+    }
+
+    @Override
     public String sftpHost() {
         return "interfaces.dev.birchwoodsoftwaregroup.com";
     }

@@ -13,12 +13,16 @@
  */
 package com.propertyvista.server.config;
 
-
 /**
  * See the files https://svn.pyx4j.com/svn-configs/trunk/vista/testenv/apps/catalina.base/tomcatA/conf/vista33
  * 
  */
 public class VistaServerSideConfiguration77 extends VistaServerSideConfigurationCustom {
+
+    @Override
+    public Integer enviromentId() {
+        return 77;
+    }
 
     @Override
     public boolean isVistaQa() {

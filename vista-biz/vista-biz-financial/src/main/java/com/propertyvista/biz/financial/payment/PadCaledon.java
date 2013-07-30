@@ -51,7 +51,8 @@ public class PadCaledon {
 
     private static final Logger log = LoggerFactory.getLogger(PadCaledon.class);
 
-    private final String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
+    private final String companyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
+            .getIntefaceCompanyId();
 
     public PadFile preparePadFile(final FundsTransferType fundsTransferType) {
         return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {

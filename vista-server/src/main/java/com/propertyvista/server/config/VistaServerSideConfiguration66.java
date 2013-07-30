@@ -13,8 +13,12 @@
  */
 package com.propertyvista.server.config;
 
-
 public class VistaServerSideConfiguration66 extends VistaServerSideConfigurationCustom {
+
+    @Override
+    public Integer enviromentId() {
+        return 66;
+    }
 
     @Override
     protected String getApplicationDeploymentProtocol() {

@@ -43,6 +43,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
         LoggerConfig.setContextName("tests");
     }
 
+    @Override
+    public Integer enviromentId() {
+        return null;
+    }
+
     private final static Logger log = LoggerFactory.getLogger(VistaTestsServerSideConfiguration.class);
 
     private final DatabaseType databaseType;
@@ -177,11 +182,6 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     @Override
     public String getDefaultBaseURLvistaOnboarding() {
         return getMainApplicationURL() + "o";
-    }
-
-    @Override
-    public String getCaledonCompanyId() {
-        return "BIRCHWOOD2";
     }
 
     @Override

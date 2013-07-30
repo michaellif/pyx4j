@@ -13,7 +13,8 @@
  */
 package com.propertyvista.config;
 
-
 public interface CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+
+    public String getIntefaceCompanyId();
 
 }

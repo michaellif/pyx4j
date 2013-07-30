@@ -43,6 +43,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
         return rc;
     }
 
+    public abstract Integer enviromentId();
+
     public abstract boolean isVistaDemo();
 
     public abstract boolean isVistaQa();
@@ -100,8 +102,6 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract String getDefaultBaseURLvistaOnboarding();
 
     public abstract String getCardServiceSimulatorUrl();
-
-    public abstract String getCaledonCompanyId();
 
     public abstract File getCaledonInterfaceWorkDirectory();
 

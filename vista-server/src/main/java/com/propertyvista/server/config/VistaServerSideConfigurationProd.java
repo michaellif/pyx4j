@@ -116,11 +116,6 @@ public class VistaServerSideConfigurationProd extends VistaServerSideConfigurati
     }
 
     @Override
-    public String getCaledonCompanyId() {
-        return "BIRCHWOOD";
-    }
-
-    @Override
     public String getApplicationURLNamespace(boolean secure) {
         switch (VistaDeployment.getSystemIdentification()) {
         case production:

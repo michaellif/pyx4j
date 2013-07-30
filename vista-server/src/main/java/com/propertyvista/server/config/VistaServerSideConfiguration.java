@@ -103,6 +103,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public Integer enviromentId() {
+        return null;
+    }
+
+    @Override
     public File getConfigDirectory() {
         return new File(new File(LoggerConfig.getContainerHome(), "conf"), LoggerConfig.getContextName());
     }
@@ -371,11 +376,6 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public String getReCaptchaPublicKey() {
         return RecaptchaConfig.getReCaptchaPublicKey();
-    }
-
-    @Override
-    public String getCaledonCompanyId() {
-        return "BIRCHWOODTEST";
     }
 
     @Override

@@ -31,6 +31,11 @@ class CaledonFundsTransferConfigurationProd implements CaledonFundsTransferConfi
     }
 
     @Override
+    public String getIntefaceCompanyId() {
+        return config.getConfigProperties().getValue("fundsTransfer.intefaceCompanyId", "BIRCHWOOD");
+    }
+
+    @Override
     public String sftpHost() {
         return config.getConfigProperties().getValue("fundsTransfer.sftpHost", "apato.caledoncard.com");
     }

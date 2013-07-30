@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -26,7 +25,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 
 import com.propertyvista.biz.system.PmcFacade;
-import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.DemoData.DemoPmc;
@@ -63,7 +61,7 @@ public class MerchantAccountPreloader extends BaseVistaDevDataPreloader {
                 } catch (IllegalArgumentException ignore) {
                 }
                 if (ordinal >= 0) {
-                    String caledonCompanyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
+                    String caledonCompanyId = "BIRCHWOODTEST";
                     List<MerchantAccountImport> companyImport = new ArrayList<MerchantAccountImport>();
                     for (MerchantAccountImport imp : accountImport) {
                         if (caledonCompanyId.equals(imp.companyId().getValue())) {

@@ -15,6 +15,7 @@ package com.propertyvista.server.config;
 
 import javax.servlet.ServletContext;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
@@ -28,6 +29,16 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     public ServerSideConfiguration selectInstanceByContextName(ServletContext servletContext, String contextName) {
         // Disable environment selection.  All defined in tomcatX.wrapper.conf -Dcom.pyx4j.appConfig=Custom
         return this;
+    }
+
+    @Override
+    public Integer enviromentId() {
+        String enviromentId = getConfigProperties().getValue("enviromentId");
+        if (CommonsStringUtils.isStringSet(enviromentId)) {
+            return Integer.valueOf(enviromentId);
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -69,7 +80,7 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
         if (VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.TRUE)) {
             return new CaledonFundsTransferConfigurationSimulatorCustom(this);
         } else {
-            return new CaledonFundsTransferConfigurationProd(this);
+            return new CaledonFundsTransferConfigurationProdTest(this);
         }
     }
 

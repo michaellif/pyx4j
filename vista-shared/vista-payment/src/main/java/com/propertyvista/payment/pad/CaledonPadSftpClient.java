@@ -22,6 +22,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.payment.pad.simulator.CaledonFundsTransferSimulatorSftpRetrieveFilter;
 import com.propertyvista.server.sftp.SftpClient;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
@@ -58,9 +59,8 @@ public class CaledonPadSftpClient {
         if (!usePadSimulator()) {
             throw new UserRuntimeException("PadSimulator is disabled");
         }
-        String companyId = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonCompanyId();
-        return SftpClient.receiveFile(configuration, new CaledonFundsTransferSftpRetrieveFilter(targetDirectory, companyId,
-                CaledonFundsTransferFileType.PadFile), CaledonFundsTransferDirectories.allPostDirectories());
+        return SftpClient.receiveFile(configuration, new CaledonFundsTransferSimulatorSftpRetrieveFilter(targetDirectory),
+                CaledonFundsTransferDirectories.allPostDirectories());
     }
 
     public void removeFile(FundsTransferType fundsTransferType, String fileName) {

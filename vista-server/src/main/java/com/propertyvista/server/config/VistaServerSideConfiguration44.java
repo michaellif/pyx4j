@@ -38,6 +38,11 @@ public class VistaServerSideConfiguration44 extends VistaServerSideConfiguration
     }
 
     @Override
+    public Integer enviromentId() {
+        return 44;
+    }
+
+    @Override
     public boolean isVistaDemo() {
         return true;
     }
