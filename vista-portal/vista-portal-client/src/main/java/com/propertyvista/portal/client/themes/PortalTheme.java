@@ -82,7 +82,23 @@ public class PortalTheme extends VistaTheme {
             protected void initStyles() {
                 super.initStyles();
 
-                Style style = new Style(".", StyleName.FormFlexPanelH1);
+                Style style = new Style(".", StyleName.FormFlexPanel);
+                style.addProperty("width", "100%");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelLeftColumn);
+                style.addProperty("width", "100%");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelRightColumn);
+                style.addProperty("width", "0");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelLeftCell);
+                style.addProperty("text-align", "center");
+                addStyle(style);
+
+                style = new Style(".", StyleName.FormFlexPanelH1);
                 style.addProperty("margin", "0");
                 addStyle(style);
 
