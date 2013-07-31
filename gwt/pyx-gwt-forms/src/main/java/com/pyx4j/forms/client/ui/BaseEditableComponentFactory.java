@@ -140,8 +140,14 @@ public class BaseEditableComponentFactory implements IEditableComponentFactory {
             CComboBox comp = new CComboBox();
             comp.setOptions(EnumSet.allOf((Class<Enum>) mm.getValueClass()));
             return comp;
-        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class)) || (mm.getValueClass().equals(LogicalDate.class))) {
+        } else if (mm.getValueClass().equals(LogicalDate.class)) {
             CDatePicker comp = new CDatePicker();
+            if (mm.getFormat() != null) {
+                comp.setDateFormat(mm.getFormat());
+            }
+            return comp;
+        } else if (mm.getValueClass().equals(Date.class) || (mm.getValueClass().equals(java.sql.Date.class))) {
+            CDateLabel comp = new CDateLabel();
             if (mm.getFormat() != null) {
                 comp.setDateFormat(mm.getFormat());
             }
