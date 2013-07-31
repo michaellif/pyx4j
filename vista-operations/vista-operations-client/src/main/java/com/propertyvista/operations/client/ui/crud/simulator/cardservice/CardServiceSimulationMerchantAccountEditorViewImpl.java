@@ -29,7 +29,7 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
         public CardServiceSimulationMerchantAccountForm(IForm<CardServiceSimulationMerchantAccount> view) {
             super(CardServiceSimulationMerchantAccount.class, view);
 
-            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel("Merchant Account");
+            TwoColumnFlexFormPanel tabPanel = new TwoColumnFlexFormPanel();
             int row = -1;
 
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().terminalID())).build());
@@ -37,6 +37,7 @@ public class CardServiceSimulationMerchantAccountEditorViewImpl extends Operatio
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
 
+            setTabBarVisible(false);
             selectTab(addTab(tabPanel));
         }
 
