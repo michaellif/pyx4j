@@ -65,6 +65,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         addTab(createEquifaxlTab());
         addTab(createYardiTab());
         addTab(createFundsTransferTab());
+        setTabEnabled(addTab(createDirectDebitTab()), !isEditable());
     }
 
     public void setOnboardingMerchantAccountsSource(ListerDataSource<PmcMerchantAccountDTO> onboardingMerchantAccountsSource) {
@@ -252,8 +253,14 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         get(proto().defaultPaymentFees()).setViewable(true);
         content.setWidget(row, 1, 1, inject(proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class)));
 
-        content.setH2(++row, 0, 2, i18n.tr("Direct Debit Records"));
+        return content;
+    }
+
+    private TwoColumnFlexFormPanel createDirectDebitTab() {
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Direct Debit Records"));
+        int row = 0;
         content.setWidget(++row, 0, 2, directDebitRecordLister = new DirectDebitRecordLister(false));
+
         return content;
     }
 }
