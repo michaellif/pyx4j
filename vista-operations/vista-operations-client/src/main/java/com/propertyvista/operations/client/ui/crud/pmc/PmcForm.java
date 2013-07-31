@@ -239,7 +239,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
     private TwoColumnFlexFormPanel createYardiTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Yardi"));
         int row = -1;
-        content.setWidget(++row, 0, 2, inject(proto().yardiCredential(), new YardiCredentialEditor()));
+        content.setWidget(++row, 0, 2, inject(proto().yardiCredentials(), new YardiCredentialFolder()));
         return content;
     }
 
