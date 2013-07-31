@@ -16,13 +16,18 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.biz.system.OperationsTriggerFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
+import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
 public class PaymentsBmoReceiveProcess implements PmcProcess {
 
+    private Integer recordsReceived;
+
     @Override
     public boolean start(PmcProcessContext context) {
-        return ServerSideFactory.create(PaymentProcessFacade.class).receiveBmoFiles(context.getExecutionMonitor());
+        recordsReceived = ServerSideFactory.create(PaymentProcessFacade.class).receiveBmoFiles(context.getExecutionMonitor());
+        return recordsReceived != null;
     }
 
     @Override
@@ -38,7 +43,9 @@ public class PaymentsBmoReceiveProcess implements PmcProcess {
 
     @Override
     public void complete(PmcProcessContext context) {
-        // TODO Auto-generated method stub
+        if ((recordsReceived != null) && (recordsReceived > 0)) {
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcess);
+        }
     }
 
 }

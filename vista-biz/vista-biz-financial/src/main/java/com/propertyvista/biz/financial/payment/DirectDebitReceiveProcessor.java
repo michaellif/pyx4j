@@ -35,17 +35,17 @@ import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 class DirectDebitReceiveProcessor {
 
-    boolean receiveBmoFiles(final ExecutionMonitor executionMonitor) {
+    Integer receiveBmoFiles(final ExecutionMonitor executionMonitor) {
         final DirectDebitFile directDebitFile;
         try {
             directDebitFile = ServerSideFactory.create(EFTTransportFacade.class).receiveBmoFiles();
         } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
-            return false;
+            return null;
         }
         if (directDebitFile == null) {
             executionMonitor.addInfoEvent("Pooled, No file found on server", null);
-            return false;
+            return null;
         } else {
             executionMonitor.addInfoEvent("received file", directDebitFile.fileName().getValue());
             executionMonitor.addInfoEvent("fileSerialDate", directDebitFile.fileSerialDate().getStringView());
@@ -61,7 +61,7 @@ class DirectDebitReceiveProcessor {
             }
         });
 
-        return true;
+        return directDebitFile.records().size();
     }
 
     private void validateAndPersistFile(ExecutionMonitor executionMonitor, DirectDebitFile directDebitFile) {

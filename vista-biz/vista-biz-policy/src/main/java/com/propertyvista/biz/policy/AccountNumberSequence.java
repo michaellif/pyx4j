@@ -145,7 +145,7 @@ class AccountNumberSequence {
         String accountPrefix = accountNumber.substring(0, rangeType.getAccountPrefixLenght());
 
         EntityQueryCriteria<PmcAccountNumbers> criteria = EntityQueryCriteria.create(PmcAccountNumbers.class);
-        criteria.eq(criteria.proto().accountPrefix(), accountPrefix);
+        criteria.eq(criteria.proto().accountPrefix(), Long.valueOf(accountPrefix));
         criteria.eq(criteria.proto().pmcType(), rangeType);
         PmcAccountNumbers accountNumbers = Persistence.service().retrieve(criteria);
         if (accountNumbers == null) {

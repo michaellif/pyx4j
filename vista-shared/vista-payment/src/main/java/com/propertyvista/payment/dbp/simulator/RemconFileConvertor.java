@@ -67,6 +67,14 @@ public class RemconFileConvertor {
             detailRecord.itemAmount = CaledonPadUtils.formatAmount(debitRecord.amount().getValue());
             detailRecord.customerName = debitRecord.customerName().getValue();
 
+            int len = debitRecord.accountNumber().getValue().length();
+            if (len >= 12) {
+                detailRecord.accountNumber = debitRecord.accountNumber().getValue().substring(0, 12);
+                detailRecord.user1 = debitRecord.accountNumber().getValue().substring(12);
+            } else {
+                detailRecord.accountNumber = debitRecord.accountNumber().getValue();
+            }
+
             batchTrailer.batchAmount = batchHeader.batchAmount;
             batchTrailer.numberOfItems = "1";
 
