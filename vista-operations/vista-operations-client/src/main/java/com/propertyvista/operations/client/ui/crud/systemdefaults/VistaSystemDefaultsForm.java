@@ -41,6 +41,27 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         addTab(makeTenantSureSettingsTab());
     }
 
+    private TwoColumnFlexFormPanel makeEquifaxSettingsTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
+        int row = -1;
+        panel.setH1(++row, 0, 2, i18n.tr("Default Fees"));
+        panel.setWidget(++row, 0, 2, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
+
+        panel.setH1(++row, 0, 2, i18n.tr("Default  Usage Limits"));
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyReports()), 6, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyRequests()), 6, true).build());
+
+        return panel;
+    }
+
+    private TwoColumnFlexFormPanel makeMistaMerchantAccountTab() {
+        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Vista Accounts"));
+        int row = -1;
+        panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account"));
+        panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccount(), new MerchantAccountForm()));
+        return panel;
+    }
+
     private TwoColumnFlexFormPanel makePaymentSettingsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Funds Transfer"));
         int row = -1;
@@ -49,32 +70,11 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
         return panel;
     }
 
-    private TwoColumnFlexFormPanel makeEquifaxSettingsTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, i18n.tr("Default Fees"));
-        panel.setWidget(++row, 0, inject(proto().equifaxFees(), new EquifaxFeeQuoteForm(true)));
-
-        panel.setH1(++row, 0, 1, i18n.tr("Default  Usage Limits"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyReports())).componentWidth(6).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifaxLimit().dailyRequests())).componentWidth(6).build());
-
-        return panel;
-    }
-
-    private TwoColumnFlexFormPanel makeMistaMerchantAccountTab() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Vista Accounts"));
-        int row = -1;
-        panel.setH1(++row, 0, 1, i18n.tr("Vista Merchant Account"));
-        panel.setWidget(++row, 0, inject(proto().vistaMerchantAccount(), new MerchantAccountForm()));
-        return panel;
-    }
-
     private TwoColumnFlexFormPanel makeTenantSureSettingsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("TenantSure"));
         int row = -1;
         panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
-        panel.setWidget(++row, 0, inject(proto().tenantSureMerchantAccount(), new MerchantAccountForm()));
+        panel.setWidget(++row, 0, 2, inject(proto().tenantSureMerchantAccount(), new MerchantAccountForm()));
         return panel;
     }
 

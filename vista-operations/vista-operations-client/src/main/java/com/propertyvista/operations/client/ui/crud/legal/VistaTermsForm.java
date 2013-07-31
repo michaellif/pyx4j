@@ -35,10 +35,11 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
     public VistaTermsForm(IForm<VistaTerms> view) {
         super(VistaTerms.class, view);
 
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
-        main.setWidget(0, 0, inject(proto().version().document(), new VistaTermsDocumentFolder()));
+        main.setWidget(0, 0, 2, inject(proto().version().document(), new VistaTermsDocumentFolder()));
 
+        setTabBarVisible(false);
         selectTab(addTab(main));
     }
 
@@ -70,11 +71,11 @@ public class VistaTermsForm extends OperationsEntityForm<VistaTerms> {
 
             int row = -1;
             // locale
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().locale()), 10).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().locale()), 10, true).build());
             // content
             CComponent<?> editor = null;
             editor = new CRichTextArea();
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().content(), editor), 60).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().content(), editor), true).build());
 
             return main;
         }
