@@ -37,8 +37,6 @@ import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryView;
 import com.propertyvista.portal.client.ui.residents.billing.BillingHistoryViewImpl;
 import com.propertyvista.portal.client.ui.residents.billing.ViewBillView;
 import com.propertyvista.portal.client.ui.residents.billing.ViewBillViewImpl;
-import com.propertyvista.portal.client.ui.residents.communicationcenter.CommunicationCenterView;
-import com.propertyvista.portal.client.ui.residents.communicationcenter.CommunicationCenterViewImpl;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardViewImpl;
 import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialSummaryView;
@@ -145,9 +143,6 @@ public class ResidentsViewFactory extends ViewFactoryBase {
                 map.put(type, new ViewMaintenanceRequestViewImpl());
             } else if (EditMaintenanceRequestView.class.equals(type)) {
                 map.put(type, new EditMaintenanceRequestViewImpl());
-
-            } else if (CommunicationCenterView.class.equals(type)) {
-                map.put(type, new CommunicationCenterViewImpl());
 
             } else if (NavigView.class.equals(type)) {
                 map.put(type, new NavigViewImpl());

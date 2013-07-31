@@ -27,7 +27,6 @@ import com.propertyvista.portal.client.activity.residents.DashboardActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.BillingHistoryActivity;
 import com.propertyvista.portal.client.activity.residents.billing.ViewBillActivity;
-import com.propertyvista.portal.client.activity.residents.communicationcenter.CommunicationCenterActivity;
 import com.propertyvista.portal.client.activity.residents.financial.FinancialSummaryActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.EditMaintenanceRequestActivity;
 import com.propertyvista.portal.client.activity.residents.maintenance.MaintenanceAcitvity;
@@ -139,10 +138,6 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     } else if (appPlace instanceof Resident.TenantInsurance.Other.UploadCertificate) {
                         activity = new TenantInsuranceByOtherProvdierUpdateActivity(appPlace);
-
-                        // TODO not sure if these activities belong here
-                    } else if (appPlace instanceof Resident.CommunicationCenter) {
-                        activity = new CommunicationCenterActivity(appPlace);
                     }
 
                     callback.onSuccess(activity);
