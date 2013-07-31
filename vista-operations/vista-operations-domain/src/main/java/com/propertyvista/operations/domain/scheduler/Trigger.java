@@ -48,14 +48,6 @@ public interface Trigger extends IEntity {
     @Caption(name = "Description")
     IPrimitive<String> name();
 
-    /**
-     * Configuration parameters for each particular trigger type.
-     * // Future may not need this for today
-     */
-    @ReadOnly
-    @Owned(forceCreation = true)
-    TriggerDetails triggerDetails();
-
     @NotNull
     IPrimitive<TriggerPmcSelectionType> populationType();
 
