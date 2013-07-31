@@ -33,7 +33,7 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
 
     private static final I18n i18n = I18n.get(AddressSimpleEditorImpl.class);
 
-    private boolean oneColumn;
+    private final boolean oneColumn;
 
     public AddressSimpleEditorImpl(Class<A> clazz) {
         this(clazz, true);

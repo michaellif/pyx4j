@@ -35,13 +35,20 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
 
     private final boolean justPreviewBill;
 
+    private final boolean oneColumn;
+
     public BillForm() {
         this(false);
     }
 
     public BillForm(boolean justCurrentBill) {
+        this(justCurrentBill, false);
+    }
+
+    public BillForm(boolean justCurrentBill, boolean oneColumn) {
         super(BillDTO.class);
         this.justPreviewBill = justCurrentBill;
+        this.oneColumn = oneColumn;
 
         setEditable(false);
         setViewable(true);
@@ -53,22 +60,28 @@ public class BillForm extends CEntityDecoratableForm<BillDTO> {
         // form top panel:
         TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
         int row = -1;
-
+        int col = oneColumn ? 0 : 1;
         if (!justPreviewBill) {
             flexPanel.setH1(++row, 0, 2, i18n.tr("Info"));
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().lease().unit())).build());
-            flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().billingCycle().building())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleStartDate())).build());
-            flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycle().billingCycleEndDate())).build());
-            flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate())).build());
+
+            int row2 = oneColumn ? row : 0;
+            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().building())).build());
+            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().billingType().billingPeriod())).build());
+            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billingCycle().targetBillExecutionDate())).build());
+            row = oneColumn ? row2 : row;
 
             flexPanel.setH1(++row, 0, 2, i18n.tr("Status"));
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billSequenceNumber())).build());
-            flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().billType())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().dueDate())).build());
-            flexPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().billStatus())).build());
             flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectReason())).build());
+
+            row2 = oneColumn ? row : row2 + 1;
+            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billType())).build());
+            flexPanel.setWidget(++row2, col, new FormDecoratorBuilder(inject(proto().billStatus())).build());
+            row = oneColumn ? row2 : row;
         }
 
         if (!justPreviewBill) {

@@ -18,6 +18,6 @@ import com.propertyvista.common.client.ui.components.editors.dto.bill.BillForm;
 public class ViewBillForm extends BillForm {
 
     public ViewBillForm() {
-        super();
+        super(false, true);
     }
 }
