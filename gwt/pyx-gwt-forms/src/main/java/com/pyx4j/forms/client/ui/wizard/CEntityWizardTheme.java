@@ -72,7 +72,6 @@ public class CEntityWizardTheme extends Theme {
         Style style = new Style(".", StyleName.WizardFooter);
         style.addProperty("padding", "2px 0");
         style.addProperty("margin", "0.5em 0");
-        style.addProperty("border-top", "4px solid");
         addStyle(style);
 
         style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
