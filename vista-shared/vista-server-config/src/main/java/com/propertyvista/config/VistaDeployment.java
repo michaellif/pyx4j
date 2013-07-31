@@ -66,7 +66,7 @@ public class VistaDeployment {
 
     public static Pmc getCurrentPmc() {
         final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
@@ -181,8 +181,8 @@ public class VistaDeployment {
 
     public static PmcYardiCredential getPmcYardiCredential(Building building) {
         final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
-        assert !building.yardiInterfaceId().isNull();
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
+        assert !building.yardiInterfaceId().isNull() : "Building '" + building.propertyCode().getValue() + "' yardiInterfaceId is not set";
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
@@ -196,7 +196,7 @@ public class VistaDeployment {
 
     public static List<PmcYardiCredential> getPmcYardiCredentials() {
         final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);

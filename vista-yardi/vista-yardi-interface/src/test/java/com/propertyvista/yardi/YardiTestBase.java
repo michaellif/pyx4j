@@ -22,9 +22,11 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -115,11 +117,24 @@ public class YardiTestBase extends IntegrationTestBase {
     }
 
     protected PmcYardiCredential getYardiCredential(String propertyCode) {
-        PmcYardiCredential credential = EntityFactory.create(PmcYardiCredential.class);
-
-        credential.propertyCode().setValue(propertyCode);
-
-        return credential;
+        final String namespace = NamespaceManager.getNamespace();
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
+        try {
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+            EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
+            criteria.eq(criteria.proto().propertyCode(), propertyCode);
+            criteria.eq(criteria.proto().pmc().namespace(), namespace);
+            PmcYardiCredential yc = Persistence.service().retrieve(criteria);
+            if (yc == null) {
+                yc = EntityFactory.create(PmcYardiCredential.class);
+                yc.pmc().set(getDataModel(PmcDataModel.class).getItem(0));
+                yc.propertyCode().setValue(propertyCode);
+                Persistence.service().persist(yc);
+            }
+            return yc;
+        } finally {
+            NamespaceManager.setNamespace(namespace);
+        }
     }
 
 }
