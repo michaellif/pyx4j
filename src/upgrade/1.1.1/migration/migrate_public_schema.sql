@@ -25,6 +25,7 @@ BEGIN TRANSACTION;
  
  DROP SEQUENCE communication_favorited_messages_seq;
  DROP SEQUENCE portal_preferences_seq;
+ DROP SEQUENCE scheduler_trigger_details_seq;
  
 
 

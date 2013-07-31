@@ -74,6 +74,10 @@ BEGIN
         ALTER TABLE application_document_file   ADD COLUMN caption VARCHAR(500),
                                                 ADD COLUMN description VARCHAR(500);
                                                 
+        -- building
+        
+        ALTER TABLE building ADD COLUMN yardi_interface_id BIGINT;
+        
                                                 
         -- company
         
@@ -279,6 +283,11 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.aggregated_transfer '
                 ||'SET  funds_transfer_type = ''PreAuthorizedDebit'' ';
+        
+        
+        -- yardi_interface_id 
+        
+        -- INSERT YARDI IF CLAUSE HERE!!!
         
         
         -- emergency_contact

@@ -39,6 +39,7 @@ SET search_path = '_admin_';
         ALTER TABLE pad_sim_debit_record DROP CONSTRAINT pad_sim_debit_record_pad_batch_fk;
         ALTER TABLE pad_sim_file$state DROP CONSTRAINT pad_sim_file$state_owner_fk;
         ALTER TABLE pad_sim_file DROP CONSTRAINT pad_sim_file_original_file_fk;
+        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_details_fk;
 
         -- primary keys
         
@@ -59,6 +60,8 @@ SET search_path = '_admin_';
         ALTER TABLE pad_sim_debit_record DROP CONSTRAINT pad_sim_debit_record_reconciliation_status_e_ck;
         ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
+        ALTER TABLE scheduler_trigger_details DROP CONSTRAINT scheduler_trigger_details_id_discriminator_ck;
+        ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_details_discriminator_d_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
 
         
@@ -70,6 +73,7 @@ SET search_path = '_admin_';
         ***     ======================================================================================================
         **/
         
+        DROP INDEX admin_pmc_yardi_credential_pmc_idx;
         DROP INDEX onboarding_user_email_idx;
         DROP INDEX pad_sim_batch_pad_file_idx;
         DROP INDEX pad_sim_file$state_owner_idx;
@@ -279,6 +283,10 @@ SET search_path = '_admin_';
         ALTER TABLE  pad_file ADD COLUMN funds_transfer_type VARCHAR(50);
         
         
+        -- pad_file_creation_number
+        
+        ALTER TABLE pad_file_creation_number ADD COLUMN funds_transfer_type VARCHAR(50);
+        
         -- pad_reconciliation_file
         
         ALTER TABLE pad_reconciliation_file     ADD COLUMN funds_transfer_type VARCHAR(50),
@@ -355,6 +363,11 @@ SET search_path = '_admin_';
         SET     funds_transfer_type = 'PreAuthorizedDebit';
         
         
+        -- pad_file_creation_number
+        
+        UPDATE  pad_file_creation_number
+        SET     funds_transfer_type = 'PreAuthorizedDebit';
+        
         -- pad_reconciliation_file
         
         UPDATE  pad_reconciliation_file
@@ -424,6 +437,17 @@ SET search_path = '_admin_';
         -- onboarding_user_credential
         
         DROP TABLE onboarding_user_credential;
+        
+        
+        -- scheduler_trigger
+        
+        ALTER TABLE scheduler_trigger   DROP COLUMN trigger_details,
+                                        DROP COLUMN trigger_details_discriminator;
+                                        
+                                        
+        -- scheduler_trigger_details
+        
+        DROP TABLE scheduler_trigger_details;
        
         
         /**
@@ -491,6 +515,8 @@ SET search_path = '_admin_';
                 CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'residentPortal'));
         ALTER TABLE pad_file ADD CONSTRAINT pad_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
+        ALTER TABLE pad_file_creation_number ADD CONSTRAINT pad_file_creation_number_funds_transfer_type_e_ck 
+                CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE pad_reconciliation_file ADD CONSTRAINT pad_reconciliation_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
@@ -513,6 +539,7 @@ SET search_path = '_admin_';
         ***     ============================================================================================================
         **/
         
+        CREATE INDEX admin_pmc_yardi_credential_pmc_idx ON admin_pmc_yardi_credential USING btree (pmc);
         CREATE INDEX dev_direct_debit_sim_record_account_number_idx ON dev_direct_debit_sim_record USING btree (account_number);
         CREATE INDEX dev_direct_debit_sim_record_file_idx ON dev_direct_debit_sim_record USING btree (file);
         CREATE INDEX dev_pad_sim_batch_pad_file_idx ON dev_pad_sim_batch USING btree (pad_file);
