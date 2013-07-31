@@ -93,12 +93,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         int row = -1;
         flexPanel.setWidget(++row, 0, 2, inject(proto().guests(), new GuestFolder(isEditable())));
-
-        flexPanel.setBR(++row, 0, 2);
-        flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().refSource())).build());
-
-        flexPanel.setBR(++row, 0, 2);
-        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().comments()), true).build());
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().refSource()), 15, true).build());
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().comments()), 55, true).build());
 
         return flexPanel;
     }
@@ -165,8 +161,8 @@ public class LeadForm extends CrmEntityForm<Lead> {
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().appointmentDate2()), 9).build());
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().appointmentTime2()), 9).build());
 
-        get(proto().status()).setViewable(true);
-        get(proto().createDate()).setViewable(true);
+        get(proto().status()).setEditable(false);
+        get(proto().createDate()).setEditable(false);
 
         return main;
     }

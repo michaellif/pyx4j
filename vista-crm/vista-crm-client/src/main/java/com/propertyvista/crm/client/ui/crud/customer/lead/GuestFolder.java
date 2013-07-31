@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -77,17 +78,19 @@ public class GuestFolder extends VistaBoxFolder<Guest> {
 
         @Override
         public IsWidget createContent() {
-            TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
-
+            BasicFlexFormPanel right = new BasicFlexFormPanel();
             int row = -1;
-            flexPanel.setWidget(++row, 0, 2, inject(proto().person().name(), new NameEditor(i18n.tr("Person"))));
 
-            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 25).build());
-            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
-            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
-            flexPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().email()), 22).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().homePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().mobilePhone()), 15).build());
+            right.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().person().workPhone()), 15).build());
 
-            return flexPanel;
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
+            main.setWidget(0, 0, inject(proto().person().name(), new NameEditor(i18n.tr("Person"), true)));
+            main.setWidget(0, 1, right);
+
+            return main;
         }
     }
 }
