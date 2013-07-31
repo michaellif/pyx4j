@@ -69,7 +69,9 @@ public class CheckInfoEditor extends CEntityDecoratableForm<CheckInfo> {
     }
 
     private void devGenerateEcheck() {
-        get(proto().nameOn()).setValue("Dev");
+        if (get(proto().nameOn()).getValue().isEmpty()) {
+            get(proto().nameOn()).setValue("Dev");
+        }
         get(proto().bankName()).setValue("Nowhere Bank");
         get(proto().accountType()).setValue(AccountType.Chequing);
         get(proto().checkNo()).setValue("1");

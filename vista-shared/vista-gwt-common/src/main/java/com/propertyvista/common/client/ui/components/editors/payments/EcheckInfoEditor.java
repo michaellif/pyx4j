@@ -111,7 +111,9 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
     }
 
     private void devGenerateEcheck() {
-        get(proto().nameOn()).setValue("Dev");
+        if (get(proto().nameOn()).getValue().isEmpty()) {
+            get(proto().nameOn()).setValue("Dev");
+        }
         get(proto().bankId()).setValue("123");
         get(proto().branchTransitNumber()).setValue("12345");
 

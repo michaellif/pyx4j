@@ -326,12 +326,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return EnumSet.allOf(PaymentType.class);
     }
 
-    @SuppressWarnings("unchecked")
     public void setPaymentTypes(Collection<PaymentType> types) {
         ((CRadioGroup<PaymentType>) get(proto().type())).setOptions(types);
     }
 
-    @SuppressWarnings("unchecked")
     public void setPaymentTypesEnabled(Collection<PaymentType> opt, boolean enabled) {
         if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroup) {
             ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(opt, enabled);

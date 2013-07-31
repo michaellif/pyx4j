@@ -164,7 +164,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
     }
 
     private void devGenerateCreditCard() {
-        get(proto().nameOn()).setValue("Dev");
+        if (get(proto().nameOn()).getValue().isEmpty()) {
+            get(proto().nameOn()).setValue("Dev");
+        }
         if (get(proto().cardType()).getValue() == null) {
             get(proto().cardType()).setValue(CreditCardType.Visa);
         }
