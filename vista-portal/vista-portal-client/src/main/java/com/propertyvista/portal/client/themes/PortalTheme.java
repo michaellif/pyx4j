@@ -146,6 +146,10 @@ public class PortalTheme extends VistaTheme {
                 style.addProperty("border-bottom-color", ThemeColor.foreground, 0.7);
                 addStyle(style);
 
+                style = new Style(".", StyleName.EntityFolderTableDecorator);
+                style.addProperty("width", "auto");
+                addStyle(style);
+
             }
         });
         addTheme(new DefaultDialogTheme());

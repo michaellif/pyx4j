@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.widgets.client.Anchor;
@@ -57,7 +57,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
 
         int row = -1;
         content.setBR(++row, 0, 2);
@@ -80,8 +80,7 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
 
         content.setBR(++row, 0, 2);
         content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, 2, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
 
         // tweak UI:
         payButton.getElement().getStyle().setFloat(Float.NONE);
