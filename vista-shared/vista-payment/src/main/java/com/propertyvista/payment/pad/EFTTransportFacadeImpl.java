@@ -52,10 +52,10 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             do {
                 String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(padFile.sent().getValue());
                 file = new File(padWorkdir, filename + "." + padFile.companyId().getValue() + "." + padFile.fundsTransferType().getValue().getFileNamePart());
+                padFile.fileName().setValue(file.getName());
                 fileSent = new File(new File(padWorkdir, "processed"), file.getName());
                 if (file.exists() || fileSent.exists()) {
                     padFile.sent().setValue(new Date());
-                    padFile.fileName().setValue(file.getName());
                 }
             } while (file.exists() || fileSent.exists());
 
