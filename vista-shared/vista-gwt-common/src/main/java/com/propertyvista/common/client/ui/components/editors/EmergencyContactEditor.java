@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -40,29 +41,25 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
+        BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
         int row = -1;
-        main.setWidget(++row, 0, 2, inject(proto().name(), new NameEditor(i18n.tr("Person"), oneColumn)));
+        int col = (oneColumn ? 0 : 1);
+        int span = (oneColumn ? 1 : 2);
 
+        main.setWidget(++row, 0, span, inject(proto().name(), new NameEditor(i18n.tr("Person"), oneColumn)));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sex()), 7).build());
 
         row = (oneColumn ? row : row - 1);
-        int col = (oneColumn ? 0 : 1);
         main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().birthDate()), 9).build());
 
         main.setH3(++row, 0, 2, i18n.tr("Contact Info"));
-
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().email()), 22).build());
-        get(proto().birthDate()).setMandatory(false);
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().homePhone()), 15).build());
 
         row = (oneColumn ? row : row - 2);
-
         main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().mobilePhone()), 15).build());
         main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().workPhone()), 15).build());
-
-        main.setWidget(++row, 0, (oneColumn ? 1 : 2), inject(proto().address(), new AddressSimpleEditor(oneColumn)));
+        main.setWidget(++row, 0, span, inject(proto().address(), new AddressSimpleEditor(oneColumn)));
 
         return main;
     }
@@ -70,6 +67,7 @@ public class EmergencyContactEditor extends CEntityDecoratableForm<EmergencyCont
     @Override
     public void addValidations() {
         super.addValidations();
+        get(proto().birthDate()).setMandatory(false);
         get(proto().birthDate()).addValueValidator(new BirthdayDateValidator());
     }
 }
