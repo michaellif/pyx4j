@@ -103,6 +103,7 @@ public interface Pmc extends IEntity {
 
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)
+    @Owned
     IList<PmcYardiCredential> yardiCredentials();
 
     /**
