@@ -233,7 +233,7 @@ public class PadCaledon {
             return null;
         } else {
             executionMonitor.addInfoEvent("received file", padAkFile.fileName().getValue());
-            executionMonitor.addInfoEvent("fundsTransferType " + padAkFile.fundsTransferType().getStringView(), null);
+            executionMonitor.addInfoEvent("fundsTransferType" + padAkFile.fundsTransferType().getStringView(), null);
             executionMonitor.addInfoEvent("fileCreationNumber", padAkFile.fileCreationNumber().getValue());
         }
 
@@ -270,7 +270,7 @@ public class PadCaledon {
             return null;
         } else {
             executionMonitor.addInfoEvent("received file", reconciliationFile.fileName().getValue());
-            executionMonitor.addInfoEvent("fundsTransferType " + reconciliationFile.fundsTransferType().getStringView(), null);
+            executionMonitor.addInfoEvent("fundsTransferType", reconciliationFile.fundsTransferType().getStringView());
         }
 
         boolean processedOk = false;
