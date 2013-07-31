@@ -68,7 +68,7 @@ public class SiteImageResourceServlet extends HttpServlet {
         }
         Key key = null;
         // check if logo was requested
-        if (segments[1].startsWith("logo-small.")) {
+        if (segments[1].startsWith(DeploymentConsts.portalLogoSmall)) {
             // portal logo
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.logo().size() == 0) {
@@ -91,7 +91,7 @@ public class SiteImageResourceServlet extends HttpServlet {
                 // TODO define default locale per PMC; use first one for now
                 key = descriptor.logo().get(0).small().getPrimaryKey();
             }
-        } else if (segments[1].startsWith("logo-large.")) {
+        } else if (segments[1].startsWith(DeploymentConsts.portalLogo)) {
             // portal logo
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.logo().size() == 0) {
@@ -114,7 +114,7 @@ public class SiteImageResourceServlet extends HttpServlet {
                 // TODO define default locale per PMC; use first one for now
                 key = descriptor.logo().get(0).large().getPrimaryKey();
             }
-        } else if (segments[1].startsWith("logo-crm.")) {
+        } else if (segments[1].startsWith(DeploymentConsts.crmLogo)) {
             // crm logo
             SiteDescriptor descriptor = SiteThemeServicesImpl.getSiteDescriptorFromCache();
             if (descriptor.crmLogo().isEmpty()) {

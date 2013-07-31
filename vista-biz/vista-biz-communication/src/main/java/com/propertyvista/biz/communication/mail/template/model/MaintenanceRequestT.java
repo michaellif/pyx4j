@@ -13,8 +13,6 @@
  */
 package com.propertyvista.biz.communication.mail.template.model;
 
-import java.util.Date;
-
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -33,7 +31,7 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<String> summary();
 
-    IPrimitive<Boolean> permissionToEnter();
+    IPrimitive<String> permissionToEnter();
 
     IPrimitive<String> petInstructions();
 
@@ -55,9 +53,9 @@ public interface MaintenanceRequestT extends IEntity {
 
     IPrimitive<String> status();
 
-    IPrimitive<Date> submitted();
+    IPrimitive<String> submitted();
 
-    IPrimitive<Date> updated();
+    IPrimitive<String> updated();
 
     IPrimitive<String> cancellationNote();
 

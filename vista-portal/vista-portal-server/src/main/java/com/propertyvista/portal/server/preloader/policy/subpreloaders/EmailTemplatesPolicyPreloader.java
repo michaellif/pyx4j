@@ -87,8 +87,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
             throw new Error("Unable to load template html wrapper resource", e);
         }
 
-        // PortalLinksT are present on all template
-        PortalLinksT portalT = EmailTemplateManager.getProto(EmailTemplateType.PasswordRetrievalCrm, PortalLinksT.class);
+        // PortalLinksT is present on all template
+        PortalLinksT portalT = EntityFactory.create(PortalLinksT.class);
 
         policy.header().setValue( SimpleMessageFormat.format(//@formatter:off
                 headerRaw,
@@ -402,8 +402,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "Description: {6}<br/>" +
                 "Permission to enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
-                " - {8}<br/>" +
-                " - {9}<br/>" +
+                " 1 - {8}<br/>" +
+                " 2 - {9}<br/>" +
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
                 // WO Created: June 6, 2013
@@ -479,8 +479,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Permission to enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
-                " - {8}<br/>" +
-                " - {9}<br/>" +
+                " 1 - {8}<br/>" +
+                " 2 - {9}<br/>" +
                 "<br/>" +
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
@@ -540,8 +540,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Permission to enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
-                " - {8}<br/>" +
-                " - {9}<br/>" +
+                " 1 - {8}<br/>" +
+                " 2 - {9}<br/>" +
                 "<br/>" +
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
@@ -582,7 +582,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Maintenance Request Completed"));
+        template.subject().setValue(i18n.tr("Maintenance Request Updated"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
                 "<br/>" +
@@ -602,8 +602,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Permission to enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
-                " - {8}<br/>" +
-                " - {9}<br/>" +
+                " 1 - {8}<br/>" +
+                " 2 - {9}<br/>" +
                 "<br/>" +
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
@@ -666,8 +666,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Permission to enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
-                " - {8}<br/>" +
-                " - {9}<br/>" +
+                " 1 - {8}<br/>" +
+                " 2 - {9}<br/>" +
                 "<br/>" +
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request
@@ -706,7 +706,7 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
         template.useHeader().setValue(Boolean.TRUE);
         template.useFooter().setValue(Boolean.TRUE);
         template.type().setValue(type);
-        template.subject().setValue(i18n.tr("Maintenance Request Completed"));
+        template.subject().setValue(i18n.tr("Maintenance Request Cancelled"));
         template.content().setValue(i18n.tr(//@formatter:off
                 "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
                 "<br/>" +
@@ -727,8 +727,8 @@ public class EmailTemplatesPolicyPreloader extends AbstractPolicyPreloader<Email
                 "<br/>" +
                 "Permission to enter: {7}<br/>" +
                 "Preferred Times:<br/>" +
-                " - {8}<br/>" +
-                " - {9}<br/>" +
+                " 1 - {8}<br/>" +
+                " 2 - {9}<br/>" +
                 "<br/>" +
                 // TODO
                 // WO # : 01 <----- this should be a link to actual work order request

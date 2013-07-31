@@ -48,6 +48,12 @@ public interface DeploymentConsts {
 
     public static final String pmcDocumentServletMapping = "pmc_document/";
 
+    public static final String portalLogo = "logo-large.png";
+
+    public static final String portalLogoSmall = "logo-small.png";
+
+    public static final String crmLogo = "logo-crm.png";
+
     public static final String vistaEmployeeCookie = "vistaDoNotTrack";
 
     public static final String RESIDENT_CONTENT_ID = "id=\"resident_content\"";

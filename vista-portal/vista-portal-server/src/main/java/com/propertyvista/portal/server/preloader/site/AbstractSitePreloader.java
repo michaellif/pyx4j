@@ -39,13 +39,13 @@ import com.propertyvista.domain.DemoData;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
-import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageContent;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageSet;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.ResidentPortalSettings;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
@@ -548,7 +548,7 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     private void createCrmLogo(SiteDescriptor site) {
         String cType = "image/png";
-        SiteImageResource siteImage = makeSiteImage("crm-logo.png", cType);
+        SiteImageResource siteImage = makeSiteImage(DeploymentConsts.crmLogo, cType);
         if (siteImage == null) {
             siteImage = makeSiteImage("logo.png", cType);
         }
@@ -557,8 +557,8 @@ public abstract class AbstractSitePreloader extends AbstractVistaDataPreloader {
 
     private void createLogo(SiteDescriptor site, List<LocaleInfo> siteLocale) {
         String cType = "image/png";
-        SiteImageResource logoSmall = makeSiteImage("logo-small.png", cType);
-        SiteImageResource logoLarge = makeSiteImage("logo-large.png", cType);
+        SiteImageResource logoSmall = makeSiteImage(DeploymentConsts.portalLogoSmall, cType);
+        SiteImageResource logoLarge = makeSiteImage(DeploymentConsts.portalLogo, cType);
         if (logoSmall != null || logoLarge != null) {
             for (LocaleInfo li : siteLocale) {
                 PortalLogoImageResource res = site.logo().$();

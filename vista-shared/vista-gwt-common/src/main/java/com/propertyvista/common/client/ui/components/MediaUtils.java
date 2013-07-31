@@ -65,14 +65,14 @@ public class MediaUtils {
     }
 
     public static String createSiteSmallLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/logo-small.png" + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogoSmall + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createSiteLargeLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/logo-large.png" + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping;
     }
 
     public static String createCrmLogoUrl() {
-        return ClientNavigUtils.getDeploymentBaseURL() + "/logo-crm.png" + DeploymentConsts.siteImageResourceServletMapping;
+        return ClientNavigUtils.getDeploymentBaseURL() + "/" + DeploymentConsts.crmLogo + DeploymentConsts.siteImageResourceServletMapping;
     }
 }

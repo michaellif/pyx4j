@@ -62,8 +62,9 @@ public class EmailTemplateRootObjectLoader {
         if (tObj instanceof PortalLinksT) {
             PortalLinksT t = (PortalLinksT) tObj;
             t.PortalHomeUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, false));
-            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH);
+            t.TenantPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true));
             t.ProspectPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true));
+            t.CompanyLogo().setValue(t.PortalHomeUrl().getValue() + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping);
 
             // TODO use SiteThemeServicesImpl.getSiteDescriptorFromCache()
             // TODO use proper locale
@@ -72,7 +73,6 @@ public class EmailTemplateRootObjectLoader {
                 t.CopyrightNotice().set(siteDescriptor.siteTitles().get(0).copyright());
                 t.CompanyName().set(siteDescriptor.siteTitles().get(0).residentPortalTitle());
             }
-            t.CompanyLogo().setValue(t.PortalHomeUrl().getValue() + "/logo.png/vista.siteimgrc");
 
         } else if (tObj instanceof PasswordRequestTenantT) {
             PasswordRequestTenantT t = (PasswordRequestTenantT) tObj;
@@ -181,10 +181,11 @@ public class EmailTemplateRootObjectLoader {
             Persistence.ensureRetrieve(mr.building(), AttachLevel.Attached);
             t.requestId().set(mr.requestId());
             t.propertyCode().set(mr.building().propertyCode());
+            t.unitNo().setValue(mr.unit().isNull() ? "" : mr.unit().info().number().getStringView());
             t.category().setValue(formatMaintenanceCategory(mr.category()));
             t.description().set(mr.description());
             t.summary().set(mr.summary());
-            t.permissionToEnter().set(mr.permissionToEnter());
+            t.permissionToEnter().setValue(mr.permissionToEnter().getStringView());
             t.petInstructions().set(mr.petInstructions());
             if (!mr.unit().isNull()) {
                 t.unitNo().set(mr.unit().info().number());
@@ -192,15 +193,21 @@ public class EmailTemplateRootObjectLoader {
             if (!mr.originator().isNull()) {
                 t.originatorName().set(mr.originator().name());
             }
-            t.reporterName().set(mr.reporterName());
-            t.reporterPhone().set(mr.reporterPhone());
-            t.reporterEmail().set(mr.reporterEmail());
+            if (!mr.reporter().isNull()) {
+                t.reporterName().setValue(mr.reporter().customer().person().name().getStringView());
+                t.reporterPhone().setValue(mr.reporter().customer().person().homePhone().getStringView());
+                t.reporterEmail().set(mr.reporter().customer().person().email());
+            } else {
+                t.reporterName().set(mr.reporterName());
+                t.reporterPhone().set(mr.reporterPhone());
+                t.reporterEmail().set(mr.reporterEmail());
+            }
             t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate1().getStringView(), mr.preferredTime1().getStringView()));
-            t.preferredDateTime1().setValue(formatEntryDateTime(mr.preferredDate2().getStringView(), mr.preferredTime2().getStringView()));
+            t.preferredDateTime2().setValue(formatEntryDateTime(mr.preferredDate2().getStringView(), mr.preferredTime2().getStringView()));
             t.priority().setValue(mr.priority().getStringView());
             t.status().setValue(mr.status().getStringView());
-            t.submitted().set(mr.submitted());
-            t.updated().set(mr.updated());
+            t.submitted().setValue(mr.submitted().getStringView());
+            t.updated().setValue(mr.updated().getStringView());
             t.cancellationNote().set(mr.cancellationNote());
             // generate url for maintenance request viewer in Resident Portal
             String residentUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true);
@@ -310,6 +317,6 @@ public class EmailTemplateRootObjectLoader {
     }
 
     private static String formatEntryDateTime(String date, String time) {
-        return date + ", " + time;
+        return (date == null || date.length() == 0 || time == null || time.length() == 0) ? i18n.tr("Not Provided") : date + ", " + time;
     }
 }

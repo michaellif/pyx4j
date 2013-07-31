@@ -295,17 +295,6 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         Mail.send(m);
     }
 
-//    @Override
-//    public MailMessage sendMaintenanceRequestEmail(String sendTo, String userName, MaintenanceRequest request, boolean isNewRequest, boolean toAdmin) {
-//        if (disabled) {
-//            return null;
-//        }
-//        MailMessage m = MessageTemplates.createMaintenanceRequestEmail(userName, request, isNewRequest, toAdmin);
-//        m.setTo(sendTo);
-//        Mail.send(m);
-//        return m;
-//    }
-
     @Override
     public void sendMaintenanceRequestCreatedPMC(MaintenanceRequest request) {
         for (Employee employee : NotificationsUtils.getNotificationTraget(request.building(), Notification.NotificationType.MaintenanceRequest)) {

@@ -14,15 +14,18 @@
 package com.propertyvista.biz.communication;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.rpc.AuthenticationService;
@@ -35,6 +38,8 @@ import com.propertyvista.biz.communication.mail.template.EmailTemplateManager;
 import com.propertyvista.biz.communication.mail.template.model.ApplicationT;
 import com.propertyvista.biz.communication.mail.template.model.BuildingT;
 import com.propertyvista.biz.communication.mail.template.model.LeaseT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestT;
+import com.propertyvista.biz.communication.mail.template.model.MaintenanceRequestWOT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestCrmT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestProspectT;
 import com.propertyvista.biz.communication.mail.template.model.PasswordRequestTenantT;
@@ -48,6 +53,14 @@ import com.propertyvista.domain.communication.EmailTemplateType;
 import com.propertyvista.domain.contact.AddressStructured.StreetType;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.maintenance.MaintenanceRequest.DayTime;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
+import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
+import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -126,6 +139,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private String tenantHomeUrl;
 
+    private MaintenanceRequest mr;
+
     public static synchronized void createPmc() {
         final Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.dnsName().setValue(NamespaceManager.getNamespace());
@@ -150,7 +165,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         createPmc();
 
         portalHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, false);
-        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.residentPortal, true) + DeploymentConsts.TENANT_URL_PATH;
+        tenantHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.resident, true);
         ptappHomeUrl = VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true);
 
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
@@ -233,6 +248,15 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         // TODO implement guarantor template test
         type = EmailTemplateType.ApplicationCreatedGuarantor;
+
+        // Maintenance Request templates
+        for (EmailTemplateType emailType : EmailTemplateType.maintenanceTemplates()) {
+            expected = getTemplateContent(emailType, true);
+            email = MessageTemplates.createMaintenanceRequestEmail(emailType, mr);
+            received = email.getHtmlBody();
+            assertEquals(emailType.toString(), expected, received);
+            log.info(type.toString() + " content: " + received);
+        }
     }
 
     public String getTemplateFormat(EmailTemplateType type) {
@@ -311,6 +335,162 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             "Sincerely,<br/><br/>" +
             "{5}<br/>" +
             "{6}<br/>";
+            break;
+        case MaintenanceRequestCreatedPMC:
+            templateFmt = "Building: {0}<br/>" +
+            "Unit: {1}<br/>" +
+            "Tenant: {2}<br/>" +
+            "Summary: {3}<br/>" +
+            "Issue: {4}<br/>" +
+            "Priority: {5}<br/>" +
+            "Description: {6}<br/>" +
+            "Permission to enter: {7}<br/>" +
+            "Preferred Times:<br/>" +
+            " 1 - {8}<br/>" +
+            " 2 - {9}<br/>" +
+            "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+            "Request Submitted: {11}<br/>" +
+            "Current Status: {12}<br/>";
+            break;
+        case MaintenanceRequestCreatedTenant:
+            templateFmt = "<h3>Dear {2},</h3><br/>" +
+            "<br/>" +
+            "We are in receipt of your maintenance request. <br/>" +
+            "To review your request please login to your account at:<br/>" +
+            "  {13}<br/>" +
+            "The following Maintenance Request has been registered:<br/>" +
+            "<br/>" +
+            "Building: {14}<br/>" +
+            "Address: {15}<br/>" +
+            "Unit: {1}<br/>" +
+            "Tenant: {2}<br/>" +
+            "<br/>" +
+            "Summary: {3}<br/>" +
+            "<br/>" +
+            "Issue: {4}<br/>" +
+            "Priority: {5}<br/>" +
+            "<br/>" +
+            "Description: {6}<br/>" +
+            "<br/>" +
+            "Permission to enter: {7}<br/>" +
+            "Preferred Times:<br/>" +
+            " 1 - {8}<br/>" +
+            " 2 - {9}<br/>" +
+            "<br/>" +
+            "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+            "Request Submitted: {11}<br/>" +
+            "Current Status: {12}<br/>";
+            break;
+        case MaintenanceRequestUpdated:
+            templateFmt = "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
+            "<br/>" +
+            "This is to inform You that the Maintenance Request below has been updated:<br/>" +
+            "<br/>" +
+            "Building: {14}<br/>" +
+            "Address: {15}<br/>" +
+            "Unit: {1}<br/>" +
+            "Tenant: {2}<br/>" +
+            "<br/>" +
+            "Summary: {3}<br/>" +
+            "<br/>" +
+            "Issue: {4}<br/>" +
+            "Priority: {5}<br/>" +
+            "<br/>" +
+            "Description: {6}<br/>" +
+            "<br/>" +
+            "Permission to enter: {7}<br/>" +
+            "Preferred Times:<br/>" +
+            " 1 - {8}<br/>" +
+            " 2 - {9}<br/>" +
+            "<br/>" +
+            "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+            "Request Submitted: {11}<br/>" +
+            "Current Status: {12}<br/>";
+            break;
+        case MaintenanceRequestCompleted:
+            templateFmt = "<h3>Dear {2},</h3><br/>" + // TODO - is this the same as reporter?
+            "<br/>" +
+            "This is to inform You that the Maintenance Request below has been completed and closed. " +
+            "If requested work has not been done to your satisfaction, please call the office to advise " +
+            "us accordingly.<br/>" +
+            "Please complete the survey to rate your experience <a href='{16}'>here</a>.<br/>" +
+            "<br/>" +
+            "The following Maintenance Request has been closed:<br/>" +
+            "<br/>" +
+            "Building: {14}<br/>" +
+            "Address: {15}<br/>" +
+            "Unit: {1}<br/>" +
+            "Tenant: {2}<br/>" +
+            "<br/>" +
+            "Summary: {3}<br/>" +
+            "<br/>" +
+            "Issue: {4}<br/>" +
+            "Priority: {5}<br/>" +
+            "<br/>" +
+            "Description: {6}<br/>" +
+            "<br/>" +
+            "Permission to enter: {7}<br/>" +
+            "Preferred Times:<br/>" +
+            " 1 - {8}<br/>" +
+            " 2 - {9}<br/>" +
+            "<br/>" +
+            "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+            "Request Submitted: {11}<br/>" +
+            "Current Status: {12}<br/>";
+            break;
+        case MaintenanceRequestCancelled:
+            templateFmt = "<h3>Dear {2},</h3><br/>" +
+            "<br/>" +
+            "This is to inform You that the Maintenance Request below has been cancelled for the following reason: " +
+            "<br/>{16}<br/>" +
+            "<br/>" +
+            "Building: {14}<br/>" +
+            "Address: {15}<br/>" +
+            "Unit: {1}<br/>" +
+            "Tenant: {2}<br/>" +
+            "<br/>" +
+            "Summary: {3}<br/>" +
+            "<br/>" +
+            "Issue: {4}<br/>" +
+            "Priority: {5}<br/>" +
+            "<br/>" +
+            "Description: {6}<br/>" +
+            "<br/>" +
+            "Permission to enter: {7}<br/>" +
+            "Preferred Times:<br/>" +
+            " 1 - {8}<br/>" +
+            " 2 - {9}<br/>" +
+            "<br/>" +
+            "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+            "Request Submitted: {11}<br/>" +
+            "Current Status: {12}<br/>";
+            break;
+        case MaintenanceRequestEntryNotice:
+            templateFmt = "<h3>Dear {2},</h3><br/>" +
+            "<br/>" +
+            "This is to inform You that your landlord/agent will be entering your rental unit on {16} {17} to " +
+            "perform maintenance or repair ({18}) in accordance with the following Maintenance Request:<br/>" +
+            "<br/>" +
+            "Building: {14}<br/>" +
+            "Address: {15}<br/>" +
+            "Unit: {1}<br/>" +
+            "Tenant: {2}<br/>" +
+            "<br/>" +
+            "Summary: {3}<br/>" +
+            "<br/>" +
+            "Issue: {4}<br/>" +
+            "Priority: {5}<br/>" +
+            "<br/>" +
+            "Description: {6}<br/>" +
+            "<br/>" +
+            "Permission to enter: {7}<br/>" +
+            "Preferred Times:<br/>" +
+            " 1 - {8}<br/>" +
+            " 2 - {9}<br/>" +
+            "<br/>" +
+            "<a href=\"{13}\">Request ID: {10}</a><br/>" +
+            "Request Submitted: {11}<br/>" +
+            "Current Status: {12}<br/>";
             break;
         default:
             // TODO comment out after maintenance templates implemented
@@ -520,6 +700,281 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                 fmtArgs = args;
             }
             break;
+        case MaintenanceRequestCreatedPMC:
+            if (asString) {
+                String[] args = {
+                        mr.building().propertyCode().getValue(),
+                        mr.unit().info().number().getValue(),
+                        mr.reporter().customer().person().name().getStringView(),
+                        mr.summary().getValue(),
+                        "Life Sucks > Vodka Rules",
+                        mr.priority().getStringView(),
+                        mr.description().getValue(),
+                        mr.permissionToEnter().getStringView(),
+                        mr.preferredDate1().getStringView() + ", " + mr.preferredTime1().getStringView(),
+                        "Not Provided",
+                        mr.requestId().getValue(),
+                        mr.submitted().getStringView(),
+                        mr.status().getStringView(),
+                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey()
+                };
+                fmtArgs = args;
+            } else {
+                MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(requestT.propertyCode()),
+                        EmailTemplateManager.getVarname(requestT.unitNo()),
+                        EmailTemplateManager.getVarname(requestT.reporterName()),
+                        EmailTemplateManager.getVarname(requestT.summary()),
+                        EmailTemplateManager.getVarname(requestT.category()),
+                        EmailTemplateManager.getVarname(requestT.priority()),
+                        EmailTemplateManager.getVarname(requestT.description()),
+                        EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                        EmailTemplateManager.getVarname(requestT.requestId()),
+                        EmailTemplateManager.getVarname(requestT.submitted()),
+                        EmailTemplateManager.getVarname(requestT.status()),
+                        EmailTemplateManager.getVarname(requestT.requestViewUrl())
+                };
+                fmtArgs = args;
+            }
+            break;
+        case MaintenanceRequestCreatedTenant:
+            if (asString) {
+                String[] args = {
+                        mr.building().propertyCode().getValue(),
+                        mr.unit().info().number().getValue(),
+                        mr.reporter().customer().person().name().getStringView(),
+                        mr.summary().getValue(),
+                        "Life Sucks > Vodka Rules",
+                        mr.priority().getStringView(),
+                        mr.description().getValue(),
+                        mr.permissionToEnter().getStringView(),
+                        mr.preferredDate1().getStringView() + ", " + mr.preferredTime1().getStringView(),
+                        "Not Provided",
+                        mr.requestId().getValue(),
+                        mr.submitted().getStringView(),
+                        mr.status().getStringView(),
+                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mr.building().marketing().name().getValue(),
+                        mr.building().info().address().getStringView()
+                };
+                fmtArgs = args;
+            } else {
+                MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(requestT.propertyCode()),
+                        EmailTemplateManager.getVarname(requestT.unitNo()),
+                        EmailTemplateManager.getVarname(requestT.reporterName()),
+                        EmailTemplateManager.getVarname(requestT.summary()),
+                        EmailTemplateManager.getVarname(requestT.category()),
+                        EmailTemplateManager.getVarname(requestT.priority()),
+                        EmailTemplateManager.getVarname(requestT.description()),
+                        EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                        EmailTemplateManager.getVarname(requestT.requestId()),
+                        EmailTemplateManager.getVarname(requestT.submitted()),
+                        EmailTemplateManager.getVarname(requestT.status()),
+                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                        EmailTemplateManager.getVarname(bldT.Address())
+                };
+                fmtArgs = args;
+            }
+            break;
+        case MaintenanceRequestUpdated:
+            if (asString) {
+                String[] args = {
+                        mr.building().propertyCode().getValue(),
+                        mr.unit().info().number().getValue(),
+                        mr.reporter().customer().person().name().getStringView(),
+                        mr.summary().getValue(),
+                        "Life Sucks > Vodka Rules",
+                        mr.priority().getStringView(),
+                        mr.description().getValue(),
+                        mr.permissionToEnter().getStringView(),
+                        mr.preferredDate1().getStringView() + ", " + mr.preferredTime1().getStringView(),
+                        "Not Provided",
+                        mr.requestId().getValue(),
+                        mr.submitted().getStringView(),
+                        mr.status().getStringView(),
+                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mr.building().marketing().name().getValue(),
+                        mr.building().info().address().getStringView()
+                };
+                fmtArgs = args;
+            } else {
+                MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(requestT.propertyCode()),
+                        EmailTemplateManager.getVarname(requestT.unitNo()),
+                        EmailTemplateManager.getVarname(requestT.reporterName()),
+                        EmailTemplateManager.getVarname(requestT.summary()),
+                        EmailTemplateManager.getVarname(requestT.category()),
+                        EmailTemplateManager.getVarname(requestT.priority()),
+                        EmailTemplateManager.getVarname(requestT.description()),
+                        EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                        EmailTemplateManager.getVarname(requestT.requestId()),
+                        EmailTemplateManager.getVarname(requestT.submitted()),
+                        EmailTemplateManager.getVarname(requestT.status()),
+                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                        EmailTemplateManager.getVarname(bldT.Address())
+                };
+                fmtArgs = args;
+            }
+            break;
+        case MaintenanceRequestCompleted:
+            if (asString) {
+                String[] args = {
+                        mr.building().propertyCode().getValue(),
+                        mr.unit().info().number().getValue(),
+                        mr.reporter().customer().person().name().getStringView(),
+                        mr.summary().getValue(),
+                        "Life Sucks > Vodka Rules",
+                        mr.priority().getStringView(),
+                        mr.description().getValue(),
+                        mr.permissionToEnter().getStringView(),
+                        mr.preferredDate1().getStringView() + ", " + mr.preferredTime1().getStringView(),
+                        "Not Provided",
+                        mr.requestId().getValue(),
+                        mr.submitted().getStringView(),
+                        mr.status().getStringView(),
+                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mr.building().marketing().name().getValue(),
+                        mr.building().info().address().getStringView()
+                };
+                fmtArgs = args;
+            } else {
+                MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(requestT.propertyCode()),
+                        EmailTemplateManager.getVarname(requestT.unitNo()),
+                        EmailTemplateManager.getVarname(requestT.reporterName()),
+                        EmailTemplateManager.getVarname(requestT.summary()),
+                        EmailTemplateManager.getVarname(requestT.category()),
+                        EmailTemplateManager.getVarname(requestT.priority()),
+                        EmailTemplateManager.getVarname(requestT.description()),
+                        EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                        EmailTemplateManager.getVarname(requestT.requestId()),
+                        EmailTemplateManager.getVarname(requestT.submitted()),
+                        EmailTemplateManager.getVarname(requestT.status()),
+                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                        EmailTemplateManager.getVarname(bldT.Address()),
+                        "SurveyURL" // TODO
+                };
+                fmtArgs = args;
+            }
+            break;
+        case MaintenanceRequestCancelled:
+            if (asString) {
+                String[] args = {
+                        mr.building().propertyCode().getValue(),
+                        mr.unit().info().number().getValue(),
+                        mr.reporter().customer().person().name().getStringView(),
+                        mr.summary().getValue(),
+                        "Life Sucks > Vodka Rules",
+                        mr.priority().getStringView(),
+                        mr.description().getValue(),
+                        mr.permissionToEnter().getStringView(),
+                        mr.preferredDate1().getStringView() + ", " + mr.preferredTime1().getStringView(),
+                        "Not Provided",
+                        mr.requestId().getValue(),
+                        mr.submitted().getStringView(),
+                        mr.status().getStringView(),
+                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mr.building().marketing().name().getValue(),
+                        mr.building().info().address().getStringView(),
+                        mr.cancellationNote().getValue()
+                };
+                fmtArgs = args;
+            } else {
+                MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(requestT.propertyCode()),
+                        EmailTemplateManager.getVarname(requestT.unitNo()),
+                        EmailTemplateManager.getVarname(requestT.reporterName()),
+                        EmailTemplateManager.getVarname(requestT.summary()),
+                        EmailTemplateManager.getVarname(requestT.category()),
+                        EmailTemplateManager.getVarname(requestT.priority()),
+                        EmailTemplateManager.getVarname(requestT.description()),
+                        EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                        EmailTemplateManager.getVarname(requestT.requestId()),
+                        EmailTemplateManager.getVarname(requestT.submitted()),
+                        EmailTemplateManager.getVarname(requestT.status()),
+                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                        EmailTemplateManager.getVarname(bldT.Address()),
+                        EmailTemplateManager.getVarname(requestT.cancellationNote())
+                };
+                fmtArgs = args;
+            }
+            break;
+        case MaintenanceRequestEntryNotice:
+            if (asString) {
+                String[] args = {
+                        mr.building().propertyCode().getValue(),
+                        mr.unit().info().number().getValue(),
+                        mr.reporter().customer().person().name().getStringView(),
+                        mr.summary().getValue(),
+                        "Life Sucks > Vodka Rules",
+                        mr.priority().getStringView(),
+                        mr.description().getValue(),
+                        mr.permissionToEnter().getStringView(),
+                        mr.preferredDate1().getStringView() + ", " + mr.preferredTime1().getStringView(),
+                        "Not Provided",
+                        mr.requestId().getValue(),
+                        mr.submitted().getStringView(),
+                        mr.status().getStringView(),
+                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mr.building().marketing().name().getValue(),
+                        mr.building().info().address().getStringView(),
+                        mr.workHistory().get(0).scheduledDate().getStringView(),
+                        "between " + mr.workHistory().get(0).scheduledTimeFrom().getStringView() + " and " + mr.workHistory().get(0).scheduledTimeTo().getStringView(),
+                        mr.workHistory().get(0).workDescription().getValue()
+                };
+                fmtArgs = args;
+            } else {
+                MaintenanceRequestT requestT = EmailTemplateManager.getProto(type, MaintenanceRequestT.class);
+                BuildingT bldT = EmailTemplateManager.getProto(type, BuildingT.class);
+                MaintenanceRequestWOT woT = EmailTemplateManager.getProto(type, MaintenanceRequestWOT.class);
+                String[] args = {
+                        EmailTemplateManager.getVarname(requestT.propertyCode()),
+                        EmailTemplateManager.getVarname(requestT.unitNo()),
+                        EmailTemplateManager.getVarname(requestT.reporterName()),
+                        EmailTemplateManager.getVarname(requestT.summary()),
+                        EmailTemplateManager.getVarname(requestT.category()),
+                        EmailTemplateManager.getVarname(requestT.priority()),
+                        EmailTemplateManager.getVarname(requestT.description()),
+                        EmailTemplateManager.getVarname(requestT.permissionToEnter()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime1()),
+                        EmailTemplateManager.getVarname(requestT.preferredDateTime2()),
+                        EmailTemplateManager.getVarname(requestT.requestId()),
+                        EmailTemplateManager.getVarname(requestT.submitted()),
+                        EmailTemplateManager.getVarname(requestT.status()),
+                        EmailTemplateManager.getVarname(requestT.requestViewUrl()),
+                        EmailTemplateManager.getVarname(bldT.PropertyMarketingName()),
+                        EmailTemplateManager.getVarname(bldT.Address()),
+                        EmailTemplateManager.getVarname(woT.scheduledDate()),
+                        EmailTemplateManager.getVarname(woT.scheduledTimeSlot()),
+                        EmailTemplateManager.getVarname(woT.workDescription())
+                };
+                fmtArgs = args;
+            }
+            break;
         default:
             fmt = "";
             fmtArgs = new String[] {};
@@ -533,14 +988,13 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
             //@formatter:off
             String[] args = {
                 portalHomeUrl,
-                portalHomeUrl + "/logo.png/vista.siteimgrc",
+                portalHomeUrl + "/" + DeploymentConsts.portalLogo + DeploymentConsts.siteImageResourceServletMapping,
                 company,
                 copyright };
             //@formatter:on
             return args;
         } else {
-            // PortalLinksT are present on all template
-            PortalLinksT portalT = EmailTemplateManager.getProto(EmailTemplateType.PasswordRetrievalCrm, PortalLinksT.class);
+            PortalLinksT portalT = EntityFactory.create(PortalLinksT.class);
             //@formatter:off
             String[] args = {
                 EmailTemplateManager.getVarname(portalT.PortalHomeUrl()),
@@ -641,6 +1095,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         // create lease
         AptUnit unit = EntityFactory.create(AptUnit.class);
+        unit.info().number().setValue("777");
         unit.building().set(building);
         Persistence.service().persist(unit);
         lease = ServerSideFactory.create(LeaseFacade.class).create(Status.Application);
@@ -700,6 +1155,47 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
         Persistence.service().persist(coApp);
         coAplt.application().set(coApp);
         Persistence.service().merge(coAplt);
+
+        // create maintenance request
+        mr = EntityFactory.create(MaintenanceRequest.class);
+        mr.setPrimaryKey(new Key("555"));
+        mr.requestId().setValue("123");
+        mr.building().set(building);
+        mr.unit().set(unit);
+        mr.reporter().set(mainAplt.leaseParticipant());
+        // -- mr categories
+        MaintenanceRequestCategory parent = null;
+        for (String name : new String[] { "ROOT", "Life Sucks", "Vodka Rules" }) {
+            MaintenanceRequestCategory cat = EntityFactory.create(MaintenanceRequestCategory.class);
+            cat.name().setValue(name);
+            cat.parent().set(parent);
+            parent = cat;
+
+            mr.category().set(cat);
+        }
+        mr.summary().setValue("Store closed");
+        mr.description().setValue("Please open a 24-hour liquor store!");
+        mr.permissionToEnter().setValue(true);
+        mr.petInstructions().setValue("just a friendly crocodile");
+        mr.preferredDate1().setValue(new LogicalDate(SystemDateManager.getDate()));
+        mr.preferredTime1().setValue(DayTime.Afternoon);
+        // -- mr priority
+        MaintenanceRequestPriority priority = EntityFactory.create(MaintenanceRequestPriority.class);
+        priority.level().setValue(PriorityLevel.STANDARD);
+        priority.name().setValue(priority.level().getValue().name());
+        mr.priority().set(priority);
+        // -- mr status
+        MaintenanceRequestStatus status = EntityFactory.create(MaintenanceRequestStatus.class);
+        status.phase().setValue(StatusPhase.Submitted);
+        status.name().setValue(status.phase().getValue().name());
+        mr.status().set(status);
+        // -- mr schedule
+        MaintenanceRequestSchedule schedule = EntityFactory.create(MaintenanceRequestSchedule.class);
+        schedule.scheduledDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+        schedule.scheduledTimeFrom().setValue(Time.valueOf("11:00:00"));
+        schedule.scheduledTimeTo().setValue(Time.valueOf("13:00:00"));
+        schedule.workDescription().setValue("planting trees");
+        mr.workHistory().add(schedule);
 
         generateEmailPolicy();
     }

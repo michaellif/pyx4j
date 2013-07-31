@@ -13,6 +13,9 @@
  */
 package com.propertyvista.domain.communication;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
@@ -48,6 +51,14 @@ public enum EmailTemplateType {
     MaintenanceRequestCancelled,
 
     MaintenanceRequestEntryNotice;
+
+    public static Set<EmailTemplateType> maintenanceTemplates() {
+        return EnumSet.of(
+
+        MaintenanceRequestCreatedPMC, MaintenanceRequestCreatedTenant, MaintenanceRequestUpdated,
+
+        MaintenanceRequestCompleted, MaintenanceRequestCancelled, MaintenanceRequestEntryNotice);
+    }
 
     @Override
     public String toString() {
