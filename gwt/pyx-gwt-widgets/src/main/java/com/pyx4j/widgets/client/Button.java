@@ -123,7 +123,7 @@ public class Button extends FocusPanel implements IFocusWidget {
                         menu.getMenuPopup().hide();
                     } else if (isEnabled()) {
                         menu.getMenuPopup().showRelativeTo(Button.this);
-                        menu.setWidth(getOffsetWidth() + "px");
+                        menu.getElement().getStyle().setProperty("minWidth", getOffsetWidth() + "px");
                     }
                 } else {
                     if (isEnabled() && (command != null)) {
