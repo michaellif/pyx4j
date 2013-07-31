@@ -20,6 +20,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Length;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
@@ -46,6 +47,7 @@ public interface Tax extends IEntity {
     @NotNull
     @Format("#,##0.00")
     @ToString(index = 2)
+    @MemberColumn(scale = 4)
     @Editor(type = EditorType.percentage)
     IPrimitive<BigDecimal> rate();
 

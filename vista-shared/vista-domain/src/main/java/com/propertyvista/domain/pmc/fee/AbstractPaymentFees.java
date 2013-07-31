@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -32,24 +33,29 @@ public interface AbstractPaymentFees extends IEntity {
      */
     @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
+    @MemberColumn(scale = 4)
     IPrimitive<BigDecimal> ccVisaFee();
 
     @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
+    @MemberColumn(scale = 4)
     IPrimitive<BigDecimal> ccMasterCardFee();
 
     //Not implemented
     @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
+    @MemberColumn(scale = 4)
     IPrimitive<BigDecimal> ccDiscoverFee();
 
     //Not implemented
     @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
+    @MemberColumn(scale = 4)
     IPrimitive<BigDecimal> ccAmexFee();
 
     @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
+    @MemberColumn(scale = 4)
     IPrimitive<BigDecimal> visaDebitFee();
 
     //--
