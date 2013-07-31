@@ -31,7 +31,6 @@ import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
@@ -66,11 +65,13 @@ public class PadCaledon {
                 if (padFile == null) {
                     padFile = EntityFactory.create(PadFile.class);
                     padFile.status().setValue(PadFile.PadFileStatus.Creating);
-                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber());
+                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber(fundsTransferType));
                     padFile.companyId().setValue(companyId);
                     padFile.fundsTransferType().setValue(fundsTransferType);
+
                     Persistence.service().persist(padFile);
                     Persistence.service().commit();
+                    log.info("created PadFile {} for {}", padFile.fileCreationNumber().getValue(), companyId);
                 }
                 return padFile;
             }
@@ -164,12 +165,13 @@ public class PadCaledon {
     /**
      * Length 4 Must be incremented by one for each file submitted per Company ID
      */
-    private String getNextFileCreationNumber() {
+    private String getNextFileCreationNumber(FundsTransferType fundsTransferType) {
         boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.FALSE);
 
         EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().simulator(), useSimulator));
-        criteria.add(PropertyCriterion.eq(criteria.proto().companyId(), companyId));
+        criteria.eq(criteria.proto().simulator(), useSimulator);
+        criteria.eq(criteria.proto().companyId(), companyId);
+        criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
 
         PadFileCreationNumber sequence = Persistence.service().retrieve(criteria);
         if (sequence == null) {
@@ -177,8 +179,9 @@ public class PadCaledon {
             sequence.number().setValue(0);
             sequence.simulator().setValue(useSimulator);
             sequence.companyId().setValue(companyId);
+            sequence.fundsTransferType().setValue(fundsTransferType);
             if ((!useSimulator) && ApplicationMode.isDevelopment()) {
-                sequence.number().setValue(PadCaledonDev.restoreFileCreationNumber(companyId));
+                sequence.number().setValue(PadCaledonDev.restoreFileCreationNumber(companyId, fundsTransferType));
             }
         }
 
@@ -186,6 +189,7 @@ public class PadCaledon {
         {
             EntityQueryCriteria<PadFile> previousFileCriteria = EntityQueryCriteria.create(PadFile.class);
             previousFileCriteria.eq(previousFileCriteria.proto().companyId(), companyId);
+            previousFileCriteria.eq(previousFileCriteria.proto().fundsTransferType(), fundsTransferType);
             previousFileCriteria.eq(previousFileCriteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, sequence.number().getValue()));
             PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
             if (padFile != null) {
@@ -207,7 +211,7 @@ public class PadCaledon {
         sequence.number().setValue(id);
         Persistence.service().persist(sequence);
         if ((!useSimulator) && ApplicationMode.isDevelopment()) {
-            PadCaledonDev.saveFileCreationNumber(companyId, id);
+            PadCaledonDev.saveFileCreationNumber(companyId, fundsTransferType, id);
         }
         return fileCreationNumberFormat(useSimulator, id);
     }

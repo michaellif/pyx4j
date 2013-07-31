@@ -82,8 +82,8 @@ class PadTransactionUtils {
     }
 
     private static int readNextTestDBversionId() {
-        int id = PadCaledonDev.restoreFileCreationNumber(transactionOffsetProperty) + 1;
-        PadCaledonDev.saveFileCreationNumber(transactionOffsetProperty, id);
+        int id = PadCaledonDev.restoreFileProperty(transactionOffsetProperty) + 1;
+        PadCaledonDev.saveFileProperty(transactionOffsetProperty, id);
         return id;
     }
 }

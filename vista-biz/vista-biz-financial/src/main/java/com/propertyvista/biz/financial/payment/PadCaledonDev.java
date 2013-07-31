@@ -25,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
+import com.propertyvista.domain.financial.FundsTransferType;
+
 public class PadCaledonDev {
 
     private static final Logger log = LoggerFactory.getLogger(PadCaledonDev.class);
@@ -49,12 +51,16 @@ public class PadCaledonDev {
         return new Properties();
     }
 
-    public static void saveFileCreationNumber(String companyId, int number) {
+    public static void saveFileCreationNumber(String companyId, FundsTransferType fundsTransferType, int number) {
+        saveFileProperty(fundsTransferType.getCode() + "." + companyId, number);
+    }
+
+    public static void saveFileProperty(String propertyName, int number) {
         Properties props = getProperties(getFile());
         FileOutputStream out = null;
         try {
             String value = String.valueOf(number);
-            props.setProperty(companyId, value);
+            props.setProperty(propertyName, value);
             props.store(out = new FileOutputStream(getFile()), null);
         } catch (IOException e) {
             log.error("Error while saving file creation number", e);
@@ -64,9 +70,13 @@ public class PadCaledonDev {
         }
     }
 
-    public static int restoreFileCreationNumber(String companyId) {
+    public static int restoreFileCreationNumber(String companyId, FundsTransferType fundsTransferType) {
+        return restoreFileProperty(fundsTransferType.getCode() + "." + companyId);
+    }
+
+    public static int restoreFileProperty(String propertyName) {
         Properties props = getProperties(getFile());
-        String result = props.getProperty(companyId);
+        String result = props.getProperty(propertyName);
         if (result != null) {
             return Integer.parseInt(result);
         }
