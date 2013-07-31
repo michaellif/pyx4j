@@ -198,7 +198,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         // lease last month check:
-        suspend |= (before(nextCycle.billingCycleEndDate(), lease.expectedMoveOut()) || before(nextCycle.billingCycleEndDate(), lease.actualMoveOut()));
+        suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
 
         if (!suspend) {
             // migrate each PAP to new billableItems
