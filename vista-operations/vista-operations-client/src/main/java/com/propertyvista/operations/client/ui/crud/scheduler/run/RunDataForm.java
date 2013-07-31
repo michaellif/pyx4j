@@ -38,38 +38,39 @@ public class RunDataForm extends OperationsEntityForm<RunData> {
     public RunDataForm(IForm<RunData> view) {
         super(RunData.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().execution().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)), 40)
+                new FormDecoratorBuilder(inject(proto().execution().trigger(), OperationsEditorsComponentFactory.createEntityHyperlink(TriggerDTO.class)))
                         .build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().execution(), OperationsEditorsComponentFactory.createEntityHyperlink(Run.class)),
-                40).build());
+        content.setWidget(row, 1,
+                new FormDecoratorBuilder(inject(proto().execution(), OperationsEditorsComponentFactory.createEntityHyperlink(Run.class))).build());
 
         content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))), 10).build());
+                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)))).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().started())).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().started()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status()), 15).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().status())).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Statistics"));
         content.getFlexCellFormatter().setColSpan(row, 0, 2);
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().total()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().processed()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().failed()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().erred()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().averageDuration()), 10).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().totalDuration()), 10).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().total())).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().executionReport().averageDuration())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().processed())).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().executionReport().totalDuration())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().failed())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().erred())).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().executionReport().message()), 40).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().errorMessage()), 40).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().executionReport().message()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().errorMessage()), true).build());
 
         reportSectionLister = new ExecutionReportSectionLister();
         content.setH4(++row, 0, 2, i18n.tr("Details"));
-        content.setWidget(++row, 0, reportSectionLister);
+        content.setWidget(++row, 0, 2, reportSectionLister);
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
 
     }
