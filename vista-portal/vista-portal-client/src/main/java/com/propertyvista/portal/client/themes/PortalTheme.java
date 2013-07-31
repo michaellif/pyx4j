@@ -163,6 +163,24 @@ public class PortalTheme extends VistaTheme {
                 addStyle(style);
             }
 
+            @Override
+            protected void initFooterStyles() {
+                Style style = new Style(".", StyleName.WizardFooter);
+                style.addProperty("padding", "10px");
+                style.addProperty("margin", "10px");
+                style.addProperty("overflow", "hidden");
+                addStyle(style);
+
+                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
+                style.addProperty("border-top", "4px solid");
+                style.addProperty("float", "right");
+                addStyle(style);
+
+                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                style.addProperty("padding", "4px");
+                addStyle(style);
+
+            }
         });
         addTheme(new TenantDashboardTheme());
         addTheme(new CommunicationCenterTheme());

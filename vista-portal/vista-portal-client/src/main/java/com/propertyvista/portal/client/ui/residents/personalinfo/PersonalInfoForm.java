@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -54,7 +54,7 @@ public class PersonalInfoForm extends CEntityDecoratableForm<ResidentDTO> {
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel container = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel container = new BasicFlexFormPanel();
         int row = -1;
 
         container.setH1(++row, 0, 1, i18n.tr("Contact Details"));
