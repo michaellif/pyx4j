@@ -67,23 +67,24 @@ public class MerchantAccountForm extends OperationsEntityForm<PmcMerchantAccount
     public MerchantAccountForm(IForm<PmcMerchantAccountDTO> view) {
         super(PmcMerchantAccountDTO.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
         content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))), 10).build());
+                new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class)))).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().status()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().paymentsStatus()), 25).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().invalid()), 25).build());
-
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId()), 25).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().status())).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantTerminalId())).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().paymentsStatus())).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().bankId()), 5).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().invalid())).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().branchTransitNumber()), 5).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().merchantAccount().chargeDescription())).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().accountNumber()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchantAccount().chargeDescription()), 30).build());
 
-        content.setH2(++row, 0, 1, i18n.tr("Assigned Buildings"));
-        content.setWidget(++row, 0, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));
+        content.setH2(++row, 0, 2, i18n.tr("Assigned Buildings"));
+        content.setWidget(++row, 0, 2, inject(proto().assignedBuildings(), new AssignedBuildingsFolder()));
+
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 

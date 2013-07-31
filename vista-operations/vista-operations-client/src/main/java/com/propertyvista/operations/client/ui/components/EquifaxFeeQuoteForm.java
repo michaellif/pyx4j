@@ -13,16 +13,15 @@
  */
 package com.propertyvista.operations.client.ui.components;
 
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.IsWidget;
 
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.pmc.fee.AbstractEquifaxFee;
 
-public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxFee> {
+public class EquifaxFeeQuoteForm extends CEntityForm<AbstractEquifaxFee> {
 
     private final boolean makeMandatory;
 
@@ -35,11 +34,10 @@ public class EquifaxFeeQuoteForm extends CEntityDecoratableForm<AbstractEquifaxF
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportSetUpFee())).labelWidth(25).componentWidth(6).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
-        panel.getFlexCellFormatter().getElement(row, 0).getStyle().setPaddingBottom(1, Unit.EM);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).labelWidth(25).componentWidth(6).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).labelWidth(25).componentWidth(6).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportSetUpFee())).build());
+        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().fullCreditReportSetUpFee())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().recommendationReportPerApplicantFee())).build());
+        panel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().fullCreditReportPerApplicantFee())).build());
 
         if (makeMandatory) {
             get(proto().recommendationReportSetUpFee()).setMandatory(true);

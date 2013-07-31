@@ -44,20 +44,20 @@ class YardiCredentialEditor extends CEntityDecoratableForm<PmcYardiCredential> {
         int row = -1;
 
         content.setH1(++row, 0, 2, i18n.tr("Yardi Credentials"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().serviceURLBase()), 50).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().residentTransactionsServiceURL()), 50).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sysBatchServiceURL()), 50).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), 50).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().propertyCode()), 30).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().serviceURLBase()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().residentTransactionsServiceURL()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sysBatchServiceURL()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().maintenanceRequestsServiceURL()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().propertyCode()), 30, true).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().username()), 30).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().username()), 30, true).build());
 
         CPersonalIdentityField<PasswordIdentity> password = new CPersonalIdentityField<PasswordIdentity>(PasswordIdentity.class);
         password.setFormat(new PasswordIdentityFormat(password));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().password(), password), 30).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().serverName()), 30).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().database()), 30).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().platform()), 15).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().password(), password), 30, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().serverName()), 30, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().database()), 30, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().platform()), 15, true).build());
 
         return content;
     }
