@@ -19,6 +19,7 @@ import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -30,8 +31,17 @@ import com.propertyvista.domain.ref.Province;
 
 public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends CEntityDecoratableForm<A> {
 
+    private static final I18n i18n = I18n.get(AddressSimpleEditorImpl.class);
+
+    private boolean oneColumn;
+
     public AddressSimpleEditorImpl(Class<A> clazz) {
+        this(clazz, true);
+    }
+
+    public AddressSimpleEditorImpl(Class<A> clazz, boolean oneColumn) {
         super(clazz);
+        this.oneColumn = oneColumn;
     }
 
     @SuppressWarnings("unchecked")
@@ -39,34 +49,30 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
         int row = -1;
+
+        main.setH3(++row, 0, 2, i18n.tr("Address"));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1()), 22).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street2()), 22).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city()), 15).build());
 
+        row = oneColumn ? row : 0;
+        int col = oneColumn ? 0 : 1;
+
         CComponent<Province> province = (CComponent<Province>) inject(proto().province());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(province, 17).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(province, 17).build());
 
         final CComponent<Country> country = (CComponent<Country>) inject(proto().country());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(country, 15).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(country, 15).build());
 
         CComponent<String> postalCode = (CComponent<String>) inject(proto().postalCode());
         if (postalCode instanceof CTextFieldBase) {
             ((CTextFieldBase<String, ?>) postalCode).setFormat(new PostalCodeFormat(new CountryContextCComponentProvider(country)));
         }
-        main.setWidget(++row, 0, new FormDecoratorBuilder(postalCode, 7).build());
+        main.setWidget(++row, col, new FormDecoratorBuilder(postalCode, 7).build());
 
         attachFilters(proto(), province, country, postalCode);
 
         return main;
-    }
-
-    @Override
-    protected void onValueSet(boolean populate) {
-        super.onValueSet(populate);
-
-        if (isViewable()) {
-            get(proto().street2()).setVisible(!getValue().street2().isNull());
-        }
     }
 
     private void attachFilters(final AddressSimple proto, CComponent<Province> province, CComponent<Country> country, CComponent<String> postalCode) {

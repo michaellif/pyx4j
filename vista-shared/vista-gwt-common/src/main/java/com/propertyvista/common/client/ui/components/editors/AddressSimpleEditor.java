@@ -22,7 +22,11 @@ import com.propertyvista.domain.contact.AddressSimple;
 public class AddressSimpleEditor extends AddressSimpleEditorImpl<AddressSimple> {
 
     public AddressSimpleEditor() {
-        super(AddressSimple.class);
+        this(true);
+    }
+
+    public AddressSimpleEditor(boolean oneColumn) {
+        super(AddressSimple.class, oneColumn);
     }
 
     @Override
