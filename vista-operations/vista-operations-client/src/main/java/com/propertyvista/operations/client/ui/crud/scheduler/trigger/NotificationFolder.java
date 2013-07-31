@@ -57,7 +57,7 @@ public class NotificationFolder extends VistaBoxFolder<TriggerNotification> {
             int row = -1;
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().event()), 10).build());
-            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user()), 20).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().user())).build());
 
             return content;
         }

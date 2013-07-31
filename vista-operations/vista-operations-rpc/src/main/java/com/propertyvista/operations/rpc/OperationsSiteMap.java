@@ -47,7 +47,7 @@ public class OperationsSiteMap implements SiteMap {
 
     public static class Management extends AppPlace {
 
-        @PlaceProperties(navigLabel = "Property Management Companies (PMCs)")
+        @PlaceProperties(navigLabel = "PMCs")
         public static class PMC extends CrmCrudAppPlace {
         }
 
