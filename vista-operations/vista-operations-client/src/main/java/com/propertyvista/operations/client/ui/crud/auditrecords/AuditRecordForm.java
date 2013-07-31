@@ -35,25 +35,28 @@ public class AuditRecordForm extends OperationsEntityForm<AuditRecordOperationsD
     public AuditRecordForm(IForm<AuditRecordOperationsDTO> view) {
         super(AuditRecordOperationsDTO.class, view);
 
-        TwoColumnFlexFormPanel detailsTab = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+        setTabBarVisible(false);
+
+        TwoColumnFlexFormPanel detailsTab = new TwoColumnFlexFormPanel();
         int row = -1;
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().userName())).build());
+        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().remoteAddr())).build());
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().userKey(), new CLabel<Key>())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().remoteAddr())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sessionId())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().when())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().worldTime())).build());
+        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().sessionId())).build());
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().event())).build());
+        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().when())).build());
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().namespace())).build());
+        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().worldTime())).build());
         detailsTab.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().pmc(), new CEntityCrudHyperlink<Pmc>(AppPlaceEntityMapper.resolvePlace(PmcDTO.class))), 10).build());
         detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().application())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().targetEntity())).build());
-        detailsTab.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().details())).build());
+        detailsTab.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().targetEntity())).build());
+        detailsTab.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().details()), true).build());
 
         selectTab(addTab(detailsTab));
 
         get(proto().details()).asWidget().setStyleName(OperationsTheme.OperationsStyles.TextFieldPreformatted.name(), true);
+
     }
 
 }
