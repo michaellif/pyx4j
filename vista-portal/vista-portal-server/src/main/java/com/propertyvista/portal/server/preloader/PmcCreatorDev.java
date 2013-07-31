@@ -85,7 +85,7 @@ public class PmcCreatorDev {
         doc.documentPages().add(docPage);
         pmc.equifaxInfo().businessInformation().documents().add(doc);
 
-        pmc.yardiCredential().set(DevYardiCredentials.getTestPmcYardiCredential());
+        pmc.yardiCredentials().add(DevYardiCredentials.getTestPmcYardiCredential());
 
         ServerSideFactory.create(PmcFacade.class).create(pmc);
 

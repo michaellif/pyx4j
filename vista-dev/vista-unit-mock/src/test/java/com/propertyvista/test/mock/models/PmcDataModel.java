@@ -68,7 +68,7 @@ public class PmcDataModel extends MockDataModel<Pmc> {
         pmc.status().setValue(PmcStatus.Active);
 
         if (getConfig().yardiIntegration) {
-            pmc.yardiCredential().set(DevYardiCredentials.getTestPmcYardiCredential());
+            pmc.yardiCredentials().add(DevYardiCredentials.getTestPmcYardiCredential());
             pmc.features().yardiIntegration().setValue(Boolean.TRUE);
             pmc.features().occupancyModel().setValue(Boolean.FALSE);
         }

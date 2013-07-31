@@ -72,13 +72,16 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     protected void retrievedSingle(Pmc entity, RetrieveTarget RetrieveTarget) {
         Persistence.service().retrieveMember(entity.equifaxInfo());
         Persistence.service().retrieveMember(entity.equifaxFee());
-        Persistence.service().retrieveMember(entity.yardiCredential());
+        Persistence.service().retrieveMember(entity.yardiCredentials());
 
-        if (!entity.yardiCredential().password().encrypted().isNull()) {
-            entity.yardiCredential().password().obfuscatedNumber().setValue("**");
-        } else if (!entity.yardiCredential().password().number().isNull()) {
-            entity.yardiCredential().password().obfuscatedNumber().setValue("##");
+        for (PmcYardiCredential yardiCredential : entity.yardiCredentials()) {
+            if (!yardiCredential.password().encrypted().isNull()) {
+                yardiCredential.password().obfuscatedNumber().setValue("**");
+            } else if (!yardiCredential.password().number().isNull()) {
+                yardiCredential.password().obfuscatedNumber().setValue("##");
+            }
         }
+
     }
 
     @Override
@@ -118,7 +121,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
             entity.features().defaultProductCatalog().setValue(Boolean.TRUE);
         }
 
-        encryptPassword(entity.yardiCredential());
+        for (PmcYardiCredential yardiCredential : entity.yardiCredentials()) {
+            encryptPassword(yardiCredential);
+        }
 
         super.persist(entity, dto);
 
@@ -140,7 +145,9 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         if (!PmcNameValidator.canCreatePmcName(entity.dnsName().getValue(), null)) {
             throw new UserRuntimeException("PMC DNS name is reserved of forbidden");
         }
-        encryptPassword(entity.yardiCredential());
+        for (PmcYardiCredential yardiCredential : entity.yardiCredentials()) {
+            encryptPassword(yardiCredential);
+        }
         ServerSideFactory.create(PmcFacade.class).create(entity);
 
         OnboardingUser user = dto.onboardingUser();
