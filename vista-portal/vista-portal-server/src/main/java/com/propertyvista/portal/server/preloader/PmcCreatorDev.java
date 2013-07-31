@@ -26,7 +26,6 @@ import com.propertyvista.domain.pmc.CreditCheckReportType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.pmc.PmcEquifaxStatus;
-import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument;
 import com.propertyvista.domain.pmc.info.PmcBusinessInfoDocument.Type;
 import com.propertyvista.domain.pmc.info.PmcDocumentFile;
@@ -92,24 +91,6 @@ public class PmcCreatorDev {
 
         pmc.status().setValue(PmcStatus.Active);
         Persistence.service().persist(pmc);
-
-        PmcPaymentTypeInfo fees = EntityFactory.create(PmcPaymentTypeInfo.class);
-        fees.pmc().set(pmc);
-        fees.ccVisaPaymentAvailable().setValue(Boolean.FALSE);
-        fees.ccVisaFee().setValue(new BigDecimal("2.50"));
-
-        fees.eCheckPaymentAvailable().setValue(Boolean.FALSE);
-        fees.eChequeFee().setValue(new BigDecimal("0.20"));
-
-        fees.eftPaymentAvailable().setValue(Boolean.FALSE);
-        fees.directBankingFee().setValue(new BigDecimal("0.40"));
-
-        fees.interacCaledonPaymentAvailable().setValue(Boolean.FALSE);
-        fees.interacCaledonFee().setValue(new BigDecimal("1.50"));
-
-        fees.interacVisaPaymentAvailable().setValue(Boolean.FALSE);
-        fees.interacVisaFee().setValue(new BigDecimal("1.50"));
-        Persistence.service().persist(fees);
 
         return pmc;
     }

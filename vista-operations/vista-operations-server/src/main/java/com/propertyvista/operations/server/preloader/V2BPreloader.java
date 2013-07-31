@@ -57,9 +57,9 @@ public class V2BPreloader extends AbstractDataPreloader {
         }
         {
             DefaultPaymentFees fee = EntityFactory.create(DefaultPaymentFees.class);
-            fee.ccVisaFee().setValue(new BigDecimal("1.5"));
-            fee.visaDebitFee().setValue(new BigDecimal("1.77"));
-            fee.ccMasterCardFee().setValue(new BigDecimal("2.22"));
+            fee.ccVisaFee().setValue(new BigDecimal("0.015"));
+            fee.visaDebitFee().setValue(new BigDecimal("0.0177"));
+            fee.ccMasterCardFee().setValue(new BigDecimal("0.0222"));
             fee.ccDiscoverFee().setValue(null);
             fee.ccAmexFee().setValue(null);
             fee.eChequeFee().setValue(new BigDecimal("1.50"));

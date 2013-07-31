@@ -16,6 +16,9 @@ package com.propertyvista.domain.pmc.fee;
 import java.math.BigDecimal;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -27,30 +30,44 @@ public interface AbstractPaymentFees extends IEntity {
     /**
      * this fee is percent of a transaction
      */
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> ccVisaFee();
 
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> ccMasterCardFee();
 
     //Not implemented
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> ccDiscoverFee();
 
     //Not implemented
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> ccAmexFee();
 
+    @Editor(type = EditorType.percentage)
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> visaDebitFee();
 
     //--
-
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> eChequeFee();
 
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> directBankingFee();
 
     //Not implemented
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> interacCaledonFee();
 
     //Not implemented
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> interacPaymentPadFee();
 
     //Not implemented
+    @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> interacVisaFee();
 }
