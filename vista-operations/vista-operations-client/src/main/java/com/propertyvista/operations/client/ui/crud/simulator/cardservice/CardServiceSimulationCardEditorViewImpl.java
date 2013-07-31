@@ -110,30 +110,29 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
         public CardServiceSimulationForm(IForm<CardServiceSimulationCard> view) {
             super(CardServiceSimulationCard.class, view);
 
-            TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel("Cards Simulation");
+            TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
 
             int row = -1;
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().merchant())).build());
+            contentPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().created())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType())).build());
+            contentPanel.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().updated())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().number())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().balance())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reserved())).build());
             contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
 
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created())).build());
-            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().updated())).build());
+            contentPanel.setH2(++row, 0, 2, "Tokens");
+            contentPanel.setWidget(++row, 0, 2, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));
 
-            contentPanel.setH2(++row, 0, 1, "Tokens");
-            contentPanel.setWidget(++row, 0, inject(proto().tokens(), new CardServiceSimulationTokenTableFolder()));
-
-            contentPanel.setH2(++row, 0, 1, "Transactions");
+            contentPanel.setH2(++row, 0, 2, "Transactions");
 
             if (false) {
                 // TODO transactions are detached
-                contentPanel.setWidget(++row, 0, inject(proto().transactions(), new CardServiceSimulationTransactionsViewer()));
+                contentPanel.setWidget(++row, 0, 2, inject(proto().transactions(), new CardServiceSimulationTransactionsViewer()));
             }
-            contentPanel.setWidget(++row, 0, new Button("Add New Transaction...", new Command() {
+            contentPanel.setWidget(++row, 0, 2, new Button("Add New Transaction...", new Command() {
                 @Override
                 public void execute() {
                     if (getValue().getPrimaryKey() == null) {
@@ -143,6 +142,8 @@ public class CardServiceSimulationCardEditorViewImpl extends OperationsEditorVie
                     ((CardServiceSimulationCardEditorView.Presenter) CardServiceSimulationCardEditorViewImpl.this.getPresenter()).addTransaction();
                 }
             }));
+
+            setTabBarVisible(false);
             selectTab(addTab(contentPanel));
 
         }

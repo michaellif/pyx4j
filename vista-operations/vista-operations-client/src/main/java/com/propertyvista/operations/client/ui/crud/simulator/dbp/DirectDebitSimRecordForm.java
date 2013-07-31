@@ -32,10 +32,10 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
         TwoColumnFlexFormPanel formPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
-        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().amount())).build());
-        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().paymentReferenceNumber())).build());
-        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().customerName())).build());
+        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().accountNumber()), 20, true).build());
+        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().amount()), 20, true).build());
+        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentReferenceNumber()), 20, true).build());
+        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().customerName()), 20, true).build());
 
         CEntityLabel<DirectDebitSimFile> fileLink = new CEntityLabel<DirectDebitSimFile>();
         fileLink.setNavigationCommand(new Command() {
@@ -44,8 +44,9 @@ public class DirectDebitSimRecordForm extends OperationsEntityForm<DirectDebitSi
                 onGoToFile();
             }
         });
-        formPanel.setWidget(++row, 0, 1, new FormDecoratorBuilder(inject(proto().file(), fileLink)).build());
+        formPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file(), fileLink), true).build());
 
+        setTabBarVisible(false);
         selectTab(addTab(formPanel));
     }
 
