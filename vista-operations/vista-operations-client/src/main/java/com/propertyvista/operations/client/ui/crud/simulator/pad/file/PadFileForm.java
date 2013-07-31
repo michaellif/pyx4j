@@ -59,7 +59,7 @@ public class PadFileForm extends OperationsEntityForm<PadSimFile> {
                 0,
                 new FormDecoratorBuilder(inject(proto().originalFile(),
                         new CEntityCrudHyperlink<PadSimFile>(AppPlaceEntityMapper.resolvePlace(PadSimFile.class))), 35).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().returnSent()), 10).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().returnSent()), 10).build());
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().state()), 25).build());
         main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().acknowledgmentStatusCode()), 10).build());

@@ -28,6 +28,7 @@ public class PadFileLister extends AbstractLister<PadSimFile> {
             new MemberColumnDescriptor.Builder(proto().fundsTransferType()).build(),
             new MemberColumnDescriptor.Builder(proto().fileCreationNumber()).build(),
             new MemberColumnDescriptor.Builder(proto().state()).build(),
+            new MemberColumnDescriptor.Builder(proto().returns()).build(),
             new MemberColumnDescriptor.Builder(proto().received()).build(),
             new MemberColumnDescriptor.Builder(proto().recordsCount()).build(),
             new MemberColumnDescriptor.Builder(proto().fileAmount()).build(),

@@ -24,6 +24,7 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
@@ -42,6 +43,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
  */
 @Table(prefix = "dev", namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
+@ToStringFormat("{3,choice,null#|0#|1#Returns for} {0} {1} {2}")
 public interface PadSimFile extends IEntity {
 
     public enum PadSimFileStatus {
@@ -54,17 +56,18 @@ public interface PadSimFile extends IEntity {
 
     };
 
-    @ToString
+    @ToString(index = 0)
     IPrimitive<String> fileName();
 
-    @ToString
+    @ToString(index = 1)
     @Editor(type = Editor.EditorType.label)
     IPrimitive<FundsTransferType> fundsTransferType();
 
-    @ToString
+    @ToString(index = 2)
     @Editor(type = Editor.EditorType.label)
     IPrimitiveSet<PadSimFileStatus> state();
 
+    @ToString(index = 3)
     IPrimitive<Boolean> returns();
 
     PadSimFile originalFile();

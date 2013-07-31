@@ -297,6 +297,9 @@ public class PadSimulationManager {
                         continue;
                     }
                     switch (record.reconciliationStatus().getValue()) {
+                    case REJECTED:
+                        returns.add(record.amount().getValue());
+                        break;
                     case RETURNED:
                         returns.add(record.amount().getValue());
                         break;
