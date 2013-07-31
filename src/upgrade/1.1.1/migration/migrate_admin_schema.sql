@@ -112,7 +112,12 @@ SET search_path = '_admin_';
         -- admin_pmc_payment_type_info
         
         ALTER TABLE admin_pmc_payment_type_info ADD COLUMN direct_banking_fee NUMERIC(18,2),
-                                                ADD COLUMN visa_debit_fee NUMERIC(18,2);
+                                                ADD COLUMN visa_debit_fee NUMERIC(18,4);
+                                                
+        ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN cc_amex_fee TYPE NUMERIC(18,4);
+        ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN cc_discover_fee TYPE NUMERIC(18,4);
+        ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN cc_master_card_fee TYPE NUMERIC(18,4);
+        ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN cc_visa_fee TYPE NUMERIC(18,4);
         
         
         -- admin_pmc_yardi_credential
@@ -242,7 +247,12 @@ SET search_path = '_admin_';
         -- fee_default_payment_fees
         
         ALTER TABLE fee_default_payment_fees    ADD COLUMN direct_banking_fee NUMERIC(18,2),
-                                                ADD COLUMN visa_debit_fee NUMERIC(18,2);
+                                                ADD COLUMN visa_debit_fee NUMERIC(18,4);
+                                                
+        ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_amex_fee TYPE NUMERIC(18,4);
+        ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_discover_fee TYPE NUMERIC(18,4);
+        ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_master_card_fee TYPE NUMERIC(18,4);
+        ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_visa_fee TYPE NUMERIC(18,4);
                                     
         -- global_crm_user_index
         
@@ -362,6 +372,14 @@ SET search_path = '_admin_';
         SET     trigger_type = 'paymentsReceiveReconciliation'
         WHERE   trigger_type = 'paymentsPadReceiveReconciliation';
         
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsPadProcessReconciliation'
+        WHERE   trigger_type = 'paymentsPadProcesReconciliation';
+        
+        
+        UPDATE  scheduler_trigger
+        SET     trigger_type = 'paymentsPadProcessAcknowledgment'
+        WHERE   trigger_type = 'paymentsPadProcesAcknowledgment';
         
         
         /**

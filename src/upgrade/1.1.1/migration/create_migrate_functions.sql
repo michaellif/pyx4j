@@ -33,6 +33,10 @@ BEGIN
         ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
         ALTER TABLE nsf_fee_item DROP CONSTRAINT nsf_fee_item_payment_type_e_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_payment_type_e_ck;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_addr_str_dir_e_ck;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_addr_str_type_e_ck;
+        ALTER TABLE payment_method DROP CONSTRAINT payment_method_billing_address_street_direction_e_ck;
+        ALTER TABLE payment_method DROP CONSTRAINT payment_method_billing_address_street_type_e_ck;
         ALTER TABLE payment_method DROP CONSTRAINT payment_method_payment_type_e_ck;
         ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
         ALTER TABLE recipient DROP CONSTRAINT recipient_recipient_type_e_ck;
@@ -114,6 +118,11 @@ BEGIN
         ALTER TABLE insurance_certificate ADD COLUMN payment_schedule VARCHAR(50);
         
         
+        --  maintenance_request
+        
+        ALTER TABLE  maintenance_request ADD COLUMN cancellation_note VARCHAR(2048);
+        
+        
         -- maintenance_request_schedule
         
         CREATE TABLE maintenance_request_schedule
@@ -158,13 +167,17 @@ BEGIN
         -- payment_information
         
         ALTER TABLE payment_information ADD COLUMN payment_method_creator BIGINT,
-                                        ADD COLUMN payment_method_creator_discriminator VARCHAR(50);
+                                        ADD COLUMN payment_method_creator_discriminator VARCHAR(50),
+                                        ADD COLUMN payment_method_billing_address_street1 VARCHAR(500),
+                                        ADD COLUMN payment_method_billing_address_street2 VARCHAR(500);
                                         
                                         
         -- payment_method
         
         ALTER TABLE payment_method      ADD COLUMN creator BIGINT,
-                                        ADD COLUMN creator_discriminator VARCHAR(50);
+                                        ADD COLUMN creator_discriminator VARCHAR(50),
+                                        ADD COLUMN billing_address_street1 VARCHAR(500),
+                                        ADD COLUMN billing_address_street2 VARCHAR(500);
                                         
         -- payment_type_selection_policy
         
@@ -209,7 +222,11 @@ BEGIN
         );
         
         ALTER TABLE site_descriptor$pmc_info OWNER TO vista;
-                                        
+        
+        
+        -- tax
+        
+        ALTER TABLE tax ALTER COLUMN rate TYPE NUMERIC(18,4);                               
                                         
         -- vendor
         
@@ -270,8 +287,8 @@ BEGIN
                 ||'CASE WHEN address_street_number_suffix IS NOT NULL THEN '' ''||address_street_number_suffix ELSE '''' END || '
                 ||''' ''||address_street_name || '
                 ||'CASE WHEN address_street_type IS NOT NULL AND address_street_type != ''other'' THEN '' ''||address_street_type ELSE '''' END ||'
-                ||'CASE WHEN address_street_direction IS NOT NULL THEN '' ''||address_street_direction ELSE '''' END, '
-                ||'     address_street2 = address_suite_number ';
+                ||'CASE WHEN address_street_direction IS NOT NULL THEN '' ''||address_street_direction ELSE '''' END || '
+                ||'CASE WHEN  address_suite_number IS NOT NULL THEN '' ''||''Unit ''||address_suite_number END ';
         
                
         -- insurance_certificate
@@ -284,6 +301,32 @@ BEGIN
         -- nsf_fee_item
         
         EXECUTE 'DELETE FROM '||v_schema_name||'.nsf_fee_item';
+        
+        -- payment_information
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_information '
+                ||'SET  payment_method_billing_address_street1 = payment_method_billing_address_street_number|| '
+                ||'CASE WHEN payment_method_billing_address_street_number_suffix IS NOT NULL THEN '' ''||payment_method_billing_address_street_number_suffix ELSE '''' END || '
+                ||''' ''||payment_method_billing_address_street_name || '
+                ||'CASE WHEN payment_method_billing_address_street_type IS NOT NULL AND payment_method_billing_address_street_type != ''other'' '
+                ||'THEN '' ''||payment_method_billing_address_street_type ELSE '''' END ||'
+                ||'CASE WHEN payment_method_billing_address_street_direction IS NOT NULL THEN '' ''||payment_method_billing_address_street_direction ELSE '''' END || '
+                ||'CASE WHEN payment_method_billing_address_suite_number IS NOT NULL THEN '' ''||''Unit ''||payment_method_billing_address_suite_number END ';
+                
+        
+        -- payment_method
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_method '
+                ||'SET  billing_address_street1 = billing_address_street_number|| '
+                ||'CASE WHEN billing_address_street_number_suffix IS NOT NULL THEN '' ''||billing_address_street_number_suffix ELSE '''' END || '
+                ||''' ''||billing_address_street_name || '
+                ||'CASE WHEN billing_address_street_type IS NOT NULL AND billing_address_street_type != ''other'' THEN '' ''||billing_address_street_type ELSE '''' END ||'
+                ||'CASE WHEN billing_address_street_direction IS NOT NULL THEN '' ''||billing_address_street_direction ELSE '''' END || '
+                ||'CASE WHEN billing_address_suite_number IS NOT NULL THEN '' ''||''Unit ''||billing_address_suite_number END ';
+                
+        
+        SET CONSTRAINTS payment_method_billing_address_country_fk,payment_method_billing_address_province_fk,
+                        payment_method_customer_fk,payment_method_details_fk,payment_method_tenant_fk IMMEDIATE;
         
         /**
         ***     ==========================================================================================================
@@ -327,6 +370,32 @@ BEGIN
         
         ALTER TABLE page_content DROP COLUMN image;
         
+        
+        -- payment_information
+       
+        ALTER TABLE payment_information  DROP COLUMN payment_method_billing_address_county,
+                                         DROP COLUMN payment_method_billing_address_location_lat,
+                                         DROP COLUMN payment_method_billing_address_location_lng,
+                                         DROP COLUMN payment_method_billing_address_street_direction,
+                                         DROP COLUMN payment_method_billing_address_street_name,
+                                         DROP COLUMN payment_method_billing_address_street_number,
+                                         DROP COLUMN payment_method_billing_address_street_number_suffix,
+                                         DROP COLUMN payment_method_billing_address_street_type,
+                                         DROP COLUMN payment_method_billing_address_suite_number;
+        
+        -- payment_method
+       
+        ALTER TABLE payment_method      DROP COLUMN billing_address_county,
+                                        DROP COLUMN billing_address_location_lat,
+                                        DROP COLUMN billing_address_location_lng,
+                                        DROP COLUMN billing_address_street_direction,
+                                        DROP COLUMN billing_address_street_name,
+                                        DROP COLUMN billing_address_street_number,
+                                        DROP COLUMN billing_address_street_number_suffix,
+                                        DROP COLUMN billing_address_street_type,
+                                        DROP COLUMN billing_address_suite_number;
+        
+          
         -- portal_preferences
         
         DROP TABLE portal_preferences;      
@@ -362,9 +431,10 @@ BEGIN
         ALTER TABLE aggregated_transfer ADD CONSTRAINT aggregated_transfer_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE email_template ADD CONSTRAINT email_template_template_type_e_ck 
-                CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 'ApplicationCreatedGuarantor', 
-                'ApplicationDeclined', 'MaintenanceRequestCompleted', 'MaintenanceRequestCreatedPMC', 'MaintenanceRequestCreatedTenant', 'MaintenanceRequestEntryNotice', 
-                'MaintenanceRequestUpdated', 'PasswordRetrievalCrm', 'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'TenantInvitation'));
+                CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 
+                'ApplicationCreatedGuarantor', 'ApplicationDeclined', 'MaintenanceRequestCancelled', 'MaintenanceRequestCompleted', 
+                'MaintenanceRequestCreatedPMC', 'MaintenanceRequestCreatedTenant', 'MaintenanceRequestEntryNotice', 'MaintenanceRequestUpdated', 
+                'PasswordRetrievalCrm', 'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'TenantInvitation'));
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_payment_schedule_e_ck CHECK ((payment_schedule) IN ('Annual', 'Monthly'));
         ALTER TABLE nsf_fee_item ADD CONSTRAINT nsf_fee_item_payment_type_e_ck CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_payment_type_e_ck 
