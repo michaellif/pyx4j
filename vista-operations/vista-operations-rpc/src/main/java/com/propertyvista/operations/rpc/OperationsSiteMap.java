@@ -76,6 +76,10 @@ public class OperationsSiteMap implements SiteMap {
                 formViewerPlace(new Key(-1));
             }
         }
+
+        @PlaceProperties(navigLabel = "Direct Debit Records")
+        public static class DirectDebitRecord extends CrmCrudAppPlace {
+        }
     }
 
     public static class Security extends AppPlace {

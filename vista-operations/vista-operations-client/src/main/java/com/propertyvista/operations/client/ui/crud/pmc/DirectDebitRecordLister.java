@@ -18,22 +18,35 @@ import java.util.Arrays;
 import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
-import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
+import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 
-public class DirectDebitRecordLister extends EntityDataTablePanel<DirectDebitRecord> {
+public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
 
-    public DirectDebitRecordLister() {
-        super(DirectDebitRecord.class, true, false);
-        setColumnDescriptors(//@formatter:off
+    public DirectDebitRecordLister(boolean addPmcColumn) {
+        super(DirectDebitRecord.class, false, false);
+        setAllowZoomIn(true);
+
+        if (addPmcColumn) {
+            setColumnDescriptors(//@formatter:off                
+                new MemberColumnDescriptor.Builder(proto().pmc()).build(),
                 new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().customerName()).build(),
                 new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
                 new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
-        );//@formatter:on
+            );//@formatter:on
+        } else {
+            setColumnDescriptors(//@formatter:off                
+                    new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
+                    new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
+                    new MemberColumnDescriptor.Builder(proto().customerName()).build(),
+                    new MemberColumnDescriptor.Builder(proto().receivedDate()).build(),
+                    new MemberColumnDescriptor.Builder(proto().processingStatus()).build()
+            );//@formatter:on
+        }
 
     }
 

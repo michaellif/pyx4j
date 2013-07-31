@@ -253,7 +253,7 @@ public class PmcForm extends OperationsEntityForm<PmcDTO> {
         content.setWidget(row, 1, 1, inject(proto().paymentTypeInfo(), new PaymentFeesForm<PmcPaymentTypeInfo>(PmcPaymentTypeInfo.class)));
 
         content.setH2(++row, 0, 2, i18n.tr("Direct Debit Records"));
-        content.setWidget(++row, 0, 2, directDebitRecordLister = new DirectDebitRecordLister());
+        content.setWidget(++row, 0, 2, directDebitRecordLister = new DirectDebitRecordLister(false));
         return content;
     }
 }
