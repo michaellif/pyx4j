@@ -15,6 +15,7 @@ package com.propertyvista.domain.property.asset.building;
 
 import java.util.Date;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.adapters.index.AlphanumIndexAdapter;
 import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.ColumnId;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.OrderColumn;
 import com.pyx4j.entity.annotations.Owned;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Reference;
 import com.pyx4j.entity.annotations.RpcTransient;
 import com.pyx4j.entity.annotations.Timestamp;
@@ -85,6 +87,10 @@ public interface Building extends PolicyNode {
     IPrimitive<String> propertyCode();
 
     IPrimitive<String> externalId();
+
+    //@see PmcYardiCredential
+    @ReadOnly
+    IPrimitive<Key> yardiInterfaceId();
 
     @Editor(type = EditorType.suggest)
     @Reference(adapter = PropertyManagerReferenceAdapter.class)

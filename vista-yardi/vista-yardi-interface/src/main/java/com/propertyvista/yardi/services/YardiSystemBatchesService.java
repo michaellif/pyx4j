@@ -21,8 +21,6 @@ import org.slf4j.LoggerFactory;
 import com.yardi.entity.resident.ResidentTransactions;
 
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.system.YardiPaymentBatchContext;
@@ -62,11 +60,6 @@ public class YardiSystemBatchesService extends YardiAbstractService {
     public void postReceipt(PmcYardiCredential yc, YardiReceipt receipt, YardiPaymentBatchContext paymentBatchContext) throws YardiServiceException,
             RemoteException, ARException {
         YardiSystemBatchesStub stub = ServerSideFactory.create(YardiSystemBatchesStub.class);
-
-        Persistence.ensureRetrieve(receipt.billingAccount(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(receipt.billingAccount().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(receipt.billingAccount().lease().unit(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(receipt.billingAccount().lease().unit().building(), AttachLevel.Attached);
 
         String propertyCode = receipt.billingAccount().lease().unit().building().propertyCode().getValue();
 

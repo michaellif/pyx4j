@@ -38,7 +38,7 @@ public interface PmcYardiCredential extends IEntity {
     @Owner
     @MemberColumn(notNull = true)
     @JoinColumn
-    @Indexed(uniqueConstraint = true)
+    @Indexed
     @Detached
     Pmc pmc();
 

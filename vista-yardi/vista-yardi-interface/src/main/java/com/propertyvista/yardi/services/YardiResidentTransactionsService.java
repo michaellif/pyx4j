@@ -32,6 +32,7 @@ import com.yardi.entity.resident.RTCustomer;
 import com.yardi.entity.resident.ResidentTransactions;
 import com.yardi.entity.resident.Transactions;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.commons.TimeUtils;
@@ -131,7 +132,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     break;
                 }
 
-                importTransaction(transaction, executionMonitor);
+                importTransaction(yc.getPrimaryKey(), transaction, executionMonitor);
             }
 
             List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyCodes);
@@ -217,7 +218,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return propertyConfigurations;
     }
 
-    private void importTransaction(ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
+    private void importTransaction(Key yardiInterfaceId, ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("ResidentTransactions: Import started...");
 
@@ -230,7 +231,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             try {
-                Building building = importProperty(property);
+                Building building = importProperty(yardiInterfaceId, property);
                 executionMonitor.addProcessedEvent("Building");
 
                 String propertyCode = building.propertyCode().getValue();
@@ -293,7 +294,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    private Building importProperty(final Property property) throws YardiServiceException {
+    private Building importProperty(final Key yardiInterfaceId, final Property property) throws YardiServiceException {
         log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
 
         Building building = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
@@ -301,6 +302,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Building execute() throws YardiServiceException {
                 Building building = new YardiBuildingProcessor().updateBuilding(property);
+                building.yardiInterfaceId().setValue(yardiInterfaceId);
                 ServerSideFactory.create(BuildingFacade.class).persist(building);
                 return building;
             }

@@ -26,7 +26,6 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
-import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -96,10 +95,6 @@ public interface Pmc extends IEntity {
     @Owned
     @Detached(level = AttachLevel.Detached)
     PmcPaymentTypeInfo paymentTypeInfo();
-
-    @Deprecated
-    @Transient
-    PmcYardiCredential yardiCredential();
 
     @Detached(level = AttachLevel.Detached)
     @OrderBy(PrimaryKey.class)

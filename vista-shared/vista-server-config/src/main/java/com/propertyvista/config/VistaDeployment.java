@@ -13,6 +13,8 @@
  */
 package com.propertyvista.config;
 
+import java.util.List;
+
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -25,6 +27,7 @@ import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -162,6 +165,7 @@ public class VistaDeployment {
         return VistaSettings.googleAPIKey;
     }
 
+    @Deprecated
     public static PmcYardiCredential getPmcYardiCredential() {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
@@ -170,6 +174,34 @@ public class VistaDeployment {
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().pmc().namespace(), namespace));
             return Persistence.service().retrieve(criteria);
+        } finally {
+            NamespaceManager.setNamespace(namespace);
+        }
+    }
+
+    public static PmcYardiCredential getPmcYardiCredential(Building building) {
+        final String namespace = NamespaceManager.getNamespace();
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
+        assert !building.yardiInterfaceId().isNull();
+        try {
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+            EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
+            criteria.eq(criteria.proto().id(), building.yardiInterfaceId());
+            criteria.eq(criteria.proto().pmc().namespace(), namespace);
+            return Persistence.service().retrieve(criteria);
+        } finally {
+            NamespaceManager.setNamespace(namespace);
+        }
+    }
+
+    public static List<PmcYardiCredential> getPmcYardiCredentials() {
+        final String namespace = NamespaceManager.getNamespace();
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
+        try {
+            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+            EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
+            criteria.eq(criteria.proto().pmc().namespace(), namespace);
+            return Persistence.service().query(criteria);
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
