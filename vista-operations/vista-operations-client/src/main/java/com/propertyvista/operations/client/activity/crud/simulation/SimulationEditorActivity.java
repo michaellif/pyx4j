@@ -20,14 +20,14 @@ import com.pyx4j.site.client.activity.AbstractEditorActivity;
 import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.simulation.SimulationEditorView;
+import com.propertyvista.operations.client.ui.crud.simulation.SimulationEdtiorView;
 import com.propertyvista.operations.rpc.SimulationDTO;
 import com.propertyvista.operations.rpc.services.simulator.SimulationService;
 
-public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEditorView.Presenter {
+public class SimulationEditorActivity extends AbstractEditorActivity<SimulationDTO> implements SimulationEdtiorView.Presenter {
 
     public SimulationEditorActivity(CrudAppPlace place) {
-        super(place, OperationsSite.getViewFactory().instantiate(SimulationEditorView.class), GWT
+        super(place, OperationsSite.getViewFactory().instantiate(SimulationEdtiorView.class), GWT
                 .<AbstractCrudService<SimulationDTO>> create(SimulationService.class), SimulationDTO.class);
     }
 

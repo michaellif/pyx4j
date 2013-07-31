@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.crud.simulation;
 import com.propertyvista.operations.client.ui.crud.OperationsEditorViewImplBase;
 import com.propertyvista.operations.rpc.SimulationDTO;
 
-public class SimulationEdtiorViewImpl extends OperationsEditorViewImplBase<SimulationDTO> implements SimulationEditorView {
+public class SimulationEdtiorViewImpl extends OperationsEditorViewImplBase<SimulationDTO> implements SimulationEdtiorView {
 
     public SimulationEdtiorViewImpl() {
         setForm(new SimulationForm(this));

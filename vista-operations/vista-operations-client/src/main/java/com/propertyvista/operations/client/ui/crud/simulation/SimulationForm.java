@@ -48,14 +48,14 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;
 
-        content.setH2(++row, 0, 1, i18n.tr("Cache"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().generalCacheEnabled()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().entityCacheServiceEnabled()), 5).build());
+        content.setH2(++row, 0, 2, i18n.tr("Cache"));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().generalCacheEnabled()), 5, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().entityCacheServiceEnabled()), 5, true).build());
 
-        content.setH2(++row, 0, 1, i18n.tr("Network Simulation"));
+        content.setH2(++row, 0, 2, i18n.tr("Network Simulation"));
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().networkSimulation().enabled()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().networkSimulation().delay()), 10).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().networkSimulation().enabled()), 5, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().networkSimulation().delay()), 10, true).build());
 
         return content;
     }
@@ -64,17 +64,17 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Payments"));
         int row = -1;
 
-        content.setH2(++row, 0, 1, i18n.tr("Funds Transfer"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systems().usePadSimulator()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systems().useDirectBankingSimulator()), 5).build());
+        content.setH2(++row, 0, 2, i18n.tr("Funds Transfer"));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().usePadSimulator()), 5, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useDirectBankingSimulator()), 5, true).build());
 
-        content.setH2(++row, 0, 1, i18n.tr("Credit Cards"));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5).build());
+        content.setH2(++row, 0, 2, i18n.tr("Credit Cards"));
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useCardServiceSimulator()), 5, true).build());
         // TODO This should be in separate server/separate forms
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardService().responseType()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardService().responseCode()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardService().responseHttpCode()), 15).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardService().responseText()), 15).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseType()), 15, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseCode()), 15, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseHttpCode()), 15, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardService().responseText()), 15, true).build());
 
         get(proto().cardService().responseType()).addValueChangeHandler(new ValueChangeHandler<CardServiceSimulatorConfig.SimpulationType>() {
 
@@ -112,11 +112,11 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("Equifax"));
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systems().useEquifaxSimulator()), 5).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useEquifaxSimulator()), 5, true).build());
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifax().approve().xml()), 50).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifax().decline().xml()), 50).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().equifax().moreInfo().xml()), 50).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifax().approve().xml()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifax().decline().xml()), true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().equifax().moreInfo().xml()), true).build());
 
         return content;
     }
@@ -125,8 +125,8 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("On-Boarding"));
         int row = -1;
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systems().onboarding().enabled()), 5).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().systems().onboarding().simpulationType()), 15).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().onboarding().enabled()), 5, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().onboarding().simpulationType()), true).build());
 
         return content;
     }

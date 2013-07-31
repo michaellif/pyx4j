@@ -17,6 +17,6 @@ import com.propertyvista.operations.rpc.SimulationDTO;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-public interface SimulationEditorView extends IEditor<SimulationDTO> {
+public interface SimulationEdtiorView extends IEditor<SimulationDTO> {
 
 }
