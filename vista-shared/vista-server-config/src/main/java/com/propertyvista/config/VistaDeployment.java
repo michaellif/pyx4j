@@ -28,6 +28,7 @@ import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.pmc.PmcDnsName;
 import com.propertyvista.domain.pmc.PmcDnsName.DnsNameTarget;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.YardiBuildingOrigination;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -182,11 +183,14 @@ public class VistaDeployment {
     public static PmcYardiCredential getPmcYardiCredential(Building building) {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
-        assert !building.yardiInterfaceId().isNull() : "Building '" + building.propertyCode().getValue() + "' yardiInterfaceId is not set";
         try {
+            EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
+            bldCrit.eq(bldCrit.proto().building(), building);
+            YardiBuildingOrigination buildingOrigin = Persistence.service().retrieve(bldCrit);
+
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
-            criteria.eq(criteria.proto().id(), building.yardiInterfaceId());
+            criteria.eq(criteria.proto().id(), buildingOrigin.yardiInterfaceId());
             criteria.eq(criteria.proto().pmc().namespace(), namespace);
             return Persistence.service().retrieve(criteria);
         } finally {

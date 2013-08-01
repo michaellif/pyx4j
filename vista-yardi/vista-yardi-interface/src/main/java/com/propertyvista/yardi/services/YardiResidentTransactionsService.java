@@ -59,6 +59,7 @@ import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.domain.financial.yardi.YardiPayment;
 import com.propertyvista.domain.financial.yardi.YardiReceiptReversal;
 import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.property.asset.building.YardiBuildingOrigination;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
@@ -302,8 +303,13 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             @Override
             public Building execute() throws YardiServiceException {
                 Building building = new YardiBuildingProcessor().updateBuilding(property);
-                building.yardiInterfaceId().setValue(yardiInterfaceId);
                 ServerSideFactory.create(BuildingFacade.class).persist(building);
+                // add building origin record
+                YardiBuildingOrigination buildingOrigin = EntityFactory.create(YardiBuildingOrigination.class);
+                buildingOrigin.building().set(building);
+                buildingOrigin.yardiInterfaceId().setValue(yardiInterfaceId);
+                Persistence.service().persist(buildingOrigin);
+
                 return building;
             }
         });
