@@ -74,7 +74,7 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
 
         content.setWidget(++row, 0, paymentMethods);
 
-        content.setH1(++row, 0, 3, proto().billingAddress().getMeta().getCaption());
+        content.setH1(++row, 0, 1, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = content.getWidget(row, 0);
 
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), 5).build());

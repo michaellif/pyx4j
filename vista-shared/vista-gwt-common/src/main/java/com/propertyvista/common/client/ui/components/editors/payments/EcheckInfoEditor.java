@@ -13,7 +13,9 @@
  */
 package com.propertyvista.common.client.ui.components.editors.payments;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 
@@ -50,22 +52,24 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn()), 20, true).build());
         panel.setWidget(
                 ++row,
                 0,
+                2,
                 new FormDecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
-                        "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
+                        "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20, true).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().bankId()), 3, true).build());
 
         if (isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
             image.getElement().getStyle().setMarginTop(2, Unit.EM);
-            image.getElement().getStyle().setMarginLeft(5, Unit.EM);
+            image.getElement().getStyle().setMarginLeft(6, Unit.EM);
             image.getElement().getStyle().setMarginRight(6, Unit.EM);
-            panel.setWidget(++row, 0, 1, image);
+            panel.setWidget(++row, 0, 2, image);
+            DOM.getParent(image.getElement()).getStyle().setTextAlign(TextAlign.LEFT);
         }
 
         return panel;
@@ -105,13 +109,12 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
                         devGenerateEcheck();
                     }
                 }
-
             });
         }
     }
 
     private void devGenerateEcheck() {
-        if (get(proto().nameOn()).getValue().isEmpty()) {
+        if (get(proto().nameOn()).isValueEmpty()) {
             get(proto().nameOn()).setValue("Dev");
         }
         get(proto().bankId()).setValue("123");

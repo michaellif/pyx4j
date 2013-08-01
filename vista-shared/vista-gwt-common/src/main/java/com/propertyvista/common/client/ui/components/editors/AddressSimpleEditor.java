@@ -15,8 +15,6 @@ package com.propertyvista.common.client.ui.components.editors;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-
 import com.propertyvista.domain.contact.AddressSimple;
 
 public class AddressSimpleEditor extends AddressSimpleEditorImpl<AddressSimple> {
@@ -31,8 +29,6 @@ public class AddressSimpleEditor extends AddressSimpleEditorImpl<AddressSimple> 
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel main = internalCreateContent();
-        main.setWidth("100%");
-        return main;
+        return internalCreateContent();
     }
 }

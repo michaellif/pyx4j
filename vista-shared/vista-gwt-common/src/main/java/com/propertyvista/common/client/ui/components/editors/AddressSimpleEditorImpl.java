@@ -18,6 +18,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.OptionsFilter;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -45,18 +46,17 @@ public abstract class AddressSimpleEditorImpl<A extends AddressSimple> extends C
     }
 
     @SuppressWarnings("unchecked")
-    protected TwoColumnFlexFormPanel internalCreateContent() {
-        TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
+    protected BasicFlexFormPanel internalCreateContent() {
+        BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
         int row = -1;
+        int col = (oneColumn ? 0 : 1);
+        int span = (oneColumn ? 1 : 2);
 
-        main.setH3(++row, 0, 2, i18n.tr("Address"));
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street1()), 22).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().street2()), 22).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().city()), 15).build());
 
-        row = oneColumn ? row : 0;
-        int col = oneColumn ? 0 : 1;
+        row = (oneColumn ? row : -1);
 
         CComponent<Province> province = (CComponent<Province>) inject(proto().province());
         main.setWidget(++row, col, new FormDecoratorBuilder(province, 17).build());

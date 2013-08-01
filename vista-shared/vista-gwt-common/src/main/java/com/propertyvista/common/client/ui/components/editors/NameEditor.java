@@ -91,20 +91,21 @@ public class NameEditor extends CEntityDecoratableForm<Name> {
     @Override
     public IsWidget createContent() {
         BasicFlexFormPanel main = (oneColumn ? new BasicFlexFormPanel() : new TwoColumnFlexFormPanel());
+        int row = -1;
+        int col = (oneColumn ? 0 : 1);
+        int span = (oneColumn ? 1 : 2);
 
         if (!isViewable()) {
-            int row = -1;
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().firstName()), 15).build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().lastName()), 15).build());
             main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().middleName()), 5).build());
 
             row = (oneColumn ? row : -1);
-            int col = (oneColumn ? 0 : 1);
             main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().namePrefix()), 5).build());
             main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().nameSuffix()), 5).build());
             main.setWidget(++row, col, new FormDecoratorBuilder(inject(proto().maidenName()), 15).build());
         } else {
-            main.setWidget(0, 0, (oneColumn ? 1 : 2), new FormDecoratorBuilder(viewComp, 15, !oneColumn).customLabel(customViewLabel).build());
+            main.setWidget(0, 0, span, new FormDecoratorBuilder(viewComp, 15, !oneColumn).customLabel(customViewLabel).build());
         }
 
         return main;

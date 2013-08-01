@@ -72,13 +72,14 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
-
         int row = -1;
+
         main.setWidget(
                 ++row,
                 0,
+                2,
                 new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
-                        RadioGroup.Layout.HORISONTAL)), 22).build());
+                        RadioGroup.Layout.HORISONTAL)), 22, true).build());
 
         main.setH3(++row, 0, 2, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
@@ -86,12 +87,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
         main.setH3(++row, 0, 2, proto().billingAddress().getMeta().getCaption());
         billingAddressHeader = main.getWidget(row, 0);
-        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), true).build());
-        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressSimpleEditor()));
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().sameAsCurrent()), 5, true).build());
+        main.setWidget(++row, 0, 2, inject(proto().billingAddress(), new AddressSimpleEditor(false)));
 
         if (paymentEntityClass.equals(PmcPaymentMethod.class)) {
             main.setBR(++row, 0, 2);
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments())).build());
+            main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(((PmcPaymentMethod) proto()).selectForEquifaxPayments()), 5, true).build());
             get(((PmcPaymentMethod) proto()).selectForEquifaxPayments()).setVisible(false);
         }
 
@@ -114,7 +115,6 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return main;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onReset() {
         super.onReset();

@@ -64,17 +64,17 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType()), 15).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn()), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType()), 15, true).build());
         panel.setWidget(
                 ++row,
                 0,
+                2,
                 new FormDecoratorBuilder(inject(proto().card(), new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class,
-                        "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null)), 15).build());
+                        "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null)), 15, true).build());
 
-        row = -1;
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
-        panel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().securityCode()), 3, true).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));
@@ -160,11 +160,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
             });
         }
-
     }
 
     private void devGenerateCreditCard() {
-        if (get(proto().nameOn()).getValue().isEmpty()) {
+        if (get(proto().nameOn()).isValueEmpty()) {
             get(proto().nameOn()).setValue("Dev");
         }
         if (get(proto().cardType()).getValue() == null) {
