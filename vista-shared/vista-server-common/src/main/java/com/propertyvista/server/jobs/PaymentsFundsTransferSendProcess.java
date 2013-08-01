@@ -21,16 +21,22 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
-public class PadSendProcess implements PmcProcess {
+public class PaymentsFundsTransferSendProcess implements PmcProcess {
+
+    private final FundsTransferType fundsTransferType;
 
     private PadFile padFile;
+
+    public PaymentsFundsTransferSendProcess(FundsTransferType fundsTransferType) {
+        this.fundsTransferType = fundsTransferType;
+    }
 
     @Override
     public boolean start(PmcProcessContext context) {
         if (VistaDeployment.isVistaStaging()) {
             return false;
         }
-        padFile = ServerSideFactory.create(PaymentProcessFacade.class).preparePadFile(FundsTransferType.PreAuthorizedDebit);
+        padFile = ServerSideFactory.create(PaymentProcessFacade.class).prepareFundsTransferFile(fundsTransferType);
         return true;
     }
 
@@ -41,12 +47,22 @@ public class PadSendProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(final PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).prepareEcheckPayments(context.getExecutionMonitor(), padFile);
+        switch (fundsTransferType) {
+        case PreAuthorizedDebit:
+            ServerSideFactory.create(PaymentProcessFacade.class).prepareEcheckFundsTransfer(context.getExecutionMonitor(), padFile);
+            break;
+        case DirectBankingPayment:
+            ServerSideFactory.create(PaymentProcessFacade.class).prepareDirectDebitFundsTransfer(context.getExecutionMonitor(), padFile);
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+
     }
 
     @Override
     public void complete(PmcProcessContext context) {
-        if (ServerSideFactory.create(PaymentProcessFacade.class).sendPadFile(this.padFile)) {
+        if (ServerSideFactory.create(PaymentProcessFacade.class).sendFundsTransferFile(this.padFile)) {
             context.getExecutionMonitor().setMessage("PAD file# " + padFile.fileCreationNumber().getStringView());
             context.getExecutionMonitor().addInfoEvent("sent file", padFile.fileName().getValue());
             context.getExecutionMonitor().addInfoEvent("fileCreationNumber", padFile.fileCreationNumber().getValue());

@@ -14,6 +14,7 @@
 package com.propertyvista.operations.server.services;
 
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
+import com.pyx4j.entity.server.Persistence;
 
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
@@ -27,6 +28,11 @@ public class PmcDirectDebitRecordCrudServiceImpl extends AbstractCrudServiceImpl
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void enhanceListRetrieved(DirectDebitRecord entity, DirectDebitRecord dto) {
+        Persistence.service().retrieve(dto.pmc());
     }
 
 }

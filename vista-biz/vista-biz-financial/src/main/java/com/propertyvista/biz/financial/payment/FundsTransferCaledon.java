@@ -46,14 +46,14 @@ import com.propertyvista.payment.pad.data.PadAckFile;
 import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
-public class PadCaledon {
+public class FundsTransferCaledon {
 
-    private static final Logger log = LoggerFactory.getLogger(PadCaledon.class);
+    private static final Logger log = LoggerFactory.getLogger(FundsTransferCaledon.class);
 
     private final String companyId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration()
             .getIntefaceCompanyId();
 
-    public PadFile preparePadFile(final FundsTransferType fundsTransferType) {
+    public PadFile prepareFundsTransferFile(final FundsTransferType fundsTransferType) {
         return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
             @Override
             public PadFile call() {
@@ -78,7 +78,7 @@ public class PadCaledon {
         });
     }
 
-    public boolean sendPadFile(final PadFile padFile) {
+    public boolean sendFundsTransferFile(final PadFile padFile) {
         EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
         criteria.eq(criteria.proto().padBatch().padFile(), padFile);
         int records = Persistence.service().count(criteria);

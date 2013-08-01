@@ -31,22 +31,22 @@ import com.propertyvista.operations.domain.payment.pad.PadFile;
 public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
-    public PadFile preparePadFile(FundsTransferType fundsTransferType) {
-        return new PadCaledon().preparePadFile(fundsTransferType);
+    public PadFile prepareFundsTransferFile(FundsTransferType fundsTransferType) {
+        return new FundsTransferCaledon().prepareFundsTransferFile(fundsTransferType);
     }
 
     @Override
-    public boolean sendPadFile(final PadFile padFile) {
+    public boolean sendFundsTransferFile(final PadFile padFile) {
         return new UnitOfWork(TransactionScopeOption.Suppress).execute(new Executable<Boolean, RuntimeException>() {
             @Override
             public Boolean execute() {
-                return new PadCaledon().sendPadFile(padFile);
+                return new FundsTransferCaledon().sendFundsTransferFile(padFile);
             }
         });
     }
 
     @Override
-    public void prepareEcheckPayments(final ExecutionMonitor executionMonitor, final PadFile padFile) {
+    public void prepareEcheckFundsTransfer(final ExecutionMonitor executionMonitor, final PadFile padFile) {
         // We take all Queued records in this PMC
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
@@ -79,8 +79,13 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
+    public void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile) {
+        new DirectDebitFundsTransfer(executionMonitor, padFile).prepareDirectDebitFundsTransfer();
+    }
+
+    @Override
     public FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor) {
-        return new PadCaledon().receiveFundsTransferAcknowledgementFile(executionMonitor);
+        return new FundsTransferCaledon().receiveFundsTransferAcknowledgementFile(executionMonitor);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor) {
-        return new PadCaledon().receiveFundsTransferReconciliation(executionMonitor);
+        return new FundsTransferCaledon().receiveFundsTransferReconciliation(executionMonitor);
     }
 
     @Override
@@ -132,4 +137,5 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     public void processDirectDebitRecords(ExecutionMonitor executionMonitor) {
         new DirectDebitPostProcessor().processDirectDebitRecords(executionMonitor);
     }
+
 }

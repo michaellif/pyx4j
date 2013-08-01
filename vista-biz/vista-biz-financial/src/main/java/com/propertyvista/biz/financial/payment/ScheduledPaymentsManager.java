@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,20 +26,14 @@ import org.slf4j.LoggerFactory;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.entity.server.CompensationHandler;
-import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.financial.ar.ARException;
-import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.financial.payment.PaymentBatchPosting.ProcessPaymentRecordInBatch;
 import com.propertyvista.biz.system.YardiARFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -49,9 +42,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
-import com.propertyvista.shared.config.VistaFeatures;
 
 class ScheduledPaymentsManager {
 
@@ -59,157 +50,33 @@ class ScheduledPaymentsManager {
 
     void processScheduledPayments(final ExecutionMonitor executionMonitor, PaymentType paymentType, LogicalDate forDate) {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.add(PropertyCriterion.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction));
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), paymentType));
-        criteria.add(PropertyCriterion.le(criteria.proto().targetDate(), forDate));
+        criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction);
+        criteria.eq(criteria.proto().paymentMethod().type(), paymentType);
+        criteria.le(criteria.proto().targetDate(), forDate);
         criteria.asc(criteria.proto().billingAccount().lease().unit().building());
 
-        boolean paymentBatchContextRequired = VistaFeatures.instance().yardiIntegration();
+        PaymentBatchPosting.processScheduledPayments(executionMonitor, criteria, new ProcessPaymentRecordInBatch() {
 
-        if (!paymentBatchContextRequired) {
-            // Simple flow one transaction per record
-            ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-            try {
-                while (paymentRecordIterator.hasNext()) {
-                    processScheduledPayment(paymentRecordIterator.next(), null, executionMonitor);
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                }
-            } finally {
-                paymentRecordIterator.close();
-            }
-        } else {
-            // Flow with single transaction per batch
-            final AtomicReference<PaymentRecord> iteratorPushBack = new AtomicReference<PaymentRecord>();
-            final ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-            try {
-
-                while (paymentRecordIterator.hasNext() || (iteratorPushBack.get() != null)) {
-                    if (executionMonitor.isTerminationRequested()) {
-                        break;
-                    }
-                    // Single transaction that pool multiple  paymentRecords
-                    new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-                        @Override
-                        public Void execute() {
-
-                            PaymentRecord firstPaymentRecord = iteratorPushBack.get();
-                            if (firstPaymentRecord == null) {
-                                firstPaymentRecord = paymentRecordIterator.next();
-                            } else {
-                                iteratorPushBack.set(null);
-                            }
-
-                            Building batchBuilding = getBuilding(firstPaymentRecord);
-
-                            // Create Batch
-                            final PaymentBatchContext paymentBatchContext;
-                            try {
-                                paymentBatchContext = ServerSideFactory.create(ARFacade.class).createPaymentBatchContext(batchBuilding);
-                            } catch (ARException e) {
-                                throw new Error(e);
-                            }
-
-                            UnitOfWork.addTransactionCompensationHandler(new CompensationHandler() {
-
-                                @Override
-                                public Void execute() {
-                                    try {
-                                        paymentBatchContext.cancelBatch();
-                                    } catch (Throwable e) {
-                                        log.error("Unable to cancel batch", e);
-                                        executionMonitor.addErredEvent("Batch", e);
-                                    }
-                                    return null;
-                                }
-                            });
-
-                            //ExecutionMonitor that will be copied to main ExecutionMonitor for each successful batch 
-                            ExecutionMonitor batchExecutionMonitor = new ExecutionMonitor();
-
-                            processScheduledPayment(firstPaymentRecord, paymentBatchContext, batchExecutionMonitor);
-
-                            while ((!paymentBatchContext.isBatchFull()) && paymentRecordIterator.hasNext()) {
-                                PaymentRecord paymentRecord = paymentRecordIterator.next();
-
-                                if (!batchBuilding.equals(getBuilding(paymentRecord))) {
-                                    iteratorPushBack.set(paymentRecord);
-                                    break;
-                                }
-
-                                processScheduledPayment(paymentRecord, paymentBatchContext, batchExecutionMonitor);
-
-                                if (executionMonitor.isTerminationRequested()) {
-                                    break;
-                                }
-                            }
-
-                            try {
-                                paymentBatchContext.postBatch();
-                                executionMonitor.addInfoEvent("Batch", null);
-
-                                executionMonitor.add(batchExecutionMonitor);
-
-                            } catch (ARException e) {
-                                log.error("Unable to post batch", e);
-                                executionMonitor.addErredEvent("Batch", e);
-                            }
-
-                            return null;
-                        }
-                    });
-                }
-
-            } finally {
-                paymentRecordIterator.close();
-            }
-        }
-    }
-
-    private Building getBuilding(PaymentRecord payment) {
-        Persistence.ensureRetrieve(payment.billingAccount(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(payment.billingAccount().lease(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(payment.billingAccount().lease().unit(), AttachLevel.Attached);
-        Persistence.ensureRetrieve(payment.billingAccount().lease().unit().building(), AttachLevel.Attached);
-        return payment.billingAccount().lease().unit().building();
-    }
-
-    private void processScheduledPayment(final PaymentRecord paymentRecord, final PaymentBatchContext paymentBatchContext,
-            final ExecutionMonitor executionMonitor) {
-        try {
-            TransactionScopeOption transactionScopeOption = TransactionScopeOption.RequiresNew;
-            if (paymentBatchContext != null) {
-                transactionScopeOption = TransactionScopeOption.Nested;
-            }
-
-            new UnitOfWork(transactionScopeOption).execute(new Executable<Void, PaymentException>() {
-
-                @Override
-                public Void execute() throws PaymentException {
-                    if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
-                        ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
-                        executionMonitor.addProcessedEvent("Canceled");
-                    } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
-                        ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
-                        executionMonitor.addProcessedEvent("Canceled ElectronicPayments Not Setup");
+            @Override
+            public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
+                if (paymentRecord.amount().getValue().compareTo(BigDecimal.ZERO) <= 0) {
+                    ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+                    executionMonitor.addProcessedEvent("Canceled");
+                } else if (!PaymentUtils.isElectronicPaymentsSetup(paymentRecord.billingAccount())) {
+                    ServerSideFactory.create(PaymentFacade.class).cancel(paymentRecord);
+                    executionMonitor.addProcessedEvent("Canceled ElectronicPayments Not Setup");
+                } else {
+                    PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
+                    if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
+                        executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
+                                SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
                     } else {
-                        PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
-                        if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                            executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
-                                    SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
-                        } else {
-                            executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue());
-                        }
+                        executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue());
                     }
-                    return null;
                 }
-            });
-        } catch (PaymentException e) {
-            log.error("ScheduledPayment {} processing failed", paymentRecord, e);
-            executionMonitor.addErredEvent("Erred", paymentRecord.amount().getValue(), SimpleMessageFormat.format("PaymentRecord {0} ", paymentRecord.id()), e);
-        }
+            }
+        });
+
     }
 
     void cancelScheduledPayments(LeasePaymentMethod paymentMethod) {

@@ -16,7 +16,7 @@ package com.propertyvista.operations.client.ui.components;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CMoneyField;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -30,16 +30,16 @@ public class PaymentFeesForm<E extends AbstractPaymentFees> extends CEntityDecor
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().ccVisaFee()), true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().ccMasterCardFee()), true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ccVisaFee())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().ccMasterCardFee())).build());
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().visaDebitFee()), true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().visaDebitFee())).build());
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().eChequeFee(), new CMoneyField()), true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().directBankingFee(), new CMoneyField()), true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().eChequeFee(), new CMoneyField())).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().directBankingFee(), new CMoneyField())).build());
 
         return panel;
     }

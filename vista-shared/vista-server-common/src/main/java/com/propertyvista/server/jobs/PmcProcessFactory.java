@@ -13,6 +13,7 @@
  */
 package com.propertyvista.server.jobs;
 
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.server.jobs.insurance.PaymentsTenantSureProcess;
@@ -54,11 +55,13 @@ public class PmcProcessFactory {
             return new PaymentsBmoReceiveProcess();
         case paymentsDbpProcess:
             return new PaymentsDbpPostProcess();
-        case paymentsDbpSend:
-            return new PaymentsDbpSendProcess();
+
 // Caledon            
         case paymentsPadSend:
-            return new PadSendProcess();
+            return new PaymentsFundsTransferSendProcess(FundsTransferType.PreAuthorizedDebit);
+        case paymentsDbpSend:
+            return new PaymentsFundsTransferSendProcess(FundsTransferType.DirectBankingPayment);
+
         case paymentsReceiveAcknowledgment:
             return new PadReceiveAcknowledgmentProcess();
         case paymentsPadProcessAcknowledgment:

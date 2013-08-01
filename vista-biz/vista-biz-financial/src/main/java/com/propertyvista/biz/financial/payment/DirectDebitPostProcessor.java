@@ -20,6 +20,7 @@ import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
@@ -29,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.biz.financial.payment.PaymentBatchPosting.ProcessPaymentRecordInBatch;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -84,6 +86,8 @@ public class DirectDebitPostProcessor {
             }
 
         }
+
+        processPayments(executionMonitor);
     }
 
     private void createPaymentRecord(DirectDebitRecord debitRecord) {
@@ -116,4 +120,26 @@ public class DirectDebitPostProcessor {
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
     }
+
+    private void processPayments(final ExecutionMonitor executionMonitor) {
+        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
+        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Submitted);
+        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
+        criteria.asc(criteria.proto().billingAccount().lease().unit().building());
+
+        PaymentBatchPosting.processScheduledPayments(executionMonitor, criteria, new ProcessPaymentRecordInBatch() {
+
+            @Override
+            public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
+                PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
+                if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
+                    executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
+                            SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
+                } else {
+                    executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue());
+                }
+            }
+        });
+    }
+
 }

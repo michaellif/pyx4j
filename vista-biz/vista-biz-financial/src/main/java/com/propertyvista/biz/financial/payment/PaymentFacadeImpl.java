@@ -183,7 +183,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             break;
         case DirectBanking:
-            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Received);
+            paymentRecord.paymentStatus().setValue(PaymentRecord.PaymentStatus.Queued);
             break;
         case Interac:
             throw new IllegalArgumentException("Not implemented");

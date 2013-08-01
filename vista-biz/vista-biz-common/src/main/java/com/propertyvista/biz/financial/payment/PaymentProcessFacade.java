@@ -22,11 +22,13 @@ import com.propertyvista.operations.domain.payment.pad.PadFile;
 
 public interface PaymentProcessFacade {
 
-    PadFile preparePadFile(FundsTransferType fundsTransferType);
+    PadFile prepareFundsTransferFile(FundsTransferType fundsTransferType);
 
-    void prepareEcheckPayments(ExecutionMonitor executionMonitor, PadFile padFile);
+    void prepareEcheckFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile);
 
-    boolean sendPadFile(PadFile padFile);
+    void prepareDirectDebitFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile);
+
+    boolean sendFundsTransferFile(PadFile padFile);
 
     //Funds Transfer
     FundsTransferType receiveFundsTransferAcknowledgementFile(ExecutionMonitor executionMonitor);

@@ -32,6 +32,7 @@ public class DirectDebitRecordLister extends AbstractLister<DirectDebitRecord> {
         if (addPmcColumn) {
             setColumnDescriptors(//@formatter:off                
                 new MemberColumnDescriptor.Builder(proto().pmc()).build(),
+                new MemberColumnDescriptor.Builder(proto().pmc().namespace()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().accountNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().paymentReferenceNumber()).build(),
                 new MemberColumnDescriptor.Builder(proto().customerName()).build(),

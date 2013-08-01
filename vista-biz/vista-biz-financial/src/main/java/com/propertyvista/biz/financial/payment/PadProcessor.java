@@ -25,7 +25,6 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -68,11 +67,11 @@ public class PadProcessor {
         return true;
     }
 
-    private PadBatch getPadBatch(PadFile padFile, Pmc pmc, MerchantAccount merchantAccount) {
+    static PadBatch getPadBatch(PadFile padFile, Pmc pmc, MerchantAccount merchantAccount) {
         EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().padFile(), padFile));
-        criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
-        criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccountKey(), merchantAccount.id()));
+        criteria.eq(criteria.proto().padFile(), padFile);
+        criteria.eq(criteria.proto().pmc(), pmc);
+        criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.id());
         PadBatch padBatch = Persistence.service().retrieve(criteria);
         if (padBatch == null) {
             padBatch = EntityFactory.create(PadBatch.class);

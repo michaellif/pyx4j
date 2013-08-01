@@ -66,6 +66,7 @@ public class RemconFileConvertor {
             detailRecord.code = "0";
             detailRecord.itemAmount = CaledonPadUtils.formatAmount(debitRecord.amount().getValue());
             detailRecord.customerName = debitRecord.customerName().getValue();
+            detailRecord.paymentReferenceNumber = debitRecord.paymentReferenceNumber().getValue();
 
             int len = debitRecord.accountNumber().getValue().length();
             if (len >= 12) {
