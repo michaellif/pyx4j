@@ -91,13 +91,12 @@ abstract class AbstractAcknowledgementProcessor {
         }
     }
 
-    void retrieveOperationsPadBatchDetails(PadBatch padBatch) {
-
+    protected void retrieveOperationsPadBatchDetails(PadBatch padBatch) {
     }
 
-    abstract void createRejectedAggregatedTransfer(PadBatch padBatch);
+    protected abstract void createRejectedAggregatedTransfer(PadBatch padBatch);
 
-    abstract void acknowledgmentReject(PadDebitRecord debitRecord);
+    protected abstract void acknowledgmentReject(PadDebitRecord debitRecord);
 
     private void processPadBatchReject(final PadBatch padBatch) {
         for (PadDebitRecord debitRecord : padBatch.records()) {

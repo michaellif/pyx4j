@@ -133,10 +133,10 @@ public class DirectDebitPostProcessor {
             public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
                 PaymentRecord processedPaymentRecord = ServerSideFactory.create(PaymentFacade.class).processPayment(paymentRecord, paymentBatchContext);
                 if (processedPaymentRecord.paymentStatus().getValue() == PaymentRecord.PaymentStatus.Rejected) {
-                    executionMonitor.addFailedEvent("Rejected", processedPaymentRecord.amount().getValue(),
+                    executionMonitor.addFailedEvent("PostRejected", processedPaymentRecord.amount().getValue(),
                             SimpleMessageFormat.format("Payment {0} was rejected", paymentRecord.id()));
                 } else {
-                    executionMonitor.addProcessedEvent("Processed", processedPaymentRecord.amount().getValue());
+                    executionMonitor.addInfoEvent("Posted", null, processedPaymentRecord.amount().getValue());
                 }
             }
         });

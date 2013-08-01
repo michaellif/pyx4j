@@ -41,16 +41,16 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
     }
 
     @Override
-    void retrieveOperationsPadBatchDetails(PadBatch padBatch) {
-        for (PadDebitRecord debitRecord : padBatch.records()) {
-            Persistence.service().retrieveMember(debitRecord.transactionRecords());
+    protected void retrieveOperationsPadBatchDetails(PadBatch padBatch) {
+        for (PadDebitRecord padDebitRecord : padBatch.records()) {
+            Persistence.service().retrieveMember(padDebitRecord.transactionRecords());
         }
     }
 
     // TODO this two functions are nearly the same make them more unified
 
     @Override
-    void createRejectedAggregatedTransfer(PadBatch padBatch) {
+    protected void createRejectedAggregatedTransfer(PadBatch padBatch) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
@@ -63,37 +63,37 @@ public class DirectDebitAcknowledgementProcessor extends AbstractAcknowledgement
 
         Persistence.service().persist(at);
 
-        for (PadDebitRecord debitRecord : padBatch.records()) {
-            rejectPaymentRecords(debitRecord, at);
+        for (PadDebitRecord padDebitRecord : padBatch.records()) {
+            rejectPaymentRecords(padDebitRecord, at);
         }
     }
 
     @Override
     // DirectBanking is Aggregated Transfer anyway
-    void acknowledgmentReject(PadDebitRecord debitRecord) {
+    protected void acknowledgmentReject(PadDebitRecord padDebitRecord) {
 
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.DirectBankingPayment);
-        at.paymentDate().setValue(new LogicalDate(debitRecord.padBatch().padFile().created().getValue()));
-        at.grossPaymentAmount().setValue(debitRecord.amount().getValue());
+        at.paymentDate().setValue(new LogicalDate(padDebitRecord.padBatch().padFile().created().getValue()));
+        at.grossPaymentAmount().setValue(padDebitRecord.amount().getValue());
         at.grossPaymentCount().setValue(1);
-        at.merchantAccount().setPrimaryKey(debitRecord.padBatch().merchantAccountKey().getValue());
+        at.merchantAccount().setPrimaryKey(padDebitRecord.padBatch().merchantAccountKey().getValue());
 
-        at.transactionErrorMessage().setValue(getAcknowledgmentErrorMessage(debitRecord));
+        at.transactionErrorMessage().setValue(getAcknowledgmentErrorMessage(padDebitRecord));
 
         Persistence.service().persist(at);
 
-        rejectPaymentRecords(debitRecord, at);
+        rejectPaymentRecords(padDebitRecord, at);
     }
 
-    private void rejectPaymentRecords(PadDebitRecord debitRecord, AggregatedTransfer at) {
+    private void rejectPaymentRecords(PadDebitRecord padDebitRecord, AggregatedTransfer at) {
 
-        for (PadDebitRecordTransaction transactionRecord : debitRecord.transactionRecords()) {
+        for (PadDebitRecordTransaction transactionRecord : padDebitRecord.transactionRecords()) {
             PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class, transactionRecord.paymentRecordKey().getValue());
 
             if (paymentRecord == null) {
-                throw new Error("Payment transaction '" + debitRecord.transactionId().getValue() + "' not found");
+                throw new Error("Payment transaction '" + padDebitRecord.transactionId().getValue() + "' not found");
             }
             if (!EnumSet.of(PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
                 throw new Error("Unexpected payment record status " + paymentRecord.getPrimaryKey() + " " + paymentRecord.paymentStatus().getValue());

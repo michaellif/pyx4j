@@ -45,7 +45,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
     }
 
     @Override
-    void createRejectedAggregatedTransfer(PadBatch padBatch) {
+    protected void createRejectedAggregatedTransfer(PadBatch padBatch) {
         AggregatedTransfer at = EntityFactory.create(AggregatedTransfer.class);
         at.status().setValue(AggregatedTransferStatus.Rejected);
         at.fundsTransferType().setValue(FundsTransferType.PreAuthorizedDebit);
@@ -79,7 +79,7 @@ class PadAcknowledgementProcessor extends AbstractAcknowledgementProcessor {
     }
 
     @Override
-    void acknowledgmentReject(PadDebitRecord debitRecord) {
+    protected void acknowledgmentReject(PadDebitRecord debitRecord) {
         PaymentRecord paymentRecord = Persistence.service().retrieve(PaymentRecord.class,
                 PadTransactionUtils.toVistaPaymentRecordId(debitRecord.transactionId()));
         if (!EnumSet.of(PaymentRecord.PaymentStatus.Processing, PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
