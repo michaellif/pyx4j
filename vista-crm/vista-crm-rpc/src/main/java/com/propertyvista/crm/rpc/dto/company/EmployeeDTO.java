@@ -36,6 +36,7 @@ public interface EmployeeDTO extends Employee, UserCredentialEditDTO {
 
     IList<CrmRole> roles();
 
+    // TODO put auditing configuration here
     UserAuditingConfigurationDTO userAuditingConfiguration();
 
     @Caption(name = "Has security question")
