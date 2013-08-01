@@ -32,12 +32,15 @@ BEGIN
         
         ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
         ALTER TABLE nsf_fee_item DROP CONSTRAINT nsf_fee_item_payment_type_e_ck;
+        ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_details_discriminator_d_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_payment_type_e_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_addr_str_dir_e_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_billing_addr_str_type_e_ck;
         ALTER TABLE payment_method DROP CONSTRAINT payment_method_billing_address_street_direction_e_ck;
         ALTER TABLE payment_method DROP CONSTRAINT payment_method_billing_address_street_type_e_ck;
+        ALTER TABLE payment_method DROP CONSTRAINT payment_method_details_discriminator_d_ck;
         ALTER TABLE payment_method DROP CONSTRAINT payment_method_payment_type_e_ck;
+        ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_id_discriminator_ck;
         ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
         ALTER TABLE recipient DROP CONSTRAINT recipient_recipient_type_e_ck;
         
@@ -183,6 +186,11 @@ BEGIN
                                         ADD COLUMN billing_address_street1 VARCHAR(500),
                                         ADD COLUMN billing_address_street2 VARCHAR(500);
                                         
+        -- payment_payment_details
+        
+        ALTER TABLE payment_payment_details     ADD COLUMN location_code VARCHAR(500),
+                                                ADD COLUMN trace_number VARCHAR(500);
+                                        
         -- payment_type_selection_policy
         
         ALTER TABLE payment_type_selection_policy       ADD COLUMN accepted_credit_card_master_card BOOLEAN,
@@ -285,9 +293,14 @@ BEGIN
                 ||'SET  funds_transfer_type = ''PreAuthorizedDebit'' ';
         
         
-        -- yardi_interface_id 
+        -- building
         
-        -- INSERT YARDI IF CLAUSE HERE!!!
+        EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
+                ||'SET  yardi_interface_id = a.id '
+                ||'FROM (SELECT y.id  '
+                ||'     FROM    _admin_.admin_pmc a '
+                ||'     JOIN    _admin_.admin_pmc_yardi_credential y ON (a.id = y.pmc) '
+                ||'     WHERE   a.namespace = '''||v_schema_name||''') AS a ';   
         
         
         -- emergency_contact
@@ -446,13 +459,19 @@ BEGIN
                 'PasswordRetrievalCrm', 'PasswordRetrievalProspect', 'PasswordRetrievalTenant', 'TenantInvitation'));
         ALTER TABLE insurance_certificate ADD CONSTRAINT insurance_certificate_payment_schedule_e_ck CHECK ((payment_schedule) IN ('Annual', 'Monthly'));
         ALTER TABLE nsf_fee_item ADD CONSTRAINT nsf_fee_item_payment_type_e_ck CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
+        ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_details_discriminator_d_ck 
+                CHECK ((payment_method_details_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo'));
         ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_payment_type_e_ck 
                 CHECK ((payment_method_payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_creator_discriminator_d_ck 
                 CHECK ((payment_method_creator_discriminator) IN ('CrmUser', 'CustomerUser'));
+         ALTER TABLE payment_method ADD CONSTRAINT payment_method_details_discriminator_d_ck 
+                CHECK ((details_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo'));
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_payment_type_e_ck CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
-        ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));     
+        ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));  
+        ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo')); 
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE recipient ADD CONSTRAINT recipient_recipient_type_e_ck CHECK ((recipient_type) IN ('company', 'group', 'person'));
   

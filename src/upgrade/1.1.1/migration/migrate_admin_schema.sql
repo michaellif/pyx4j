@@ -52,6 +52,7 @@ SET search_path = '_admin_';
         -- check constraints
         
         ALTER TABLE admin_pmc_dns_name DROP CONSTRAINT admin_pmc_dns_name_target_e_ck;
+        ALTER TABLE admin_pmc_payment_method DROP CONSTRAINT admin_pmc_payment_method_details_discriminator_d_ck;
         ALTER TABLE admin_pmc_payment_method DROP CONSTRAINT admin_pmc_payment_method_payment_type_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
@@ -59,6 +60,7 @@ SET search_path = '_admin_';
         ALTER TABLE pad_sim_batch DROP CONSTRAINT pad_sim_batch_reconciliation_status_e_ck;
         ALTER TABLE pad_sim_debit_record DROP CONSTRAINT pad_sim_debit_record_reconciliation_status_e_ck;
         ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
+        ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_id_discriminator_ck;
         ALTER TABLE operations_alert DROP CONSTRAINT operations_alert_app_e_ck;
         ALTER TABLE scheduler_trigger_details DROP CONSTRAINT scheduler_trigger_details_id_discriminator_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_details_discriminator_d_ck;
@@ -291,7 +293,10 @@ SET search_path = '_admin_';
         
         ALTER TABLE pad_reconciliation_file     ADD COLUMN funds_transfer_type VARCHAR(50),
                                                 ADD COLUMN created TIMESTAMP;
+        -- payment_payment_details
         
+        ALTER TABLE payment_payment_details     ADD COLUMN location_code VARCHAR(500),
+                                                ADD COLUMN trace_number VARCHAR(500);
         
         -- pmc_document_file
         
@@ -495,6 +500,8 @@ SET search_path = '_admin_';
         
         ALTER TABLE admin_pmc_dns_name ADD CONSTRAINT admin_pmc_dns_name_target_e_ck 
                 CHECK ((target) IN ('field', 'prospectPortal', 'resident', 'residentPortal', 'vistaCrm'));
+        ALTER TABLE admin_pmc_payment_method ADD CONSTRAINT admin_pmc_payment_method_details_discriminator_d_ck 
+                CHECK ((details_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo'));
         ALTER TABLE admin_pmc_payment_method ADD CONSTRAINT admin_pmc_payment_method_payment_type_e_ck 
                 CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
         ALTER TABLE audit_record ADD CONSTRAINT audit_record_app_e_ck 
@@ -520,6 +527,8 @@ SET search_path = '_admin_';
         ALTER TABLE pad_reconciliation_file ADD CONSTRAINT pad_reconciliation_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));
+        ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_id_discriminator_ck 
+                CHECK ((id_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo'));
         ALTER TABLE scheduler_trigger ADD CONSTRAINT scheduler_trigger_trigger_type_e_ck 
                 CHECK ((trigger_type) IN ('billing', 'cleanup', 'depositInterestAdjustment', 'depositRefund', 'equifaxRetention', 'initializeFutureBillingCycles', 
                 'leaseActivation', 'leaseCompletion', 'leaseRenewal', 'paymentsBmoReceive', 'paymentsDbpProcess','paymentsDbpProcessAcknowledgment', 'paymentsDbpProcessReconciliation', 
