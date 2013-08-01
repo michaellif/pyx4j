@@ -40,6 +40,7 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE maintenance_request_schedule_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE notice_of_entry_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE site_descriptor$pmc_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_building_origination_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  
 
   
@@ -59,6 +60,7 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE notice_of_entry_seq OWNER TO vista ;
  ALTER SEQUENCE portal_logo_image_resource_seq OWNER TO vista ;
  ALTER SEQUENCE site_descriptor$pmc_info_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_building_origination_seq OWNER TO vista ;
  
 COMMIT;
 

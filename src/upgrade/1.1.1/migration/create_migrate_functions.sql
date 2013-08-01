@@ -77,10 +77,7 @@ BEGIN
         ALTER TABLE application_document_file   ADD COLUMN caption VARCHAR(500),
                                                 ADD COLUMN description VARCHAR(500);
                                                 
-        -- building
-        
-        ALTER TABLE building ADD COLUMN yardi_interface_id BIGINT;
-        
+             
                                                 
         -- company
         
@@ -244,6 +241,19 @@ BEGIN
         
         ALTER TABLE vendor   ADD COLUMN logo_media_file_caption VARCHAR(500),
                              ADD COLUMN logo_media_file_description  VARCHAR(500);   
+                             
+        
+        -- yardi_building_origination
+        
+        CREATE TABLE yardi_building_origination
+        (
+                id                      BIGINT                  NOT NULL,
+                building                BIGINT,
+                yardi_interface_id      BIGINT,
+                        CONSTRAINT yardi_building_origination_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE yardi_building_origination OWNER TO vista;
         
         /**
         ***     =====================================================================================================
@@ -293,15 +303,7 @@ BEGIN
                 ||'SET  funds_transfer_type = ''PreAuthorizedDebit'' ';
         
         
-        -- building
-        
-        EXECUTE 'UPDATE '||v_schema_name||'.building AS b '
-                ||'SET  yardi_interface_id = a.id '
-                ||'FROM (SELECT y.id  '
-                ||'     FROM    _admin_.admin_pmc a '
-                ||'     JOIN    _admin_.admin_pmc_yardi_credential y ON (a.id = y.pmc) '
-                ||'     WHERE   a.namespace = '''||v_schema_name||''') AS a ';   
-        
+       
         
         -- emergency_contact
         EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact '
@@ -349,6 +351,16 @@ BEGIN
         
         SET CONSTRAINTS payment_method_billing_address_country_fk,payment_method_billing_address_province_fk,
                         payment_method_customer_fk,payment_method_details_fk,payment_method_tenant_fk IMMEDIATE;
+        
+        
+        
+        -- yardi_building_origination
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.yardi_building_origination (id,building,yardi_interface_id) '
+                ||'(SELECT nextval(''public.yardi_building_origination_seq'') AS id, b.id AS building,y.id AS yardi_interface_id '
+                ||'FROM '||v_schema_name||'.building b, _admin_.admin_pmc a, _admin_.admin_pmc_yardi_credential y '
+                ||'WHERE a.id = y.pmc '
+                ||'AND a.namespace = '''||v_schema_name||''')';
         
         /**
         ***     ==========================================================================================================
@@ -445,6 +457,7 @@ BEGIN
         ALTER TABLE site_descriptor$logo ADD CONSTRAINT site_descriptor$logo_value_fk FOREIGN KEY(value) REFERENCES portal_logo_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE site_descriptor$pmc_info ADD CONSTRAINT site_descriptor$pmc_info_owner_fk FOREIGN KEY(owner) REFERENCES site_descriptor(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE site_descriptor$pmc_info ADD CONSTRAINT site_descriptor$pmc_info_value_fk FOREIGN KEY(value) REFERENCES html_content(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE yardi_building_origination ADD CONSTRAINT yardi_building_origination_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
 
 
         

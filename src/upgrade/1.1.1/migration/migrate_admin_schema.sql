@@ -399,6 +399,20 @@ SET search_path = '_admin_';
         SET     trigger_type = 'paymentsPadProcessAcknowledgment'
         WHERE   trigger_type = 'paymentsPadProcesAcknowledgment';
         
+        INSERT INTO scheduler_trigger (id,trigger_type,name,population_type,created)
+        ((SELECT nextval('public.scheduler_trigger_seq') AS id,'paymentsDbpProcess','P 0B - Process Direct Banking, create payment records and post to yardi (auto triggered by PaymentsBmoReceive)',
+        'allPmc',current_timestamp)
+        UNION
+        (SELECT nextval('public.scheduler_trigger_seq') AS id,'paymentsDbpSend','P 5B - Send Direct Banking (BMO) Funds Transfer to Caledon',
+        'allPmc',current_timestamp)
+        UNION
+        (SELECT nextval('public.scheduler_trigger_seq') AS id,'paymentsDbpProcessAcknowledgment','P 6C - Payments Direct Banking Process Acknowledgment (auto triggered by ReceiveAcknowledgment)',
+        'allPmc',current_timestamp)
+        UNION
+        (SELECT nextval('public.scheduler_trigger_seq') AS id,'paymentsDbpProcessReconciliation','P 7C - Payments Direct Banking Process Reconciliation (auto triggered by ReceiveReconciliation)',
+        'allPmc',current_timestamp));
+        
+        
         
         /**
         ***     ==========================================================================================================
