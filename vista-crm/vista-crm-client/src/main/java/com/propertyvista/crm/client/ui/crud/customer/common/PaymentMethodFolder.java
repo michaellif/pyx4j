@@ -128,6 +128,11 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         }
 
         @Override
+        protected String getNameOn() {
+            return PaymentMethodFolder.this.getNameOn();
+        }
+
+        @Override
         protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
             PaymentMethodFolder.this.onBillingAddressSameAsCurrentOne(set, comp);
         }
