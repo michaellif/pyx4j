@@ -148,10 +148,10 @@ public class EftReportWidget extends Composite implements ReportWidget {
             builder.appendHtmlConstant("</tr>");
         }
         if (eftReportData.agregateByBuildings().isBooleanTrue()) {
-            appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
+            appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
         }
-
-        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total:"), overallTotal);
+        appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"), new BigDecimal(paymentRecords.size()));
+        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $:"), overallTotal);
 
         builder.appendHtmlConstant("</tbody>");
         builder.appendHtmlConstant("</table>");
