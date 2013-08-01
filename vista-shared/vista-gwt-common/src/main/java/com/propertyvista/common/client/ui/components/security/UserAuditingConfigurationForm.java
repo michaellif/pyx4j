@@ -34,8 +34,8 @@ public class UserAuditingConfigurationForm extends CEntityDecoratableForm<UserAu
         TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        contentPanel.setH1(++row, 0, 1, i18n.tr("Login Notifications"));
-        contentPanel.setWidget(++row, 0, inject(proto().loginNotifications(), new LoginNotificationsConfigurationForm()));
+        contentPanel.setH1(++row, 0, 2, i18n.tr("Login Notifications"));
+        contentPanel.setWidget(++row, 0, 2, inject(proto().loginNotifications(), new LoginNotificationsConfigurationForm()));
 
         return contentPanel;
     }
