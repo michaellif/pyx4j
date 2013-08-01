@@ -16,9 +16,16 @@ package com.propertyvista.server.jobs;
 import com.pyx4j.config.server.ServerSideFactory;
 
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
-public class PadProcessAcknowledgmentProcess implements PmcProcess {
+public class PaymentsFundsTransferProcessReconciliationProcess implements PmcProcess {
+
+    private final FundsTransferType fundsTransferType;
+
+    public PaymentsFundsTransferProcessReconciliationProcess(FundsTransferType fundsTransferType) {
+        this.fundsTransferType = fundsTransferType;
+    }
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -32,8 +39,16 @@ public class PadProcessAcknowledgmentProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).processPmcPadAcknowledgement(context.getExecutionMonitor());
-
+        switch (fundsTransferType) {
+        case PreAuthorizedDebit:
+            ServerSideFactory.create(PaymentProcessFacade.class).processPmcPadReconciliation(context.getExecutionMonitor());
+            break;
+        case DirectBankingPayment:
+            ServerSideFactory.create(PaymentProcessFacade.class).processPmcDirectDebitReconciliation(context.getExecutionMonitor());
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

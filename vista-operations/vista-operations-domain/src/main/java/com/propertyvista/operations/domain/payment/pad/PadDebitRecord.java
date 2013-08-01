@@ -15,15 +15,20 @@ package com.propertyvista.operations.domain.payment.pad;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.ToString;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
@@ -70,5 +75,10 @@ public interface PadDebitRecord extends IEntity {
     // Not coming from Caledon, this is our processing flag
     @ToString
     IPrimitive<PadDebitRecordProcessingStatus> processingStatus();
+
+    @Owned(cascade = {})
+    @Detached(level = AttachLevel.Detached)
+    @OrderBy(PrimaryKey.class)
+    IList<PadDebitRecordTransaction> transactionRecords();
 
 }

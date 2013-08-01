@@ -63,13 +63,18 @@ public class PmcProcessFactory {
             return new PaymentsFundsTransferSendProcess(FundsTransferType.DirectBankingPayment);
 
         case paymentsReceiveAcknowledgment:
-            return new PadReceiveAcknowledgmentProcess();
+            return new PaymentsFundsTransferReceiveAcknowledgmentProcess();
         case paymentsPadProcessAcknowledgment:
-            return new PadProcessAcknowledgmentProcess();
+            return new PaymentsFundsTransferProcessAcknowledgmentProcess(FundsTransferType.PreAuthorizedDebit);
+        case paymentsDbpProcessAcknowledgment:
+            return new PaymentsFundsTransferProcessAcknowledgmentProcess(FundsTransferType.DirectBankingPayment);
+
         case paymentsReceiveReconciliation:
-            return new PadReceiveReconciliationProcess();
+            return new PaymentsFundsTransferReceiveReconciliationProcess();
         case paymentsPadProcessReconciliation:
-            return new PadProcessReconciliationProcess();
+            return new PaymentsFundsTransferProcessReconciliationProcess(FundsTransferType.PreAuthorizedDebit);
+        case paymentsDbpProcessReconciliation:
+            return new PaymentsFundsTransferProcessReconciliationProcess(FundsTransferType.DirectBankingPayment);
 
         case paymentsTenantSure:
             return new PaymentsTenantSureProcess();

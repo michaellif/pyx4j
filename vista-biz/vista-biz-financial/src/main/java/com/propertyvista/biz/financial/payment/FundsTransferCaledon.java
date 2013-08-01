@@ -36,6 +36,8 @@ import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.FundsTransferType;
+import com.propertyvista.domain.financial.MerchantAccount;
+import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
@@ -76,6 +78,29 @@ public class FundsTransferCaledon {
                 return padFile;
             }
         });
+    }
+
+    static PadBatch getPadBatch(PadFile padFile, Pmc pmc, MerchantAccount merchantAccount) {
+        EntityQueryCriteria<PadBatch> criteria = EntityQueryCriteria.create(PadBatch.class);
+        criteria.eq(criteria.proto().padFile(), padFile);
+        criteria.eq(criteria.proto().pmc(), pmc);
+        criteria.eq(criteria.proto().merchantAccountKey(), merchantAccount.id());
+        PadBatch padBatch = Persistence.service().retrieve(criteria);
+        if (padBatch == null) {
+            padBatch = EntityFactory.create(PadBatch.class);
+            padBatch.padFile().set(padFile);
+            padBatch.pmc().set(pmc);
+
+            padBatch.merchantTerminalId().setValue(merchantAccount.merchantTerminalId().getValue());
+            padBatch.bankId().setValue(merchantAccount.bankId().getValue());
+            padBatch.branchTransitNumber().setValue(merchantAccount.branchTransitNumber().getValue());
+            padBatch.accountNumber().setValue(merchantAccount.accountNumber().getValue());
+            padBatch.chargeDescription().setValue(merchantAccount.chargeDescription().getValue());
+
+            padBatch.merchantAccountKey().setValue(merchantAccount.id().getValue());
+            Persistence.service().persist(padBatch);
+        }
+        return padBatch;
     }
 
     public boolean sendFundsTransferFile(final PadFile padFile) {
@@ -247,7 +272,7 @@ public class FundsTransferCaledon {
 
                 @Override
                 public Void execute() {
-                    new PadCaledonAcknowledgement(executionMonitor).validateAndPersistFile(padAkFile);
+                    new FundsTransferCaledonAcknowledgement(executionMonitor).validateAndPersistFile(padAkFile);
                     return null;
                 }
             });

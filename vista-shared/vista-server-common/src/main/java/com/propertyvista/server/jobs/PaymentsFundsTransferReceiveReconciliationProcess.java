@@ -22,7 +22,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 
-public class PadReceiveAcknowledgmentProcess implements PmcProcess {
+public class PaymentsFundsTransferReceiveReconciliationProcess implements PmcProcess {
 
     private FundsTransferType fundsTransferType;
 
@@ -31,7 +31,7 @@ public class PadReceiveAcknowledgmentProcess implements PmcProcess {
         if (VistaDeployment.isVistaStaging()) {
             return false;
         } else {
-            fundsTransferType = ServerSideFactory.create(PaymentProcessFacade.class).receiveFundsTransferAcknowledgementFile(context.getExecutionMonitor());
+            fundsTransferType = ServerSideFactory.create(PaymentProcessFacade.class).receiveFundsTransferReconciliation(context.getExecutionMonitor());
             return (fundsTransferType != null);
         }
     }
@@ -50,14 +50,13 @@ public class PadReceiveAcknowledgmentProcess implements PmcProcess {
     public void complete(PmcProcessContext context) {
         switch (fundsTransferType) {
         case PreAuthorizedDebit:
-            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcessAcknowledgment);
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsPadProcessReconciliation);
             break;
         case DirectBankingPayment:
-            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcessAcknowledgment);
+            ServerSideFactory.create(OperationsTriggerFacade.class).startProcess(PmcProcessType.paymentsDbpProcessReconciliation);
             break;
         default:
             throw new IllegalArgumentException();
         }
     }
-
 }

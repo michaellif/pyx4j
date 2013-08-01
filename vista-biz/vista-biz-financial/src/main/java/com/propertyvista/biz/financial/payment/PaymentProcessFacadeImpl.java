@@ -14,17 +14,9 @@
 package com.propertyvista.biz.financial.payment;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.server.Executable;
-import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.server.TransactionScopeOption;
-import com.pyx4j.entity.server.UnitOfWork;
-import com.pyx4j.entity.shared.AttachLevel;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.FundsTransferType;
-import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 
@@ -37,45 +29,12 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
 
     @Override
     public boolean sendFundsTransferFile(final PadFile padFile) {
-        return new UnitOfWork(TransactionScopeOption.Suppress).execute(new Executable<Boolean, RuntimeException>() {
-            @Override
-            public Boolean execute() {
-                return new FundsTransferCaledon().sendFundsTransferFile(padFile);
-            }
-        });
+        return new FundsTransferCaledon().sendFundsTransferFile(padFile);
     }
 
     @Override
     public void prepareEcheckFundsTransfer(final ExecutionMonitor executionMonitor, final PadFile padFile) {
-        // We take all Queued records in this PMC
-        EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
-        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
-        ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
-        try {
-            while (paymentRecordIterator.hasNext()) {
-
-                final PaymentRecord paymentRecord = paymentRecordIterator.next();
-
-                new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
-
-                    @Override
-                    public Void execute() {
-                        if (new PadProcessor().processPayment(paymentRecord, padFile)) {
-                            executionMonitor.addProcessedEvent("Processed amount", paymentRecord.amount().getValue());
-                        } else {
-                            executionMonitor.addFailedEvent("No Merchant Account", paymentRecord.amount().getValue());
-                        }
-                        return null;
-                    }
-
-                });
-                // If there are error we may create new run again.
-
-            }
-        } finally {
-            paymentRecordIterator.close();
-        }
+        new PadFundsTransfer(executionMonitor, padFile).prepareEcheckFundsTransfer();
     }
 
     @Override
@@ -94,6 +53,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     }
 
     @Override
+    public void processPmcDirectDebitAcknowledgement(ExecutionMonitor executionMonitor) {
+        new DirectDebitAcknowledgementProcessor(executionMonitor).processPmcAcknowledgement();
+    }
+
+    @Override
     public FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor) {
         return new FundsTransferCaledon().receiveFundsTransferReconciliation(executionMonitor);
     }
@@ -101,6 +65,11 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     @Override
     public void processPmcPadReconciliation(ExecutionMonitor executionMonitor) {
         new PadReconciliationProcessor(executionMonitor).processPmcReconciliation();
+    }
+
+    @Override
+    public void processPmcDirectDebitReconciliation(ExecutionMonitor executionMonitor) {
+        new DirectDebitReconciliationProcessor(executionMonitor).processPmcReconciliation();
     }
 
     @Override

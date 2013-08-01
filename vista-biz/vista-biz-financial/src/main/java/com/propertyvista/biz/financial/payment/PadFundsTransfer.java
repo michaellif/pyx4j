@@ -13,12 +13,9 @@
  */
 package com.propertyvista.biz.financial.payment;
 
-import java.math.BigDecimal;
 import java.util.concurrent.Callable;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.commons.UserRuntimeException;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
@@ -30,57 +27,39 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
-import com.propertyvista.biz.system.Vista2PmcFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
-import com.propertyvista.operations.domain.payment.pad.PadDebitRecordTransaction;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
-import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.server.jobs.TaskRunner;
 
-class DirectDebitFundsTransfer {
+class PadFundsTransfer {
 
     private final ExecutionMonitor executionMonitor;
 
     private final PadFile padFile;
 
-    private final Pmc pmc;
-
-    private final BigDecimal directBankingFee;
-
-    private final VistaMerchantAccount vistaMerchantAccount;
-
-    DirectDebitFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile) {
+    PadFundsTransfer(ExecutionMonitor executionMonitor, PadFile padFile) {
         this.executionMonitor = executionMonitor;
         this.padFile = padFile;
-        this.pmc = VistaDeployment.getCurrentPmc();
-        this.directBankingFee = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentFees().directBankingFee().getValue();
-
-        vistaMerchantAccount = TaskRunner.runInOperationsNamespace(new Callable<VistaMerchantAccount>() {
-            @Override
-            public VistaMerchantAccount call() {
-                return Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class));
-            }
-        });
-        if ((vistaMerchantAccount == null || vistaMerchantAccount.merchantTerminalId().isNull())) {
-            throw new UserRuntimeException("Vista MerchantAccount is not setup");
-        }
     }
 
-    void prepareDirectDebitFundsTransfer() {
+    void prepareEcheckFundsTransfer() {
         // We take all Queued records in this PMC
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
-        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
+        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (paymentRecordIterator.hasNext()) {
+
                 final PaymentRecord paymentRecord = paymentRecordIterator.next();
+
                 new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
                     @Override
@@ -95,6 +74,7 @@ class DirectDebitFundsTransfer {
 
                 });
                 // If there are error we may create new run again.
+
             }
         } finally {
             paymentRecordIterator.close();
@@ -102,7 +82,7 @@ class DirectDebitFundsTransfer {
     }
 
     private boolean addRecordToBatch(final PaymentRecord paymentRecord) {
-        final MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
+        MerchantAccount merchantAccount = PaymentUtils.retrieveMerchantAccount(paymentRecord);
         if ((merchantAccount == null) || (!PaymentUtils.isElectronicPaymentsSetup(merchantAccount))) {
             return false;
         }
@@ -111,51 +91,36 @@ class DirectDebitFundsTransfer {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
 
+        Persistence.service().retrieve(paymentRecord.billingAccount());
+
+        final Pmc pmc = VistaDeployment.getCurrentPmc();
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                PadBatch padBatch = FundsTransferCaledon.getPadBatch(padFile, pmc, merchantAccount);
-                updatePadDebitRecord(padBatch, paymentRecord);
+                PadBatch padBatch = FundsTransferCaledon.getPadBatch(padFile, pmc, paymentRecord.merchantAccount());
+                createPadDebitRecord(padBatch, paymentRecord);
                 return null;
             }
-
         });
 
         return true;
     }
 
-    private void updatePadDebitRecord(PadBatch padBatch, PaymentRecord paymentRecord) {
-        EntityQueryCriteria<PadDebitRecord> criteria = EntityQueryCriteria.create(PadDebitRecord.class);
-        criteria.eq(criteria.proto().padBatch(), padBatch);
-        PadDebitRecord padRecord = Persistence.service().retrieve(criteria);
-        if (padRecord == null) {
-            padRecord = EntityFactory.create(PadDebitRecord.class);
-            padRecord.padBatch().set(padBatch);
-            padRecord.processed().setValue(Boolean.FALSE);
-            padRecord.clientId().setValue("vista");
-            padRecord.amount().setValue(BigDecimal.ZERO);
-            padRecord.transactionId().setValue(PadTransactionUtils.toCaldeonTransactionId(padBatch.id()));
+    private void createPadDebitRecord(PadBatch padBatch, PaymentRecord paymentRecord) {
+        PadDebitRecord padRecord = EntityFactory.create(PadDebitRecord.class);
+        padRecord.padBatch().set(padBatch);
+        padRecord.processed().setValue(Boolean.FALSE);
+        padRecord.clientId().setValue(paymentRecord.billingAccount().accountNumber().getValue());
+        padRecord.amount().setValue(paymentRecord.amount().getValue());
+        EcheckInfo echeckInfo = paymentRecord.paymentMethod().details().cast();
 
-            padRecord.bankId().setValue(vistaMerchantAccount.bankId().getValue());
-            padRecord.branchTransitNumber().setValue(vistaMerchantAccount.branchTransitNumber().getValue());
-            padRecord.accountNumber().setValue(vistaMerchantAccount.accountNumber().getValue());
-        }
+        padRecord.bankId().setValue(echeckInfo.bankId().getValue());
+        padRecord.branchTransitNumber().setValue(echeckInfo.branchTransitNumber().getValue());
+        padRecord.accountNumber().setValue(echeckInfo.accountNo().number().getValue());
 
-        BigDecimal transactionAmount;
-        if (paymentRecord.amount().getValue().compareTo(directBankingFee) > 0) {
-            transactionAmount = paymentRecord.amount().getValue().subtract(directBankingFee);
-            executionMonitor.addInfoEvent("Fee amount", null, directBankingFee);
-        } else {
-            transactionAmount = new BigDecimal("0.01");
-            executionMonitor.addInfoEvent("Fee amount", null, paymentRecord.amount().getValue().subtract(transactionAmount));
-        }
-        padRecord.amount().setValue(padRecord.amount().getValue().add(transactionAmount));
+        padRecord.transactionId().setValue(PadTransactionUtils.toCaldeonTransactionId(paymentRecord.id()));
 
         Persistence.service().persist(padRecord);
 
-        PadDebitRecordTransaction transactionRecord = EntityFactory.create(PadDebitRecordTransaction.class);
-        transactionRecord.padDebitRecord().set(padRecord);
-        transactionRecord.paymentRecordKey().setValue(paymentRecord.getPrimaryKey());
-        Persistence.service().persist(transactionRecord);
     }
 }

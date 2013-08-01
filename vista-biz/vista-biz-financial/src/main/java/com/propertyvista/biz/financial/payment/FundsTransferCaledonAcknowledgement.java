@@ -31,11 +31,11 @@ import com.propertyvista.payment.pad.data.PadAckBatch;
 import com.propertyvista.payment.pad.data.PadAckDebitRecord;
 import com.propertyvista.payment.pad.data.PadAckFile;
 
-class PadCaledonAcknowledgement {
+class FundsTransferCaledonAcknowledgement {
 
     private final ExecutionMonitor executionMonitor;
 
-    PadCaledonAcknowledgement(ExecutionMonitor executionMonitor) {
+    FundsTransferCaledonAcknowledgement(ExecutionMonitor executionMonitor) {
         this.executionMonitor = executionMonitor;
     }
 
@@ -145,7 +145,7 @@ class PadCaledonAcknowledgement {
             padBatch.acknowledgmentStatusCode().setValue(akBatch.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padBatch);
 
-            executionMonitor.addFailedEvent("Pad Batch Rejected", padBatch.batchAmount().getValue());
+            executionMonitor.addFailedEvent("Batch Rejected", padBatch.batchAmount().getValue());
         }
     }
 
@@ -182,7 +182,7 @@ class PadCaledonAcknowledgement {
             padDebitRecord.acknowledgmentStatusCode().setValue(akDebitRecord.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padDebitRecord);
 
-            executionMonitor.addFailedEvent("Debit Record Rejected", padDebitRecord.amount().getValue());
+            executionMonitor.addFailedEvent("Record Rejected", padDebitRecord.amount().getValue());
         }
     }
 
@@ -193,7 +193,7 @@ class PadCaledonAcknowledgement {
             criteria.isNull(criteria.proto().processingStatus());
             for (PadDebitRecord padDebitRecord : Persistence.service().query(criteria)) {
                 padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgedReceived);
-                executionMonitor.addProcessedEvent("Debit Record Acknowledged", padDebitRecord.amount().getValue());
+                executionMonitor.addProcessedEvent("Record Acknowledged", padDebitRecord.amount().getValue());
                 Persistence.service().persist(padDebitRecord);
             }
         }
@@ -204,7 +204,7 @@ class PadCaledonAcknowledgement {
             criteria.isNull(criteria.proto().processingStatus());
             for (PadBatch padBatch : Persistence.service().query(criteria)) {
                 padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgedReceived);
-                executionMonitor.addProcessedEvent("Pad Batch Acknowledged");
+                executionMonitor.addProcessedEvent("Batch Acknowledged");
                 Persistence.service().persist(padBatch);
             }
         }

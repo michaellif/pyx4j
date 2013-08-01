@@ -35,9 +35,13 @@ public interface PaymentProcessFacade {
 
     void processPmcPadAcknowledgement(ExecutionMonitor executionMonitor);
 
+    void processPmcDirectDebitAcknowledgement(ExecutionMonitor executionMonitor);
+
     FundsTransferType receiveFundsTransferReconciliation(ExecutionMonitor executionMonitor);
 
     void processPmcPadReconciliation(ExecutionMonitor executionMonitor);
+
+    void processPmcDirectDebitReconciliation(ExecutionMonitor executionMonitor);
 
     void createPmcPreauthorisedPayments(ExecutionMonitor executionMonitor, LogicalDate padGenerationDate);
 

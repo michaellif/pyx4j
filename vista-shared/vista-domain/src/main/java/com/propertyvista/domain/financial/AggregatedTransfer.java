@@ -22,6 +22,7 @@ import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.JoinTable;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
@@ -59,6 +60,7 @@ public interface AggregatedTransfer extends IEntity {
 
     MerchantAccount merchantAccount();
 
+    @MemberColumn(notNull = true)
     IPrimitive<FundsTransferType> fundsTransferType();
 
     IPrimitive<Key> padReconciliationSummaryKey();
