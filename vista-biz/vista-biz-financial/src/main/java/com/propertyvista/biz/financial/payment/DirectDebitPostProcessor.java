@@ -127,7 +127,7 @@ public class DirectDebitPostProcessor {
         criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.DirectBanking);
         criteria.asc(criteria.proto().billingAccount().lease().unit().building());
 
-        PaymentBatchPosting.processScheduledPayments(executionMonitor, criteria, new ProcessPaymentRecordInBatch() {
+        PaymentBatchPosting.processPaymentsInBatch(executionMonitor, criteria, new ProcessPaymentRecordInBatch() {
 
             @Override
             public void processPayment(PaymentRecord paymentRecord, PaymentBatchContext paymentBatchContext) throws PaymentException {
