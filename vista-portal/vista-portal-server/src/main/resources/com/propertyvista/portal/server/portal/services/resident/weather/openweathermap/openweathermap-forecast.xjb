@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+          version="2.1">
+    <bindings schemaLocation="open-api-weather-forecast.xsd" node="/xsd:schema">
+        <schemaBindings>
+            <package name="com.propertyvista.portal.server.portal.services.resident.weather.openweathermap" />
+        </schemaBindings>
+        <bindings node="//xsd:attribute[@name='value']" multiple="true">
+            <property name="ValueAttribute" />
+        </bindings>
+        <bindings node="./xsd:element[@name='weatherdata']/xsd:complexType/xsd:sequence/xsd:element[@name='location']">
+            <bindings node=".//xsd:element[@name='location']/xsd:complexType">
+                <class name="GeoLocation" />
+            </bindings>
+            <bindings node=".//xsd:element[@name='location']">
+                <property name="GeoLocation" />
+            </bindings>
+        </bindings>
+    </bindings>
+</bindings>
