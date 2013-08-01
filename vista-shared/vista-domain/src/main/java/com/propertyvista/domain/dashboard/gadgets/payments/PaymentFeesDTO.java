@@ -19,6 +19,7 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
+import com.pyx4j.entity.annotations.MemberColumn;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -30,13 +31,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 public interface PaymentFeesDTO extends IEntity {
 
     @I18n
-    enum PaymentFeeMeasure {
+    enum PaymentFeePolicy {
 
-        @Translate("Fee, $ per transaction")
-        absolute,
-
-        @Translate("Fee, % per transaction")
-        relative;
+        @Translate("Fee per transaction")
+        feePerStransaction;
 
         @Override
         public String toString() {
@@ -47,37 +45,28 @@ public interface PaymentFeesDTO extends IEntity {
 
     // this caption is intentionally left blank :)
     @Caption(name = "")
-    IPrimitive<PaymentFeeMeasure> paymentFeeMeasure();
+    IPrimitive<PaymentFeePolicy> paymentFeePolicy();
 
+    @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> cash();
+    IPrimitive<BigDecimal> visa();
 
+    @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> check();
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> visaDebit();
 
+    @Editor(type = EditorType.percentage)
     @Format("#,##0.00")
+    @MemberColumn(scale = 4)
+    IPrimitive<BigDecimal> masterCard();
+
     @Editor(type = EditorType.money)
-    @Caption(name = "eCheck")
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> eCheck();
 
-    @Format("#,##0.00")
     @Editor(type = EditorType.money)
-    @Caption(name = "EFT")
-    IPrimitive<BigDecimal> eft();
-
     @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    @Caption(name = "CC")
-    IPrimitive<BigDecimal> cc();
-
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> interacCaledon();
-
-    @Format("#,##0.00")
-    @Editor(type = EditorType.money)
-    IPrimitive<BigDecimal> interacVisa();
+    IPrimitive<BigDecimal> directBanking();
 
 }

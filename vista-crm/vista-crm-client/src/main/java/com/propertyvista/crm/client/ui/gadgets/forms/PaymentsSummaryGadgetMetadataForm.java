@@ -82,7 +82,6 @@ public class PaymentsSummaryGadgetMetadataForm extends CEntityDecoratableForm<Pa
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
-
         get(proto().asOf()).setVisible(getValue().customizeDate().isBooleanTrue());
     }
 }

@@ -22,16 +22,16 @@ import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesHolderDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public interface PaymentReportService extends IService {
+public interface PaymentRecordsSummaryGadgetService extends IService {
 
-    void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
+    void paymentRecordsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildings, LogicalDate targetDate,
             Vector<PaymentRecord.PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria);
 
-    void paymentsFees(AsyncCallback<Vector<PaymentFeesDTO>> callback);
+    void fundsTransferFees(AsyncCallback<PaymentFeesHolderDTO> callback);
 
 }

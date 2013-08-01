@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.client.ui.gadgets.impl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +23,10 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -33,16 +34,17 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
-import com.pyx4j.forms.client.ui.datatable.DataItem;
-import com.pyx4j.forms.client.ui.datatable.DataTable;
 import com.pyx4j.forms.client.ui.datatable.DataTable.SortChangeHandler;
-import com.pyx4j.forms.client.ui.datatable.DataTableModel;
 import com.pyx4j.forms.client.ui.datatable.DataTablePanel;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
 import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
@@ -50,17 +52,18 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilt
 import com.propertyvista.crm.client.ui.gadgets.forms.PaymentsSummaryGadgetMetadataForm;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsSummaryGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesHolderDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.dashboard.gadgets.type.PaymentsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.property.asset.building.Building;
 
-public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGadgetMetadata> {
+public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGadgetMetadata> {
 
-    private final static I18n i18n = I18n.get(PaymentsSummaryGadget.class);
+    private final static I18n i18n = I18n.get(PaymentRecordsSummaryGadget.class);
 
     private final static List<ColumnDescriptor> DEFAULT_PAYMENTS_SUMMARY_COLUMN_DESCRIPTORS;
     static {
@@ -80,9 +83,9 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
         );//@formatter:on
     }
 
-    private final PaymentReportService service;
+    private final PaymentRecordsSummaryGadgetService service;
 
-    private DataTableModel<PaymentFeesDTO> feesTableModel;
+    private CEntityForm<PaymentFeesHolderDTO> paymentFeesForm;
 
     private HTML summaryTitlePanel;
 
@@ -90,9 +93,9 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
 
     private int pageNumber;
 
-    public PaymentsSummaryGadget(PaymentsSummaryGadgetMetadata gadgetMetadata) {
+    public PaymentRecordsSummaryGadget(PaymentsSummaryGadgetMetadata gadgetMetadata) {
         super(gadgetMetadata, PaymentsSummaryGadgetMetadata.class, new PaymentsSummaryGadgetMetadataForm());
-        service = GWT.<PaymentReportService> create(PaymentReportService.class);
+        service = GWT.<PaymentRecordsSummaryGadgetService> create(PaymentRecordsSummaryGadgetService.class);
         pageNumber = 0;
         setDefaultPopulator(new Populator() {
             @Override
@@ -114,7 +117,7 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
     }
 
     private void populatePage(final int pageNumber) {
-        service.paymentsSummary(//@formatter:off
+        service.paymentRecordsSummary(//@formatter:off
                 new AsyncCallback<EntitySearchResult<PaymentsSummary>>() {
                     
                     @Override
@@ -242,29 +245,11 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
         feesCaption.getElement().getStyle().setProperty("textAlign", "center");
         feesPanel.add(feesCaption);
 
-        PaymentFeesDTO proto = EntityFactory.getEntityPrototype(PaymentFeesDTO.class);
-        feesTableModel = new DataTableModel<PaymentFeesDTO>(PaymentFeesDTO.class);
-        feesTableModel.setColumnDescriptors(Arrays.asList(//@formatter:off
-                new MemberColumnDescriptor.Builder(proto.paymentFeeMeasure()).sortable(false).width("20%").build(),
-                new MemberColumnDescriptor.Builder(proto.cash()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.check()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.eCheck()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.eft()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.cc()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.interacCaledon()).sortable(false).build(),
-                new MemberColumnDescriptor.Builder(proto.interacVisa()).sortable(false).build()
-        ));//@formatter:on
+        paymentFeesForm = new PaymentFeesForm();
+        paymentFeesForm.initContent();
 
-        DataTable<PaymentFeesDTO> feesTable = new DataTable<PaymentFeesDTO>(feesTableModel);
-        feesTable.setWidth("100%");
-        feesTable.getElement().getStyle().setProperty("tableLayout", "auto");
-        feesTable.setHasColumnClickSorting(false);
-        feesTable.setColumnSelectorVisible(false);
-        feesTable.setHasDetailsNavigation(false);
-        feesTable.setMarkSelectedRow(false);
-        feesPanel.add(feesTable);
-
-        feesPanel.setCellHorizontalAlignment(feesTable, HasHorizontalAlignment.ALIGN_CENTER);
+        feesPanel.add(paymentFeesForm);
+        feesPanel.setCellHorizontalAlignment(paymentFeesForm, HasHorizontalAlignment.ALIGN_CENTER);
 
         return feesPanel;
     }
@@ -298,7 +283,7 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
     }
 
     private void populateFeesPanel() {
-        service.paymentsFees(new AsyncCallback<Vector<PaymentFeesDTO>>() {
+        service.fundsTransferFees(new AsyncCallback<PaymentFeesHolderDTO>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -306,15 +291,8 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
             }
 
             @Override
-            public void onSuccess(Vector<PaymentFeesDTO> result) {
-                if (!result.isEmpty()) {
-                    List<DataItem<PaymentFeesDTO>> dataItems = new ArrayList<DataItem<PaymentFeesDTO>>(2);
-                    dataItems.add(new DataItem<PaymentFeesDTO>(result.get(0)));
-                    dataItems.add(new DataItem<PaymentFeesDTO>(result.get(1)));
-                    feesTableModel.populateData(dataItems, 0, false, 2);
-                } else {
-                    feesTableModel.clearData();
-                }
+            public void onSuccess(PaymentFeesHolderDTO result) {
+                paymentFeesForm.populate(result);
                 redrawSummaryCaption();
                 populateSucceded();
             }
@@ -324,5 +302,46 @@ public class PaymentsSummaryGadget extends GadgetInstanceBase<PaymentsSummaryGad
 
     private LogicalDate getStatusDate() {
         return getMetadata().customizeDate().isBooleanTrue() ? getMetadata().asOf().getValue() : new LogicalDate(ClientContext.getServerDate());
+    }
+
+    private static final class PaymentFeesForm extends CEntityDecoratableForm<PaymentFeesHolderDTO> {
+
+        public PaymentFeesForm() {
+            super(PaymentFeesHolderDTO.class);
+            setViewable(true);
+            setEditable(false);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            FlowPanel panel = new FlowPanel();
+            panel.add(inject(proto().paymentFees(), new PaymentFeesFolder()));
+            return panel;
+        }
+
+        private static final class PaymentFeesFolder extends VistaTableFolder<PaymentFeesDTO> {
+
+            private final List<EntityFolderColumnDescriptor> columns;
+
+            public PaymentFeesFolder() {
+                super(PaymentFeesDTO.class);
+                setAddable(false);
+                setRemovable(false);
+                columns = Arrays.asList(//@formatter:off
+                        new EntityFolderColumnDescriptor(proto().paymentFeePolicy(), "10em"),
+                        new EntityFolderColumnDescriptor(proto().visa(), "8em"),
+                        new EntityFolderColumnDescriptor(proto().visaDebit(), "8em"),
+                        new EntityFolderColumnDescriptor(proto().masterCard(), "8em"),
+                        new EntityFolderColumnDescriptor(proto().eCheck(), "8em"),
+                        new EntityFolderColumnDescriptor(proto().directBanking(), "8em")
+                );//@formatter:on
+            }
+
+            @Override
+            public List<EntityFolderColumnDescriptor> columns() {
+                return columns;
+            }
+
+        }
     }
 }

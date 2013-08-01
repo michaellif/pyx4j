@@ -27,7 +27,6 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.server.services.reports.GadgetReportModelCreator;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -124,35 +123,11 @@ public class PaymentsSummaryReportModelCreator implements GadgetReportModelCreat
 
     private Vector<String> makePaymentFeeLabelList(PaymentFeesDTO fees) {
         Vector<String> labels = new Vector<String>();
-        addIfNotNull(labels, makePaymentFeeLabel(fees.cash(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.check(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.eCheck(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.eft(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.cc(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.interacCaledon(), fees.paymentFeeMeasure().getValue()));
-        addIfNotNull(labels, makePaymentFeeLabel(fees.interacVisa(), fees.paymentFeeMeasure().getValue()));
         return labels;
     }
 
-    private String makePaymentFeeLabel(IPrimitive<BigDecimal> fee, PaymentFeesDTO.PaymentFeeMeasure measure) {
-        final BigDecimal zero = new BigDecimal("0.00");
-        if (!fee.isNull() & !zero.equals(fee.getValue())) {
-            StringBuilder label = new StringBuilder();
-
-            label.append(fee.getMeta().getCaption());
-            label.append(' ');
-
-            if (measure == PaymentFeeMeasure.absolute) {
-                label.append("$");
-            }
-            label.append(fee.getValue().toString());
-            if (measure == PaymentFeeMeasure.relative) {
-                label.append("%");
-            }
-            return label.toString();
-        } else {
-            return null;
-        }
+    private String makePaymentFeeLabel(IPrimitive<BigDecimal> fee, PaymentFeesDTO.PaymentFeePolicy measure) {
+        return null;
     }
 
     private <T> void addIfNotNull(Collection<T> collection, T value) {

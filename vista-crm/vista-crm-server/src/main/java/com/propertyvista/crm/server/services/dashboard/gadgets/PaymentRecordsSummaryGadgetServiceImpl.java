@@ -19,40 +19,40 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
-import java.util.concurrent.Callable;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.config.VistaDeployment;
-import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentReportService;
+import com.propertyvista.biz.system.Vista2PmcFacade;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.PaymentRecordsSummaryGadgetService;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO;
-import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeeMeasure;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesDTO.PaymentFeePolicy;
+import com.propertyvista.domain.dashboard.gadgets.payments.PaymentFeesHolderDTO;
 import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.BuildingMerchantAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
-import com.propertyvista.domain.pmc.Pmc;
-import com.propertyvista.domain.pmc.PmcPaymentTypeInfo;
+import com.propertyvista.domain.pmc.fee.AbstractPaymentFees;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.server.common.util.PaymentsSummaryHelper;
-import com.propertyvista.server.jobs.TaskRunner;
 
-public class PaymentReportServiceImpl implements PaymentReportService {
+public class PaymentRecordsSummaryGadgetServiceImpl implements PaymentRecordsSummaryGadgetService {
 
     @Override
-    public void paymentsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildingsFilter, LogicalDate targetDate,
+    public void paymentRecordsSummary(AsyncCallback<EntitySearchResult<PaymentsSummary>> callback, Vector<Building> buildingsFilter, LogicalDate targetDate,
             Vector<PaymentStatus> paymentStatusCriteria, int pageNumber, int pageSize, Vector<Sort> sortingCriteria) {
 
         Vector<PaymentsSummary> summariesVector = new Vector<PaymentsSummary>();
@@ -107,25 +107,20 @@ public class PaymentReportServiceImpl implements PaymentReportService {
     }
 
     @Override
-    public void paymentsFees(AsyncCallback<Vector<PaymentFeesDTO>> callback) {
-        // TODO: WARNING getCurrentPmc() uses current namespace to get currentPmc:        
-        final Pmc currentPmc = VistaDeployment.getCurrentPmc();
+    public void fundsTransferFees(AsyncCallback<PaymentFeesHolderDTO> callback) {
 
-        PmcPaymentTypeInfo paymentTypeInfo = TaskRunner.runInOperationsNamespace(new Callable<PmcPaymentTypeInfo>() {
-            @Override
-            public PmcPaymentTypeInfo call() throws Exception {
-                EntityQueryCriteria<PmcPaymentTypeInfo> criteria = EntityQueryCriteria.create(PmcPaymentTypeInfo.class);
-                criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), currentPmc));
-                return Persistence.service().retrieve(criteria);
-            }
-        });
+        AbstractPaymentFees fees = ServerSideFactory.create(Vista2PmcFacade.class).getPaymentFees();
+        PaymentFeesHolderDTO paymentFeesHolder = EntityFactory.create(PaymentFeesHolderDTO.class);
+        PaymentFeesDTO paymentFeesDto = EntityFactory.create(PaymentFeesDTO.class);
+        paymentFeesDto.paymentFeePolicy().setValue(PaymentFeePolicy.feePerStransaction);
+        paymentFeesDto.visa().setValue(fees.ccVisaFee().getValue());
+        paymentFeesDto.visaDebit().setValue(fees.visaDebitFee().getValue());
+        paymentFeesDto.masterCard().setValue(fees.ccMasterCardFee().getValue());
+        paymentFeesDto.eCheck().setValue(fees.eChequeFee().getValue());
+        paymentFeesDto.directBanking().setValue(fees.directBankingFee().getValue());
+        paymentFeesHolder.paymentFees().add(paymentFeesDto);
 
-        Vector<PaymentFeesDTO> paymentFees = new Vector<PaymentFeesDTO>();
-        if (paymentTypeInfo != null) {
-            paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.absolute));
-            paymentFees.add(PaymentFeesHelper.extractFees(paymentTypeInfo, PaymentFeeMeasure.relative));
-        }
-        callback.onSuccess(paymentFees);
+        callback.onSuccess(paymentFeesHolder);
     }
 
     /** returns iterator over merchant accounts of the given buildings */
