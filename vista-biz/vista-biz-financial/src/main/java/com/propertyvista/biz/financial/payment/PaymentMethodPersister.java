@@ -27,6 +27,7 @@ import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.DirectDebitInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
@@ -223,8 +224,11 @@ class PaymentMethodPersister {
             // Assert value type
             Validate.isTrue(paymentMethod.details().isInstanceOf(CheckInfo.class));
             break;
+        case DirectBanking:
+            Validate.isTrue(paymentMethod.details().isInstanceOf(DirectDebitInfo.class));
+            break;
         default:
-            throw new Error();
+            throw new IllegalArgumentException("Unsupported PaymentMethod type " + paymentMethod.type().getValue());
         }
 
         Persistence.service().merge(paymentMethod);

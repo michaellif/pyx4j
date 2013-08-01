@@ -21,7 +21,6 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.financial.FundsTransferType;
@@ -50,8 +49,8 @@ public class PaymentProcessFacadeImpl implements PaymentProcessFacade {
     public void prepareEcheckPayments(final ExecutionMonitor executionMonitor, final PadFile padFile) {
         // We take all Queued records in this PMC
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued));
-        criteria.add(PropertyCriterion.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck));
+        criteria.eq(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Queued);
+        criteria.eq(criteria.proto().paymentMethod().type(), PaymentType.Echeck);
         ICursorIterator<PaymentRecord> paymentRecordIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
             while (paymentRecordIterator.hasNext()) {
