@@ -28,17 +28,18 @@ public class PageForm extends CrmEntityForm<PageDescriptor> {
     public PageForm(IForm<PageDescriptor> view) {
         super(PageDescriptor.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
 
-        content.setH1(++row, 0, 1, proto().content().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().content(), new PageContentFolder(this)));
+        content.setH1(++row, 0, 2, proto().content().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().content(), new PageContentFolder(this)));
 
-        content.setH1(++row, 0, 1, proto().childPages().getMeta().getCaption());
-        content.setWidget(++row, 0, inject(proto().childPages(), new PageDescriptorFolder(this)));
+        content.setH1(++row, 0, 2, proto().childPages().getMeta().getCaption());
+        content.setWidget(++row, 0, 2, inject(proto().childPages(), new PageDescriptorFolder(this)));
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 

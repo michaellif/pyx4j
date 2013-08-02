@@ -34,8 +34,8 @@ public class CityIntroPageForm extends CrmEntityForm<CityIntroPage> {
         main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().cityName()), 25).build());
         main.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().province()), 25).build());
 
-        main.setH1(row++, 0, 1, i18n.tr("Page Content"));
-        main.setWidget(row++, 0, inject(proto().content(), new RichTextContentFolder(isEditable())));
+        main.setH1(row++, 0, 2, i18n.tr("Page Content"));
+        main.setWidget(row++, 0, 2, inject(proto().content(), new RichTextContentFolder(isEditable())));
 
         selectTab(addTab(main));
     }

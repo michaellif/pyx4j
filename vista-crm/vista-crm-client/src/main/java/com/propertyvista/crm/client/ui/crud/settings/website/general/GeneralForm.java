@@ -113,13 +113,13 @@ public class GeneralForm extends CrmEntityForm<SiteDescriptorDTO> {
         content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().residentPortalSettings().useCustomHtml(), residentSkinSwitch), 10).build());
 
         content.setH3(row++, 0, 2, i18n.tr("Resident Portal Custom Content"));
-        content.setWidget(row++, 0, inject(proto().residentPortalSettings().customHtml(), contentFolder));
+        content.setWidget(row++, 0, 2, inject(proto().residentPortalSettings().customHtml(), contentFolder));
         selectTab(addTab(content));
 
         // =====================================================================================================================
 
         content = new TwoColumnFlexFormPanel(proto().locales().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().locales(), new AvailableLocaleFolder(isEditable())));
         addTab(content);
     }
 
