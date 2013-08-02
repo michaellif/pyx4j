@@ -224,11 +224,16 @@ public class YardiARIntegrationAgent {
     private static void setPaymentInfo(Detail detail, PaymentRecord pr, Lease lease) {
         Persistence.ensureRetrieve(pr.paymentMethod().customer(), AttachLevel.Attached);
 
-        detail.setPaidBy(pr.paymentMethod().customer().person().getStringView());
-        // There is Max length in YArdi table trans.SUSERDEFINED2 nvarchar(42)
-        if (detail.getPaidBy().length() > 24) {
-            detail.setPaidBy(detail.getPaidBy().substring(0, 24));
+        String paidBy = pr.paymentMethod().customer().person().getStringView();
+        if (paidBy.length() == 0) {
+            Persistence.ensureRetrieve(pr.leaseTermParticipant(), AttachLevel.Attached);
+            paidBy = pr.leaseTermParticipant().leaseParticipant().participantId().getValue();
         }
+        // There is Max length in YArdi table trans.SUSERDEFINED2 nvarchar(42)
+        if (paidBy.length() > 24) {
+            paidBy = paidBy.substring(0, 24);
+        }
+        detail.setPaidBy(paidBy);
 
         // info below is used to uniquely identify transaction in yardi
         detail.setCustomerID(lease.leaseId().getValue());
