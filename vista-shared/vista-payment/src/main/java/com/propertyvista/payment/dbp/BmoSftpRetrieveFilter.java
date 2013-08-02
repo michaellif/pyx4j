@@ -36,7 +36,13 @@ public class BmoSftpRetrieveFilter implements SftpRetrieveFilter<SftpFile> {
         if (!fileName.contains("%BMOCOM-SEND%" + bmoMailboxNumber + "-BMOREMI-FILE")) {
             return null;
         }
-        if (existsLoadedOrProcessed(fileName) || existsLoadedOrProcessed(fileName.replace("%POLLABLE%", "%ACCEPTED%"))) {
+        if (existsLoadedOrProcessed(fileName)) {
+            return null;
+        }
+        if (fileName.contains("%POLLABLE%") && existsLoadedOrProcessed(fileName.replace("%POLLABLE%", "%ACCEPTED%"))) {
+            return null;
+        }
+        if (fileName.contains("%ACCEPTED%") && existsLoadedOrProcessed(fileName.replace("%ACCEPTED%", "%POLLABLE%"))) {
             return null;
         }
 

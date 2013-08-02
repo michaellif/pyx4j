@@ -103,15 +103,19 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String getCardServiceSimulatorUrl();
 
-    public abstract File getCaledonInterfaceWorkDirectory();
-
-    public abstract int interfaceSSHDPort();
-
-    public abstract File getTenantSureInterfaceSftpDirectory();
+    public abstract boolean isFundsTransferSimulationConfigurable();
 
     public abstract File getCaledonSimulatorSftpDirectory();
 
     public abstract File getBmoSimulatorSftpDirectory();
+
+    public abstract File getCaledonInterfaceWorkDirectory();
+
+    public abstract File getBmoInterfaceWorkDirectory();
+
+    public abstract int interfaceSSHDPort();
+
+    public abstract File getTenantSureInterfaceSftpDirectory();
 
     public abstract String getTenantSureEmailSender();
 

@@ -131,8 +131,8 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
 
     @Override
     public DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException {
-        File padWorkdir = getPadBaseDir();
-        SftpFile sftpFile = new BmoSftpClient().receiveFile(padWorkdir);
+        File workdir = getBmoBaseDir();
+        SftpFile sftpFile = new BmoSftpClient().receiveFile(workdir);
         if (sftpFile == null) {
             return null;
         }
@@ -144,9 +144,9 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             return directDebitFile;
         } finally {
             if (parsOk) {
-                move(sftpFile.localFile, padWorkdir, "processed");
+                move(sftpFile.localFile, workdir, "processed");
             } else {
-                move(sftpFile.localFile, padWorkdir, "error");
+                move(sftpFile.localFile, workdir, "error");
             }
         }
     }
@@ -163,7 +163,18 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     private File getPadBaseDir() {
-        File padWorkdir = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCaledonInterfaceWorkDirectory();
+        File padWorkdir = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonInterfaceWorkDirectory();
+        if (!padWorkdir.exists()) {
+            if (!padWorkdir.mkdirs()) {
+                log.error("Unable to create directory {}", padWorkdir.getAbsolutePath());
+                throw new Error(MessageFormat.format("Unable to create directory {0}", padWorkdir.getAbsolutePath()));
+            }
+        }
+        return padWorkdir;
+    }
+
+    private File getBmoBaseDir() {
+        File padWorkdir = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBmoInterfaceWorkDirectory();
         if (!padWorkdir.exists()) {
             if (!padWorkdir.mkdirs()) {
                 log.error("Unable to create directory {}", padWorkdir.getAbsolutePath());

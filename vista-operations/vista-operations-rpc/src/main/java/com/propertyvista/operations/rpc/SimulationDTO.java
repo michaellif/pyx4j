@@ -37,6 +37,8 @@ public interface SimulationDTO extends IEntity {
 
     VistaSystemsSimulationConfigDTO systems();
 
+    IPrimitive<Boolean> fundsTransferSimulationConfigurable();
+
     EquifaxSimulatorConfig equifax();
 
     // TODO This should be in separate server/separate forms

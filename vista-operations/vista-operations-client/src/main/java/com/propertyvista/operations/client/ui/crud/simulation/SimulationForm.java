@@ -89,6 +89,10 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
     }
 
     private void updatecardServiceVisibility() {
+
+        get(proto().systems().usePadSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
+        get(proto().systems().useDirectBankingSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
+
         get(proto().cardService().responseCode()).setVisible(false);
         get(proto().cardService().responseText()).setVisible(false);
         get(proto().cardService().responseHttpCode()).setVisible(false);

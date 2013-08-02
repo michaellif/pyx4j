@@ -215,8 +215,18 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public File getBmoInterfaceWorkDirectory() {
+        return null;
+    }
+
+    @Override
     public File getTenantSureInterfaceSftpDirectory() {
         return null;
+    }
+
+    @Override
+    public boolean isFundsTransferSimulationConfigurable() {
+        return false;
     }
 
     @Override

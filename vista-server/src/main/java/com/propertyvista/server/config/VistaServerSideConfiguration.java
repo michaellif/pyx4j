@@ -436,6 +436,16 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
+    public File getBmoInterfaceWorkDirectory() {
+        String dirName = getConfigProperties().getValue("vista-work.bmo.dir");
+        if (CommonsStringUtils.isStringSet(dirName)) {
+            return new File(dirName);
+        } else {
+            return new File(vistaWorkDir(), "bmo");
+        }
+    }
+
+    @Override
     public File getTenantSureInterfaceSftpDirectory() {
         String dirName = getConfigProperties().getValue("vista-work.tenant-sure.dir");
         if (CommonsStringUtils.isStringSet(dirName)) {
@@ -443,6 +453,11 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         } else {
             return new File(vistaWorkDir(), "tenant-sure");
         }
+    }
+
+    @Override
+    public boolean isFundsTransferSimulationConfigurable() {
+        return false;
     }
 
     @Override

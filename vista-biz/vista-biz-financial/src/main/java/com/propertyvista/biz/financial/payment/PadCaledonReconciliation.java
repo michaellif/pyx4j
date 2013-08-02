@@ -34,6 +34,13 @@ class PadCaledonReconciliation {
     }
 
     void validateAndPersistFile(PadReconciliationFile reconciliationFile) {
+        {
+            EntityQueryCriteria<PadReconciliationFile> criteria = EntityQueryCriteria.create(PadReconciliationFile.class);
+            criteria.eq(criteria.proto().fileName(), reconciliationFile.fileName());
+            if (Persistence.service().count(criteria) > 0) {
+                throw new Error("Duplicate reconciliation file received " + reconciliationFile.fileName().getValue());
+            }
+        }
 
         // Save detached objects
         List<PadReconciliationSummary> batches = new ArrayList<PadReconciliationSummary>(reconciliationFile.batches());

@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimFileCrudService;
 import com.propertyvista.payment.dbp.simulator.DirectDebitSimManager;
 
@@ -32,6 +33,12 @@ public class DirectDebitSimFileCrudServiceImpl extends AbstractCrudServiceImpl<D
     @Override
     protected void bind() {
         bindCompleteDBO();
+    }
+
+    @Override
+    protected void create(DirectDebitSimFile entity, DirectDebitSimFile dto) {
+        entity.status().setValue(DirectDebitSimFileStatus.New);
+        super.create(entity, dto);
     }
 
     @Override

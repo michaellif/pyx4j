@@ -16,6 +16,7 @@ package com.propertyvista.operations.server.services.simulator;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.cache.CacheService;
 import com.pyx4j.entity.rpc.EntitySearchResult;
@@ -28,6 +29,7 @@ import com.pyx4j.essentials.server.admin.AdminServiceImpl;
 import com.pyx4j.essentials.server.dev.NetworkSimulationServiceFilter;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.operations.domain.dev.EquifaxSimulatorConfig;
@@ -56,6 +58,9 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         if (result.cardService().responseType().isNull()) {
             result.cardService().responseType().setValue(CardServiceSimulatorConfig.SimpulationType.SimulateTransations);
         }
+
+        result.fundsTransferSimulationConfigurable().setValue(
+                ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isFundsTransferSimulationConfigurable());
 
         callback.onSuccess(result);
     }

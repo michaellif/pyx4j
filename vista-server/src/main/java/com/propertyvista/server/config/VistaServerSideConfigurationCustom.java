@@ -76,6 +76,11 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
+    public boolean isFundsTransferSimulationConfigurable() {
+        return true;
+    }
+
+    @Override
     public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
         if (VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.TRUE)) {
             return new CaledonFundsTransferConfigurationSimulatorCustom(this);

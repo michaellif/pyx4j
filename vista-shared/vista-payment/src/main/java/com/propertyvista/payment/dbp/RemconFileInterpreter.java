@@ -14,6 +14,7 @@
 package com.propertyvista.payment.dbp;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -37,6 +38,8 @@ public class RemconFileInterpreter {
         RemconRecordFileHeader headerRecord = (RemconRecordFileHeader) remconFile.records.get(0);
         directDebitFile.fileSerialDate().setValue(headerRecord.fileSerialDate);
         directDebitFile.fileSerialNumber().setValue(headerRecord.fileSerialNumber);
+
+        directDebitFile.records().addAll(Collections.<DirectDebitRecord> emptyList());
 
         RemconRecordBatchHeader currentBatchHeader = null;
         for (RemconRecord record : remconFile.records) {
