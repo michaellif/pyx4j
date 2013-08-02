@@ -59,6 +59,7 @@ class EFTBankMockAck implements ScheduledResponseAckTransaction.Handler, Schedul
 
     PadAckFile createAcknowledgementFile(PadFile unacknowledgedFile) {
         PadAckFile ackFile = EntityFactory.create(PadAckFile.class);
+        ackFile.fileName().setValue(String.valueOf(System.nanoTime()));
 
         boolean batchLevelReject = false;
         boolean transactionReject = false;

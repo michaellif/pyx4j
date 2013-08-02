@@ -41,6 +41,7 @@ class EFTBankMockReconciliation {
 
     PadReconciliationFile createReconciliationFile(List<PadDebitRecord> records) {
         PadReconciliationFile reconciliationFile = EntityFactory.create(PadReconciliationFile.class);
+        reconciliationFile.fileName().setValue(String.valueOf(System.nanoTime()));
 
         Map<String, PadReconciliationSummary> byMID = new HashMap<String, PadReconciliationSummary>();
 
