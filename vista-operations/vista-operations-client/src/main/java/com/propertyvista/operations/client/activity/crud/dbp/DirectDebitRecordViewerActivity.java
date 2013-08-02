@@ -7,28 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-07-31
+ * Created on 2013-08-02
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.operations.client.activity.crud.directdebitrecords;
+package com.propertyvista.operations.client.activity.crud.dbp;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.place.shared.Place;
 
 import com.pyx4j.entity.rpc.AbstractCrudService;
-import com.pyx4j.site.client.activity.AbstractListerActivity;
+import com.pyx4j.site.client.activity.AbstractViewerActivity;
+import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.operations.client.OperationsSite;
-import com.propertyvista.operations.client.ui.crud.directdebitrecords.DirectDebitRecordListerView;
+import com.propertyvista.operations.client.ui.crud.directdebitrecords.DirectDebitRecordViewerView;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.rpc.services.PmcDirectDebitRecordCrudService;
 
-public class DirectDebitListerActivity extends AbstractListerActivity<DirectDebitRecord> {
+public class DirectDebitRecordViewerActivity extends AbstractViewerActivity<DirectDebitRecord> implements DirectDebitRecordViewerView.Presenter {
 
-    public DirectDebitListerActivity(Place place) {
-        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitRecordListerView.class), GWT
-                .<AbstractCrudService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class), DirectDebitRecord.class);
+    public DirectDebitRecordViewerActivity(CrudAppPlace place) {
+        super(place, OperationsSite.getViewFactory().instantiate(DirectDebitRecordViewerView.class), GWT
+                .<AbstractCrudService<DirectDebitRecord>> create(PmcDirectDebitRecordCrudService.class));
+    }
+
+    @Override
+    public boolean canEdit() {
+        return false;
     }
 
 }

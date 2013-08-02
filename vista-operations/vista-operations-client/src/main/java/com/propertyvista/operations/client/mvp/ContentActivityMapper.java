@@ -30,7 +30,8 @@ import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserLis
 import com.propertyvista.operations.client.activity.crud.adminusers.AdminUserViewerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordListerActivity;
 import com.propertyvista.operations.client.activity.crud.auditrecords.AuditRecordViewerActivity;
-import com.propertyvista.operations.client.activity.crud.directdebitrecords.DirectDebitListerActivity;
+import com.propertyvista.operations.client.activity.crud.dbp.DirectDebitRecordListerActivity;
+import com.propertyvista.operations.client.activity.crud.dbp.DirectDebitRecordViewerActivity;
 import com.propertyvista.operations.client.activity.crud.encryptedstorage.EncryptedStorageActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsDefaultActivity;
 import com.propertyvista.operations.client.activity.crud.legal.VistaTermsEditorActivity;
@@ -188,7 +189,10 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (place instanceof OperationsSiteMap.Management.DirectDebitRecord) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new DirectDebitListerActivity(crudPlace);
+                            activity = new DirectDebitRecordListerActivity(crudPlace);
+                            break;
+                        case viewer:
+                            activity = new DirectDebitRecordViewerActivity(crudPlace);
                             break;
                         default:
                             break;

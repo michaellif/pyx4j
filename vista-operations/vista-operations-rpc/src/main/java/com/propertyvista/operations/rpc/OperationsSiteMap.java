@@ -77,7 +77,7 @@ public class OperationsSiteMap implements SiteMap {
             }
         }
 
-        @PlaceProperties(navigLabel = "Direct Debit Records")
+        @PlaceProperties(caption = "Direct Debit Records", navigLabel = "Direct Debit Records")
         public static class DirectDebitRecord extends CrmCrudAppPlace {
         }
     }
