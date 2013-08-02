@@ -140,7 +140,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
     }
 
     private void rejectPaymentRecord(PaymentRecord paymentRecord) {
-        if (!EnumSet.of(PaymentRecord.PaymentStatus.Received).contains(paymentRecord.paymentStatus().getValue())) {
+        if (!EnumSet.of(PaymentRecord.PaymentStatus.Received, PaymentRecord.PaymentStatus.Cleared).contains(paymentRecord.paymentStatus().getValue())) {
             throw new Error("Unexpected payment record status " + paymentRecord.getPrimaryKey() + " " + paymentRecord.paymentStatus().getValue());
         }
         // Update record status. Allow to ReSend automatically or Cancel Manually
