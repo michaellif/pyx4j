@@ -39,7 +39,8 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "E-Check")
     IPrimitive<Boolean> acceptedEcheck();
 
-    @Caption(name = "EFT")
+    @Caption(name = "Direct Banking")
+    //TODO rename the filed!
     IPrimitive<Boolean> acceptedEFT();
 
     @Caption(name = "Credit Card")
@@ -63,7 +64,7 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     @Caption(name = "E-Check")
     IPrimitive<Boolean> residentPortalEcheck();
 
-    @Caption(name = "EFT")
+    @Caption(name = "Direct Banking")
     IPrimitive<Boolean> residentPortalEFT();
 
     @Caption(name = "Credit Card")
@@ -94,7 +95,7 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     IPrimitive<Boolean> cashEquivalentEcheck();
 
     // There is no way to Disabled this, We can just not advertise it portal
-    @Caption(name = "EFT")
+    @Caption(name = "Direct Banking")
     IPrimitive<Boolean> cashEquivalentEFT();
 
     @Caption(name = "Credit Card")
