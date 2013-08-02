@@ -298,7 +298,6 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
 
         // second column:
         datesPanel.setWidget(1, 1, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
-        get(proto().creationDate()).setViewable(true);
 
         leftRow = rightRow = Math.max(leftRow, rightRow);
 

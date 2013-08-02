@@ -19,6 +19,8 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.EmbeddedEntity;
 import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
@@ -118,6 +120,7 @@ public interface LeaseTerm extends IVersionedEntity<LeaseTermV> {
 
     @ReadOnly
     @Timestamp(Update.Created)
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> creationDate();
 
     public interface LeaseTermV extends IVersionData<LeaseTerm> {

@@ -190,40 +190,40 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
 
         @Override
         public IsWidget createContent() {
-            TwoColumnFlexFormPanel flexPanel = new TwoColumnFlexFormPanel();
+            TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel();
 
             int leftRow = -1;
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
-            flexPanel.setWidget(++leftRow, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
+            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().participantId()), 7).build());
+            main.setWidget(++leftRow, 0, 2, inject(proto().leaseParticipant().customer().person().name(), new NameEditor(i18n.tr("Tenant"), Tenant.class) {
                 @Override
                 public Key getLinkKey() {
                     return TenantInLeaseEditor.this.getValue().leaseParticipant().getPrimaryKey();
                 }
             }));
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
+            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
+            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
 
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().role()), 15).build());
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
-            flexPanel.setWidget(
+            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().role()), 15).build());
+            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().relationship()), 15).build());
+            main.setWidget(
                     ++leftRow,
                     0,
                     new FormDecoratorBuilder(inject(proto().effectiveScreening(),
                             new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 9).build());
-            flexPanel.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
+            main.setWidget(++leftRow, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().email()), 25).build());
 
             int rightRow = 1;
-            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
-            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
-            flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
+            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().homePhone()), 15).build());
+            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
+            main.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
 
             preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
             preauthorizedPaymentsPanel.setWidget(1, 0, 2, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
 
             leftRow = Math.max(leftRow, rightRow);
-            flexPanel.setWidget(++leftRow, 0, 2, preauthorizedPaymentsPanel);
+            main.setWidget(++leftRow, 0, 2, preauthorizedPaymentsPanel);
 
-            return flexPanel;
+            return main;
         }
 
         @Override
