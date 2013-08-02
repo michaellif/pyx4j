@@ -98,6 +98,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().prorationMethod()), 10, true).build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().confirmationMethod()), 10, true).build());
+
         panel.setH3(++row, 0, 2, proto().availableBillingTypes().getMeta().getCaption());
         panel.setWidget(++row, 0, 2, inject(proto().availableBillingTypes(), new LeaseBillingTypeFolder()));
 
@@ -105,6 +106,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
             get(proto().prorationMethod()).setVisible(false);
             get(proto().confirmationMethod()).setVisible(false);
         }
+
         return panel;
     }
 
