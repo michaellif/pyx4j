@@ -33,6 +33,11 @@ public interface EFTTransportFacade {
      */
     void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag);
 
-    DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException;
+    DirectDebitFile receiveBmoFile() throws SftpTransportConnectionException;
+
+    /**
+     * Remove the file from remote server directory in success.
+     */
+    void confirmReceivedBmoFile(String fileName, boolean protocolErrorFlag);
 
 }

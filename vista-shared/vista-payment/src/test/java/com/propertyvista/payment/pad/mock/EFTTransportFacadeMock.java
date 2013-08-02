@@ -48,8 +48,13 @@ public class EFTTransportFacadeMock implements EFTTransportFacade {
     }
 
     @Override
-    public DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException {
+    public DirectDebitFile receiveBmoFile() throws SftpTransportConnectionException {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void confirmReceivedBmoFile(String fileName, boolean protocolErrorFlag) {
+
     }
 }

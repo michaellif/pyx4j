@@ -38,7 +38,7 @@ class DirectDebitReceiveProcessor {
     Integer receiveBmoFiles(final ExecutionMonitor executionMonitor) {
         final DirectDebitFile directDebitFile;
         try {
-            directDebitFile = ServerSideFactory.create(EFTTransportFacade.class).receiveBmoFiles();
+            directDebitFile = ServerSideFactory.create(EFTTransportFacade.class).receiveBmoFile();
         } catch (SftpTransportConnectionException e) {
             executionMonitor.addInfoEvent("Pooled, Can't connect to server", e.getMessage());
             return null;
@@ -52,15 +52,20 @@ class DirectDebitReceiveProcessor {
             executionMonitor.addInfoEvent("fileSerialNumber", directDebitFile.fileSerialNumber().getValue());
         }
 
-        new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
+        boolean processedOk = false;
+        try {
+            new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Void, RuntimeException>() {
 
-            @Override
-            public Void execute() {
-                validateAndPersistFile(executionMonitor, directDebitFile);
-                return null;
-            }
-        });
-
+                @Override
+                public Void execute() {
+                    validateAndPersistFile(executionMonitor, directDebitFile);
+                    return null;
+                }
+            });
+            processedOk = true;
+        } finally {
+            ServerSideFactory.create(EFTTransportFacade.class).confirmReceivedBmoFile(directDebitFile.fileName().getValue(), !processedOk);
+        }
         return directDebitFile.records().size();
     }
 

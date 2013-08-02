@@ -37,7 +37,7 @@ import com.propertyvista.server.sftp.SftpFile;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 /**
- * Caledon SFTP interface implementation
+ * FundsTransfer Caledon and BMO SFTP interface implementation
  */
 public class EFTTransportFacadeImpl implements EFTTransportFacade {
 
@@ -130,7 +130,18 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
     }
 
     @Override
-    public DirectDebitFile receiveBmoFiles() throws SftpTransportConnectionException {
+    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
+        File padWorkdir = getPadBaseDir();
+        if (protocolErrorFlag) {
+            move(new File(padWorkdir, fileName), padWorkdir, "error");
+        } else {
+            move(new File(padWorkdir, fileName), padWorkdir, "processed");
+            new CaledonPadSftpClient().removeFile(fundsTransferType, fileName);
+        }
+    }
+
+    @Override
+    public DirectDebitFile receiveBmoFile() throws SftpTransportConnectionException {
         File workdir = getBmoBaseDir();
         SftpFile sftpFile = new BmoSftpClient().receiveFile(workdir);
         if (sftpFile == null) {
@@ -143,22 +154,20 @@ public class EFTTransportFacadeImpl implements EFTTransportFacade {
             parsOk = true;
             return directDebitFile;
         } finally {
-            if (parsOk) {
-                move(sftpFile.localFile, workdir, "processed");
-            } else {
+            if (!parsOk) {
                 move(sftpFile.localFile, workdir, "error");
             }
         }
     }
 
     @Override
-    public void confirmReceivedFile(FundsTransferType fundsTransferType, String fileName, boolean protocolErrorFlag) {
-        File padWorkdir = getPadBaseDir();
+    public void confirmReceivedBmoFile(String fileName, boolean protocolErrorFlag) {
+        File workdir = getBmoBaseDir();
         if (protocolErrorFlag) {
-            move(new File(padWorkdir, fileName), padWorkdir, "error");
+            move(new File(workdir, fileName), workdir, "error");
         } else {
-            move(new File(padWorkdir, fileName), padWorkdir, "processed");
-            new CaledonPadSftpClient().removeFile(fundsTransferType, fileName);
+            move(new File(workdir, fileName), workdir, "processed");
+            new BmoSftpClient().removeFile(fileName);
         }
     }
 

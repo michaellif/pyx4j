@@ -49,6 +49,7 @@ public class DirectDebitSimManager {
         DirectDebitSimFile directDebitSimFile = Persistence.service().retrieve(DirectDebitSimFile.class, directDebitSimFileId.getPrimaryKey());
         Validate.isTrue(directDebitSimFile.status().getValue() == DirectDebitSimFileStatus.New);
         directDebitSimFile.status().setValue(DirectDebitSimFileStatus.Sent);
+        directDebitSimFile.sentDate().setValue(new Date());
         Persistence.service().persist(directDebitSimFile);
         Persistence.service().retrieveMember(directDebitSimFile.records());
 

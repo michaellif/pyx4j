@@ -25,8 +25,16 @@ import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public class BmoSftpClient {
 
-    public SftpFile receiveFile(File targetDirectory) throws SftpTransportConnectionException {
-        BmoInterfaceConfiguration configuration = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBmoInterfaceConfiguration();
-        return SftpClient.receiveFile(configuration, new BmoSftpRetrieveFilter(targetDirectory, configuration.bmoMailboxNumber()), ".");
+    private BmoInterfaceConfiguration configuration() {
+        return ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBmoInterfaceConfiguration();
     }
+
+    public SftpFile receiveFile(File targetDirectory) throws SftpTransportConnectionException {
+        return SftpClient.receiveFile(configuration(), new BmoSftpRetrieveFilter(targetDirectory, configuration().bmoMailboxNumber()), ".");
+    }
+
+    public void removeFile(String fileName) {
+        SftpClient.removeFile(configuration(), ".", fileName);
+    }
+
 }
