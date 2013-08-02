@@ -79,6 +79,11 @@ public class SftpClient implements Closeable {
             channel = null;
         }
         if (session != null) {
+            try {
+                // Avoid server side error: java.io.IOException: An established connection was aborted by the software in your host machine
+                Thread.sleep(100);
+            } catch (InterruptedException ignore) {
+            }
             session.disconnect();
             session = null;
         }
