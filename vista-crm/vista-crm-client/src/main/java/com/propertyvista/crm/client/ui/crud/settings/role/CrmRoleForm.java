@@ -47,22 +47,23 @@ public class CrmRoleForm extends CrmEntityForm<CrmRole> {
     public CrmRoleForm(IForm<CrmRole> view) {
         super(CrmRole.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name())).labelWidth(10).componentWidth(20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).labelWidth(10).componentWidth(20).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireTwoStepVerificationOnLogin())).labelWidth(10).componentWidth(3).build());
-        content.setH1(++row, 0, 1, proto().permissions().getMeta().getCaption());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 20, true).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requireTwoStepVerificationOnLogin()), 3, true).build());
+
+        content.setH1(++row, 0, 2, proto().permissions().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().permissions(), new CrmRolePermissionsFolder()));
         get(proto().permissions()).addValueChangeHandler(new ValueChangeHandler<List<VistaCrmBehaviorDTO>>() {
-
             @Override
             public void onValueChange(ValueChangeEvent<List<VistaCrmBehaviorDTO>> event) {
                 enforceRequireTwoStepVerificationForEquifaxBehaviour();
             }
         });
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 
