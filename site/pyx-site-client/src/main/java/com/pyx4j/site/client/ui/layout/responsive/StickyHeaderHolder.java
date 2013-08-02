@@ -60,6 +60,8 @@ public class StickyHeaderHolder extends SimplePanel implements RequiresResize {
                 //keeps space for fixed child
                 getElement().getStyle().setHeight(getWidget().getOffsetHeight(), Unit.PX);
                 getWidget().getElement().getStyle().setTop(0, Unit.PX);
+                getWidget().getElement().getStyle().setLeft(0, Unit.PX);
+                getWidget().getElement().getStyle().setRight(0, Unit.PX);
                 getWidget().getElement().getStyle().setPosition(Position.FIXED);
                 getWidget().getElement().getStyle().setWidth(getOffsetWidth(), Unit.PX);
             }
