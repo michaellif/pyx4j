@@ -270,6 +270,7 @@ abstract class AbstractReconciliationProcessor {
                 criteria.ne(criteria.proto().processingStatus(), PadDebitRecordProcessingStatus.AcknowledgeReject);
                 criteria.eq(criteria.proto().padBatch().pmc(), pmc);
                 PadDebitRecord padDebitRecord = Persistence.service().retrieve(criteria);
+                retrieveOperationsPadDebitRecordDetails(padDebitRecord);
                 return padDebitRecord;
             }
         });
