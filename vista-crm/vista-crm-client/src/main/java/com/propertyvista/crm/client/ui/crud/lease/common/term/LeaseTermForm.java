@@ -112,7 +112,7 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
         }
 
         setUnitNote(getValue().unitMoveOutNote().getValue());
-        setAgeOfMajority(getValue().ageOfMajority().getValue());
+        setAgeOfMajority(getValue().ageOfMajority().getValue(), false);
     }
 
     private TwoColumnFlexFormPanel createDetailsTab(String title) {
@@ -420,8 +420,13 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
     }
 
     @SuppressWarnings("rawtypes")
-    void setAgeOfMajority(Integer value) {
+    void setAgeOfMajority(Integer value, boolean revalidate) {
         ((LeaseTermParticipantFolder) get(proto().version().tenants())).setAgeOfMajority(value);
         ((LeaseTermParticipantFolder) get(proto().version().guarantors())).setAgeOfMajority(value);
+
+        if (revalidate) {
+            ((LeaseTermParticipantFolder) get(proto().version().tenants())).revalidate();
+            ((LeaseTermParticipantFolder) get(proto().version().guarantors())).revalidate();
+        }
     }
 }
