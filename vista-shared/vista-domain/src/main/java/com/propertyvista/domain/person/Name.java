@@ -47,6 +47,7 @@ public interface Name extends IEntity {
         }
     }
 
+    @ToString(index = 0)
     IPrimitive<Prefix> namePrefix();
 
     @NotNull
@@ -64,5 +65,6 @@ public interface Name extends IEntity {
 
     IPrimitive<String> maidenName();
 
+    @ToString(index = 4)
     IPrimitive<String> nameSuffix();
 }
