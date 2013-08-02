@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.ui.crud.policies.backgroundcheck;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -46,13 +47,14 @@ public class BackgroundCheckPolicyForm extends PolicyDTOTabPanelBasedForm<Backgr
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Policy"));
         int row = -1;
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().version().bankruptcy()), 5, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().version().judgment()), 5, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().version().collection()), 5, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().version().chargeOff()), 5, true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().bankruptcy()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().judgment()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().collection()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().chargeOff()), 5).build());
 
         panel.setH3(++row, 0, 2, i18n.tr("Help"));
         panel.setWidget(++row, 0, 2, new HTML(CrmResources.INSTANCE.backgroundCheckHelp().getText()));
+        panel.getWidget(row, 0).getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         return panel;
     }
