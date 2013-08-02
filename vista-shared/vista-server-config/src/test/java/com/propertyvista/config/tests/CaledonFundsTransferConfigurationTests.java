@@ -17,7 +17,7 @@ import com.pyx4j.config.server.Credentials;
 
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 
-public class CaledonFundsTransferConfigurationTests implements CaledonFundsTransferConfiguration {
+public class CaledonFundsTransferConfigurationTests extends CaledonFundsTransferConfiguration {
 
     @Override
     public String sftpHost() {

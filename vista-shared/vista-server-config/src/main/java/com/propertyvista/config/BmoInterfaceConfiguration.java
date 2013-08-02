@@ -13,8 +13,14 @@
  */
 package com.propertyvista.config;
 
-public interface BmoInterfaceConfiguration extends SftpConnectionConfiguration {
+public abstract class BmoInterfaceConfiguration extends SftpConnectionConfiguration {
 
-    String bmoMailboxNumber();
+    public abstract String bmoMailboxNumber();
 
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder(super.toString());
+        b.append("bmoMailboxNumber                  : ").append(bmoMailboxNumber()).append("\n");
+        return b.toString();
+    }
 }

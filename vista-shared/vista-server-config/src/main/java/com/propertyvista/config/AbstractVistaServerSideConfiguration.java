@@ -53,7 +53,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract Set<DemoPmc> dbResetPreloadPmc();
 
-    public abstract boolean openIdrequired();
+    public abstract boolean openIdRequired();
 
     public abstract String openIdDomain();
 
@@ -119,7 +119,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract String getTenantSureEmailSender();
 
-    public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration();
+    public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfiguration();
 
     public abstract TenantSureConfiguration getTenantSureConfiguration();
 

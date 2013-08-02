@@ -18,7 +18,7 @@ import com.pyx4j.config.server.IPersistenceConfiguration;
 public class VistaServerSideConfigurationDevTomcat extends VistaServerSideConfigurationDev {
 
     @Override
-    public boolean openIdrequired() {
+    public boolean openIdRequired() {
         return true;
     }
 

@@ -15,11 +15,22 @@ package com.propertyvista.config;
 
 import com.pyx4j.config.server.Credentials;
 
-public interface SftpConnectionConfiguration {
+public abstract class SftpConnectionConfiguration {
 
-    String sftpHost();
+    public abstract String sftpHost();
 
-    int sftpPort();
+    public abstract int sftpPort();
 
-    Credentials sftpCredentials();
+    public abstract Credentials sftpCredentials();
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("configurationClass                : ").append(getClass().getName()).append("\n");
+        b.append("sftpHost                          : ").append(sftpHost()).append("\n");
+        b.append("sftpPort                          : ").append(sftpPort()).append("\n");
+        b.append("sftpCredentials                   : ").append(sftpCredentials().userName).append("\n");
+        return b.toString();
+    }
+
 }

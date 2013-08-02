@@ -225,7 +225,7 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
     }
 
     private static IMailServiceConfigConfiguration getTenantSureConfig() {
-        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureMailServiceConfigConfiguration();
+        return ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getTenantSureMailServiceConfiguration();
     }
 
     @Override

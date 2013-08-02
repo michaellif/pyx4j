@@ -38,7 +38,7 @@ public class GWTCacheFilter extends com.pyx4j.gwt.server.GWTCacheFilter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         super.init(filterConfig);
-        openIdEnabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired();
+        openIdEnabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdRequired();
     }
 
     @Override

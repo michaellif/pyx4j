@@ -13,9 +13,21 @@
  */
 package com.propertyvista.config;
 
-public interface TenantSureConfiguration {
+public abstract class TenantSureConfiguration {
 
-    public boolean useCfcApiAdapterMockup();
+    public abstract boolean useCfcApiAdapterMockup();
 
-    public String cfcApiEndpointUrl();
+    public abstract String cfcApiEndpointUrl();
+
+    //TODO move cfcCredentials here
+
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append("configurationClass                : ").append(getClass().getName()).append("\n");
+        b.append("useCfcApiAdapterMockup            : ").append(useCfcApiAdapterMockup()).append("\n");
+        b.append("cfcApiEndpointUrl                 : ").append(cfcApiEndpointUrl()).append("\n");
+        //TODO b.append("cfcCredentials                   : ").append(cfcCredentials().userName).append("\n");
+        return b.toString();
+    }
 }

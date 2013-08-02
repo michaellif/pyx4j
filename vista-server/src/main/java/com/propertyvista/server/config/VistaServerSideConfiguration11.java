@@ -48,7 +48,7 @@ public class VistaServerSideConfiguration11 extends VistaServerSideConfiguration
     }
 
     @Override
-    public boolean openIdrequired() {
+    public boolean openIdRequired() {
         return true;
     }
 

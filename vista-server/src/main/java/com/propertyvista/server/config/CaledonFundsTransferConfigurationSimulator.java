@@ -22,7 +22,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 
-public class CaledonFundsTransferConfigurationSimulator implements CaledonFundsTransferConfiguration {
+public class CaledonFundsTransferConfigurationSimulator extends CaledonFundsTransferConfiguration {
 
     private final AbstractVistaServerSideConfiguration config;
 

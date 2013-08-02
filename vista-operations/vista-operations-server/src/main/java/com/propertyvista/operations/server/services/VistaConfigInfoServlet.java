@@ -19,9 +19,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.essentials.server.admin.ConfigInfoServlet;
 import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.domain.security.VistaOperationsBehavior;
 
 @SuppressWarnings("serial")
@@ -31,5 +33,47 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         SecurityController.assertBehavior(VistaOperationsBehavior.SystemAdmin);
         super.doGet(request, response);
+    }
+
+    @Override
+    protected String applicationConfigurationText() {
+        StringBuilder b = new StringBuilder();
+        b.append("\nVista Configuration:\n");
+
+        AbstractVistaServerSideConfiguration conf = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class);
+
+        b.append("  enviromentId                        : ").append(conf.enviromentId()).append("\n");
+        b.append("  openDBReset                         : ").append(conf.openDBReset()).append("\n");
+        b.append("  openIdRequired                      : ").append(conf.openIdRequired()).append("\n");
+        b.append("  openIdDomain                        : ").append(conf.openIdDomain()).append("\n");
+        b.append("  openIdProviderDomain                : ").append(conf.openIdProviderDomain()).append("\n");
+        b.append("  isVistaDemo                         : ").append(conf.isVistaDemo()).append("\n");
+        b.append("  isVistaQa                           : ").append(conf.isVistaQa()).append("\n");
+        b.append("  interfaceSSHDPort                   : ").append(conf.interfaceSSHDPort()).append("\n");
+        b.append("\n");
+
+        b.append("  TenantSureInterfaceSftpDirectory    : ").append(conf.getTenantSureInterfaceSftpDirectory().getAbsolutePath()).append("\n");
+        b.append("  TenantSureConfiguration             :\n    ").append(conf.getTenantSureConfiguration().toString().replaceAll("\n", "\n    ")).append("\n");
+        b.append("  TenantSureEmailSender               : ").append(conf.getTenantSureEmailSender()).append("\n");
+        b.append("  TenantSureMailServiceConfiguration  :\n    ").append(conf.getTenantSureMailServiceConfiguration().toString().replaceAll("\n", "\n    "))
+                .append("\n");
+        b.append("\n");
+
+        b.append("  CaledonInterfaceWorkDirectory       : ").append(conf.getCaledonInterfaceWorkDirectory().getAbsolutePath()).append("\n");
+        b.append("  CaledonFundsTransferConfiguration   :\n    ").append(conf.getCaledonFundsTransferConfiguration().toString().replaceAll("\n", "\n    "))
+                .append("\n");
+        b.append("\n");
+        b.append("  BmoInterfaceWorkDirectory           : ").append(conf.getBmoInterfaceWorkDirectory().getAbsolutePath()).append("\n");
+        b.append("  BmoInterfaceConfiguration           :\n    ").append(conf.getBmoInterfaceConfiguration().toString().replaceAll("\n", "\n    "))
+                .append("\n");
+        b.append("\n");
+
+        b.append("\nVista Simulator Configuration:\n");
+        b.append("  CardServiceSimulatorUrl             : ").append(conf.getCardServiceSimulatorUrl()).append("\n");
+        b.append("  FundsTransferSimulationConfigurable : ").append(conf.isFundsTransferSimulationConfigurable()).append("\n");
+        b.append("  CaledonSimulatorSftpDirectory       : ").append(conf.getCaledonSimulatorSftpDirectory().getAbsolutePath()).append("\n");
+        b.append("  BmoSimulatorSftpDirectory           : ").append(conf.getBmoSimulatorSftpDirectory().getAbsolutePath()).append("\n");
+
+        return b.toString();
     }
 }

@@ -13,8 +13,14 @@
  */
 package com.propertyvista.config;
 
-public interface CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
+public abstract class CaledonFundsTransferConfiguration extends SftpConnectionConfiguration {
 
-    public String getIntefaceCompanyId();
+    public abstract String getIntefaceCompanyId();
 
+    @Override
+    public String toString() {
+        StringBuilder b = new StringBuilder(super.toString());
+        b.append("IntefaceCompanyId                 : ").append(getIntefaceCompanyId()).append("\n");
+        return b.toString();
+    }
 }

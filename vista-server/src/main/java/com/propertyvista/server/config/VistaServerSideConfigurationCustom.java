@@ -52,7 +52,7 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
-    public boolean openIdrequired() {
+    public boolean openIdRequired() {
         return getConfigProperties().getBooleanValue("openIdrequired", true);
     }
 

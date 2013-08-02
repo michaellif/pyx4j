@@ -22,7 +22,7 @@ import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 
-public class BmoInterfaceConfigurationSimulator implements BmoInterfaceConfiguration {
+public class BmoInterfaceConfigurationSimulator extends BmoInterfaceConfiguration {
 
     private final AbstractVistaServerSideConfiguration config;
 

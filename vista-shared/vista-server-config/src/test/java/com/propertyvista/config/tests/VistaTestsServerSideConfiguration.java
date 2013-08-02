@@ -120,7 +120,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public boolean openIdrequired() {
+    public boolean openIdRequired() {
         return false;
     }
 
@@ -250,7 +250,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
-    public IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration() {
+    public IMailServiceConfigConfiguration getTenantSureMailServiceConfiguration() {
         return getMailServiceConfigConfiguration();
     }
 

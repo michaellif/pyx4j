@@ -47,7 +47,7 @@ public class OpenIdFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        enabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdrequired();
+        enabled = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).openIdRequired();
     }
 
     @Override

@@ -59,7 +59,7 @@ public class VistaServerSideConfigurationDemoMac extends VistaServerSideConfigur
     }
 
     @Override
-    public boolean openIdrequired() {
+    public boolean openIdRequired() {
         return false;
     }
 

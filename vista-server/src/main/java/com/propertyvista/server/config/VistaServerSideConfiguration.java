@@ -284,7 +284,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public IMailServiceConfigConfiguration getTenantSureMailServiceConfigConfiguration() {
+    public IMailServiceConfigConfiguration getTenantSureMailServiceConfiguration() {
         return VistaSMTPMailServiceConfig.getCustomConfig("mail.tenantsure", this);
     }
 
@@ -349,7 +349,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public boolean openIdrequired() {
+    public boolean openIdRequired() {
         return true;
     }
 

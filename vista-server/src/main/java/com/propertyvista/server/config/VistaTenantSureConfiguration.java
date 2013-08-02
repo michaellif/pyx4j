@@ -17,7 +17,7 @@ import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.shared.config.VistaDemo;
 
-public class VistaTenantSureConfiguration implements TenantSureConfiguration {
+public class VistaTenantSureConfiguration extends TenantSureConfiguration {
 
     private final VistaServerSideConfiguration serverSideConfiguration;
 
