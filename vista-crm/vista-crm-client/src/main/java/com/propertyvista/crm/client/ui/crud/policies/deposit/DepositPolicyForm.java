@@ -102,11 +102,11 @@ public class DepositPolicyForm extends PolicyDTOTabPanelBasedForm<DepositPolicyD
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().depositType())).build());
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().productCode())).build());
                 get(proto().productCode()).setEditable(false);
+                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
-                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().valueType())).build());
-                content.setWidget(++row, 0, valueHolder);
-
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().description())).build());
+                row = -1;
+                content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().valueType())).build());
+                content.setWidget(++row, 1, valueHolder);
 
                 get(proto().valueType()).addValueChangeHandler(new ValueChangeHandler<ValueType>() {
                     @Override
