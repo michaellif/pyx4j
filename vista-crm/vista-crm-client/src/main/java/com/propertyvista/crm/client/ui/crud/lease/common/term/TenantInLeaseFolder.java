@@ -244,39 +244,39 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     CComboBox<Role> role = (CComboBox<Role>) get(proto().role());
                     role.setOptions(Role.tenantRelated());
                 }
-
-                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
-                        get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
-                    }
-                });
-
-                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<Role>(get(proto().leaseParticipant().customer().person().birthDate())));
-                get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
-                    @Override
-                    public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
-                        if (getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
-                            if (role != null && Role.resposible().contains(role)) {
-                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
-                                    return new ValidationError(component, i18n.tr(
-                                            "This tenant is too young to be an applicant: the minimum age required is {0}.", getAgeOfMajority()));
-                                }
-                            }
-                        }
-                        return null;
-                    }
-                });
-
-                get(proto().leaseParticipant().customer().person().birthDate())
-                        .addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
-                get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
             }
         }
 
         @Override
         public void addValidations() {
             super.addValidations();
+
+            get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
+                @Override
+                public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
+                    get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
+                }
+            });
+
+            get(proto().role()).addValueChangeHandler(new RevalidationTrigger<Role>(get(proto().leaseParticipant().customer().person().birthDate())));
+            get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
+                @Override
+                public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
+                    if (getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                        if (role != null && Role.resposible().contains(role)) {
+                            if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                return new ValidationError(component, i18n.tr("This tenant is too young to be an applicant: the minimum age required is {0}.",
+                                        getAgeOfMajority()));
+                            }
+                        }
+                    }
+                    return null;
+                }
+            });
+
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
+
             if (ApplicationMode.isDevelopment()) {
                 this.addDevShortcutHandler(new DevShortcutHandler() {
                     @Override

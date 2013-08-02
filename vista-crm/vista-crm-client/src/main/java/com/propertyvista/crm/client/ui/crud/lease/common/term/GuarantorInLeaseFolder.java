@@ -144,18 +144,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
             }));
             left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().sex()), 7).build());
             left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().birthDate()), 9).build());
-            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
-                @Override
-                public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
-                    if (getAgeOfMajority() != null) {
-                        if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
-                            return new ValidationError(component, i18n.tr("The minimum age requirement for a guarantor is {0}.", getAgeOfMajority()));
-                        }
-
-                    }
-                    return null;
-                }
-            });
             if (isEditable()) {
                 left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CSimpleEntityComboBox<Tenant>()), 25).build());
             } else {
@@ -203,7 +191,6 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
 
         void updateTenantList() {
             if (get(proto().tenant()) instanceof CComboBox<?>) {
-                @SuppressWarnings("unchecked")
                 CComboBox<Tenant> combo = (CComboBox<Tenant>) get(proto().tenant());
                 combo.setOptions(getLeaseCustomerTenants());
             }
@@ -220,6 +207,20 @@ public class GuarantorInLeaseFolder extends LeaseTermParticipantFolder<LeaseTerm
         @Override
         public void addValidations() {
             super.addValidations();
+
+            get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new EditableValueValidator<LogicalDate>() {
+                @Override
+                public ValidationError isValid(CComponent<LogicalDate> component, LogicalDate value) {
+                    if (getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                        if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                            return new ValidationError(component, i18n.tr("The minimum age requirement for a guarantor is {0}.", getAgeOfMajority()));
+                        }
+
+                    }
+                    return null;
+                }
+            });
+
             if (ApplicationMode.isDevelopment()) {
                 this.addDevShortcutHandler(new DevShortcutHandler() {
                     @Override
