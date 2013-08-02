@@ -17,7 +17,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEditorViewImplBase;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
 public class ApplicationDocumentationPolicyEditorViewImpl extends CrmEditorViewImplBase<ApplicationDocumentationPolicyDTO> implements
-        ApplicationDocumentationPolicyEdtiorView {
+        ApplicationDocumentationPolicyEditorView {
 
     public ApplicationDocumentationPolicyEditorViewImpl() {
         setForm(new ApplicationDocumentationPolicyForm(this));

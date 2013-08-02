@@ -43,9 +43,9 @@ public class ARPolicyForm extends PolicyDTOTabPanelBasedForm<ARPolicyDTO> {
     private TwoColumnFlexFormPanel createARPoliciesTab() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("AR Settings"));
         int row = -1;
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().creditDebitRule()), true).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creditDebitRule()), 15).build());
 
-        content.setBR(++row, 0, 1);
+        content.setBR(++row, 0, 2);
         content.setWidget(++row, 0, 2, new HTML(CrmResources.INSTANCE.arPolicyRuleDescription().getText()));
 
         return content;

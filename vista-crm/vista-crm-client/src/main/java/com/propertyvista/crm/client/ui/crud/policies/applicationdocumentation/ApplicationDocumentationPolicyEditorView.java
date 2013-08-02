@@ -17,6 +17,6 @@ import com.pyx4j.site.client.ui.prime.form.IEditor;
 
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
-public interface ApplicationDocumentationPolicyEdtiorView extends IEditor<ApplicationDocumentationPolicyDTO> {
+public interface ApplicationDocumentationPolicyEditorView extends IEditor<ApplicationDocumentationPolicyDTO> {
 
 }

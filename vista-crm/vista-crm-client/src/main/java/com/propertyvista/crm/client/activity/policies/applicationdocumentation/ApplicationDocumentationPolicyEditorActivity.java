@@ -19,16 +19,16 @@ import com.pyx4j.site.rpc.CrudAppPlace;
 
 import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.policies.common.PolicyEditorActivityBase;
-import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEdtiorView;
+import com.propertyvista.crm.client.ui.crud.policies.applicationdocumentation.ApplicationDocumentationPolicyEditorView;
 import com.propertyvista.crm.rpc.services.policies.policy.AbstractPolicyCrudService;
 import com.propertyvista.crm.rpc.services.policies.policy.ApplicationDocumentationPolicyCrudService;
 import com.propertyvista.domain.policy.dto.ApplicationDocumentationPolicyDTO;
 
 public class ApplicationDocumentationPolicyEditorActivity extends PolicyEditorActivityBase<ApplicationDocumentationPolicyDTO> implements
-        ApplicationDocumentationPolicyEdtiorView.Presenter {
+        ApplicationDocumentationPolicyEditorView.Presenter {
 
     public ApplicationDocumentationPolicyEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(ApplicationDocumentationPolicyEdtiorView.class), GWT
+        super(place,  CrmSite.getViewFactory().instantiate(ApplicationDocumentationPolicyEditorView.class), GWT
                 .<AbstractPolicyCrudService<ApplicationDocumentationPolicyDTO>> create(ApplicationDocumentationPolicyCrudService.class),
                 ApplicationDocumentationPolicyDTO.class);
     }
