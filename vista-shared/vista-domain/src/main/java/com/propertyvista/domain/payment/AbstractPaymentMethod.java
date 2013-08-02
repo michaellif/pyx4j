@@ -59,6 +59,9 @@ public interface AbstractPaymentMethod extends IEntity {
     @NotNull
     IPrimitive<Boolean> isDeleted();
 
+    @Timestamp(Timestamp.Update.Created)
+    IPrimitive<Date> creationDate();
+
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
 

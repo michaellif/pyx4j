@@ -46,6 +46,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
+import com.propertyvista.server.common.security.VistaContext;
 
 public class PaymentFacadeImpl implements PaymentFacade {
 
@@ -96,6 +97,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         if (paymentRecord.id().isNull()) {
             paymentRecord.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
+            paymentRecord.creator().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         Persistence.service().merge(paymentRecord);

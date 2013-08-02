@@ -44,6 +44,7 @@ import com.pyx4j.i18n.shared.I18nEnum;
 import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 
@@ -221,6 +222,10 @@ public interface PaymentRecord extends IEntity {
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();
+
+    @ReadOnly
+    @Detached
+    AbstractPmcUser creator();
 
     @Owned(cascade = {})
     ISet<PaymentRecordProcessing> processing();
