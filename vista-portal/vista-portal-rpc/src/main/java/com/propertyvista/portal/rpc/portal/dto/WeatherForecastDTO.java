@@ -24,12 +24,10 @@ import com.pyx4j.i18n.shared.I18nEnum;
 @Transient
 public interface WeatherForecastDTO extends IEntity {
 
-    // this is taken from http://api.accuweather.com/developers/weatherIcons
-    // TODO finish this (see later)
     @I18n
-    public enum WeatherDescription {
+    public enum TemperatureUnit {
 
-        Sunny, MostlySunny, PartlySunny, IntermittentClouds, HazySunshine, MostlyCloudy, Cloudy, Dreary, Fog, Showers;
+        Celcius, Fahrenheit;
 
         @Override
         public String toString() {
@@ -47,9 +45,10 @@ public interface WeatherForecastDTO extends IEntity {
 
     IPrimitive<Double> temperature();
 
-    IPrimitive<String> temperatureUnit();
+    IPrimitive<TemperatureUnit> temperatureUnit();
 
-    // TODO change to enum
+    IPrimitive<String> weatherIconUrl();
+
     IPrimitive<String> weatherDescription();
 
 }

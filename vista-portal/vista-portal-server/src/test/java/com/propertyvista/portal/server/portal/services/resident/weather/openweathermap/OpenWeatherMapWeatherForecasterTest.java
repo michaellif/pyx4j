@@ -17,20 +17,46 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import com.google.gwt.editor.client.Editor.Ignore;
+
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO.TemperatureUnit;
 
 public class OpenWeatherMapWeatherForecasterTest extends TestCase {
 
-    @Override
-    public void setUp() {
+    public void testOpenWeatherMapWeatherData2WeatherForecastDTOMapping() {
+        OpenWeatherMapWeatherForecaster forecaster = new OpenWeatherMapWeatherForecaster(new MockupOpenWeatherMapApiImpl("mock-forecast-1.xml"));
+        List<WeatherForecastDTO> forecast = forecaster.forecastWeather(EntityFactory.create(AddressStructured.class));
+        assertFalse("Forecast data should be present.", forecast.isEmpty());
+
+        assertEquals("OpenWeatherMap", forecast.get(0).providerName().getValue());
+        assertEquals(DateUtils.detectDateformat("2013-07-30 12:00:00"), forecast.get(0).from().getValue());
+        assertEquals(DateUtils.detectDateformat("2013-07-30 15:00:00"), forecast.get(0).to().getValue());
+        assertTrue(Math.abs(22.32 - forecast.get(0).temperature().getValue()) < 0.001);
+        assertEquals(TemperatureUnit.Celcius, forecast.get(0).temperatureUnit().getValue());
+        assertEquals("scattered clouds", forecast.get(0).weatherDescription().getValue());
+        assertEquals("http://openweathermap.org/img/w/03d.png", forecast.get(0).weatherIconUrl().getValue());
+
+        // TODO Make linkTopProvidersWebsite point to a URL of a page that displays the relevant information for the city
+        // CITY_ID can be fetched using city search API call, more details are at:
+        //      http://bugs.openweathermap.org/projects/api/wiki/Api_2_5_searhing
+        // assertEquals("http://openweathermap.org/city/{CITY_ID}", forecast.get(0).linkToProvidersWebstite().getValue());
+        assertEquals("http://openweathermap.org", forecast.get(0).linkToProvidersWebstite().getValue());
     }
 
-    public void testSanity() {
-        OpenWeatherMapWeatherForecaster forecaster = new OpenWeatherMapWeatherForecaster(new MockupOpenWeatherMapApi("mock-forecast-1.xml"));
-        List<WeatherForecastDTO> forecast = forecaster.forecastWeather(EntityFactory.create(AddressStructured.class));
+    @Ignore
+    public void testRealOpenWeatherMapApiSanity() {
+        OpenWeatherMapWeatherForecaster forecaster = new OpenWeatherMapWeatherForecaster(new OpenWeatherMapApiImpl(null));
+        AddressStructured address = EntityFactory.create(AddressStructured.class);
+        address.country().name().setValue("Canada");
+        address.city().setValue("Toronto");
+
+        List<WeatherForecastDTO> forecast = forecaster.forecastWeather(address);
+
         assertFalse(forecast.isEmpty());
     }
 }

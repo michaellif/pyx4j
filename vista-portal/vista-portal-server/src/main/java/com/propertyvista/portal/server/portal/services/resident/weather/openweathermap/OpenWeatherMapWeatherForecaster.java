@@ -13,12 +13,16 @@
  */
 package com.propertyvista.portal.server.portal.services.resident.weather.openweathermap;
 
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+
+import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO.TemperatureUnit;
 import com.propertyvista.portal.server.portal.services.resident.weather.WeatherForecaster;
+import com.propertyvista.portal.server.portal.services.resident.weather.openweathermap.Weatherdata.Forecast.Time;
 
 public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
 
@@ -31,6 +35,38 @@ public class OpenWeatherMapWeatherForecaster implements WeatherForecaster {
     @Override
     public List<WeatherForecastDTO> forecastWeather(AddressStructured address) {
         Weatherdata wd = openWeatherApi.getWeatherdata(address.city().getValue(), address.country().name().getValue());
-        return Collections.emptyList();
+        List<WeatherForecastDTO> forecast = new LinkedList<WeatherForecastDTO>();
+        if (wd != null) {
+            for (Weatherdata.Forecast.Time weatherDataForecastPerTime : wd.getForecast().getTime()) {
+                forecast.add(weatherDataForcastPerTime2WeatherForecastDto(weatherDataForecastPerTime));
+            }
+        }
+        return forecast;
+    }
+
+    //@formatter:off
+    /**
+     * Based on the following:<br />
+     * <a href="http://bugs.openweathermap.org/projects/api/wiki/Weather_Data">http://bugs.openweathermap.org/projects/api/wiki/Weather_Data</a><br/>
+     * <a href="http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes">http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes</a><br />
+     */
+    //@formatter:on
+    private WeatherForecastDTO weatherDataForcastPerTime2WeatherForecastDto(Time weatherDataForecastPerTime) {
+        WeatherForecastDTO dto = EntityFactory.create(WeatherForecastDTO.class);
+        dto.providerName().setValue("OpenWeatherMap");
+        dto.linkToProvidersWebstite().setValue("http://openweathermap.org"); // TODO make this link point to city information
+        dto.from().setValue(weatherDataForecastPerTime.getFrom().toGregorianCalendar().getTime());
+        dto.to().setValue(weatherDataForecastPerTime.getTo().toGregorianCalendar().getTime());
+        dto.temperature().setValue((double) weatherDataForecastPerTime.getTemperature().getValueAttribute());
+        if ("celsius".equals(weatherDataForecastPerTime.getTemperature().getUnit())) {
+            dto.temperatureUnit().setValue(TemperatureUnit.Celcius);
+        } else if ("fahrenheit".equals(weatherDataForecastPerTime.getTemperature().getUnit())) {
+            dto.temperatureUnit().setValue(TemperatureUnit.Fahrenheit);
+        }
+
+        dto.weatherDescription().setValue(weatherDataForecastPerTime.getSymbol().getName());
+        dto.weatherIconUrl().setValue("http://openweathermap.org/img/w/" + weatherDataForecastPerTime.getSymbol().getVar() + ".png");
+
+        return dto;
     }
 }

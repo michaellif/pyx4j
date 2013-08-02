@@ -18,13 +18,13 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 /**
- * Returns static data parsed from a resource reponse file provided in the constructor
+ * Returns static data parsed from a resource response file provided in the constructor
  */
-public class MockupOpenWeatherMapApi implements OpenWeatherMapApi {
+public class MockupOpenWeatherMapApiImpl implements OpenWeatherMapApi {
 
     private final String mockApiResponeResourceName;
 
-    public MockupOpenWeatherMapApi(String mockApiResponeResourceName) {
+    public MockupOpenWeatherMapApiImpl(String mockApiResponeResourceName) {
         this.mockApiResponeResourceName = mockApiResponeResourceName;
     }
 

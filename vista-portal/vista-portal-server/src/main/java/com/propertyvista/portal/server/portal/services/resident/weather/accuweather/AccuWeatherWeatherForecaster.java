@@ -22,6 +22,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO.TemperatureUnit;
 import com.propertyvista.portal.server.portal.services.resident.weather.WeatherForecaster;
 import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.beans.ForecastBundle;
 import com.propertyvista.portal.server.portal.services.resident.weather.accuweather.beans.ForecastBundle.Forecast;
@@ -91,7 +92,13 @@ public class AccuWeatherWeatherForecaster implements WeatherForecaster {
         weatherForecastDto.from().setValue(from);
         weatherForecastDto.to().setValue(to);
         weatherForecastDto.temperature().setValue(forecast.getTemperature().getTemperatureValue());
-        weatherForecastDto.temperatureUnit().setValue(forecast.getTemperature().getUnit());
+
+        if ("F".equals(forecast.getTemperature().getUnit())) {
+            weatherForecastDto.temperatureUnit().setValue(TemperatureUnit.Fahrenheit);
+        } else if ("C".equals(forecast.getTemperature().getUnit())) {
+            weatherForecastDto.temperatureUnit().setValue(TemperatureUnit.Celcius);
+        }
+
         weatherForecastDto.weatherDescription().setValue(forecast.getIconPhrase());
 
         return weatherForecastDto;

@@ -13,11 +13,13 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.cache.CacheService;
 
 import com.propertyvista.domain.contact.AddressStructured;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -29,6 +31,13 @@ import com.propertyvista.portal.server.portal.services.resident.weather.WeatherF
 import com.propertyvista.server.common.util.AddressRetriever;
 
 public class WeatherServiceImpl implements WeatherService {
+
+    private static final String CACHE_KEY_PREFIX = "WEATHER_FOR_BUILDING_";
+
+    /**
+     * this is max time that weather in cache is allowed to live without renewal in milliseconds;
+     */
+    private static final long MAX_WEATHER_FORECAST_AGE = 3L * 60L * 60L * 1000L;
 
     @Override
     public void getForecast(AsyncCallback<Vector<WeatherForecastDTO>> callback) {
@@ -49,13 +58,28 @@ public class WeatherServiceImpl implements WeatherService {
     }
 
     private void putWeatherToCache(Building contextBuilding, Vector<WeatherForecastDTO> weather) {
-        // TODO Auto-generated method stub
-
+        CacheService.put(CACHE_KEY_PREFIX + contextBuilding.getPrimaryKey().toString(), new WeatherForecastHolder(weather, new Date()));
     }
 
     private Vector<WeatherForecastDTO> getWeatherFromCache(Building contextBuilding) {
-        // TODO Auto-generated method stub
-        return null;
+        WeatherForecastHolder forecastHolder = CacheService.get(CACHE_KEY_PREFIX + contextBuilding.getPrimaryKey().toString());
+        if (forecastHolder != null && (forecastHolder.timestamp.getTime() + MAX_WEATHER_FORECAST_AGE) > new Date().getTime()) {
+            return forecastHolder.weather;
+        } else {
+            return null;
+        }
+    }
+
+    private static class WeatherForecastHolder {
+
+        private final Vector<WeatherForecastDTO> weather;
+
+        private final Date timestamp;
+
+        public WeatherForecastHolder(Vector<WeatherForecastDTO> weather, Date timestamp) {
+            this.weather = weather;
+            this.timestamp = timestamp;
+        }
     }
 
 }

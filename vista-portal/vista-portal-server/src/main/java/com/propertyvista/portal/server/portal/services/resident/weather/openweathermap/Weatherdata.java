@@ -5,11 +5,11 @@
 // Generated on: 2013.07.30 at 12:18:12 PM EDT 
 //
 
-
 package com.propertyvista.portal.server.portal.services.resident.weather.openweathermap;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -20,203 +20,31 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.XmlValue;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-
 /**
- * <p>Java class for anonymous complex type.
+ * http://bugs.openweathermap.org/projects/api/wiki/Weather_Data
+ * http://bugs.openweathermap.org/projects/api/wiki/Weather_Condition_Codes
  * 
- * <p>The following schema fragment specifies the expected content contained within this class.
- * 
- * <pre>
- * &lt;complexType>
- *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="location">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                   &lt;element name="type" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                   &lt;element name="country" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                   &lt;element name="timezone" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *                   &lt;element name="location">
- *                     &lt;complexType>
- *                       &lt;simpleContent>
- *                         &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                           &lt;attribute name="altitude" type="{http://www.w3.org/2001/XMLSchema}byte" />
- *                           &lt;attribute name="latitude" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                           &lt;attribute name="longitude" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                           &lt;attribute name="geobase" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                           &lt;attribute name="geobaseid" type="{http://www.w3.org/2001/XMLSchema}byte" />
- *                         &lt;/extension>
- *                       &lt;/simpleContent>
- *                     &lt;/complexType>
- *                   &lt;/element>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="credit" type="{http://www.w3.org/2001/XMLSchema}string"/>
- *         &lt;element name="meta">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="lastupdate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *                   &lt;element name="calctime" type="{http://www.w3.org/2001/XMLSchema}float"/>
- *                   &lt;element name="nextupdate" type="{http://www.w3.org/2001/XMLSchema}dateTime"/>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="sun">
- *           &lt;complexType>
- *             &lt;simpleContent>
- *               &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                 &lt;attribute name="rise" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
- *                 &lt;attribute name="set" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
- *               &lt;/extension>
- *             &lt;/simpleContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *         &lt;element name="forecast">
- *           &lt;complexType>
- *             &lt;complexContent>
- *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                 &lt;sequence>
- *                   &lt;element name="time" maxOccurs="unbounded" minOccurs="0">
- *                     &lt;complexType>
- *                       &lt;complexContent>
- *                         &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *                           &lt;sequence>
- *                             &lt;element name="symbol">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="number" type="{http://www.w3.org/2001/XMLSchema}short" />
- *                                     &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="var" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="precipitation">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}byte" />
- *                                     &lt;attribute name="unit" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="type" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="windDirection">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="deg" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                                     &lt;attribute name="code" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="windSpeed">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="mps" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                                     &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="temperature">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="unit" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                                     &lt;attribute name="min" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                                     &lt;attribute name="max" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="pressure">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="unit" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}float" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="humidity">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}byte" />
- *                                     &lt;attribute name="unit" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                             &lt;element name="clouds">
- *                               &lt;complexType>
- *                                 &lt;simpleContent>
- *                                   &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *                                     &lt;attribute name="value" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                     &lt;attribute name="all" type="{http://www.w3.org/2001/XMLSchema}byte" />
- *                                     &lt;attribute name="unit" type="{http://www.w3.org/2001/XMLSchema}string" />
- *                                   &lt;/extension>
- *                                 &lt;/simpleContent>
- *                               &lt;/complexType>
- *                             &lt;/element>
- *                           &lt;/sequence>
- *                           &lt;attribute name="from" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
- *                           &lt;attribute name="to" type="{http://www.w3.org/2001/XMLSchema}dateTime" />
- *                         &lt;/restriction>
- *                       &lt;/complexContent>
- *                     &lt;/complexType>
- *                   &lt;/element>
- *                 &lt;/sequence>
- *               &lt;/restriction>
- *             &lt;/complexContent>
- *           &lt;/complexType>
- *         &lt;/element>
- *       &lt;/sequence>
- *     &lt;/restriction>
- *   &lt;/complexContent>
- * &lt;/complexType>
- * </pre>
- * 
- * 
+ * The docs have no XSD for the XML response, so to produce this some kind of online tool was used to geneate an XSD based on a given XML.
+ * Then this definition was generated using <code>xjc</code>...
  */
+// TODO review and remove all stuff that is not required
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = {
-    "location",
-    "credit",
-    "meta",
-    "sun",
-    "forecast"
-})
+@XmlType(name = "", propOrder = { "location", "credit", "meta", "sun", "forecast" })
 @XmlRootElement(name = "weatherdata")
 public class Weatherdata {
 
     @XmlElement(required = true)
     protected Weatherdata.Location location;
+
     @XmlElement(required = true)
     protected String credit;
+
     @XmlElement(required = true)
     protected Weatherdata.Meta meta;
+
     @XmlElement(required = true)
     protected Weatherdata.Sun sun;
+
     @XmlElement(required = true)
     protected Weatherdata.Forecast forecast;
 
@@ -224,9 +52,8 @@ public class Weatherdata {
      * Gets the value of the location property.
      * 
      * @return
-     *     possible object is
-     *     {@link Weatherdata.Location }
-     *     
+     *         possible object is {@link Weatherdata.Location }
+     * 
      */
     public Weatherdata.Location getLocation() {
         return location;
@@ -236,9 +63,8 @@ public class Weatherdata {
      * Sets the value of the location property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link Weatherdata.Location }
-     *     
+     *            allowed object is {@link Weatherdata.Location }
+     * 
      */
     public void setLocation(Weatherdata.Location value) {
         this.location = value;
@@ -248,9 +74,8 @@ public class Weatherdata {
      * Gets the value of the credit property.
      * 
      * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *         possible object is {@link String }
+     * 
      */
     public String getCredit() {
         return credit;
@@ -260,9 +85,8 @@ public class Weatherdata {
      * Sets the value of the credit property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *            allowed object is {@link String }
+     * 
      */
     public void setCredit(String value) {
         this.credit = value;
@@ -272,9 +96,8 @@ public class Weatherdata {
      * Gets the value of the meta property.
      * 
      * @return
-     *     possible object is
-     *     {@link Weatherdata.Meta }
-     *     
+     *         possible object is {@link Weatherdata.Meta }
+     * 
      */
     public Weatherdata.Meta getMeta() {
         return meta;
@@ -284,9 +107,8 @@ public class Weatherdata {
      * Sets the value of the meta property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link Weatherdata.Meta }
-     *     
+     *            allowed object is {@link Weatherdata.Meta }
+     * 
      */
     public void setMeta(Weatherdata.Meta value) {
         this.meta = value;
@@ -296,9 +118,8 @@ public class Weatherdata {
      * Gets the value of the sun property.
      * 
      * @return
-     *     possible object is
-     *     {@link Weatherdata.Sun }
-     *     
+     *         possible object is {@link Weatherdata.Sun }
+     * 
      */
     public Weatherdata.Sun getSun() {
         return sun;
@@ -308,9 +129,8 @@ public class Weatherdata {
      * Sets the value of the sun property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link Weatherdata.Sun }
-     *     
+     *            allowed object is {@link Weatherdata.Sun }
+     * 
      */
     public void setSun(Weatherdata.Sun value) {
         this.sun = value;
@@ -320,9 +140,8 @@ public class Weatherdata {
      * Gets the value of the forecast property.
      * 
      * @return
-     *     possible object is
-     *     {@link Weatherdata.Forecast }
-     *     
+     *         possible object is {@link Weatherdata.Forecast }
+     * 
      */
     public Weatherdata.Forecast getForecast() {
         return forecast;
@@ -332,19 +151,19 @@ public class Weatherdata {
      * Sets the value of the forecast property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link Weatherdata.Forecast }
-     *     
+     *            allowed object is {@link Weatherdata.Forecast }
+     * 
      */
     public void setForecast(Weatherdata.Forecast value) {
         this.forecast = value;
     }
 
-
     /**
-     * <p>Java class for anonymous complex type.
+     * <p>
+     * Java class for anonymous complex type.
      * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * The following schema fragment specifies the expected content contained within this class.
      * 
      * <pre>
      * &lt;complexType>
@@ -458,9 +277,7 @@ public class Weatherdata {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "time"
-    })
+    @XmlType(name = "", propOrder = { "time" })
     public static class Forecast {
 
         protected List<Weatherdata.Forecast.Time> time;
@@ -469,21 +286,19 @@ public class Weatherdata {
          * Gets the value of the time property.
          * 
          * <p>
-         * This accessor method returns a reference to the live list,
-         * not a snapshot. Therefore any modification you make to the
-         * returned list will be present inside the JAXB object.
-         * This is why there is not a <CODE>set</CODE> method for the time property.
+         * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to the returned list will be present
+         * inside the JAXB object. This is why there is not a <CODE>set</CODE> method for the time property.
          * 
          * <p>
          * For example, to add a new item, do as follows:
+         * 
          * <pre>
-         *    getTime().add(newItem);
+         * getTime().add(newItem);
          * </pre>
          * 
          * 
          * <p>
-         * Objects of the following type(s) are allowed in the list
-         * {@link Weatherdata.Forecast.Time }
+         * Objects of the following type(s) are allowed in the list {@link Weatherdata.Forecast.Time }
          * 
          * 
          */
@@ -494,11 +309,12 @@ public class Weatherdata {
             return this.time;
         }
 
-
         /**
-         * <p>Java class for anonymous complex type.
+         * <p>
+         * Java class for anonymous complex type.
          * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
+         * <p>
+         * The following schema fragment specifies the expected content contained within this class.
          * 
          * <pre>
          * &lt;complexType>
@@ -602,37 +418,37 @@ public class Weatherdata {
          * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "symbol",
-            "precipitation",
-            "windDirection",
-            "windSpeed",
-            "temperature",
-            "pressure",
-            "humidity",
-            "clouds"
-        })
+        @XmlType(name = "", propOrder = { "symbol", "precipitation", "windDirection", "windSpeed", "temperature", "pressure", "humidity", "clouds" })
         public static class Time {
 
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.Symbol symbol;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.Precipitation precipitation;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.WindDirection windDirection;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.WindSpeed windSpeed;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.Temperature temperature;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.Pressure pressure;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.Humidity humidity;
+
             @XmlElement(required = true)
             protected Weatherdata.Forecast.Time.Clouds clouds;
+
             @XmlAttribute(name = "from")
             @XmlSchemaType(name = "dateTime")
             protected XMLGregorianCalendar from;
+
             @XmlAttribute(name = "to")
             @XmlSchemaType(name = "dateTime")
             protected XMLGregorianCalendar to;
@@ -641,9 +457,8 @@ public class Weatherdata {
              * Gets the value of the symbol property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.Symbol }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.Symbol }
+             * 
              */
             public Weatherdata.Forecast.Time.Symbol getSymbol() {
                 return symbol;
@@ -653,9 +468,8 @@ public class Weatherdata {
              * Sets the value of the symbol property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.Symbol }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.Symbol }
+             * 
              */
             public void setSymbol(Weatherdata.Forecast.Time.Symbol value) {
                 this.symbol = value;
@@ -665,9 +479,8 @@ public class Weatherdata {
              * Gets the value of the precipitation property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.Precipitation }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.Precipitation }
+             * 
              */
             public Weatherdata.Forecast.Time.Precipitation getPrecipitation() {
                 return precipitation;
@@ -677,9 +490,8 @@ public class Weatherdata {
              * Sets the value of the precipitation property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.Precipitation }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.Precipitation }
+             * 
              */
             public void setPrecipitation(Weatherdata.Forecast.Time.Precipitation value) {
                 this.precipitation = value;
@@ -689,9 +501,8 @@ public class Weatherdata {
              * Gets the value of the windDirection property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.WindDirection }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.WindDirection }
+             * 
              */
             public Weatherdata.Forecast.Time.WindDirection getWindDirection() {
                 return windDirection;
@@ -701,9 +512,8 @@ public class Weatherdata {
              * Sets the value of the windDirection property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.WindDirection }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.WindDirection }
+             * 
              */
             public void setWindDirection(Weatherdata.Forecast.Time.WindDirection value) {
                 this.windDirection = value;
@@ -713,9 +523,8 @@ public class Weatherdata {
              * Gets the value of the windSpeed property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.WindSpeed }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.WindSpeed }
+             * 
              */
             public Weatherdata.Forecast.Time.WindSpeed getWindSpeed() {
                 return windSpeed;
@@ -725,9 +534,8 @@ public class Weatherdata {
              * Sets the value of the windSpeed property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.WindSpeed }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.WindSpeed }
+             * 
              */
             public void setWindSpeed(Weatherdata.Forecast.Time.WindSpeed value) {
                 this.windSpeed = value;
@@ -737,9 +545,8 @@ public class Weatherdata {
              * Gets the value of the temperature property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.Temperature }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.Temperature }
+             * 
              */
             public Weatherdata.Forecast.Time.Temperature getTemperature() {
                 return temperature;
@@ -749,9 +556,8 @@ public class Weatherdata {
              * Sets the value of the temperature property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.Temperature }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.Temperature }
+             * 
              */
             public void setTemperature(Weatherdata.Forecast.Time.Temperature value) {
                 this.temperature = value;
@@ -761,9 +567,8 @@ public class Weatherdata {
              * Gets the value of the pressure property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.Pressure }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.Pressure }
+             * 
              */
             public Weatherdata.Forecast.Time.Pressure getPressure() {
                 return pressure;
@@ -773,9 +578,8 @@ public class Weatherdata {
              * Sets the value of the pressure property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.Pressure }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.Pressure }
+             * 
              */
             public void setPressure(Weatherdata.Forecast.Time.Pressure value) {
                 this.pressure = value;
@@ -785,9 +589,8 @@ public class Weatherdata {
              * Gets the value of the humidity property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.Humidity }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.Humidity }
+             * 
              */
             public Weatherdata.Forecast.Time.Humidity getHumidity() {
                 return humidity;
@@ -797,9 +600,8 @@ public class Weatherdata {
              * Sets the value of the humidity property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.Humidity }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.Humidity }
+             * 
              */
             public void setHumidity(Weatherdata.Forecast.Time.Humidity value) {
                 this.humidity = value;
@@ -809,9 +611,8 @@ public class Weatherdata {
              * Gets the value of the clouds property.
              * 
              * @return
-             *     possible object is
-             *     {@link Weatherdata.Forecast.Time.Clouds }
-             *     
+             *         possible object is {@link Weatherdata.Forecast.Time.Clouds }
+             * 
              */
             public Weatherdata.Forecast.Time.Clouds getClouds() {
                 return clouds;
@@ -821,9 +622,8 @@ public class Weatherdata {
              * Sets the value of the clouds property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Weatherdata.Forecast.Time.Clouds }
-             *     
+             *            allowed object is {@link Weatherdata.Forecast.Time.Clouds }
+             * 
              */
             public void setClouds(Weatherdata.Forecast.Time.Clouds value) {
                 this.clouds = value;
@@ -833,9 +633,8 @@ public class Weatherdata {
              * Gets the value of the from property.
              * 
              * @return
-             *     possible object is
-             *     {@link XMLGregorianCalendar }
-             *     
+             *         possible object is {@link XMLGregorianCalendar }
+             * 
              */
             public XMLGregorianCalendar getFrom() {
                 return from;
@@ -845,9 +644,8 @@ public class Weatherdata {
              * Sets the value of the from property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link XMLGregorianCalendar }
-             *     
+             *            allowed object is {@link XMLGregorianCalendar }
+             * 
              */
             public void setFrom(XMLGregorianCalendar value) {
                 this.from = value;
@@ -857,9 +655,8 @@ public class Weatherdata {
              * Gets the value of the to property.
              * 
              * @return
-             *     possible object is
-             *     {@link XMLGregorianCalendar }
-             *     
+             *         possible object is {@link XMLGregorianCalendar }
+             * 
              */
             public XMLGregorianCalendar getTo() {
                 return to;
@@ -869,19 +666,19 @@ public class Weatherdata {
              * Sets the value of the to property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link XMLGregorianCalendar }
-             *     
+             *            allowed object is {@link XMLGregorianCalendar }
+             * 
              */
             public void setTo(XMLGregorianCalendar value) {
                 this.to = value;
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -898,17 +695,18 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class Clouds {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "value")
                 protected String valueAttribute;
+
                 @XmlAttribute(name = "all")
                 protected Byte all;
+
                 @XmlAttribute(name = "unit")
                 protected String unit;
 
@@ -916,9 +714,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -928,9 +725,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -940,9 +736,8 @@ public class Weatherdata {
                  * Gets the value of the valueAttribute property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValueAttribute() {
                     return valueAttribute;
@@ -952,9 +747,8 @@ public class Weatherdata {
                  * Sets the value of the valueAttribute property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValueAttribute(String value) {
                     this.valueAttribute = value;
@@ -964,9 +758,8 @@ public class Weatherdata {
                  * Gets the value of the all property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Byte }
-                 *     
+                 *         possible object is {@link Byte }
+                 * 
                  */
                 public Byte getAll() {
                     return all;
@@ -976,9 +769,8 @@ public class Weatherdata {
                  * Sets the value of the all property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Byte }
-                 *     
+                 *            allowed object is {@link Byte }
+                 * 
                  */
                 public void setAll(Byte value) {
                     this.all = value;
@@ -988,9 +780,8 @@ public class Weatherdata {
                  * Gets the value of the unit property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getUnit() {
                     return unit;
@@ -1000,9 +791,8 @@ public class Weatherdata {
                  * Sets the value of the unit property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setUnit(String value) {
                     this.unit = value;
@@ -1010,11 +800,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1030,15 +821,15 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class Humidity {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "value")
                 protected Byte valueAttribute;
+
                 @XmlAttribute(name = "unit")
                 protected String unit;
 
@@ -1046,9 +837,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1058,9 +848,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1070,9 +859,8 @@ public class Weatherdata {
                  * Gets the value of the valueAttribute property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Byte }
-                 *     
+                 *         possible object is {@link Byte }
+                 * 
                  */
                 public Byte getValueAttribute() {
                     return valueAttribute;
@@ -1082,9 +870,8 @@ public class Weatherdata {
                  * Sets the value of the valueAttribute property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Byte }
-                 *     
+                 *            allowed object is {@link Byte }
+                 * 
                  */
                 public void setValueAttribute(Byte value) {
                     this.valueAttribute = value;
@@ -1094,9 +881,8 @@ public class Weatherdata {
                  * Gets the value of the unit property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getUnit() {
                     return unit;
@@ -1106,9 +892,8 @@ public class Weatherdata {
                  * Sets the value of the unit property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setUnit(String value) {
                     this.unit = value;
@@ -1116,11 +901,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1137,17 +923,18 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class Precipitation {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "value")
-                protected Byte valueAttribute;
+                protected String valueAttribute;
+
                 @XmlAttribute(name = "unit")
                 protected String unit;
+
                 @XmlAttribute(name = "type")
                 protected String type;
 
@@ -1155,9 +942,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1167,9 +953,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1179,11 +964,10 @@ public class Weatherdata {
                  * Gets the value of the valueAttribute property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Byte }
-                 *     
+                 *         possible object is {@link Byte }
+                 * 
                  */
-                public Byte getValueAttribute() {
+                public String getValueAttribute() {
                     return valueAttribute;
                 }
 
@@ -1191,11 +975,10 @@ public class Weatherdata {
                  * Sets the value of the valueAttribute property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Byte }
-                 *     
+                 *            allowed object is {@link Byte }
+                 * 
                  */
-                public void setValueAttribute(Byte value) {
+                public void setValueAttribute(String value) {
                     this.valueAttribute = value;
                 }
 
@@ -1203,9 +986,8 @@ public class Weatherdata {
                  * Gets the value of the unit property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getUnit() {
                     return unit;
@@ -1215,9 +997,8 @@ public class Weatherdata {
                  * Sets the value of the unit property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setUnit(String value) {
                     this.unit = value;
@@ -1227,9 +1008,8 @@ public class Weatherdata {
                  * Gets the value of the type property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getType() {
                     return type;
@@ -1239,9 +1019,8 @@ public class Weatherdata {
                  * Sets the value of the type property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setType(String value) {
                     this.type = value;
@@ -1249,11 +1028,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1269,15 +1049,15 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class Pressure {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "unit")
                 protected String unit;
+
                 @XmlAttribute(name = "value")
                 protected Float valueAttribute;
 
@@ -1285,9 +1065,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1297,9 +1076,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1309,9 +1087,8 @@ public class Weatherdata {
                  * Gets the value of the unit property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getUnit() {
                     return unit;
@@ -1321,9 +1098,8 @@ public class Weatherdata {
                  * Sets the value of the unit property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setUnit(String value) {
                     this.unit = value;
@@ -1333,9 +1109,8 @@ public class Weatherdata {
                  * Gets the value of the valueAttribute property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Float }
-                 *     
+                 *         possible object is {@link Float }
+                 * 
                  */
                 public Float getValueAttribute() {
                     return valueAttribute;
@@ -1345,9 +1120,8 @@ public class Weatherdata {
                  * Sets the value of the valueAttribute property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Float }
-                 *     
+                 *            allowed object is {@link Float }
+                 * 
                  */
                 public void setValueAttribute(Float value) {
                     this.valueAttribute = value;
@@ -1355,11 +1129,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1376,17 +1151,18 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class Symbol {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "number")
                 protected Short number;
+
                 @XmlAttribute(name = "name")
                 protected String name;
+
                 @XmlAttribute(name = "var")
                 protected String var;
 
@@ -1394,9 +1170,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1406,9 +1181,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1418,9 +1192,8 @@ public class Weatherdata {
                  * Gets the value of the number property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Short }
-                 *     
+                 *         possible object is {@link Short }
+                 * 
                  */
                 public Short getNumber() {
                     return number;
@@ -1430,9 +1203,8 @@ public class Weatherdata {
                  * Sets the value of the number property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Short }
-                 *     
+                 *            allowed object is {@link Short }
+                 * 
                  */
                 public void setNumber(Short value) {
                     this.number = value;
@@ -1442,9 +1214,8 @@ public class Weatherdata {
                  * Gets the value of the name property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getName() {
                     return name;
@@ -1454,9 +1225,8 @@ public class Weatherdata {
                  * Sets the value of the name property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setName(String value) {
                     this.name = value;
@@ -1466,9 +1236,8 @@ public class Weatherdata {
                  * Gets the value of the var property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getVar() {
                     return var;
@@ -1478,9 +1247,8 @@ public class Weatherdata {
                  * Sets the value of the var property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setVar(String value) {
                     this.var = value;
@@ -1488,11 +1256,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1510,19 +1279,21 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class Temperature {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "unit")
                 protected String unit;
+
                 @XmlAttribute(name = "value")
                 protected Float valueAttribute;
+
                 @XmlAttribute(name = "min")
                 protected Float min;
+
                 @XmlAttribute(name = "max")
                 protected Float max;
 
@@ -1530,9 +1301,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1542,9 +1312,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1554,9 +1323,8 @@ public class Weatherdata {
                  * Gets the value of the unit property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getUnit() {
                     return unit;
@@ -1566,9 +1334,8 @@ public class Weatherdata {
                  * Sets the value of the unit property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setUnit(String value) {
                     this.unit = value;
@@ -1578,9 +1345,8 @@ public class Weatherdata {
                  * Gets the value of the valueAttribute property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Float }
-                 *     
+                 *         possible object is {@link Float }
+                 * 
                  */
                 public Float getValueAttribute() {
                     return valueAttribute;
@@ -1590,9 +1356,8 @@ public class Weatherdata {
                  * Sets the value of the valueAttribute property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Float }
-                 *     
+                 *            allowed object is {@link Float }
+                 * 
                  */
                 public void setValueAttribute(Float value) {
                     this.valueAttribute = value;
@@ -1602,9 +1367,8 @@ public class Weatherdata {
                  * Gets the value of the min property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Float }
-                 *     
+                 *         possible object is {@link Float }
+                 * 
                  */
                 public Float getMin() {
                     return min;
@@ -1614,9 +1378,8 @@ public class Weatherdata {
                  * Sets the value of the min property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Float }
-                 *     
+                 *            allowed object is {@link Float }
+                 * 
                  */
                 public void setMin(Float value) {
                     this.min = value;
@@ -1626,9 +1389,8 @@ public class Weatherdata {
                  * Gets the value of the max property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Float }
-                 *     
+                 *         possible object is {@link Float }
+                 * 
                  */
                 public Float getMax() {
                     return max;
@@ -1638,9 +1400,8 @@ public class Weatherdata {
                  * Sets the value of the max property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Float }
-                 *     
+                 *            allowed object is {@link Float }
+                 * 
                  */
                 public void setMax(Float value) {
                     this.max = value;
@@ -1648,11 +1409,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1669,17 +1431,18 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class WindDirection {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "deg")
                 protected Float deg;
+
                 @XmlAttribute(name = "code")
                 protected String code;
+
                 @XmlAttribute(name = "name")
                 protected String name;
 
@@ -1687,9 +1450,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1699,9 +1461,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1711,9 +1472,8 @@ public class Weatherdata {
                  * Gets the value of the deg property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Float }
-                 *     
+                 *         possible object is {@link Float }
+                 * 
                  */
                 public Float getDeg() {
                     return deg;
@@ -1723,9 +1483,8 @@ public class Weatherdata {
                  * Sets the value of the deg property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Float }
-                 *     
+                 *            allowed object is {@link Float }
+                 * 
                  */
                 public void setDeg(Float value) {
                     this.deg = value;
@@ -1735,9 +1494,8 @@ public class Weatherdata {
                  * Gets the value of the code property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getCode() {
                     return code;
@@ -1747,9 +1505,8 @@ public class Weatherdata {
                  * Sets the value of the code property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setCode(String value) {
                     this.code = value;
@@ -1759,9 +1516,8 @@ public class Weatherdata {
                  * Gets the value of the name property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getName() {
                     return name;
@@ -1771,9 +1527,8 @@ public class Weatherdata {
                  * Sets the value of the name property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setName(String value) {
                     this.name = value;
@@ -1781,11 +1536,12 @@ public class Weatherdata {
 
             }
 
-
             /**
-             * <p>Java class for anonymous complex type.
+             * <p>
+             * Java class for anonymous complex type.
              * 
-             * <p>The following schema fragment specifies the expected content contained within this class.
+             * <p>
+             * The following schema fragment specifies the expected content contained within this class.
              * 
              * <pre>
              * &lt;complexType>
@@ -1801,15 +1557,15 @@ public class Weatherdata {
              * 
              */
             @XmlAccessorType(XmlAccessType.FIELD)
-            @XmlType(name = "", propOrder = {
-                "value"
-            })
+            @XmlType(name = "", propOrder = { "value" })
             public static class WindSpeed {
 
                 @XmlValue
                 protected String value;
+
                 @XmlAttribute(name = "mps")
                 protected Float mps;
+
                 @XmlAttribute(name = "name")
                 protected String name;
 
@@ -1817,9 +1573,8 @@ public class Weatherdata {
                  * Gets the value of the value property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getValue() {
                     return value;
@@ -1829,9 +1584,8 @@ public class Weatherdata {
                  * Sets the value of the value property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setValue(String value) {
                     this.value = value;
@@ -1841,9 +1595,8 @@ public class Weatherdata {
                  * Gets the value of the mps property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link Float }
-                 *     
+                 *         possible object is {@link Float }
+                 * 
                  */
                 public Float getMps() {
                     return mps;
@@ -1853,9 +1606,8 @@ public class Weatherdata {
                  * Sets the value of the mps property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link Float }
-                 *     
+                 *            allowed object is {@link Float }
+                 * 
                  */
                 public void setMps(Float value) {
                     this.mps = value;
@@ -1865,9 +1617,8 @@ public class Weatherdata {
                  * Gets the value of the name property.
                  * 
                  * @return
-                 *     possible object is
-                 *     {@link String }
-                 *     
+                 *         possible object is {@link String }
+                 * 
                  */
                 public String getName() {
                     return name;
@@ -1877,9 +1628,8 @@ public class Weatherdata {
                  * Sets the value of the name property.
                  * 
                  * @param value
-                 *     allowed object is
-                 *     {@link String }
-                 *     
+                 *            allowed object is {@link String }
+                 * 
                  */
                 public void setName(String value) {
                     this.name = value;
@@ -1891,11 +1641,12 @@ public class Weatherdata {
 
     }
 
-
     /**
-     * <p>Java class for anonymous complex type.
+     * <p>
+     * Java class for anonymous complex type.
      * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * The following schema fragment specifies the expected content contained within this class.
      * 
      * <pre>
      * &lt;complexType>
@@ -1928,23 +1679,21 @@ public class Weatherdata {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "name",
-        "type",
-        "country",
-        "timezone",
-        "geoLocation"
-    })
+    @XmlType(name = "", propOrder = { "name", "type", "country", "timezone", "geoLocation" })
     public static class Location {
 
         @XmlElement(required = true)
         protected String name;
+
         @XmlElement(required = true)
         protected String type;
+
         @XmlElement(required = true)
         protected String country;
+
         @XmlElement(required = true)
         protected String timezone;
+
         @XmlElement(name = "location", required = true)
         protected Weatherdata.Location.GeoLocation geoLocation;
 
@@ -1952,9 +1701,8 @@ public class Weatherdata {
          * Gets the value of the name property.
          * 
          * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *         possible object is {@link String }
+         * 
          */
         public String getName() {
             return name;
@@ -1964,9 +1712,8 @@ public class Weatherdata {
          * Sets the value of the name property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *            allowed object is {@link String }
+         * 
          */
         public void setName(String value) {
             this.name = value;
@@ -1976,9 +1723,8 @@ public class Weatherdata {
          * Gets the value of the type property.
          * 
          * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *         possible object is {@link String }
+         * 
          */
         public String getType() {
             return type;
@@ -1988,9 +1734,8 @@ public class Weatherdata {
          * Sets the value of the type property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *            allowed object is {@link String }
+         * 
          */
         public void setType(String value) {
             this.type = value;
@@ -2000,9 +1745,8 @@ public class Weatherdata {
          * Gets the value of the country property.
          * 
          * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *         possible object is {@link String }
+         * 
          */
         public String getCountry() {
             return country;
@@ -2012,9 +1756,8 @@ public class Weatherdata {
          * Sets the value of the country property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *            allowed object is {@link String }
+         * 
          */
         public void setCountry(String value) {
             this.country = value;
@@ -2024,9 +1767,8 @@ public class Weatherdata {
          * Gets the value of the timezone property.
          * 
          * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *         possible object is {@link String }
+         * 
          */
         public String getTimezone() {
             return timezone;
@@ -2036,9 +1778,8 @@ public class Weatherdata {
          * Sets the value of the timezone property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *            allowed object is {@link String }
+         * 
          */
         public void setTimezone(String value) {
             this.timezone = value;
@@ -2048,9 +1789,8 @@ public class Weatherdata {
          * Gets the value of the geoLocation property.
          * 
          * @return
-         *     possible object is
-         *     {@link Weatherdata.Location.GeoLocation }
-         *     
+         *         possible object is {@link Weatherdata.Location.GeoLocation }
+         * 
          */
         public Weatherdata.Location.GeoLocation getGeoLocation() {
             return geoLocation;
@@ -2060,19 +1800,19 @@ public class Weatherdata {
          * Sets the value of the geoLocation property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link Weatherdata.Location.GeoLocation }
-         *     
+         *            allowed object is {@link Weatherdata.Location.GeoLocation }
+         * 
          */
         public void setGeoLocation(Weatherdata.Location.GeoLocation value) {
             this.geoLocation = value;
         }
 
-
         /**
-         * <p>Java class for anonymous complex type.
+         * <p>
+         * Java class for anonymous complex type.
          * 
-         * <p>The following schema fragment specifies the expected content contained within this class.
+         * <p>
+         * The following schema fragment specifies the expected content contained within this class.
          * 
          * <pre>
          * &lt;complexType>
@@ -2091,21 +1831,24 @@ public class Weatherdata {
          * 
          */
         @XmlAccessorType(XmlAccessType.FIELD)
-        @XmlType(name = "", propOrder = {
-            "value"
-        })
+        @XmlType(name = "", propOrder = { "value" })
         public static class GeoLocation {
 
             @XmlValue
             protected String value;
+
             @XmlAttribute(name = "altitude")
             protected Byte altitude;
+
             @XmlAttribute(name = "latitude")
             protected Float latitude;
+
             @XmlAttribute(name = "longitude")
             protected Float longitude;
+
             @XmlAttribute(name = "geobase")
             protected String geobase;
+
             @XmlAttribute(name = "geobaseid")
             protected Byte geobaseid;
 
@@ -2113,9 +1856,8 @@ public class Weatherdata {
              * Gets the value of the value property.
              * 
              * @return
-             *     possible object is
-             *     {@link String }
-             *     
+             *         possible object is {@link String }
+             * 
              */
             public String getValue() {
                 return value;
@@ -2125,9 +1867,8 @@ public class Weatherdata {
              * Sets the value of the value property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
+             *            allowed object is {@link String }
+             * 
              */
             public void setValue(String value) {
                 this.value = value;
@@ -2137,9 +1878,8 @@ public class Weatherdata {
              * Gets the value of the altitude property.
              * 
              * @return
-             *     possible object is
-             *     {@link Byte }
-             *     
+             *         possible object is {@link Byte }
+             * 
              */
             public Byte getAltitude() {
                 return altitude;
@@ -2149,9 +1889,8 @@ public class Weatherdata {
              * Sets the value of the altitude property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Byte }
-             *     
+             *            allowed object is {@link Byte }
+             * 
              */
             public void setAltitude(Byte value) {
                 this.altitude = value;
@@ -2161,9 +1900,8 @@ public class Weatherdata {
              * Gets the value of the latitude property.
              * 
              * @return
-             *     possible object is
-             *     {@link Float }
-             *     
+             *         possible object is {@link Float }
+             * 
              */
             public Float getLatitude() {
                 return latitude;
@@ -2173,9 +1911,8 @@ public class Weatherdata {
              * Sets the value of the latitude property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Float }
-             *     
+             *            allowed object is {@link Float }
+             * 
              */
             public void setLatitude(Float value) {
                 this.latitude = value;
@@ -2185,9 +1922,8 @@ public class Weatherdata {
              * Gets the value of the longitude property.
              * 
              * @return
-             *     possible object is
-             *     {@link Float }
-             *     
+             *         possible object is {@link Float }
+             * 
              */
             public Float getLongitude() {
                 return longitude;
@@ -2197,9 +1933,8 @@ public class Weatherdata {
              * Sets the value of the longitude property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Float }
-             *     
+             *            allowed object is {@link Float }
+             * 
              */
             public void setLongitude(Float value) {
                 this.longitude = value;
@@ -2209,9 +1944,8 @@ public class Weatherdata {
              * Gets the value of the geobase property.
              * 
              * @return
-             *     possible object is
-             *     {@link String }
-             *     
+             *         possible object is {@link String }
+             * 
              */
             public String getGeobase() {
                 return geobase;
@@ -2221,9 +1955,8 @@ public class Weatherdata {
              * Sets the value of the geobase property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link String }
-             *     
+             *            allowed object is {@link String }
+             * 
              */
             public void setGeobase(String value) {
                 this.geobase = value;
@@ -2233,9 +1966,8 @@ public class Weatherdata {
              * Gets the value of the geobaseid property.
              * 
              * @return
-             *     possible object is
-             *     {@link Byte }
-             *     
+             *         possible object is {@link Byte }
+             * 
              */
             public Byte getGeobaseid() {
                 return geobaseid;
@@ -2245,9 +1977,8 @@ public class Weatherdata {
              * Sets the value of the geobaseid property.
              * 
              * @param value
-             *     allowed object is
-             *     {@link Byte }
-             *     
+             *            allowed object is {@link Byte }
+             * 
              */
             public void setGeobaseid(Byte value) {
                 this.geobaseid = value;
@@ -2257,11 +1988,12 @@ public class Weatherdata {
 
     }
 
-
     /**
-     * <p>Java class for anonymous complex type.
+     * <p>
+     * Java class for anonymous complex type.
      * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * The following schema fragment specifies the expected content contained within this class.
      * 
      * <pre>
      * &lt;complexType>
@@ -2280,17 +2012,15 @@ public class Weatherdata {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "lastupdate",
-        "calctime",
-        "nextupdate"
-    })
+    @XmlType(name = "", propOrder = { "lastupdate", "calctime", "nextupdate" })
     public static class Meta {
 
         @XmlElement(required = true)
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar lastupdate;
+
         protected float calctime;
+
         @XmlElement(required = true)
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar nextupdate;
@@ -2299,9 +2029,8 @@ public class Weatherdata {
          * Gets the value of the lastupdate property.
          * 
          * @return
-         *     possible object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *         possible object is {@link XMLGregorianCalendar }
+         * 
          */
         public XMLGregorianCalendar getLastupdate() {
             return lastupdate;
@@ -2311,9 +2040,8 @@ public class Weatherdata {
          * Sets the value of the lastupdate property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *            allowed object is {@link XMLGregorianCalendar }
+         * 
          */
         public void setLastupdate(XMLGregorianCalendar value) {
             this.lastupdate = value;
@@ -2339,9 +2067,8 @@ public class Weatherdata {
          * Gets the value of the nextupdate property.
          * 
          * @return
-         *     possible object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *         possible object is {@link XMLGregorianCalendar }
+         * 
          */
         public XMLGregorianCalendar getNextupdate() {
             return nextupdate;
@@ -2351,9 +2078,8 @@ public class Weatherdata {
          * Sets the value of the nextupdate property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *            allowed object is {@link XMLGregorianCalendar }
+         * 
          */
         public void setNextupdate(XMLGregorianCalendar value) {
             this.nextupdate = value;
@@ -2361,11 +2087,12 @@ public class Weatherdata {
 
     }
 
-
     /**
-     * <p>Java class for anonymous complex type.
+     * <p>
+     * Java class for anonymous complex type.
      * 
-     * <p>The following schema fragment specifies the expected content contained within this class.
+     * <p>
+     * The following schema fragment specifies the expected content contained within this class.
      * 
      * <pre>
      * &lt;complexType>
@@ -2381,16 +2108,16 @@ public class Weatherdata {
      * 
      */
     @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "", propOrder = {
-        "value"
-    })
+    @XmlType(name = "", propOrder = { "value" })
     public static class Sun {
 
         @XmlValue
         protected String value;
+
         @XmlAttribute(name = "rise")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar rise;
+
         @XmlAttribute(name = "set")
         @XmlSchemaType(name = "dateTime")
         protected XMLGregorianCalendar set;
@@ -2399,9 +2126,8 @@ public class Weatherdata {
          * Gets the value of the value property.
          * 
          * @return
-         *     possible object is
-         *     {@link String }
-         *     
+         *         possible object is {@link String }
+         * 
          */
         public String getValue() {
             return value;
@@ -2411,9 +2137,8 @@ public class Weatherdata {
          * Sets the value of the value property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link String }
-         *     
+         *            allowed object is {@link String }
+         * 
          */
         public void setValue(String value) {
             this.value = value;
@@ -2423,9 +2148,8 @@ public class Weatherdata {
          * Gets the value of the rise property.
          * 
          * @return
-         *     possible object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *         possible object is {@link XMLGregorianCalendar }
+         * 
          */
         public XMLGregorianCalendar getRise() {
             return rise;
@@ -2435,9 +2159,8 @@ public class Weatherdata {
          * Sets the value of the rise property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *            allowed object is {@link XMLGregorianCalendar }
+         * 
          */
         public void setRise(XMLGregorianCalendar value) {
             this.rise = value;
@@ -2447,9 +2170,8 @@ public class Weatherdata {
          * Gets the value of the set property.
          * 
          * @return
-         *     possible object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *         possible object is {@link XMLGregorianCalendar }
+         * 
          */
         public XMLGregorianCalendar getSet() {
             return set;
@@ -2459,9 +2181,8 @@ public class Weatherdata {
          * Sets the value of the set property.
          * 
          * @param value
-         *     allowed object is
-         *     {@link XMLGregorianCalendar }
-         *     
+         *            allowed object is {@link XMLGregorianCalendar }
+         * 
          */
         public void setSet(XMLGregorianCalendar value) {
             this.set = value;
