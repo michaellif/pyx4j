@@ -20,12 +20,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javassist.ClassClassPath;
 import javassist.ClassPool;
 import javassist.CtClass;
 import javassist.CtField;
 import javassist.NotFoundException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class RemconFieldReflection {
+
+    private static final Logger log = LoggerFactory.getLogger(RemconFieldReflection.class);
 
     private static final Map<Class<? extends RemconRecord>, List<Field>> registry = new HashMap<Class<? extends RemconRecord>, List<Field>>();
 
@@ -40,11 +46,13 @@ public class RemconFieldReflection {
         return list;
     }
 
-    // javassist use to ensure the declaration order of fields
+    // javassist used to ensure the declaration order of fields
     static void initialize(Collection<Class<? extends RemconRecord>> klassCollection) {
         ClassPool pool = ClassPool.getDefault();
+        pool.insertClassPath(new ClassClassPath(RemconRecord.class));
         try {
             for (Class<? extends RemconRecord> klass : klassCollection) {
+                log.debug("initialize filed of {}", klass.getName());
                 CtClass ctClass = pool.get(klass.getName());
 
                 List<Field> fieldList = new ArrayList<Field>();
