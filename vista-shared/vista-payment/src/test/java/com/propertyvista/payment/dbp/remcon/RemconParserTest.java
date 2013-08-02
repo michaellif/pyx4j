@@ -23,10 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.gwt.server.IOUtils;
 
-import com.propertyvista.payment.dbp.remcon.RemconFile;
-import com.propertyvista.payment.dbp.remcon.RemconParser;
-import com.propertyvista.payment.dbp.remcon.RemconRecordDetailRecord;
-
 public class RemconParserTest {
 
     private static final Logger log = LoggerFactory.getLogger(RemconParserTest.class);
@@ -53,7 +49,7 @@ public class RemconParserTest {
         List<RemconRecordDetailRecord> records = remcon.getDetailRecords();
         Assert.assertEquals(1, records.size());
 
-        System.out.println(records.get(0));
+        log.debug("RemconRecordDetailRecord {}", RemconFile.toString(records.get(0)));
     }
 
     @Test
@@ -63,7 +59,7 @@ public class RemconParserTest {
         List<RemconRecordDetailRecord> records = remcon.getDetailRecords();
         Assert.assertEquals(6, records.size());
 
-        System.out.println(records.get(0));
+        log.debug("RemconRecordDetailRecord {}", RemconFile.toString(records.get(0)));
     }
 
     @Test
@@ -73,6 +69,6 @@ public class RemconParserTest {
         List<RemconRecordDetailRecord> records = remcon.getDetailRecords();
         Assert.assertEquals(44, records.size());
 
-        System.out.println(records.get(0));
+        log.debug("RemconRecordDetailRecord {}", RemconFile.toString(records.get(0)));
     }
 }

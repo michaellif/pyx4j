@@ -73,10 +73,14 @@ public class RemconFile {
         StringBuilder buf = new StringBuilder();
         buf.append("{\n");
         for (RemconRecord record : records) {
-            buf.append(ToStringBuilder.reflectionToString(record, ToStringStyle.MULTI_LINE_STYLE));
+            buf.append(toString(record));
             buf.append("\n");
         }
         buf.append("}");
         return buf.toString();
+    }
+
+    public static String toString(RemconRecord record) {
+        return ToStringBuilder.reflectionToString(record, ToStringStyle.MULTI_LINE_STYLE);
     }
 }
