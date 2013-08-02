@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.Validate;
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 public class RemconFile {
 
@@ -71,7 +73,7 @@ public class RemconFile {
         StringBuilder buf = new StringBuilder();
         buf.append("{\n");
         for (RemconRecord record : records) {
-            buf.append(record);
+            buf.append(ToStringBuilder.reflectionToString(record, ToStringStyle.MULTI_LINE_STYLE));
             buf.append("\n");
         }
         buf.append("}");

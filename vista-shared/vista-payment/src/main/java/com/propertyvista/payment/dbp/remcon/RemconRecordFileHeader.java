@@ -13,9 +13,6 @@
  */
 package com.propertyvista.payment.dbp.remcon;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-import org.apache.commons.lang.builder.ToStringStyle;
-
 import com.propertyvista.payment.dbp.remcon.RemconField.RemconFieldType;
 
 public class RemconRecordFileHeader implements RemconRecord {
@@ -40,8 +37,4 @@ public class RemconRecordFileHeader implements RemconRecord {
     @RemconField(value = 131, type = RemconFieldType.Filler)
     public String filler;
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
-    }
 }
