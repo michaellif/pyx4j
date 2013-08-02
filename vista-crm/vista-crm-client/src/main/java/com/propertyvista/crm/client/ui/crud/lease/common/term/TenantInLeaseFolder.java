@@ -215,35 +215,11 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
             flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().mobilePhone()), 15).build());
             flexPanel.setWidget(++rightRow, 1, new FormDecoratorBuilder(inject(proto().leaseParticipant().customer().person().workPhone()), 15).build());
 
-            if (isEditable()) {
-                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
-                    @Override
-                    public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
-                        get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
-                    }
-                });
-
-                get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
-                    @Override
-                    public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
-                        if (getAgeOfMajority() != null) {
-                            if (role != null && role == Role.Applicant) {
-                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
-                                    return new ValidationError(component, i18n.tr(
-                                            "This tenant is too young to be an applicant: the minimum age required is {0}.", getAgeOfMajority()));
-                                }
-                            }
-                        }
-                        return null;
-                    }
-                });
-            }
-
             preauthorizedPaymentsPanel.setH3(0, 0, 2, proto().leaseParticipant().preauthorizedPayments().getMeta().getCaption());
             preauthorizedPaymentsPanel.setWidget(1, 0, 2, inject(proto().leaseParticipant().preauthorizedPayments(), preauthorizedPayments));
 
             leftRow = Math.max(leftRow, rightRow);
-            flexPanel.setWidget(leftRow, 0, 2, preauthorizedPaymentsPanel);
+            flexPanel.setWidget(++leftRow, 0, 2, preauthorizedPaymentsPanel);
 
             return flexPanel;
         }
@@ -266,6 +242,28 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     CComboBox<Role> role = (CComboBox<Role>) get(proto().role());
                     role.setOptions(Role.tenantRelated());
                 }
+
+                get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<LeaseTermParticipant.Role> event) {
+                        get(proto().relationship()).setVisible(event.getValue() != LeaseTermParticipant.Role.Applicant);
+                    }
+                });
+
+                get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
+                    @Override
+                    public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
+                        if (getAgeOfMajority() != null) {
+                            if (role != null && role == Role.Applicant) {
+                                if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
+                                    return new ValidationError(component, i18n.tr(
+                                            "This tenant is too young to be an applicant: the minimum age required is {0}.", getAgeOfMajority()));
+                                }
+                            }
+                        }
+                        return null;
+                    }
+                });
             }
         }
 
