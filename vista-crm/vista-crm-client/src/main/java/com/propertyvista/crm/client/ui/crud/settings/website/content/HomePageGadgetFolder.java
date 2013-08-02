@@ -58,7 +58,7 @@ public class HomePageGadgetFolder extends VistaTableFolder<HomePageGadget> {
         ArrayList<EntityFolderColumnDescriptor> columns = new ArrayList<EntityFolderColumnDescriptor>();
         columns.add(new EntityFolderColumnDescriptor(proto().name(), "25em"));
         columns.add(new EntityFolderColumnDescriptor(proto().type(), "10em"));
-        columns.add(new EntityFolderColumnDescriptor(proto().status(), "5em"));
+        columns.add(new EntityFolderColumnDescriptor(proto().status(), "10em"));
         return columns;
     }
 

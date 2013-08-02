@@ -46,34 +46,34 @@ public class BrandingForm extends CrmEntityForm<SiteDescriptorDTO> {
         TwoColumnFlexFormPanel content;
 
         content = new TwoColumnFlexFormPanel(proto().siteTitles().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().siteTitles(), new SiteTitlesFolder(isEditable())));
         selectTab(addTab(content));
 
         content = new TwoColumnFlexFormPanel(i18n.tr("Site Logos"));
-        content.setWidget(0, 0, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().logo(), new PortalImageResourceFolder(isEditable())));
         addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().slogan().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().slogan(), new RichTextContentFolder(isEditable())));
         addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().pmcInfo().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().pmcInfo(), new RichTextContentFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().pmcInfo(), new RichTextContentFolder(isEditable())));
         addTab(content);
 
         PortalImageSetFolder imageFolder = new PortalImageSetFolder(isEditable());
         imageFolder.setImageSize(690, 300);
         imageFolder.setThumbSize(230, 100);
         content = new TwoColumnFlexFormPanel(proto().banner().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().banner(), imageFolder));
+        content.setWidget(0, 0, 2, inject(proto().banner(), imageFolder));
         addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().metaTags().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().metaTags(), new MetaTagsFolder(isEditable())));
         addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().socialLinks().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
+        content.setWidget(0, 0, 2, inject(proto().socialLinks(), new SocialLinkFolder(isEditable())));
         addTab(content);
 
         addTab(createCrmLogoTab());

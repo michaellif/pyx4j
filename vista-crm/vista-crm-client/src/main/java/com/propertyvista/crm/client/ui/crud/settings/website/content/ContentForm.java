@@ -32,15 +32,15 @@ public class ContentForm extends CrmEntityForm<SiteDescriptorDTO> {
         TwoColumnFlexFormPanel content;
 
         content = new TwoColumnFlexFormPanel(proto().childPages().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().childPages(), new PageDescriptorFolder(this)));
+        content.setWidget(0, 0, 2, inject(proto().childPages(), new PageDescriptorFolder(this)));
         selectTab(addTab(content));
 
         content = new TwoColumnFlexFormPanel(i18n.tr("Home Page Gadgets"));
-        content.setWidget(0, 0, createGadgetPanel());
+        content.setWidget(0, 0, 2, createGadgetPanel());
         addTab(content);
 
         content = new TwoColumnFlexFormPanel(proto().cityIntroPages().getMeta().getCaption());
-        content.setWidget(0, 0, inject(proto().cityIntroPages(), new CityIntroPageFolder(this)));
+        content.setWidget(0, 0, 2, inject(proto().cityIntroPages(), new CityIntroPageFolder(this)));
         addTab(content);
     }
 
@@ -48,13 +48,13 @@ public class ContentForm extends CrmEntityForm<SiteDescriptorDTO> {
         TwoColumnFlexFormPanel gadgetPanel = new TwoColumnFlexFormPanel();
         int row = 0;
 
-        gadgetPanel.setH4(row++, 0, 1, i18n.tr("Narrow Page Gadgets:"));
-        gadgetPanel.setWidget(row++, 0, inject(proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable())));
+        gadgetPanel.setH4(row++, 0, 2, i18n.tr("Narrow Page Gadgets:"));
+        gadgetPanel.setWidget(row++, 0, 2, inject(proto().homePageGadgetsNarrow(), new HomePageGadgetFolder(isEditable())));
 
-        gadgetPanel.setBR(row++, 0, 1);
+        gadgetPanel.setBR(row++, 0, 2);
 
-        gadgetPanel.setH4(row++, 0, 1, i18n.tr("Wide Page Gadgets:"));
-        gadgetPanel.setWidget(row++, 0, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
+        gadgetPanel.setH4(row++, 0, 2, i18n.tr("Wide Page Gadgets:"));
+        gadgetPanel.setWidget(row++, 0, 2, inject(proto().homePageGadgetsWide(), new HomePageGadgetFolder(isEditable())));
 
         return gadgetPanel;
     }
