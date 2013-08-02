@@ -17,10 +17,13 @@ public abstract class BmoInterfaceConfiguration extends SftpConnectionConfigurat
 
     public abstract String bmoMailboxNumber();
 
+    public abstract boolean removeReceivedFileFromSftpHost();
+
     @Override
     public String toString() {
         StringBuilder b = new StringBuilder(super.toString());
         b.append("bmoMailboxNumber                  : ").append(bmoMailboxNumber()).append("\n");
+        b.append("removeReceivedFileFromSftpHost    : ").append(removeReceivedFileFromSftpHost()).append("\n");
         return b.toString();
     }
 }

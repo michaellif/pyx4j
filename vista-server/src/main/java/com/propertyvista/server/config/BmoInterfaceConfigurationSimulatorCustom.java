@@ -51,4 +51,8 @@ class BmoInterfaceConfigurationSimulatorCustom extends BmoInterfaceConfiguration
         return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), fileName));
     }
 
+    @Override
+    public boolean removeReceivedFileFromSftpHost() {
+        return true;
+    }
 }

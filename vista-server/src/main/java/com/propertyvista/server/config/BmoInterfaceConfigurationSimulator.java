@@ -50,4 +50,9 @@ public class BmoInterfaceConfigurationSimulator extends BmoInterfaceConfiguratio
         return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), VistaInterfaceCredentials.bmoMailBoxPoolSimulator));
     }
 
+    @Override
+    public boolean removeReceivedFileFromSftpHost() {
+        return true;
+    }
+
 }

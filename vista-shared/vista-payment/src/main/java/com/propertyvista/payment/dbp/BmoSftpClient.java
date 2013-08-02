@@ -34,7 +34,9 @@ public class BmoSftpClient {
     }
 
     public void removeFile(String fileName) {
-        SftpClient.removeFile(configuration(), ".", fileName);
+        if (configuration().removeReceivedFileFromSftpHost()) {
+            SftpClient.removeFile(configuration(), ".", fileName);
+        }
     }
 
 }

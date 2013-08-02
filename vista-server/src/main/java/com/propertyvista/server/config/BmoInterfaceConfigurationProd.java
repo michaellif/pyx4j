@@ -50,4 +50,9 @@ class BmoInterfaceConfigurationProd extends BmoInterfaceConfiguration {
         return CredentialsFileStorage.getCredentials(new File(config.getConfigDirectory(), VistaInterfaceCredentials.bmoMailBoxPool));
     }
 
+    @Override
+    public boolean removeReceivedFileFromSftpHost() {
+        return config.getConfigProperties().getBooleanValue("bmoPool.removeReceivedFileFromSftpHost", false);
+    }
+
 }
