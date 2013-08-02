@@ -65,6 +65,16 @@ class DirectDebitReceiveProcessor {
     }
 
     private void validateAndPersistFile(ExecutionMonitor executionMonitor, DirectDebitFile directDebitFile) {
+        {
+            EntityQueryCriteria<DirectDebitFile> criteria = EntityQueryCriteria.create(DirectDebitFile.class);
+            criteria.eq(criteria.proto().fileSerialNumber(), directDebitFile.fileSerialNumber());
+            criteria.eq(criteria.proto().fileSerialDate(), directDebitFile.fileSerialDate());
+            if (Persistence.service().count(criteria) > 0) {
+                throw new Error("Duplicate DirectDebit file received " + directDebitFile.fileSerialNumber().getValue() + " "
+                        + directDebitFile.fileSerialDate().getValue());
+            }
+        }
+
         Persistence.service().persist(directDebitFile);
         for (final DirectDebitRecord record : directDebitFile.records()) {
 
