@@ -36,7 +36,7 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
     public ARCodeForm(IForm<ARCode> view) {
         super(ARCode.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 25).build());
@@ -62,11 +62,12 @@ public class ARCodeForm extends CrmEntityForm<ARCode> implements HasYardiIntegra
         }), 25).build());
 
         yardiIntegrationPanel = new TwoColumnFlexFormPanel();
-        yardiIntegrationPanel.setH1(0, 0, 1, i18n.tr("Yardi Integration"));
-        yardiIntegrationPanel.setWidget(1, 0, inject(proto().yardiChargeCodes(), new YardiChargeCodeFolder()));
+        yardiIntegrationPanel.setH1(0, 0, 2, i18n.tr("Yardi Integration"));
+        yardiIntegrationPanel.setWidget(1, 0, 2, inject(proto().yardiChargeCodes(), new YardiChargeCodeFolder()));
 
-        content.setWidget(++row, 0, yardiIntegrationPanel);
+        content.setWidget(++row, 0, 2, yardiIntegrationPanel);
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 

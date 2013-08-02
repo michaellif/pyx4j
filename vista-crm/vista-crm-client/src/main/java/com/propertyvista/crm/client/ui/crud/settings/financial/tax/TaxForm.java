@@ -28,7 +28,7 @@ public class TaxForm extends CrmEntityForm<Tax> {
     public TaxForm(IForm<Tax> view) {
         super(Tax.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
         int row = -1;
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 25).build());
@@ -36,7 +36,7 @@ public class TaxForm extends CrmEntityForm<Tax> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rate()), 7).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().compound()), 5).build());
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
-
     }
 }

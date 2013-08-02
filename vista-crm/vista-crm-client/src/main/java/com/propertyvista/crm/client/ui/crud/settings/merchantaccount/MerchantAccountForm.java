@@ -42,7 +42,7 @@ public class MerchantAccountForm extends CrmEntityForm<MerchantAccount> {
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 5).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
         general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber()), 15).build());
-        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 30).build());
+        general.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().chargeDescription()), 40).build());
 
         // tweak:
         if (isEditable()) {

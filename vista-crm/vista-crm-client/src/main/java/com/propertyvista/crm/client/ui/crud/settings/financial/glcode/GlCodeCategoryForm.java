@@ -28,14 +28,16 @@ public class GlCodeCategoryForm extends CrmEntityForm<GlCodeCategory> {
     public GlCodeCategoryForm(IForm<GlCodeCategory> view) {
         super(GlCodeCategory.class, view);
 
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = 0;
+
         content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().categoryId()), 7).build());
         content.setWidget(row++, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
 
-        content.setH3(row++, 0, 1, proto().glCodes().getMeta().getCaption());
-        content.setWidget(row++, 0, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
+        content.setH3(row++, 0, 2, proto().glCodes().getMeta().getCaption());
+        content.setWidget(row++, 0, 2, inject(proto().glCodes(), new GlCodeFolder(isEditable())));
 
+        setTabBarVisible(false);
         selectTab(addTab(content));
     }
 }
