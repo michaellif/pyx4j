@@ -252,7 +252,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasSprinklers()), 15).build());
         flexPanel.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().info().hasFireAlarm()), 15).build());
 
-        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().contacts().website()), 40, true).build());
+        flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().contacts().website()), true).build());
         get(proto().contacts().website()).addValueValidator(new EditableValueValidator<String>() {
             @Override
             public ValidationError isValid(CComponent<String> component, String url) {
