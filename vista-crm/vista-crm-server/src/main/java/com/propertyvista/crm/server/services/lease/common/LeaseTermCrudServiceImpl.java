@@ -105,8 +105,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
     }
 
     @Override
-    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(in, dto, RetrieveTarget);
+    protected void enhanceRetrieved(LeaseTerm in, LeaseTermDTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(in, dto, retrieveTarget);
 
         Persistence.service().retrieve(dto.lease());
 
@@ -132,7 +132,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
             Persistence.ensureRetrieve(dto.unit().building(), AttachLevel.ToStringMembers);
             dto.building().set(dto.unit().building());
 
-            if (RetrieveTarget == RetrieveTarget.Edit) {
+            if (retrieveTarget == RetrieveTarget.Edit) {
                 // fill runtime editor data:
                 fillServiceEligibilityData(dto);
                 fillserviceItems(dto);
@@ -140,10 +140,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
             checkUnitMoveOut(dto);
 
-            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
-            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
-                dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
-            }
+            setAgeOfMajority(dto);
         }
     }
 
@@ -163,6 +160,8 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         fillserviceItems(currentValue);
 
         checkUnitMoveOut(currentValue);
+
+        setAgeOfMajority(currentValue);
 
         callback.onSuccess(currentValue);
     }
@@ -322,7 +321,7 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
         enhanceRetrieved(dbo, dto, null);
     }
 
-    void checkUnitMoveOut(LeaseTermDTO dto) {
+    private void checkUnitMoveOut(LeaseTermDTO dto) {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().unit(), dto.unit()));
         criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
@@ -332,6 +331,17 @@ public class LeaseTermCrudServiceImpl extends AbstractVersionedCrudServiceDtoImp
 
         if (Persistence.service().exists(criteria)) {
             dto.unitMoveOutNote().setValue("Warning: This unit is not freed completely by previous tenant!");
+        }
+    }
+
+    private void setAgeOfMajority(LeaseTermDTO dto) {
+        dto.ageOfMajority().setValue(null);
+
+        if (!dto.unit().isNull()) {
+            RestrictionsPolicy restrictionsPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(dto.unit(), RestrictionsPolicy.class);
+            if (restrictionsPolicy.enforceAgeOfMajority().isBooleanTrue()) {
+                dto.ageOfMajority().setValue(restrictionsPolicy.ageOfMajority().getValue());
+            }
         }
     }
 }
