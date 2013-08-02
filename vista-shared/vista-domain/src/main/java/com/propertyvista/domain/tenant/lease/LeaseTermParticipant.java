@@ -68,6 +68,10 @@ public interface LeaseTermParticipant<LC extends LeaseParticipant<?>> extends IE
             return I18nEnum.toString(this);
         }
 
+        public static Collection<Role> resposible() {
+            return EnumSet.of(Applicant, CoApplicant);
+        }
+
         public static Collection<Role> tenantRelated() {
             return EnumSet.of(Applicant, CoApplicant, Dependent);
         }

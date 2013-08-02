@@ -30,6 +30,7 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -47,6 +48,7 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolde
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
+import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.Customer;
@@ -250,11 +252,12 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     }
                 });
 
+                get(proto().role()).addValueChangeHandler(new RevalidationTrigger<Role>(get(proto().leaseParticipant().customer().person().birthDate())));
                 get(proto().role()).addValueValidator(new EditableValueValidator<LeaseTermParticipant.Role>() {
                     @Override
                     public ValidationError isValid(CComponent<LeaseTermParticipant.Role> component, LeaseTermParticipant.Role role) {
-                        if (getAgeOfMajority() != null) {
-                            if (role != null && role == Role.Applicant) {
+                        if (getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
+                            if (role != null && Role.resposible().contains(role)) {
                                 if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
                                     return new ValidationError(component, i18n.tr(
                                             "This tenant is too young to be an applicant: the minimum age required is {0}.", getAgeOfMajority()));
@@ -264,6 +267,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                         return null;
                     }
                 });
+
+                get(proto().leaseParticipant().customer().person().birthDate())
+                        .addValueChangeHandler(new RevalidationTrigger<LogicalDate>(get(proto().role())));
+                get(proto().leaseParticipant().customer().person().birthDate()).addValueValidator(new BirthdayDateValidator());
             }
         }
 
