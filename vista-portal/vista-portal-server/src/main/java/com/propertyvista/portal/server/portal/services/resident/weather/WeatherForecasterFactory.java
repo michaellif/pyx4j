@@ -18,7 +18,7 @@ import com.pyx4j.config.server.FacadeFactory;
 import com.propertyvista.portal.server.portal.services.resident.weather.openweathermap.OpenWeatherMapApiImpl;
 import com.propertyvista.portal.server.portal.services.resident.weather.openweathermap.OpenWeatherMapWeatherForecaster;
 
-public class WeatherForcasterFactory implements FacadeFactory<WeatherForecaster> {
+public class WeatherForecasterFactory implements FacadeFactory<WeatherForecaster> {
 
     @Override
     public WeatherForecaster getFacade() {
