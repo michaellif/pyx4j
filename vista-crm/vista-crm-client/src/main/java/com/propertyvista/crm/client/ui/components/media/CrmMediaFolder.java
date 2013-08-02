@@ -15,7 +15,6 @@ package com.propertyvista.crm.client.ui.components.media;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -76,9 +75,8 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
     public CComponent<?> create(IObject<?> member) {
         if (member instanceof Media) {
             return new CrmMediaEditor();
-        } else {
-            return super.create(member);
         }
+        return super.create(member);
     }
 
     class CrmMediaEditor extends CEntityDecoratableForm<Media> {
@@ -131,12 +129,14 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
             switch (imageTarget) {
             case Building:
                 width = ImageConsts.BUILDING_SMALL.width;
+                break;
             case Floorplan:
                 width = ImageConsts.FLOORPLAN_SMALL.width;
+                break;
             }
 
             thumbnailWrap.getElement().getStyle().setWidth(width, Style.Unit.PX);
-            thumbnailWrap.getElement().getStyle().setMarginLeft(5, Unit.EM);
+            thumbnailWrap.getElement().getStyle().setMarginRight(1, Style.Unit.EM);
 
             thumbnail.addClickHandler(new ClickHandler() {
                 @Override
@@ -154,7 +154,6 @@ public class CrmMediaFolder extends VistaBoxFolder<Media> {
         @Override
         public void addValidations() {
             if (CrmMediaFolder.this.isEditable()) {
-                @SuppressWarnings("unchecked")
                 CComboBox<Media.Type> type = (CComboBox<Media.Type>) get(proto().type());
                 type.addValueChangeHandler(new ValueChangeHandler<Media.Type>() {
                     @Override
