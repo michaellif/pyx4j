@@ -39,16 +39,13 @@ public class BoilerForm extends MechBaseForm<BoilerDTO> {
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 15).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 15).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+
+        main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
+        main.setWidget(++row, 0, 2, inject(proto().license(), new LicenseEditor()));
 
         row = 0;
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().build()), 9).build());
-        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().description()), 20).build());
-        main.getFlexCellFormatter().setRowSpan(row, 1, 3);
-
-        row += 2;
-        main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         return main;
     }

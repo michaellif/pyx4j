@@ -52,7 +52,6 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
 
     private TwoColumnFlexFormPanel createMiscPoliciesTab() {
         BasicFlexFormPanel accepted = new BasicFlexFormPanel();
-
         int col = -1;
         accepted.setH4(0, ++col, 1, i18n.tr("Accepted:"));
         accepted.getWidget(0, col).setWidth(hdrW);

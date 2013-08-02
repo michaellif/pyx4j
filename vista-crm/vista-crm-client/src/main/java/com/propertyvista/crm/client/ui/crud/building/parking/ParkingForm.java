@@ -43,10 +43,10 @@ public class ParkingForm extends CrmEntityForm<ParkingDTO> {
 
         int row = -1;
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().name()), 15).build());
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description()), 25).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 10).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().levels()), 3).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().totalSpaces()), 3).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         row = -1;
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().regularSpaces()), 3).build());

@@ -32,28 +32,21 @@ public class ElevatorForm extends MechBaseForm<ElevatorDTO> {
 
     @Override
     protected TwoColumnFlexFormPanel createGeneralTab() {
-
-        TwoColumnFlexFormPanel info = new TwoColumnFlexFormPanel();
-
-        int row = -1;
-        info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
-        info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 15).build());
-        info.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 15).build());
-
-        row = 0;
-        info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().build()), 9).build());
-        info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().description()), 20).build());
-        info.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
-
-        // form main panel:
         TwoColumnFlexFormPanel main = new TwoColumnFlexFormPanel(i18n.tr("General"));
 
-        row = -1;
+        int row = -1;
         main.setH1(++row, 0, 2, i18n.tr("Information"));
-        main.setWidget(++row, 0, info);
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().make()), 15).build());
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().model()), 15).build());
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
 
         main.setH1(++row, 0, 2, proto().license().getMeta().getCaption());
-        main.setWidget(++row, 0, inject(proto().license(), new LicenseEditor()));
+        main.setWidget(++row, 0, 2, inject(proto().license(), new LicenseEditor()));
+
+        row = 0;
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().build()), 9).build());
+        main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().isForMoveInOut()), 5).build());
 
         return main;
     }
