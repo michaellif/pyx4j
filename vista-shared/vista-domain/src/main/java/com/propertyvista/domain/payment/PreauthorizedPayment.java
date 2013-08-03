@@ -105,7 +105,8 @@ public interface PreauthorizedPayment extends IEntity {
     AbstractPmcUser creator();
 
     @Timestamp(Timestamp.Update.Created)
-    IPrimitive<Date> creationDate();
+    //TODO change to Date
+    IPrimitive<LogicalDate> creationDate();
 
     @Timestamp(Timestamp.Update.Updated)
     IPrimitive<Date> updated();

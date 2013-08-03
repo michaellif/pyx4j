@@ -119,7 +119,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
                 b.append(paymentRecord.paymentMethod().type().getValue().name());
             }
             if (!VistaDeployment.isVistaProduction()) {
-                b.append(":t").append(PadTransactionUtils.testDBversionId());
+                b.append(":t").append(PadTransactionUtils.readTestDBversionIdInOperations());
             }
             b.append(":").append(paymentRecord.getPrimaryKey().toString());
             paymentRecord.yardiDocumentNumber().setValue(b.toString());

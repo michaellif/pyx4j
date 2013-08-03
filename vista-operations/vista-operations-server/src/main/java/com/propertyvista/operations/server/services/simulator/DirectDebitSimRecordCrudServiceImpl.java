@@ -19,8 +19,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile;
-import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimFile.DirectDebitSimFileStatus;
+import com.propertyvista.operations.domain.payment.dbp.simulator.DirectDebitSimRecord;
 import com.propertyvista.operations.rpc.services.simulator.DirectDebitSimRecordCrudService;
 
 public class DirectDebitSimRecordCrudServiceImpl extends AbstractCrudServiceImpl<DirectDebitSimRecord> implements DirectDebitSimRecordCrudService {
@@ -42,9 +42,7 @@ public class DirectDebitSimRecordCrudServiceImpl extends AbstractCrudServiceImpl
             criteria.eq(criteria.proto().status(), DirectDebitSimFileStatus.New);
             DirectDebitSimFile directDebitSimFile = Persistence.service().retrieve(criteria);
             if (directDebitSimFile == null) {
-                directDebitSimFile = EntityFactory.create(DirectDebitSimFile.class);
-                directDebitSimFile.status().setValue(DirectDebitSimFileStatus.New);
-                Persistence.service().persist(directDebitSimFile);
+                directDebitSimFile = DirectDebitSimFileCrudServiceImpl.createNewFile(EntityFactory.create(DirectDebitSimFile.class));
             }
             entity.file().set(directDebitSimFile);
         }

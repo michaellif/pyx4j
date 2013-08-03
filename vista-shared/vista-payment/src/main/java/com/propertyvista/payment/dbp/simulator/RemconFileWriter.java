@@ -67,9 +67,9 @@ public class RemconFileWriter implements Closeable {
             }
             RemconField remconField = field.getAnnotation(RemconField.class);
             if (value == null) {
-                value = createDefaultValue(remconField);
+                value = createDefaultValue(field, remconField);
             } else {
-                value = padValue(value, remconField);
+                value = padValue(value, field, remconField);
             }
             writer.append(value);
         }
@@ -77,7 +77,7 @@ public class RemconFileWriter implements Closeable {
         writer.append("\n");
     }
 
-    private String createDefaultValue(RemconField remconField) {
+    private String createDefaultValue(Field field, RemconField remconField) {
         int filedLength = remconField.value();
         switch (remconField.type()) {
         case Alphanumeric:
@@ -91,14 +91,14 @@ public class RemconFileWriter implements Closeable {
         case Filler:
             return CommonsStringUtils.padding(filedLength, ' ');
         default:
-            throw new IllegalArgumentException(remconField.type().toString());
+            throw new IllegalArgumentException("invalid type " + remconField.type().toString() + " of filed " + field.getName());
         }
     }
 
-    private String padValue(String value, RemconField remconField) {
+    private String padValue(String value, Field field, RemconField remconField) {
         int filedLength = remconField.value();
         if (value.length() > filedLength) {
-            throw new IllegalArgumentException("invalid filed length");
+            throw new IllegalArgumentException("invalid filed " + field.getName() + " length");
         }
         switch (remconField.type()) {
         case Alphanumeric:
@@ -112,7 +112,7 @@ public class RemconFileWriter implements Closeable {
         case Filler:
             return CommonsStringUtils.padding(filedLength, ' ');
         default:
-            throw new IllegalArgumentException(remconField.type().toString());
+            throw new IllegalArgumentException("invalid type " + remconField.type().toString() + " of filed " + field.getName());
         }
     }
 

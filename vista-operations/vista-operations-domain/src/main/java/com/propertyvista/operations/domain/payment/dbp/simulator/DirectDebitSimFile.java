@@ -43,6 +43,10 @@ public interface DirectDebitSimFile extends IEntity {
 
     };
 
+    @Editor(type = Editor.EditorType.label)
+    IPrimitive<Integer> serialNumber();
+
+    @Editor(type = Editor.EditorType.label)
     @Timestamp(Timestamp.Update.Created)
     @Format("yyyy-MM-dd HH:mm")
     @ToString

@@ -37,7 +37,7 @@ public class RemconFileConvertor {
         remconFile.records.add(header);
         RemconRecordFileTrailer trailer = new RemconRecordFileTrailer();
 
-        header.fileSerialNumber = "1";
+        header.fileSerialNumber = debitFile.serialNumber().getStringView();
         header.fileSerialDate = new SimpleDateFormat("yyMMdd").format(debitFile.creatationDate().getValue());
         header.currentDate = new SimpleDateFormat("yyMMdd").format(new Date());
         trailer.fileSerialNumber = header.fileSerialNumber;

@@ -28,8 +28,10 @@ import com.propertyvista.server.jobs.TaskRunner;
 /**
  * Used to enforce unique transaction number in development.
  * In production the values are mapped one to one.
+ * 
+ * TODO move to vista-payment
  */
-class PadTransactionUtils {
+public class PadTransactionUtils {
 
     private static final char transactionSeparator = '-';
 
@@ -39,7 +41,7 @@ class PadTransactionUtils {
         if (VistaDeployment.isVistaProduction()) {
             return paymentRecordId.getStringView();
         } else {
-            return testDBversionId() + transactionSeparator + paymentRecordId.getStringView();
+            return readTestDBversionIdInOperations() + transactionSeparator + paymentRecordId.getStringView();
         }
     }
 
@@ -54,15 +56,15 @@ class PadTransactionUtils {
                 return new Key(transactionId.getValue());
             } else {
                 String versionId = transactionId.getValue().substring(0, separator);
-                if (!versionId.equals(testDBversionId())) {
-                    throw new Error("Unexpected transactionId " + transactionId.getValue() + "; expected prefix " + testDBversionId());
+                if (!versionId.equals(readTestDBversionIdInOperations())) {
+                    throw new Error("Unexpected transactionId " + transactionId.getValue() + "; expected prefix " + readTestDBversionIdInOperations());
                 }
                 return new Key(transactionId.getValue().substring(separator + 1));
             }
         }
     }
 
-    static String testDBversionId() {
+    public static String readTestDBversionIdInOperations() {
         return TaskRunner.runInOperationsNamespace(new Callable<String>() {
             @Override
             public String call() {
@@ -71,7 +73,7 @@ class PadTransactionUtils {
         });
     }
 
-    private static String readTestDBversionId() {
+    public static String readTestDBversionId() {
         PadTestTransactionOffset dbResetSequence = Persistence.service().retrieve(EntityQueryCriteria.create(PadTestTransactionOffset.class));
         if (dbResetSequence == null) {
             dbResetSequence = EntityFactory.create(PadTestTransactionOffset.class);
