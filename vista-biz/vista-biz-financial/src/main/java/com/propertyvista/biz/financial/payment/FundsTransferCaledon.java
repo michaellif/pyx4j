@@ -23,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
-import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Executable;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
@@ -34,6 +33,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.MerchantAccount;
@@ -198,6 +198,11 @@ public class FundsTransferCaledon {
         criteria.eq(criteria.proto().companyId(), companyId);
         criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
 
+        boolean useFileBaseSequence = !VistaDeployment.isVistaProduction();
+        if (useSimulator) {
+            useFileBaseSequence = false;
+        }
+
         PadFileCreationNumber sequence = Persistence.service().retrieve(criteria);
         if (sequence == null) {
             sequence = EntityFactory.create(PadFileCreationNumber.class);
@@ -205,9 +210,9 @@ public class FundsTransferCaledon {
             sequence.simulator().setValue(useSimulator);
             sequence.companyId().setValue(companyId);
             sequence.fundsTransferType().setValue(fundsTransferType);
-            if ((!useSimulator) && ApplicationMode.isDevelopment()) {
-                sequence.number().setValue(PadCaledonDev.restoreFileCreationNumber(companyId, fundsTransferType));
-            }
+        }
+        if (useFileBaseSequence) {
+            sequence.number().setValue(PadCaledonDev.restoreFileCreationNumber(companyId, fundsTransferType));
         }
 
         // Find and verify that previous file has acknowledgment
@@ -235,7 +240,7 @@ public class FundsTransferCaledon {
         }
         sequence.number().setValue(id);
         Persistence.service().persist(sequence);
-        if ((!useSimulator) && ApplicationMode.isDevelopment()) {
+        if (useFileBaseSequence) {
             PadCaledonDev.saveFileCreationNumber(companyId, fundsTransferType, id);
         }
         return fileCreationNumberFormat(useSimulator, id);
