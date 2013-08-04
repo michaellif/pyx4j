@@ -20,29 +20,23 @@
  */
 package com.pyx4j.site.client.ui.layout.responsive;
 
-import com.google.gwt.dom.client.Style.Position;
-import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.pyx4j.site.client.DisplayPanel;
+public class InlineToolbarHolder extends SimplePanel {
 
-public class SidePanelHolder extends SimplePanel {
+    private final ResponsiveLayoutPanel parent;
 
-    public SidePanelHolder() {
+    public InlineToolbarHolder(ResponsiveLayoutPanel parent) {
+        this.parent = parent;
+
+        setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutInlineToolbarHolder.name());
+
     }
 
-    public void setDisplay(DisplayPanel display) {
-        super.setWidget(display);
-        getWidget().getElement().getStyle().setPosition(Position.STATIC);
-        getWidget().getElement().getStyle().setProperty("width", "auto");
-        getWidget().getElement().getStyle().setProperty("height", "100%");
-        getElement().getStyle().setProperty("height", "100%");
-        getElement().getStyle().setProperty("width", "100%");
-    }
-
-    @Override
-    public void setWidget(IsWidget w) {
-        throw new Error("Use setDisplay() instead.");
+    public void setDisplay() {
+        setWidget(parent.getToolbarDisplay());
+        getElement().getStyle().setHeight(parent.getToolbarDisplay().getOffsetHeight(), Unit.PX);
     }
 
 }

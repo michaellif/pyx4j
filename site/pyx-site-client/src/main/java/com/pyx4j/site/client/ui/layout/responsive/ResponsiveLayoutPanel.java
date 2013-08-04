@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
@@ -72,7 +73,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
     }
 
     public enum Display {
-        header, stickyHeader, menu, content, footer, communication, extra, notification
+        header, toolbar, menu, content, footer, communication, extra, notification
     }
 
     private static final int ANIMATION_TIME = 500;
@@ -81,7 +82,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final Layout pageLayout;
 
-    private final StickyHeaderHolder stickyHeaderHolder;
+    private final InlineToolbarHolder inlineToolbarHolder;
+
+    private final StickyToolbarHolder stickyToolbarHolder;
 
     private final InlineMenuHolder inlineMenuHolder;
 
@@ -97,9 +100,13 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     private final SimplePanel footerHolder;
 
-    private final ScrollPanel pageScroll;
+    private final FlowPanel pageHolder;
+
+    private final FlowPanel pagePanel;
 
     private final CenterPanel centerPanel;
+
+    private final ScrollPanel pageScroll;
 
     private boolean sideMenuVisible = false;
 
@@ -118,17 +125,28 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         pageLayout = new Layout(getElement());
 
-        FlowPanel pagePanel = new FlowPanel();
+        pageHolder = new FlowPanel();
+
+        pagePanel = new FlowPanel();
         pagePanel.setStyleName(ResponsiveLayoutTheme.StyleName.ResponsiveLayoutMainHolder.name());
 
         pageScroll = new ScrollPanel(pagePanel);
+        pageScroll.getElement().getStyle().setOverflowY(Overflow.SCROLL);
+        pageScroll.setHeight("100%");
+        pageHolder.add(pageScroll);
 
-        stickyHeaderHolder = new StickyHeaderHolder(this);
+        inlineToolbarHolder = new InlineToolbarHolder(this);
+
+        stickyToolbarHolder = new StickyToolbarHolder(this);
+        pageHolder.add(stickyToolbarHolder);
 
         extraHolder = new ExtraHolder(this);
 
         getNotificationDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
         getContentDisplay().getElement().getStyle().setTextAlign(TextAlign.CENTER);
+
+        getToolbarDisplay().getElement().getStyle().setProperty("maxWidth", ResponsiveLayoutPanel.MAX_WIDTH + "px");
+        getToolbarDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         contentHolder = new ContentHolder(this);
         contentHolder.getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
@@ -146,9 +164,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         pageScroll.addScrollHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
-                stickyHeaderHolder.onPositionChange();
-                inlineMenuHolder.onPositionChange();
-
+                ResponsiveLayoutPanel.this.onScroll();
             }
         });
 
@@ -160,17 +176,19 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         getFooterDisplay().addStyleName(HorizontalAlignCenterMixin.StyleName.HorizontalAlignCenter.name());
 
         pagePanel.add(getHeaderDisplay());
-        pagePanel.add(stickyHeaderHolder);
+        pagePanel.add(inlineToolbarHolder);
         pagePanel.add(centerPanel);
         pagePanel.add(footerHolder);
 
         // ============ Content Layer ============
         {
-            Layer layer = pageLayout.attachChild(pageScroll.asWidget().getElement(), pageScroll);
-            pageScroll.setLayoutData(layer);
+            Layer layer = pageLayout.attachChild(pageHolder.asWidget().getElement(), pageHolder);
+            pageHolder.setLayoutData(layer);
 
-            getChildren().add(pageScroll);
-            adopt(pageScroll);
+            layer.setTopBottom(0, Unit.PX, 0, Unit.PX);
+
+            getChildren().add(pageHolder);
+            adopt(pageHolder);
         }
 
         // ============ Side Menu Layer ============
@@ -203,8 +221,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
     }
 
-    StickyHeaderHolder getStickyHeaderHolder() {
-        return stickyHeaderHolder;
+    StickyToolbarHolder getStickyHeaderHolder() {
+        return stickyToolbarHolder;
     }
 
     SimplePanel getFooterHolder() {
@@ -215,8 +233,8 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         return displays.get(Display.header);
     }
 
-    public DisplayPanel getStickyHeaderDisplay() {
-        return displays.get(Display.stickyHeader);
+    public DisplayPanel getToolbarDisplay() {
+        return displays.get(Display.toolbar);
     }
 
     public DisplayPanel getContentDisplay() {
@@ -279,7 +297,7 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
 
         Layer menuLayer = (Layer) sideMenuHolder.getLayoutData();
         Layer commLayer = (Layer) sideCommHolder.getLayoutData();
-        Layer mainLayer = (Layer) pageScroll.getLayoutData();
+        Layer mainLayer = (Layer) pageHolder.getLayoutData();
 
         if (sideMenuVisible) {
             menuLayer.setLeftWidth(0.0, Unit.PCT, 75.0, Unit.PCT);
@@ -308,12 +326,25 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         } else {
             resizeComponents();
         }
+
+        pageScroll.onResize();
+    }
+
+    private void onScroll() {
+        inlineMenuHolder.onPositionChange();
+
+        if (inlineToolbarHolder.getAbsoluteTop() > 0) {
+            if (inlineToolbarHolder.getWidget() == null) {
+                inlineToolbarHolder.setDisplay();
+            }
+        } else if (stickyToolbarHolder.getWidget() == null) {
+            stickyToolbarHolder.setDisplay();
+        }
+
     }
 
     private void resizeComponents() {
-        stickyHeaderHolder.onResize();
-        stickyHeaderHolder.onPositionChange();
-        inlineMenuHolder.onPositionChange();
+        onScroll();
 
         contentHolder.getElement().getStyle().setPaddingLeft(inlineMenuHolder.getOffsetWidth(), Unit.PX);
 
@@ -322,6 +353,12 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         } else {
             contentHolder.setWidth((centerPanel.getOffsetWidth() - inlineMenuHolder.getOffsetWidth()) + "px");
         }
+
+        for (DisplayPanel displayPanel : displays.values()) {
+            displayPanel.onResize();
+        }
+
+        stickyToolbarHolder.onResize();
     }
 
     @Override
@@ -391,5 +428,9 @@ public class ResponsiveLayoutPanel extends ComplexPanel implements RequiresResiz
         default:
             break;
         }
+    }
+
+    public int getPageWidth() {
+        return pagePanel.getOffsetWidth();
     }
 }

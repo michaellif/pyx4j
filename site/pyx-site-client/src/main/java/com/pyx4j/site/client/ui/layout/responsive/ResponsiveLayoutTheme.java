@@ -30,13 +30,38 @@ import com.pyx4j.commons.css.ThemeId;
 public class ResponsiveLayoutTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyHeaderHolder, ResponsiveLayoutStickyMessageHolder,
+        ResponsiveLayoutMainHolder, ResponsiveLayoutStickyToolbarHolder, ResponsiveLayoutInlineToolbarHolder, ResponsiveLayoutStickyMessageHolder,
 
         ResponsiveLayoutFooterHolder, ResponsiveLayoutContentHolder, ResponsiveLayoutContentBackground;
     }
 
     public ResponsiveLayoutTheme() {
         initStyles();
+        initScrollStyles();
+    }
+
+    private void initScrollStyles() {
+
+        Style style = new Style(".customScrollPanel");
+        style.addProperty("background-color", "#295d98");
+        addStyle(style);
+
+        style = new Style(".customScrollPanelCorner");
+        style.addProperty("background-color", "#295d98");
+        addStyle(style);
+
+        style = new Style(".nativeVerticalScrollbar");
+        style.addProperty("opacity", "0.6");
+        style.addProperty("-webkit-transition", "opacity 350ms");
+        style.addProperty("-moz-transition", "opacity 350ms");
+        style.addProperty("-o-transition", "opacity 350ms");
+        style.addProperty("transition", "opacity 350ms");
+        addStyle(style);
+
+        style = new Style(".nativeVerticalScrollbar:hover");
+        style.addProperty("opacity", "0.6");
+        addStyle(style);
+
     }
 
     @Override
@@ -49,7 +74,13 @@ public class ResponsiveLayoutTheme extends Theme {
         style.addProperty("min-width", "320px");
         addStyle(style);
 
-        style = new Style(".", StyleName.ResponsiveLayoutStickyHeaderHolder);
+        style = new Style(".", StyleName.ResponsiveLayoutInlineToolbarHolder);
+        style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
+        style.addProperty("min-width", "320px");
+        style.addProperty("height", "60px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.ResponsiveLayoutStickyToolbarHolder);
         style.addGradient(ThemeColor.foreground, 1, ThemeColor.foreground, 0.95);
         style.addProperty("min-width", "320px");
         addStyle(style);
