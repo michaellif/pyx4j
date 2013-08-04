@@ -33,7 +33,7 @@ public class PortalRootPane extends RootPane<ResponsiveLayoutPanel> {
         super(new ResponsiveLayoutPanel());
 
         bind(new HeaderActivityMapper(), asWidget().getHeaderDisplay());
-        bind(new StickyHeaderActivityMapper(), asWidget().getStickyHeaderDisplay());
+        bind(new StickyHeaderActivityMapper(), asWidget().getToolbarDisplay());
         bind(new MenuActivityMapper(), asWidget().getMenuDisplay());
         bind(new CommunicationActivityMapper(), asWidget().getCommDisplay());
         bind(new ContentActivityMapper(), asWidget().getContentDisplay());
