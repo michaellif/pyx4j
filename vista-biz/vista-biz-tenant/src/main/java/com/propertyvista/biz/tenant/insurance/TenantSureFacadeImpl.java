@@ -70,6 +70,16 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
 
     private static final Logger log = LoggerFactory.getLogger(TenantSureFacadeImpl.class);
 
+    private static final int TENANT_SURE_CLIENT_INIT_MUTEX_COUNT = 10;
+
+    private static final Object[] TENANT_SURE_CLIENT_INIT_MUTEX;
+    static {
+        TENANT_SURE_CLIENT_INIT_MUTEX = new Object[TENANT_SURE_CLIENT_INIT_MUTEX_COUNT];
+        for (int i = 0; i < TENANT_SURE_CLIENT_INIT_MUTEX_COUNT; ++i) {
+            TENANT_SURE_CLIENT_INIT_MUTEX[i] = new Object();
+        }
+    }
+
     public TenantSureFacadeImpl() {
     }
 
@@ -471,24 +481,29 @@ public class TenantSureFacadeImpl implements TenantSureFacade {
     }
 
     private InsuranceTenantSureClient initializeClient(Tenant tenantId, String name, String phone) {
-        EntityQueryCriteria<InsuranceTenantSureClient> criteria = EntityQueryCriteria.create(InsuranceTenantSureClient.class);
-        criteria.eq(criteria.proto().tenant(), tenantId);
-        InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
-        if (tenantSureClient == null) {
-            tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
-            tenantSureClient.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
-            String clientReferenceNumber = null;
-            try {
-                clientReferenceNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).createClient(tenantId, name, phone);
-            } catch (CfcApiException e) {
-                log.error("Failed to register tenant '" + tenantId.getPrimaryKey() + "' via CFC API", e);
-                throw new UserRuntimeException(i18n.tr("Failed to register client via TenantSure interface"), e);
+        Object mutex = TENANT_SURE_CLIENT_INIT_MUTEX[(int) tenantId.getPrimaryKey().asLong() % TENANT_SURE_CLIENT_INIT_MUTEX_COUNT];
+
+        synchronized (mutex) {
+            EntityQueryCriteria<InsuranceTenantSureClient> criteria = EntityQueryCriteria.create(InsuranceTenantSureClient.class);
+            criteria.eq(criteria.proto().tenant(), tenantId);
+            InsuranceTenantSureClient tenantSureClient = Persistence.service().retrieve(criteria);
+            if (tenantSureClient == null) {
+                tenantSureClient = EntityFactory.create(InsuranceTenantSureClient.class);
+                tenantSureClient.tenant().set(Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey()));
+                String clientReferenceNumber = null;
+                try {
+                    clientReferenceNumber = ServerSideFactory.create(CfcApiAdapterFacade.class).createClient(tenantId, name, phone);
+                } catch (CfcApiException e) {
+                    log.error("Failed to register tenant '" + tenantId.getPrimaryKey() + "' via CFC API", e);
+                    throw new UserRuntimeException(i18n.tr("Failed to register client via TenantSure interface"), e);
+                }
+                tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
+                Persistence.service().persist(tenantSureClient);
+                Persistence.service().commit();
             }
-            tenantSureClient.clientReferenceNumber().setValue(clientReferenceNumber);
-            Persistence.service().persist(tenantSureClient);
-            Persistence.service().commit();
+            return tenantSureClient;
         }
-        return tenantSureClient;
+
     }
 
     private InsuranceTenantSure retrieveActiveInsuranceTenantSure(Tenant tenantId) {
