@@ -20,6 +20,7 @@ import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.AttachLevel;
+import com.pyx4j.entity.shared.criterion.AndCriterion;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
@@ -91,6 +92,11 @@ public class LeaseProcessManagerInternal {
         EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
         criteria.add(PropertyCriterion.eq(criteria.proto().status(), Lease.Status.Active));
         criteria.add(PropertyCriterion.lt(criteria.proto().leaseTo(), date));
+        //@formatter:off
+        criteria.or(PropertyCriterion.isNull(criteria.proto().nextTerm()),                              // not renewed OR
+                    new AndCriterion(PropertyCriterion.isNotNull(criteria.proto().nextTerm()),          // renewed but moving out
+                                     PropertyCriterion.isNotNull(criteria.proto().completion())));
+        //@formatter:on
 
         ICursorIterator<Lease> i = Persistence.service().query(null, criteria, AttachLevel.IdOnly);
         final LeaseFacade leaseFacade = ServerSideFactory.create(LeaseFacade.class);
