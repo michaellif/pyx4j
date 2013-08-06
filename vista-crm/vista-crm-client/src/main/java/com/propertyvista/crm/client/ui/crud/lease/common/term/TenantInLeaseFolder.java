@@ -58,6 +58,7 @@ import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTenant> {
 
@@ -250,6 +251,9 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
         @Override
         public void addValidations() {
             super.addValidations();
+
+            get(proto().leaseParticipant().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
+            get(proto().leaseParticipant().customer().person().birthDate()).setMandatory(!VistaFeatures.instance().yardiIntegration());
 
             get(proto().role()).addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant.Role>() {
                 @Override
