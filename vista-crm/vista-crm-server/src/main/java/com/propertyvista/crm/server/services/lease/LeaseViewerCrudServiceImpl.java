@@ -141,7 +141,8 @@ public class LeaseViewerCrudServiceImpl extends LeaseViewerCrudServiceBaseImpl<L
         ServerSideFactory.create(LeaseFacade.class).moveOut(leaseId, new LogicalDate(SystemDateManager.getDate()));
 
         // complete actually, if it already finished:
-        if (Persistence.secureRetrieve(Lease.class, entityId).leaseTo().getValue().after(new LogicalDate(SystemDateManager.getDate()))) {
+        Lease lease = Persistence.secureRetrieve(Lease.class, entityId);
+        if (!lease.leaseTo().isNull() && lease.leaseTo().getValue().after(new LogicalDate(SystemDateManager.getDate()))) {
             ServerSideFactory.create(LeaseFacade.class).complete(leaseId);
         }
 
