@@ -478,7 +478,7 @@ public abstract class LeaseAbstractManager {
             throw new IllegalStateException("Lease has next term ready");
         }
         // if still has time to go:
-        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().after(new LogicalDate(SystemDateManager.getDate()))) {
+        if (!lease.leaseTo().isNull() && !lease.leaseTo().getValue().before(new LogicalDate(SystemDateManager.getDate()))) {
             throw new IllegalStateException("Lease is not ended yet");
         }
 
