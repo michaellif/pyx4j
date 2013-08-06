@@ -171,6 +171,7 @@ BEGIN
         -- payment_information
         
         ALTER TABLE payment_information ADD COLUMN payment_method_creator BIGINT,
+                                        ADD COLUMN payment_method_creation_date TIMESTAMP,
                                         ADD COLUMN payment_method_creator_discriminator VARCHAR(50),
                                         ADD COLUMN payment_method_billing_address_street1 VARCHAR(500),
                                         ADD COLUMN payment_method_billing_address_street2 VARCHAR(500);
@@ -179,6 +180,7 @@ BEGIN
         -- payment_method
         
         ALTER TABLE payment_method      ADD COLUMN creator BIGINT,
+                                        ADD COLUMN creation_date TIMESTAMP,
                                         ADD COLUMN creator_discriminator VARCHAR(50),
                                         ADD COLUMN billing_address_street1 VARCHAR(500),
                                         ADD COLUMN billing_address_street2 VARCHAR(500);
@@ -187,6 +189,13 @@ BEGIN
         
         ALTER TABLE payment_payment_details     ADD COLUMN location_code VARCHAR(500),
                                                 ADD COLUMN trace_number VARCHAR(500);
+                                                
+       
+       -- payment_record
+       
+       ALTER COLUMN payment_record      ADD COLUMN creator BIGINT,
+                                        ADD COLUMN creator_discriminator VARCHAR(50);
+       
                                         
         -- payment_type_selection_policy
         
@@ -485,10 +494,13 @@ BEGIN
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));  
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_id_discriminator_ck 
                 CHECK ((id_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo')); 
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE recipient ADD CONSTRAINT recipient_recipient_type_e_ck CHECK ((recipient_type) IN ('company', 'group', 'person'));
   
+        -- not null
         
+        ALTER TABLE aggregated_transfer ALTER COLUMN funds_transfer_type SET NOT NULL;
        
         /**
         ***     ====================================================================================================

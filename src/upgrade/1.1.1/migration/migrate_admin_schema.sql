@@ -115,6 +115,10 @@ SET search_path = '_admin_';
         ***     =======================================================================================================
         **/
         
+        -- admin_pmc_payment_method
+        
+        ALTER TABLE admin_pmc_payment_method ADD COLUMN creation_date TIMESTAMP;
+        
         -- admin_pmc_payment_type_info
         
         ALTER TABLE admin_pmc_payment_type_info ADD COLUMN direct_banking_fee NUMERIC(18,2),
@@ -158,6 +162,7 @@ SET search_path = '_admin_';
         CREATE TABLE dev_direct_debit_sim_file
         (
                 id                              BIGINT                  NOT NULL,
+                serial_number                   INT,
                 creatation_date                 TIMESTAMP,
                 sent_date                       TIMESTAMP,
                 status                          VARCHAR(50),
@@ -278,6 +283,18 @@ SET search_path = '_admin_';
         
         ALTER TABLE onboarding_user     ADD COLUMN pmc BIGINT,
                                         ADD COLUMN password VARCHAR(500);                              
+        
+        -- pad_debit_record_transaction
+        
+        CREATE TABLE pad_debit_record_transaction
+        (
+                id                      BIGINT                  NOT NULL,
+                pad_debit_record        BIGINT                  NOT NULL,
+                payment_record_key      BIGINT,
+                        CONSTRAINT pad_debit_record_transaction_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE pad_debit_record_transaction OWNER TO vista;
         
                 
         --  pad_file
@@ -507,6 +524,8 @@ SET search_path = '_admin_';
                 REFERENCES dev_pad_sim_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_file_fk FOREIGN KEY(file) REFERENCES direct_debit_file(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_pmc_fk FOREIGN KEY(pmc) REFERENCES admin_pmc(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE pad_debit_record_transaction ADD CONSTRAINT pad_debit_record_transaction_pad_debit_record_fk FOREIGN KEY(pad_debit_record) 
+                REFERENCES pad_debit_record(id)  DEFERRABLE INITIALLY DEFERRED;
 
 
 
@@ -574,6 +593,7 @@ SET search_path = '_admin_';
         CREATE INDEX global_crm_user_index_email_idx ON global_crm_user_index USING btree (email);
         CREATE INDEX global_crm_user_index_pmc_crm_user_idx ON global_crm_user_index USING btree (pmc, crm_user);
         CREATE INDEX onboarding_user_email_idx ON onboarding_user USING btree (lower(email));
+        CREATE INDEX pad_debit_record_transaction_pad_debit_record_idx ON pad_debit_record_transaction USING btree (pad_debit_record);
 
        
 
