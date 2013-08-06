@@ -193,7 +193,7 @@ BEGIN
        
        -- payment_record
        
-       ALTER COLUMN payment_record      ADD COLUMN creator BIGINT,
+       ALTER TABLE payment_record      ADD COLUMN creator BIGINT,
                                         ADD COLUMN creator_discriminator VARCHAR(50);
        
                                         
