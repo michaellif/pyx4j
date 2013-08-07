@@ -24,6 +24,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -140,6 +141,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
                 content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
                 content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
 
@@ -171,6 +174,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 expirationWarning.prepareView(getValue().expiring());
                 setEditable(getValue().expiring().isNull());
 
+                get(proto().id()).setVisible(!getValue().id().isNull());
+                get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
                 get(proto().creator()).setVisible(!getValue().creator().isNull());
             }
         }

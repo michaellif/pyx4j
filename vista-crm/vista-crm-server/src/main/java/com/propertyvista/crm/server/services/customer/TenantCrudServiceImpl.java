@@ -42,6 +42,7 @@ import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.crm.rpc.services.customer.TenantCrudService;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.media.InsuranceCertificateDocument;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
@@ -78,6 +79,9 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
 
         Persistence.service().retrieve(dto.customer().emergencyContacts());
         Persistence.service().retrieve(dto.lease().unit().building());
+        for (PaymentMethod method : dto.paymentMethods()) {
+            Persistence.service().retrieve(method.creator());
+        }
 
         fillPreauthorizedPayments(dto);
 
