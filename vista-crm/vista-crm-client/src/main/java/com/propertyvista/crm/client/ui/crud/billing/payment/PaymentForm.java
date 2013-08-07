@@ -44,6 +44,7 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
+import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
@@ -57,6 +58,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
@@ -206,6 +208,12 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), "200px").build());
 
         left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), "30px").labelWidth("20em").build());
+        left.setWidget(
+                ++row,
+                0,
+                new PaymentFormDecoratorBuilder(inject(proto().preauthorizedPayment(),
+                        new CEntityCrudHyperlink<PreauthorizedPayment>(AppPlaceEntityMapper.resolvePlace(PreauthorizedPayment.class))), "30px").labelWidth(
+                        "20em").build());
 
         TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         row = -1;
@@ -328,6 +336,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
+        get(proto().preauthorizedPayment()).setVisible(false);
         get(proto().profiledPaymentMethod()).setNote(null);
     }
 
@@ -403,6 +412,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
+            get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
         }
     }
 
