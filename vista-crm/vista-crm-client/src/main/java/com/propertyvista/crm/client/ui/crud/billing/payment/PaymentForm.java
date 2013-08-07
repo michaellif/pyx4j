@@ -32,6 +32,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
@@ -45,14 +46,17 @@ import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.dialogs.AbstractEntitySelectorDialog;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorListDialog;
 import com.pyx4j.site.client.ui.prime.form.IForm;
-import com.pyx4j.site.client.ui.prime.misc.CEntityCrudHyperlink;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.editors.payments.EcheckInfoEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodEditor;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -75,7 +79,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private static final I18n i18n = I18n.get(PaymentForm.class);
 
-    private final Widget paymentMethodEditorSeparator;
+    private final Widget preauthorizedPaymentMethodViewerHeader, paymentMethodEditorHeader;
 
     private final CComboBox<LeasePaymentMethod> profiledPaymentMethodsCombo = new CSimpleEntityComboBox<LeasePaymentMethod>();
 
@@ -140,11 +144,17 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         super(PaymentRecordDTO.class, view);
 
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel(i18n.tr("General"));
+        int row = -1;
 
-        content.setWidget(0, 0, createDetailsPanel());
-        content.setH1(1, 0, 1, i18n.tr("Payment Method"));
-        paymentMethodEditorSeparator = content.getWidget(1, 0);
-        content.setWidget(2, 0, inject(proto().paymentMethod(), paymentMethodEditor));
+        content.setWidget(++row, 0, createDetailsPanel());
+
+        content.setH1(++row, 0, 1, i18n.tr("Preauthorized Payment"));
+        preauthorizedPaymentMethodViewerHeader = content.getWidget(row, 0);
+        content.setWidget(++row, 0, inject(proto().preauthorizedPayment(), new PreauthorizedPaymentViewer()));
+
+        content.setH1(++row, 0, 1, i18n.tr("Payment Method"));
+        paymentMethodEditorHeader = content.getWidget(row, 0);
+        content.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -163,18 +173,17 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         TwoColumnFlexFormPanel left = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), "100px").build());
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().propertyCode()), "100px").build());
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().unitNumber()), "100px").build());
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().leaseId()), "100px").build());
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().leaseStatus()), "100px").build());
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().billingAccount().accountNumber()), "100px").build());
-        get(proto().billingAccount().accountNumber()).setViewable(true);
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().propertyCode()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unitNumber()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseId()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseStatus()), 10).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingAccount().accountNumber(), new CLabel<String>()), 10).build());
 
         left.setWidget(
                 ++row,
                 0,
-                new PaymentFormDecoratorBuilder(inject(proto().leaseTermParticipant(),
+                new FormDecoratorBuilder(inject(proto().leaseTermParticipant(),
                         new CEntitySelectorHyperlink<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
                             @Override
                             protected AppPlace getTargetPlace() {
@@ -199,42 +208,33 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                                     }
                                 };
                             }
-                        }), "200px").build());
+                        }), 22).build());
 
         left.setWidget(
                 ++row,
                 0,
-                new PaymentFormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(
-                        PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL)), "200px").labelWidth("20em").build());
+                new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentDataDTO.PaymentSelect>(
+                        PaymentDataDTO.PaymentSelect.class, RadioGroup.Layout.HORISONTAL))).build());
 
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), "200px").build());
-
-        left.setWidget(++row, 0, new PaymentFormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), "30px").labelWidth("20em").build());
-        left.setWidget(
-                ++row,
-                0,
-                new PaymentFormDecoratorBuilder(inject(proto().preauthorizedPayment(),
-                        new CEntityCrudHyperlink<PreauthorizedPayment>(AppPlaceEntityMapper.resolvePlace(PreauthorizedPayment.class))), "30px").labelWidth(
-                        "20em").build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 30).build());
+        left.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 3).build());
 
         TwoColumnFlexFormPanel right = new TwoColumnFlexFormPanel();
         row = -1;
 
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().amount()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().createdDate()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().receivedDate()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().targetDate()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().finalizeDate()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().paymentStatus()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().lastStatusChangeDate()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().transactionAuthorizationNumber()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().transactionErrorMessage()), "100px").build());
-        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().notes()), "100px").build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().createdDate()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().receivedDate()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().targetDate()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().finalizeDate()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().paymentStatus()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().lastStatusChangeDate()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transactionAuthorizationNumber()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().transactionErrorMessage()), 22).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().notes()), 22).build());
 
         // tweak UI:
-        get(proto().id()).setViewable(true);
-
         CComponent<?> comp = get(proto().leaseTermParticipant());
         ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp)
                 .addValueChangeHandler(new ValueChangeHandler<LeaseTermParticipant<? extends LeaseParticipant<?>>>() {
@@ -270,7 +270,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                         }
 
                         paymentMethodEditor.setVisible(!getValue().leaseTermParticipant().isNull());
-                        paymentMethodEditorSeparator.setVisible(!getValue().leaseTermParticipant().isNull());
+                        paymentMethodEditorHeader.setVisible(!getValue().leaseTermParticipant().isNull());
 
                         paymentMethodEditor.getValue().isProfiledMethod().setValue(Boolean.FALSE);
 
@@ -280,7 +280,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                     case Profiled:
                         paymentMethodEditor.setViewable(true);
                         paymentMethodEditor.setVisible(false);
-                        paymentMethodEditorSeparator.setVisible(false);
+                        paymentMethodEditorHeader.setVisible(false);
 
                         profiledPaymentMethodsCombo.reset();
                         setProfiledPaymentMethodsVisible(true);
@@ -297,7 +297,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             @Override
             public void onValueChange(ValueChangeEvent<LeasePaymentMethod> event) {
                 paymentMethodEditor.setVisible(event.getValue() != null);
-                paymentMethodEditorSeparator.setVisible(event.getValue() != null);
+                paymentMethodEditorHeader.setVisible(event.getValue() != null);
                 if (event.getValue() != null) {
                     paymentMethodEditor.setViewable(true);
                     paymentMethodEditor.populate(event.getValue());
@@ -326,11 +326,13 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         paymentMethodEditor.reset();
         paymentMethodEditor.setVisible(false);
         paymentMethodEditor.setViewable(true);
-        paymentMethodEditorSeparator.setVisible(false);
+        paymentMethodEditorHeader.setVisible(false);
+
+        get(proto().preauthorizedPayment()).setVisible(false);
+        preauthorizedPaymentMethodViewerHeader.setVisible(false);
 
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
-        get(proto().preauthorizedPayment()).setVisible(false);
         get(proto().creator()).setVisible(false);
 
         get(proto().profiledPaymentMethod()).setNote(null);
@@ -348,6 +350,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().finalizeDate()).setVisible(!isEditable());
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
+        get(proto().creator()).setVisible(!getValue().creator().isNull());
 
         get(proto().profiledPaymentMethod()).setNote(getValue().notice().getValue());
 
@@ -381,7 +384,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 } else {
                     paymentMethodEditor.setVisible(true);
                     paymentMethodEditor.setViewable(false);
-                    paymentMethodEditorSeparator.setVisible(true);
+                    paymentMethodEditorHeader.setVisible(true);
                     get(proto().addThisPaymentMethodToProfile()).setVisible(true);
                     setupAddThisPaymentMethodToProfile(getValue().paymentMethod().type().getValue());
                 }
@@ -400,7 +403,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 profiledPaymentMethodsCombo.setValue(getValue().paymentMethod());
             } else {
                 paymentMethodEditor.setVisible(true);
-                paymentMethodEditorSeparator.setVisible(true);
+                paymentMethodEditorHeader.setVisible(true);
             }
 
             boolean transactionResult = getValue().paymentMethod().isNull() ? false
@@ -408,8 +411,9 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
+
             get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
-            get(proto().creator()).setVisible(!getValue().creator().isNull());
+            preauthorizedPaymentMethodViewerHeader.setVisible(!getValue().preauthorizedPayment().isNull());
         }
     }
 
@@ -482,6 +486,45 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
                 break;
             }
+        }
+    }
+
+    private class PreauthorizedPaymentViewer extends CEntityDecoratableForm<PreauthorizedPayment> {
+
+        private final PapExpirationWarning expirationWarning = new PapExpirationWarning();
+
+        public PreauthorizedPaymentViewer() {
+            super(PreauthorizedPayment.class);
+            setViewable(true);
+        }
+
+        @Override
+        public IsWidget createContent() {
+            TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+            int row = -1;
+
+            content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
+
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+
+            content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).build());
+
+            content.setBR(++row, 0, 2);
+
+            content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+
+            return content;
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            expirationWarning.prepareView(getValue().expiring());
+            setEditable(getValue().expiring().isNull());
+
+            get(proto().creator()).setVisible(!getValue().creator().isNull());
         }
     }
 }
