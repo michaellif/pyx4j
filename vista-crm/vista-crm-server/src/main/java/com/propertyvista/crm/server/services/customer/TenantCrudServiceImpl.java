@@ -266,6 +266,8 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
 
+        Persistence.service().retrieve(papDto.creator());
+
         updateCoveredItemsDto(papDto);
         fillCoveredItemsDto(papDto);
 

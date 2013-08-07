@@ -156,13 +156,17 @@ public interface PaymentRecord extends IEntity {
     @ReadOnly
     IPrimitive<String> yardiDocumentNumber();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> createdDate();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> receivedDate();
 
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> finalizeDate();
 
     // Do not show in UI. May be used for reporting
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> lastStatusChangeDate();
 
     /**
@@ -177,6 +181,7 @@ public interface PaymentRecord extends IEntity {
 
     LeasePaymentMethod paymentMethod();
 
+    @Editor(type = EditorType.label)
     IPrimitive<PaymentStatus> paymentStatus();
 
     public static boolean merchantAccountIsRequedForPayments = false;
@@ -221,6 +226,7 @@ public interface PaymentRecord extends IEntity {
     IPrimitive<String> notes();
 
     @Timestamp(Timestamp.Update.Updated)
+    @Editor(type = EditorType.label)
     IPrimitive<Date> updated();
 
     @ReadOnly

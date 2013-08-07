@@ -41,6 +41,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.crm.rpc.dto.tenant.PreauthorizedPaymentsDTO;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 
 public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentsDTO> {
@@ -139,6 +140,9 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
                 content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
@@ -151,7 +155,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                             }
                         };
                     }
-                }), true).componentWidth("35em").build());
+                })).componentWidth("35em").build());
 
                 content.setBR(++row, 0, 2);
 
@@ -166,6 +170,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
                 expirationWarning.prepareView(getValue().expiring());
                 setEditable(getValue().expiring().isNull());
+
+                get(proto().creator()).setVisible(!getValue().creator().isNull());
             }
         }
     }

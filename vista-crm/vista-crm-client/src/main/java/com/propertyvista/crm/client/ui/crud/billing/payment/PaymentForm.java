@@ -30,6 +30,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -60,6 +61,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.security.VistaCrmBehavior;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.lease.Guarantor;
 import com.propertyvista.domain.tenant.lease.LeaseParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermGuarantor;
@@ -219,6 +221,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         row = -1;
 
         right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().amount()), "100px").build());
+        right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), "100px").build());
         right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().createdDate()), "100px").build());
         right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().receivedDate()), "100px").build());
         right.setWidget(++row, 1, new PaymentFormDecoratorBuilder(inject(proto().targetDate()), "100px").build());
@@ -231,15 +234,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         // tweak UI:
         get(proto().id()).setViewable(true);
-        get(proto().propertyCode()).setViewable(true);
-        get(proto().unitNumber()).setViewable(true);
-        get(proto().leaseId()).setViewable(true);
-        get(proto().leaseStatus()).setViewable(true);
-        get(proto().paymentStatus()).setViewable(true);
-        get(proto().createdDate()).setViewable(true);
-        get(proto().receivedDate()).setViewable(true);
-        get(proto().finalizeDate()).setViewable(true);
-        get(proto().lastStatusChangeDate()).setViewable(true);
 
         CComponent<?> comp = get(proto().leaseTermParticipant());
         ((CComponent<LeaseTermParticipant<? extends LeaseParticipant<?>>>) comp)
@@ -337,6 +331,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
         get(proto().preauthorizedPayment()).setVisible(false);
+        get(proto().creator()).setVisible(false);
+
         get(proto().profiledPaymentMethod()).setNote(null);
     }
 
@@ -413,6 +409,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());
             get(proto().preauthorizedPayment()).setVisible(!getValue().preauthorizedPayment().isNull());
+            get(proto().creator()).setVisible(!getValue().creator().isNull());
         }
     }
 

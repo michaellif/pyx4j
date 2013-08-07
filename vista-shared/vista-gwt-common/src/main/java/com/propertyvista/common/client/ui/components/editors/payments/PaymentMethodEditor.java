@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroup;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.IEditableComponentFactory;
@@ -44,8 +45,10 @@ import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentDetails;
+import com.propertyvista.domain.payment.PaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.pmc.PmcPaymentMethod;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 
 public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntityDecoratableForm<E> {
 
@@ -80,6 +83,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 2,
                 new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
                         RadioGroup.Layout.HORISONTAL)), 22, true).build());
+
+        main.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().creationDate()), 9, true).build());
+        if (paymentEntityClass.equals(PaymentMethod.class)) {
+            main.setWidget(++row, 0, 2,
+                    new FormDecoratorBuilder(inject(((PaymentMethod) proto()).creator(), new CEntityLabel<AbstractPmcUser>()), 5, true).build());
+        }
 
         main.setH3(++row, 0, 2, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
@@ -123,6 +132,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         }
         (get(proto().type())).setNote(null);
         setBillingAddressVisible(false);
+
+        if (paymentEntityClass.equals(PaymentMethod.class)) {
+            get(((PaymentMethod) proto()).creator()).setVisible(false);
+        }
     }
 
     @Override
@@ -146,6 +159,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         get(proto().billingAddress()).setEditable(!getValue().sameAsCurrent().isBooleanTrue());
 
         paymentDetailsHeader.setVisible(this.contains(proto().details()));
+
+        if (paymentEntityClass.equals(PaymentMethod.class)) {
+            get(((PaymentMethod) proto()).creator()).setVisible(!((PaymentMethod) getValue()).creator().isNull());
+        }
     }
 
     @SuppressWarnings("unchecked")

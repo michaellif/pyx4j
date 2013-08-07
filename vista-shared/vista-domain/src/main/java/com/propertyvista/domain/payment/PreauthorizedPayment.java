@@ -106,6 +106,7 @@ public interface PreauthorizedPayment extends IEntity {
 
     @Timestamp(Timestamp.Update.Created)
     //TODO change to Date
+    @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> creationDate();
 
     @Timestamp(Timestamp.Update.Updated)

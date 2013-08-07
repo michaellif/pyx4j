@@ -13,6 +13,8 @@
  */
 package com.propertyvista.dto;
 
+import com.pyx4j.entity.annotations.Editor;
+import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
@@ -44,12 +46,16 @@ public interface PaymentDataDTO extends IEntity {
 
     AddressSimple address();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> propertyCode();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> unitNumber();
 
+    @Editor(type = EditorType.label)
     IPrimitive<String> leaseId();
 
+    @Editor(type = EditorType.label)
     IPrimitive<Status> leaseStatus();
 
     IPrimitive<Boolean> electronicPaymentsAllowed();

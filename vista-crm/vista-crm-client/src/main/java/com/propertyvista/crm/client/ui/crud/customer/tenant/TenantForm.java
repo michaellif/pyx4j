@@ -25,6 +25,7 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
@@ -49,6 +50,7 @@ import com.propertyvista.crm.client.activity.crud.customer.tenant.TenantEditorAc
 import com.propertyvista.crm.client.ui.crud.customer.common.LeaseParticipantForm;
 import com.propertyvista.crm.client.ui.crud.lease.TenantInsuranceCertificateFolder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.EmergencyContact;
 import com.propertyvista.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.dto.TenantDTO;
@@ -212,7 +214,10 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
                 content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
                     protected AbstractEntitySelectorDialog<LeasePaymentMethod> getSelectorDialog() {
                         return new EntitySelectorListDialog<LeasePaymentMethod>(i18n.tr("Select Payment Method"), false, TenantForm.this.getValue()
@@ -224,7 +229,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
                             }
                         };
                     }
-                }), true).componentWidth("35em").build());
+                })).componentWidth("35em").build());
 
                 content.setBR(++row, 0, 2);
 
@@ -239,6 +244,8 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
                 expirationWarning.prepareView(getValue().expiring());
                 setEditable(getValue().expiring().isNull());
+
+                get(proto().creator()).setVisible(!getValue().creator().isNull());
             }
         }
     }
