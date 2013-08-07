@@ -14,6 +14,7 @@
 package com.propertyvista.domain.settings;
 
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -52,4 +53,9 @@ public interface PmcVistaFeatures extends IEntity {
 
     @NotNull
     IPrimitive<Boolean> tenantSureIntegration();
+
+    //------ calculated values ------------
+    @Transient
+    IPrimitive<Integer> yardiInterfaces();
+
 }

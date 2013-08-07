@@ -41,6 +41,8 @@ public class VistaFeatures {
         boolean yardiIntegration();
 
         boolean yardiMaintenance();
+
+        int yardiInterfaces();
     }
 
     private final static VistaFeaturesCustomization impl;

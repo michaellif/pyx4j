@@ -16,10 +16,18 @@ package com.propertyvista.biz.financial.maintenance.yardi;
 import java.util.Date;
 
 import com.pyx4j.config.server.ServerSideFactory;
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceMetadataAbstractManager;
 import com.propertyvista.biz.system.YardiMaintenanceFacade;
+import com.propertyvista.config.VistaDeployment;
+import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.maintenance.YardiMaintenanceMetaOrigination;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 
 public class MaintenanceMetadataYardiManager extends MaintenanceMetadataAbstractManager {
 
@@ -34,13 +42,13 @@ public class MaintenanceMetadataYardiManager extends MaintenanceMetadataAbstract
     }
 
     @Override
-    public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
-        Date lastMetaUpdate = ServerSideFactory.create(YardiMaintenanceFacade.class).getMetaTimestamp();
+    public MaintenanceRequestMetadata getMaintenanceMetadata(Building building) {
+        Date lastMetaUpdate = ServerSideFactory.create(YardiMaintenanceFacade.class).getMetaTimestamp(building);
         if (metaTS == null || !metaTS.equals(lastMetaUpdate)) {
-            invalidateMeta();
+            invalidateMeta(building);
             metaTS = lastMetaUpdate;
         }
-        return super.getMaintenanceMetadata(levelsOnly);
+        return super.getMaintenanceMetadata(building);
     }
 
     @Override
@@ -51,5 +59,39 @@ public class MaintenanceMetadataYardiManager extends MaintenanceMetadataAbstract
     @Override
     protected String getRoot() {
         return "ROOT_YARDI";
+    }
+
+    @Override
+    protected String getCacheKey(Building building) {
+        // Cache per yardi interface
+        return MaintenanceMetadataAbstractManager.cacheKey + "-" + VistaDeployment.getPmcYardiInterfaceId(building).toString();
+    }
+
+    @Override
+    protected MaintenanceRequestMetadata retrieveMeta(Building building) {
+        MaintenanceRequestMetadata meta = null;
+        // We store one Meta instance per Yardi interface
+        PmcYardiCredential yc = VistaDeployment.getPmcYardiCredential(building);
+        EntityQueryCriteria<YardiMaintenanceMetaOrigination> criteria = EntityQueryCriteria.create(YardiMaintenanceMetaOrigination.class);
+        criteria.eq(criteria.proto().yardiInterfaceId(), yc.getPrimaryKey());
+        YardiMaintenanceMetaOrigination metaOrig = Persistence.service().retrieve(criteria);
+        if (metaOrig != null) {
+            Persistence.service().retrieve(metaOrig.metadata());
+            return metaOrig.metadata();
+        } else {
+            // very first time - create empty meta entity that will be populated by yardi maintenance service
+            meta = EntityFactory.create(MaintenanceRequestMetadata.class);
+            meta.rootCategory().set(EntityFactory.create(MaintenanceRequestCategory.class));
+            meta.rootCategory().name().setValue(getRoot());
+            Persistence.service().persist(meta.rootCategory());
+            Persistence.service().persist(meta);
+            // add origination record
+            metaOrig = EntityFactory.create(YardiMaintenanceMetaOrigination.class);
+            metaOrig.metadata().set(meta);
+            metaOrig.yardiInterfaceId().setValue(yc.getPrimaryKey());
+            Persistence.service().persist(metaOrig);
+            Persistence.service().commit();
+        }
+        return meta;
     }
 }

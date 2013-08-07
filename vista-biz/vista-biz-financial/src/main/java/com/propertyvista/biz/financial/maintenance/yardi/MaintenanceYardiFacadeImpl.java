@@ -28,8 +28,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
 
     @Override
-    public MaintenanceRequestMetadata getMaintenanceMetadata(boolean labelsOnly) {
-        return MaintenanceMetadataYardiManager.instance().getMaintenanceMetadata(labelsOnly);
+    public MaintenanceRequestMetadata getMaintenanceMetadata(Building building) {
+        return MaintenanceMetadataYardiManager.instance().getMaintenanceMetadata(building);
     }
 
     @Override
@@ -40,11 +40,6 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     @Override
     public void postMaintenanceRequest(MaintenanceRequest maintenanceRequest) {
         MaintenanceYardiManager.instance().postMaintenanceRequest(maintenanceRequest);
-    }
-
-    @Override
-    public MaintenanceRequest getMaintenanceRequest(String requestId) {
-        return MaintenanceYardiManager.instance().getMaintenanceRequest(requestId);
     }
 
     @Override
@@ -78,8 +73,8 @@ public class MaintenanceYardiFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void beforeItemRequest() {
-        MaintenanceYardiManager.instance().beforeItemRequest();
+    public void beforeItemRequest(Building building) {
+        MaintenanceYardiManager.instance().beforeItemRequest(building);
     }
 
     @Override

@@ -14,10 +14,12 @@
 package com.propertyvista.domain.maintenance;
 
 import com.pyx4j.entity.annotations.Detached;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Owner;
+import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.AttachLevel;
@@ -29,6 +31,8 @@ public interface MaintenanceRequestCategory extends IEntity {
 
     @Owner
     @JoinColumn
+    @Indexed
+    @ReadOnly
     MaintenanceRequestCategory parent();
 
     @Transient
@@ -41,4 +45,10 @@ public interface MaintenanceRequestCategory extends IEntity {
     @OrderBy(PrimaryKey.class)
     @Detached(level = AttachLevel.Detached)
     IList<MaintenanceRequestCategory> subCategories();
+
+    // ----------------------------------
+    // to speed up loading in multi-root setup
+    @Indexed
+    @ReadOnly
+    MaintenanceRequestCategory root();
 }

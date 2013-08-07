@@ -15,15 +15,15 @@ package com.propertyvista.portal.web.client.ui.residents.maintenance;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.web.client.ui.IEntityView;
 import com.propertyvista.portal.web.client.ui.residents.EditImpl;
 
 public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
-    private MaintenanceRequestMetadata categoryMeta;
+    private MaintenanceRequestMetadataDTO categoryMeta;
 
     public EditMaintenanceRequestViewImpl() {
         super(new MaintenanceRequestForm());
@@ -35,13 +35,14 @@ public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestD
         if (categoryMeta != null) {
             ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
         } else if (presenter != null) {
-            ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
+            ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
                 @Override
-                public void onSuccess(MaintenanceRequestMetadata meta) {
+                public void onSuccess(MaintenanceRequestMetadataDTO meta) {
                     EditMaintenanceRequestViewImpl.this.categoryMeta = meta;
                     ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
                 }
-            });
+                // TODO add building selector - see MaintenanceRequestViewerViewImpl.java:117
+            }, null);
         }
     }
 

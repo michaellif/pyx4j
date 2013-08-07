@@ -42,6 +42,7 @@ import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -127,16 +128,18 @@ public class YardiMaintenanceProcessor {
     public MaintenanceRequest updateRequest(PmcYardiCredential yc, MaintenanceRequest mr, ServiceRequest request) throws YardiServiceException {
         boolean metaReloaded = false;
         // find building - propertyCode field is mandatory
+        Building building = null;
         {
             EntityQueryCriteria<Building> crit = EntityQueryCriteria.create(Building.class);
             crit.add(PropertyCriterion.eq(crit.proto().propertyCode(), request.getPropertyCode()));
-            Building building = Persistence.service().retrieve(crit);
+            building = Persistence.service().retrieve(crit);
             if (building == null) {
                 throw new YardiServiceException("Request dropped - Building not found: " + request.getPropertyCode());
             } else {
                 mr.building().set(building);
             }
         }
+        MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         // unit
         if (request.getUnitCode() != null) {
             EntityQueryCriteria<AptUnit> crit = EntityQueryCriteria.create(AptUnit.class);
@@ -167,10 +170,10 @@ public class YardiMaintenanceProcessor {
 //        }
         // category
         if (request.getCategory() != null) {
-            MaintenanceRequestCategory category = findCategory(request.getCategory(), null);
+            MaintenanceRequestCategory category = findCategory(request.getCategory(), meta.rootCategory());
             if (category == null) {
                 metaReloaded = reloadMeta(yc);
-                category = findCategory(request.getCategory(), null);
+                category = findCategory(request.getCategory(), meta.rootCategory());
                 if (category == null) {
                     throw new YardiServiceException("Request dropped - Category not found: " + request.getCategory());
                 }
@@ -189,10 +192,10 @@ public class YardiMaintenanceProcessor {
         }
         // status
         if (request.getCurrentStatus() != null) {
-            MaintenanceRequestStatus stat = findStatus(request.getCurrentStatus());
+            MaintenanceRequestStatus stat = findStatus(request.getCurrentStatus(), meta);
             if (stat == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
-                stat = findStatus(request.getCurrentStatus());
+                stat = findStatus(request.getCurrentStatus(), meta);
                 if (stat == null) {
                     throw new YardiServiceException("Request dropped - Status not found: " + request.getCurrentStatus());
                 }
@@ -203,10 +206,10 @@ public class YardiMaintenanceProcessor {
         }
         // priority
         if (request.getPriority() != null) {
-            MaintenanceRequestPriority pr = findPriority(request.getPriority());
+            MaintenanceRequestPriority pr = findPriority(request.getPriority(), meta);
             if (pr == null && !metaReloaded) {
                 metaReloaded = reloadMeta(yc);
-                pr = findPriority(request.getPriority());
+                pr = findPriority(request.getPriority(), meta);
                 if (pr == null) {
                     throw new YardiServiceException("Request dropped - Priority not found: " + request.getPriority());
                 }
@@ -236,11 +239,11 @@ public class YardiMaintenanceProcessor {
         return mr;
     }
 
-    public List<MaintenanceRequestStatus> mergeStatuses(Statuses statuses) {
+    public List<MaintenanceRequestStatus> mergeStatuses(Statuses statuses, MaintenanceRequestMetadata meta) {
         if (statuses == null) {
             return null;
         }
-        List<MaintenanceRequestStatus> oldStatuses = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).statuses();
+        List<MaintenanceRequestStatus> oldStatuses = meta.statuses();
         Map<String, MaintenanceRequestStatus> oldMap = new HashMap<String, MaintenanceRequestStatus>();
         List<MaintenanceRequestStatus> toBeRemoved = new ArrayList<MaintenanceRequestStatus>(oldStatuses);
         for (MaintenanceRequestStatus status : oldStatuses) {
@@ -268,11 +271,11 @@ public class YardiMaintenanceProcessor {
         return oldStatuses;
     }
 
-    public List<MaintenanceRequestPriority> mergePriorities(Priorities priorities) {
+    public List<MaintenanceRequestPriority> mergePriorities(Priorities priorities, MaintenanceRequestMetadata meta) {
         if (priorities == null) {
             return null;
         }
-        List<MaintenanceRequestPriority> oldPriorities = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).priorities();
+        List<MaintenanceRequestPriority> oldPriorities = meta.priorities();
         Map<String, MaintenanceRequestPriority> oldMap = new HashMap<String, MaintenanceRequestPriority>();
         List<MaintenanceRequestPriority> toBeRemoved = new ArrayList<MaintenanceRequestPriority>(oldPriorities);
         for (MaintenanceRequestPriority priority : oldPriorities) {
@@ -298,15 +301,13 @@ public class YardiMaintenanceProcessor {
         return oldPriorities;
     }
 
-    public MaintenanceRequestCategory mergeCategories(Categories categories) {
-        MaintenanceRequestCategory oldRoot = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).rootCategory();
-        mergeCategoriesRecursive(oldRoot, categories.getCategory());
-        Persistence.service().persist(oldRoot);
-        return oldRoot;
+    public MaintenanceRequestCategory mergeCategories(Categories categories, MaintenanceRequestMetadata meta) {
+        mergeCategoriesRecursive(meta.rootCategory(), categories.getCategory(), meta.rootCategory());
+        return meta.rootCategory();
     }
 
-    private void mergeCategoriesRecursive(MaintenanceRequestCategory oldParent, List<?> newList) {
-        if (oldParent.subCategories().getAttachLevel() == AttachLevel.Detached) {
+    private void mergeCategoriesRecursive(MaintenanceRequestCategory oldParent, List<?> newList, MaintenanceRequestCategory root) {
+        if (oldParent.subCategories().getAttachLevel() != AttachLevel.Attached) {
             Persistence.service().retrieveMember(oldParent.subCategories());
         }
         List<MaintenanceRequestCategory> toBeRemoved = new ArrayList<MaintenanceRequestCategory>();
@@ -327,8 +328,7 @@ public class YardiMaintenanceProcessor {
                 toBeRemoved.remove(category);
             } else {
                 log.debug("new category: {} -> {}", oldParent.name().getValue(), newName);
-                category = createCategory(newName);
-                category.parent().set(oldParent);
+                category = createCategory(newName, root);
                 oldParent.subCategories().add(category);
             }
             if (newCat instanceof Category) {
@@ -337,7 +337,7 @@ public class YardiMaintenanceProcessor {
                     // our parent category must have a single null-named sub-category
                     subCategories = Arrays.asList(new String[] { null });
                 }
-                mergeCategoriesRecursive(category, subCategories);
+                mergeCategoriesRecursive(category, subCategories, root);
             }
         }
         for (MaintenanceRequestCategory cat : toBeRemoved) {
@@ -351,9 +351,10 @@ public class YardiMaintenanceProcessor {
         }
     }
 
-    private MaintenanceRequestCategory createCategory(String name) {
+    private MaintenanceRequestCategory createCategory(String name, MaintenanceRequestCategory root) {
         MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
         category.name().setValue(name);
+        category.root().set(root);
         return category;
     }
 
@@ -396,9 +397,6 @@ public class YardiMaintenanceProcessor {
     }
 
     private MaintenanceRequestCategory findCategory(String name, MaintenanceRequestCategory parent) {
-        if (parent == null) {
-            parent = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).rootCategory();
-        }
         // name could be null
         for (MaintenanceRequestCategory cat : parent.subCategories()) {
             if ((name == null && cat.name().isNull()) || (name != null && name.equals(cat.name().getValue()))) {
@@ -408,11 +406,11 @@ public class YardiMaintenanceProcessor {
         return null;
     }
 
-    private MaintenanceRequestStatus findStatus(String name) {
+    private MaintenanceRequestStatus findStatus(String name, MaintenanceRequestMetadata meta) {
         if (name == null) {
             return null;
         }
-        for (MaintenanceRequestStatus stat : ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).statuses()) {
+        for (MaintenanceRequestStatus stat : meta.statuses()) {
             if (name.equals(stat.name().getValue())) {
                 return stat;
             }
@@ -420,11 +418,11 @@ public class YardiMaintenanceProcessor {
         return null;
     }
 
-    private MaintenanceRequestPriority findPriority(String name) {
+    private MaintenanceRequestPriority findPriority(String name, MaintenanceRequestMetadata meta) {
         if (name == null) {
             return null;
         }
-        for (MaintenanceRequestPriority pr : ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(false).priorities()) {
+        for (MaintenanceRequestPriority pr : meta.priorities()) {
             if (name.equals(pr.name().getValue())) {
                 return pr;
             }

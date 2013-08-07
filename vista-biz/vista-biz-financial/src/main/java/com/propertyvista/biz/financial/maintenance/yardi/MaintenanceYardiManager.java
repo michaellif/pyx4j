@@ -18,9 +18,6 @@ import java.util.Set;
 
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
-import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.server.mail.MailMessage;
 
 import com.propertyvista.biz.communication.CommunicationFacade;
@@ -31,6 +28,7 @@ import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 public class MaintenanceYardiManager extends MaintenanceAbstractManager {
@@ -73,7 +71,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Cancelled);
+        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Cancelled);
         if (status != null) {
             request.status().set(status);
             postRequest(request);
@@ -90,7 +88,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
-        MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Scheduled);
+        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Scheduled);
         if (status != null) {
             request.workHistory().add(schedule);
             request.status().set(status);
@@ -112,7 +110,7 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
-        MaintenanceRequestStatus status = getMaintenanceStatus(StatusPhase.Resolved);
+        MaintenanceRequestStatus status = getMaintenanceStatus(request.building(), StatusPhase.Resolved);
         if (status != null) {
             request.status().set(status);
             postRequest(request);
@@ -123,24 +121,17 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
 
     @Override
     public List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter) {
-        importModifiedRequests();
+        importModifiedRequests(reporter.lease().unit().building());
         return super.getMaintenanceRequests(statuses, reporter);
     }
 
-    @Override
-    public MaintenanceRequest getMaintenanceRequest(String requestId) {
-        importModifiedRequests();
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().requestId(), requestId));
-        return Persistence.service().retrieve(criteria);
-    }
-
-    protected void beforeItemRequest() {
-        importModifiedRequests();
+    protected void beforeItemRequest(Building building) {
+        importModifiedRequests(building);
     }
 
     protected void beforeListRequest() {
-        importModifiedRequests();
+        // get modified requests for all interfaces
+        importModifiedRequests(null);
     }
 
     private void postRequest(MaintenanceRequest request) {
@@ -152,9 +143,9 @@ public class MaintenanceYardiManager extends MaintenanceAbstractManager {
         }
     }
 
-    private void importModifiedRequests() {
+    private void importModifiedRequests(Building building) {
         try {
-            ServerSideFactory.create(YardiMaintenanceFacade.class).loadMaintenanceRequests();
+            ServerSideFactory.create(YardiMaintenanceFacade.class).loadMaintenanceRequests(building);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

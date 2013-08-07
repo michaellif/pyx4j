@@ -13,8 +13,10 @@
  */
 package com.propertyvista.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
@@ -166,15 +168,15 @@ public class VistaDeployment {
         return VistaSettings.googleAPIKey;
     }
 
-    @Deprecated
-    public static PmcYardiCredential getPmcYardiCredential() {
+    public static Key getPmcYardiInterfaceId(Building building) {
         final String namespace = NamespaceManager.getNamespace();
-        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "PMC not available when running in admin namespace";
+        assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc().namespace(), namespace));
-            return Persistence.service().retrieve(criteria);
+            EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
+            bldCrit.eq(bldCrit.proto().building(), building);
+            YardiBuildingOrigination buildingOrigin = Persistence.service().retrieve(bldCrit);
+
+            return buildingOrigin.yardiInterfaceId().getValue();
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
@@ -184,13 +186,10 @@ public class VistaDeployment {
         final String namespace = NamespaceManager.getNamespace();
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {
-            EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
-            bldCrit.eq(bldCrit.proto().building(), building);
-            YardiBuildingOrigination buildingOrigin = Persistence.service().retrieve(bldCrit);
-
+            Key yardiInterfaceId = getPmcYardiInterfaceId(building);
             NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
             EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
-            criteria.eq(criteria.proto().id(), buildingOrigin.yardiInterfaceId());
+            criteria.eq(criteria.proto().id(), yardiInterfaceId);
             criteria.eq(criteria.proto().pmc().namespace(), namespace);
             return Persistence.service().retrieve(criteria);
         } finally {
@@ -209,5 +208,15 @@ public class VistaDeployment {
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
+    }
+
+    public static List<Building> getPmcYardiBuildings(PmcYardiCredential yc) {
+        EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
+        bldCrit.eq(bldCrit.proto().yardiInterfaceId(), yc.getPrimaryKey());
+        List<Building> buildings = new ArrayList<Building>();
+        for (YardiBuildingOrigination orig : Persistence.service().query(bldCrit)) {
+            buildings.add(orig.building());
+        }
+        return buildings;
     }
 }

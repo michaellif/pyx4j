@@ -17,14 +17,15 @@ import java.rmi.RemoteException;
 import java.util.Date;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public interface YardiMaintenanceFacade {
 
-    Date getMetaTimestamp();
+    Date getMetaTimestamp(Building building);
 
-    Date getTicketTimestamp();
+    Date getTicketTimestamp(Building building);
 
     MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException, RemoteException;
 
-    void loadMaintenanceRequests() throws YardiServiceException, RemoteException;
+    void loadMaintenanceRequests(Building building) throws YardiServiceException, RemoteException;
 }

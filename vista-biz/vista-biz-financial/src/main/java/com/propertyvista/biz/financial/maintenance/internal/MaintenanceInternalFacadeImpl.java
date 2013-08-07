@@ -28,8 +28,8 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
 
     @Override
-    public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
-        return MaintenanceMetadataInternalManager.instance().getMaintenanceMetadata(levelsOnly);
+    public MaintenanceRequestMetadata getMaintenanceMetadata(Building building) {
+        return MaintenanceMetadataInternalManager.instance().getMaintenanceMetadata(building);
     }
 
     @Override
@@ -53,11 +53,6 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public MaintenanceRequest getMaintenanceRequest(String requestId) {
-        return MaintenanceInternalManager.instance().getMaintenanceRequest(requestId);
-    }
-
-    @Override
     public MaintenanceRequest createNewRequest(Building building) {
         return MaintenanceInternalManager.instance().createNewRequest(building);
     }
@@ -78,7 +73,7 @@ public class MaintenanceInternalFacadeImpl implements MaintenanceFacade {
     }
 
     @Override
-    public void beforeItemRequest() {
+    public void beforeItemRequest(Building building) {
         // N/A - do nothing
     }
 

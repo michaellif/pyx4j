@@ -18,27 +18,35 @@ import java.util.Date;
 
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
+import com.propertyvista.domain.property.asset.building.Building;
+import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.services.YardiMaintenanceRequestsService;
 
 public class YardiMaintenanceFacadeImpl implements YardiMaintenanceFacade {
 
     @Override
-    public Date getMetaTimestamp() {
-        return YardiMaintenanceRequestsService.getInstance().getMetaTimestamp();
+    public Date getMetaTimestamp(Building building) {
+        return YardiMaintenanceRequestsService.getInstance().getMetaTimestamp(VistaDeployment.getPmcYardiCredential(building));
     }
 
     @Override
-    public Date getTicketTimestamp() {
-        return YardiMaintenanceRequestsService.getInstance().getTicketTimestamp();
+    public Date getTicketTimestamp(Building building) {
+        return YardiMaintenanceRequestsService.getInstance().getTicketTimestamp(VistaDeployment.getPmcYardiCredential(building));
     }
 
     @Override
     public MaintenanceRequest postMaintenanceRequest(MaintenanceRequest request) throws YardiServiceException, RemoteException {
-        return YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(VistaDeployment.getPmcYardiCredential(), request);
+        return YardiMaintenanceRequestsService.getInstance().postMaintenanceRequest(VistaDeployment.getPmcYardiCredential(request.building()), request);
     }
 
     @Override
-    public void loadMaintenanceRequests() throws YardiServiceException, RemoteException {
-        YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(VistaDeployment.getPmcYardiCredential());
+    public void loadMaintenanceRequests(Building building) throws YardiServiceException, RemoteException {
+        if (building == null) {
+            for (PmcYardiCredential yc : VistaDeployment.getPmcYardiCredentials()) {
+                YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(yc);
+            }
+        } else {
+            YardiMaintenanceRequestsService.getInstance().loadMaintenanceRequests(VistaDeployment.getPmcYardiCredential(building));
+        }
     }
 }

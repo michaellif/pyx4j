@@ -32,12 +32,15 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.crm.client.ui.components.boxes.BuildingSelectorDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
 
@@ -112,13 +115,34 @@ public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<Main
         if (categoryMeta != null) {
             ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
         } else if (presenter != null) {
-            ((MaintenanceRequestViewerView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadata meta) {
-                    MaintenanceRequestViewerViewImpl.this.categoryMeta = meta;
-                    ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
-                }
-            });
+            if (VistaFeatures.instance().yardiInterfaces() > 1) {
+                // for multiple yardi interfaces ask to select building first
+                new BuildingSelectorDialog(false) {
+                    @Override
+                    public boolean onClickOk() {
+                        if (getSelectedItems().isEmpty()) {
+                            return false;
+                        }
+                        ((MaintenanceRequestViewerView.Presenter) getPresenter()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+                            @Override
+                            public void onSuccess(MaintenanceRequestMetadataDTO meta) {
+                                MaintenanceRequestViewerViewImpl.this.categoryMeta = meta;
+                                ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+                            }
+                        }, getSelectedItems().get(0));
+                        return true;
+                    }
+                }.show();
+            } else {
+                // just use null for building
+                ((MaintenanceRequestViewerView.Presenter) getPresenter()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+                    @Override
+                    public void onSuccess(MaintenanceRequestMetadataDTO meta) {
+                        MaintenanceRequestViewerViewImpl.this.categoryMeta = meta;
+                        ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+                    }
+                }, null);
+            }
         }
     }
 

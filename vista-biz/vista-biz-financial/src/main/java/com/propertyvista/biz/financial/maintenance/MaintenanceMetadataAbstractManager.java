@@ -23,33 +23,34 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategoryLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
-import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.property.asset.building.Building;
 
 public abstract class MaintenanceMetadataAbstractManager {
 
     public static final String cacheKey = "maintenance-metadata";
 
-    protected void invalidateMeta() {
-        CacheService.remove(cacheKey);
+    protected void invalidateMeta(Building building) {
+        CacheService.remove(getCacheKey(building));
     }
 
     protected abstract String getRoot();
 
+    protected abstract String getCacheKey(Building building);
+
+    protected abstract MaintenanceRequestMetadata retrieveMeta(Building building);
+
     protected abstract String[] getLevels();
 
-    public MaintenanceRequestMetadata getMaintenanceMetadata(boolean levelsOnly) {
-        MaintenanceRequestMetadata meta = (MaintenanceRequestMetadata) CacheService.get(cacheKey);
-
-        MaintenanceRequestMetadata result = EntityFactory.create(MaintenanceRequestMetadata.class);
+    public MaintenanceRequestMetadata getMaintenanceMetadata(Building building) {
+        MaintenanceRequestMetadata meta = (MaintenanceRequestMetadata) CacheService.get(getCacheKey(building));
         if (meta == null) {
-            meta = EntityFactory.create(MaintenanceRequestMetadata.class);
+            meta = retrieveMeta(building);
         }
+
         // retrieve levels
         if (meta.categoryLevels().isEmpty()) {
             String[] levels = getLevels();
@@ -57,41 +58,16 @@ public abstract class MaintenanceMetadataAbstractManager {
                 meta.categoryLevels().add(createLevel(levels[i], i + 1));
             }
         }
-        result.categoryLevels().set(meta.categoryLevels());
-        // retrieve statuses
-        if (meta.statuses().isEmpty()) {
-            EntityQueryCriteria<MaintenanceRequestStatus> crit = EntityQueryCriteria.create(MaintenanceRequestStatus.class);
-            meta.statuses().addAll(Persistence.service().query(crit));
+        // retrieve categories
+        if (meta.rootCategory().subCategories().getAttachLevel() != AttachLevel.Attached) {
+            // load categories
+            new CategoryTree(meta.rootCategory()).retrieveAll();
+            // TODO - remove next line once new algo above is finalized
+            // new CategoryTree(meta.rootCategory()).retrieveRecursive();
         }
-        result.statuses().set(meta.statuses());
-        // retrieve priorities
-        if (meta.priorities().isEmpty()) {
-            EntityQueryCriteria<MaintenanceRequestPriority> crit = EntityQueryCriteria.create(MaintenanceRequestPriority.class);
-            meta.priorities().addAll(Persistence.service().query(crit));
-        }
-        result.priorities().set(meta.priorities());
-        if (!levelsOnly) {
-            // retrieve categories
-            if (meta.rootCategory().isNull()) {
-                EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
-                crit.add(PropertyCriterion.eq(crit.proto().name(), getRoot()));
-                meta.rootCategory().set(Persistence.service().retrieve(crit));
-                // load categories
-                new CategoryTree(meta.rootCategory()).retrieveAll();
-                // TODO - remove next line once new algo above is finalized
-                // new CategoryTree(meta.rootCategory()).retrieveRecursive();
-                if (meta.rootCategory().isNull()) {
-                    // create root
-                    MaintenanceRequestCategory root = EntityFactory.create(MaintenanceRequestCategory.class);
-                    root.name().setValue(getRoot());
-                    meta.rootCategory().set(root);
-                    Persistence.service().persist(root);
-                }
-            }
-            result.rootCategory().set(meta.rootCategory());
-        }
-        CacheService.put(cacheKey, meta);
-        return result;
+        CacheService.put(getCacheKey(building), meta);
+
+        return meta;
     }
 
     private MaintenanceRequestCategoryLevel createLevel(String name, int id) {
@@ -110,6 +86,9 @@ public abstract class MaintenanceMetadataAbstractManager {
 
         public CategoryTree(MaintenanceRequestCategory root) {
             this.root = root;
+            // initialize subCategories
+            root.subCategories().setAttachLevel(AttachLevel.Attached);
+
             cTree = new HashMap<Key, MaintenanceRequestCategory>();
         }
 
@@ -118,7 +97,11 @@ public abstract class MaintenanceMetadataAbstractManager {
         }
 
         public void retrieveAll() {
-            List<MaintenanceRequestCategory> categories = Persistence.service().query(EntityQueryCriteria.create(MaintenanceRequestCategory.class));
+            // retrieve all categories for this root
+            EntityQueryCriteria<MaintenanceRequestCategory> crit = EntityQueryCriteria.create(MaintenanceRequestCategory.class);
+            crit.eq(crit.proto().root(), root);
+            List<MaintenanceRequestCategory> categories = Persistence.service().query(crit);
+            // create category tree
             for (MaintenanceRequestCategory category : categories) {
                 initNodeRecursive(category);
             }
@@ -153,10 +136,6 @@ public abstract class MaintenanceMetadataAbstractManager {
                 return null;
             }
             if (node.equals(root)) {
-                if (root.subCategories().getAttachLevel() == AttachLevel.Detached) {
-                    // initialize subCategories
-                    root.subCategories().setAttachLevel(AttachLevel.Attached);
-                }
                 return root;
             }
             if (node.getAttachLevel() != AttachLevel.Attached) {

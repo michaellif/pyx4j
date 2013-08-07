@@ -40,11 +40,12 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 
+import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
 import com.propertyvista.biz.financial.maintenance.yardi.YardiMaintenanceIntegrationAgent;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
-import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
-import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.shared.config.VistaFeatures;
 import com.propertyvista.yardi.bean.Properties;
@@ -68,34 +69,44 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         public static final YardiMaintenanceRequestsService INSTANCE = new YardiMaintenanceRequestsService();
         static {
             // reset cache on startup
-            CacheService.remove(lastMetaUpdateCacheKey);
-            CacheService.remove(lastTicketUpdateCacheKey);
+            for (PmcYardiCredential yc : VistaDeployment.getPmcYardiCredentials()) {
+                CacheService.remove(getMetaUpdateCacheKey(yc));
+                CacheService.remove(getTicketUpdateCacheKey(yc));
+            }
         }
+    }
+
+    private static String getMetaUpdateCacheKey(PmcYardiCredential yc) {
+        return lastMetaUpdateCacheKey + "-" + yc.getPrimaryKey().toString();
+    }
+
+    private static String getTicketUpdateCacheKey(PmcYardiCredential yc) {
+        return lastTicketUpdateCacheKey + "-" + yc.getPrimaryKey().toString();
     }
 
     public static YardiMaintenanceRequestsService getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    public Date getMetaTimestamp() {
-        return (Date) CacheService.get(lastMetaUpdateCacheKey);
+    public Date getMetaTimestamp(PmcYardiCredential yc) {
+        return (Date) CacheService.get(getMetaUpdateCacheKey(yc));
     }
 
-    public Date getTicketTimestamp() {
-        Date ticketTS = (Date) CacheService.get(lastTicketUpdateCacheKey);
+    public Date getTicketTimestamp(PmcYardiCredential yc) {
+        Date ticketTS = (Date) CacheService.get(getTicketUpdateCacheKey(yc));
         if (ticketTS == null) {
-            ticketTS = setTicketTimestamp(YardiMaintenanceIntegrationAgent.getLastModifiedDate());
+            ticketTS = setTicketTimestamp(YardiMaintenanceIntegrationAgent.getLastModifiedDate(), yc);
         }
 
         return ticketTS;
     }
 
-    private Date setMetaTimestamp(Date ts) {
-        CacheService.put(lastMetaUpdateCacheKey, ts);
+    private Date setMetaTimestamp(Date ts, PmcYardiCredential yc) {
+        CacheService.put(getMetaUpdateCacheKey(yc), ts);
         return ts;
     }
 
-    private Date setTicketTimestamp(Date ts) {
+    private Date setTicketTimestamp(Date ts, PmcYardiCredential yc) {
         Date dateOnly;
         if (ts == null) {
             return dateOnly = new Date(0);
@@ -108,7 +119,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
             cal.set(GregorianCalendar.SECOND, 0);
             dateOnly = cal.getTime();
         }
-        CacheService.put(lastTicketUpdateCacheKey, dateOnly);
+        CacheService.put(getTicketUpdateCacheKey(yc), dateOnly);
         return dateOnly;
     }
 
@@ -118,7 +129,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     public void loadMaintenanceRequestMeta(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration() && VistaFeatures.instance().yardiMaintenance();
 
-        if (getMetaTimestamp() == null) {
+        if (getMetaTimestamp(yc) == null && VistaDeployment.getPmcYardiBuildings(yc).size() > 0) {
             loadMeta(yc);
         }
     }
@@ -129,13 +140,16 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
      */
     public void loadMaintenanceRequests(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration() && VistaFeatures.instance().yardiMaintenance();
+        if (VistaDeployment.getPmcYardiBuildings(yc).size() == 0) {
+            return;
+        }
 
         YardiMaintenanceRequestsStub stub = ServerSideFactory.create(YardiMaintenanceRequestsStub.class);
 
         // make sure meta was loaded
         loadMaintenanceRequestMeta(yc);
 
-        Date ticketTS = getTicketTimestamp();
+        Date ticketTS = getTicketTimestamp(yc);
         if (ticketTS != null) {
             // add 1 ms time gap
             ticketTS.setTime(ticketTS.getTime() - 1);
@@ -151,9 +165,9 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
         if (propertyCodes != null) {
             for (String propertyCode : propertyCodes) {
                 Date lastModified = loadRequests(yc, ticketTS, propertyCode);
-                if (getTicketTimestamp().before(lastModified)) {
-                    log.info("setting new ticket time stamp {} -> {}", getTicketTimestamp(), lastModified.getTime());
-                    setTicketTimestamp(lastModified);
+                if (getTicketTimestamp(yc).before(lastModified)) {
+                    log.info("setting new ticket time stamp {} -> {}", getTicketTimestamp(yc), lastModified.getTime());
+                    setTicketTimestamp(lastModified, yc);
                 }
             }
         } else {
@@ -194,7 +208,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
                 Date lastUpdate = new Date(0);
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 for (ServiceRequest request : newRequests.getServiceRequest()) {
-                    // When no records found Yardi returns request xml with invalid scheme...
+                    // When no records found Yardi returns response xml with invalid scheme...
                     if (!isResponseValid(request)) {
                         log.debug("Invalid request skipped");
                         continue;
@@ -220,28 +234,26 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
 
     protected void loadMeta(final PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         YardiMaintenanceRequestsStub stub = ServerSideFactory.create(YardiMaintenanceRequestsStub.class);
-        final YardiMaintenanceConfigMeta meta = stub.getMaintenanceConfigMeta(yc);
+        final YardiMaintenanceConfigMeta yardiMeta = stub.getMaintenanceConfigMeta(yc);
+        final MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(
+                VistaDeployment.getPmcYardiBuildings(yc).get(0));
         new UnitOfWork(TransactionScopeOption.Nested).execute(new Executable<Void, YardiServiceException>() {
             @Override
             public Void execute() throws YardiServiceException {
                 Date now = SystemDateManager.getDate();
                 YardiMaintenanceProcessor processor = new YardiMaintenanceProcessor();
                 // categories
-                processor.mergeCategories(meta.getCategories());
-                log.info("loaded categories: {}", meta.getCategories().getCategory().size());
+                processor.mergeCategories(yardiMeta.getCategories(), meta);
+                Persistence.service().persist(meta.rootCategory());
+                log.info("loaded categories: {}", yardiMeta.getCategories().getCategory().size());
                 // statuses
-                List<MaintenanceRequestStatus> statuses = processor.mergeStatuses(meta.getStatuses());
-                if (statuses != null) {
-                    Persistence.service().persist(statuses);
-                }
-                log.info("loaded statuses: {}", statuses.size());
+                processor.mergeStatuses(yardiMeta.getStatuses(), meta);
+                log.info("loaded statuses: {}", meta.statuses().size());
                 // priorities
-                List<MaintenanceRequestPriority> priorities = processor.mergePriorities(meta.getPriorities());
-                if (priorities != null) {
-                    Persistence.service().persist(priorities);
-                }
-                log.info("loaded priorities: {}", priorities.size());
-                setMetaTimestamp(now);
+                processor.mergePriorities(yardiMeta.getPriorities(), meta);
+                log.info("loaded priorities: {}", meta.priorities().size());
+                Persistence.service().persist(meta);
+                setMetaTimestamp(now, yc);
 
                 return null;
             }
@@ -260,7 +272,7 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     }
 
     private boolean isResponseValid(ServiceRequest request) {
-        // When Yardi has problems it returns invalid request with undocumented Error element inside !?
+        // When Yardi has problems it returns invalid response xml with undocumented Error element inside !?
         //   <ServiceRequests><ServiceRequest>
         //     <ErrorMessages><Error>There are no work orders found for these input values.</Error></ErrorMessages>
         //   </ServiceRequest></ServiceRequests>

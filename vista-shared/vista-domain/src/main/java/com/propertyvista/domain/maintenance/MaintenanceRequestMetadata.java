@@ -13,18 +13,25 @@
  */
 package com.propertyvista.domain.maintenance;
 
+import com.pyx4j.entity.annotations.OrderBy;
+import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 
-@Transient
 public interface MaintenanceRequestMetadata extends IEntity {
 
+    // @Owned won't work as the Category has itself as the Owner to build the tree structure
     MaintenanceRequestCategory rootCategory();
 
-    IList<MaintenanceRequestCategoryLevel> categoryLevels();
-
+    @Owned
+    @OrderBy(PrimaryKey.class)
     IList<MaintenanceRequestStatus> statuses();
 
+    @Owned
+    @OrderBy(PrimaryKey.class)
     IList<MaintenanceRequestPriority> priorities();
+
+    @Transient
+    IList<MaintenanceRequestCategoryLevel> categoryLevels();
 }

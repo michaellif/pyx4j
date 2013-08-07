@@ -17,13 +17,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
+import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 
 public interface MaintenanceRequestEditorView extends IEditor<MaintenanceRequestDTO> {
 
     interface Presenter extends IEditor.Presenter {
 
-        void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback);
+        void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building);
     }
 }

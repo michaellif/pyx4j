@@ -24,17 +24,17 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
-import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
-    private MaintenanceRequestMetadata meta;
+    private MaintenanceRequestMetadataDTO meta;
 
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
-        super(place,  CrmSite.getViewFactory().instantiate(MaintenanceRequestEditorView.class), GWT.<MaintenanceCrudService> create(MaintenanceCrudService.class),
-                MaintenanceRequestDTO.class);
+        super(place, CrmSite.getViewFactory().instantiate(MaintenanceRequestEditorView.class), GWT
+                .<MaintenanceCrudService> create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
     }
 
     @Override
@@ -47,15 +47,15 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building) {
         if (meta == null) {
-            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
+            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
                 @Override
-                public void onSuccess(MaintenanceRequestMetadata result) {
+                public void onSuccess(MaintenanceRequestMetadataDTO result) {
                     meta = result;
                     callback.onSuccess(result);
                 }
-            }, false);
+            }, false, building);
         } else {
             callback.onSuccess(meta);
         }

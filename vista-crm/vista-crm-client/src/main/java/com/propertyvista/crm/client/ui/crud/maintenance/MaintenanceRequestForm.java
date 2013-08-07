@@ -109,6 +109,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         }
     }
 
+    public void setBuilding(Building building) {
+        buildingSelector.setValue(building);
+        buildingSelector.setEditable(false);
+    }
+
     private TwoColumnFlexFormPanel createGeneralTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("General"));
         int row = -1;

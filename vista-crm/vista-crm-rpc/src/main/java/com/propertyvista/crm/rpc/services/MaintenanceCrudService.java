@@ -19,11 +19,11 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
-import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceRequestDTO> {
@@ -42,5 +42,5 @@ public interface MaintenanceCrudService extends AbstractCrudService<MaintenanceR
 
     void createNewRequestForTenant(AsyncCallback<MaintenanceRequestDTO> callback, Tenant tenantStub);
 
-    void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean labelsOnly);
+    void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, boolean labelsOnly, Building building);
 }

@@ -30,15 +30,13 @@ import com.propertyvista.domain.tenant.lease.Tenant;
  */
 public interface MaintenanceFacade {
 
-    MaintenanceRequestMetadata getMaintenanceMetadata(boolean labelsOnly);
+    MaintenanceRequestMetadata getMaintenanceMetadata(Building building);
 
     List<MaintenanceRequest> getMaintenanceRequests(Set<StatusPhase> statuses, Tenant reporter);
 
     MaintenanceRequest createNewRequest(Building building);
 
     MaintenanceRequest createNewRequestForTenant(Tenant tenant);
-
-    MaintenanceRequest getMaintenanceRequest(String requestId);
 
     void postMaintenanceRequest(MaintenanceRequest request);
 
@@ -50,7 +48,7 @@ public interface MaintenanceFacade {
 
     void resolveMaintenanceRequest(MaintenanceRequest request);
 
-    void beforeItemRequest();
+    void beforeItemRequest(Building building);
 
     void beforeListRequest();
 }

@@ -63,6 +63,11 @@ public class VistaFeaturesCustomizationClient implements VistaFeaturesCustomizat
     }
 
     @Override
+    public int yardiInterfaces() {
+        return features.yardiInterfaces().getValue(0);
+    }
+
+    @Override
     public CountryOfOperation countryOfOperation() {
         return features.countryOfOperation().getValue();
     }

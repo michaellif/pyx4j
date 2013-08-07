@@ -56,7 +56,13 @@ public class VistaFeatures {
     public static final class VistaFeaturesCustomizationImpl implements VistaFeaturesCustomization {
 
         public static PmcVistaFeatures getCurrentVistaFeatures() {
-            return threadLocale.get();
+            PmcVistaFeatures curFeatures = threadLocale.get();
+            // add calculated values
+            if (curFeatures.yardiIntegration().isBooleanTrue()) {
+                curFeatures.yardiInterfaces().setValue(VistaDeployment.getPmcYardiCredentials().size());
+            }
+
+            return curFeatures;
         }
 
         @Override
@@ -92,6 +98,11 @@ public class VistaFeatures {
         @Override
         public boolean yardiMaintenance() {
             return threadLocale.get().yardiMaintenance().getValue(Boolean.FALSE);
+        }
+
+        @Override
+        public int yardiInterfaces() {
+            return threadLocale.get().yardiInterfaces().getValue(0);
         }
 
         @Override

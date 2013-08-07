@@ -81,7 +81,7 @@ public abstract class MaintenanceAbstractManager {
         boolean isNewRequest = false;
         if (request.id().isNull()) {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(request);
-            request.status().set(getMaintenanceStatus(StatusPhase.Submitted));
+            request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Submitted));
             isNewRequest = true;
         }
         Persistence.service().merge(request);
@@ -93,7 +93,7 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public void cancelMaintenanceRequest(MaintenanceRequest request) {
-        request.status().set(getMaintenanceStatus(StatusPhase.Cancelled));
+        request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Cancelled));
         request.updated().setValue(SystemDateManager.getDate());
         Persistence.service().merge(request);
 
@@ -107,7 +107,7 @@ public abstract class MaintenanceAbstractManager {
 
     public void sheduleMaintenanceRequest(MaintenanceRequest request, MaintenanceRequestSchedule schedule) {
         request.workHistory().add(schedule);
-        request.status().set(getMaintenanceStatus(StatusPhase.Scheduled));
+        request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Scheduled));
 
         if (!request.unit().isNull() && request.permissionToEnter().isBooleanTrue()) {
             // send notice of entry if permission to access unit is granted
@@ -124,7 +124,7 @@ public abstract class MaintenanceAbstractManager {
     }
 
     public void resolveMaintenanceRequest(MaintenanceRequest request) {
-        request.status().set(getMaintenanceStatus(StatusPhase.Resolved));
+        request.status().set(getMaintenanceStatus(request.building(), StatusPhase.Resolved));
         Persistence.service().merge(request);
 
         ServerSideFactory.create(CommunicationFacade.class).sendMaintenanceRequestCompleted(request);
@@ -139,15 +139,9 @@ public abstract class MaintenanceAbstractManager {
         return Persistence.service().query(criteria.desc(criteria.proto().updated()));
     }
 
-    public MaintenanceRequest getMaintenanceRequest(String requestId) {
-        EntityQueryCriteria<MaintenanceRequest> criteria = EntityQueryCriteria.create(MaintenanceRequest.class);
-        criteria.add(PropertyCriterion.eq(criteria.proto().requestId(), requestId));
-        return Persistence.service().retrieve(criteria);
-    }
-
-    protected MaintenanceRequestStatus getMaintenanceStatus(StatusPhase phase) {
+    protected MaintenanceRequestStatus getMaintenanceStatus(Building building, StatusPhase phase) {
         if (phase != null) {
-            MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(true);
+            MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
             for (MaintenanceRequestStatus status : meta.statuses()) {
                 if (phase.equals(status.phase().getValue())) {
                     return status;

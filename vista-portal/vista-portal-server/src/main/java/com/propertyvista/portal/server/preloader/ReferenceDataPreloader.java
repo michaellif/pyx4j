@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.server.preloader;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ import com.pyx4j.essentials.server.csv.EntityCSVReciver;
 import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority;
 import com.propertyvista.domain.maintenance.MaintenanceRequestPriority.PriorityLevel;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus;
@@ -55,14 +57,18 @@ public class ReferenceDataPreloader extends AbstractDataPreloader {
     }
 
     public void createInternalMaintenancePreload() {
-        createMaintenanceCategories();
-        createMaintenancePriorities();
-        createMaintenanceStatuses();
+        MaintenanceRequestMetadata meta = EntityFactory.create(MaintenanceRequestMetadata.class);
+        meta.rootCategory().set(EntityFactory.create(MaintenanceRequestCategory.class));
+        meta.rootCategory().name().setValue("ROOT");
+        createMaintenanceCategories(meta.rootCategory());
+        meta.priorities().addAll(createMaintenancePriorities());
+        meta.statuses().addAll(createMaintenanceStatuses());
+        Persistence.service().persist(meta.rootCategory());
+        Persistence.service().persist(meta);
     }
 
-    private void createMaintenanceCategories() {
+    private MaintenanceRequestCategory createMaintenanceCategories(MaintenanceRequestCategory root) {
         // create categories for each level
-        MaintenanceRequestCategory root = createMaintenanceCategory("ROOT");
         List<MaintenanceTreeImport> data = EntityCSVReciver.create(MaintenanceTreeImport.class).loadResourceFile(
                 IOUtils.resourceFileName("maintenance-tree.csv", ReferenceDataPreloader.class));
 
@@ -71,7 +77,7 @@ public class ReferenceDataPreloader extends AbstractDataPreloader {
             // Find or create Element
             MaintenanceRequestCategory element = categories.get(row.type().getValue() + row.rooms().getValue());
             if (element == null) {
-                element = createMaintenanceCategory(row.rooms().getValue());
+                element = createMaintenanceCategory(row.rooms().getValue(), root);
                 categories.put(row.type().getValue() + row.rooms().getValue(), element);
                 root.subCategories().add(element);
             }
@@ -84,8 +90,7 @@ public class ReferenceDataPreloader extends AbstractDataPreloader {
                 }
             }
             if (subject == null) {
-                subject = createMaintenanceCategory(row.repairSubject().getValue());
-                subject.parent().set(element);
+                subject = createMaintenanceCategory(row.repairSubject().getValue(), root);
                 element.subCategories().add(subject);
             }
             // Find or create Subject Details
@@ -97,40 +102,43 @@ public class ReferenceDataPreloader extends AbstractDataPreloader {
                 }
             }
             if (detail == null) {
-                detail = createMaintenanceCategory(row.subjectDetails().getValue());
-                detail.parent().set(subject);
+                detail = createMaintenanceCategory(row.subjectDetails().getValue(), root);
                 subject.subCategories().add(detail);
             }
             // Create IssueClassification
-            MaintenanceRequestCategory classification = createMaintenanceCategory(row.issue().getValue());
-            classification.parent().set(detail);
+            MaintenanceRequestCategory classification = createMaintenanceCategory(row.issue().getValue(), root);
             detail.subCategories().add(classification);
         }
-        Persistence.service().persist(root);
+        return root;
     }
 
-    private MaintenanceRequestCategory createMaintenanceCategory(String name) {
+    private MaintenanceRequestCategory createMaintenanceCategory(String name, MaintenanceRequestCategory root) {
         MaintenanceRequestCategory category = EntityFactory.create(MaintenanceRequestCategory.class);
         category.name().setValue(name);
+        category.root().set(root);
         return category;
     }
 
-    private void createMaintenancePriorities() {
+    private List<MaintenanceRequestPriority> createMaintenancePriorities() {
+        List<MaintenanceRequestPriority> priorities = new ArrayList<MaintenanceRequestPriority>();
         for (PriorityLevel level : PriorityLevel.values()) {
             MaintenanceRequestPriority priority = EntityFactory.create(MaintenanceRequestPriority.class);
             priority.level().setValue(level);
             priority.name().setValue(level.toString());
-            Persistence.service().persist(priority);
+            priorities.add(priority);
         }
+        return priorities;
     }
 
-    private void createMaintenanceStatuses() {
+    private List<MaintenanceRequestStatus> createMaintenanceStatuses() {
+        List<MaintenanceRequestStatus> statuses = new ArrayList<MaintenanceRequestStatus>();
         for (StatusPhase phase : StatusPhase.values()) {
             MaintenanceRequestStatus status = EntityFactory.create(MaintenanceRequestStatus.class);
             status.phase().setValue(phase);
             status.name().setValue(phase.toString());
-            Persistence.service().persist(status);
+            statuses.add(status);
         }
+        return statuses;
     }
 
 }
