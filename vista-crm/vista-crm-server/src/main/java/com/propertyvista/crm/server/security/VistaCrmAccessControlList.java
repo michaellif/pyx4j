@@ -89,6 +89,7 @@ import com.propertyvista.crm.rpc.services.dashboard.GadgetMetadataService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ApplicationsGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.ArrearsReportService;
+import com.propertyvista.crm.rpc.services.dashboard.gadgets.BuildingResidentInsuranceListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.CollectionsGadgetService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.DelinquentLeaseListService;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.LeadsAndRentalsGadgetService;
@@ -279,6 +280,7 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(NoticesGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordsSummaryGadgetService.class));
         grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(PaymentRecordsGadgetListService.class));
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(BuildingResidentInsuranceListService.class));
 
 // - Building-related:
         grant(VistaBasicBehavior.CRM, new EntityPermission(Complex.class, EntityPermission.ALL));

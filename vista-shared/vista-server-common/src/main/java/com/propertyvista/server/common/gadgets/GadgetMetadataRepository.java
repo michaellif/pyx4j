@@ -21,6 +21,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.ArrearsStatusGadgetMetada
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsSummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.ArrearsYOYAnalysisChartGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.BuildingListerGadgetMetadata;
+import com.propertyvista.domain.dashboard.gadgets.type.BuildingResidentInsuranceCoverageGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.CollectionsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeadsAndRentalsGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.LeaseExpirationGadgetMetadata;
@@ -73,10 +74,10 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
                 bind(LeadsAndRentalsGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(ApplicationsGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 
+                bind(BuildingResidentInsuranceCoverageGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                
                 // STUPID GADGETS
-                bind(BuildingListerGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
-                bind(OccupancyChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
-                bind(OutstandingMaintenanceChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                bind(BuildingListerGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),                
                 
                 // DEMO GADGETS (in lexicographic order)
                 bind(BarChart2DGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
@@ -84,6 +85,8 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
                 bind(DemoGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(GaugeGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(LineChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                bind(OccupancyChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
+                bind(OutstandingMaintenanceChartGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 bind(PieChart2DGadgetMetadata.class, GadgetMetadataCommonDefaultSettings.class),
                 
                 // SPECIAL GADGETS                
