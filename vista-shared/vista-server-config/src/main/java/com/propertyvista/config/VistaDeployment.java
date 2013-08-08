@@ -175,8 +175,7 @@ public class VistaDeployment {
             EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
             bldCrit.eq(bldCrit.proto().building(), building);
             YardiBuildingOrigination buildingOrigin = Persistence.service().retrieve(bldCrit);
-
-            return buildingOrigin.yardiInterfaceId().getValue();
+            return buildingOrigin == null ? null : buildingOrigin.yardiInterfaceId().getValue();
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
@@ -187,11 +186,15 @@ public class VistaDeployment {
         assert (!namespace.equals(VistaNamespace.operationsNamespace)) : "Function not available when running in operations namespace";
         try {
             Key yardiInterfaceId = getPmcYardiInterfaceId(building);
-            NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
-            EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
-            criteria.eq(criteria.proto().id(), yardiInterfaceId);
-            criteria.eq(criteria.proto().pmc().namespace(), namespace);
-            return Persistence.service().retrieve(criteria);
+            if (yardiInterfaceId != null) {
+                NamespaceManager.setNamespace(VistaNamespace.operationsNamespace);
+                EntityQueryCriteria<PmcYardiCredential> criteria = EntityQueryCriteria.create(PmcYardiCredential.class);
+                criteria.eq(criteria.proto().id(), yardiInterfaceId);
+                criteria.eq(criteria.proto().pmc().namespace(), namespace);
+                return Persistence.service().retrieve(criteria);
+            } else {
+                return null;
+            }
         } finally {
             NamespaceManager.setNamespace(namespace);
         }
@@ -211,11 +214,13 @@ public class VistaDeployment {
     }
 
     public static List<Building> getPmcYardiBuildings(PmcYardiCredential yc) {
-        EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
-        bldCrit.eq(bldCrit.proto().yardiInterfaceId(), yc.getPrimaryKey());
         List<Building> buildings = new ArrayList<Building>();
-        for (YardiBuildingOrigination orig : Persistence.service().query(bldCrit)) {
-            buildings.add(orig.building());
+        if (yc != null) {
+            EntityQueryCriteria<YardiBuildingOrigination> bldCrit = EntityQueryCriteria.create(YardiBuildingOrigination.class);
+            bldCrit.eq(bldCrit.proto().yardiInterfaceId(), yc.getPrimaryKey());
+            for (YardiBuildingOrigination orig : Persistence.service().query(bldCrit)) {
+                buildings.add(orig.building());
+            }
         }
         return buildings;
     }

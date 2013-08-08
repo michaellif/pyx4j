@@ -154,7 +154,11 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
                 throw new Error("Building selection must be forced");
             }
             // single interface - use first available building
-            building = VistaDeployment.getPmcYardiBuildings(VistaDeployment.getPmcYardiCredentials().get(0)).get(0);
+            List<Building> buildings = VistaDeployment.getPmcYardiBuildings(VistaDeployment.getPmcYardiCredentials().get(0));
+            if (buildings == null || buildings.size() == 0) {
+                throw new Error("Maintenance Request Service has not been initialized");
+            }
+            building = buildings.get(0);
         }
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         MaintenanceRequestMetadataDTO metaDto = EntityFactory.create(MaintenanceRequestMetadataDTO.class);
