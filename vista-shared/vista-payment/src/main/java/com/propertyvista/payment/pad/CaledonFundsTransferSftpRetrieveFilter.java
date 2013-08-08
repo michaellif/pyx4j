@@ -37,18 +37,14 @@ public class CaledonFundsTransferSftpRetrieveFilter implements SftpRetrieveFilte
     public CaledonFundsTransferSftpFile accept(String directoryName, String fileName) {
         // file name match;
         switch (fileType) {
-        case PadFile:
-            // Used for simulator only
-            if (!fileName.contains("." + companyId + ".")) {
-                return null;
-            }
-            break;
         case Acknowledgement:
+            //YYYYMMDDhhmmss_pad.COMPANYID_acknowledgement.csv
             if (!(fileName.contains("." + companyId + "_") && fileName.contains(PadAckFile.FileNameSufix))) {
                 return null;
             }
             break;
         case Reconciliation:
+            // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
             if (!(fileName.contains(PadReconciliationFile.FileNameSufix) && fileName.endsWith("." + companyId))) {
                 return null;
             }

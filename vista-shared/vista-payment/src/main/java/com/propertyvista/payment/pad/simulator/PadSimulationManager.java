@@ -124,10 +124,10 @@ public class PadSimulationManager {
         Persistence.service().retrieveMember(padFile.batches());
         updateAcknowledgments(padFile);
 
-        //YYYYMMDDhhmmss.COMPANYID_pad_acknowledgement.csv
+        //YYYYMMDDhhmmss_pad.COMPANYID_acknowledgement.csv
         String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("."));
-        fileName += "." + padFile.companyId().getValue();
         fileName += "_" + padFile.fundsTransferType().getValue().getFileNamePart();
+        fileName += "." + padFile.companyId().getValue();
         fileName += PadAckFile.FileNameSufix;
         File file = new File(getPadBaseDir(), fileName);
         try {
@@ -256,9 +256,11 @@ public class PadSimulationManager {
 
         PadSimFile padFileNew = EntityGraph.businessDuplicate(padFile);
         padFileNew.originalFile().set(padStub);
+        // change the pad name
+        // YYYMMDDhhmmss_pad.COMPANYID
         String filename = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        filename += "_" + FilenameUtils.getExtension(padFile.fileName().getValue());
         filename += "." + padFileNew.companyId().getValue();
-        filename += "." + FilenameUtils.getExtension(padFile.fileName().getValue());
         padFileNew.fileName().setValue(filename);
 
         padFileNew.state().clear();
