@@ -125,7 +125,7 @@ public class PadSimulationManager {
         updateAcknowledgments(padFile);
 
         //YYYYMMDDhhmmss_pad.COMPANYID_acknowledgement.csv
-        String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("."));
+        String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("_"));
         fileName += "_" + padFile.fundsTransferType().getValue().getFileNamePart();
         fileName += "." + padFile.companyId().getValue();
         fileName += PadAckFile.FileNameSufix;
@@ -337,7 +337,7 @@ public class PadSimulationManager {
 
     String reconciliationReportFileName(PadSimFile padFile) {
         // YYYYMMDDhhmmss_reconciliation_rpt_pad.COMPANYID
-        String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("."));
+        String fileName = padFile.fileName().getValue().substring(0, padFile.fileName().getValue().indexOf("_"));
         fileName += PadReconciliationFile.FileNameSufix;
         fileName += "_" + padFile.fundsTransferType().getValue().getFileNamePart();
         fileName += "." + padFile.companyId().getValue();
