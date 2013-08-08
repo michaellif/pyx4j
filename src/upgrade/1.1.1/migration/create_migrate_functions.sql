@@ -127,6 +127,34 @@ BEGIN
         ALTER TABLE  maintenance_request ADD COLUMN cancellation_note VARCHAR(2048);
         
         
+        -- maintenance_request_category
+       
+        ALTER TABLE maintenance_request_category ADD COLUMN root BIGINT;
+        
+        
+        -- maintenance_request_metadata
+        
+        CREATE TABLE maintenance_request_metadata
+        (
+                id                              BIGINT                  NOT NULL,
+                root_category                   BIGINT,
+                        CONSTRAINT maintenance_request_metadata_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE maintenance_request_metadata OWNER TO vista;
+        
+        
+        -- maintenance_request_priority
+        
+        ALTER TABLE maintenance_request_priority ADD COLUMN meta BIGINT;
+        
+        
+        -- maintenance_request_status
+        
+        
+        ALTER TABLE maintenance_request_status ADD COLUMN meta BIGINT;
+        
+        
         -- maintenance_request_schedule
         
         CREATE TABLE maintenance_request_schedule
@@ -263,6 +291,18 @@ BEGIN
         );
         
         ALTER TABLE yardi_building_origination OWNER TO vista;
+        
+        -- yardi_maintenance_meta_origination
+        
+        CREATE TABLE yardi_maintenance_meta_origination
+        (
+                id                      BIGINT                  NOT NULL,
+                metadata                BIGINT,
+                yardi_interface_id      BIGINT,
+                        CONSTRAINT yardi_maintenance_meta_origination_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE yardi_maintenance_meta_origination OWNER TO vista;
         
         /**
         ***     =====================================================================================================
@@ -459,6 +499,11 @@ BEGIN
         -- foreign key
         
         ALTER TABLE customer_picture ADD CONSTRAINT customer_picture_customer_fk FOREIGN KEY(customer) REFERENCES customer(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_category ADD CONSTRAINT maintenance_request_category_root_fk FOREIGN KEY(root) REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_metadata ADD CONSTRAINT maintenance_request_metadata_root_category_fk FOREIGN KEY(root_category) 
+                REFERENCES maintenance_request_category(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_priority ADD CONSTRAINT maintenance_request_priority_meta_fk FOREIGN KEY(meta) REFERENCES maintenance_request_metadata(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE maintenance_request_status ADD CONSTRAINT maintenance_request_status_meta_fk FOREIGN KEY(meta) REFERENCES maintenance_request_metadata(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE maintenance_request_schedule ADD CONSTRAINT maintenance_request_schedule_request_fk FOREIGN KEY(request) REFERENCES maintenance_request(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_large_fk FOREIGN KEY(large) REFERENCES site_image_resource(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_locale_fk FOREIGN KEY(locale) REFERENCES available_locale(id)  DEFERRABLE INITIALLY DEFERRED;
@@ -467,6 +512,8 @@ BEGIN
         ALTER TABLE site_descriptor$pmc_info ADD CONSTRAINT site_descriptor$pmc_info_owner_fk FOREIGN KEY(owner) REFERENCES site_descriptor(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE site_descriptor$pmc_info ADD CONSTRAINT site_descriptor$pmc_info_value_fk FOREIGN KEY(value) REFERENCES html_content(id)  DEFERRABLE INITIALLY DEFERRED;
         ALTER TABLE yardi_building_origination ADD CONSTRAINT yardi_building_origination_building_fk FOREIGN KEY(building) REFERENCES building(id)  DEFERRABLE INITIALLY DEFERRED;
+        ALTER TABLE yardi_maintenance_meta_origination ADD CONSTRAINT yardi_maintenance_meta_origination_metadata_fk FOREIGN KEY(metadata) 
+                REFERENCES maintenance_request_metadata(id)  DEFERRABLE INITIALLY DEFERRED;
 
 
         
@@ -501,6 +548,8 @@ BEGIN
         -- not null
         
         ALTER TABLE aggregated_transfer ALTER COLUMN funds_transfer_type SET NOT NULL;
+        -- ALTER TABLE maintenance_request_priority ALTER COLUMN meta SET NOT NULL;
+        -- ALTER TABLE maintenance_request_status ALTER COLUMN meta SET NOT NULL;
        
         /**
         ***     ====================================================================================================
@@ -511,6 +560,10 @@ BEGIN
         **/
         
         CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
+        CREATE INDEX maintenance_request_category_parent_idx ON maintenance_request_category USING btree (parent);
+        CREATE INDEX maintenance_request_category_root_idx ON maintenance_request_category USING btree (root);
+        CREATE INDEX maintenance_request_priority_meta_idx ON maintenance_request_priority USING btree (meta);
+        CREATE INDEX maintenance_request_status_meta_idx ON maintenance_request_status USING btree (meta);
         CREATE INDEX maintenance_request_schedule_request_idx ON maintenance_request_schedule USING btree (request);
         CREATE INDEX site_descriptor$pmc_info_owner_idx ON site_descriptor$pmc_info USING btree (owner);
         

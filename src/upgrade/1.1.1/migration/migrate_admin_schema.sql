@@ -65,6 +65,7 @@ SET search_path = '_admin_';
         ALTER TABLE scheduler_trigger_details DROP CONSTRAINT scheduler_trigger_details_id_discriminator_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_details_discriminator_d_ck;
         ALTER TABLE scheduler_trigger DROP CONSTRAINT scheduler_trigger_trigger_type_e_ck;
+        ALTER TABLE scheduler_trigger_notification DROP CONSTRAINT scheduler_trigger_notification_event_e_ck;
 
         
         /**
@@ -569,6 +570,8 @@ SET search_path = '_admin_';
                 'paymentsReceiveAcknowledgment', 'paymentsReceiveReconciliation', 'paymentsScheduledCreditCards', 'paymentsScheduledEcheck', 'paymentsTenantSure', 
                 'paymentsUpdate', 'tenantSureCancellation', 'tenantSureHQUpdate', 'tenantSureReports', 'tenantSureTransactionReports', 'test', 'updateArrears', 
                 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
+        ALTER TABLE scheduler_trigger_notification ADD CONSTRAINT scheduler_trigger_notification_event_e_ck 
+                CHECK ((event) IN ('All', 'Completed', 'Error', 'Failed', 'NonEmpty'));
 
         
 

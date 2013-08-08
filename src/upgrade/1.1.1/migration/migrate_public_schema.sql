@@ -37,11 +37,13 @@ BEGIN TRANSACTION;
  CREATE SEQUENCE dev_equifax_simulator_data_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE direct_debit_record_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE global_crm_user_index_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE maintenance_request_metadata_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE maintenance_request_schedule_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE notice_of_entry_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE pad_debit_record_transaction_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE site_descriptor$pmc_info_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  CREATE SEQUENCE yardi_building_origination_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
+ CREATE SEQUENCE yardi_maintenance_meta_origination_seq START WITH 1 INCREMENT BY 1 NO MAXVALUE NO MINVALUE CACHE 1;
  
 
   
@@ -57,12 +59,14 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE dev_pad_sim_file_seq OWNER TO vista ;
  ALTER SEQUENCE direct_debit_record_seq OWNER TO vista ;
  ALTER SEQUENCE global_crm_user_index_seq OWNER TO vista ;
+ ALTER SEQUENCE maintenance_request_metadata_seq OWNER TO vista ;
  ALTER SEQUENCE maintenance_request_schedule_seq OWNER TO vista ;
  ALTER SEQUENCE notice_of_entry_seq OWNER TO vista ;
  ALTER SEQUENCE portal_logo_image_resource_seq OWNER TO vista ;
  ALTER SEQUENCE pad_debit_record_transaction_seq OWNER TO vista ;
  ALTER SEQUENCE site_descriptor$pmc_info_seq OWNER TO vista ;
  ALTER SEQUENCE yardi_building_origination_seq OWNER TO vista ;
+ ALTER SEQUENCE yardi_maintenance_meta_origination_seq OWNER TO vista ;
  
 COMMIT;
 
