@@ -53,6 +53,27 @@ BEGIN
         /**
         ***     ======================================================================================================
         ***
+        ***             DROP INDEXES
+        ***
+        ***     ======================================================================================================
+        **/
+        
+        /**
+        ***    ======================================================================================================
+        ***
+        ***             Very special case for billing_arrears_snapshot_from_date_to_date_idx
+        ***             This index doesn''t exist in new schemas, and might bloated for schemas
+        ***             where it does exists due to removal of extra rows from billing_arrears_snapshot table 
+        ***             So I''ll just drop and recreate it
+        ***
+        ***     ===================================================================================================== 
+        **/
+        
+        DROP INDEX IF EXISTS billing_arrears_snapshot_from_date_to_date_idx;
+        
+        /**
+        ***     ======================================================================================================
+        ***
         ***             DROP TABLES 
         ***
         ***     ======================================================================================================
@@ -558,6 +579,12 @@ BEGIN
         ***
         ***     ====================================================================================================
         **/
+        
+        -- billing_arrears_snapshot -GiST index!
+        
+        CREATE INDEX billing_arrears_snapshot_from_date_to_date_idx ON billing_arrears_snapshot 
+                USING GiST (box(point(from_date,from_date),point(to_date,to_date)) box_ops);
+        
         
         CREATE UNIQUE INDEX id_assignment_item_policy_target_idx ON id_assignment_item USING btree (policy, target);
         CREATE INDEX maintenance_request_category_parent_idx ON maintenance_request_category USING btree (parent);
