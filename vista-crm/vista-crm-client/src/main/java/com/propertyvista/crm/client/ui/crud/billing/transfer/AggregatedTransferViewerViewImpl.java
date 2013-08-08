@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.AggregatedTransfer;
 import com.propertyvista.domain.financial.AggregatedTransfer.AggregatedTransferStatus;
+import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.domain.financial.PaymentRecord;
 
 public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<AggregatedTransfer> implements AggregatedTransferViewerView {
@@ -72,8 +73,8 @@ public class AggregatedTransferViewerViewImpl extends CrmViewerViewImplBase<Aggr
     public void populate(AggregatedTransfer value) {
         super.populate(value);
 
-        setActionVisible(cancelAction, value.status().getValue() == AggregatedTransferStatus.Rejected
-                && value.status().getValue() != AggregatedTransferStatus.Canceled);
+        setActionVisible(cancelAction, value.fundsTransferType().getValue() == FundsTransferType.PreAuthorizedDebit
+                && value.status().getValue() == AggregatedTransferStatus.Rejected && value.status().getValue() != AggregatedTransferStatus.Canceled);
     }
 
     @Override
