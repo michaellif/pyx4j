@@ -28,17 +28,15 @@ CREATE OR REPLACE VIEW _dba_.pmc_stats AS
                 b.row_count AS units,
                 c.row_count AS leases,
                 d.row_count AS payment_records,
-                e.row_count AS customers_accepted_terms,
-                f.row_count AS customer_users,
-                g.row_count AS insurance_certificates
+                e.row_count AS customer_users,
+                f.row_count AS tenant_sure
         FROM    _admin_.admin_pmc ap
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('building')) a ON (ap.namespace = a.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('apt_unit')) b ON (a.pmc = b.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('lease')) c ON (a.pmc = c.pmc)
         JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('payment_record')) d ON (a.pmc = d.pmc)
-        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer_accepted_terms')) e ON (a.pmc = e.pmc)
-        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer_user')) f ON (a.pmc = f.pmc)
-        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('insurance_certificate')) g ON (a.pmc = g.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('customer',ARRAY['registered_in_portal'])) e ON (a.pmc = e.pmc)
+        JOIN    (SELECT * FROM _dba_.count_rows_all_pmc('insurance_certificate',ARRAY['id_discriminator = ''InsuranceTenantSure'' '])) f ON (a.pmc = f.pmc)
         ORDER BY ap.id
 );
         
