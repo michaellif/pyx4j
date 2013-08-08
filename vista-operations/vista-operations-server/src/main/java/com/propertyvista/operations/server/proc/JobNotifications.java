@@ -22,6 +22,7 @@ import com.pyx4j.server.mail.Mail;
 import com.pyx4j.server.mail.MailMessage;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.operations.domain.scheduler.Run;
@@ -45,6 +46,7 @@ public class JobNotifications {
         case PartiallyCompleted:
         case Failed:
             events.add(TriggerNotificationEvent.Error);
+            events.add(TriggerNotificationEvent.Failed);
             events.add(TriggerNotificationEvent.NonEmpty);
             break;
         default:
@@ -53,6 +55,9 @@ public class JobNotifications {
 
         if (run.executionReport().total().getValue(0L) > 0) {
             events.add(TriggerNotificationEvent.NonEmpty);
+        }
+        if (run.executionReport().failed().getValue(0L) > 0) {
+            events.add(TriggerNotificationEvent.Failed);
         }
 
         for (TriggerNotification notificationCfg : trigger.notifications()) {
@@ -70,6 +75,13 @@ public class JobNotifications {
         m.setSubject(SimpleMessageFormat.format("Trigger Run notification {0} {1}", trigger.name(), run.status()));
 
         String message = "<html><body>";
+
+        // Distinguish test environments
+        Integer enviromentId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).enviromentId();
+        if (enviromentId != null) {
+            message += SimpleMessageFormat.format("Env{0}<br/>\n", enviromentId);
+        }
+
         message += SimpleMessageFormat.format("Execution of process {0} is {1},<br/>\n", trigger.name(), run.status());
         message += SimpleMessageFormat.format("For Date: {0}<br/>\n", run.forDate());
         message += SimpleMessageFormat.format("Statistics: {0}<br/>\n", run.executionReport().getStringView());

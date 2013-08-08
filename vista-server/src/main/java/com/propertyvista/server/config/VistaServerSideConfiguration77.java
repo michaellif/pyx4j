@@ -46,7 +46,7 @@ public class VistaServerSideConfiguration77 extends VistaServerSideConfiguration
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Property Vista Support77\" <support.www33@birchwoodsoftwaregroup.com>";
+        return "\"Vista Support 77\" <support.www77@birchwoodsoftwaregroup.com>";
     }
 
 }

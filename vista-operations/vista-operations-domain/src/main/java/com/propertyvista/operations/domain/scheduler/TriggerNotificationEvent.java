@@ -25,6 +25,8 @@ public enum TriggerNotificationEvent implements Serializable {
 
     Error,
 
+    Failed,
+
     Completed,
 
     NonEmpty;

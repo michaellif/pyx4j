@@ -31,6 +31,7 @@ public enum RunStatus implements Serializable {
 
     PartiallyCompleted,
 
+    //TODO rename to Erred
     Failed;
 
     @Override

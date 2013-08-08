@@ -46,7 +46,7 @@ public class VistaServerSideConfiguration33 extends VistaServerSideConfiguration
 
     @Override
     public String getApplicationEmailSender() {
-        return "\"Property Vista Support33\" <support.www33@birchwoodsoftwaregroup.com>";
+        return "\"Vista Support 33\" <support.www33@birchwoodsoftwaregroup.com>";
     }
 
 }
