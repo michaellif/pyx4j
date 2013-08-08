@@ -158,7 +158,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                             }
                         };
                     }
-                })).componentWidth("35em").build());
+                }), 35).build());
 
                 content.setBR(++row, 0, 2);
 

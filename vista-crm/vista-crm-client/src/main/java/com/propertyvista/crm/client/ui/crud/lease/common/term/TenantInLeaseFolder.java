@@ -30,6 +30,8 @@ import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CNumberLabel;
 import com.pyx4j.forms.client.ui.RevalidationTrigger;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -51,6 +53,7 @@ import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.common.client.ui.validators.BirthdayDateValidator;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
+import com.propertyvista.domain.security.common.AbstractPmcUser;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.CustomerScreening;
 import com.propertyvista.domain.tenant.PersonRelationship;
@@ -337,7 +340,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 int row = -1;
 
                 content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
-                content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod()), true).componentWidth("35em").build());
+
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
+
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+
+                content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod()), 35).build());
+
                 content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
 
                 return content;
@@ -348,6 +358,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                 super.onValueSet(populate);
 
                 expirationWarning.prepareView(getValue().expiring());
+
+                get(proto().id()).setVisible(!getValue().id().isNull());
+                get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+                get(proto().creator()).setVisible(!getValue().creator().isNull());
             }
         }
     }
