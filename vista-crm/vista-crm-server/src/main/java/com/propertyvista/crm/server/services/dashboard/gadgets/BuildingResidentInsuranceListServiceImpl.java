@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.server.services.dashboard.gadgets;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Vector;
 
@@ -20,17 +21,21 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.BuildingResidentInsuranceCoverageDTO;
 import com.propertyvista.crm.rpc.services.dashboard.gadgets.BuildingResidentInsuranceListService;
+import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
@@ -42,7 +47,28 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
             EntityListCriteria<BuildingResidentInsuranceCoverageDTO> criteria) {
 
         Vector<BuildingResidentInsuranceCoverageDTO> values = new Vector<BuildingResidentInsuranceCoverageDTO>();
-        Iterator<Building> buildingIterator = Persistence.service().query(null, EntityQueryCriteria.create(Building.class), AttachLevel.Attached);
+        // extract buildings filter:
+
+        BuildingResidentInsuranceCoverageDTO proto = EntityFactory.getEntityPrototype(BuildingResidentInsuranceCoverageDTO.class);
+        Serializable buildingsFilter = null;
+        if (criteria.getFilters() != null) {
+            for (Iterator<Criterion> criteriaIterator = criteria.getFilters().iterator(); criteriaIterator.hasNext();) {
+                Criterion criterion = criteriaIterator.next();
+                if (criterion instanceof PropertyCriterion) {
+                    PropertyCriterion propertyCriterion = (PropertyCriterion) criterion;
+                    if (propertyCriterion.getPropertyPath().equals(proto.buildingFilter().getPath().toString())) {
+                        criteriaIterator.remove();
+                        buildingsFilter = propertyCriterion.getValue();
+                    }
+                }
+            }
+        }
+
+        EntityQueryCriteria<Building> buildingsCriteria = EntityQueryCriteria.create(Building.class);
+        if (buildingsFilter != null) {
+            buildingsCriteria.in(buildingsCriteria.proto().id(), (Vector<Building>) buildingsFilter);
+        }
+        Iterator<Building> buildingIterator = Persistence.secureQuery(null, buildingsCriteria, AttachLevel.Attached);
 
         while (buildingIterator.hasNext()) {
             Building b = buildingIterator.next();
@@ -62,7 +88,12 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
             insuranceCriteria.or().left(PropertyCriterion.isNull(insuranceCriteria.proto().expiryDate()))
                     .right(PropertyCriterion.ge(insuranceCriteria.proto().expiryDate(), now));
             insuranceCriteria.le(insuranceCriteria.proto().inceptionDate(), now);
-            // TODO add insurance policy
+
+            TenantInsurancePolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(b, TenantInsurancePolicy.class);
+            if (policy.requireMinimumLiability().isBooleanTrue()) {
+                insuranceCriteria.ge(insuranceCriteria.proto().liabilityCoverage(), policy.minimumRequiredLiability().getValue());
+            }
+
             dto.unitsWithInsuranceCount().setValue(Persistence.service().count(insuranceCriteria));
             if (dto.units().getValue() > 0) {
                 dto.unitsWithInsuranceShare().setValue(dto.unitsWithInsuranceCount().getValue() / (double) dto.units().getValue());

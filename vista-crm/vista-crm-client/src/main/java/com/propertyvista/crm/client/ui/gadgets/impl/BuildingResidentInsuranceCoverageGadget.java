@@ -21,13 +21,17 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.forms.client.ui.datatable.ColumnDescriptor;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.site.client.ui.prime.lister.EntityDataTablePanel;
 import com.pyx4j.site.client.ui.prime.lister.ListerDataSource;
 
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEvent;
+import com.propertyvista.crm.client.ui.board.events.BuildingSelectionChangedEventHandler;
 import com.propertyvista.crm.client.ui.gadgets.common.GadgetInstanceBase;
+import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.IBuildingFilterContainer;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils;
 import com.propertyvista.crm.client.ui.gadgets.util.ListerUtils.ItemSelectCommand;
 import com.propertyvista.crm.client.ui.gadgets.util.Provider;
@@ -56,8 +60,27 @@ public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<
         setDefaultPopulator(new Populator() {
             @Override
             public void populate() {
+                lister.getDataTablePanel().setPageSize(getMetadata().buildingInsuranceCoverageListerSettings().pageSize().getValue());
+
+                lister.getDataSource().clearPreDefinedFilters();
+                if (!containerBoard.getSelectedBuildingsStubs().isEmpty()) {
+                    lister.getDataSource().addPreDefinedFilter(
+                            PropertyCriterion.in(lister.proto().buildingFilter(), containerBoard.getSelectedBuildingsStubs()));
+                }
+
                 lister.obtain(0);
                 populateSucceded();
+            }
+        });
+    }
+
+    @Override
+    public void setContainerBoard(IBuildingFilterContainer board) {
+        super.setContainerBoard(board);
+        board.addBuildingSelectionChangedEventHandler(new BuildingSelectionChangedEventHandler() {
+            @Override
+            public void onBuildingSelectionChanged(BuildingSelectionChangedEvent event) {
+                populate();
             }
         });
     }
