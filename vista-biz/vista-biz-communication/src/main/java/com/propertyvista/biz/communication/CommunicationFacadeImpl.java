@@ -336,6 +336,9 @@ public class CommunicationFacadeImpl implements CommunicationFacade {
         if (disabled) {
             return null;
         }
+        if (sendTo == null) {
+            return null;
+        }
         MailMessage m = MessageTemplates.createMaintenanceRequestEmail(emailType, request);
         m.setTo(sendTo);
         if (MailDeliveryStatus.Success != Mail.send(m)) {
