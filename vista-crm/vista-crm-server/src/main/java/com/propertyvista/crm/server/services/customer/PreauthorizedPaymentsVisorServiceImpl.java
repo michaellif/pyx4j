@@ -67,8 +67,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     public void create(AsyncCallback<PreauthorizedPaymentDTO> callback, Tenant tenantId) {
         PreauthorizedPaymentDTO papDto = EntityFactory.create(PreauthorizedPaymentDTO.class);
 
-        Persistence.service().retrieve(papDto.creator());
-
         papDto.tenant().set(tenantId);
 
         fillCoveredItemsDto(papDto);
@@ -168,6 +166,8 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
 
     private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
+
+        Persistence.service().retrieve(papDto.creator(), AttachLevel.ToStringMembers);
 
         updateCoveredItemsDto(papDto);
         fillCoveredItemsDto(papDto);
