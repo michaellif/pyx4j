@@ -86,9 +86,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(
                 ++row,
                 0,
-                2,
                 new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
-                        RadioGroup.Layout.HORISONTAL)), 22, true).build());
+                        RadioGroup.Layout.HORISONTAL)), 35).build());
 
         main.setH3(++row, 0, 2, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
