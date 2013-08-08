@@ -94,12 +94,8 @@ public class CustomSkinProxyServlet extends HttpServlet {
         String path = request.getPathInfo();
         int hostEnd = path.indexOf('/', 1);
         String host = path.substring(1, hostEnd);
-        ensureWhitelisted(host);
         String servicePath = path.substring(hostEnd);
         String url = new URL("http", host, 80, servicePath).toExternalForm();
-//        if (request.getQueryString() != null) {
-//            url += "?" + request.getQueryString();
-//        }
         return url;
     }
 
@@ -125,6 +121,7 @@ public class CustomSkinProxyServlet extends HttpServlet {
             long startTime = System.currentTimeMillis();
             boolean sucsess = false;
             GetMethod method = new GetMethod(url);
+            ensureWhitelisted(method.getURI().getHost());
             method.setFollowRedirects(true);
             try {
                 status = client.executeMethod(method);
