@@ -24,6 +24,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.rpc.InMemeoryListService;
+import com.pyx4j.entity.server.IEntityPersistenceService.ICursorIterator;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -31,6 +32,7 @@ import com.pyx4j.entity.shared.criterion.Criterion;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.gwt.server.IOUtils;
 
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.crm.rpc.dto.gadgets.BuildingResidentInsuranceCoverageDTO;
@@ -68,7 +70,7 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
         if (buildingsFilter != null) {
             buildingsCriteria.in(buildingsCriteria.proto().id(), (Vector<Building>) buildingsFilter);
         }
-        Iterator<Building> buildingIterator = Persistence.secureQuery(null, buildingsCriteria, AttachLevel.Attached);
+        ICursorIterator<Building> buildingIterator = Persistence.secureQuery(null, buildingsCriteria, AttachLevel.Attached);
 
         while (buildingIterator.hasNext()) {
             Building b = buildingIterator.next();
@@ -100,6 +102,7 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
             }
             values.add(dto);
         }
+        IOUtils.closeQuietly(buildingIterator);
 
         new InMemeoryListService<BuildingResidentInsuranceCoverageDTO>(values).list(callback, criteria);
     }
