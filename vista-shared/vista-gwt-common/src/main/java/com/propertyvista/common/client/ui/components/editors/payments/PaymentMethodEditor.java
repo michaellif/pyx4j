@@ -81,7 +81,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 10).build());
-        main.setWidget(row, 1, new FormDecoratorBuilder(inject(((PaymentMethod) proto()).creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+        if (proto() instanceof PaymentMethod) {
+            main.setWidget(row, 1, new FormDecoratorBuilder(inject(((PaymentMethod) proto()).creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+        }
 
         main.setWidget(
                 ++row,
@@ -136,7 +138,9 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         if (isBound(proto().id())) {
             get(proto().id()).setVisible(false);
             get(proto().creationDate()).setVisible(false);
-            get(((PaymentMethod) proto()).creator()).setVisible(false);
+            if (proto() instanceof PaymentMethod) {
+                get(((PaymentMethod) proto()).creator()).setVisible(false);
+            }
         }
     }
 
@@ -166,7 +170,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         if (isBound(proto().id())) {
             get(proto().id()).setVisible(!getValue().id().isNull());
             get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
-            if (getValue().isInstanceOf(PaymentMethod.class)) {
+            if (proto() instanceof PaymentMethod) {
                 get(((PaymentMethod) proto()).creator()).setVisible(!((PaymentMethod) getValue()).creator().isNull());
             }
         }
