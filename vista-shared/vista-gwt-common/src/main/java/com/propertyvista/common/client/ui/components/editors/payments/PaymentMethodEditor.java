@@ -132,9 +132,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         (get(proto().type())).setNote(null);
         setBillingAddressVisible(false);
 
-        get(proto().id()).setVisible(false);
-        get(proto().creationDate()).setVisible(false);
-        get(((PaymentMethod) proto()).creator()).setVisible(false);
+        // setup CRM only block:
+        if (isBound(proto().id())) {
+            get(proto().id()).setVisible(false);
+            get(proto().creationDate()).setVisible(false);
+            get(((PaymentMethod) proto()).creator()).setVisible(false);
+        }
     }
 
     @Override
@@ -159,10 +162,13 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
         paymentDetailsHeader.setVisible(this.contains(proto().details()));
 
-        get(proto().id()).setVisible(!getValue().id().isNull());
-        get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
-        if (getValue().isInstanceOf(PaymentMethod.class)) {
-            get(((PaymentMethod) proto()).creator()).setVisible(!((PaymentMethod) getValue()).creator().isNull());
+        // setup CRM only block:
+        if (isBound(proto().id())) {
+            get(proto().id()).setVisible(!getValue().id().isNull());
+            get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
+            if (getValue().isInstanceOf(PaymentMethod.class)) {
+                get(((PaymentMethod) proto()).creator()).setVisible(!((PaymentMethod) getValue()).creator().isNull());
+            }
         }
     }
 
