@@ -98,6 +98,7 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
     public void addValidations() {
         super.addValidations();
 
+        get(proto().customer().emergencyContacts()).setMandatory(!VistaFeatures.instance().yardiIntegration());
         get(proto().customer().emergencyContacts()).addValueValidator(new EditableValueValidator<List<EmergencyContact>>() {
             @Override
             public ValidationError isValid(CComponent<List<EmergencyContact>> component, List<EmergencyContact> value) {
@@ -116,8 +117,6 @@ public class TenantForm extends LeaseParticipantForm<TenantDTO> {
 
         get(proto().customer().person().sex()).setMandatory(!VistaFeatures.instance().yardiIntegration());
         get(proto().customer().person().birthDate()).setMandatory(!VistaFeatures.instance().yardiIntegration());
-
-        get(proto().customer().emergencyContacts()).setMandatory(!VistaFeatures.instance().yardiIntegration());
     }
 
     private TwoColumnFlexFormPanel createContactsTab(String title) {
