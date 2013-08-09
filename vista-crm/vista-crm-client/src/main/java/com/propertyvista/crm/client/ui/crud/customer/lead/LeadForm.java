@@ -72,18 +72,26 @@ public class LeadForm extends CrmEntityForm<Lead> {
         super.addValidations();
 
         get(proto().guests()).addValueValidator(new EditableValueValidator<List<Guest>>() {
+
+
+
             @Override
             public ValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
                 Boolean hasContact = false;
                 if (value != null) {
                     for (Guest g : value) {
-                        if (!g.person().homePhone().isNull() || !g.person().workPhone().isNull() || !g.person().email().isNull()) {
+                        //@formatter:off
+                        if (!g.person().email().isNull() || 
+                            !g.person().homePhone().isNull() || 
+                            !g.person().workPhone().isNull() || 
+                            !g.person().mobilePhone().isNull()) {
+                        //@formatter:on
                             hasContact = true;
                             break;
                         }
                     }
                 }
-                return hasContact ? null : new ValidationError(component, i18n.tr("No contact info provided"));
+                return hasContact ? null : new ValidationError(component, i18n.tr("No contact information (email and/or phone #) has been provided"));
             }
         });
     }
@@ -93,6 +101,9 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         int row = -1;
         flexPanel.setWidget(++row, 0, 2, inject(proto().guests(), new GuestFolder(isEditable())));
+
+        flexPanel.setBR(++row, 0, 2);
+
         flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().refSource()), 15, true).build());
         flexPanel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().comments()), 55, true).build());
 
