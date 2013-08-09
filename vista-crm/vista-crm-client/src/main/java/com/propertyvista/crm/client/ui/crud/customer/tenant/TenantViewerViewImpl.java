@@ -25,6 +25,7 @@ import com.pyx4j.widgets.client.dialog.OkDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.TenantDTO;
 import com.propertyvista.dto.TenantPortalAccessInformationDTO;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -38,6 +39,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
     private final MenuItem screeningAction;
 
     private final MenuItem maintenanceAction;
+
+    private final MenuItem registrationAction;
 
     public TenantViewerViewImpl() {
         setForm(new TenantForm(this));
@@ -76,12 +79,13 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         });
         addAction(maintenanceAction);
 
-        addAction(new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
+        registrationAction = new MenuItem(i18n.tr("Portal Registration Information"), new Command() {
             @Override
             public void execute() {
                 ((TenantViewerView.Presenter) getPresenter()).getPortalRegistrationInformation();
             }
-        }));
+        });
+        addAction(registrationAction);
     }
 
     @Override
@@ -89,6 +93,7 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         setActionVisible(passwordAction, false);
         setActionVisible(screeningAction, false);
         setActionVisible(maintenanceAction, false);
+        setActionVisible(registrationAction, false);
 
         super.reset();
     }
@@ -117,6 +122,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
         if (VistaFeatures.instance().yardiIntegration()) {
             setActionVisible(maintenanceAction, !value.isPotentialTenant().isBooleanTrue());
         }
+
+        setActionVisible(registrationAction, LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue()));
     }
 
     @Override

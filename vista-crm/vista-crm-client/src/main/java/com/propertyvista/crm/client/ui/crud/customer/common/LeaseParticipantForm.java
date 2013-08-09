@@ -27,8 +27,10 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.TimeUtils;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.images.EntityFolderImages;
+import com.pyx4j.forms.client.ui.CBooleanLabel;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEnumLabel;
 import com.pyx4j.forms.client.ui.CImage;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -57,6 +59,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.domain.tenant.CustomerScreening;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.GuarantorDTO;
 import com.propertyvista.dto.LeaseParticipantDTO;
 import com.propertyvista.dto.TenantDTO;
@@ -91,6 +94,11 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             ClientPolicyManager.setIdComponentEditabilityByPolicy(idTarget, get(proto().participantId()), getValue().getPrimaryKey());
         } else {
             get(proto().customer().personScreening()).setVisible(getValue().customer().personScreening().getPrimaryKey() != null);
+        }
+
+        if (rootClass.equals(TenantDTO.class)) {
+            get(((TenantDTO) proto()).customer().registeredInPortal()).setVisible(
+                    LeaseTermParticipant.Role.portalAccess().contains(((TenantDTO) getValue()).role().getValue()));
         }
     }
 
@@ -162,17 +170,17 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
         main.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().customer().person().email()), 15).build());
 
         row = 4;
-        if (!isEditable()) {
+        main.setBR(++row, 0, 2);
+        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 22).build());
+        main.setWidget(
+                row,
+                1,
+                new FormDecoratorBuilder(inject(proto().customer().personScreening(),
+                        new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 22).build());
 
-            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermV(), new CLeaseTermVHyperlink()), 15).build());
-            if (rootClass.equals(TenantDTO.class)) {
-                main.setWidget(row, 1, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role()), 10).build());
-            }
-            main.setWidget(
-                    ++row,
-                    0,
-                    new FormDecoratorBuilder(inject(proto().customer().personScreening(),
-                            new CEntityCrudHyperlink<CustomerScreening>(AppPlaceEntityMapper.resolvePlace(CustomerScreening.class))), 15).build());
+        if (rootClass.equals(TenantDTO.class)) {
+            main.setWidget(++row, 0, new FormDecoratorBuilder(inject(((TenantDTO) proto()).role(), new CEnumLabel()), 10).build());
+            main.setWidget(row, 1, new FormDecoratorBuilder(inject(((TenantDTO) proto()).customer().registeredInPortal(), new CBooleanLabel()), 2).build());
         }
 
         if (VistaFeatures.instance().yardiIntegration()) {
