@@ -151,7 +151,7 @@ abstract class AbstractReconciliationProcessor {
 
                 });
 
-                executionMonitor.addProcessedEvent("AggregatedTransfer", summary.netAmount().getValue());
+                executionMonitor.addInfoEvent("AggregatedTransfer", null, summary.netAmount().getValue());
 
             } catch (Throwable e) {
                 log.error("AggregatedTransfer {} creation failed", summary.id().getValue(), e);
@@ -191,22 +191,23 @@ abstract class AbstractReconciliationProcessor {
 
                 switch (debitRecord.reconciliationStatus().getValue()) {
                 case PROCESSED:
-                    executionMonitor.addProcessedEvent("Processed", debitRecord.amount().getValue());
+                    executionMonitor.addProcessedEvent("Payment Processed", debitRecord.amount().getValue());
                     break;
                 case REJECTED:
-                    executionMonitor.addFailedEvent("Rejected", debitRecord.amount().getValue());
+                    executionMonitor.addFailedEvent("Payment Rejected", debitRecord.amount().getValue());
                     break;
                 case RETURNED:
-                    executionMonitor.addFailedEvent("Returned", debitRecord.amount().getValue());
+                    executionMonitor.addFailedEvent("Payment Returned", debitRecord.amount().getValue());
                     break;
                 case DUPLICATE:
-                    executionMonitor.addErredEvent("Duplicate", debitRecord.amount().getValue(), "TransactionId " + debitRecord.transactionId().getValue());
+                    executionMonitor.addErredEvent("Payment Duplicate", debitRecord.amount().getValue(), "TransactionId "
+                            + debitRecord.transactionId().getValue());
                     break;
                 }
 
             } catch (Throwable e) {
                 log.error("payment transaction '" + debitRecord.transactionId().getValue() + "' processing error", e);
-                executionMonitor.addErredEvent("Error", debitRecord.amount().getValue(), e);
+                executionMonitor.addErredEvent("Payment Error", debitRecord.amount().getValue(), e);
             }
         }
 

@@ -49,25 +49,22 @@ public class AggregatedTransferForm extends CrmEntityForm<AggregatedTransfer> {
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentFee()), 10).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().grossPaymentCount()), 10).build());
 
-        TwoColumnFlexFormPanel amount = new TwoColumnFlexFormPanel();
-        int row2 = -1;
-        amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
-        amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
-        amount.setWidget(++row2, 0, new FormDecoratorBuilder(inject(proto().rejectItemsCount()), 5).build());
-        row2 = -1;
-        amount.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
-        amount.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
-        amount.setWidget(++row2, 1, new FormDecoratorBuilder(inject(proto().returnItemsCount()), 5).build());
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectItemsAmount()), 10).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().returnItemsAmount()), 10).build());
 
-        content.setWidget(++row, 0, amount);
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectItemsFee()), 10).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().returnItemsFee()), 10).build());
+
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().rejectItemsCount()), 5).build());
+        content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().returnItemsCount()), 5).build());
 
         content.setH3(++row, 0, 1, proto().payments().getMeta().getCaption());
-        content.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
+        content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getPaymentsListerView().asWidget());
         content.setH3(++row, 0, 1, proto().returnedPayments().getMeta().getCaption());
-        content.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
+        content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getReturnedPaymentsListerView().asWidget());
 
         content.setH3(++row, 0, 1, proto().rejectedBatchPayments().getMeta().getCaption());
-        content.setWidget(++row, 0, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
+        content.setWidget(++row, 0, 2, ((AggregatedTransferViewerView) getParentView()).getRejectedBatchPaymentsListerView().asWidget());
 
         selectTab(addTab(content));
 
