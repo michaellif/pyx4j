@@ -142,13 +142,16 @@ class DirectDebitFundsTransfer {
         }
 
         BigDecimal transactionAmount;
+        BigDecimal feeAmount;
+        // Make a transactions with amounts less then nominal see to appear in CRM and in transaction list  
         if (paymentRecord.amount().getValue().compareTo(directBankingFee) > 0) {
-            transactionAmount = paymentRecord.amount().getValue().subtract(directBankingFee);
-            executionMonitor.addInfoEvent("Fee amount", null, directBankingFee);
+            feeAmount = directBankingFee;
+            transactionAmount = paymentRecord.amount().getValue().subtract(feeAmount);
         } else {
             transactionAmount = new BigDecimal("0.01");
-            executionMonitor.addInfoEvent("Fee amount", null, paymentRecord.amount().getValue().subtract(transactionAmount));
+            feeAmount = paymentRecord.amount().getValue().subtract(transactionAmount);
         }
+        executionMonitor.addInfoEvent("Fee amount", null, feeAmount);
         padRecord.amount().setValue(padRecord.amount().getValue().add(transactionAmount));
 
         Persistence.service().persist(padRecord);
@@ -156,6 +159,7 @@ class DirectDebitFundsTransfer {
         PadDebitRecordTransaction transactionRecord = EntityFactory.create(PadDebitRecordTransaction.class);
         transactionRecord.padDebitRecord().set(padRecord);
         transactionRecord.paymentRecordKey().setValue(paymentRecord.getPrimaryKey());
+        transactionRecord.feeAmount().setValue(feeAmount);
         Persistence.service().persist(transactionRecord);
     }
 }

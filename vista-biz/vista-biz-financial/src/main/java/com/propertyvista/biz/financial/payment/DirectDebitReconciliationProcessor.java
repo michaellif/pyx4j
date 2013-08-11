@@ -13,6 +13,7 @@
  */
 package com.propertyvista.biz.financial.payment;
 
+import java.math.BigDecimal;
 import java.util.EnumSet;
 import java.util.concurrent.Callable;
 
@@ -52,6 +53,12 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
         AggregatedTransfer at = createAggregatedTransfer(summary);
         Persistence.service().persist(at);
 
+        // Override Caledon report values by calculating our onw fee
+        at.grossPaymentCount().setValue(0);
+        if (at.grossPaymentFee().isNull()) {
+            at.grossPaymentFee().setValue(BigDecimal.ZERO);
+        }
+
         // Validate payment records and add them to this aggregatedTransfer
         for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
             final PadDebitRecord padDebitRecord = getPadDebitRecord(debitRecord);
@@ -90,6 +97,8 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 switch (debitRecord.reconciliationStatus().getValue()) {
                 case PROCESSED:
                     paymentRecord.aggregatedTransfer().set(at);
+                    at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
+                    at.grossPaymentFee().setValue(at.grossPaymentFee().getValue().add(transactionRecord.feeAmount().getValue()));
                     break;
                 case REJECTED:
                     paymentRecord.aggregatedTransfer().set(at);
@@ -115,6 +124,8 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
             }
 
         }
+
+        Persistence.service().persist(at);
 
     }
 

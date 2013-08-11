@@ -13,6 +13,8 @@
  */
 package com.propertyvista.operations.domain.payment.pad;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.annotations.GwtBlacklist;
 import com.pyx4j.entity.annotations.Indexed;
@@ -26,6 +28,9 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.domain.VistaNamespace;
 
+/**
+ * Link from PadDebitRecord to PaymentRecord for payments that do not match one to one.
+ */
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @GwtBlacklist
@@ -38,5 +43,7 @@ public interface PadDebitRecordTransaction extends IEntity {
     PadDebitRecord padDebitRecord();
 
     IPrimitive<Key> paymentRecordKey();
+
+    IPrimitive<BigDecimal> feeAmount();
 
 }
