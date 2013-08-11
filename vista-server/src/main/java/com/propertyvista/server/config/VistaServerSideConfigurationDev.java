@@ -160,4 +160,10 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         //return VistaSettings.googleAnalyticsDevKey;
         return null;
     }
+
+    // The same simulated service will be used even when production is ON. 
+    @Override
+    public boolean isFundsTransferSimulationConfigurable() {
+        return true;
+    }
 }

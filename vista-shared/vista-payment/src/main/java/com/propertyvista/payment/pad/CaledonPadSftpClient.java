@@ -17,10 +17,10 @@ import java.io.File;
 
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.config.server.ServerSideConfiguration;
+import com.pyx4j.config.shared.ApplicationMode;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
-import com.propertyvista.config.VistaSystemsSimulationConfig;
 import com.propertyvista.domain.financial.FundsTransferType;
 import com.propertyvista.payment.pad.simulator.CaledonFundsTransferSimulatorSftpRetrieveFilter;
 import com.propertyvista.server.sftp.SftpClient;
@@ -34,17 +34,13 @@ public class CaledonPadSftpClient {
         configuration = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getCaledonFundsTransferConfiguration();
     }
 
-    private static boolean usePadSimulator() {
-        return VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.TRUE);
-    }
-
     public String sftpPut(FundsTransferType fundsTransferType, File file) {
         return SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.postDst));
     }
 
     public String sftpPutSim(FundsTransferType fundsTransferType, File file) {
-        if (!usePadSimulator()) {
-            throw new UserRuntimeException("PadSimulator is disabled");
+        if (!ApplicationMode.isDevelopment()) {
+            throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }
         return SftpClient.sftpPut(configuration, file, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.getSrc));
     }
@@ -56,8 +52,8 @@ public class CaledonPadSftpClient {
     }
 
     public CaledonFundsTransferSftpFile receiveFilesSim(File targetDirectory) throws SftpTransportConnectionException {
-        if (!usePadSimulator()) {
-            throw new UserRuntimeException("PadSimulator is disabled");
+        if (!ApplicationMode.isDevelopment()) {
+            throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }
         return SftpClient.receiveFile(configuration, new CaledonFundsTransferSimulatorSftpRetrieveFilter(targetDirectory),
                 CaledonFundsTransferDirectories.allPostDirectories());
@@ -68,8 +64,8 @@ public class CaledonPadSftpClient {
     }
 
     public void removeFilesSim(FundsTransferType fundsTransferType, String fileName) {
-        if (!CaledonPadSftpClient.usePadSimulator()) {
-            throw new UserRuntimeException("PadSimulator is disabled");
+        if (!ApplicationMode.isDevelopment()) {
+            throw new UserRuntimeException("FundsTransfer Simulator is not available");
         }
         SftpClient.removeFile(configuration, fundsTransferType.getDirectoryName(CaledonFundsTransferDirectories.postDst), fileName);
     }

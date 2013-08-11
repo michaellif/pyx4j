@@ -16,11 +16,11 @@ package com.propertyvista.biz.financial.payment;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.EnumSet;
-import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Executable;
@@ -45,7 +45,6 @@ import com.propertyvista.operations.domain.payment.pad.PadFileCreationNumber;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationFile;
 import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.data.PadAckFile;
-import com.propertyvista.server.jobs.TaskRunner;
 import com.propertyvista.server.sftp.SftpTransportConnectionException;
 
 public class FundsTransferCaledon {
@@ -56,9 +55,10 @@ public class FundsTransferCaledon {
             .getIntefaceCompanyId();
 
     public PadFile prepareFundsTransferFile(final FundsTransferType fundsTransferType) {
-        return TaskRunner.runAutonomousTransation(new Callable<PadFile>() {
+        return new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<PadFile, RuntimeException>() {
+
             @Override
-            public PadFile call() {
+            public PadFile execute() {
                 EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
                 criteria.eq(criteria.proto().companyId(), companyId);
                 criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
@@ -67,13 +67,12 @@ public class FundsTransferCaledon {
                 if (padFile == null) {
                     padFile = EntityFactory.create(PadFile.class);
                     padFile.status().setValue(PadFile.PadFileStatus.Creating);
-                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber(fundsTransferType));
+                    padFile.fileCreationNumber().setValue(getNextFileCreationNumber(fundsTransferType, false));
                     padFile.companyId().setValue(companyId);
                     padFile.fundsTransferType().setValue(fundsTransferType);
 
                     Persistence.service().persist(padFile);
-                    Persistence.service().commit();
-                    log.info("created PadFile {} for {}", padFile.fileCreationNumber().getValue(), companyId);
+                    log.info("created FundsTransferFile # {} for {} {}", padFile.fileCreationNumber().getValue(), companyId, fundsTransferType);
                 }
                 return padFile;
             }
@@ -116,6 +115,7 @@ public class FundsTransferCaledon {
             @Override
             public Void execute() {
                 padFile.status().setValue(PadFile.PadFileStatus.Sending);
+                padFile.fileCreationNumber().setValue(getNextFileCreationNumber(padFile.fundsTransferType().getValue(), true));
                 padFile.sent().setValue(new Date());
                 Persistence.service().merge(padFile);
                 return null;
@@ -188,22 +188,29 @@ public class FundsTransferCaledon {
     }
 
     /**
-     * Length 4 Must be incremented by one for each file submitted per Company ID
+     * Length 6
+     * Must be incremented by one for each file submitted to Caledon, Unique per Company ID and FundsTransferType
+     * 
+     * @param fundsTransferType
+     * @param consumeNumber
+     *            the file is sent or attempt to send is made, the sequence is changed
+     * @return
      */
-    private String getNextFileCreationNumber(FundsTransferType fundsTransferType) {
-        boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().usePadSimulator().getValue(Boolean.FALSE);
-
-        EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
-        criteria.eq(criteria.proto().simulator(), useSimulator);
-        criteria.eq(criteria.proto().companyId(), companyId);
-        criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
-
+    private String getNextFileCreationNumber(FundsTransferType fundsTransferType, boolean consumeNumber) {
+        boolean useSimulator = VistaSystemsSimulationConfig.getConfiguration().useFundsTransferSimulator().getValue(Boolean.FALSE);
         boolean useFileBaseSequence = !VistaDeployment.isVistaProduction();
         if (useSimulator) {
             useFileBaseSequence = false;
         }
 
-        PadFileCreationNumber sequence = Persistence.service().retrieve(criteria);
+        PadFileCreationNumber sequence;
+        {
+            EntityQueryCriteria<PadFileCreationNumber> criteria = EntityQueryCriteria.create(PadFileCreationNumber.class);
+            criteria.eq(criteria.proto().simulator(), useSimulator);
+            criteria.eq(criteria.proto().companyId(), companyId);
+            criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
+            sequence = Persistence.service().retrieve(criteria);
+        }
         if (sequence == null) {
             sequence = EntityFactory.create(PadFileCreationNumber.class);
             sequence.number().setValue(0);
@@ -217,14 +224,14 @@ public class FundsTransferCaledon {
 
         // Find and verify that previous file has acknowledgment
         {
-            EntityQueryCriteria<PadFile> previousFileCriteria = EntityQueryCriteria.create(PadFile.class);
-            previousFileCriteria.eq(previousFileCriteria.proto().companyId(), companyId);
-            previousFileCriteria.eq(previousFileCriteria.proto().fundsTransferType(), fundsTransferType);
-            previousFileCriteria.eq(previousFileCriteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, sequence.number().getValue()));
-            PadFile padFile = Persistence.service().retrieve(previousFileCriteria);
+            EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+            criteria.eq(criteria.proto().companyId(), companyId);
+            criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
+            criteria.eq(criteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, sequence.number().getValue()));
+            PadFile padFile = Persistence.service().retrieve(criteria);
             if (padFile != null) {
                 if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
-                    throw new Error("Can't send PAD file until previous file is processed");
+                    throw new Error("Can't send FundsTransfer File until previous file is Acknowledged or Canceled");
                 }
 
                 //If a file has rejected the corrected file must be submitted using the same file creation number.
@@ -234,16 +241,30 @@ public class FundsTransferCaledon {
             }
         }
 
-        int id = sequence.number().getValue() + 1;
-        if (id == 999999) {
-            id = 1;
+        int value = sequence.number().getValue() + 1;
+        if (value == 999999) {
+            value = 1;
         }
-        sequence.number().setValue(id);
-        Persistence.service().persist(sequence);
-        if (useFileBaseSequence) {
-            PadCaledonDev.saveFileCreationNumber(companyId, fundsTransferType, id);
+
+        // Assert file number duplication when creating the file, in other case index on the table will do assertions
+        if (!consumeNumber) {
+            EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
+            criteria.eq(criteria.proto().companyId(), companyId);
+            criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
+            criteria.eq(criteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, value));
+            if (Persistence.service().count(criteria) > 0) {
+                throw new Error(SimpleMessageFormat.format("FundsTransfer FileCreationNumber sequence is duplicated, the number ''{0}'' already exists", value));
+            }
         }
-        return fileCreationNumberFormat(useSimulator, id);
+
+        if (consumeNumber) {
+            sequence.number().setValue(value);
+            Persistence.service().persist(sequence);
+            if (useFileBaseSequence) {
+                PadCaledonDev.saveFileCreationNumber(companyId, fundsTransferType, value);
+            }
+        }
+        return fileCreationNumberFormat(useSimulator, value);
     }
 
     private String fileCreationNumberFormat(boolean useSimulator, int value) {
@@ -267,7 +288,7 @@ public class FundsTransferCaledon {
             return null;
         } else {
             executionMonitor.addInfoEvent("received file", padAkFile.fileName().getValue());
-            executionMonitor.addInfoEvent("fundsTransferType" + padAkFile.fundsTransferType().getStringView(), null);
+            executionMonitor.addInfoEvent("fundsTransferType", padAkFile.fundsTransferType().getStringView());
             executionMonitor.addInfoEvent("fileCreationNumber", padAkFile.fileCreationNumber().getValue());
         }
 

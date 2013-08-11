@@ -29,7 +29,6 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.config.VistaDeployment;
@@ -102,7 +101,7 @@ abstract class AbstractReconciliationProcessor {
         // Find MerchantAccount
         {
             EntityQueryCriteria<MerchantAccount> criteria = EntityQueryCriteria.create(MerchantAccount.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId()));
+            criteria.eq(criteria.proto().merchantTerminalId(), summary.merchantTerminalId());
             at.merchantAccount().set(Persistence.service().retrieve(criteria));
             if (at.merchantAccount().isNull()) {
                 throw new Error("Merchant Account '" + summary.merchantTerminalId().getValue() + "' not found");

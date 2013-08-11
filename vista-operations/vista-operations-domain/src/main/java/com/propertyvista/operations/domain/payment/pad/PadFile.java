@@ -18,6 +18,7 @@ import java.util.Date;
 
 import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.GwtBlacklist;
+import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.OrderBy;
 import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Table;
@@ -40,6 +41,7 @@ import com.propertyvista.domain.financial.FundsTransferType;
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @GwtBlacklist
+//TODO rename to FundsTransferFile
 public interface PadFile extends IEntity {
 
     public enum PadFileStatus {
@@ -89,14 +91,20 @@ public interface PadFile extends IEntity {
         }
     }
 
+    /**
+     * Must be incremented by one for each file submitted to Caledon, Unique per Company ID and FundsTransferType
+     */
+    @Indexed(group = { "n,1" }, uniqueConstraint = true)
     IPrimitive<String> fileCreationNumber();
 
     IPrimitive<String> fileName();
 
+    @Indexed(group = { "n,3" }, uniqueConstraint = true)
     IPrimitive<String> companyId();
 
     IPrimitive<PadFileStatus> status();
 
+    @Indexed(group = { "n,2" }, uniqueConstraint = true)
     IPrimitive<FundsTransferType> fundsTransferType();
 
     @Owned(cascade = {})

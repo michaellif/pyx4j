@@ -29,10 +29,10 @@ public class VistaSystemsSimulationConfig {
     static {
         configuration = EntityFactory.create(VistaSystemsSimulationConfigDTO.class);
         configuration.useEquifaxSimulator().setValue(VistaDemo.isDemo() || ApplicationMode.isDevelopment());
-        configuration.usePadSimulator().setValue(
+        configuration.useFundsTransferSimulator().setValue(
                 !EnumSet.of(VistaSystemIdentification.production, VistaSystemIdentification.staging).contains(VistaDeployment.getSystemIdentification()));
-        configuration.useCardServiceSimulator().setValue(configuration.usePadSimulator().getValue());
-        configuration.useDirectBankingSimulator().setValue(configuration.usePadSimulator().getValue());
+        configuration.useCardServiceSimulator().setValue(configuration.useFundsTransferSimulator().getValue());
+        configuration.useDirectBankingSimulator().setValue(configuration.useFundsTransferSimulator().getValue());
     }
 
     public static VistaSystemsSimulationConfigDTO getConfiguration() {

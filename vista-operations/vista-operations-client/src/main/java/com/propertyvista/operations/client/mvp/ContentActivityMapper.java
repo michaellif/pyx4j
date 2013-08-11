@@ -19,6 +19,7 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.site.client.activity.AppActivityMapper;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -208,59 +209,9 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (place instanceof OperationsSiteMap.Simulator.SimulatedDataPreload) {
-                        activity = new SimulatedDataPreloadActivity();
-
-                    } else if (place instanceof OperationsSiteMap.Simulator.DirectBankingSimRecord) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new DirectDebitSimRecordEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new DirectDebitSimRecordViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new DirectDebitSimRecordListerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof OperationsSiteMap.Simulator.DirectBankingSimFile) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new DirectDebitSimFileEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new DirectDebitSimFileViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new DirectDebitSimFileListerActivity(crudPlace);
-                            break;
-                        default:
-                            break;
-                        }
-
-                    } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimFile) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new PadFileEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new PadFileViewerActivity(crudPlace);
-                            break;
-                        case lister:
-                            activity = new PadFileListerActivity(crudPlace);
-                            break;
-                        }
-
-                    } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimBatch) {
-                        switch (crudPlace.getType()) {
-                        case editor:
-                            activity = new PadBatchEditorActivity(crudPlace);
-                            break;
-                        case viewer:
-                            activity = new PadBatchViewerActivity(crudPlace);
-                            break;
-                        }
+                    } else if (ApplicationMode.isDevelopment() && place instanceof OperationsSiteMap.DevelopmentOnlyPlace) {
+// All simulations go this this function
+                        activity = createDevelopmentOnlyActivity(place);
 
                     } else if (place instanceof OperationsSiteMap.Administration.AdminUsers) {
                         switch (crudPlace.getType()) {
@@ -367,41 +318,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                             activity = new MerchantAccountViewerActivity((CrudAppPlace) place);
                             break;
                         }
-// - Simulation
-                    } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                        case editor:
-                            activity = new CardServiceSimulationCardEditorActivity((CrudAppPlace) place);
-                            break;
-                        case lister:
-                            activity = new CardServiceSimulationCardListerActivity(place);
-                            break;
-                        }
-
-                    } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                        case editor:
-                            activity = new CardServiceSimulationTransactionEditorActivity((CrudAppPlace) place);
-                            break;
-                        case lister:
-                            activity = new CardServiceSimulationTransactionListerActivity(place);
-                            break;
-                        }
-
-                    } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
-                        switch (crudPlace.getType()) {
-                        case viewer:
-                        case editor:
-                            activity = new CardServiceSimulationMerchantAccountEditorActivity((CrudAppPlace) place);
-                            break;
-                        case lister:
-                            activity = new CardServiceSimulationMerchantAccountListerActivity(place);
-                            break;
-                        }
                     }
-
                 } else if (place instanceof OperationsSiteMap.Administration.EncryptedStorage) {
                     activity = new EncryptedStorageActivity((AppPlace) place);
 
@@ -429,4 +346,102 @@ public class ContentActivityMapper implements AppActivityMapper {
         });
 
     }
+
+    private Activity createDevelopmentOnlyActivity(Place place) {
+        Activity activity = null;
+        if (place instanceof CrudAppPlace) {
+            CrudAppPlace crudPlace = (CrudAppPlace) place;
+            if (place instanceof OperationsSiteMap.Simulator.SimulatedDataPreload) {
+                activity = new SimulatedDataPreloadActivity();
+
+            } else if (place instanceof OperationsSiteMap.Simulator.DirectBankingSimRecord) {
+                switch (crudPlace.getType()) {
+                case editor:
+                    activity = new DirectDebitSimRecordEditorActivity(crudPlace);
+                    break;
+                case viewer:
+                    activity = new DirectDebitSimRecordViewerActivity(crudPlace);
+                    break;
+                case lister:
+                    activity = new DirectDebitSimRecordListerActivity(crudPlace);
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.DirectBankingSimFile) {
+                switch (crudPlace.getType()) {
+                case editor:
+                    activity = new DirectDebitSimFileEditorActivity(crudPlace);
+                    break;
+                case viewer:
+                    activity = new DirectDebitSimFileViewerActivity(crudPlace);
+                    break;
+                case lister:
+                    activity = new DirectDebitSimFileListerActivity(crudPlace);
+                    break;
+                default:
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimFile) {
+                switch (crudPlace.getType()) {
+                case editor:
+                    activity = new PadFileEditorActivity(crudPlace);
+                    break;
+                case viewer:
+                    activity = new PadFileViewerActivity(crudPlace);
+                    break;
+                case lister:
+                    activity = new PadFileListerActivity(crudPlace);
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.PadSimulation.PadSimBatch) {
+                switch (crudPlace.getType()) {
+                case editor:
+                    activity = new PadBatchEditorActivity(crudPlace);
+                    break;
+                case viewer:
+                    activity = new PadBatchViewerActivity(crudPlace);
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationCard) {
+                switch (crudPlace.getType()) {
+                case viewer:
+                case editor:
+                    activity = new CardServiceSimulationCardEditorActivity((CrudAppPlace) place);
+                    break;
+                case lister:
+                    activity = new CardServiceSimulationCardListerActivity(place);
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationTransaction) {
+                switch (crudPlace.getType()) {
+                case viewer:
+                case editor:
+                    activity = new CardServiceSimulationTransactionEditorActivity((CrudAppPlace) place);
+                    break;
+                case lister:
+                    activity = new CardServiceSimulationTransactionListerActivity(place);
+                    break;
+                }
+
+            } else if (place instanceof OperationsSiteMap.Simulator.CardServiceSimulation.CardServiceSimulationMerchantAccount) {
+                switch (crudPlace.getType()) {
+                case viewer:
+                case editor:
+                    activity = new CardServiceSimulationMerchantAccountEditorActivity((CrudAppPlace) place);
+                    break;
+                case lister:
+                    activity = new CardServiceSimulationMerchantAccountListerActivity(place);
+                    break;
+                }
+
+            }
+
+        }
+        return activity;
+    }
+
 }

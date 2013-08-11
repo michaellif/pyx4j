@@ -23,6 +23,10 @@ import com.propertyvista.crm.rpc.CrmCrudAppPlace;
 
 public class OperationsSiteMap implements SiteMap {
 
+    public interface DevelopmentOnlyPlace {
+
+    }
+
     public static class Login extends AppPlace implements PublicPlace {
     }
 
@@ -142,20 +146,20 @@ public class OperationsSiteMap implements SiteMap {
 
     public static class Simulator extends AppPlace {
 
-        public static class CardServiceSimulation extends CrmCrudAppPlace {
+        public static class CardServiceSimulation extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             @PlaceProperties(caption = "Simulated Card", navigLabel = "Cards")
-            public static class CardServiceSimulationCard extends CrmCrudAppPlace {
+            public static class CardServiceSimulationCard extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
 
             @PlaceProperties(caption = "Simulated Card Transaction", navigLabel = "Card Transactions")
-            public static class CardServiceSimulationTransaction extends CrmCrudAppPlace {
+            public static class CardServiceSimulationTransaction extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
 
             @PlaceProperties(caption = "Simulated Card Merchant", navigLabel = "Card Merchants")
-            public static class CardServiceSimulationMerchantAccount extends CrmCrudAppPlace {
+            public static class CardServiceSimulationMerchantAccount extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             }
         }
@@ -163,16 +167,16 @@ public class OperationsSiteMap implements SiteMap {
         public static class PadSimulation extends CrmCrudAppPlace {
 
             @PlaceProperties(caption = "Simulated Funds Transfer", navigLabel = "Funds Transfer")
-            public static class PadSimFile extends CrmCrudAppPlace {
+            public static class PadSimFile extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
             }
 
             @PlaceProperties(caption = "PAD Batch")
-            public static class PadSimBatch extends CrmCrudAppPlace {
+            public static class PadSimBatch extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
             }
 
         }
 
-        public static class SimulatedDataPreload extends CrmCrudAppPlace {
+        public static class SimulatedDataPreload extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
             public SimulatedDataPreload() {
                 formViewerPlace(new Key(-1));
@@ -181,12 +185,12 @@ public class OperationsSiteMap implements SiteMap {
         }
 
         @PlaceProperties(caption = "Simulated Direct Banking Record", navigLabel = "Direct Banking Record")
-        public static class DirectBankingSimRecord extends CrmCrudAppPlace {
+        public static class DirectBankingSimRecord extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
         }
 
         @PlaceProperties(caption = "Simulated Direct Banking File", navigLabel = "Direct Banking File")
-        public static class DirectBankingSimFile extends CrmCrudAppPlace {
+        public static class DirectBankingSimFile extends CrmCrudAppPlace implements DevelopmentOnlyPlace {
 
         }
 

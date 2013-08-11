@@ -16,11 +16,13 @@ package com.propertyvista.operations.dto;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface VistaSystemsSimulationConfigDTO extends IEntity {
 
-    IPrimitive<Boolean> usePadSimulator();
+    IPrimitive<Boolean> useFundsTransferSimulator();
 
     IPrimitive<Boolean> useDirectBankingSimulator();
 

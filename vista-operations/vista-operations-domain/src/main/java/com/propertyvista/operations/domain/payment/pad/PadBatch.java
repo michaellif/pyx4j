@@ -42,6 +42,7 @@ import com.propertyvista.domain.pmc.Pmc;
 @Table(namespace = VistaNamespace.operationsNamespace)
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 @GwtBlacklist
+//TODO rename to FundsTransferBatch
 public interface PadBatch extends IEntity {
 
     @Owner

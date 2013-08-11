@@ -65,7 +65,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
         int row = -1;
 
         content.setH2(++row, 0, 2, i18n.tr("Funds Transfer"));
-        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().usePadSimulator()), 5, true).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useFundsTransferSimulator()), 5, true).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().systems().useDirectBankingSimulator()), 5, true).build());
 
         content.setH2(++row, 0, 2, i18n.tr("Credit Cards"));
@@ -90,7 +90,7 @@ public class SimulationForm extends OperationsEntityForm<SimulationDTO> {
 
     private void updatecardServiceVisibility() {
 
-        get(proto().systems().usePadSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
+        get(proto().systems().useFundsTransferSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
         get(proto().systems().useDirectBankingSimulator()).setEditable(getValue().fundsTransferSimulationConfigurable().getValue());
 
         get(proto().cardService().responseCode()).setVisible(false);
