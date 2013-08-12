@@ -197,15 +197,17 @@ public class EntityDiff {
         }
 
         private void getPrimitiveSetChanges(DiffPath path, String name, boolean logTransient, Collection<Object> set1, Collection<Object> set2) {
-            Iterator<Object> iter1 = set1.iterator();
             List<Object> set2copy = new Vector<Object>(set2);
-            while (iter1.hasNext()) {
-                Object ent1 = iter1.next();
-                if (set2copy.contains(ent1)) {
-                    set2copy.remove(ent1);
-                } else {
-                    // removed
-                    addChanges(path, name, logTransient, ent1, "");
+            if (set1 != null) {
+                Iterator<Object> iter1 = set1.iterator();
+                while (iter1.hasNext()) {
+                    Object ent1 = iter1.next();
+                    if (set2copy.contains(ent1)) {
+                        set2copy.remove(ent1);
+                    } else {
+                        // removed
+                        addChanges(path, name, logTransient, ent1, "");
+                    }
                 }
             }
             // Added
