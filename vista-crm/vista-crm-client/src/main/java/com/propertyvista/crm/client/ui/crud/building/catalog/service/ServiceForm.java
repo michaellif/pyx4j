@@ -23,6 +23,7 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.domain.financial.offering.Service;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class ServiceForm extends CrmEntityForm<Service> {
 
@@ -34,10 +35,9 @@ public class ServiceForm extends CrmEntityForm<Service> {
         Tab tab = addTab(createGeneralTab(i18n.tr("General")));
         selectTab(tab);
 
-// TODO uncomment in final version:        
-//        if (!VistaFeatures.instance().genericProductCatalog()) {
-        addTab(createEligibilityTab(i18n.tr("Eligibility")));
-//        }
+        if (!VistaFeatures.instance().defaultProductCatalog()) {
+            addTab(createEligibilityTab(i18n.tr("Eligibility")));
+        }
     }
 
     public TwoColumnFlexFormPanel createGeneralTab(String title) {
@@ -48,11 +48,9 @@ public class ServiceForm extends CrmEntityForm<Service> {
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 20).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         main.setH1(++row, 0, 2, i18n.tr("Items"));
-        main.setWidget(++row, 0, inject(proto().version().items(), new ServiceItemFolder(this)));
-        main.getFlexCellFormatter().setColSpan(row, 0, 2);
+        main.setWidget(++row, 0, 2, inject(proto().version().items(), new ServiceItemFolder(this)));
 
         return main;
     }

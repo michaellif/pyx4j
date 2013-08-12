@@ -36,14 +36,10 @@ public class FeatureForm extends CrmEntityForm<Feature> {
         content.setH1(++row, 0, 2, i18n.tr("Information"));
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().type(), new CEnumLabel()), 20).build());
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().name()), 20).build());
-        content.setBR(++row, 0, 1);
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().version().description()), 55).build());
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
 
         content.setH1(++row, 0, 2, i18n.tr("Items"));
-
-        content.setWidget(++row, 0, inject(proto().version().items(), new FeatureItemFolder(this)));
-        content.getFlexCellFormatter().setColSpan(row, 0, 2);
+        content.setWidget(++row, 0, 2, inject(proto().version().items(), new FeatureItemFolder(this)));
 
         row = 0;
         content.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().version().mandatory()), 4).build());
