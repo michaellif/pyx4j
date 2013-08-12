@@ -292,6 +292,7 @@ SET search_path = '_admin_';
                 id                      BIGINT                  NOT NULL,
                 pad_debit_record        BIGINT                  NOT NULL,
                 payment_record_key      BIGINT,
+                fee_amount              NUMERIC(18,2),
                         CONSTRAINT pad_debit_record_transaction_pk PRIMARY KEY(id)
         );
         
@@ -597,6 +598,7 @@ SET search_path = '_admin_';
         CREATE INDEX global_crm_user_index_pmc_crm_user_idx ON global_crm_user_index USING btree (pmc, crm_user);
         CREATE INDEX onboarding_user_email_idx ON onboarding_user USING btree (lower(email));
         CREATE INDEX pad_debit_record_transaction_pad_debit_record_idx ON pad_debit_record_transaction USING btree (pad_debit_record);
+        CREATE UNIQUE INDEX pad_file_creation_number_funds_transfer_type_company_id_idx ON pad_file USING btree (file_creation_number, funds_transfer_type, company_id) ;
 
        
 
