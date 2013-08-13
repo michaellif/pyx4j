@@ -240,10 +240,12 @@ BEGIN
                                                 ADD COLUMN trace_number VARCHAR(500);
                                                 
        
-       -- payment_record
+        -- payment_record
        
-       ALTER TABLE payment_record      ADD COLUMN creator BIGINT,
+        ALTER TABLE payment_record       ADD COLUMN creator BIGINT,
                                         ADD COLUMN creator_discriminator VARCHAR(50);
+                                        
+        ALTER TABLE payment_record ALTER COLUMN created_date TYPE TIMESTAMP;
        
                                         
         -- payment_type_selection_policy
@@ -261,7 +263,10 @@ BEGIN
         -- preauthorized_payment
         
         ALTER TABLE preauthorized_payment       ADD COLUMN creator BIGINT,
-                                                ADD COLUMN creator_discriminator VARCHAR(50);                                 
+                                                ADD COLUMN creator_discriminator VARCHAR(50);      
+                                             
+                                             
+        ALTER TABLE preauthorized_payment ALTER COLUMN creation_date TYPE TIMESTAMP;                          
         
         -- portal_image_resource
         
