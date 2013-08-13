@@ -45,7 +45,7 @@ public class PmcCreatorDev {
         pmc.features().productCatalog().setValue(Boolean.TRUE);
         pmc.features().leases().setValue(Boolean.TRUE);
         pmc.features().onlineApplication().setValue(Boolean.TRUE);
-        pmc.features().defaultProductCatalog().setValue(true);
+        pmc.features().defaultProductCatalog().setValue(Boolean.FALSE);
         pmc.features().yardiIntegration().setValue(Boolean.FALSE);
         pmc.features().tenantSureIntegration().setValue(Boolean.TRUE);
 

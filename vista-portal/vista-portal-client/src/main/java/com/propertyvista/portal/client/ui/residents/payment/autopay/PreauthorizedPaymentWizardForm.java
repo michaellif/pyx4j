@@ -279,7 +279,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "12em", "10", width + "em").build());
+        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "12em", "10em", width + "em").build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }
