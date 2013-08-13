@@ -18,6 +18,11 @@
 
     <dependencies>
 
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>jaxws-rt</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -46,6 +46,10 @@ public class SystemConfig extends HostConfig {
     @Override
     protected void configure() {
         super.configure();
+
+        // Set this when testing with http://www.charlesproxy.com/
+        //setProxy("127.0.0.1", 9999);
+
         if (this.getProxyConfig() != null) {
             log.info("default proxy defined {}:{} ", this.getProxyConfig().getHost(), this.getProxyConfig().getPort());
         } else {

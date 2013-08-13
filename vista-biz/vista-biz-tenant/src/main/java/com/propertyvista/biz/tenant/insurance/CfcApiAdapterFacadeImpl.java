@@ -15,12 +15,15 @@ package com.propertyvista.biz.tenant.insurance;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
+import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.Handler;
 import javax.xml.ws.handler.HandlerResolver;
 import javax.xml.ws.handler.PortInfo;
@@ -33,7 +36,9 @@ import com.cfcprograms.api.OptionQuote;
 import com.cfcprograms.api.Result;
 import com.cfcprograms.api.SimpleClient;
 import com.cfcprograms.api.SimpleClientResponse;
+import com.sun.xml.ws.developer.JAXWSProperties;
 
+import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.Credentials;
 import com.pyx4j.config.server.ServerSideConfiguration;
@@ -48,6 +53,7 @@ import com.propertyvista.biz.tenant.insurance.tenantsure.errors.TooManyPreviousC
 import com.propertyvista.biz.tenant.insurance.tenantsure.rules.ITenantSurePaymentSchedule;
 import com.propertyvista.biz.tenant.insurance.tenantsure.rules.TenantSurePaymentScheduleFactory;
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.SystemConfig;
 import com.propertyvista.config.TenantSureConfiguration;
 import com.propertyvista.config.VistaInterfaceCredentials;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSureClient;
@@ -61,6 +67,18 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     private static final boolean ENABLE_WORKAROUNDS_FOR_CFC_UNDOCUMENTED_STUFF = true;
 
+    /**
+     * Copy from com.sun.xml.internal.ws.developer.JAXWSProperties
+     * value in milliseconds {@link HttpURLConnection#setConnectTimeout(int)}
+     */
+    public static final String JAXWSProperties_CONNECT_TIMEOUT = "com.sun.xml.internal.ws.connect.timeout";
+
+    /**
+     * Copy from com.sun.xml.internal.ws.developer.JAXWSProperties
+     * value in milliseconds {@link HttpURLConnection#httpConnection.setReadTimeout(int)}
+     */
+    public static final String JAXWSProperties_REQUEST_TIMEOUT = "com.sun.xml.internal.ws.request.timeout";
+
     private final TenantSureConfiguration configuration;
 
     public CfcApiAdapterFacadeImpl(TenantSureConfiguration configuration) {
@@ -68,7 +86,10 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
     }
 
     // TODO this monster needs refactoring: looks like having an abstract factory and a a multiple factories with every permutation of settings would do the job.    
-    private CFCAPI getApi() {
+    private CFCAPISoap getApi() {
+        // Initialize proxy configuration
+        SystemConfig.instance();
+
         CFCAPI api = null;
         try {
             String url = configuration.cfcApiEndpointUrl();
@@ -77,6 +98,15 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
         } catch (MalformedURLException e) {
             throw new Error(e);
         }
+        CFCAPISoap soap = api.getCFCAPISoap();
+        Map<String, Object> requestContext = ((BindingProvider) soap).getRequestContext();
+
+        // If we are using JAXWS reference implementation at runtime
+        requestContext.put(JAXWSProperties.CONNECT_TIMEOUT, 30 * Consts.SEC2MILLISECONDS);
+        requestContext.put(JAXWSProperties.REQUEST_TIMEOUT, 80 * Consts.SEC2MILLISECONDS);
+        // Just in case if we will be using JDK bundled JAXWS
+        requestContext.put(JAXWSProperties_CONNECT_TIMEOUT, 30 * Consts.SEC2MILLISECONDS);
+        requestContext.put(JAXWSProperties_REQUEST_TIMEOUT, 80 * Consts.SEC2MILLISECONDS);
 
         api.setHandlerResolver(new HandlerResolver() {
             @SuppressWarnings("rawtypes")
@@ -88,12 +118,12 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
             }
         });
 
-        return api;
+        return soap;
     }
 
     @Override
     public String createClient(Tenant tenant, String tenantName, String tenantPhone) throws CfcApiException {
-        CFCAPISoap api = getApi().getCFCAPISoap();
+        CFCAPISoap api = getApi();
         String sessionId = makeNewCfcSession(api);
 
         SimpleClient simpleClient = new ObjectFactory().createSimpleClient();
@@ -112,7 +142,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     @Override
     public TenantSureQuoteDTO getQuote(InsuranceTenantSureClient client, TenantSureCoverageDTO coverageRequest) throws CfcApiException {
-        CFCAPISoap api = getApi().getCFCAPISoap();
+        CFCAPISoap api = getApi();
         String sessionId = makeNewCfcSession(api);
 
         OptionQuote optionQuote = new ObjectFactory().createOptionQuote();
@@ -159,7 +189,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     @Override
     public String bindQuote(String quoteId) throws CfcApiException {
-        CFCAPISoap api = getApi().getCFCAPISoap();
+        CFCAPISoap api = getApi();
         String sessionId = makeNewCfcSession(api);
 
         Result bindResult = api.requestBind(quoteId, sessionId);
@@ -172,7 +202,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     @Override
     public void requestDocument(String quoteId, List<String> emails) throws CfcApiException {
-        CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
+        CFCAPISoap cfcApiSoap = getApi();
         String sessionId = makeNewCfcSession(cfcApiSoap);
 
         ArrayOfString toEmailArray = new ObjectFactory().createArrayOfString();
@@ -183,7 +213,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     @Override
     public LogicalDate cancel(String policyId, CancellationType cancellationType, String toAddress) throws CfcApiException {
-        CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
+        CFCAPISoap cfcApiSoap = getApi();
 
         String sessionId = makeNewCfcSession(cfcApiSoap);
 
@@ -199,7 +229,7 @@ public class CfcApiAdapterFacadeImpl implements CfcApiAdapterFacade {
 
     @Override
     public void reinstate(String policyId, ReinstatementType reinstatementType, String toAddress) throws CfcApiException {
-        CFCAPISoap cfcApiSoap = getApi().getCFCAPISoap();
+        CFCAPISoap cfcApiSoap = getApi();
 
         String sessionId = makeNewCfcSession(cfcApiSoap);
 
