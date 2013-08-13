@@ -22,11 +22,12 @@ import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RateIt;
@@ -43,9 +44,9 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
 
     private MaintenanceView.Presenter presenter;
 
-    private final TwoColumnFlexFormPanel openRequestsPanel = new TwoColumnFlexFormPanel();
+    private final BasicFlexFormPanel openRequestsPanel = new BasicFlexFormPanel();
 
-    private final TwoColumnFlexFormPanel historyRequestsPanel = new TwoColumnFlexFormPanel();
+    private final BasicFlexFormPanel historyRequestsPanel = new BasicFlexFormPanel();
 
     public MaintenanceViewList() {
         setWidth("100%");
@@ -98,6 +99,7 @@ public class MaintenanceViewList extends VerticalPanel implements MaintenanceVie
                 openRequestsPanel.setHTML(row, ++col, request.summary().getStringView());
                 openRequestsPanel.setHTML(row, ++col, issueStatus(request));
                 openRequestsPanel.setWidget(row, ++col, issueActions(request));
+                openRequestsPanel.getCellFormatter().setHorizontalAlignment(row, col, HasHorizontalAlignment.ALIGN_CENTER);
 
                 openRequestsPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             }
