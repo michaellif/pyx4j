@@ -267,17 +267,19 @@ class PreauthorizedPaymentAgreementMananger {
                                 boolean suspended = false;
                                 for (PreauthorizedPayment item : retrieveActivePreauthorizedPayments(account.lease())) {
                                     suspendPreauthorizedPayment(item);
-                                    executionMonitor.addProcessedEvent("Pad suspend");
+                                    executionMonitor.addProcessedEvent("Pap suspend");
                                     suspended = true;
                                 }
                                 if (suspended) {
                                     ServerSideFactory.create(NotificationFacade.class).papSuspension(account.lease());
+                                    Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
+                                    executionMonitor.addInfoEvent("Lease with suspended Pap", "LeaseId " + account.lease().leaseId().getStringView());
                                 }
                                 return null;
                             }
                         });
                     } catch (Throwable error) {
-                        executionMonitor.addFailedEvent("Pad suspend", error);
+                        executionMonitor.addErredEvent("Pap suspend", error);
                     }
 
                     if (executionMonitor.isTerminationRequested()) {
