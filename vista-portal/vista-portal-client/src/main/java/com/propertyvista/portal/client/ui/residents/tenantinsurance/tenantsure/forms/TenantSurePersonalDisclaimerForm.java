@@ -33,7 +33,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
 
     private static final I18n i18n = I18n.get(TenantSurePersonalDisclaimerForm.class);
 
-    private SimplePanel personalDisclaimerHolder;
+    private final SimplePanel personalDisclaimerHolder = new SimplePanel();
 
     public TenantSurePersonalDisclaimerForm() {
         super(TenantSurePersonalDisclaimerHolderDTO.class);
@@ -45,7 +45,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
         int row = -1;
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Personal Disclaimer Terms"));
-        contentPanel.setWidget(++row, 0, personalDisclaimerHolder = new SimplePanel());
+        contentPanel.setWidget(++row, 0, personalDisclaimerHolder);
 
         contentPanel.setBR(++row, 0, 1);
 

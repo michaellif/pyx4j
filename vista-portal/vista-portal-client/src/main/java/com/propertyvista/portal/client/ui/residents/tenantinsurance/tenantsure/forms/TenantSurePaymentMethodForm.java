@@ -19,6 +19,7 @@ import java.util.EnumSet;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -26,7 +27,6 @@ import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
-import com.pyx4j.forms.client.ui.CRichTextArea;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
@@ -46,7 +46,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     private final CCheckBox iAgreeBox = new CCheckBox();
 
-    protected final CRichTextArea legalTerms = new CRichTextArea();
+    protected final HTML legalTerms = new HTML();
 
     private boolean isAgreedToPreauthorizedPayments;
 
@@ -58,7 +58,6 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
         super(InsurancePaymentMethod.class);
         this.onSameAsCurrentAddressSelected = onSameAsCurrentAddressSelected;
         this.isAgreedToPreauthorizedPayments = false;
-        legalTerms.setViewable(true);
     }
 
     @Override
@@ -82,7 +81,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
         panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
 
-        panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
+        panel.setWidget(1, 0, new ScrollPanel(legalTerms));
         panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
 
         panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 5, 3, 3).customLabel(i18n.tr("I Agree")).build());
@@ -110,7 +109,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     public void setPreAuthorizedAgreement(String agreementHtml) {
-        legalTerms.setValue(agreementHtml);
+        legalTerms.setHTML(agreementHtml);
     }
 
     @Override

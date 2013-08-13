@@ -111,6 +111,9 @@ public class NewPaymentMethodEditorTheme extends Theme {
 
         style.addProperty("height", "30em");
         style.addProperty("width", "60em");
+
+        style.addProperty("border", "solid 1px #666");
+
         addStyle(style);
 
         style = new Style(".", StyleName.PaymentEditorLegalTermsHeader);
