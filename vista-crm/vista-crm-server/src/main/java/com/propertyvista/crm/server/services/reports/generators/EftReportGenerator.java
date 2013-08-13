@@ -14,6 +14,7 @@
 package com.propertyvista.crm.server.services.reports.generators;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.Path;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
+import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
@@ -119,6 +121,13 @@ public class EftReportGenerator implements ReportExporter {
                 }
                 reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().isBooleanTrue());
                 paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria));
+            }
+
+            if (!reportMetadata.orderBy().isNull()) {
+                Collections.sort(
+                        paymentRecords,
+                        EntityComparatorFactory.createMemberComparator(dtoBinder.getBoundDboMemberPath(new Path(reportMetadata.orderBy().memberPath()
+                                .getValue()))));
             }
 
             for (PaymentRecord paymentRecord : paymentRecords) {
