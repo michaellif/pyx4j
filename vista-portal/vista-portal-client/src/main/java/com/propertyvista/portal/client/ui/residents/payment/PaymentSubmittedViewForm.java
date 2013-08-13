@@ -17,6 +17,7 @@ import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -24,7 +25,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -53,21 +53,20 @@ public class PaymentSubmittedViewForm extends CEntityDecoratableForm<PaymentReco
     public IsWidget createContent() {
         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
         int row = -1;
-        Widget w;
 
-        content.setWidget(++row, 0, w = new HTML(i18n.tr("Payment Submitted Successfully!")));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        w.getElement().getStyle().setFontSize(1.2, Unit.EM);
+        content.setWidget(++row, 0, new HTML(i18n.tr("Payment Submitted Successfully!")));
+        content.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        content.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).labelAlignment(Alignment.left).build());
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).labelAlignment(Alignment.left).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().amount()), 20).build());
 
-        content.setHR(++row, 0, 1);
+        content.setBR(++row, 0, 1);
+        content.setHR(++row, 0, 2);
 
-        content.setWidget(++row, 0, createAutoPaySignupPanel());
+        content.setWidget(++row, 0, 2, createAutoPaySignupPanel());
 
         return content;
     }
@@ -82,8 +81,10 @@ public class PaymentSubmittedViewForm extends CEntityDecoratableForm<PaymentReco
                 ((PaymentSubmittedView.Presenter) view.getPresenter()).goToAutoPay();
             }
         }));
+        text.getElement().getStyle().setMarginLeft(0.2, Unit.EM);
 
         HorizontalPanel panel = new HorizontalPanel();
+        panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_MIDDLE);
         panel.add(new Image(VistaImages.INSTANCE.recurringCredit()));
         panel.add(text);
 
