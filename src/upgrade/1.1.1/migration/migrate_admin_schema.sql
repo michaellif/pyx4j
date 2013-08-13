@@ -57,6 +57,8 @@ SET search_path = '_admin_';
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_app_e_ck;
         ALTER TABLE audit_record DROP CONSTRAINT audit_record_event_e_ck;
         ALTER TABLE dev_card_service_simulation_card DROP CONSTRAINT dev_card_service_simulation_card_card_type_e_ck;
+        ALTER TABLE pad_batch DROP CONSTRAINT pad_batch_processing_status_e_ck;
+        ALTER TABLE pad_debit_record DROP CONSTRAINT pad_debit_record_processing_status_e_ck;
         ALTER TABLE pad_sim_batch DROP CONSTRAINT pad_sim_batch_reconciliation_status_e_ck;
         ALTER TABLE pad_sim_debit_record DROP CONSTRAINT pad_sim_debit_record_reconciliation_status_e_ck;
         ALTER TABLE payment_payment_details DROP CONSTRAINT payment_payment_details_card_type_e_ck;
@@ -381,6 +383,23 @@ SET search_path = '_admin_';
         WHERE   c.usr = u.id;
         
         
+        -- pad_batch
+        
+        UPDATE  pad_batch
+        SET     processing_status = 'AcknowledgeProcessed'
+        WHERE   processing_status = 'AcknowledgeProcesed';
+        
+        
+        -- pad_debit_record
+        
+        UPDATE  pad_debit_record
+        SET     processing_status = 'AcknowledgeProcessed'
+        WHERE   processing_status = 'AcknowledgeProcesed';
+        
+        UPDATE  pad_debit_record
+        SET     processing_status = 'ReconciliationProcessed'
+        WHERE   processing_status = 'ReconciliationProcesed';
+        
         -- pad_file
         
         UPDATE  pad_file
@@ -552,9 +571,12 @@ SET search_path = '_admin_';
                 CHECK ((reconciliation_status) IN ('DUPLICATE', 'PROCESSED', 'REJECTED', 'RETURNED'));
         ALTER TABLE dev_pad_sim_file ADD CONSTRAINT dev_pad_sim_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
-        ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_processing_status_e_ck CHECK ((processing_status) IN ('Invalid', 'Procesed', 'Received'));
+        ALTER TABLE direct_debit_record ADD CONSTRAINT direct_debit_record_processing_status_e_ck CHECK ((processing_status) IN ('Invalid', 'Processed', 'Received'));
         ALTER TABLE operations_alert ADD CONSTRAINT operations_alert_app_e_ck 
                 CHECK ((app) IN ('crm', 'field', 'onboarding', 'operations', 'prospect', 'resident', 'residentPortal'));
+        ALTER TABLE pad_batch ADD CONSTRAINT pad_batch_processing_status_e_ck CHECK ((processing_status) IN ('AcknowledgeProcessed', 'AcknowledgeReject', 'AcknowledgedReceived'));
+        ALTER TABLE pad_debit_record ADD CONSTRAINT pad_debit_record_processing_status_e_ck 
+                CHECK ((processing_status) IN ('AcknowledgeProcessed', 'AcknowledgeReject', 'AcknowledgedReceived', 'ReconciliationProcessed', 'ReconciliationReceived'));
         ALTER TABLE pad_file ADD CONSTRAINT pad_file_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
         ALTER TABLE pad_file_creation_number ADD CONSTRAINT pad_file_creation_number_funds_transfer_type_e_ck 
