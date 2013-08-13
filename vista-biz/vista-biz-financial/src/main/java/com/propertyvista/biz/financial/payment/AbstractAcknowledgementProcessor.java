@@ -170,7 +170,7 @@ abstract class AbstractAcknowledgementProcessor {
             TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                 @Override
                 public Void call() {
-                    padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgeProcesed);
+                    padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgeProcessed);
                     Persistence.service().persist(padBatch);
                     return null;
                 }
@@ -188,7 +188,7 @@ abstract class AbstractAcknowledgementProcessor {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeProcesed);
+                debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeProcessed);
                 Persistence.service().persist(debitRecord);
                 return null;
             }

@@ -58,7 +58,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
             //TODO Improve validation
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
+                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
                     throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -67,7 +67,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
                 paymentRecord.aggregatedTransfer().set(at);
                 break;
             case REJECTED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
+                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
                     throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -76,7 +76,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
                 paymentRecord.aggregatedTransfer().set(at);
                 break;
             case RETURNED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcesed) {
+                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcessed) {
                     throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not processed");
                 }
                 paymentRecord.aggregatedTransferReturn().set(at);
@@ -89,7 +89,7 @@ class PadReconciliationProcessor extends AbstractReconciliationProcessor {
 
             Persistence.service().persist(paymentRecord);
 
-            if (padDebitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
+            if (padDebitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
                 TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                     @Override
                     public Void call() {

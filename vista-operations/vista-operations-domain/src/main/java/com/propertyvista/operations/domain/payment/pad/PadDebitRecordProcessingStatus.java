@@ -17,11 +17,11 @@ public enum PadDebitRecordProcessingStatus {
 
     AcknowledgedReceived,
 
-    AcknowledgeProcesed,
+    AcknowledgeProcessed,
 
     AcknowledgeReject,
 
     ReconciliationReceived,
 
-    ReconciliationProcesed
+    ReconciliationProcessed
 }

@@ -66,7 +66,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
             //TODO Improve validation
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
+                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
                     throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -74,7 +74,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 }
                 break;
             case REJECTED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
+                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
                     throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
@@ -82,7 +82,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 }
                 break;
             case RETURNED:
-                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcesed) {
+                if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcessed) {
                     throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not processed");
                 }
                 break;
@@ -112,7 +112,7 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 Persistence.service().persist(paymentRecord);
             }
 
-            if (padDebitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgeProcesed) {
+            if (padDebitRecord.processingStatus().getValue() == PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
                 TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                     @Override
                     public Void call() {

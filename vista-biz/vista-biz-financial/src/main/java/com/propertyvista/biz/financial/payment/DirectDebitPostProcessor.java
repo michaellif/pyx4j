@@ -66,7 +66,7 @@ public class DirectDebitPostProcessor {
                     @Override
                     public Void execute() {
                         createPaymentRecord(debitRecord);
-                        debitRecord.processingStatus().setValue(DirectDebitRecordProcessingStatus.Procesed);
+                        debitRecord.processingStatus().setValue(DirectDebitRecordProcessingStatus.Processed);
                         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
                             @Override
                             public Void call() {

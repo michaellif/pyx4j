@@ -248,7 +248,7 @@ abstract class AbstractReconciliationProcessor {
         TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
             public Void call() {
-                padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.ReconciliationProcesed);
+                padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.ReconciliationProcessed);
                 padDebitRecord.processed().setValue(Boolean.TRUE);
                 Persistence.service().persist(padDebitRecord);
 
