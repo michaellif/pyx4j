@@ -242,7 +242,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelWidth(30).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), "30em", "10em", "10em").build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
@@ -269,7 +269,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 }
             }, getValue());
 
-            switchTotal(confirmationTotalHolder, 11.5);
+            switchTotal(confirmationTotalHolder, 10.3);
         }
     }
 

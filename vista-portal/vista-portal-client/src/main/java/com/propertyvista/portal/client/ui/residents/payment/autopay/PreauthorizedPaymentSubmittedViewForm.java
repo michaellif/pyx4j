@@ -18,13 +18,11 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -48,25 +46,23 @@ public class PreauthorizedPaymentSubmittedViewForm extends CEntityDecoratableFor
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
-        Widget w;
 
-        content.setWidget(++row, 0, w = new HTML(i18n.tr("Automatic Payment Submitted Successfully!")));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        w.getElement().getStyle().setFontSize(1.2, Unit.EM);
-
-        content.setBR(++row, 0, 1);
-
-        content.setWidget(++row, 0,
-                new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).labelAlignment(Alignment.left).build());
-
-        content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total()), 22).build());
+        content.setWidget(++row, 0, new HTML(i18n.tr("Automatic Payment Submitted Successfully!")));
+        content.getWidget(row, 0).getElement().getStyle().setFontWeight(FontWeight.BOLD);
+        content.getWidget(row, 0).getElement().getStyle().setFontSize(1.2, Unit.EM);
 
         content.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel())).build());
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).build());
+        content.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total()), "12em", "10em", "10.3em").build());
+        content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+
+        content.setBR(++row, 0, 1);
+
+        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), "22em", "10em", "10em").build());
         content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         content.setHR(++row, 0, 1);
