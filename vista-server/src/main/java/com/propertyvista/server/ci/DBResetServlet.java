@@ -48,6 +48,7 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.server.dataimport.DataPreloaderCollection;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
+import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.server.preloader.DataGenerator;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.annotations.I18n;
@@ -74,6 +75,7 @@ import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
 import com.propertyvista.operations.domain.scheduler.PmcProcessType;
 import com.propertyvista.operations.server.preloader.VistaOperationsDataPreloaders;
+import com.propertyvista.operations.server.qa.DBIntegrityCheckDeferredProcess;
 import com.propertyvista.portal.server.preloader.PmcCreatorDev;
 import com.propertyvista.server.common.security.DevelopmentSecurity;
 import com.propertyvista.server.config.VistaServerSideConfiguration;
@@ -130,6 +132,8 @@ public class DBResetServlet extends HttpServlet {
         clearPmc(true),
 
         dropForeignKeys,
+
+        dbIntegrityCheck,
 
         @Translate("Reset Data Cache for this PMC")
         resetPmcCache,
@@ -394,6 +398,11 @@ public class DBResetServlet extends HttpServlet {
                                     RDBUtils.dropAllForeignKeys();
                                     break;
                                 case prodReset:
+                                    break;
+                                case dbIntegrityCheck:
+                                    ReportRequest reportdbo = new ReportRequest();
+                                    reportdbo.setCriteria(EntityQueryCriteria.create(Pmc.class));
+                                    new DBIntegrityCheckDeferredProcess(reportdbo).execute();
                                     break;
                                 default:
                                     throw new Error("unimplemented: " + type);
