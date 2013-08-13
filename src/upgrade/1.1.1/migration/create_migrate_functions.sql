@@ -226,6 +226,11 @@ BEGIN
                                         ADD COLUMN payment_method_billing_address_street2 VARCHAR(500);
                                         
                                         
+        ALTER TABLE payment_information RENAME COLUMN payment_method_creator TO payment_method_created_by;
+        ALTER TABLE payment_information RENAME COLUMN payment_method_creator_discriminator TO payment_method_created_by_discriminator;
+        
+                                        
+                                        
         -- payment_method
         
         ALTER TABLE payment_method      ADD COLUMN creator BIGINT,
@@ -233,6 +238,9 @@ BEGIN
                                         ADD COLUMN creator_discriminator VARCHAR(50),
                                         ADD COLUMN billing_address_street1 VARCHAR(500),
                                         ADD COLUMN billing_address_street2 VARCHAR(500);
+                                        
+        ALTER TABLE payment_method RENAME COLUMN creator TO created_by;
+        ALTER TABLE payment_method RENAME COLUMN creator_discriminator TO created_by_discriminator ;
                                         
         -- payment_payment_details
         
@@ -246,6 +254,8 @@ BEGIN
                                         ADD COLUMN creator_discriminator VARCHAR(50);
                                         
         ALTER TABLE payment_record ALTER COLUMN created_date TYPE TIMESTAMP;
+        ALTER TABLE payment_record RENAME COLUMN creator TO created_by;
+        ALTER TABLE payment_record RENAME COLUMN creator_discriminator TO created_by_discriminator ;
        
                                         
         -- payment_type_selection_policy
@@ -263,7 +273,10 @@ BEGIN
         -- preauthorized_payment
         
         ALTER TABLE preauthorized_payment       ADD COLUMN creator BIGINT,
-                                                ADD COLUMN creator_discriminator VARCHAR(50);      
+                                                ADD COLUMN creator_discriminator VARCHAR(50); 
+                                                
+        ALTER TABLE preauthorized_payment RENAME COLUMN creator TO created_by;
+        ALTER TABLE preauthorized_payment RENAME COLUMN creator_discriminator TO created_by_discriminator ;     
                                              
                                              
         ALTER TABLE preauthorized_payment ALTER COLUMN creation_date TYPE TIMESTAMP;                          
@@ -558,17 +571,17 @@ BEGIN
                 CHECK ((payment_method_details_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo'));
         ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_payment_type_e_ck 
                 CHECK ((payment_method_payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
-        ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_creator_discriminator_d_ck 
-                CHECK ((payment_method_creator_discriminator) IN ('CrmUser', 'CustomerUser'));
-         ALTER TABLE payment_method ADD CONSTRAINT payment_method_details_discriminator_d_ck 
+        ALTER TABLE payment_information ADD CONSTRAINT payment_information_payment_method_created_by_discr_d_ck 
+                CHECK ((payment_method_created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_details_discriminator_d_ck 
                 CHECK ((details_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo'));
         ALTER TABLE payment_method ADD CONSTRAINT payment_method_payment_type_e_ck CHECK ((payment_type) IN ('Cash', 'Check', 'CreditCard', 'DirectBanking', 'Echeck', 'Interac'));
-        ALTER TABLE payment_method ADD CONSTRAINT payment_method_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE payment_method ADD CONSTRAINT payment_method_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_card_type_e_ck CHECK ((card_type) IN ('MasterCard', 'Visa', 'VisaDebit'));  
         ALTER TABLE payment_payment_details ADD CONSTRAINT payment_payment_details_id_discriminator_ck 
                 CHECK ((id_discriminator) IN ('CashInfo', 'CheckInfo', 'CreditCard', 'DirectDebit', 'EcheckInfo', 'InteracInfo')); 
-        ALTER TABLE payment_record ADD CONSTRAINT payment_record_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
-        ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_creator_discriminator_d_ck CHECK ((creator_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE payment_record ADD CONSTRAINT payment_record_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
+        ALTER TABLE preauthorized_payment ADD CONSTRAINT preauthorized_payment_created_by_discriminator_d_ck CHECK ((created_by_discriminator) IN ('CrmUser', 'CustomerUser'));
         ALTER TABLE recipient ADD CONSTRAINT recipient_recipient_type_e_ck CHECK ((recipient_type) IN ('company', 'group', 'person'));
   
         -- not null
