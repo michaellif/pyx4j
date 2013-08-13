@@ -84,9 +84,9 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
         Persistence.service().retrieve(dto.leaseTermParticipant());
         Persistence.service().retrieve(dto.paymentMethod());
-        Persistence.service().retrieve(dto.paymentMethod().creator(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.paymentMethod().createdBy(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.preauthorizedPayment());
-        Persistence.service().retrieve(dto.creator(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(dto.createdBy(), AttachLevel.ToStringMembers);
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().status());

@@ -80,7 +80,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
         Persistence.service().retrieve(dto.customer().emergencyContacts());
         Persistence.service().retrieve(dto.lease().unit().building());
         for (PaymentMethod method : dto.paymentMethods()) {
-            Persistence.service().retrieve(method.creator(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(method.createdBy(), AttachLevel.ToStringMembers);
         }
 
         fillPreauthorizedPayments(dto);
@@ -270,7 +270,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
 
-        Persistence.service().retrieve(papDto.creator(), AttachLevel.ToStringMembers);
+        Persistence.service().retrieve(papDto.createdBy(), AttachLevel.ToStringMembers);
 
         updateCoveredItemsDto(papDto);
         fillCoveredItemsDto(papDto);

@@ -223,7 +223,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         row = -1;
 
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
-        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 10).build());
+        right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().createdDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().receivedDate()), 10).build());
         right.setWidget(++row, 1, new FormDecoratorBuilder(inject(proto().targetDate()), 10).build());
@@ -333,7 +333,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
         get(proto().selectPaymentMethod()).setVisible(false);
         get(proto().addThisPaymentMethodToProfile()).setVisible(false);
-        get(proto().creator()).setVisible(false);
+        get(proto().createdBy()).setVisible(false);
 
         get(proto().profiledPaymentMethod()).setNote(null);
     }
@@ -350,7 +350,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
         get(proto().finalizeDate()).setVisible(!isEditable());
         get(proto().paymentStatus()).setVisible(!isNew);
         get(proto().lastStatusChangeDate()).setVisible(!isNew);
-        get(proto().creator()).setVisible(!getValue().creator().isNull());
+        get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
 
         get(proto().profiledPaymentMethod()).setNote(getValue().notice().getValue());
 
@@ -506,7 +506,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             content.setWidget(++row, 0, 2, expirationWarning.getExpirationWarningPanel());
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
-            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+            content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
 
             content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).build());
 
@@ -524,7 +524,7 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             expirationWarning.prepareView(getValue().expiring());
             setEditable(getValue().expiring().isNull());
 
-            get(proto().creator()).setVisible(!getValue().creator().isNull());
+            get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
         }
     }
 }

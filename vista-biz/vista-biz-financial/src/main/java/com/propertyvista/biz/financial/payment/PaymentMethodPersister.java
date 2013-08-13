@@ -98,7 +98,7 @@ class PaymentMethodPersister {
                 }
             }
         } else {
-            paymentMethod.creator().set(VistaContext.getCurrentUserIfAvalable());
+            paymentMethod.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         Validate.isTrue(!paymentMethod.customer().isNull(), "Owner (customer) is required for PaymentMethod");

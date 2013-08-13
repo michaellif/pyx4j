@@ -97,7 +97,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
 
         if (paymentRecord.id().isNull()) {
             paymentRecord.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
-            paymentRecord.creator().set(VistaContext.getCurrentUserIfAvalable());
+            paymentRecord.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         Persistence.service().merge(paymentRecord);

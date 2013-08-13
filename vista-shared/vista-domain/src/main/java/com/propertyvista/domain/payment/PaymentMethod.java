@@ -28,6 +28,6 @@ public interface PaymentMethod extends AbstractPaymentMethod {
 
     @ReadOnly
     @Detached
-    AbstractPmcUser creator();
+    AbstractPmcUser createdBy();
 
 }

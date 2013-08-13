@@ -144,7 +144,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 9).build());
-                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creator(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+                content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
 
                 content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntitySelectorLabel<LeasePaymentMethod>() {
                     @Override
@@ -176,7 +176,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
                 get(proto().id()).setVisible(!getValue().id().isNull());
                 get(proto().creationDate()).setVisible(!getValue().creationDate().isNull());
-                get(proto().creator()).setVisible(!getValue().creator().isNull());
+                get(proto().createdBy()).setVisible(!getValue().createdBy().isNull());
             }
         }
     }

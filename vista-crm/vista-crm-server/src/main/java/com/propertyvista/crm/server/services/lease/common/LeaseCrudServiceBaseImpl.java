@@ -120,7 +120,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
                 .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
 
         for (PreauthorizedPayment pap : item.leaseParticipant().preauthorizedPayments()) {
-            Persistence.service().retrieve(pap.creator(), AttachLevel.ToStringMembers);
+            Persistence.service().retrieve(pap.createdBy(), AttachLevel.ToStringMembers);
         }
     }
 }

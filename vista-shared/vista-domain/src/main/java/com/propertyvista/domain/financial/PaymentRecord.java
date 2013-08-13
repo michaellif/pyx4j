@@ -231,7 +231,7 @@ public interface PaymentRecord extends IEntity {
 
     @ReadOnly
     @Detached
-    AbstractPmcUser creator();
+    AbstractPmcUser createdBy();
 
     @Owned(cascade = {})
     ISet<PaymentRecordProcessing> processing();

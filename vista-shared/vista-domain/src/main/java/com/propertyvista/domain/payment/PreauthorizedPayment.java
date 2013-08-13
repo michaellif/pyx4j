@@ -102,7 +102,7 @@ public interface PreauthorizedPayment extends IEntity {
 
     @ReadOnly
     @Detached
-    AbstractPmcUser creator();
+    AbstractPmcUser createdBy();
 
     @Timestamp(Timestamp.Update.Created)
     @Editor(type = EditorType.label)

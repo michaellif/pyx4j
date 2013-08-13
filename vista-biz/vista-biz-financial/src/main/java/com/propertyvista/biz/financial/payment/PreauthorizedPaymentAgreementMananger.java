@@ -95,7 +95,7 @@ class PreauthorizedPaymentAgreementMananger {
             }
         } else {
             preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
-            preauthorizedPayment.creator().set(VistaContext.getCurrentUserIfAvalable());
+            preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
 
         Persistence.service().merge(preauthorizedPayment);
