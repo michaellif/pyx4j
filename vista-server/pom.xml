@@ -743,9 +743,6 @@
 
         <profile>
             <id>deploy-db-reset</id>
-            <properties>
-                <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
-            </properties>
             <build>
                 <plugins>
 
@@ -777,9 +774,6 @@
 
         <profile>
             <id>deploy-db-reset-mini</id>
-            <properties>
-                <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
-            </properties>
             <build>
                 <plugins>
 
@@ -810,9 +804,6 @@
 
         <profile>
             <id>deploy-db-reset-mockup</id>
-            <properties>
-                <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
-            </properties>
             <build>
                 <plugins>
 
@@ -844,9 +835,6 @@
 
         <profile>
             <id>deploy-db-integrity-check</id>
-            <properties>
-                <ciSiteDirectory>${scp-apache-site-snapshot-base}/vista</ciSiteDirectory>
-            </properties>
             <build>
                 <plugins>
 
