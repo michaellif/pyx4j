@@ -19,6 +19,7 @@ import java.util.EnumSet;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -26,7 +27,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.pyx4j.forms.client.ui.CCheckBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CRichTextArea;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.client.ClientContext;
 
@@ -67,7 +68,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
 
         content.setWidget(0, 0, super.createContent());
         content.setBR(1, 0, 1);
@@ -77,14 +78,16 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     private Widget createLegalTermsPanel() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         panel.setH1(0, 0, 3, i18n.tr("Pre-Authorized Agreement"));
 
         panel.setWidget(1, 0, new ScrollPanel(legalTerms.asWidget()));
         panel.getWidget(1, 0).setStyleName(NewPaymentMethodEditorTheme.StyleName.PaymentEditorLegalTerms.name());
 
-        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 5).customLabel(i18n.tr("I Agree")).build());
+        panel.setWidget(2, 0, new FormDecoratorBuilder(iAgreeBox, 5, 3, 3).customLabel(i18n.tr("I Agree")).build());
+        panel.getFlexCellFormatter().setHorizontalAlignment(2, 0, HasHorizontalAlignment.ALIGN_CENTER);
+
         iAgreeBox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
             @Override
             public void onValueChange(ValueChangeEvent<Boolean> event) {

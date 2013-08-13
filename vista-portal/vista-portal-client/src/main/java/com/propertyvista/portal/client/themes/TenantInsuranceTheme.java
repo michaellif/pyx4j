@@ -87,8 +87,8 @@ public class TenantInsuranceTheme extends Theme {
 
         style = new Style(".", StyleName.TenantSureManagementStatusDetailsPanel.name());
         style.addProperty("display", "inline-block");
-        style.addProperty("width", "50%");
         style.addProperty("vertical-align", "middle");
+        style.addProperty("text-align", "center");
         addStyle(style);
 
         style = new Style(".", StyleName.TenantSureManagementActionsPanel.name());

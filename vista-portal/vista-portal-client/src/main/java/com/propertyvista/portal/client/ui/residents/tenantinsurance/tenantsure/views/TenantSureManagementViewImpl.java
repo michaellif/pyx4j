@@ -17,7 +17,9 @@ import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.annotations.Editor;
@@ -109,21 +111,23 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
     private Anchor reinstateTenantSureButton;
 
     public TenantSureManagementViewImpl() {
+
+        VerticalPanel contentPanel = new VerticalPanel();
+        contentPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementContentPanel.name());
+        contentPanel.add(makeStatusDetailsPanel());
+        contentPanel.add(new HTML("&nbsp"));
+        contentPanel.add(makeActionsPanel());
+        contentPanel.setCellHorizontalAlignment(contentPanel.getWidget(contentPanel.getWidgetCount() - 1), HasHorizontalAlignment.ALIGN_CENTER);
+
+        VerticalPanel viewPanel = new VerticalPanel();
+        viewPanel.add(makeGreetingPanel());
+        viewPanel.add(contentPanel);
+
         TenantSureViewDecorator viewDecorator = new TenantSureViewDecorator();
         viewDecorator.setPrivacyPolcyAddress(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
         viewDecorator.setCompensationDisclosureStatement(TenantSureConstants.HIGHCOURT_PARTNERS_COMPENSATION_DISCLOSURE_STATEMENT_HREF);
-
-        FlowPanel viewPanel = new FlowPanel();
-        viewPanel.add(makeGreetingPanel());
-
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementContentPanel.name());
-        contentPanel.add(makeStatusDetailsPanel());
-        contentPanel.add(makeActionsPanel());
-
-        viewPanel.add(contentPanel);
-
         viewDecorator.setContent(viewPanel);
+
         initWidget(viewDecorator);
     }
 
@@ -181,6 +185,7 @@ public class TenantSureManagementViewImpl extends Composite implements TenantSur
         statusPanel.setStyleName(TenantInsuranceTheme.StyleName.TenantSureManagementStatusDetailsPanel.name());
         statusForm = new TenantSureStatusForm();
         statusForm.initContent();
+
         statusPanel.add(statusForm);
         return statusPanel;
     }

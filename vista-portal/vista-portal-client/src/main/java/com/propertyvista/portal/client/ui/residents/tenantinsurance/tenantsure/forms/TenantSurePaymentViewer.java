@@ -20,12 +20,12 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CDatePicker;
 import com.pyx4j.forms.client.ui.CViewer;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Label;
 
@@ -55,30 +55,33 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
 
     @Override
     public IsWidget createContent(TenantSurePaymentDTO payment) {
-        FlowPanel contentPanel = new FlowPanel();
+        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
+        int outerRow = -1;
+
         if (payment != null) {
-            int row = -1;
-            TwoColumnFlexFormPanel paymentBreakdownPanel = new TwoColumnFlexFormPanel();
+            int innerRow = -1;
+            BasicFlexFormPanel paymentBreakdownPanel = new BasicFlexFormPanel();
             for (TenantSurePaymentItemDTO paymentItem : payment.paymentBreakdown()) {
 
-                addDetailRecord(paymentBreakdownPanel, ++row, paymentItem.description().getValue(), paymentItem.amount().getValue());
+                addDetailRecord(paymentBreakdownPanel, ++innerRow, paymentItem.description().getValue(), paymentItem.amount().getValue());
                 for (TenantSurePaymentItemTaxDTO tax : paymentItem.taxBreakdown()) {
-                    addDetailRecord(paymentBreakdownPanel, ++row, tax.tax().getValue(), tax.amount().getValue());
+                    addDetailRecord(paymentBreakdownPanel, ++innerRow, tax.tax().getValue(), tax.amount().getValue());
                 }
             }
             if (!payment.total().isNull()) {
-                addTotalRecord(paymentBreakdownPanel, ++row, payment.total().getMeta().getCaption(), payment.total().getValue());
+                addTotalRecord(paymentBreakdownPanel, ++innerRow, payment.total().getMeta().getCaption(), payment.total().getValue());
             }
-            contentPanel.add(paymentBreakdownPanel);
+            contentPanel.setWidget(++outerRow, 0, paymentBreakdownPanel);
 
             if (!payment.paymentDate().isNull()) {
                 Label nextPaymentDateLabel = new Label();
                 nextPaymentDateLabel.getElement().getStyle().setWidth(100, Unit.PCT);
-                nextPaymentDateLabel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
+                nextPaymentDateLabel.getElement().getStyle().setTextAlign(TextAlign.RIGHT);
                 nextPaymentDateLabel.setText(i18n.tr("Next Payment Date: {0}", dateFormat.format(payment.paymentDate().getValue())));
-                contentPanel.add(nextPaymentDateLabel);
-            }
 
+                contentPanel.setWidget(++outerRow, 0, new HTML("&nbsp"));
+                contentPanel.setWidget(++outerRow, 0, nextPaymentDateLabel);
+            }
         }
 
         return contentPanel;
@@ -89,7 +92,6 @@ public class TenantSurePaymentViewer extends CViewer<TenantSurePaymentDTO> {
         table.setHTML(row, 2, currencyFormat.format(amount));
         // styling:
         table.getRowFormatter().setStyleName(row, BillingTheme.StyleName.BillingDetailItem.name());
-        table.getFlexCellFormatter().setStyleName(row, 0, BillingTheme.StyleName.BillingDetailItemDate.name());
         table.getFlexCellFormatter().setStyleName(row, 1, BillingTheme.StyleName.BillingDetailItemTitle.name());
         table.getFlexCellFormatter().setStyleName(row, 2, BillingTheme.StyleName.BillingDetailItemAmount.name());
         table.getFlexCellFormatter().addStyleName(row, 2, TenantSureTheme.StyleName.TSPaymentAmount.name());
