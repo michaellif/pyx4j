@@ -14,6 +14,7 @@
 package com.propertyvista.domain.dashboard.gadgets.payments;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.annotations.Editor;
@@ -45,7 +46,7 @@ public interface PaymentRecordForReportDTO extends IEntity {
 
     IPrimitive<LogicalDate> lastStatusChangeDate();
 
-    IPrimitive<LogicalDate> created();
+    IPrimitive<Date> created();
 
     IPrimitive<LogicalDate> received();
 

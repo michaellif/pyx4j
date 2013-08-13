@@ -157,7 +157,7 @@ public interface PaymentRecord extends IEntity {
     IPrimitive<String> yardiDocumentNumber();
 
     @Editor(type = EditorType.label)
-    IPrimitive<LogicalDate> createdDate();
+    IPrimitive<Date> createdDate();
 
     @Editor(type = EditorType.label)
     IPrimitive<LogicalDate> receivedDate();
