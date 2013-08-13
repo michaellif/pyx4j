@@ -33,6 +33,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.financial.ar.ARException;
 import com.propertyvista.biz.financial.ar.ARFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.biz.system.OperationsAlertFacade;
 import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.AggregatedTransfer;
@@ -95,7 +96,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
         Building building = Persistence.service().retrieve(criteria);
         PaymentMethodPersister.persistLeasePaymentMethod(building, paymentRecord.paymentMethod());
 
+        boolean isNew = false;
         if (paymentRecord.id().isNull()) {
+            isNew = true;
             paymentRecord.createdDate().setValue(new LogicalDate(SystemDateManager.getDate()));
             paymentRecord.createdBy().set(VistaContext.getCurrentUserIfAvalable());
         }
@@ -124,6 +127,10 @@ public class PaymentFacadeImpl implements PaymentFacade {
             b.append(":").append(paymentRecord.getPrimaryKey().toString());
             paymentRecord.yardiDocumentNumber().setValue(b.toString());
             Persistence.service().persist(paymentRecord);
+        }
+
+        if (isNew) {
+            ServerSideFactory.create(AuditFacade.class).created(paymentRecord);
         }
 
         return paymentRecord;
@@ -248,6 +255,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
             }
         }
         log.info("Payment {} {} Canceled", paymentRecord.id().getValue(), paymentRecord.amount().getValue());
+        ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Canceled");
         return paymentRecord;
     }
 
@@ -273,6 +281,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
         paymentRecord.lastStatusChangeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         paymentRecord.finalizeDate().setValue(new LogicalDate(SystemDateManager.getDate()));
         Persistence.service().merge(paymentRecord);
+
+        ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Cleared");
+
         return paymentRecord;
     }
 
@@ -314,7 +325,7 @@ public class PaymentFacadeImpl implements PaymentFacade {
         } catch (ARException e) {
             throw new UserRuntimeException(i18n.tr("Payment can't be rejected"), e);
         }
-
+        ServerSideFactory.create(AuditFacade.class).updated(paymentRecord, "Rejected");
         return paymentRecord;
     }
 

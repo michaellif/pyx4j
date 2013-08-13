@@ -15,12 +15,15 @@ package com.propertyvista.biz.financial.payment;
 
 import org.apache.commons.lang.Validate;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSourceBuilding;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.AbstractPaymentMethod;
@@ -253,6 +256,14 @@ class PaymentMethodPersister {
             break;
         default:
             break;
+        }
+        if (origPaymentMethod == null) {
+            ServerSideFactory.create(AuditFacade.class).created(paymentMethod);
+        } else {
+            String diff = EntityDiff.getChanges(origPaymentMethod, paymentMethod);
+            if (diff.length() > 0) {
+                ServerSideFactory.create(AuditFacade.class).updated(paymentMethod, diff);
+            }
         }
 
         return paymentMethod;

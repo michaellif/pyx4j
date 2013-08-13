@@ -26,6 +26,7 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -56,6 +57,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
         paymentMethod.isDeleted().setValue(Boolean.TRUE);
         paymentMethod.isProfiledMethod().setValue(Boolean.FALSE);
         Persistence.service().merge(paymentMethod);
+        ServerSideFactory.create(AuditFacade.class).updated(paymentMethod, "Deleted");
         new ScheduledPaymentsManager().cancelScheduledPayments(paymentMethod);
         // delete associated PreauthorizedPayments
         new PreauthorizedPaymentAgreementMananger().deletePreauthorizedPayments(paymentMethod);

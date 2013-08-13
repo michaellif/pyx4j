@@ -30,12 +30,14 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -59,11 +61,16 @@ class PreauthorizedPaymentAgreementMananger {
         LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(
                 preauthorizedPayment.tenant().lease());
 
+        PreauthorizedPayment origPreauthorizedPayment;
+
         // Creates a new version of PAP if values changed and there are payments created
         if (!preauthorizedPayment.id().isNull()) {
-            PreauthorizedPayment origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
+            origPreauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPayment.getPrimaryKey());
 
             if (!EntityGraph.fullyEqual(origPreauthorizedPayment, preauthorizedPayment)) {
+                ServerSideFactory.create(AuditFacade.class)
+                        .updated(preauthorizedPayment, EntityDiff.getChanges(origPreauthorizedPayment, preauthorizedPayment));
+
                 // If tenant modifies PAP after cut off date - original will be used in this cycle and a new one in next cycle.
                 LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
                         preauthorizedPayment.tenant().lease());
@@ -96,9 +103,11 @@ class PreauthorizedPaymentAgreementMananger {
         } else {
             preauthorizedPayment.effectiveFrom().setValue(nextPaymentDate);
             preauthorizedPayment.createdBy().set(VistaContext.getCurrentUserIfAvalable());
+            ServerSideFactory.create(AuditFacade.class).created(preauthorizedPayment);
         }
 
         Persistence.service().merge(preauthorizedPayment);
+
         return preauthorizedPayment;
     }
 
@@ -107,6 +116,7 @@ class PreauthorizedPaymentAgreementMananger {
         PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
         preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
         Persistence.service().merge(preauthorizedPayment);
+        ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, "Deleted");
     }
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
