@@ -39,7 +39,7 @@ import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -109,12 +109,12 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private TwoColumnFlexFormPanel createDetailsStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+    private BasicFlexFormPanel createDetailsStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), 22)
-                .customLabel(i18n.tr("Tenant")).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), 25)
+                .customLabel(i18n.tr("Payer")).build());
 
         panel.setBR(++row, 0, 1);
         panel.setWidget(++row, 0, inject(proto().address(), new AddressSimpleEditor()));
@@ -123,13 +123,14 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
 
         // tweak UI:
+        get(proto().leaseTermParticipant()).setViewable(true);
         get(proto().address()).setViewable(true);
 
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createSelectPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method Selection"));
+    private BasicFlexFormPanel createSelectPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
         panel.setWidget(
@@ -198,8 +199,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method"));
+    private BasicFlexFormPanel createPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
         int row = -1;
 
         panel.setWidget(++row, 0, inject(proto().paymentMethod(), paymentMethodEditor));
@@ -219,8 +220,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
+    private BasicFlexFormPanel createConfirmationStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);

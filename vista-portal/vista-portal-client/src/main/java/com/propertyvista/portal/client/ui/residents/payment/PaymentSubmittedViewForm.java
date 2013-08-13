@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -51,7 +51,7 @@ public class PaymentSubmittedViewForm extends CEntityDecoratableForm<PaymentReco
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel content = new BasicFlexFormPanel();
         int row = -1;
 
         content.setWidget(++row, 0, new HTML(i18n.tr("Payment Submitted Successfully!")));
