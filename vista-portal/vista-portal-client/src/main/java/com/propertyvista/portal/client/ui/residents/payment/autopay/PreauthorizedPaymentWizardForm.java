@@ -42,7 +42,7 @@ import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
 import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -123,13 +123,13 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         comfirmationStep = addStep(createConfirmationStep());
     }
 
-    private TwoColumnFlexFormPanel createDetailsStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
+    private BasicFlexFormPanel createDetailsStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 22).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 22).build());
-        panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
+        panel.setWidget(++row, 0, 2, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
                 BigDecimal total = BigDecimal.ZERO;
@@ -142,12 +142,13 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             }
         }));
         panel.setWidget(++row, 0, detailsTotalHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createSelectPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method Selection"));
+    private BasicFlexFormPanel createSelectPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method Selection"));
         int row = -1;
 
         panel.setWidget(
@@ -216,31 +217,32 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createPaymentMethodStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Payment Method"));
+    private BasicFlexFormPanel createPaymentMethodStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Payment Method"));
 
         panel.setWidget(0, 0, inject(proto().paymentMethod(), paymentMethodEditor));
 
         return panel;
     }
 
-    private TwoColumnFlexFormPanel createConfirmationStep() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Confirmation"));
+    private BasicFlexFormPanel createConfirmationStep() {
+        BasicFlexFormPanel panel = new BasicFlexFormPanel(i18n.tr("Confirmation"));
         int row = -1;
 
         panel.setWidget(++row, 0, confirmationDetailsHolder);
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        panel.setWidget(++row, 0, 2, inject(proto().coveredItems(), new PapCoveredItemFolder()));
         get(proto().coveredItems()).setViewable(true);
         get(proto().coveredItems()).inheritViewable(false);
 
         panel.setWidget(++row, 0, confirmationTotalHolder);
+        panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 22).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelWidth(30).build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
@@ -255,7 +257,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
         if (event.getSelectedItem().equals(detailsStep)) {
-            switchTotal(detailsTotalHolder, 38);
+            switchTotal(detailsTotalHolder, 12);
         } else if (event.getSelectedItem().equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
@@ -267,7 +269,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 }
             }, getValue());
 
-            switchTotal(confirmationTotalHolder, 40);
+            switchTotal(confirmationTotalHolder, 11.5);
         }
     }
 
@@ -277,7 +279,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), 10).build());
+        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "12em", "10", width + "em").build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }
