@@ -73,7 +73,7 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     private TwoColumnFlexFormPanel makeTenantSureSettingsTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("TenantSure"));
         int row = -1;
-        panel.setH1(++row, 0, 1, i18n.tr("Merchant Account"));
+        panel.setH1(++row, 0, 2, i18n.tr("Merchant Account"));
         panel.setWidget(++row, 0, 2, inject(proto().tenantSureMerchantAccount(), new MerchantAccountForm()));
         return panel;
     }
