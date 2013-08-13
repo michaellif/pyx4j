@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 
 import com.pyx4j.forms.client.ui.CViewer;
@@ -62,28 +61,25 @@ public class TenantSureQuoteViewer extends CViewer<TenantSureQuoteDTO> {
         if (quote != null) {
             if (quote.specialQuote().isNull()) {
                 int row = 0;
-                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Quote Number:"));
+                paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Quote Number"));
 
                 paymentBreakdownPanel.setWidget(++row, 0, new HTML(quote.quoteId().getValue()));
                 paymentBreakdownPanel.getFlexCellFormatter().setColSpan(row, 0, 3);
-                paymentBreakdownPanel.getFlexCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_MIDDLE);
-                paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
+                paymentBreakdownPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
                 if (quote.paymentSchedule().getValue() == TenantSurePaymentSchedule.Monthly) {
                     if (!quote.totalFirstPayable().isNull()) {
-                        paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*:"));
-
+                        paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("First Payment*"));
                         addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalFirstPayable().getValue());
                     }
 
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments:"));
-
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Recurring Monthly Payments"));
                     addDetailRecord(paymentBreakdownPanel, ++row, "", quote.totalMonthlyPayable().getValue());
 
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment:"));
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Total Annual Payment"));
                     addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 } else {
-                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Annual Payment:"));
+                    paymentBreakdownPanel.setH2(++row, 0, 3, i18n.tr("Annual Payment"));
                     addDetailRecord(paymentBreakdownPanel, ++row, quote.annualPremium().getMeta().getCaption(), quote.annualPremium().getValue());
                 }
 
