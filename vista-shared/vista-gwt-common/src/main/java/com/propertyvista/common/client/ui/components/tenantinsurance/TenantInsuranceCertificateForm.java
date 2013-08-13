@@ -24,7 +24,7 @@ import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -75,7 +75,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
 
         @Override
         public IsWidget createContent() {
-            TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+            BasicFlexFormPanel panel = new BasicFlexFormPanel();
             panel.setWidget(0, 0, inject(proto().documentPages(), new ApplicationDocumentFileUploaderFolder()));
             addValueValidator(new EditableValueValidator<InsuranceCertificateDocument>() {
                 @Override
@@ -101,7 +101,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
 
     private int insuranceCeritificatesHeaderRow;
 
-    private TwoColumnFlexFormPanel contentPanel;
+    private BasicFlexFormPanel contentPanel;
 
     /**
      * @param displayTenantOwner
@@ -122,7 +122,7 @@ public class TenantInsuranceCertificateForm<E extends InsuranceCertificate> exte
 
     @Override
     public IsWidget createContent() {
-        contentPanel = new TwoColumnFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
+        contentPanel = new BasicFlexFormPanel(); // TODO the only reason its a field is to set a proper caption for the insurance certificate folder
         int row = -1;
         if (displayTenantOwner) {
             CEntityLabel<Customer> comp = new CEntityLabel<Customer>(i18n.tr("Tenant"));

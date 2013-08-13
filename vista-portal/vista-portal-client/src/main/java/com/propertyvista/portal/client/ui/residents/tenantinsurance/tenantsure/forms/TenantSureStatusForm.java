@@ -23,7 +23,7 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.forms.client.ui.IFormat;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
@@ -64,17 +64,17 @@ public class TenantSureStatusForm extends CEntityDecoratableForm<TenantSureTenan
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
         panel.setH3(++row, 0, 1, i18n.tr("Coverage"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().inceptionDate())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().insuranceCertificateNumber()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().inceptionDate()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate()), 10).build());
 
         // TODO maybe create a separate coverage viewer?
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().personalLiabilityCoverage())).componentWidth(10).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().contentsCoverage())).componentWidth(10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().personalLiabilityCoverage()), 10).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().coverage().contentsCoverage()), 10).build());
 
         // TODO investigate why format of annotated on the field doesn't work
         IFormat<BigDecimal> currencyFormat = new MoneyComboBox.MoneyComboBoxFormat();

@@ -14,11 +14,12 @@
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms;
 
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.forms.client.ui.CCheckBox;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
@@ -40,13 +41,16 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel contentPanel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel contentPanel = new BasicFlexFormPanel();
         int row = -1;
 
         contentPanel.setH1(++row, 0, 1, i18n.tr("Personal Disclaimer Terms"));
         contentPanel.setWidget(++row, 0, personalDisclaimerHolder = new SimplePanel());
+
         contentPanel.setBR(++row, 0, 1);
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isAgreed(), new CCheckBox())).build());
+
+        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().isAgreed(), new CCheckBox()), 10, 3, 3).build());
+        contentPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         return contentPanel;
     }
@@ -54,6 +58,7 @@ public class TenantSurePersonalDisclaimerForm extends CEntityDecoratableForm<Ten
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
         HTMLPanel personalDisclaimer = new HTMLPanel(getValue().terms().getValue());
         Anchor privacyPolicyAnchor = new Anchor(i18n.tr("Privacy Policy"));
         privacyPolicyAnchor.setHref(TenantSureConstants.HIGHCOURT_PARTNERS_PRIVACY_POLICY_HREF);
