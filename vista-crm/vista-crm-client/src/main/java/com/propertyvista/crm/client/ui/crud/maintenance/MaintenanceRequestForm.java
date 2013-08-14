@@ -13,12 +13,13 @@
  */
 package com.propertyvista.crm.client.ui.crud.maintenance;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -37,7 +38,9 @@ import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.folder.ItemActionsBar.ActionType;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppPlaceEntityMapper;
+import com.pyx4j.site.client.ui.prime.form.IEditor;
 import com.pyx4j.site.client.ui.prime.form.IForm;
 import com.pyx4j.site.client.ui.prime.misc.CEntitySelectorHyperlink;
 import com.pyx4j.site.rpc.AppPlace;
@@ -64,12 +67,14 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
+import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestForm.class);
 
-    private FlowPanel categoryPanel;
+    private TwoColumnFlexFormPanel categoryPanel;
 
     private TwoColumnFlexFormPanel accessPanel;
 
@@ -87,31 +92,51 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private MaintenanceRequestMetadata meta;
 
-    private boolean choicesReady = false;
+    MaintenanceRequestCategoryChoice mrCategory;
+
+    private final Map<Building, MaintenanceRequestMetadataDTO> categoryMetaCache = new HashMap<Building, MaintenanceRequestMetadataDTO>();
 
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
 
         selectTab(addTab(createGeneralTab()));
         addTab(createWorkHistoryTab());
-
-        initSelectors();
-
     }
 
-    public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
-        this.meta = meta;
-        initSelectors();
+    private void ensureBuilding() {
+        if (getValue() == null) {
+            return;
+        }
 
-        // set value again in case meta comes after the form was populated
-        if (getValue() != null) {
-            setComponentsValue(getValue(), false, true);
+        Building building = getValue().building();
+        if (building.isNull() && VistaFeatures.instance().yardiInterfaces() > 1) {
+            // for multiple yardi interfaces ask to select building first
+            buildingSelector.getSelectorDialog(false).show();
+        } else {
+            setMaintenanceRequestCategoryMeta();
         }
     }
 
-    public void setBuilding(Building building) {
-        buildingSelector.setValue(building);
-        buildingSelector.setEditable(false);
+    private void setMaintenanceRequestCategoryMeta() {
+        MaintenanceRequestMetadataDTO meta = categoryMetaCache.get(getValue().building());
+        if (meta == null) {
+            DefaultAsyncCallback<MaintenanceRequestMetadataDTO> callback = new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+                @Override
+                public void onSuccess(MaintenanceRequestMetadataDTO meta) {
+                    MaintenanceRequestForm.this.categoryMetaCache.put(getValue().building(), meta);
+                    MaintenanceRequestForm.this.meta = meta;
+                    initSelectors();
+                }
+            };
+            if (getParentView() instanceof IEditor) {
+                ((MaintenanceRequestEditorView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, getValue().building());
+            } else {
+                ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, getValue().building());
+            }
+        } else {
+            this.meta = meta;
+            initSelectors();
+        }
     }
 
     private TwoColumnFlexFormPanel createGeneralTab() {
@@ -119,9 +144,9 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         int row = -1;
 
         panel.setH1(++row, 0, 2, i18n.tr("Issue Details"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>())).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().requestId(), new CLabel<String>()), 20, true).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().building(), buildingSelector)).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().building(), buildingSelector), 20, true).build());
         buildingSelector.addValueChangeHandler(new ValueChangeHandler<Building>() {
             @Override
             public void onValueChange(ValueChangeEvent<Building> event) {
@@ -130,19 +155,23 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             }
         });
 
-        categoryPanel = new FlowPanel();
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().unit(), unitSelector), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector), 20, true).build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().unit(), unitSelector)).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reporter(), reporterSelector)).build());
-        panel.setWidget(++row, 0, categoryPanel);
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().priority(), prioritySelector)).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().summary()), true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), true).build());
+        // category panel
+        mrCategory = new MaintenanceRequestCategoryChoice();
+        bind(mrCategory, proto().category());
+        categoryPanel = new TwoColumnFlexFormPanel();
+        panel.setWidget(++row, 0, 2, categoryPanel);
+
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().priority(), prioritySelector), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().summary()), 20, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
 
         // --------------------------------------------------------------------------------------------------------------------
 
         panel.setH1(++row, 0, 2, i18n.tr("Unit Access"));
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().permissionToEnter())).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().permissionToEnter()), 20, true).build());
 
         get(proto().permissionToEnter()).setNote(i18n.tr("To allow our service personnel to enter your apartment"));
         get(proto().permissionToEnter()).addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -157,7 +186,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
         // --------------------------------------------------------------------------------------------------------------------
         accessPanel = new TwoColumnFlexFormPanel();
 
-        accessPanel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), true).build());
+        accessPanel.setWidget(0, 0, 2, new FormDecoratorBuilder(inject(proto().petInstructions()), 40, true).build());
         get(proto().petInstructions()).setNote(i18n.tr("Special instructions in case you have a pet in the apartment"));
         // --------------------------------------------------------------------------------------------------------------------
 
@@ -207,31 +236,36 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private void initSelectors() {
-        if (meta == null || choicesReady) {
+        if (meta == null) {
             return;
         }
+
         prioritySelector.setOptions(meta.priorities());
-        // create selectors
+
+        // create category selectors - bottom-up
         int levels = meta.categoryLevels().size();
-        MaintenanceRequestCategoryChoice child = null;
-        MaintenanceRequestCategoryChoice mrCategory = null;
+        MaintenanceRequestCategoryChoice choice = null;
         for (int i = 0; i < levels; i++) {
-            MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
-            choice.setViewable(isViewable());
-            String choiceLabel = EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue());
             if (i == 0) {
-                categoryPanel.insert(new FormDecoratorBuilder(inject(proto().category(), choice)).customLabel(choiceLabel).build(), 0);
-                mrCategory = choice;
+                choice = mrCategory;
             } else {
-                categoryPanel.insert(new FormDecoratorBuilder(choice).customLabel(choiceLabel).build(), 0);
+                MaintenanceRequestCategoryChoice parent = new MaintenanceRequestCategoryChoice();
+                choice.assignParent(parent);
+                choice = parent;
             }
-            if (child != null) {
-                child.assignParent(choice);
-            }
-            child = choice;
+            choice.setViewable(isViewable());
+            choice.setTitle(EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue()));
         }
+        // set options and re-populate
         mrCategory.setOptionsMeta(meta);
-        choicesReady = true;
+        mrCategory.populate(getValue().category());
+
+        // attach selectors to the panel - bottom up
+        categoryPanel.clear();
+        int row = levels;
+        for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
+            categoryPanel.setWidget(--row, 0, 2, new FormDecoratorBuilder(choice, 20, true).build());
+        }
     }
 
     @Override
@@ -247,10 +281,8 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             return;
         }
 
-        if (isEditable()) {
-//            buildingSelector.setEditable(getValue().building().isNull());
-//            reporterSelector.setEditable(getValue().reporter().isNull());
-        }
+        // to support yardi mode with multiple interfaces
+        ensureBuilding();
 
         StatusPhase phase = mr.status().phase().getValue();
         get(proto().scheduledDate()).setVisible(phase == StatusPhase.Scheduled);
@@ -274,17 +306,24 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
         @Override
         protected BuildingSelectorDialog getSelectorDialog() {
-            return new BuildingSelectorDialog(false) {
+            return getSelectorDialog(true);
+        }
 
+        public BuildingSelectorDialog getSelectorDialog(boolean allowCancel) {
+            BuildingSelectorDialog buildingDialog = new BuildingSelectorDialog(false) {
                 @Override
                 public boolean onClickOk() {
                     if (getSelectedItems().isEmpty()) {
                         return false;
                     }
                     setValue(getSelectedItems().get(0));
+                    setMaintenanceRequestCategoryMeta();
                     return true;
                 }
             };
+            buildingDialog.getCancelButton().setVisible(allowCancel);
+
+            return buildingDialog;
         }
     }
 

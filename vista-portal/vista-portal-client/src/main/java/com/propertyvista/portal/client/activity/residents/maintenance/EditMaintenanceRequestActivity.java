@@ -44,8 +44,6 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     private final Key entityId;
 
-    private MaintenanceRequestMetadataDTO meta;
-
     public EditMaintenanceRequestActivity(AppPlace place) {
         srv = GWT.create(MaintenanceService.class);
         this.view = ResidentsViewFactory.instance(EditMaintenanceRequestView.class);
@@ -93,16 +91,11 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     @Override
     public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building) {
-        if (meta == null) {
-            srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO result) {
-                    meta = result;
-                    callback.onSuccess(result);
-                }
-            }, false, building);
-        } else {
-            callback.onSuccess(meta);
-        }
+        srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadataDTO result) {
+                callback.onSuccess(result);
+            }
+        }, false, building);
     }
 }

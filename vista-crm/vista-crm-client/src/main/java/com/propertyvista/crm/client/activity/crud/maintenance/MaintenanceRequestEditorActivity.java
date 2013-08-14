@@ -30,8 +30,6 @@ import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
-    private MaintenanceRequestMetadataDTO meta;
-
     public MaintenanceRequestEditorActivity(CrudAppPlace place) {
         super(place, CrmSite.getViewFactory().instantiate(MaintenanceRequestEditorView.class), GWT
                 .<MaintenanceCrudService> create(MaintenanceCrudService.class), MaintenanceRequestDTO.class);
@@ -48,16 +46,11 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
 
     @Override
     public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building) {
-        if (meta == null) {
-            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO result) {
-                    meta = result;
-                    callback.onSuccess(result);
-                }
-            }, false, building);
-        } else {
-            callback.onSuccess(meta);
-        }
+        ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadataDTO result) {
+                callback.onSuccess(result);
+            }
+        }, false, building);
     }
 }

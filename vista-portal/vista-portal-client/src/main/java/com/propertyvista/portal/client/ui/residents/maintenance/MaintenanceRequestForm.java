@@ -55,8 +55,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
 
-    private boolean choicesReady = false;
-
     public MaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
     }
@@ -163,7 +161,7 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     }
 
     public void initSelectors() {
-        if (meta == null || choicesReady) {
+        if (meta == null) {
             return;
         }
 
@@ -172,11 +170,13 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         // create selectors
         MaintenanceRequestCategoryChoice child = null;
         MaintenanceRequestCategoryChoice mrCategory = null;
+        categoryPanel.clear();
         for (int i = 0; i < levels; i++) {
             MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
             String choiceLabel = EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue());
             int row = levels - 1 - i;
             if (i == 0) {
+                unbind(proto().category());
                 categoryPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build());
                 mrCategory = choice;
             } else {
@@ -188,7 +188,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
             child = choice;
         }
         mrCategory.setOptionsMeta(meta);
-        choicesReady = true;
     }
 
     class PrioritySelector extends CComboBox<MaintenanceRequestPriority> {

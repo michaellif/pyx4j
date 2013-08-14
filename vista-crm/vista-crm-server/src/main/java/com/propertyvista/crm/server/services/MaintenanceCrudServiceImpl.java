@@ -52,7 +52,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget retrieveTarget) {
+    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget RetrieveTarget) {
         enhanceAll(dto);
     }
 
@@ -74,7 +74,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     protected void enhanceDbo(MaintenanceRequest dbo) {
         Persistence.service().retrieve(dbo.building());
-        Persistence.service().retrieve(dbo.reporter());
+//        Persistence.service().retrieve(dbo.reporter());
 //        Persistence.service().retrieve(dbo.category());
         MaintenanceRequestCategory parent = dbo.category().parent();
         while (!parent.isNull()) {
@@ -85,21 +85,12 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void retrieve(final AsyncCallback<MaintenanceRequestDTO> callback, Key entityId, final RetrieveTarget retrieveTarget) {
-        // get building from the first attempt
-        super.retrieve(new AsyncCallback<MaintenanceRequestDTO>() {
-            @Override
-            public void onFailure(Throwable caught) {
-                callback.onFailure(caught);
-            }
-
-            @Override
-            public void onSuccess(MaintenanceRequestDTO result) {
-                ServerSideFactory.create(MaintenanceFacade.class).beforeItemRequest(result.building());
-                MaintenanceCrudServiceImpl.super.retrieve(callback, result.getPrimaryKey(), retrieveTarget);
-            }
-
-        }, entityId, retrieveTarget);
+    protected MaintenanceRequest retrieve(Key entityId, RetrieveTarget retrieveTarget) {
+        // get building first
+        MaintenanceRequest request = Persistence.service().retrieve(MaintenanceRequest.class, entityId);
+        ServerSideFactory.create(MaintenanceFacade.class).beforeItemRequest(request.building());
+        MaintenanceRequest result = super.retrieve(entityId, retrieveTarget);
+        return result;
     }
 
     @Override
@@ -174,7 +165,7 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
 
     @Override
     public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, boolean levelsOnly, Building building) {
-        if (building == null && VistaFeatures.instance().yardiIntegration()) {
+        if (building.isNull() && VistaFeatures.instance().yardiIntegration()) {
             // ensure single interface
             if (VistaFeatures.instance().yardiInterfaces() > 1) {
                 throw new Error("Building selection must be forced");
@@ -184,9 +175,9 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
         }
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         MaintenanceRequestMetadataDTO metaDto = EntityFactory.create(MaintenanceRequestMetadataDTO.class);
-        metaDto.categoryLevels().set(meta.categoryLevels());
-        metaDto.statuses().set(meta.statuses());
-        metaDto.priorities().set(meta.priorities());
+        metaDto.categoryLevels().addAll(meta.categoryLevels());
+        metaDto.statuses().addAll(meta.statuses());
+        metaDto.priorities().addAll(meta.priorities());
         if (!levelsOnly) {
             metaDto.rootCategory().set(meta.rootCategory());
         }

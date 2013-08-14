@@ -19,6 +19,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 
 import com.pyx4j.forms.client.ui.CComboBox;
+import com.pyx4j.forms.client.ui.CListBox.AsyncOptionsReadyCallback;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -73,7 +74,10 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         }
         // set visibility based on value pushed by parent container or child selector via onValueSet()
         setVisible(parent == null || (value != null && !value.name().isNull()));
-        super.setEditorValue(value);
+        // in edit mode only call super if options are ready - see note above regarding NComboBox#refreshOptions()
+        if (isViewable() || getOptions().size() > 0) {
+            super.setEditorValue(value);
+        }
     }
 
     @Override
@@ -121,6 +125,10 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         parent.acceptChild(this);
     }
 
+    public MaintenanceRequestCategoryChoice getParentSelector() {
+        return parent;
+    }
+
     protected void acceptChild(final MaintenanceRequestCategoryChoice child) {
         this.child = child;
         if (isEditable()) {
@@ -133,8 +141,16 @@ public class MaintenanceRequestCategoryChoice extends CComboBox<MaintenanceReque
         }
     }
 
-    protected int getLevel() {
+    public int getLevel() {
         return parent == null ? 1 : 1 + parent.getLevel();
+    }
+
+    @Override
+    public void retriveOptions(final AsyncOptionsReadyCallback<MaintenanceRequestCategory> callback) {
+        // don't bother with options in view mode
+        if (!isViewable()) {
+            super.retriveOptions(callback);
+        }
     }
 
     protected void resetOptions() {
