@@ -37,7 +37,7 @@ import com.propertyvista.server.jobs.TaskRunner;
 public class CreditCheckStatusCrudServiceImpl implements CreditCheckStatusCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
+    public void retrieve(AsyncCallback<CreditCheckStatusDTO> callback, Key entityId, RetrieveTarget retrieveTarget ) {
 
         final CreditCheckStatusDTO status = EntityFactory.create(CreditCheckStatusDTO.class);
         final Pmc pmc = VistaDeployment.getCurrentPmc();

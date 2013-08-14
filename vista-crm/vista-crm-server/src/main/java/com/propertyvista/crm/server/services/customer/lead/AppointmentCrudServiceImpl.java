@@ -36,8 +36,8 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
     }
 
     @Override
-    protected void enhanceRetrieved(Appointment entity, Appointment dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(entity, dto, RetrieveTarget);
+    protected void enhanceRetrieved(Appointment entity, Appointment dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(entity, dto, retrieveTarget);
         Persistence.service().retrieve(dto.lead());
     }
 
@@ -50,7 +50,7 @@ public class AppointmentCrudServiceImpl extends AbstractCrudServiceImpl<Appointm
     @Override
     public void close(AsyncCallback<VoidSerializable> callback, String reason, Appointment appointmentId) {
         Persistence.service().retrieve(appointmentId);
-        
+
         appointmentId.status().setValue(Status.closed);
         appointmentId.closeReason().setValue(reason);
         Persistence.service().merge(appointmentId);

@@ -63,8 +63,8 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
     }
 
     @Override
-    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(entity, dto, RetrieveTarget);
+    protected void enhanceRetrieved(PaymentRecord entity, PaymentRecordDTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(entity, dto, retrieveTarget);
         enhanceListRetrieved(entity, dto);
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.billingAccount()));

@@ -28,8 +28,8 @@ public class ProductTaxPolicyCrudServiceImpl extends GenericPolicyCrudService<Pr
     }
 
     @Override
-    protected void enhanceRetrieved(ProductTaxPolicy in, ProductTaxPolicyDTO dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(in, dto, RetrieveTarget);
+    protected void enhanceRetrieved(ProductTaxPolicy in, ProductTaxPolicyDTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(in, dto, retrieveTarget);
         Persistence.service().retrieveMember(in.policyItems());
         dto.policyItems().setAttachLevel(AttachLevel.Attached);
         dto.policyItems().set(in.policyItems());

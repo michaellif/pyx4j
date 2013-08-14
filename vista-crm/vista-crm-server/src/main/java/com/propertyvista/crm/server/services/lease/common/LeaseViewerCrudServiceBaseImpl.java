@@ -47,8 +47,8 @@ public abstract class LeaseViewerCrudServiceBaseImpl<DTO extends LeaseDTO> exten
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(in, dto, RetrieveTarget);
+    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(in, dto, retrieveTarget);
 
         if (!VistaFeatures.instance().yardiIntegration()) {
             // create bill preview for draft leases/applications:

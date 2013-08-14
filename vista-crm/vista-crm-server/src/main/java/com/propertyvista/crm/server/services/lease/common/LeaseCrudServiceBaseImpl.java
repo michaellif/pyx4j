@@ -47,7 +47,7 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
     }
 
     @Override
-    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(Lease in, DTO dto, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieve(dto.unit().building());
 
         if (!dto.currentTerm().isNull()) {

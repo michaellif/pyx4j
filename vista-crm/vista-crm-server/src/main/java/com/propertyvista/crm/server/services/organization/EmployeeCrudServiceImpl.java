@@ -55,7 +55,7 @@ public class EmployeeCrudServiceImpl extends AbstractCrudServiceDtoImpl<Employee
     }
 
     @Override
-    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(Employee entity, EmployeeDTO dto, RetrieveTarget retrieveTarget ) {
         // Load detached data:
         Persistence.service().retrieveMember(entity.portfolios());
         dto.portfolios().set(entity.portfolios());

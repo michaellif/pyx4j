@@ -72,8 +72,8 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
     }
 
     @Override
-    protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(entity, dto, RetrieveTarget);
+    protected void enhanceRetrieved(Tenant entity, TenantDTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(entity, dto, retrieveTarget);
 
         dto.role().setValue(retrieveTenant(dto.leaseTermV(), entity).role().getValue());
 
@@ -91,7 +91,7 @@ public class TenantCrudServiceImpl extends LeaseParticipantCrudServiceBaseImpl<T
             insuranceCertificate.tenant().set(insuranceCertificate.tenant().createIdentityStub());
         }
 
-        if (RetrieveTarget == RetrieveTarget.Edit) {
+        if (retrieveTarget == RetrieveTarget.Edit) {
             TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(entity.lease().unit(),
                     TenantInsurancePolicy.class);
             if (insurancePolicy.requireMinimumLiability().isBooleanTrue()) {

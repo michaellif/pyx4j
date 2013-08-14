@@ -30,8 +30,8 @@ import com.propertyvista.domain.tenant.Customer;
 public class CustomerCreditCheckLongReportServiceImpl implements CustomerCreditCheckLongReportService {
 
     @Override
-    public void retrieve(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
-        if (RetrieveTarget == RetrieveTarget.View) {
+    public void retrieve(AsyncCallback<CustomerCreditCheckLongReportDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
+        if (retrieveTarget == RetrieveTarget.View) {
             callback.onSuccess(ServerSideFactory.create(ScreeningFacade.class).retriveLongReport(Persistence.service().retrieve(Customer.class, entityId)));
         } else {
             throw new Error("Not intended for Edit!");

@@ -39,7 +39,7 @@ public class ServiceCrudServiceImpl extends AbstractCrudServiceImpl<Service> imp
     }
 
     @Override
-    protected void enhanceRetrieved(Service dbo, Service dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(Service dbo, Service dto, RetrieveTarget retrieveTarget) {
         // Load detached data:
 
         /*

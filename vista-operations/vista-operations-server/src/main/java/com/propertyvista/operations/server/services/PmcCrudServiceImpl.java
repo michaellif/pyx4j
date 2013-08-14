@@ -69,7 +69,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void retrievedSingle(Pmc entity, RetrieveTarget RetrieveTarget) {
+    protected void retrievedSingle(Pmc entity, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(entity.equifaxInfo());
         Persistence.service().retrieveMember(entity.equifaxFee());
         Persistence.service().retrieveMember(entity.yardiCredentials());
@@ -85,8 +85,8 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
     }
 
     @Override
-    protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTarget RetrieveTarget) {
-        super.enhanceRetrieved(entity, dto, RetrieveTarget);
+    protected void enhanceRetrieved(Pmc entity, PmcDTO dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(entity, dto, retrieveTarget);
 
         dto.vistaCrmUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.crm, true));
         dto.residentPortalUrl().setValue(VistaDeployment.getBaseApplicationURL(entity, VistaApplication.residentPortal, false));

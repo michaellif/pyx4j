@@ -78,7 +78,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget retrieveTarget ) {
         enhanceAll(dto);
     }
 

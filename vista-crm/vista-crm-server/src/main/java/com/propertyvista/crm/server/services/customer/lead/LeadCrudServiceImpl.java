@@ -48,7 +48,7 @@ public class LeadCrudServiceImpl extends AbstractCrudServiceImpl<Lead> implement
     }
 
     @Override
-    protected void enhanceRetrieved(Lead entity, Lead dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(Lead entity, Lead dto, RetrieveTarget retrieveTarget) {
         if (!dto.floorplan().isNull()) {
             Persistence.service().retrieve(dto.floorplan().building(), AttachLevel.ToStringMembers);
         }

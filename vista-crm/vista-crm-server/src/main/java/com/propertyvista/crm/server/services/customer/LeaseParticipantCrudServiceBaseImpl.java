@@ -56,7 +56,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
     }
 
     @Override
-    protected void enhanceRetrieved(DBO entity, DTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(DBO entity, DTO dto, RetrieveTarget retrieveTarget) {
         dto.leaseTermV().set(retrieveLeaseTerm(entity));
 
         LeaseParticipantUtils.retrieveCustomerScreeningPointer(dto.customer());
@@ -64,7 +64,7 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
         // fill/update payment methods: 
         dto.paymentMethods().clear();
         dto.paymentMethods().addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrieveLeasePaymentMethods(entity.customer()));
-        if (RetrieveTarget == RetrieveTarget.Edit) {
+        if (retrieveTarget == RetrieveTarget.Edit) {
             for (LeasePaymentMethod method : dto.paymentMethods()) {
                 Persistence.service().retrieve(method.details());
             }

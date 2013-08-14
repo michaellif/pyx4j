@@ -38,8 +38,7 @@ public class CustomerCreditCheckCrudServiceImpl extends AbstractCrudServiceDtoIm
     }
 
     @Override
-    protected void enhanceRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto,
-            RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(CustomerCreditCheck entity, CustomerCreditCheckDTO dto, RetrieveTarget retrieveTarget) {
         Persistence.service().retrieveMember(dto.screening());
         Persistence.service().retrieveMember(dto.screening().screene());
 

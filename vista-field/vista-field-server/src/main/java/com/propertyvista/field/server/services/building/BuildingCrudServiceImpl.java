@@ -50,8 +50,8 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void retrievedSingle(Building entity, RetrieveTarget RetrieveTarget) {
-        super.retrievedSingle(entity, RetrieveTarget);
+    protected void retrievedSingle(Building entity, RetrieveTarget retrieveTarget) {
+        super.retrievedSingle(entity, retrieveTarget);
 
         Persistence.service().retrieveMember(entity.amenities());
         Persistence.service().retrieveMember(entity.utilities());
@@ -60,7 +60,7 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
     }
 
     @Override
-    protected void enhanceRetrieved(Building in, BuildingDTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(Building in, BuildingDTO dto, RetrieveTarget retrieveTarget) {
         // load detached entities/lists. Update other places: BuildingsResource and BuildingRetriever
         Persistence.service().retrieve(dto.media());
         Persistence.service().retrieve(dto.productCatalog());
@@ -68,13 +68,13 @@ public class BuildingCrudServiceImpl extends AbstractCrudServiceDtoImpl<Building
         Persistence.service().retrieve(dto.contacts().organizationContacts());
         Persistence.service().retrieve(dto.marketing().adBlurbs());
 
-        if (RetrieveTarget == RetrieveTarget.View) {
+        if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<DashboardMetadata> criteria = EntityQueryCriteria.create(DashboardMetadata.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().type(), DashboardMetadata.DashboardType.building));
             dto.dashboards().addAll(Persistence.secureQuery(criteria, AttachLevel.ToStringMembers));
         }
 
-        if (RetrieveTarget == RetrieveTarget.Edit) {
+        if (retrieveTarget == RetrieveTarget.Edit) {
             EntityQueryCriteria<ARCode> featureItemCriteria = EntityQueryCriteria.create(ARCode.class);
             featureItemCriteria.add(PropertyCriterion.in(featureItemCriteria.proto().type(), ARCode.Type.AddOn, ARCode.Type.Utility));
             dto.availableUtilities().addAll(Persistence.service().query(featureItemCriteria));

@@ -36,7 +36,7 @@ public class HomePageGadgetCrudServiceImpl extends AbstractCrudServiceImpl<HomeP
     }
 
     @Override
-    protected void enhanceRetrieved(HomePageGadget entity, HomePageGadget dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(HomePageGadget entity, HomePageGadget dto, RetrieveTarget retrieveTarget ) {
         // set the gadget type based on the content
         @SuppressWarnings("unchecked")
         GadgetType type = GadgetType.getGadgetType((Class<? extends GadgetContent>) entity.content().getInstanceValueClass());

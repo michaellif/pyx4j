@@ -41,7 +41,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(OperationsUserCredential entity, OperationsUserDTO dto, RetrieveTarget retrieveTarget ) {
         if (!entity.behaviors().isEmpty()) {
             dto.role().setValue(entity.behaviors().iterator().next());
         }
@@ -53,7 +53,7 @@ public class AdminUserCrudServiceImpl extends AbstractCrudServiceDtoImpl<Operati
     }
 
     @Override
-    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget RetrieveTarget) {
+    protected void retrievedSingle(OperationsUserCredential entity, RetrieveTarget retrieveTarget ) {
         Persistence.service().retrieve(entity.user());
     }
 

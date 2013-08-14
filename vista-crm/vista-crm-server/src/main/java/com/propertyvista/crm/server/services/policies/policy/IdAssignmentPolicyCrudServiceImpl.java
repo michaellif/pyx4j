@@ -32,7 +32,7 @@ public class IdAssignmentPolicyCrudServiceImpl extends GenericPolicyCrudService<
     }
 
     @Override
-    protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(IdAssignmentPolicy entity, IdAssignmentPolicyDTO dto, RetrieveTarget retrieveTarget ) {
         // tune up UI items in case of YardyInegration mode:
         if (VistaFeatures.instance().yardiIntegration()) {
             for (IdAssignmentItem item : entity.items()) {

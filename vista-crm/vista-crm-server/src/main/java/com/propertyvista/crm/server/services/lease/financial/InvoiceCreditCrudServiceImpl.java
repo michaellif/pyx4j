@@ -36,7 +36,7 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 public class InvoiceCreditCrudServiceImpl implements InvoiceCreditCrudService {
 
     @Override
-    public void retrieve(AsyncCallback<InvoiceCreditDTO> callback, Key entityId, RetrieveTarget RetrieveTarget) {
+    public void retrieve(AsyncCallback<InvoiceCreditDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
         InvoiceCredit creditDbo = Persistence.secureRetrieve(InvoiceCredit.class, entityId);
         Persistence.service().retrieveMember(creditDbo.debitLinks(), AttachLevel.Attached);
 

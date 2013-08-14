@@ -29,7 +29,7 @@ public abstract class AbstractVistaVersionedCrudServiceImpl<E extends IVersioned
     }
 
     @Override
-    protected void enhanceRetrieved(E entity, E dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(E entity, E dto, RetrieveTarget retrieveTarget ) {
         setCreatedByUser(dto);
     }
 
