@@ -103,11 +103,12 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
 
         folder = new NavigFolder(i18n.tr("Policies"));
         if (!VistaFeatures.instance().yardiIntegration()) {
-            folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
-        }
-        if (!VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.ApplicationDocumentation());
         }
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
+        }
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AutoPayChange());
         if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.BackgroundCheck());
         }
@@ -132,7 +133,6 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.Restrictions());
         }
         folder.addNavigItem(new CrmSiteMap.Administration.Policies.TenantInsurance());
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AutoPayChange());
         if (VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.YardiInterface());
         }
