@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy;
 
 import com.pyx4j.site.client.ui.prime.form.IViewer;
 
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
+import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
-public interface AutoPayChangePolicyViewerView extends IViewer<AutoPayChangePolicyDTO> {
+public interface AutoPayChangePolicyViewerView extends IViewer<AutoPayPolicyDTO> {
 
 }

@@ -14,11 +14,11 @@
 package com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy;
 
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
+import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
-public class AutoPayChangePolicyViewerViewImpl extends CrmViewerViewImplBase<AutoPayChangePolicyDTO> implements AutoPayChangePolicyViewerView {
+public class AutoPayChangePolicyViewerViewImpl extends CrmViewerViewImplBase<AutoPayPolicyDTO> implements AutoPayChangePolicyViewerView {
 
     public AutoPayChangePolicyViewerViewImpl() {
-        setForm(new AutoPayChangePolicyForm(this));
+        setForm(new AutoPayPolicyForm(this));
     }
 }

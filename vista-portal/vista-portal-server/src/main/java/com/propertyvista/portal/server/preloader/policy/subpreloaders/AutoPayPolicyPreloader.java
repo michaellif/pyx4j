@@ -15,19 +15,23 @@ package com.propertyvista.portal.server.preloader.policy.subpreloaders;
 
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.portal.server.preloader.policy.util.AbstractPolicyPreloader;
 
-public class AutoPayChangePolicyPreloader extends AbstractPolicyPreloader<AutoPayChangePolicy> {
+public class AutoPayPolicyPreloader extends AbstractPolicyPreloader<AutoPayPolicy> {
 
-    public AutoPayChangePolicyPreloader() {
-        super(AutoPayChangePolicy.class);
+    public AutoPayPolicyPreloader() {
+        super(AutoPayPolicy.class);
     }
 
     @Override
-    protected AutoPayChangePolicy createPolicy(StringBuilder log) {
-        AutoPayChangePolicy policy = EntityFactory.create(AutoPayChangePolicy.class);
-        policy.rule().setValue(AutoPayChangePolicy.ChangeRule.keepPercentage);
+    protected AutoPayPolicy createPolicy(StringBuilder log) {
+        AutoPayPolicy policy = EntityFactory.create(AutoPayPolicy.class);
+
+        policy.onLeaseChargeChangeRule().setValue(AutoPayPolicy.ChangeRule.keepPercentage);
+        policy.allowFirstBillingPeriodCharge().setValue(Boolean.TRUE);
+        policy.allowLastBillingPeriodCharge().setValue(Boolean.FALSE);
+
         return policy;
     }
 }

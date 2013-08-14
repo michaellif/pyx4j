@@ -25,10 +25,10 @@ import com.propertyvista.domain.policy.framework.LowestApplicableNode;
 import com.propertyvista.domain.policy.framework.Policy;
 import com.propertyvista.domain.property.asset.building.Building;
 
-@Caption(name = "AutoPay Change Policy")
-@DiscriminatorValue("AutoPayChangePolicy")
+@Caption(name = "AutoPay Policy")
+@DiscriminatorValue("AutoPayPolicy")
 @LowestApplicableNode(value = Building.class)
-public interface AutoPayChangePolicy extends Policy {
+public interface AutoPayPolicy extends Policy {
 
     @I18n
     enum ChangeRule {
@@ -45,7 +45,11 @@ public interface AutoPayChangePolicy extends Policy {
         };
     }
 
-    @Caption(name = "Change rule", description = "AutoPay Change Rule for Lease Charge Changes (Suggestion)")
     @NotNull
-    IPrimitive<ChangeRule> rule();
+    @Caption(description = "AutoPay Change Rule for Lease Charge Changes (Suggestion)")
+    IPrimitive<ChangeRule> onLeaseChargeChangeRule();
+
+    IPrimitive<Boolean> allowFirstBillingPeriodCharge();
+
+    IPrimitive<Boolean> allowLastBillingPeriodCharge();
 }

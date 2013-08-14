@@ -22,14 +22,14 @@ import com.pyx4j.site.client.ui.prime.form.IForm;
 
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyDTOTabPanelBasedForm;
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
+import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
-public class AutoPayChangePolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayChangePolicyDTO> {
+public class AutoPayPolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayPolicyDTO> {
 
-    private static final I18n i18n = I18n.get(AutoPayChangePolicyForm.class);
+    private static final I18n i18n = I18n.get(AutoPayPolicyForm.class);
 
-    public AutoPayChangePolicyForm(IForm<AutoPayChangePolicyDTO> view) {
-        super(AutoPayChangePolicyDTO.class, view);
+    public AutoPayPolicyForm(IForm<AutoPayPolicyDTO> view) {
+        super(AutoPayPolicyDTO.class, view);
     }
 
     @Override
@@ -40,7 +40,13 @@ public class AutoPayChangePolicyForm extends PolicyDTOTabPanelBasedForm<AutoPayC
     private TwoColumnFlexFormPanel createPolicyEditorPanel() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel("Settings");
         int row = -1;
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().rule()), 15, true).build());
+
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().onLeaseChargeChangeRule()), 15, true).labelWidth(20).build());
+
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowFirstBillingPeriodCharge()), 5, true).labelWidth(20).build());
+
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().allowLastBillingPeriodCharge()), 5, true).labelWidth(20).build());
+
         return panel;
     }
 

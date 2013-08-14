@@ -48,7 +48,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.operations.server.upgrade.UpgradeProcedure;
 import com.propertyvista.portal.server.preloader.ReferenceDataPreloader;
-import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayChangePolicyPreloader;
+import com.propertyvista.portal.server.preloader.policy.subpreloaders.AutoPayPolicyPreloader;
 import com.propertyvista.portal.server.preloader.policy.subpreloaders.YardiInterfacePolicyPreloader;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
 import com.propertyvista.server.jobs.TaskRunner;
@@ -147,7 +147,7 @@ public class UpgradeProcedure110 implements UpgradeProcedure {
 
     private void runAutoPayChangePolicyGeneration() {
         log.info("Creating AutoPayChangePolicy and setting its scope to 'Organization'");
-        AutoPayChangePolicyPreloader policyPreloader = new AutoPayChangePolicyPreloader();
+        AutoPayPolicyPreloader policyPreloader = new AutoPayPolicyPreloader();
         OrganizationPoliciesNode organizationNode = Persistence.service().retrieve(EntityQueryCriteria.create(OrganizationPoliciesNode.class));
         if (organizationNode == null) {
             throw new UserRuntimeException("Organizational Policy Was not found");

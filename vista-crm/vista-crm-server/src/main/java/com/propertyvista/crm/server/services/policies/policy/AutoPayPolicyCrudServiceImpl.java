@@ -13,16 +13,16 @@
  */
 package com.propertyvista.crm.server.services.policies.policy;
 
-import com.propertyvista.crm.rpc.services.policies.policy.AutoPayChangePolicyCrudService;
+import com.propertyvista.crm.rpc.services.policies.policy.AutoPayPolicyCrudService;
 import com.propertyvista.crm.server.services.policies.GenericPolicyCrudService;
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
-import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
+import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 
-public class AutoPayChangePolicyCrudServiceImpl extends GenericPolicyCrudService<AutoPayChangePolicy, AutoPayChangePolicyDTO> implements
-        AutoPayChangePolicyCrudService {
+public class AutoPayPolicyCrudServiceImpl extends GenericPolicyCrudService<AutoPayPolicy, AutoPayPolicyDTO> implements
+        AutoPayPolicyCrudService {
 
-    public AutoPayChangePolicyCrudServiceImpl() {
-        super(AutoPayChangePolicy.class, AutoPayChangePolicyDTO.class);
+    public AutoPayPolicyCrudServiceImpl() {
+        super(AutoPayPolicy.class, AutoPayPolicyDTO.class);
     }
 
 }

@@ -168,9 +168,9 @@ import com.propertyvista.crm.client.activity.policies.applicationdocumentation.A
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.ar.ARPolicyViewerActivity;
-import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayChangePolicyEditorActivity;
-import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayChangePolicyListerActivity;
-import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayChangePolicyViewerActivity;
+import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayPolicyEditorActivity;
+import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayPolicyListerActivity;
+import com.propertyvista.crm.client.activity.policies.autopaychange.AutoPayPolicyViewerActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyEditorActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyListerActivity;
 import com.propertyvista.crm.client.activity.policies.backgroundcheck.BackgroundCheckPolicyViewerActivity;
@@ -1159,16 +1159,16 @@ public class ContentActivityMapper implements AppActivityMapper {
                             break;
                         }
 
-                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.AutoPayChange) {
+                    } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.AutoPay) {
                         switch (crudPlace.getType()) {
                         case lister:
-                            activity = new AutoPayChangePolicyListerActivity(crudPlace);
+                            activity = new AutoPayPolicyListerActivity(crudPlace);
                             break;
                         case editor:
-                            activity = new AutoPayChangePolicyEditorActivity(crudPlace);
+                            activity = new AutoPayPolicyEditorActivity(crudPlace);
                             break;
                         case viewer:
-                            activity = new AutoPayChangePolicyViewerActivity(crudPlace);
+                            activity = new AutoPayPolicyViewerActivity(crudPlace);
                             break;
                         }
                     } else if (crudPlace instanceof CrmSiteMap.Administration.Policies.YardiInterface) {

@@ -16,21 +16,24 @@ package com.propertyvista.test.mock.models;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
-import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.test.mock.MockDataModel;
 
-public class AutoPayChangePolicyDataModel extends MockDataModel<AutoPayChangePolicy> {
+public class AutoPayPolicyDataModel extends MockDataModel<AutoPayPolicy> {
 
-    public AutoPayChangePolicyDataModel() {
+    public AutoPayPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        AutoPayChangePolicy policy = EntityFactory.create(AutoPayChangePolicy.class);
-        policy.rule().setValue(AutoPayChangePolicy.ChangeRule.keepPercentage);
+        AutoPayPolicy policy = EntityFactory.create(AutoPayPolicy.class);
+
+        policy.onLeaseChargeChangeRule().setValue(AutoPayPolicy.ChangeRule.keepPercentage);
+        policy.allowFirstBillingPeriodCharge().setValue(Boolean.TRUE);
+        policy.allowLastBillingPeriodCharge().setValue(Boolean.FALSE);
+
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
     }
-
 }

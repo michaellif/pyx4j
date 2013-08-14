@@ -11,10 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.rpc.services.policies.policy;
+package com.propertyvista.domain.policy.dto;
 
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
+import com.pyx4j.entity.annotations.ExtendsDBO;
+import com.pyx4j.entity.annotations.Transient;
 
-public interface AutoPayChangePolicyCrudService extends AbstractPolicyCrudService<AutoPayChangePolicyDTO> {
+import com.propertyvista.domain.policy.framework.PolicyDTOBase;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
+
+@Transient
+@ExtendsDBO(value = AutoPayPolicy.class)
+public interface AutoPayPolicyDTO extends PolicyDTOBase, AutoPayPolicy {
 
 }

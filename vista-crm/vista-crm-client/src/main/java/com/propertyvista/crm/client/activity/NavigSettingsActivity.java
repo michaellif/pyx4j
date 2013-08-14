@@ -108,7 +108,7 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         if (!VistaFeatures.instance().yardiIntegration()) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.AR());
         }
-        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AutoPayChange());
+        folder.addNavigItem(new CrmSiteMap.Administration.Policies.AutoPay());
         if (!VistaTODO.Equifax_Off_VISTA_478 && VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
             folder.addNavigItem(new CrmSiteMap.Administration.Policies.BackgroundCheck());
         }

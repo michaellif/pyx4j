@@ -15,8 +15,8 @@ package com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy;
 
 import com.pyx4j.site.client.ui.prime.form.IEditor;
 
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
+import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
-public interface AutoPayChangePolicyEditorView extends IEditor<AutoPayChangePolicyDTO> {
+public interface AutoPayChangePolicyEditorView extends IEditor<AutoPayPolicyDTO> {
 
 }

@@ -15,18 +15,18 @@ package com.propertyvista.crm.client.ui.crud.policies.autopaychangepolicy;
 
 import com.propertyvista.crm.client.ui.crud.CrmListerViewImplBase;
 import com.propertyvista.crm.client.ui.crud.policies.common.PolicyListerBase;
-import com.propertyvista.domain.policy.dto.AutoPayChangePolicyDTO;
+import com.propertyvista.domain.policy.dto.AutoPayPolicyDTO;
 
-public class AutoPayChangePolicyListerViewImpl extends CrmListerViewImplBase<AutoPayChangePolicyDTO> {
+public class AutoPayChangePolicyListerViewImpl extends CrmListerViewImplBase<AutoPayPolicyDTO> {
 
     public AutoPayChangePolicyListerViewImpl() {
         setLister(new AutoPayChangePolicyLister());
     }
 
-    public static class AutoPayChangePolicyLister extends PolicyListerBase<AutoPayChangePolicyDTO> {
+    public static class AutoPayChangePolicyLister extends PolicyListerBase<AutoPayPolicyDTO> {
 
         public AutoPayChangePolicyLister() {
-            super(AutoPayChangePolicyDTO.class);
+            super(AutoPayPolicyDTO.class);
         }
 
     }

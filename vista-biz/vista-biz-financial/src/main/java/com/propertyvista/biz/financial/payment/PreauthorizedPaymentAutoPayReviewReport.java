@@ -35,7 +35,7 @@ import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
-import com.propertyvista.domain.policy.policies.AutoPayChangePolicy;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -117,9 +117,9 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         review.paymentDue().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(billingAccount.lease()));
 
-        AutoPayChangePolicy policy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(billingAccount.lease().unit().building(),
-                AutoPayChangePolicy.class);
-        AutoPayChangePolicy.ChangeRule changeRule = policy.rule().getValue();
+        AutoPayPolicy policy = ServerSideFactory.create(PolicyFacade.class)
+                .obtainEffectivePolicy(billingAccount.lease().unit().building(), AutoPayPolicy.class);
+        AutoPayPolicy.ChangeRule changeRule = policy.onLeaseChargeChangeRule().getValue();
 
         List<PreauthorizedPayment> preauthorizedPayments = getPreauthorizedPayments(billingAccount);
         for (PreauthorizedPayment preauthorizedPayment : preauthorizedPayments) {
@@ -192,7 +192,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         }
     }
 
-    private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(BillingAccount billingAccount, AutoPayChangePolicy.ChangeRule changeRule,
+    private AutoPayReviewPreauthorizedPaymentDTO createPreauthorizedPaymentPreview(BillingAccount billingAccount, AutoPayPolicy.ChangeRule changeRule,
             LogicalDate preauthorizedPaymentDate, PreauthorizedPayment preauthorizedPayment) {
         AutoPayReviewPreauthorizedPaymentDTO papReview = EntityFactory.create(AutoPayReviewPreauthorizedPaymentDTO.class);
 
@@ -311,7 +311,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
         return (billableItem.expirationDate().isNull() || billableItem.expirationDate().getValue().after(preauthorizedPaymentDate));
     }
 
-    private AutoPayReviewChargeDetailDTO calulateSuggestedChargeDetail(BillingAccount billingAccount, AutoPayChangePolicy.ChangeRule changeRule,
+    private AutoPayReviewChargeDetailDTO calulateSuggestedChargeDetail(BillingAccount billingAccount, AutoPayPolicy.ChangeRule changeRule,
             LogicalDate preauthorizedPaymentDate, BillableItem newBillableItem, PreauthorizedPaymentCoveredItem coveredItem) {
         AutoPayReviewChargeDetailDTO suggestedChargeDetail = EntityFactory.create(AutoPayReviewChargeDetailDTO.class);
 
@@ -328,7 +328,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
     }
 
     private BigDecimal calulateNewPaymentValue(BigDecimal originalPaymentAmount, BigDecimal originalPrice, BigDecimal newPrice,
-            AutoPayChangePolicy.ChangeRule changeRule) {
+            AutoPayPolicy.ChangeRule changeRule) {
         switch (changeRule) {
         case keepUnchanged:
             return originalPaymentAmount;
