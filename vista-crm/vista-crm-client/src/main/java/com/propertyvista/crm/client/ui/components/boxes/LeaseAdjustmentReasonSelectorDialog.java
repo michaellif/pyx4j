@@ -65,7 +65,7 @@ public abstract class LeaseAdjustmentReasonSelectorDialog extends EntitySelector
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().name().getPath().toString(), false), new Sort(proto().glCode().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().name(), false), new Sort(proto().glCode(), false));
     }
 
     @Override

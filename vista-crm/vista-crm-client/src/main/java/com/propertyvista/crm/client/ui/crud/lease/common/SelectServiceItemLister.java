@@ -38,6 +38,6 @@ public class SelectServiceItemLister extends AbstractLister<ProductItem> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().code().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().code(), false));
     }
 }

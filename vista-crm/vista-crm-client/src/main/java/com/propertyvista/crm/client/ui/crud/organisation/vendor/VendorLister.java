@@ -35,6 +35,6 @@ public class VendorLister extends AbstractLister<Vendor> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().name(), false));
     }
 }

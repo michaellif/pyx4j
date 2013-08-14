@@ -28,10 +28,10 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.dialogs.EntitySelectorTableDialog;
 
-import com.propertyvista.operations.domain.scheduler.TriggerPmc;
-import com.propertyvista.operations.rpc.services.scheduler.SelectPmcListService;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.operations.domain.scheduler.TriggerPmc;
+import com.propertyvista.operations.rpc.services.scheduler.SelectPmcListService;
 
 public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
 
@@ -70,7 +70,7 @@ public class PopulationFolder extends VistaTableFolder<TriggerPmc> {
 
             @Override
             public List<Sort> getDefaultSorting() {
-                return Arrays.asList(new Sort(proto().name().getPath().toString(), false));
+                return Arrays.asList(new Sort(proto().name(), false));
             }
 
             @Override

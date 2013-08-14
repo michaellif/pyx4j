@@ -107,8 +107,7 @@ public abstract class UnitSelectorDialog extends EntitySelectorTableDialog<AptUn
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().building().propertyCode().getPath().toString(), false), new Sort(proto().info().number().getPath().toString(),
-                false));
+        return Arrays.asList(new Sort(proto().building().propertyCode(), false), new Sort(proto().info().number(), false));
     }
 
     @Override

@@ -44,6 +44,6 @@ public class LeadLister extends AbstractLister<Lead> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().leadId().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().leadId(), false));
     }
 }

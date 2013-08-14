@@ -76,7 +76,7 @@ public class UnitLister extends AbstractLister<AptUnitDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().buildingCode().getPath().toString(), false), new Sort(proto().info().number().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().buildingCode(), false), new Sort(proto().info().number(), false));
     }
 
     @Override

@@ -69,6 +69,6 @@ public class ConcessionLister extends VersionedLister<Concession> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().version().type().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().version().type(), false));
     }
 }

@@ -38,6 +38,6 @@ public class ShowingLister extends AbstractLister<ShowingDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().unit().building().getPath().toString(), false), new Sort(proto().unit().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().unit().building(), false), new Sort(proto().unit(), false));
     }
 }

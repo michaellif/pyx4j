@@ -75,6 +75,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
 
 
+
             @Override
             public ValidationError isValid(CComponent<List<Guest>> component, List<Guest> value) {
                 Boolean hasContact = false;
@@ -259,8 +260,7 @@ public class LeadForm extends CrmEntityForm<Lead> {
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().building().propertyCode().getPath().toString(), false), new Sort(
-                    proto().marketingName().getPath().toString(), false));
+            return Arrays.asList(new Sort(proto().building().propertyCode(), false), new Sort(proto().marketingName(), false));
         }
 
         @Override

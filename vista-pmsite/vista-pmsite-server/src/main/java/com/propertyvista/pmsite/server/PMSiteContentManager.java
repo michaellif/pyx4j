@@ -42,13 +42,13 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.ref.City;
 import com.propertyvista.domain.site.AvailableLocale;
 import com.propertyvista.domain.site.HtmlContent;
-import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.News;
 import com.propertyvista.domain.site.PageCaption;
 import com.propertyvista.domain.site.PageDescriptor;
 import com.propertyvista.domain.site.PageDescriptor.Type;
 import com.propertyvista.domain.site.PageMetaTags;
 import com.propertyvista.domain.site.PortalImageSet;
+import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
 import com.propertyvista.domain.site.SiteDescriptorChanges;
 import com.propertyvista.domain.site.SiteImageResource;
@@ -177,7 +177,7 @@ public class PMSiteContentManager implements Serializable {
     public List<AvailableLocale> getAllAvailableLocale() {
         if (allAvailableLocale == null) {
             EntityQueryCriteria<AvailableLocale> criteria = EntityQueryCriteria.create(AvailableLocale.class);
-            criteria.asc(criteria.proto().displayOrder().getPath().toString());
+            criteria.asc(criteria.proto().displayOrder());
             allAvailableLocale = Persistence.service().query(criteria);
         }
         if (allAvailableLocale == null) {
@@ -198,7 +198,7 @@ public class PMSiteContentManager implements Serializable {
         if (news.get(locale) == null) {
             EntityListCriteria<News> criteria = EntityListCriteria.create(News.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().locale(), locale));
-            criteria.desc(criteria.proto().date().getPath().toString());
+            criteria.desc(criteria.proto().date());
             criteria.setPageSize(4);
             criteria.setPageNumber(0);
             news.put(locale, Persistence.service().query(criteria));

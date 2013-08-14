@@ -97,7 +97,7 @@ public abstract class BuildingSelectorDialog extends EntitySelectorTableDialog<B
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().propertyCode().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().propertyCode(), false));
     }
 
     @Override

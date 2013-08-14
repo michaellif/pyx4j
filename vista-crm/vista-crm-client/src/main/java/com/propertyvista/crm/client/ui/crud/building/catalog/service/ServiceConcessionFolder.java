@@ -139,8 +139,7 @@ class ServiceConcessionFolder extends VistaTableFolder<Concession> {
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().version().type().getPath().toString(), false), new Sort(proto().version().effectiveDate().getPath()
-                    .toString(), false));
+            return Arrays.asList(new Sort(proto().version().type(), false), new Sort(proto().version().effectiveDate(), false));
         }
 
         @Override

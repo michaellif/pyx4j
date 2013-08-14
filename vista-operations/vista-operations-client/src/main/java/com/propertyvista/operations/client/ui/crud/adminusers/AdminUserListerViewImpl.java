@@ -44,7 +44,7 @@ public class AdminUserListerViewImpl extends OperationsListerViewImplBase<Operat
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().name().getPath().toString(), false), new Sort(proto().created().getPath().toString(), false));
+            return Arrays.asList(new Sort(proto().name(), false), new Sort(proto().created(), false));
         }
     }
 }

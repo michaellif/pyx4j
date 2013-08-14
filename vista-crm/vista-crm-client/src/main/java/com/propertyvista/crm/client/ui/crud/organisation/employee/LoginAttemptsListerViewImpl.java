@@ -44,7 +44,7 @@ public class LoginAttemptsListerViewImpl extends CrmListerViewImplBase<LoginAtte
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().time().getPath().toString(), true));
+            return Arrays.asList(new Sort(proto().time(), true));
         }
     }
 }

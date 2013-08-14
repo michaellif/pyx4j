@@ -13,15 +13,11 @@
  */
 package com.propertyvista.field.server.services.unit;
 
-import java.util.Arrays;
-import java.util.Vector;
-
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 
 import com.propertyvista.biz.asset.BuildingFacade;
@@ -49,7 +45,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
     }
 
     @Override
-    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTarget RetrieveTarget) {
+    protected void enhanceRetrieved(AptUnit in, AptUnitDTO dto, RetrieveTarget retrieveTarget) {
         //TODO: calculate value here:
         dto.buildingCode().set(Persistence.service().retrieve(Building.class, dto.building().getPrimaryKey()).propertyCode());
 
@@ -64,7 +60,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
             criteria.add(PropertyCriterion.eq(criteria.proto().unit(), in));
             criteria.add(PropertyCriterion.in(criteria.proto().status(), Lease.Status.current()));
             // set sorting by 'from date' to get last active lease first:
-            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().leaseFrom().getPath().toString(), true))));
+            criteria.asc(criteria.proto().leaseFrom());
             dto.lease().set(Persistence.service().retrieve(criteria));
         }
 
@@ -75,7 +71,7 @@ public class UnitCrudServiceImpl extends AbstractCrudServiceDtoImpl<AptUnit, Apt
         retrieveServicePrices(dto);
 
         // check unit catalog/lease readiness:
-        if (RetrieveTarget == RetrieveTarget.View) {
+        if (retrieveTarget == RetrieveTarget.View) {
             EntityQueryCriteria<ProductItem> criteria = EntityQueryCriteria.create(ProductItem.class);
             criteria.add(PropertyCriterion.in(criteria.proto().code().type(), ARCode.Type.services()));
             criteria.add(PropertyCriterion.eq(criteria.proto().element(), in));

@@ -65,7 +65,7 @@ public abstract class GlCodeSelectorDialog extends EntitySelectorTableDialog<GlC
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().codeId().getPath().toString(), false), new Sort(proto().glCodeCategory().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().codeId(), false), new Sort(proto().glCodeCategory(), false));
     }
 
     @Override

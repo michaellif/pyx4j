@@ -55,6 +55,6 @@ public class BuildingUnitLister extends UnitLister {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().info().floor().getPath().toString(), false), new Sort(proto().info().number().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().info().floor(), false), new Sort(proto().info().number(), false));
     }
 }

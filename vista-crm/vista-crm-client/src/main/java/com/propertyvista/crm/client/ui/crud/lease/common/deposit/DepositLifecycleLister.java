@@ -43,6 +43,6 @@ public class DepositLifecycleLister extends AbstractLister<DepositLifecycleDTO> 
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().depositDate().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().depositDate(), false));
     }
 }

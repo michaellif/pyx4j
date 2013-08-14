@@ -179,7 +179,7 @@ public class UnitForm extends CrmEntityForm<AptUnitDTO> {
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().marketingName().getPath().toString(), false), new Sort(proto().bedrooms().getPath().toString(), false));
+            return Arrays.asList(new Sort(proto().marketingName(), false), new Sort(proto().bedrooms(), false));
         }
 
         @Override

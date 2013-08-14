@@ -42,6 +42,6 @@ public class FloorplanLister extends AbstractLister<FloorplanDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().bedrooms().getPath().toString(), false), new Sort(proto().bathrooms().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().bedrooms(), false), new Sort(proto().bathrooms(), false));
     }
 }

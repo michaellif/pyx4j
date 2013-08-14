@@ -49,7 +49,7 @@ public class AptUnitSource {
     private void nextBuilding() {
         unitNo = 0;
         EntityListCriteria<Building> bcriteria = EntityListCriteria.create(Building.class);
-        bcriteria.asc(bcriteria.proto().propertyCode().getPath().toString());
+        bcriteria.asc(bcriteria.proto().propertyCode());
         bcriteria.setPageSize(1);
         bcriteria.setPageNumber(buildingNo++);
         Building building = Persistence.service().retrieve(bcriteria);
@@ -59,7 +59,7 @@ public class AptUnitSource {
 
         EntityQueryCriteria<AptUnit> ucriteria = new EntityQueryCriteria<AptUnit>(AptUnit.class);
         ucriteria.add(PropertyCriterion.eq(ucriteria.proto().building(), building));
-        ucriteria.asc(ucriteria.proto().info().number().getPath().toString());
+        ucriteria.asc(ucriteria.proto().info().number());
         units = Persistence.service().query(ucriteria);
         if (units.size() == 0) {
             nextBuilding();

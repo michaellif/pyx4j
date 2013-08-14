@@ -136,7 +136,7 @@ class ServiceFeatureFolder extends VistaTableFolder<Feature> {
 
         @Override
         public List<Sort> getDefaultSorting() {
-            return Arrays.asList(new Sort(proto().type().getPath().toString(), false), new Sort(proto().version().name().getPath().toString(), false));
+            return Arrays.asList(new Sort(proto().type(), false), new Sort(proto().version().name(), false));
         }
 
         @Override

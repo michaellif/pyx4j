@@ -86,7 +86,6 @@ public class BillLister extends AbstractLister<BillDataDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().bill().executionDate().getPath().toString(), false), new Sort(proto().bill().dueDate().getPath().toString(),
-                false));
+        return Arrays.asList(new Sort(proto().bill().executionDate(), false), new Sort(proto().bill().dueDate(), false));
     }
 }

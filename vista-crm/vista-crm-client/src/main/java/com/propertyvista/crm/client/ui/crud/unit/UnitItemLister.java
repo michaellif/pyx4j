@@ -39,6 +39,6 @@ public class UnitItemLister extends AbstractLister<AptUnitItem> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().type().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().type(), false));
     }
 }

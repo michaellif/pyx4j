@@ -43,6 +43,6 @@ public class ElevatorLister extends AbstractLister<ElevatorDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().model().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().model(), false));
     }
 }

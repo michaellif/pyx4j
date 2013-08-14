@@ -93,6 +93,6 @@ public abstract class VersionedLister<E extends IVersionedEntity<?>> extends Abs
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().version().versionNumber().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().version().versionNumber(), false));
     }
 }

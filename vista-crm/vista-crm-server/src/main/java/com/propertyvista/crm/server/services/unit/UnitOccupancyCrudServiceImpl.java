@@ -13,8 +13,6 @@
  */
 package com.propertyvista.crm.server.services.unit;
 
-import java.util.LinkedList;
-
 import javax.naming.OperationNotSupportedException;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -23,8 +21,6 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.AbstractCrudServiceImpl;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 
 import com.propertyvista.biz.occupancy.OccupancyFacade;
 import com.propertyvista.crm.rpc.services.unit.UnitOccupancyCrudService;
@@ -43,9 +39,7 @@ public class UnitOccupancyCrudServiceImpl extends AbstractCrudServiceImpl<AptUni
 
     @Override
     public void list(AsyncCallback<EntitySearchResult<AptUnitOccupancySegment>> callback, EntityListCriteria<AptUnitOccupancySegment> dtoCriteria) {
-        LinkedList<Sort> sortingCriteria = new LinkedList<EntityQueryCriteria.Sort>(dtoCriteria.getSorts());
-        sortingCriteria.push(new Sort(dtoProto.dateFrom().getPath().toString(), false));
-        dtoCriteria.setSorts(sortingCriteria);
+        dtoCriteria.asc(dtoProto.dateFrom());
         super.list(callback, dtoCriteria);
     }
 

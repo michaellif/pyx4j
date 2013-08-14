@@ -68,7 +68,7 @@ public abstract class LeaseTermSelectorDialog extends EntitySelectorTableDialog<
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().termFrom().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().termFrom(), false));
     }
 
     @Override

@@ -150,8 +150,7 @@ public class Converter {
 
         // List of amenities
         EntityQueryCriteria<BuildingAmenity> amenitysCriteria = EntityQueryCriteria.create(BuildingAmenity.class);
-        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).building().getPath().toString(), Restriction.EQUAL,
-                from));
+        amenitysCriteria.add(new PropertyCriterion(EntityFactory.getEntityPrototype(BuildingAmenity.class).building(), Restriction.EQUAL, from));
         for (BuildingAmenity amenity : Persistence.service().query(amenitysCriteria)) {
             AmenityDTO amntDTO = EntityFactory.create(AmenityDTO.class);
             amntDTO.name().setValue(amenity.getStringView());

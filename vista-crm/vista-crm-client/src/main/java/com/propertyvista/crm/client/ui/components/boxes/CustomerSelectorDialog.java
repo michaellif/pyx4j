@@ -71,7 +71,7 @@ public abstract class CustomerSelectorDialog extends EntitySelectorTableDialog<C
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().person().name().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().person().name(), false));
     }
 
     @Override

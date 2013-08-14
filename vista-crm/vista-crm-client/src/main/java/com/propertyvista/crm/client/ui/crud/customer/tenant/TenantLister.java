@@ -75,8 +75,7 @@ public class TenantLister extends AbstractLister<TenantDTO> {
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().lease().leaseId().getPath().toString(), false), new Sort(proto().customer().person().name().getPath().toString(),
-                false));
+        return Arrays.asList(new Sort(proto().lease().leaseId(), false), new Sort(proto().customer().person().name(), false));
     }
 
     public void setTenantPadFileUploadEnable(boolean isEnabled) {

@@ -32,7 +32,6 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
     public VersionSelectorDialog(Class<V> entityVersionClass, Key entityId) {
         super(entityVersionClass, false, Collections.<V> emptyList(), i18n.tr("Select Version"));
         setParentFiltering(entityId);
-        getLister().setSorting(Arrays.asList(new Sort(proto().versionNumber().getPath().toString(), false)));
         setWidth("700px");
     }
 
@@ -54,6 +53,6 @@ public abstract class VersionSelectorDialog<V extends IVersionData<?>> extends E
 
     @Override
     public List<Sort> getDefaultSorting() {
-        return Arrays.asList(new Sort(proto().versionNumber().getPath().toString(), false));
+        return Arrays.asList(new Sort(proto().versionNumber(), false));
     }
 }

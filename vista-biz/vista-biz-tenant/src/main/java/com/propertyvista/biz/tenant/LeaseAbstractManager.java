@@ -15,12 +15,10 @@ package com.propertyvista.biz.tenant;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -37,7 +35,6 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
-import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
 import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.entity.shared.utils.EntityGraph;
@@ -1004,7 +1001,7 @@ public abstract class LeaseAbstractManager {
             criteria.add(PropertyCriterion.eq(criteria.proto().lease(), lease));
             criteria.add(PropertyCriterion.ne(criteria.proto().status(), LeaseTerm.Status.Offer));
             // set sorting by 'from date':
-            criteria.setSorts(new Vector<Sort>(Arrays.asList(new Sort(criteria.proto().termFrom().getPath().toString(), false))));
+            criteria.asc(criteria.proto().termFrom());
 
             List<LeaseTerm> terms = Persistence.service().query(criteria);
             assert (!terms.isEmpty());
