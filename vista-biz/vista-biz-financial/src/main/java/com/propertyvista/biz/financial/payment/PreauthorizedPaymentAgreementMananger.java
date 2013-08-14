@@ -37,6 +37,7 @@ import com.pyx4j.gwt.server.DateUtils;
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.communication.NotificationFacade;
 import com.propertyvista.biz.financial.billingcycle.BillingCycleFacade;
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -44,6 +45,7 @@ import com.propertyvista.domain.financial.billing.BillingCycle;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.domain.tenant.lease.BillableItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
@@ -208,7 +210,10 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         // lease last month check:
-        suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
+        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), AutoPayPolicy.class);
+        if (!autoPayPolicy.allowLastBillingPeriodCharge().getValue(Boolean.FALSE)) {
+            suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
+        }
 
         if (!suspend) {
             // migrate each PAP to new billableItems
