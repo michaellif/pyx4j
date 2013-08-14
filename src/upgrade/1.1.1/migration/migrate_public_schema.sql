@@ -68,6 +68,20 @@ BEGIN TRANSACTION;
  ALTER SEQUENCE yardi_building_origination_seq OWNER TO vista ;
  ALTER SEQUENCE yardi_maintenance_meta_origination_seq OWNER TO vista ;
  
+        /**
+        ***     =======================================================================================================
+        ***
+        ***             NEW AND ALTERED TABLES 
+        ***
+        ***     =======================================================================================================
+        **/
+ 
+ 
+        -- qrtz_fired_triggers
+        
+        ALTER TABLE qrtz_fired_triggers ADD COLUMN sched_time BIGINT;
+        
+        ALTER TABLE qrtz_fired_triggers ALTER COLUMN sched_time SET NOT NULL;
 COMMIT;
 
 SET client_min_messages = 'notice';
