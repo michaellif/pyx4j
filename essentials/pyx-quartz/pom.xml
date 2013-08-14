@@ -25,18 +25,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-oracle</artifactId>
-            <version>${quartzVersion}</version>
-            <optional>true</optional>
-        </dependency>
-        
-        <dependency>
             <groupId>com.pyx4j</groupId>
             <artifactId>pyx-entity-rdb</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
