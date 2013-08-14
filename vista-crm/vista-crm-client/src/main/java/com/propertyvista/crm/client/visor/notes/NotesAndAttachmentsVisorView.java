@@ -220,6 +220,15 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         content.setWidget(++row, 0, 2, inject(proto().attachments(), new AttachmentsEditorFolder()));
                     }
 
+                    content.setWidget(++row, 0, createLowerToolbar());
+                    content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
+
+                    setViewableMode(viewable);
+
+                    return content;
+                }
+
+                protected Toolbar createLowerToolbar() {
                     Toolbar tb = new Toolbar();
 
                     btnSave = new Button(i18n.tr("Save"), new Command() {
@@ -275,12 +284,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     btnCancel.setVisible(false);
                     tb.add(btnCancel);
 
-                    content.setWidget(++row, 0, tb);
-                    content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-
-                    setViewableMode(viewable);
-
-                    return content;
+                    return tb;
                 }
 
                 @Override
