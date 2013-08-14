@@ -58,11 +58,15 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
-        protected void onValueSet(boolean populate) {
-            super.onValueSet(populate);
+        public IsWidget createContent() {
+            IsWidget content = super.createContent();
+
+            // tune-up:
             setPaymentTypeSelectionVisible(false);
             setIsPreauthorizedVisible(true);
             setBillingAddressVisible(false);
+
+            return content;
         }
 
         @Override

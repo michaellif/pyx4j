@@ -89,13 +89,13 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
 
         @Override
         public IsWidget createContent() {
-            IsWidget w = super.createContent();
+            IsWidget content = super.createContent();
 
             // tune-up:
-            setPaymentTypeSelectionVisible(false);
+            setPaymentTypeSelectionVisible(!isEditable());
             setBillingAddressVisible(false);
 
-            return w;
+            return content;
         }
 
         @Override

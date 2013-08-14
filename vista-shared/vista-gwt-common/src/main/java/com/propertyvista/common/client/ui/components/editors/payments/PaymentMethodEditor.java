@@ -79,17 +79,16 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         int row = -1;
 
         main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().id(), new CNumberLabel()), 10).build());
-
-        main.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().creationDate()), 10).build());
-        if (proto() instanceof PaymentMethod) {
-            main.setWidget(row, 1, new FormDecoratorBuilder(inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
-        }
+        main.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().creationDate()), 10).build());
 
         main.setWidget(
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().type(), new CRadioGroupEnum<PaymentType>(PaymentType.class, defaultPaymentTypes(),
                         RadioGroup.Layout.HORISONTAL)), 35).build());
+        if (proto() instanceof PaymentMethod) {
+            main.setWidget(row, 1, new FormDecoratorBuilder(inject(((PaymentMethod) proto()).createdBy(), new CEntityLabel<AbstractPmcUser>()), 22).build());
+        }
 
         main.setH3(++row, 0, 2, proto().details().getMeta().getCaption());
         paymentDetailsHeader = main.getWidget(row, 0);
@@ -131,7 +130,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         if (get(proto().type()).isEditable() && get(proto().type()) instanceof CRadioGroup) {
             ((CRadioGroup<PaymentType>) get(proto().type())).setOptionsEnabled(EnumSet.allOf(PaymentType.class), true);
         }
-        (get(proto().type())).setNote(null);
+        get(proto().type()).setNote(null);
         setBillingAddressVisible(false);
 
         // setup CRM only block:
