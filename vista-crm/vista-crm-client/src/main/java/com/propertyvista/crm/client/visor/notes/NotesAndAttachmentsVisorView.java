@@ -189,14 +189,11 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 private Button btnSave;
 
-                private final boolean viewable;
-
                 private Anchor btnCancel;
 
                 public NoteEditor(boolean viewable) {
                     super(NotesAndAttachments.class);
 
-                    this.viewable = viewable;
                     inheritViewable(false);
                     setViewable(viewable);
                 }
@@ -222,8 +219,6 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                     content.setWidget(++row, 0, createLowerToolbar());
                     content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
-
-                    setViewableMode(viewable);
 
                     return content;
                 }
@@ -271,7 +266,6 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                                 MessageDialog.confirm(i18n.tr("Confirm"),
                                         i18n.tr("Are you sure you want to cancel your changes?\n\nPress Yes to continue, or No to stay on the current page."),
                                         new Command() {
-
                                             @Override
                                             public void execute() {
                                                 setViewableMode(true);
@@ -324,7 +318,6 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     setButtonsVisible(!isViewable);
                     setViewable(isViewable);
                 }
-
             }
 
             private class AttachmentsEditorFolder extends VistaBoxFolder<NoteAttachment> {
@@ -386,6 +379,5 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                 }
             }
         }
-
     }
 }
