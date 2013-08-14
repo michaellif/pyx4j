@@ -265,15 +265,19 @@ class PreauthorizedPaymentAgreementMananger {
                 }
 
                 for (final BillingAccount account : Persistence.service().query(criteria1)) {
+                    final AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(account.lease().unit(),
+                            AutoPayPolicy.class);
                     try {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                             @Override
                             public Void execute() {
                                 boolean suspended = false;
                                 for (PreauthorizedPayment item : retrieveActivePreauthorizedPayments(account.lease())) {
-                                    suspendPreauthorizedPayment(item);
-                                    executionMonitor.addProcessedEvent("Pap suspend");
-                                    suspended = true;
+                                    if (!autoPayPolicy.allowLastBillingPeriodCharge().getValue(Boolean.FALSE)) {
+                                        suspendPreauthorizedPayment(item);
+                                        executionMonitor.addProcessedEvent("Pap suspend");
+                                        suspended = true;
+                                    }
                                 }
                                 if (suspended) {
                                     ServerSideFactory.create(NotificationFacade.class).papSuspension(account.lease());
