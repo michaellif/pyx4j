@@ -15,6 +15,7 @@ package com.propertyvista.crm.client.visor.notes;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -27,7 +28,9 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.BoxFolderDecorator;
 import com.pyx4j.forms.client.ui.folder.BoxFolderItemDecorator;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
@@ -200,30 +203,21 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
                 @Override
                 public IsWidget createContent() {
-
                     TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                     int row = -1;
 
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().subject())).componentWidth(40).build());
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().note())).componentWidth(40).build());
+                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().subject()), 50, true).build());
+                    content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().note()), 50, true).build());
 
-                    CComponent<?> comp = inject(proto().created());
-                    comp.inheritViewable(false);
-                    comp.setViewable(true);
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(comp).build());
-                    comp = inject(proto().updated());
-                    comp.inheritViewable(false);
-                    comp.setViewable(true);
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(comp).build());
-                    comp = inject(proto().user().name());
-                    comp.inheritViewable(false);
-                    comp.setViewable(true);
-                    content.setWidget(++row, 0, new FormDecoratorBuilder(comp).build());
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().created(), new CDateLabel()), 10).build());
+                    content.setWidget(row, 1, new FormDecoratorBuilder(inject(proto().updated(), new CDateLabel()), 10).build());
+
+                    content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().user(), new CEntityLabel<CrmUser>()), 25).build());
 
                     // TODO Removed for 1.05
                     if (!VistaTODO.VISTA_2127_Attachments_For_Notes) {
-                        content.setH3(++row, 0, 1, i18n.tr("Attachments"));
-                        content.setWidget(++row, 0, inject(proto().attachments(), new AttachmentsEditorFolder()));
+                        content.setH3(++row, 0, 2, i18n.tr("Attachments"));
+                        content.setWidget(++row, 0, 2, inject(proto().attachments(), new AttachmentsEditorFolder()));
                     }
 
                     Toolbar tb = new Toolbar();
@@ -282,6 +276,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     tb.add(btnCancel);
 
                     content.setWidget(++row, 0, tb);
+                    content.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_RIGHT);
 
                     setViewableMode(viewable);
 
@@ -294,12 +289,17 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                     if (getValue().isEmpty()) {
                         setViewableMode(false);
                     }
+
                     if (!isOwner()) {
                         @SuppressWarnings("unchecked")
                         CEntityFolderItem<NotesAndAttachments> item = (CEntityFolderItem<NotesAndAttachments>) getParent();
                         item.setRemovable(false);
                         item.getItemActionsBar().setButtonVisible(ActionType.Cust1, false);
                     }
+
+                    get(proto().created()).setVisible(!getValue().created().isNull());
+                    get(proto().updated()).setVisible(!getValue().updated().isNull());
+                    get(proto().user()).setVisible(!getValue().user().isNull());
                 }
 
                 private void setButtonsVisible(boolean visible) {
@@ -374,8 +374,8 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
                         TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
                         int row = -1;
 
-                        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().description())).build());
-                        content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().file())).build());
+                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().description()), 40, true).build());
+                        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().file()), 40, true).build());
 
                         return content;
                     }
