@@ -24,6 +24,7 @@ import com.pyx4j.widgets.client.Button;
 import com.propertyvista.common.client.ui.components.MediaUtils;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.dto.PaymentRecordDTO;
 
 public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDTO> implements PaymentViewerView {
@@ -117,7 +118,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         super.populate(value);
 
         // enable editing for submitted payments only:
-        setEditingVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted);
+        setEditingVisible(value.paymentStatus().getValue() == PaymentStatus.Submitted && value.paymentMethod().type().getValue() != PaymentType.DirectBanking);
         setActionVisible(cancelAction, value.paymentStatus().getValue().isCancelable());
 
         if (value.paymentStatus().getValue() == PaymentStatus.Submitted) {
