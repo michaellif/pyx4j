@@ -82,10 +82,13 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
                 PreauthorizedPaymentListDTO dto = EntityFactory.create(PreauthorizedPaymentListDTO.class);
 
                 dto.preauthorizedPayments().addAll(result.getData());
+                dto.currentPaymentDate().setValue(
+                        ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLeaseIdStub()));
                 dto.nextScheduledPaymentDate().setValue(
-                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLease()));
+                        ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(
+                                TenantAppContext.getCurrentUserLeaseIdStub()));
                 dto.isMoveOutWithinNextBillingCycle().setValue(
-                        ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(TenantAppContext.getCurrentUserLease()));
+                        ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(TenantAppContext.getCurrentUserLeaseIdStub()));
 
                 callback.onSuccess(dto);
             }

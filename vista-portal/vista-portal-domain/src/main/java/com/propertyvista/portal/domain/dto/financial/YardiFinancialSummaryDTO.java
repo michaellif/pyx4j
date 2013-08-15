@@ -14,15 +14,11 @@
 package com.propertyvista.portal.domain.dto.financial;
 
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IList;
 
-import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.dto.TransactionHistoryDTO;
 
 @Transient
 public interface YardiFinancialSummaryDTO extends FinancialSummaryDTO {
 
     TransactionHistoryDTO transactionsHistory();
-
-    IList<InvoiceLineItem> latestActivities();
 }

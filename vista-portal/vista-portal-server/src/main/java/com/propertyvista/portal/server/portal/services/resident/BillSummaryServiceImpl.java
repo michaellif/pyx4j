@@ -13,16 +13,24 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
+import java.math.BigDecimal;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.biz.financial.ar.ARFacade;
 import com.propertyvista.biz.financial.billing.BillingFacade;
+import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
+import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.BillSummaryService;
@@ -41,18 +49,37 @@ public class BillSummaryServiceImpl implements BillSummaryService {
         FinancialSummaryDTO financialSummary = VistaFeatures.instance().yardiIntegration() ? EntityFactory.create(YardiFinancialSummaryDTO.class)
                 : EntityFactory.create(PvBillingFinancialSummaryDTO.class);
 
-        Lease contextLease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserTenant().lease().getPrimaryKey());
+        Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserTenant().lease().getPrimaryKey());
 
-        ARFacade arFacade = ServerSideFactory.create(ARFacade.class);
-        financialSummary.currentBalance().setValue(arFacade.getCurrentBalance(contextLease.billingAccount()));
+        financialSummary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
+
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+            PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
+
+            pi.amount().setValue(BigDecimal.ZERO);
+            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+                pi.amount().setValue(pi.amount().getValue().add(ci.amount().getValue()));
+            }
+
+            pi.paymentMethod().set(pap.paymentMethod());
+            pi.paymentDate().setValue(excutionDate);
+            pi.payer().set(pap.tenant());
+            Persistence.ensureRetrieve(pi.payer(), AttachLevel.ToStringMembers);
+
+            financialSummary.currentAutoPayments().add(pi);
+        }
 
         // TODO has to stay here until billing facade and AR facade merged together
         if (financialSummary.isInstanceOf(YardiFinancialSummaryDTO.class)) {
-            ((YardiFinancialSummaryDTO) financialSummary).transactionsHistory().set(arFacade.getTransactionHistory(contextLease.billingAccount()));
-            ((YardiFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getLatestBillingActivity(contextLease.billingAccount()));
+            ((YardiFinancialSummaryDTO) financialSummary).transactionsHistory().set(
+                    ServerSideFactory.create(ARFacade.class).getTransactionHistory(lease.billingAccount()));
+            ((YardiFinancialSummaryDTO) financialSummary).latestActivities().addAll(
+                    ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
         } else if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
-            ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(contextLease));
-            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(arFacade.getLatestBillingActivity(contextLease.billingAccount()));
+            ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(lease));
+            ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(
+                    ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
         }
 
         return financialSummary;

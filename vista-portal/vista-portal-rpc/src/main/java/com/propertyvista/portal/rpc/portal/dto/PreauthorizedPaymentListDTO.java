@@ -32,6 +32,9 @@ public interface PreauthorizedPaymentListDTO extends IEntity {
     @Caption(name = "Pre-Authorized Payments")
     IList<ListItemDTO> preauthorizedPayments();
 
+    @Caption(name = "Your current automated payment date")
+    IPrimitive<LogicalDate> currentPaymentDate();
+
     @Caption(name = "Your next automated payment is scheduled for")
     IPrimitive<LogicalDate> nextScheduledPaymentDate();
 

@@ -44,6 +44,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
 
+    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
+
     private PreauthorizedPaymentsView.Presenter presenter;
 
     public PreauthorizedPaymentsForm() {
@@ -59,6 +61,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     public IsWidget createContent() {
         VerticalPanel container = new VerticalPanel();
 
+        container.add(new FormDecoratorBuilder(inject(proto().currentPaymentDate(), new CDateLabel()), 10).labelWidth(22).build());
         container.add(new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelWidth(22).build());
         container.add(new HTML("&nbsp"));
         container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
@@ -71,6 +74,14 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         super.onValueSet(populate);
 
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
+
+        if (!getValue().currentPaymentDate().equals(getValue().nextScheduledPaymentDate())) {
+            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
+            get(proto().currentPaymentDate()).setVisible(true);
+        } else {
+            get(proto().nextScheduledPaymentDate()).setNote(null);
+            get(proto().currentPaymentDate()).setVisible(false);
+        }
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentListDTO.ListItemDTO> {

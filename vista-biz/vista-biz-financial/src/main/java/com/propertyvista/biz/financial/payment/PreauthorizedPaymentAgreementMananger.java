@@ -113,14 +113,6 @@ class PreauthorizedPaymentAgreementMananger {
         return preauthorizedPayment;
     }
 
-    //If Tenant removes PAP - payment will NOT be canceled.
-    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
-        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
-        preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
-        Persistence.service().merge(preauthorizedPayment);
-        ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, "Deleted");
-    }
-
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId) {
         EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
         criteria.eq(criteria.proto().tenant(), tenantId);
@@ -128,12 +120,38 @@ class PreauthorizedPaymentAgreementMananger {
         return Persistence.service().query(criteria);
     }
 
-    private List<PreauthorizedPayment> retrieveActivePreauthorizedPayments(Lease leaseId) {
+    List<PreauthorizedPayment> retrieveActivePreauthorizedPayments(Lease leaseId) {
         EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
         criteria.eq(criteria.proto().tenant().lease(), leaseId);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
         criteria.isNull(criteria.proto().expiring());
         return Persistence.service().query(criteria);
+    }
+
+    List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentBillingCycle(lease);
+        List<PreauthorizedPayment> currentPaps;
+        {
+            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+            {
+                OrCriterion or = criteria.or();
+                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
+                or.left().isNull(criteria.proto().expiring());
+            }
+            criteria.in(criteria.proto().tenant().lease(), lease);
+            currentPaps = Persistence.service().query(criteria);
+        }
+
+        return currentPaps;
+    }
+
+    //If Tenant removes PAP - payment will NOT be canceled.
+    void deletePreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
+        PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
+        preauthorizedPayment.isDeleted().setValue(Boolean.TRUE);
+        Persistence.service().merge(preauthorizedPayment);
+        ServerSideFactory.create(AuditFacade.class).updated(preauthorizedPayment, "Deleted");
     }
 
     void deletePreauthorizedPayments(LeasePaymentMethod paymentMethod) {
@@ -148,11 +166,18 @@ class PreauthorizedPaymentAgreementMananger {
 
     }
 
-    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId) {
+    void suspendPreauthorizedPayment(PreauthorizedPayment preauthorizedPaymentId, boolean suspend) {
         PreauthorizedPayment preauthorizedPayment = Persistence.service().retrieve(PreauthorizedPayment.class, preauthorizedPaymentId.getPrimaryKey());
-        Persistence.service().retrieve(preauthorizedPayment.tenant());
-        LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(preauthorizedPayment.tenant().lease());
-        preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
+
+        if (suspend) {
+            Persistence.service().retrieve(preauthorizedPayment.tenant());
+            LogicalDate cutOffDate = ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(
+                    preauthorizedPayment.tenant().lease());
+            preauthorizedPayment.expiring().setValue(DateUtils.daysAdd(cutOffDate, -1));
+        } else {
+            preauthorizedPayment.expiring().setValue(null);
+        }
+
         Persistence.service().merge(preauthorizedPayment);
     }
 
@@ -233,11 +258,7 @@ class PreauthorizedPaymentAgreementMananger {
 
         // Suspend all or update all
         for (PreauthorizedPayment pap : activePap) {
-            if (suspend) {
-                suspendPreauthorizedPayment(pap);
-            } else {
-                Persistence.service().merge(pap);
-            }
+            suspendPreauthorizedPayment(pap, suspend);
         }
         if (suspend) {
             ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
@@ -274,7 +295,7 @@ class PreauthorizedPaymentAgreementMananger {
                                 boolean suspended = false;
                                 for (PreauthorizedPayment item : retrieveActivePreauthorizedPayments(account.lease())) {
                                     if (!autoPayPolicy.allowLastBillingPeriodCharge().getValue(Boolean.FALSE)) {
-                                        suspendPreauthorizedPayment(item);
+                                        suspendPreauthorizedPayment(item, true);
                                         executionMonitor.addProcessedEvent("Pap suspend");
                                         suspended = true;
                                     }

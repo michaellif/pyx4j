@@ -76,12 +76,17 @@ public interface PaymentMethodFacade {
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
 
+    List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease);
+
+    BillingCycle getCurrentPreauthorizedPaymentBillingCycle(Lease lease);
+
+    LogicalDate getCurrentPreauthorizedPaymentDate(Lease lease);
+
+    LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
+
     BillingCycle getNextScheduledPreauthorizedPaymentBillingCycle(Lease lease);
 
     LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease);
 
-    LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
-
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
-
 }
