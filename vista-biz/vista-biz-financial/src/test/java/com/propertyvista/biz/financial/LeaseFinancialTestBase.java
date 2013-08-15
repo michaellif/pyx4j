@@ -70,6 +70,7 @@ import com.propertyvista.test.integration.IntegrationTestBase;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
+import com.propertyvista.test.mock.models.AutoPayPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.DepositPolicyDataModel;
@@ -107,6 +108,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         models.add(CustomerDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
+        models.add(AutoPayPolicyDataModel.class);
         models.add(LeaseDataModel.class);
         return models;
     }
