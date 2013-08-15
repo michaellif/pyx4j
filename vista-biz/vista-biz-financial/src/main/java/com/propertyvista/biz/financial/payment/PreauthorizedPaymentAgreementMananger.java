@@ -210,7 +210,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         // lease last month check:
-        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), AutoPayPolicy.class);
+        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
         if (!autoPayPolicy.allowLastBillingPeriodCharge().getValue(Boolean.FALSE)) {
             suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
         }
@@ -265,7 +265,7 @@ class PreauthorizedPaymentAgreementMananger {
                 }
 
                 for (final BillingAccount account : Persistence.service().query(criteria1)) {
-                    final AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(account.lease().unit(),
+                    final AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(account.lease().unit().building(),
                             AutoPayPolicy.class);
                     try {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {

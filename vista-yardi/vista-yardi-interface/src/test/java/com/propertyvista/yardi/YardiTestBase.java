@@ -37,6 +37,7 @@ import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.models.ARCodeDataModel;
 import com.propertyvista.test.mock.models.ARPolicyDataModel;
+import com.propertyvista.test.mock.models.AutoPayPolicyDataModel;
 import com.propertyvista.test.mock.models.GLCodeDataModel;
 import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
@@ -86,6 +87,7 @@ public class YardiTestBase extends IntegrationTestBase {
         models.add(IdAssignmentPolicyDataModel.class);
         models.add(LeaseBillingPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
+        models.add(AutoPayPolicyDataModel.class);
         return models;
     }
 

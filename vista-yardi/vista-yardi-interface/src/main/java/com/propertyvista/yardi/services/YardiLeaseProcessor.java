@@ -346,6 +346,7 @@ public class YardiLeaseProcessor {
                 }
             }
         } else { // check first/last/etc. month charges suspension (via policies):
+            // TODO - tests are failing!!?
             ServerSideFactory.create(PaymentMethodFacade.class).renewPreauthorizedPayments(lease);
         }
 

@@ -140,8 +140,7 @@ public class LeaseMerger {
                     lease.currentTerm().version().leaseProducts().serviceItem().set(item);
                 } else {
                     // new feature - add it
-                    // TODO - tests are failing!!?
-//                    lease.currentTerm().version().leaseProducts().featureItems().add(item);
+                    lease.currentTerm().version().leaseProducts().featureItems().add(item);
                 }
             }
         }
