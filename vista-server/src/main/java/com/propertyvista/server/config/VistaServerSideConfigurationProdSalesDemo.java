@@ -55,6 +55,11 @@ public class VistaServerSideConfigurationProdSalesDemo extends VistaServerSideCo
     }
 
     @Override
+    public String getDefaultBaseURLresidentPortalWeb(String pmcDnsName) {
+        return "https://" + pmcDnsName + ".residentportal.info/" + DeploymentConsts.RESIDENT_URL_PATH;
+    }
+
+    @Override
     public String getDefaultBaseURLprospectPortal(String pmcDnsName) {
         return "http://" + pmcDnsName + ".prospectportal.info/";
     }
