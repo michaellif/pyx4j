@@ -23,8 +23,6 @@ import com.propertyvista.portal.client.ui.residents.ViewBase;
 
 public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestDTO> implements EditMaintenanceRequestView {
 
-    private MaintenanceRequestMetadataDTO categoryMeta;
-
     public EditMaintenanceRequestViewImpl() {
         super(new MaintenanceRequestForm());
     }
@@ -32,18 +30,12 @@ public class EditMaintenanceRequestViewImpl extends EditImpl<MaintenanceRequestD
     @Override
     public void setPresenter(ViewBase.Presenter<MaintenanceRequestDTO> presenter) {
         super.setPresenter(presenter);
-        if (categoryMeta != null) {
-            ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
-        } else if (presenter != null) {
-            ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO meta) {
-                    EditMaintenanceRequestViewImpl.this.categoryMeta = meta;
-                    ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
-                }
-                // TODO add building selector - see MaintenanceRequestViewerViewImpl.java:117
-            }, null);
-        }
+        ((EditMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadataDTO meta) {
+                ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+            }
+        });
     }
 
     @Override

@@ -92,8 +92,10 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     private MaintenanceRequestMetadata meta;
 
-    MaintenanceRequestCategoryChoice mrCategory;
+    private MaintenanceRequestCategoryChoice mrCategory;
 
+    // TODO - YARDI: per building cache is easy to implement with current data model, but it is INEFFICIENT since
+    // multiple buildings that belong to the same Yardi account will share the same Meta
     private final Map<Building, MaintenanceRequestMetadataDTO> categoryMetaCache = new HashMap<Building, MaintenanceRequestMetadataDTO>();
 
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
@@ -256,8 +258,11 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
             choice.setViewable(isViewable());
             choice.setTitle(EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue()));
         }
-        // set options and re-populate
-        mrCategory.setOptionsMeta(meta);
+        if (!isViewable()) {
+            // set options
+            mrCategory.setOptionsMeta(meta);
+        }
+        // re-populate after parent categories have been added
         mrCategory.populate(getValue().category());
 
         // attach selectors to the panel - bottom up

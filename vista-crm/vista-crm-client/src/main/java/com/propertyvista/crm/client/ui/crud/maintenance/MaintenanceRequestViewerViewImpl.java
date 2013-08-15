@@ -31,7 +31,6 @@ import com.pyx4j.widgets.client.dialog.OkCancelDialog;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.crm.client.ui.crud.CrmViewerViewImplBase;
-import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.dto.MaintenanceRequestDTO;
@@ -40,8 +39,6 @@ import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 public class MaintenanceRequestViewerViewImpl extends CrmViewerViewImplBase<MaintenanceRequestDTO> implements MaintenanceRequestViewerView {
 
     private static final I18n i18n = I18n.get(MaintenanceRequestViewerViewImpl.class);
-
-    private MaintenanceRequestMetadata categoryMeta;
 
     private final Map<StatusPhase, MenuItem> transitionActions;
 

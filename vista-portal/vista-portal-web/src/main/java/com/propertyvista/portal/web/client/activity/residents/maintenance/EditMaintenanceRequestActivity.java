@@ -27,7 +27,6 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -43,8 +42,6 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
     protected final MaintenanceService srv;
 
     private final Key entityId;
-
-    private MaintenanceRequestMetadataDTO meta;
 
     public EditMaintenanceRequestActivity(AppPlace place) {
         srv = GWT.create(MaintenanceService.class);
@@ -92,18 +89,13 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building) {
-        if (meta == null) {
-            srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO result) {
-                    meta = result;
-                    callback.onSuccess(result);
-                }
-            }, false, building);
-        } else {
-            callback.onSuccess(meta);
-        }
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback) {
+        srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadataDTO result) {
+                callback.onSuccess(result);
+            }
+        }, false);
     }
 
 }

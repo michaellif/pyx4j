@@ -22,8 +22,6 @@ import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
 
 public class ViewMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestDTO> implements ViewMaintenanceRequestView {
 
-    private MaintenanceRequestMetadataDTO categoryMeta;
-
     public ViewMaintenanceRequestViewImpl() {
         super(new MaintenanceRequestForm());
     }
@@ -31,18 +29,12 @@ public class ViewMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestD
     @Override
     public void setPresenter(IEntityView.EntityPresenter<MaintenanceRequestDTO> presenter) {
         super.setPresenter(presenter);
-        if (categoryMeta != null) {
-            ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(categoryMeta);
-        } else if (presenter != null) {
-            ((ViewMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO meta) {
-                    ViewMaintenanceRequestViewImpl.this.categoryMeta = meta;
-                    ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
-                }
-// TODO add building selector - see MaintenanceRequestViewerViewImpl.java:117
-            }, null);
-        }
+        ((ViewMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadataDTO meta) {
+                ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
+            }
+        });
     }
 
     @Override

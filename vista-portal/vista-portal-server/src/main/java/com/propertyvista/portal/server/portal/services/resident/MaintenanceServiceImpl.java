@@ -28,7 +28,6 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.biz.financial.maintenance.MaintenanceFacade;
-import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.maintenance.MaintenanceRequest;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
@@ -42,7 +41,6 @@ import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
-import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<MaintenanceRequest, MaintenanceRequestDTO> implements MaintenanceService {
 
@@ -78,7 +76,7 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget retrieveTarget ) {
+    protected void enhanceRetrieved(MaintenanceRequest entity, MaintenanceRequestDTO dto, RetrieveTarget retrieveTarget) {
         enhanceAll(dto);
     }
 
@@ -147,24 +145,14 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, boolean levelsOnly, Building building) {
-        if (building == null && VistaFeatures.instance().yardiIntegration()) {
-            // ensure single interface
-            if (VistaFeatures.instance().yardiInterfaces() > 1) {
-                throw new Error("Building selection must be forced");
-            }
-            // single interface - use first available building
-            List<Building> buildings = VistaDeployment.getPmcYardiBuildings(VistaDeployment.getPmcYardiCredentials().get(0));
-            if (buildings == null || buildings.size() == 0) {
-                throw new Error("Maintenance Request Service has not been initialized");
-            }
-            building = buildings.get(0);
-        }
+    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, boolean levelsOnly) {
+        Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
+        Building building = tenant.lease().unit().building();
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
         MaintenanceRequestMetadataDTO metaDto = EntityFactory.create(MaintenanceRequestMetadataDTO.class);
-        metaDto.categoryLevels().set(meta.categoryLevels());
-        metaDto.statuses().set(meta.statuses());
-        metaDto.priorities().set(meta.priorities());
+        metaDto.categoryLevels().addAll(meta.categoryLevels());
+        metaDto.statuses().addAll(meta.statuses());
+        metaDto.priorities().addAll(meta.priorities());
         if (!levelsOnly) {
             metaDto.rootCategory().set(meta.rootCategory());
         }

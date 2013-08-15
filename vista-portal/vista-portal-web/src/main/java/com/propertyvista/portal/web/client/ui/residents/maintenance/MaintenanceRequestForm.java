@@ -45,6 +45,8 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
     private MaintenanceRequestMetadata meta;
 
+    private MaintenanceRequestCategoryChoice mrCategory;
+
     private final TwoColumnFlexFormPanel categoryPanel = new TwoColumnFlexFormPanel();
 
     private final TwoColumnFlexFormPanel permissionPanel = new TwoColumnFlexFormPanel();
@@ -55,8 +57,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
 
     private final PrioritySelector prioritySelector = new PrioritySelector();
 
-    private boolean choicesReady = false;
-
     public MaintenanceRequestForm() {
         super(MaintenanceRequestDTO.class, new VistaEditorsComponentFactory());
     }
@@ -64,11 +64,6 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     public void setMaintenanceRequestCategoryMeta(MaintenanceRequestMetadata meta) {
         this.meta = meta;
         initSelectors();
-
-        // set value again in case meta comes after the form was populated
-        if (getValue() != null) {
-            setComponentsValue(getValue(), false, true);
-        }
     }
 
     @Override
@@ -81,6 +76,9 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
         content.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reportedForOwnUnit()), 25).build());
         content.setBR(++row, 0, 1);
 
+        // category panel
+        mrCategory = new MaintenanceRequestCategoryChoice();
+        bind(mrCategory, proto().category());
         content.setWidget(++row, 0, categoryPanel);
         content.getCellFormatter().setVerticalAlignment(row, 0, HasVerticalAlignment.ALIGN_TOP);
 
@@ -163,32 +161,41 @@ public class MaintenanceRequestForm extends CEntityDecoratableForm<MaintenanceRe
     }
 
     public void initSelectors() {
-        if (meta == null || choicesReady) {
+        if (meta == null) {
             return;
         }
 
         prioritySelector.setOptions(meta.priorities());
+
+        // create category selectors - bottom-up
         int levels = meta.categoryLevels().size();
-        // create selectors
-        MaintenanceRequestCategoryChoice child = null;
-        MaintenanceRequestCategoryChoice mrCategory = null;
+        MaintenanceRequestCategoryChoice choice = null;
         for (int i = 0; i < levels; i++) {
-            MaintenanceRequestCategoryChoice choice = new MaintenanceRequestCategoryChoice();
-            String choiceLabel = EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue());
-            int row = levels - 1 - i;
             if (i == 0) {
-                categoryPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().category(), choice), 20).customLabel(choiceLabel).build());
-                mrCategory = choice;
+                choice = mrCategory;
             } else {
-                categoryPanel.setWidget(row, 0, new FormDecoratorBuilder(choice, 20).customLabel(choiceLabel).build());
+                MaintenanceRequestCategoryChoice parent = new MaintenanceRequestCategoryChoice();
+                choice.assignParent(parent);
+                choice = parent;
             }
-            if (child != null) {
-                child.assignParent(choice);
-            }
-            child = choice;
+            choice.setViewable(isViewable());
+            choice.setTitle(EnglishGrammar.capitalize(meta.categoryLevels().get(levels - 1 - i).name().getValue()));
         }
-        mrCategory.setOptionsMeta(meta);
-        choicesReady = true;
+        if (!isViewable()) {
+            // set options and re-populate
+            mrCategory.setOptionsMeta(meta);
+        }
+        // re-populate after parent categories have been added
+        if (getValue() != null) {
+            mrCategory.populate(getValue().category());
+        }
+
+        // attach selectors to the panel - bottom up
+        categoryPanel.clear();
+        int row = levels;
+        for (choice = mrCategory; choice != null; choice = choice.getParentSelector()) {
+            categoryPanel.setWidget(--row, 0, new FormDecoratorBuilder(choice, 20).build());
+        }
     }
 
     class PrioritySelector extends CComboBox<MaintenanceRequestPriority> {
