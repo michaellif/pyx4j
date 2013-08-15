@@ -26,13 +26,15 @@ public class BmoInterfaceConfigurationSimulator extends BmoInterfaceConfiguratio
 
     private final AbstractVistaServerSideConfiguration config;
 
+    static final String defaultSimulatorMailboxNumber = "TST12345";
+
     BmoInterfaceConfigurationSimulator(AbstractVistaServerSideConfiguration config) {
         this.config = config;
     }
 
     @Override
     public String bmoMailboxNumber() {
-        return "TST12345";
+        return defaultSimulatorMailboxNumber;
     }
 
     @Override

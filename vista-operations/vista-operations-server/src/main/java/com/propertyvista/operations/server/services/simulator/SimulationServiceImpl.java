@@ -39,7 +39,7 @@ import com.propertyvista.operations.rpc.services.simulator.SimulationService;
 public class SimulationServiceImpl extends AdminServiceImpl implements SimulationService {
 
     @Override
-    public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, RetrieveTarget retrieveTarget ) {
+    public void retrieve(AsyncCallback<SimulationDTO> callback, Key entityId, RetrieveTarget retrieveTarget) {
         SimulationDTO result = EntityFactory.create(SimulationDTO.class);
         result.setPrimaryKey(entityId);
 
@@ -60,7 +60,8 @@ public class SimulationServiceImpl extends AdminServiceImpl implements Simulatio
         }
 
         result.fundsTransferSimulationConfigurable().setValue(
-                ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).isFundsTransferSimulationConfigurable());
+                ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration()
+                        .isFundsTransferSimulationConfigurable());
 
         callback.onSuccess(result);
     }

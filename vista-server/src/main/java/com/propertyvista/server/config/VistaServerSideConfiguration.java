@@ -43,6 +43,7 @@ import com.pyx4j.security.shared.AclRevalidator;
 import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
@@ -138,6 +139,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         }
     }
 
+    @Override
     public String getApplicationURLNamespace(boolean secure) {
         return ".birchwoodsoftwaregroup.com/";
     }
@@ -205,22 +207,6 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     @Override
     public String getDefaultBaseURLvistaOperations() {
         return getApplicationDeploymentProtocol() + "://" + "operations" + getApplicationURLNamespace(true) + DeploymentConsts.OPERATIONS_URL;
-    }
-
-    @Override
-    public String getCardServiceSimulatorUrl() {
-        return getConfigProperties().getValue("simulator.cardServiceSimulatorUrl",
-                "http://" + "operations" + getApplicationURLNamespace(false) + "o/" + "CardServiceSimulation");
-    }
-
-    @Override
-    public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
-        return new CaledonFundsTransferConfigurationSimulator(this);
-    }
-
-    @Override
-    public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
-        return new BmoInterfaceConfigurationSimulator(this);
     }
 
     @Override
@@ -416,7 +402,8 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
         }
     }
 
-    protected File vistaWorkDir() {
+    @Override
+    public File vistaWorkDir() {
         String dirName = getConfigProperties().getValue("vista-work.dir");
         if (CommonsStringUtils.isStringSet(dirName)) {
             return new File(dirName);
@@ -456,23 +443,23 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
     }
 
     @Override
-    public boolean isFundsTransferSimulationConfigurable() {
-        return false;
-    }
-
-    @Override
-    public File getCaledonSimulatorSftpDirectory() {
-        return new File(vistaWorkDir(), "caledon-simulator-sftp");
-    }
-
-    @Override
-    public File getBmoSimulatorSftpDirectory() {
-        return new File(vistaWorkDir(), "bmo-simulator-sftp");
-    }
-
-    @Override
     public EncryptedStorageConfiguration getEncryptedStorageConfiguration() {
         return new VistaEncryptedStorageConfiguration(this);
+    }
+
+    @Override
+    public BankingSimulatorConfiguration getBankingSimulatorConfiguration() {
+        return new BankingSimulatorConfigurationCustom(this);
+    }
+
+    @Override
+    public CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration() {
+        return new CaledonFundsTransferConfigurationSimulator(this);
+    }
+
+    @Override
+    public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
+        return new BmoInterfaceConfigurationSimulator(this);
     }
 
 }

@@ -63,6 +63,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
 
     public abstract boolean isAppsContextlessDepoyment();
 
+    public abstract String getApplicationURLNamespace(boolean secure);
+
     /**
      * This method should not be used directly since PMC may have custom DNS configuration
      * Use @see VistaDeployment.getBaseApplicationURL(VistaApplication.TenantPortal, true);
@@ -101,17 +103,7 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
      */
     public abstract String getDefaultBaseURLvistaOnboarding();
 
-    public abstract String getCardServiceSimulatorUrl();
-
-    public abstract boolean isFundsTransferSimulationConfigurable();
-
-    public abstract File getCaledonSimulatorSftpDirectory();
-
-    public abstract File getBmoSimulatorSftpDirectory();
-
-    public abstract File getCaledonInterfaceWorkDirectory();
-
-    public abstract File getBmoInterfaceWorkDirectory();
+    public abstract File vistaWorkDir();
 
     public abstract int interfaceSSHDPort();
 
@@ -122,6 +114,12 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
     public abstract IMailServiceConfigConfiguration getTenantSureMailServiceConfiguration();
 
     public abstract TenantSureConfiguration getTenantSureConfiguration();
+
+    public abstract BankingSimulatorConfiguration getBankingSimulatorConfiguration();
+
+    public abstract File getCaledonInterfaceWorkDirectory();
+
+    public abstract File getBmoInterfaceWorkDirectory();
 
     public abstract CaledonFundsTransferConfiguration getCaledonFundsTransferConfiguration();
 

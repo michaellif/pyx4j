@@ -19,6 +19,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.config.server.IPersistenceConfiguration;
 import com.pyx4j.config.server.ServerSideConfiguration;
 
+import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.VistaSystemsSimulationConfig;
@@ -76,8 +77,13 @@ public class VistaServerSideConfigurationCustom extends VistaServerSideConfigura
     }
 
     @Override
-    public boolean isFundsTransferSimulationConfigurable() {
-        return true;
+    public BankingSimulatorConfiguration getBankingSimulatorConfiguration() {
+        return new BankingSimulatorConfigurationCustom(this) {
+            @Override
+            public boolean isFundsTransferSimulationConfigurable() {
+                return true;
+            }
+        };
     }
 
     @Override

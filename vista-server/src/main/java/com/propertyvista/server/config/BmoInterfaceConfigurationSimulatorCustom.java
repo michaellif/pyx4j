@@ -32,7 +32,7 @@ class BmoInterfaceConfigurationSimulatorCustom extends BmoInterfaceConfiguration
 
     @Override
     public String bmoMailboxNumber() {
-        return config.getConfigProperties().getValue("simulator.bmoPool.mailboxNumber", "TST12345");
+        return config.getConfigProperties().getValue("simulator.bmoPool.mailboxNumber", BmoInterfaceConfigurationSimulator.defaultSimulatorMailboxNumber);
     }
 
     @Override

@@ -64,7 +64,7 @@ public class CaledonHttpClient {
         boolean useCardServiceSimulator = VistaSystemsSimulationConfig.getConfiguration().useCardServiceSimulator().getValue(Boolean.FALSE);
 
         if (useCardServiceSimulator) {
-            url = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance()).getCardServiceSimulatorUrl();
+            url = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration().getCardServiceSimulatorUrl();
         } else {
             if (useTestServer) {
                 url = urlTests;

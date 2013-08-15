@@ -68,11 +68,7 @@ public class VistaConfigInfoServlet extends ConfigInfoServlet {
                 .append("\n");
         b.append("\n");
 
-        b.append("\nVista Simulator Configuration:\n");
-        b.append("  CardServiceSimulatorUrl             : ").append(conf.getCardServiceSimulatorUrl()).append("\n");
-        b.append("  FundsTransferSimulationConfigurable : ").append(conf.isFundsTransferSimulationConfigurable()).append("\n");
-        b.append("  CaledonSimulatorSftpDirectory       : ").append(conf.getCaledonSimulatorSftpDirectory().getAbsolutePath()).append("\n");
-        b.append("  BmoSimulatorSftpDirectory           : ").append(conf.getBmoSimulatorSftpDirectory().getAbsolutePath()).append("\n");
+        b.append("  BankingSimulatorConfiguration       :\n ").append(conf.getBankingSimulatorConfiguration()).append("\n");
 
         return b.toString();
     }

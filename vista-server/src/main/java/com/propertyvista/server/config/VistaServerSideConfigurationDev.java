@@ -21,6 +21,7 @@ import com.pyx4j.config.server.ServerSideConfiguration;
 import com.pyx4j.security.server.ThrottleConfig;
 import com.pyx4j.server.contexts.Context;
 
+import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.misc.VistaTODO;
 
 public class VistaServerSideConfigurationDev extends VistaServerSideConfiguration {
@@ -161,9 +162,16 @@ public class VistaServerSideConfigurationDev extends VistaServerSideConfiguratio
         return null;
     }
 
-    // The same simulated service will be used even when production is ON. 
     @Override
-    public boolean isFundsTransferSimulationConfigurable() {
-        return true;
+    public BankingSimulatorConfiguration getBankingSimulatorConfiguration() {
+        return new BankingSimulatorConfigurationCustom(this) {
+
+            // The same simulated service will be used even when production is ON. 
+
+            @Override
+            public boolean isFundsTransferSimulationConfigurable() {
+                return true;
+            }
+        };
     }
 }

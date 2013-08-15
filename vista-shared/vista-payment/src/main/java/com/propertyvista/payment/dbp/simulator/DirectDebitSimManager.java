@@ -36,7 +36,8 @@ public class DirectDebitSimManager {
     private static final Logger log = LoggerFactory.getLogger(DirectDebitSimManager.class);
 
     public static File getSftpRootDir() {
-        File dir = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBmoSimulatorSftpDirectory();
+        File dir = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).getBankingSimulatorConfiguration()
+                .getBmoSimulatorSftpDirectory();
         try {
             FileUtils.forceMkdir(dir);
         } catch (IOException e) {

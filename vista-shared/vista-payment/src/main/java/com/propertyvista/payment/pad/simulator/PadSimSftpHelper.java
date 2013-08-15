@@ -34,7 +34,7 @@ public class PadSimSftpHelper {
 
         AbstractVistaServerSideConfiguration config = ((AbstractVistaServerSideConfiguration) ServerSideConfiguration.instance());
 
-        File dir = config.getCaledonSimulatorSftpDirectory();
+        File dir = config.getBankingSimulatorConfiguration().getCaledonSimulatorSftpDirectory();
         if (!dir.exists()) {
             if (!dir.mkdirs()) {
                 log.error("Unable to create directory {}", dir.getAbsolutePath());

@@ -31,6 +31,7 @@ import com.pyx4j.log4j.LoggerConfig;
 import com.pyx4j.security.shared.AclCreator;
 
 import com.propertyvista.config.AbstractVistaServerSideConfiguration;
+import com.propertyvista.config.BankingSimulatorConfiguration;
 import com.propertyvista.config.BmoInterfaceConfiguration;
 import com.propertyvista.config.CaledonFundsTransferConfiguration;
 import com.propertyvista.config.EncryptedStorageConfiguration;
@@ -140,6 +141,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public String getApplicationURLNamespace(boolean secure) {
+        return ".birchwoodsoftwaregroup.com/";
+    }
+
+    @Override
     public boolean isAppsContextlessDepoyment() {
         return true;
     }
@@ -210,6 +216,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
     }
 
     @Override
+    public File vistaWorkDir() {
+        return null;
+    }
+
+    @Override
     public File getCaledonInterfaceWorkDirectory() {
         return null;
     }
@@ -221,26 +232,6 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public File getTenantSureInterfaceSftpDirectory() {
-        return null;
-    }
-
-    @Override
-    public boolean isFundsTransferSimulationConfigurable() {
-        return false;
-    }
-
-    @Override
-    public File getCaledonSimulatorSftpDirectory() {
-        return null;
-    }
-
-    @Override
-    public File getBmoSimulatorSftpDirectory() {
-        return null;
-    }
-
-    @Override
-    public String getCardServiceSimulatorUrl() {
         return null;
     }
 
@@ -287,6 +278,11 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public BmoInterfaceConfiguration getBmoInterfaceConfiguration() {
+        throw new Error("not supported in tests");
+    }
+
+    @Override
+    public BankingSimulatorConfiguration getBankingSimulatorConfiguration() {
         throw new Error("not supported in tests");
     }
 
