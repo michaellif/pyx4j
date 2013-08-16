@@ -21,6 +21,7 @@ import java.util.List;
 import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -51,6 +52,10 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
 
     private Button payButton;
 
+    private Widget currentAutoPaymentCaption;
+
+    private Widget transactionsHistoryCaption;
+
     public FinancialSummaryForm(Command payNowCommand) {
         super(YardiFinancialSummaryDTO.class);
         setViewable(true);
@@ -74,14 +79,24 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
         }));
 
         content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
+        currentAutoPaymentCaption = content.getWidget(row, 0);
         content.setWidget(++row, 0, inject(proto().latestActivities(), new LatestActivitiesFolder()));
 
         content.setBR(++row, 0, 2);
 
         content.setH3(++row, 0, 2, i18n.tr("Charges and Payments"));
+        transactionsHistoryCaption = content.getWidget(row, 0);
         content.setWidget(++row, 0, inject(proto().transactionsHistory(), new TransactionHistoryViewerYardi()));
 
         return content;
+    }
+
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
+
+        currentAutoPaymentCaption.setVisible(!getValue().currentAutoPayments().isEmpty());
+        transactionsHistoryCaption.setVisible(!getValue().transactionsHistory().isEmpty());
     }
 
     public void setPayNowVisible(boolean visible) {

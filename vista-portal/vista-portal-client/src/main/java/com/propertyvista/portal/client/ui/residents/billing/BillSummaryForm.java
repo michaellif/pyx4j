@@ -19,6 +19,7 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CMoneyField;
 import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
@@ -45,6 +46,10 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
     private Presenter presenter;
 
     private Button payButton;
+
+    private Widget currentAutoPaymentCaption;
+
+    private Widget latestActivitiesCaption;
 
     public BillSummaryForm() {
         super(PvBillingFinancialSummaryDTO.class, new VistaViewersComponentFactory());
@@ -79,11 +84,13 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         }));
 
         content.setH3(++row, 0, 2, proto().currentAutoPayments().getMeta().getCaption());
+        currentAutoPaymentCaption = content.getWidget(row, 0);
         content.setWidget(++row, 0, 2, inject(proto().currentAutoPayments(), new PaymentInfoFolder()));
 
         content.setBR(++row, 0, 2);
 
         content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
+        latestActivitiesCaption = content.getWidget(row, 0);
         content.setWidget(++row, 0, 2, inject(proto().latestActivities(), new InvoiceLineItemFolder()));
 
         // tweak UI:
@@ -97,6 +104,8 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
         super.onValueSet(populate);
 
         payButton.setVisible(SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values()));
+        currentAutoPaymentCaption.setVisible(!getValue().currentAutoPayments().isEmpty());
+        latestActivitiesCaption.setVisible(!getValue().latestActivities().isEmpty());
     }
 
     class InvoiceLineItemFolder extends VistaTableFolder<InvoiceLineItem> {

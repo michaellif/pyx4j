@@ -72,7 +72,7 @@ public class BillSummaryServiceImpl implements BillSummaryService {
 
     }
 
-    static List<PaymentInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
+    public static List<PaymentInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
         List<PaymentInfoDTO> currentAutoPayments = new ArrayList<PaymentInfoDTO>();
         LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
         for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {

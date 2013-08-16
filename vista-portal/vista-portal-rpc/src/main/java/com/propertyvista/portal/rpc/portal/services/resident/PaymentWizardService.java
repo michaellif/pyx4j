@@ -21,9 +21,9 @@ import com.pyx4j.entity.rpc.AbstractWizardService;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 
-public interface PaymentWizardService extends AbstractWizardService<PaymentRecordDTO> {
+public interface PaymentWizardService extends AbstractWizardService<PaymentDTO> {
 
     void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 

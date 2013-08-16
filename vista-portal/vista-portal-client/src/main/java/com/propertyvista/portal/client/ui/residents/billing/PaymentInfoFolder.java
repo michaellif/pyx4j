@@ -21,10 +21,11 @@ import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 
-class PaymentInfoFolder extends VistaTableFolder<PaymentInfoDTO> {
+public class PaymentInfoFolder extends VistaTableFolder<PaymentInfoDTO> {
 
     public PaymentInfoFolder() {
         super(PaymentInfoDTO.class, false);
+        setViewable(true);
     }
 
     @Override

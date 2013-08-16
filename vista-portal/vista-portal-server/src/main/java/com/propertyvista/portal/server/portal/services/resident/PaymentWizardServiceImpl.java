@@ -41,19 +41,19 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentWizardService {
+public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentDTO> implements PaymentWizardService {
 
     private static final I18n i18n = I18n.get(PaymentWizardServiceImpl.class);
 
     public PaymentWizardServiceImpl() {
-        super(PaymentRecord.class, PaymentRecordDTO.class);
+        super(PaymentRecord.class, PaymentDTO.class);
     }
 
     @Override
@@ -62,12 +62,12 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
     }
 
     @Override
-    public void create(AsyncCallback<PaymentRecordDTO> callback) {
+    public void create(AsyncCallback<PaymentDTO> callback) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
-        PaymentRecordDTO dto = EntityFactory.create(PaymentRecordDTO.class);
+        PaymentDTO dto = EntityFactory.create(PaymentDTO.class);
 
         dto.billingAccount().set(lease.billingAccount());
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
@@ -93,12 +93,14 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
             dto.amount().setValue(new BigDecimal("0.00"));
         }
 
+        dto.currentAutoPayments().addAll(BillSummaryServiceImpl.retrieveCurrentAutoPayments(lease));
+
         callback.onSuccess(dto);
     }
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, PaymentRecordDTO dto) {
+    public void finish(AsyncCallback<Key> callback, PaymentDTO dto) {
         PaymentRecord entity = createDBO(dto);
 
         // some validation:

@@ -38,7 +38,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView.Presenter;
-import com.propertyvista.portal.domain.dto.PaymentMethodListDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentMethodListDTO;
 
 public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
 

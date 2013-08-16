@@ -21,9 +21,9 @@ import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 
-public interface PaymentWizardView extends IWizard<PaymentRecordDTO> {
+public interface PaymentWizardView extends IWizard<PaymentDTO> {
 
     interface Persenter extends IWizard.Presenter {
 

@@ -59,11 +59,12 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
-import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.client.ui.residents.billing.PaymentInfoFolder;
+import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 
-public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
+public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
@@ -100,8 +101,10 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
         }
     };
 
-    public PaymentWizardForm(IWizard<PaymentRecordDTO> view, String caption, String endButtonCaption) {
-        super(PaymentRecordDTO.class, view, caption, endButtonCaption);
+    private Widget currentAutoPaymentCaption;
+
+    public PaymentWizardForm(IWizard<PaymentDTO> view, String caption, String endButtonCaption) {
+        super(PaymentDTO.class, view, caption, endButtonCaption);
 
         addStep(createDetailsStep());
         paymentMethodSelectionStep = addStep(createSelectPaymentMethodStep());
@@ -121,6 +124,10 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
 
         panel.setHR(++row, 0, 1);
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount()), 10).build());
+
+        panel.setH4(++row, 0, 2, proto().currentAutoPayments().getMeta().getCaption());
+        currentAutoPaymentCaption = panel.getWidget(row, 0);
+        panel.setWidget(++row, 0, 2, inject(proto().currentAutoPayments(), new PaymentInfoFolder()));
 
         // tweak UI:
         get(proto().leaseTermParticipant()).setViewable(true);
@@ -262,6 +269,8 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentRecordDTO> {
                 paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
         });
+
+        currentAutoPaymentCaption.setVisible(!getValue().currentAutoPayments().isEmpty());
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {

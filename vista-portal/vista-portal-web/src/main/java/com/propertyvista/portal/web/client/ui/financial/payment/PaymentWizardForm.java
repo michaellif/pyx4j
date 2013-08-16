@@ -54,7 +54,7 @@ import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
@@ -62,7 +62,7 @@ import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
+public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
 
     private static final I18n i18n = I18n.get(PaymentWizardForm.class);
 
@@ -94,7 +94,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentRecordDTO> {
     };
 
     public PaymentWizardForm(PaymentWizardView view, String endButtonCaption) {
-        super(PaymentRecordDTO.class, view, endButtonCaption);
+        super(PaymentDTO.class, view, endButtonCaption);
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
