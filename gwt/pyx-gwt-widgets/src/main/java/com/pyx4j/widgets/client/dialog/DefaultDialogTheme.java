@@ -72,7 +72,6 @@ public class DefaultDialogTheme extends Theme {
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
-        style.addProperty("padding", "10px");
         addStyle(style);
     }
 
