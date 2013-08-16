@@ -78,7 +78,6 @@ public class BillSummaryForm extends CEntityDecoratableForm<PvBillingFinancialSu
             }
         }));
 
-        content.setBR(++row, 0, 2);
         content.setH3(++row, 0, 2, proto().currentAutoPayments().getMeta().getCaption());
         content.setWidget(++row, 0, 2, inject(proto().currentAutoPayments(), new PaymentInfoFolder()));
 

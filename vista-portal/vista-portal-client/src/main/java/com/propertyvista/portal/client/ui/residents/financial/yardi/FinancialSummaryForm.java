@@ -73,11 +73,11 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
             }
         }));
 
-        content.setBR(++row, 0, 2);
         content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
         content.setWidget(++row, 0, inject(proto().latestActivities(), new LatestActivitiesFolder()));
 
         content.setBR(++row, 0, 2);
+
         content.setH3(++row, 0, 2, i18n.tr("Charges and Payments"));
         content.setWidget(++row, 0, inject(proto().transactionsHistory(), new TransactionHistoryViewerYardi()));
 
