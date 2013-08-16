@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.domain.dto.financial;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
+@Transient
 public interface PaymentDTO extends PaymentRecordDTO {
 
     IList<PaymentInfoDTO> currentAutoPayments();
