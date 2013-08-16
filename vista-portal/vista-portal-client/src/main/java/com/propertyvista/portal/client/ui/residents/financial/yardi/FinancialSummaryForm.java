@@ -42,6 +42,7 @@ import com.propertyvista.domain.financial.billing.InvoiceCredit;
 import com.propertyvista.domain.financial.billing.InvoiceDebit;
 import com.propertyvista.domain.financial.billing.InvoiceLineItem;
 import com.propertyvista.portal.client.ui.components.CurrentBalanceFormat;
+import com.propertyvista.portal.client.ui.residents.billing.PaymentInfoFolder;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 
 public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialSummaryDTO> {
@@ -78,9 +79,9 @@ public class FinancialSummaryForm extends CEntityDecoratableForm<YardiFinancialS
             }
         }));
 
-        content.setH3(++row, 0, 2, proto().latestActivities().getMeta().getCaption());
+        content.setH3(++row, 0, 2, proto().currentAutoPayments().getMeta().getCaption());
         currentAutoPaymentCaption = content.getWidget(row, 0);
-        content.setWidget(++row, 0, inject(proto().latestActivities(), new LatestActivitiesFolder()));
+        content.setWidget(++row, 0, 2, inject(proto().currentAutoPayments(), new PaymentInfoFolder()));
 
         content.setBR(++row, 0, 2);
 
