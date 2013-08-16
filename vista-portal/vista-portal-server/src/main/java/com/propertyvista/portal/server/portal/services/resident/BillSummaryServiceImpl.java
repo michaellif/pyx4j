@@ -14,6 +14,8 @@
 package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -52,23 +54,7 @@ public class BillSummaryServiceImpl implements BillSummaryService {
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserTenant().lease().getPrimaryKey());
 
         financialSummary.currentBalance().setValue(ServerSideFactory.create(ARFacade.class).getCurrentBalance(lease.billingAccount()));
-
-        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
-        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
-            PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
-
-            pi.amount().setValue(BigDecimal.ZERO);
-            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
-                pi.amount().setValue(pi.amount().getValue().add(ci.amount().getValue()));
-            }
-
-            pi.paymentMethod().set(pap.paymentMethod());
-            pi.paymentDate().setValue(excutionDate);
-            pi.payer().set(pap.tenant());
-            Persistence.ensureRetrieve(pi.payer(), AttachLevel.ToStringMembers);
-
-            financialSummary.currentAutoPayments().add(pi);
-        }
+        financialSummary.currentAutoPayments().addAll(retrieveCurrentAutoPayments(lease));
 
         // TODO has to stay here until billing facade and AR facade merged together
         if (financialSummary.isInstanceOf(YardiFinancialSummaryDTO.class)) {
@@ -84,5 +70,29 @@ public class BillSummaryServiceImpl implements BillSummaryService {
 
         return financialSummary;
 
+    }
+
+    static List<PaymentInfoDTO> retrieveCurrentAutoPayments(Lease lease) {
+        List<PaymentInfoDTO> currentAutoPayments = new ArrayList<PaymentInfoDTO>();
+        LogicalDate excutionDate = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(lease);
+        for (PreauthorizedPayment pap : ServerSideFactory.create(PaymentMethodFacade.class).retrieveCurrentPreauthorizedPayments(lease)) {
+            PaymentInfoDTO pi = EntityFactory.create(PaymentInfoDTO.class);
+
+            pi.amount().setValue(BigDecimal.ZERO);
+            for (PreauthorizedPaymentCoveredItem ci : pap.coveredItems()) {
+                pi.amount().setValue(pi.amount().getValue().add(ci.amount().getValue()));
+            }
+
+            pi.paymentDate().setValue(excutionDate);
+            pi.payer().set(pap.tenant());
+            Persistence.ensureRetrieve(pi.payer(), AttachLevel.ToStringMembers);
+            if (pi.payer().equals(TenantAppContext.getCurrentUserTenant())) {
+                pi.paymentMethod().set(pap.paymentMethod());
+            }
+
+            currentAutoPayments.add(pi);
+        }
+
+        return currentAutoPayments;
     }
 }
