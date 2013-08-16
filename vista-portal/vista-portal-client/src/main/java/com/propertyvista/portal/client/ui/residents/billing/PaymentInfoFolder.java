@@ -30,8 +30,8 @@ class PaymentInfoFolder extends VistaTableFolder<PaymentInfoDTO> {
     @Override
     public List<EntityFolderColumnDescriptor> columns() {
         return Arrays.asList(// @formatter:off
-                new EntityFolderColumnDescriptor(proto().amount(), "10em"),
-                new EntityFolderColumnDescriptor(proto().paymentDate(), "10em"),
+                new EntityFolderColumnDescriptor(proto().amount(), "7em"),
+                new EntityFolderColumnDescriptor(proto().paymentDate(), "9em"),
                 new EntityFolderColumnDescriptor(proto().paymentMethod().type(), "10em"),
                 new EntityFolderColumnDescriptor(proto().payer(), "20em")
         ); // formatter:on
