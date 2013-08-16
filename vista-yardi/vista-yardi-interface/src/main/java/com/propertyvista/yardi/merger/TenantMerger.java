@@ -76,14 +76,19 @@ public class TenantMerger {
         return term;
     }
 
-    public void updateTenantsData(RTCustomer rtCustomer, Lease lease) {
+    public boolean updateTenantsData(RTCustomer rtCustomer, Lease lease) {
+        boolean updated = false;
+
         for (YardiCustomer customer : rtCustomer.getCustomers().getCustomer()) {
             for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                 if (tenant.leaseParticipant().participantId().getValue().equals(customer.getCustomerID())) {
-                    Persistence.service().merge(new TenantMapper().mapCustomer(customer, tenant.leaseParticipant().customer()));
+                    updated |= new TenantMapper().updateTenant(customer, tenant);
+                    Persistence.service().merge(tenant.leaseParticipant().customer());
                 }
             }
         }
+
+        return updated;
     }
 
     private List<String> fromT(List<LeaseTermTenant> tenants) {

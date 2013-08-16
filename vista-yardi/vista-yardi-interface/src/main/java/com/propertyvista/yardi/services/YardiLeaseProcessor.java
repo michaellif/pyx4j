@@ -250,7 +250,10 @@ public class YardiLeaseProcessor {
         }
 
         lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
-        new TenantMerger().updateTenantsData(rtCustomer, lease);
+        if (new TenantMerger().updateTenantsData(rtCustomer, lease)) {
+            toFinalize = true;
+            log.debug("        - TenantDataChanged...");
+        }
 
         // persist: 
 

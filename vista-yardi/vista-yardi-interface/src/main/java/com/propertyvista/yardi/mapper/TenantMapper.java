@@ -52,6 +52,27 @@ public class TenantMapper {
         return tenant;
     }
 
+    public boolean updateTenant(YardiCustomer yardiCustomer, LeaseTermTenant tenant) {
+        tenant.leaseParticipant().customer().set(mapCustomer(yardiCustomer, tenant.leaseParticipant().customer()));
+
+        boolean updated = false;
+
+        Role current = tenant.role().getValue();
+
+        // update CoApplicant <-> Dependent transition:
+        if (yardiCustomer.getLease().isResponsibleForLease()) {
+            if (tenant.role().getValue() != Role.Applicant) {
+                tenant.role().setValue(Role.CoApplicant);
+            }
+        } else {
+            tenant.role().setValue(Role.Dependent);
+        }
+
+        updated |= current != tenant.role().getValue();
+
+        return updated;
+    }
+
     private Customer findCustomer(YardiCustomer yardiCustomer) {
         if (!yardiCustomer.getAddress().isEmpty() && CommonsStringUtils.isStringSet(yardiCustomer.getAddress().get(0).getEmail())) {
             EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
