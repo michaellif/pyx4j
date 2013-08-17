@@ -22,6 +22,7 @@ package com.pyx4j.widgets.client.dialog;
 
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.NativeEvent;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.MouseDownEvent;
 import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.event.dom.client.MouseMoveEvent;
@@ -347,7 +348,8 @@ public class DialogPanel extends PopupPanel implements ProvidesResize, MouseMove
         public CaptionPanel() {
             setWordWrap(false);
             setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCaption.name());
-            setHeight("22px");
+            getElement().getStyle().setHeight(1.5, Unit.EM);
+            getElement().getStyle().setLineHeight(1.5, Unit.EM);
         }
 
     }

@@ -48,6 +48,7 @@ import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DockPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
@@ -57,11 +58,9 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.ProvidesResize;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -74,6 +73,7 @@ import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.ImageFactory;
 import com.pyx4j.widgets.client.ImageFactory.WidgetsImageBundle;
 import com.pyx4j.widgets.client.ResizibleScrollPanel;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 /**
  * Shared implementation for Modal Dialogs
@@ -96,7 +96,7 @@ public class Dialog extends DialogPanel {
 
     private boolean allowEnterKeyForDefaultButton;
 
-    protected HorizontalPanel buttonsPanel;
+    protected Widget buttonsPanel;
 
     private Button yesButton;
 
@@ -204,77 +204,56 @@ public class Dialog extends DialogPanel {
 
     }
 
-    private HorizontalPanel createButtonsPanel() {
-        HorizontalPanel buttonsPanel = new HorizontalPanel();
-        buttonsPanel.setWidth("100%");
-        DOM.setStyleAttribute(buttonsPanel.getElement(), "padding", "3px");
+    private FlowPanel createButtonsPanel() {
+        FlowPanel buttonsPanel = new FlowPanel();
+        buttonsPanel.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogButtonsPanel.name());
+
+        Toolbar defaultButtonsToolbar = new Toolbar();
+        defaultButtonsToolbar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogDefaultButtonsToolbar.name());
+        buttonsPanel.add(defaultButtonsToolbar);
+
+        Toolbar customButtonsToolbar = new Toolbar();
+        customButtonsToolbar.setStylePrimaryName(DefaultDialogTheme.StyleName.DialogCustomButtonsToolbar.name());
+        buttonsPanel.add(customButtonsToolbar);
 
         ClickHandler buttonsHandler = new ButtonClickHandler();
 
-        boolean hasDefaultButtons = (options instanceof YesOption) || (options instanceof NoOption) || (options instanceof OkOption)
-                || (options instanceof CancelOption) || (options instanceof CloseOption);
-
-        if (!hasDefaultButtons) {
-            Panel glue = new SimplePanel();
-            glue.setWidth("100%");
-            buttonsPanel.insert(glue, 0);
-            buttonsPanel.setCellWidth(glue, "100%");
-        }
-
         if (options instanceof Custom1Option) {
-            custom1Button = createButton(((Custom1Option) options).custom1Text(), ((Custom1Option) options).getCustom1DebugID(), buttonsHandler,
-                    !hasDefaultButtons);
-            buttonsPanel.add(custom1Button);
+            custom1Button = createButton(((Custom1Option) options).custom1Text(), ((Custom1Option) options).getCustom1DebugID(), buttonsHandler, true);
+            customButtonsToolbar.add(custom1Button);
         }
         if (options instanceof Custom2Option) {
-            custom2Button = createButton(((Custom2Option) options).custom2Text(), ((Custom2Option) options).getCustom2DebugID(), buttonsHandler,
-                    !hasDefaultButtons);
-            buttonsPanel.add(custom2Button);
+            custom2Button = createButton(((Custom2Option) options).custom2Text(), ((Custom2Option) options).getCustom2DebugID(), buttonsHandler, true);
+            customButtonsToolbar.add(custom2Button);
         }
         if (options instanceof Custom3Option) {
-            custom3Button = createButton(((Custom3Option) options).custom3Text(), ((Custom3Option) options).getCustom3DebugID(), buttonsHandler,
-                    !hasDefaultButtons);
-            buttonsPanel.add(custom3Button);
+            custom3Button = createButton(((Custom3Option) options).custom3Text(), ((Custom3Option) options).getCustom3DebugID(), buttonsHandler, true);
+            customButtonsToolbar.add(custom3Button);
         }
         if (options instanceof Custom4Option) {
-            custom4Button = createButton(((Custom4Option) options).custom4Text(), ((Custom4Option) options).getCustom4DebugID(), buttonsHandler,
-                    !hasDefaultButtons);
-            buttonsPanel.add(custom4Button);
-        }
-
-        if (hasDefaultButtons) {
-            Panel glue = new SimplePanel();
-            glue.setWidth("100%");
-            if (options instanceof GlueOption) {
-                buttonsPanel.add(glue);
-                Panel rigid = new SimplePanel();
-                rigid.setWidth("30px");
-                buttonsPanel.insert(rigid, 0);
-            } else {
-                buttonsPanel.insert(glue, 0);
-            }
-            buttonsPanel.setCellWidth(glue, "100%");
+            custom4Button = createButton(((Custom4Option) options).custom4Text(), ((Custom4Option) options).getCustom4DebugID(), buttonsHandler, true);
+            customButtonsToolbar.add(custom4Button);
         }
 
         if (options instanceof YesOption) {
             yesButton = createButton(defaultYesText(), DialogDebugId.Dialog_Yes, buttonsHandler, true);
-            buttonsPanel.add(yesButton);
+            defaultButtonsToolbar.add(yesButton);
         }
         if (options instanceof NoOption) {
             noButton = createButton(defaultNoText(), DialogDebugId.Dialog_No, buttonsHandler, true);
-            buttonsPanel.add(noButton);
+            defaultButtonsToolbar.add(noButton);
         }
         if (options instanceof OkOption) {
             okButton = createButton(optionTextOk(), DialogDebugId.Dialog_Ok, buttonsHandler, true);
-            buttonsPanel.add(okButton);
+            defaultButtonsToolbar.add(okButton);
         }
         if (options instanceof CancelOption) {
             cancelButton = createButton(optionTextCancel(), DialogDebugId.Dialog_Cancel, buttonsHandler, true);
-            buttonsPanel.add(cancelButton);
+            defaultButtonsToolbar.add(cancelButton);
         }
         if (options instanceof CloseOption) {
             closeButton = createButton(optionTextClose(), DialogDebugId.Dialog_Close, buttonsHandler, true);
-            buttonsPanel.add(closeButton);
+            defaultButtonsToolbar.add(closeButton);
         }
 
         return buttonsPanel;
@@ -530,8 +509,8 @@ public class Dialog extends DialogPanel {
     }
 
     public final native Element getDocumentActiveElement() /*-{
-		return $doc.activeElement;
-    }-*/;
+                                                           return $doc.activeElement;
+                                                           }-*/;
 
     public static void closeOpenDialogs() {
         for (int i = 0; i < openDialogs.size(); i++) {

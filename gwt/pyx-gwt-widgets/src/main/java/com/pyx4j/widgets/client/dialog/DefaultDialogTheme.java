@@ -31,7 +31,9 @@ import com.pyx4j.commons.css.ThemeId;
 public class DefaultDialogTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Dialog, DialogCaption, DialogResizer, DialogContent
+        Dialog, DialogCaption, DialogResizer, DialogContent,
+
+        DialogButtonsPanel, DialogDefaultButtonsToolbar, DialogCustomButtonsToolbar
     }
 
     public static enum StyleDependent implements IStyleDependent {
@@ -72,6 +74,21 @@ public class DefaultDialogTheme extends Theme {
         style.addProperty("background-color", ThemeColor.background);
         style.addProperty("width", "100%");
         style.addProperty("height", "100%");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DialogButtonsPanel);
+        style.addProperty("border-top", "solid 1px");
+        style.addProperty("border-top-color", ThemeColor.foreground, 0.3);
+        addStyle(style);
+
+        style = new Style(".", StyleName.DialogDefaultButtonsToolbar);
+        style.addProperty("margin", "10px");
+        style.addProperty("float", "right");
+        addStyle(style);
+
+        style = new Style(".", StyleName.DialogCustomButtonsToolbar);
+        style.addProperty("margin", "10px");
+        style.addProperty("float", "right");
         addStyle(style);
     }
 
