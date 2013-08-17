@@ -37,6 +37,7 @@ import com.propertyvista.domain.pmc.ReservedPmcNames;
 import com.propertyvista.operations.domain.payment.pad.PadReconciliationSummary;
 import com.propertyvista.operations.domain.scheduler.RunData;
 import com.propertyvista.operations.domain.scheduler.TriggerPmc;
+import com.propertyvista.operations.domain.security.AuditRecord;
 import com.propertyvista.operations.domain.tenantsure.TenantSureSubscribers;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
 import com.propertyvista.portal.server.preloader.PmcCreator;
@@ -85,35 +86,40 @@ public class PmcFacadeImpl implements PmcFacade {
     private void remove(Pmc pmc) {
         {
             EntityQueryCriteria<RunData> criteria = EntityQueryCriteria.create(RunData.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.eq(criteria.proto().pmc(), pmc);
             Persistence.service().delete(criteria);
         }
         {
             EntityQueryCriteria<TriggerPmc> criteria = EntityQueryCriteria.create(TriggerPmc.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.eq(criteria.proto().pmc(), pmc);
             Persistence.service().delete(criteria);
         }
         {
             EntityQueryCriteria<PmcAccountNumbers> criteria = EntityQueryCriteria.create(PmcAccountNumbers.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.eq(criteria.proto().pmc(), pmc);
             Persistence.service().delete(criteria);
         }
 
         {
             EntityQueryCriteria<PadReconciliationSummary> criteria = EntityQueryCriteria.create(PadReconciliationSummary.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().merchantAccount().pmc(), pmc));
+            criteria.eq(criteria.proto().merchantAccount().pmc(), pmc);
             Persistence.service().delete(criteria);
         }
 
         {
             EntityQueryCriteria<TenantSureSubscribers> criteria = EntityQueryCriteria.create(TenantSureSubscribers.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.eq(criteria.proto().pmc(), pmc);
             Persistence.service().delete(criteria);
         }
 
         {
             EntityQueryCriteria<GlobalCrmUserIndex> criteria = EntityQueryCriteria.create(GlobalCrmUserIndex.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().pmc(), pmc));
+            criteria.eq(criteria.proto().pmc(), pmc);
+            Persistence.service().delete(criteria);
+        }
+        {
+            EntityQueryCriteria<AuditRecord> criteria = EntityQueryCriteria.create(AuditRecord.class);
+            criteria.eq(criteria.proto().pmc(), pmc);
             Persistence.service().delete(criteria);
         }
 
