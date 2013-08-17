@@ -349,7 +349,7 @@ public class YardiLeaseProcessor {
                 }
             }
         } else { // check first/last/etc. month charges suspension (via policies):
-            ServerSideFactory.create(PaymentMethodFacade.class).renewPreauthorizedPayments(lease);
+            ServerSideFactory.create(PaymentMethodFacade.class).updatePreauthorizedPaymentsByPolicy(lease);
         }
 
         return lease;

@@ -891,6 +891,8 @@ public abstract class LeaseAbstractManager {
         Persistence.service().merge(lease);
         Persistence.service().merge(lease.billingAccount());
 
+        ServerSideFactory.create(PaymentMethodFacade.class).updatePreauthorizedPaymentsByPolicy(lease);
+
         // update reservation if necessary:
         if (doUnreserve) {
             switch (lease.status().getValue()) {

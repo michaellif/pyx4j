@@ -183,7 +183,7 @@ class PreauthorizedPaymentAgreementMananger {
 
     public void renewPreauthorizedPayments(Lease lease) {
         BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
-        List<PreauthorizedPayment> activePap;
+        List<PreauthorizedPayment> activePaps;
         {
             EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
             criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
@@ -193,14 +193,12 @@ class PreauthorizedPaymentAgreementMananger {
                 or.left().isNull(criteria.proto().expiring());
             }
             criteria.in(criteria.proto().tenant().lease(), lease);
-            activePap = Persistence.service().query(criteria);
+            activePaps = Persistence.service().query(criteria);
         }
 
-        if (activePap.size() == 0) {
+        if (activePaps.size() == 0) {
             return;
         }
-
-        Map<String, BillableItem> billableItems = PaymentBillableUtils.getAllBillableItems(lease.currentTerm().version());
 
         // Verify that new charges not added
         LeaseTerm.LeaseTermV previousVersion = null;
@@ -219,8 +217,8 @@ class PreauthorizedPaymentAgreementMananger {
 
         boolean suspend = false;
 
+        Map<String, BillableItem> billableItems = PaymentBillableUtils.getAllBillableItems(lease.currentTerm().version());
         Map<String, BillableItem> previousBillableItems = PaymentBillableUtils.getAllBillableItems(previousVersion);
-
         if (!EqualsHelper.equals(previousBillableItems.keySet(), billableItems.keySet())) {
             suspend = true;
         } else {
@@ -234,15 +232,9 @@ class PreauthorizedPaymentAgreementMananger {
             }
         }
 
-        // lease last month check:
-        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
-        if (!autoPayPolicy.allowLastBillingPeriodCharge().getValue(Boolean.FALSE)) {
-            suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
-        }
-
         if (!suspend) {
             // migrate each PAP to new billableItems
-            forEachAllPap: for (PreauthorizedPayment pap : activePap) {
+            forEachAllPap: for (PreauthorizedPayment pap : activePaps) {
                 for (PreauthorizedPaymentCoveredItem pi : pap.coveredItems()) {
                     BillableItem bi = billableItems.get(pi.billableItem().uid().getValue());
                     // Not found or price changed, should have been caught by previous comparison
@@ -257,10 +249,47 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         // Suspend all or update all
-        for (PreauthorizedPayment pap : activePap) {
+        for (PreauthorizedPayment pap : activePaps) {
             suspendPreauthorizedPayment(pap, suspend);
         }
         if (suspend) {
+            ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
+        }
+    }
+
+    public void updatePreauthorizedPaymentsByPolicy(Lease lease) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        List<PreauthorizedPayment> activePaps;
+        {
+            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+            {
+                OrCriterion or = criteria.or();
+                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
+                or.left().isNull(criteria.proto().expiring());
+            }
+            criteria.in(criteria.proto().tenant().lease(), lease);
+            activePaps = Persistence.service().query(criteria);
+        }
+
+        if (activePaps.size() == 0) {
+            return;
+        }
+
+        boolean suspend = false;
+
+        // lease last month check:
+        AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
+        if (!autoPayPolicy.allowLastBillingPeriodCharge().getValue(Boolean.FALSE)) {
+            suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
+        }
+
+        // Suspend all or update all
+        if (suspend) {
+            for (PreauthorizedPayment pap : activePaps) {
+                suspendPreauthorizedPayment(pap, true);
+            }
+
             ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
         }
     }
