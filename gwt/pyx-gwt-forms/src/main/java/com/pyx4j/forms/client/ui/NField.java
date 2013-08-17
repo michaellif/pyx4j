@@ -253,13 +253,13 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
         public EditorPanel() {
             super();
             setStyleName(DefaultCComponentsTheme.StyleName.FieldEditorPanel.name());
-            getElement().getStyle().setWhiteSpace(WhiteSpace.NOWRAP);
+            getElement().getStyle().setProperty("display", "table");
             setWidth("100%");
 
             editorHolder = new SimplePanel();
             editorHolder.setWidth("100%");
             editorHolder.getElement().getStyle().setWhiteSpace(WhiteSpace.NORMAL);
-            editorHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            editorHolder.getElement().getStyle().setProperty("display", "table-cell");
             add(editorHolder);
 
             focusHandlerManager = new GroupFocusHandler(this);
@@ -270,7 +270,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
             }
 
             triggerButtonHolder = new SimplePanel();
-            triggerButtonHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            triggerButtonHolder.getElement().getStyle().setProperty("display", "table-cell");
             triggerButtonHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
 
             add(triggerButtonHolder);
@@ -334,6 +334,7 @@ public abstract class NField<DATA, EDITOR extends IWidget, CCOMP extends CField<
                 }));
 
                 triggerButton.ensureDebugId(CompositeDebugId.debugId(baseDebugID, CCompDebugId.trigger));
+                triggerButton.getElement().getStyle().setDisplay(Display.BLOCK);
                 triggerButtonHolder.setWidget(triggerButton);
             }
         }
