@@ -86,8 +86,9 @@ public class CustomerFacadeImpl implements CustomerFacade {
                 credential.enabled().setValue(Boolean.TRUE);
                 Persistence.service().persist(credential);
             }
-            customer.portalRegistrationToken().setValue(null);
-        } else if (customer.portalRegistrationToken().isNull()) {
+        }
+
+        if (customer.portalRegistrationToken().isNull() && !customer.registeredInPortal().getValue(false)) {
             customer.portalRegistrationToken().setValue(AccessKey.createPortalSecureToken());
         }
 
@@ -208,7 +209,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
         if (tenants.size() == 0) {
             throw EntityValidationException.make(SelfRegistrationDTO.class)
-                    .addError(selfRegistration.securityCode(), i18n.tr("The Secuirty Code was incorrect")).build();
+                    .addError(selfRegistration.securityCode(), i18n.tr("The Security Code was incorrect")).build();
         }
 
         Tenant tenant = null;
