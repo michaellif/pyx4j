@@ -24,7 +24,8 @@ public class LoginPanelWidgetDecorator extends WidgetDecorator {
     }
 
     public LoginPanelWidgetDecorator(CComponent<?> component, double componentWidth) {
-        super(new Builder(component).labelWidth(9).componentWidth(componentWidth).labelAlignment(Builder.Alignment.left));
+        super(new Builder(component).labelWidth(9 + "em").contentWidth(componentWidth + "em").componentWidth(componentWidth + "em")
+                .labelAlignment(Builder.Alignment.left));
         addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.noMandatoryStar.name());
     }
 }
