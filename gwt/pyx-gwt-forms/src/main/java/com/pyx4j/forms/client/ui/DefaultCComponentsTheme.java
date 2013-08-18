@@ -113,7 +113,7 @@ public class DefaultCComponentsTheme extends Theme {
         style.addProperty("color", "red");
         style.addProperty("text-align", "left");
         style.addProperty("white-space", "normal");
-        style.addProperty("line-height", "2em");
+        style.addProperty("padding-top", "3px");
         addStyle(style);
     }
 
