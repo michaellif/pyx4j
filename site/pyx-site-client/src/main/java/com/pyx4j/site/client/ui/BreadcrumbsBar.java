@@ -57,7 +57,9 @@ public class BreadcrumbsBar extends HorizontalPanel {
             // build UI representation of the trail
             for (int i = 0; i < filteredTrail.size(); i++) {
                 IEntity breadcrumb = breadcrumbTrail.get(i);
-                add(new BreadcrumbAnchor(breadcrumb).asWidget());
+                BreadcrumbAnchor anchor = new BreadcrumbAnchor(breadcrumb);
+                add(anchor);
+                setCellVerticalAlignment(anchor, HorizontalPanel.ALIGN_MIDDLE);
                 if (i < breadcrumbTrail.size() - 1) {
                     Label separator = new HTML("&nbsp;>&nbsp;");
                     add(separator);
