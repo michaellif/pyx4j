@@ -90,11 +90,13 @@ public abstract class DefaultWidgetDecoratorTheme extends Theme {
         style.addProperty("font-weight", "bold");
         style.addProperty("padding-right", "1em");
         style.addProperty("white-space", "normal");
+        style.addProperty("line-height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecorator, "-", StyleDependent.viewable, " .", StyleName.WidgetDecoratorLabel);
         style.addProperty("color", ThemeColor.foreground, 0.5);
         style.addProperty("font-size", "0.9em");
+        style.addProperty("line-height", "1.5em");
         addStyle(style);
 
         style = new Style(".", StyleName.WidgetDecoratorInfoImage);
