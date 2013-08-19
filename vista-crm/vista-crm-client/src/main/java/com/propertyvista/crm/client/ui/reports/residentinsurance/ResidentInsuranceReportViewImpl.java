@@ -17,9 +17,9 @@ import com.pyx4j.site.client.ui.reports.AbstractReport;
 
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 
-public class ResidentInsuranceReportSettingViewImpl extends AbstractReport<ResidentInsuranceReportMetadata> implements ResidentInsuranceReportView {
+public class ResidentInsuranceReportViewImpl extends AbstractReport<ResidentInsuranceReportMetadata> implements ResidentInsuranceReportView {
 
-    public ResidentInsuranceReportSettingViewImpl() {
+    public ResidentInsuranceReportViewImpl() {
         super(new ResidentInsuranceReportWidget(), new ResidentInsuranceReportSettingsForm(), null);
     }
 
