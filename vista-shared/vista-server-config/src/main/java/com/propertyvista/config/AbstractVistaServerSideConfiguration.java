@@ -137,6 +137,8 @@ public abstract class AbstractVistaServerSideConfiguration extends EssentialsSer
         return true;
     }
 
+    public abstract String rdateServer();
+
     public abstract EncryptedStorageConfiguration getEncryptedStorageConfiguration();
 
 }

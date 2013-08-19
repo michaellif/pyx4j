@@ -21,6 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.Consts;
+import com.pyx4j.config.server.ServerSideConfiguration;
+
+import com.propertyvista.config.AbstractVistaServerSideConfiguration;
 
 /**
  * This is rdate in java
@@ -50,7 +53,7 @@ public class WorldDateManager {
             // We want to timeout if a response takes longer than 60 seconds
             client.setDefaultTimeout(60 * Consts.SEC2MSEC);
             client.open();
-            remoteTime = client.getDate(InetAddress.getByName("209.47.15.67"));
+            remoteTime = client.getDate(InetAddress.getByName(ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).rdateServer()));
             timedelta = remoteTime.getTime() - System.currentTimeMillis();
             log.debug("RemoteTime {}, timeDelta {} ", remoteTime, timedelta);
         } catch (Throwable e) {

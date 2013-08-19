@@ -286,4 +286,10 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
         throw new Error("not supported in tests");
     }
 
+    @Override
+    public String rdateServer() {
+        //return "98.158.157.171";
+        return "209.47.15.67";
+    }
+
 }
