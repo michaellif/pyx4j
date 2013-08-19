@@ -63,7 +63,7 @@ public class BillSummaryServiceImpl implements BillSummaryService {
             ((YardiFinancialSummaryDTO) financialSummary).latestActivities().addAll(
                     ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
         } else if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
-            ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestBill(lease));
+            ((PvBillingFinancialSummaryDTO) financialSummary).currentBill().set(ServerSideFactory.create(BillingFacade.class).getLatestConfirmedBill(lease));
             ((PvBillingFinancialSummaryDTO) financialSummary).latestActivities().addAll(
                     ServerSideFactory.create(ARFacade.class).getLatestBillingActivity(lease.billingAccount()));
         }

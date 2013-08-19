@@ -161,9 +161,9 @@ public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
         private final CurrentBalanceFormat currentBalanceFormat = new CurrentBalanceFormat();
 
         @Override
-        public IsWidget createContent(FinancialSummaryDTO value) {
+        public IsWidget createContent(FinancialSummaryDTO financialSummary) {
 
-            if (value == null) {
+            if (financialSummary == null) {
                 return null;
             }
 
@@ -175,18 +175,20 @@ public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
 
             int row = -1;
 
-            dataPanel.setHTML(++row, 0, value.currentBalance().getMeta().getCaption());
+            dataPanel.setHTML(++row, 0, financialSummary.currentBalance().getMeta().getCaption());
             dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
             dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-            dataPanel.setHTML(row, 1, currentBalanceFormat.format(value.currentBalance().getValue()));
+            dataPanel.setHTML(row, 1, currentBalanceFormat.format(financialSummary.currentBalance().getValue()));
 
             // TODO wrong polymorphism
-            if (value.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
-                PvBillingFinancialSummaryDTO pvBillingSumarry = value.duplicate(PvBillingFinancialSummaryDTO.class);
-                dataPanel.setHTML(++row, 0, pvBillingSumarry.currentBill().dueDate().getMeta().getCaption());
-                dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
-                dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
-                dataPanel.setHTML(row, 1, pvBillingSumarry.currentBill().dueDate().getStringView());
+            if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
+                PvBillingFinancialSummaryDTO pvBillingSumarry = financialSummary.duplicate(PvBillingFinancialSummaryDTO.class);
+                if (!pvBillingSumarry.currentBill().isNull()) {
+                    dataPanel.setHTML(++row, 0, pvBillingSumarry.currentBill().dueDate().getMeta().getCaption());
+                    dataPanel.getRowFormatter().getElement(row).addClassName(TenantDashboardTheme.StyleName.TenantDashboardTableRow.name());
+                    dataPanel.getCellFormatter().getElement(row, 0).getStyle().setPaddingLeft(1, Unit.EM);
+                    dataPanel.setHTML(row, 1, pvBillingSumarry.currentBill().dueDate().getStringView());
+                }
             }
             VerticalPanel content = new VerticalPanel();
             content.add(dataPanel);
@@ -196,7 +198,7 @@ public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
             actions.getElement().getStyle().setMargin(1, Unit.EM);
 
             // TODO wrong polymorphism
-            if (value.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
+            if (financialSummary.isInstanceOf(PvBillingFinancialSummaryDTO.class)) {
                 Anchor viewBill = new Anchor(i18n.tr("View Current Bill")) {
                 };
                 viewBill.addClickHandler(new ClickHandler() {
@@ -212,7 +214,6 @@ public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {
             payButton = new Button(i18n.tr("Pay Now"), new Command() {
                 @Override
                 public void execute() {
-                    // TODO Auto-generated method stub
                     presenter.payNow();
                 }
 
