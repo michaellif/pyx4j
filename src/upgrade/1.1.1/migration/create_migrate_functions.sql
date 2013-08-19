@@ -30,6 +30,8 @@ BEGIN
         
         -- check constraints
         
+        ALTER TABLE auto_pay_change_policy DROP CONSTRAINT auto_pay_change_policy_node_discriminator_d_ck;
+        ALTER TABLE auto_pay_change_policy DROP CONSTRAINT auto_pay_change_policy_rule_e_ck;
         ALTER TABLE email_template DROP CONSTRAINT email_template_template_type_e_ck;
         ALTER TABLE nsf_fee_item DROP CONSTRAINT nsf_fee_item_payment_type_e_ck;
         ALTER TABLE payment_information DROP CONSTRAINT payment_information_payment_method_details_discriminator_d_ck;
@@ -47,6 +49,7 @@ BEGIN
         
         -- primary keys
         
+        ALTER TABLE auto_pay_change_policy DROP CONSTRAINT auto_pay_change_policy_pk;
         ALTER TABLE portal_image_resource DROP CONSTRAINT portal_image_resource_pk;
         
         
@@ -98,7 +101,14 @@ BEGIN
         ALTER TABLE application_document_file   ADD COLUMN caption VARCHAR(500),
                                                 ADD COLUMN description VARCHAR(500);
                                                 
-             
+        -- auto_pay_change_policy
+        
+        ALTER TABLE auto_pay_change_policy RENAME TO auto_pay_policy;
+        
+        ALTER TABLE auto_pay_policy     ADD COLUMN allow_first_billing_period_charge BOOLEAN,
+                                        ADD COLUMN allow_last_billing_period_charge BOOLEAN;
+                                        
+        ALTER TABLE auto_pay_policy RENAME COLUMN rule TO on_lease_charge_change_rule; 
                                                 
         -- company
         
@@ -533,6 +543,7 @@ BEGIN
         
         -- primary key
         
+        ALTER TABLE auto_pay_policy ADD CONSTRAINT auto_pay_policy_pk PRIMARY KEY(id);
         ALTER TABLE portal_logo_image_resource ADD CONSTRAINT portal_logo_image_resource_pk PRIMARY KEY(id);
         
         -- foreign key
@@ -560,6 +571,9 @@ BEGIN
         
         ALTER TABLE aggregated_transfer ADD CONSTRAINT aggregated_transfer_funds_transfer_type_e_ck 
                 CHECK ((funds_transfer_type) IN ('DirectBankingPayment', 'InteracOnlinePayment', 'PreAuthorizedDebit'));
+        ALTER TABLE auto_pay_policy ADD CONSTRAINT auto_pay_policy_node_discriminator_d_ck 
+                CHECK ((node_discriminator) IN ('Disc Complex', 'Disc_Building', 'Disc_Country', 'Disc_Floorplan', 'Disc_Province', 'OrganizationPoliciesNode', 'Unit_BuildingElement'));
+        ALTER TABLE auto_pay_policy ADD CONSTRAINT auto_pay_policy_on_lease_charge_change_rule_e_ck CHECK ((on_lease_charge_change_rule) IN ('keepPercentage', 'keepUnchanged'));
         ALTER TABLE email_template ADD CONSTRAINT email_template_template_type_e_ck 
                 CHECK ((template_type) IN ('ApplicationApproved', 'ApplicationCreatedApplicant', 'ApplicationCreatedCoApplicant', 
                 'ApplicationCreatedGuarantor', 'ApplicationDeclined', 'MaintenanceRequestCancelled', 'MaintenanceRequestCompleted', 
