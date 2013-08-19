@@ -370,10 +370,10 @@ public class LeaseTermForm extends CrmEntityForm<LeaseTermDTO> {
                     LogicalDate dateToCompare = getValue().lease().creationDate().isNull() ? new LogicalDate(ClientContext.getServerDate()) : getValue()
                             .lease().creationDate().getValue();
                     if (getValue().lease().status().getValue() == Lease.Status.Application) {
-                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Application Creaion Date"))
+                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Application Creation Date"))
                                 .isValid(component, value);
                     } else if (getValue().lease().status().getValue() == Lease.Status.NewLease) {
-                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Lease Creaion Date"))
+                        return new FutureDateIncludeTodayValidator(dateToCompare, i18n.tr("The Date Must Be Later Than Or Equal To Lease Creation Date"))
                                 .isValid(component, value);
                     } else if (getValue().lease().status().getValue() == Lease.Status.ExistingLease) {
                         return new PastDateValidator(dateToCompare, i18n.tr("The Date Must Be Earlier Than Lease Creation Date")).isValid(component, value);
