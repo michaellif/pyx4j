@@ -371,9 +371,7 @@ public class VistaServerSideConfiguration extends AbstractVistaServerSideConfigu
 
     @Override
     public String rdateServer() {
-        return getConfigProperties().getValue("rdateServer",
-        //"98.158.157.171"
-                "209.47.15.67");
+        return getConfigProperties().getValue("rdateServer", "98.158.137.171");
     }
 
     @Override

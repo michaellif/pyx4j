@@ -288,8 +288,7 @@ public class VistaTestsServerSideConfiguration extends AbstractVistaServerSideCo
 
     @Override
     public String rdateServer() {
-        //return "98.158.157.171";
-        return "209.47.15.67";
+        return "98.158.137.171";
     }
 
 }
