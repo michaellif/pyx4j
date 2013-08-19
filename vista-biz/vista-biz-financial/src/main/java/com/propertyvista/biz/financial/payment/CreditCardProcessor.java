@@ -36,6 +36,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.util.ValidationUtils;
@@ -153,6 +154,20 @@ class CreditCardProcessor {
             throw new UserRuntimeException(response.message().getValue());
         }
 
+    }
+
+    static boolean validateVisaDebit(CreditCardInfo cc) {
+        if (cc.cardType().getValue() != CreditCardType.VisaDebit) {
+            return false;
+        } else {
+            CCInformation ccInfo = EntityFactory.create(CCInformation.class);
+            ccInfo.creditCardNumber().setValue(cc.card().number().getValue());
+
+            IPaymentProcessor proc = new CaledonPaymentProcessor();
+            PaymentResponse response = proc.validateVisaDebit(ccInfo);
+
+            return response.success().getValue();
+        }
     }
 
     private static PaymentInstrument createPaymentInstrument(CreditCardInfo cc) {

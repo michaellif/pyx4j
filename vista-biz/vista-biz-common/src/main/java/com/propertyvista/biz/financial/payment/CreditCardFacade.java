@@ -59,4 +59,6 @@ public interface CreditCardFacade {
 
     public String completion(BigDecimal amount, String merchantTerminalId, ReferenceNumberPrefix uniquePrefix, String referenceNumber, CreditCardInfo cc);
 
+    public boolean validateVisaDebit(CreditCardInfo creditCardInfo);
+
 }

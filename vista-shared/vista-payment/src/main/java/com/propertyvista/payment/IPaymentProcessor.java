@@ -23,6 +23,8 @@ public interface IPaymentProcessor {
 
     PaymentResponse realTimePreAuthorizationCompletion(Merchant merchant, PaymentRequest request);
 
+    PaymentResponse validateVisaDebit(CCInformation ccinfo);
+
     PaymentResponse createToken(Merchant merchant, CCInformation ccinfo, Token token);
 
     PaymentResponse updateToken(Merchant merchant, CCInformation ccinfo, Token token);

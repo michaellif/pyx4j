@@ -55,4 +55,9 @@ public class CreditCardFacadeImpl implements CreditCardFacade {
     public boolean isNetworkError(String responseCode) {
         return new CaledonPaymentProcessor().isNetworkError(responseCode);
     }
+
+    @Override
+    public boolean validateVisaDebit(CreditCardInfo creditCardInfo) {
+        return CreditCardProcessor.validateVisaDebit(creditCardInfo);
+    }
 }

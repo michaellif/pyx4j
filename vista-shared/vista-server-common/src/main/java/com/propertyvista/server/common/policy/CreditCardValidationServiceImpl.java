@@ -15,26 +15,17 @@ package com.propertyvista.server.common.policy;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.config.server.ServerSideFactory;
+
+import com.propertyvista.biz.financial.payment.CreditCardFacade;
 import com.propertyvista.domain.payment.CreditCardInfo;
-import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.portal.rpc.shared.services.CreditCardValidationService;
 
 public class CreditCardValidationServiceImpl implements CreditCardValidationService {
 
     @Override
     public void validate(AsyncCallback<Boolean> callback, CreditCardInfo creditCardInfo) {
-
-        if (creditCardInfo.cardType().getValue() != CreditCardType.VisaDebit) {
-            callback.onSuccess(false);
-        } else {
-            // TODO implement table lookup
-            if (creditCardInfo.card().newNumber().getValue().startsWith("400447")) {
-                callback.onSuccess(true);
-            } else {
-                callback.onSuccess(false);
-            }
-        }
-
+        callback.onSuccess(ServerSideFactory.create(CreditCardFacade.class).validateVisaDebit(creditCardInfo));
     }
 
 }

@@ -28,6 +28,7 @@ import com.propertyvista.payment.PaymentProcessingException;
 import com.propertyvista.payment.PaymentRequest;
 import com.propertyvista.payment.PaymentResponse;
 import com.propertyvista.payment.Token;
+import com.propertyvista.payment.caledon.dev.VisaDebitInternalValidator;
 
 public class CaledonPaymentProcessor implements IPaymentProcessor {
 
@@ -241,4 +242,19 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         return createResponse(cresponse);
     }
 
+    @Override
+    public PaymentResponse validateVisaDebit(CCInformation ccinfo) {
+        if (VisaDebitInternalValidator.isVisaDebitValid(ccinfo.creditCardNumber().getValue())) {
+            PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+            response.success().setValue(true);
+            response.code().setValue("1020");
+            response.message().setValue("The card number did not pass check-digit tests for that card type.");
+            return response;
+        } else {
+            PaymentResponse response = EntityFactory.create(PaymentResponse.class);
+            response.success().setValue(true);
+            response.code().setValue("0000");
+            return response;
+        }
+    }
 }
