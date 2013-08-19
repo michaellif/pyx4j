@@ -97,7 +97,7 @@ public class SftpClient implements Closeable {
             client.channel.cd(dst);
             client.channel.put(file.getAbsolutePath(), file.getName());
 
-            log.info("SFTP file {} transfer completed to {}", file.getAbsolutePath(), configuration.sftpHost());
+            log.info("SFTP file {} transfer completed to {}, directory {}", file.getAbsolutePath(), configuration.sftpHost(), dst);
             return null;
         } catch (SftpException e) {
             log.error("SFTP error", e);
@@ -135,7 +135,7 @@ public class SftpClient implements Closeable {
                     E dst = filter.accept(dir, rFile.getFilename());
                     if (dst != null) {
                         client.channel.get(rFile.getFilename(), dst.localFile.getAbsolutePath());
-                        log.info("SFTP file {} received from {}", dst.localFile.getAbsolutePath(), configuration.sftpHost());
+                        log.info("SFTP file {} received from {}, directory {}", dst.localFile.getAbsolutePath(), configuration.sftpHost(), dir);
                         receivedFile = dst;
                         receivedFile.remoteName = rFile.getFilename();
                         receivedFile.remotePath = dir;
