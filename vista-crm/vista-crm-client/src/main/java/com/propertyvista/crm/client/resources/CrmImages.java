@@ -210,17 +210,17 @@ public interface CrmImages extends VistaImages {
     public interface EditIconButtonImages extends ButtonImages {
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_normal.png")
+        @Source("edit.png")
         ImageResource regular();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_hover.png")
+        @Source("edit.png")
         ImageResource hover();
 
         @Override
         @ImageOptions(repeatStyle = RepeatStyle.Both)
-        @Source("Dashboards_active.png")
+        @Source("edit.png")
         ImageResource active();
     }
 }

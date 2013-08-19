@@ -13,11 +13,13 @@
  */
 package com.propertyvista.crm.client.visor.notes;
 
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
@@ -73,8 +75,10 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
 
         form = new NotesAndAttachmentsForm();
         form.initContent();
-        setContentPane(new ScrollPanel(form.asWidget()));
-        getElement().getStyle().setProperty("padding", "6px");
+        SimplePanel contentPane = new SimplePanel();
+        contentPane.getElement().getStyle().setMargin(6, Unit.PX);
+        contentPane.setWidget(form.asWidget());
+        setContentPane(new ScrollPanel(contentPane));
     }
 
     public void populate(final Command onPopulate) {
@@ -106,7 +110,7 @@ public class NotesAndAttachmentsVisorView extends AbstractVisorPane {
         public IsWidget createContent() {
             TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
 
-            content.setWidget(0, 0, inject(proto().notes(), new NotesAndAttachmentsFolder()));
+            content.setWidget(0, 0, 2, inject(proto().notes(), new NotesAndAttachmentsFolder()));
 
             return content;
         }
