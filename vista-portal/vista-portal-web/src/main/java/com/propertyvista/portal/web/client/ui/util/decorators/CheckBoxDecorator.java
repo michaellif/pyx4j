@@ -42,12 +42,15 @@ public class CheckBoxDecorator extends Composite implements IDecorator<CCheckBox
         FlowPanel decoratorPanel = new FlowPanel();
         componentHolder = new SimplePanel();
         componentHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        componentHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
+        componentHolder.getElement().getStyle().setWidth(1.5, Unit.EM);
+
         decoratorPanel.add(componentHolder);
 
         label = new Label();
         label.setStyleName(DefaultWidgetDecoratorTheme.StyleName.WidgetDecoratorLabel.name());
         label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-        label.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         label.getElement().getStyle().setMarginLeft(0.5, Unit.EM);
         decoratorPanel.add(label);
 
