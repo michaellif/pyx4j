@@ -36,7 +36,7 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
 
     private static final double TOOLBAR_DEFAULT_HEIGHT = 2.8;
 
-    private final VisorHolder visorHolder;
+    private final VisorHolder contentHolder;
 
     private final Label captionLabel;
 
@@ -89,8 +89,8 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
         footerToolbarHolder.setWidget(footerToolbar);
         addSouth(footerToolbarHolder, 0);
 
-        visorHolder = new VisorHolder(this);
-        visorHolder.setAnimationDuration(500);
+        contentHolder = new VisorHolder(this);
+        contentHolder.setAnimationDuration(500);
     }
 
     protected FlowPanel getHeaderCaption() {
@@ -98,31 +98,31 @@ public abstract class AbstractPane extends DockLayoutPanel implements IPane {
     }
 
     protected IsWidget getContentPane() {
-        if (visorHolder.getWidgetCount() == 0) {
+        if (contentHolder.getWidgetCount() == 0) {
             return null;
         }
-        return visorHolder.getWidget(0);
+        return contentHolder.getWidget(0);
     }
 
     protected void setContentPane(IsWidget widget) {
-        assert visorHolder.getWidgetCount() == 0 : "Content Pane is already set";
-        visorHolder.setContentPane(widget);
-        add(visorHolder);
+        assert contentHolder.getWidgetCount() == 0 : "Content Pane is already set";
+        contentHolder.setContentPane(widget);
+        add(contentHolder);
     }
 
     @Override
     public void showVisor(IVisor visor) {
-        visorHolder.showVisorPane(visor);
+        contentHolder.showVisorPane(visor);
     }
 
     @Override
     public void hideVisor() {
-        visorHolder.hideVisorPane();
+        contentHolder.hideVisorPane();
     }
 
     @Override
     public boolean isVisorShown() {
-        return visorHolder.isVisorShown();
+        return contentHolder.isVisorShown();
     }
 
     public void setCaption(String caption) {

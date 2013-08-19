@@ -38,6 +38,8 @@ public class DefaultWidgetsTheme extends Theme {
 
         Button, ButtonText,
 
+        Label,
+
         Anchor,
 
         RateIt, RateItBar,
@@ -69,6 +71,7 @@ public class DefaultWidgetsTheme extends Theme {
     protected void initStyles() {
         initTextBoxStyle();
         initListBoxStyle();
+        initLabelStyle();
         initButtonStyle();
         initToolbarStyle();
         initAnchorStyle();
@@ -83,6 +86,12 @@ public class DefaultWidgetsTheme extends Theme {
     private void initAnchorStyle() {
         Style style = new Style(".", StyleName.Anchor);
         style.addProperty("color", ThemeColor.foreground);
+        addStyle(style);
+    }
+
+    private void initLabelStyle() {
+        Style style = new Style(".", StyleName.Label);
+        style.addProperty("line-height", "2em");
         addStyle(style);
     }
 

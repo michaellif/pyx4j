@@ -25,7 +25,7 @@ import com.google.gwt.user.client.ui.HTML;
 public class Label extends HTML implements IWidget {
 
     public Label() {
-
+        setStyleName(DefaultWidgetsTheme.StyleName.Label.name());
     }
 
     @Override
