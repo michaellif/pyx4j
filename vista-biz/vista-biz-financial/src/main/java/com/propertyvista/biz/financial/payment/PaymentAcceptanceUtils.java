@@ -109,8 +109,14 @@ public class PaymentAcceptanceUtils {
         require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.notCashEquivalent()));
         require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.cashEquivalentEcheck()));
 
-        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.notCashEquivalent()));
-        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.cashEquivalentCreditCard()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p.cashEquivalentCreditCardMasterCard()));
+
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.cashEquivalentCreditCardVisa()));
+
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.cashEquivalentVisaDebit()));
 
         return require;
     }
@@ -123,12 +129,22 @@ public class PaymentAcceptanceUtils {
         require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p.notCashEquivalent()));
         require.add(new Acceptance(PaymentType.Echeck, p.electronicPayments(), p.acceptedEcheck(), p.residentPortalEcheck(), p.cashEquivalentEcheck()));
 
-        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.residentPortalCreditCard(), p.notCashEquivalent()));
-        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCard(), p.residentPortalCreditCard(), p
-                .cashEquivalentCreditCard()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p.residentPortalCreditCardMasterCard(), p
+                .notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p.residentPortalCreditCardMasterCard(), p
+                .cashEquivalentCreditCardMasterCard()));
 
-        require.add(new Acceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.notCashEquivalent()));
-        require.add(new Acceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedEFT(), p.residentPortalEFT(), p.cashEquivalentEFT()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(), p
+                .notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(), p
+                .cashEquivalentCreditCardVisa()));
+
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.CreditCard, p.electronicPayments(), p.acceptedVisaDebit(), p.residentPortalVisaDebit(), p
+                .cashEquivalentVisaDebit()));
+
+        require.add(new Acceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedDirectBanking(), p.residentPortalDirectBanking(), p.notCashEquivalent()));
+        require.add(new Acceptance(PaymentType.DirectBanking, p.electronicPayments(), p.acceptedDirectBanking(), p.residentPortalDirectBanking(), p.cashEquivalentDirectBanking()));
 
         if (!VistaTODO.removedForProduction && false) {
             require.add(new Acceptance(PaymentType.Interac, p.electronicPayments(), p.acceptedInterac(), p.residentPortalInterac(), p.notCashEquivalent()));

@@ -32,22 +32,28 @@ public class PaymentMethodSelectionPolicyPreloader extends AbstractPolicyPreload
         policy.acceptedCash().setValue(Boolean.TRUE);
         policy.acceptedCheck().setValue(Boolean.TRUE);
         policy.acceptedEcheck().setValue(Boolean.TRUE);
-        policy.acceptedEFT().setValue(Boolean.TRUE);
-        policy.acceptedCreditCard().setValue(Boolean.TRUE);
+        policy.acceptedDirectBanking().setValue(Boolean.TRUE);
+        policy.acceptedCreditCardMasterCard().setValue(Boolean.TRUE);
+        policy.acceptedCreditCardVisa().setValue(Boolean.TRUE);
+        policy.acceptedVisaDebit().setValue(Boolean.TRUE);
         policy.acceptedInterac().setValue(Boolean.TRUE);
 
         // -- Accepted In residentPortal
         policy.residentPortalEcheck().setValue(Boolean.TRUE);
-        policy.residentPortalEFT().setValue(Boolean.TRUE);
-        policy.residentPortalCreditCard().setValue(Boolean.TRUE);
+        policy.residentPortalDirectBanking().setValue(Boolean.TRUE);
+        policy.residentPortalCreditCardMasterCard().setValue(Boolean.TRUE);
+        policy.residentPortalCreditCardVisa().setValue(Boolean.TRUE);
+        policy.residentPortalVisaDebit().setValue(Boolean.TRUE);
         policy.residentPortalInterac().setValue(Boolean.TRUE);
 
         // -- Accepted when cashEquivalent flag on BillingAccount.paymentAccepted is set to CashEquivalent
         policy.cashEquivalentCash().setValue(Boolean.TRUE);
         policy.cashEquivalentCheck().setValue(Boolean.FALSE);
         policy.cashEquivalentEcheck().setValue(Boolean.FALSE);
-        policy.cashEquivalentEFT().setValue(Boolean.TRUE);
-        policy.cashEquivalentCreditCard().setValue(Boolean.TRUE);
+        policy.cashEquivalentDirectBanking().setValue(Boolean.TRUE);
+        policy.cashEquivalentCreditCardMasterCard().setValue(Boolean.TRUE);
+        policy.cashEquivalentCreditCardVisa().setValue(Boolean.TRUE);
+        policy.cashEquivalentVisaDebit().setValue(Boolean.TRUE);
         policy.cashEquivalentInterac().setValue(Boolean.TRUE);
 
         log.append(policy.getStringView());

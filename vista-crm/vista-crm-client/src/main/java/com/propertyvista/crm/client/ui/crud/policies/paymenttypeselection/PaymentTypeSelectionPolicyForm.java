@@ -59,8 +59,10 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCash()));
         accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCheck()));
         accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedEcheck()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedEFT()));
-        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCreditCard()));
+        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedDirectBanking()));
+        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCreditCardMasterCard()));
+        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedCreditCardVisa()));
+        accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedVisaDebit()));
         accepted.setWidget(0, ++col, alignedToCenter(proto().acceptedInterac()));
 
         BasicFlexFormPanel residentPortal = new BasicFlexFormPanel();
@@ -73,8 +75,10 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         residentPortal.setWidget(0, ++col, new HTML()); // fill empty cell
         residentPortal.getWidget(0, col).setWidth(lblW);
         residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalEcheck()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalEFT()));
-        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalCreditCard()));
+        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalDirectBanking()));
+        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalCreditCardMasterCard()));
+        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalCreditCardVisa()));
+        residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalVisaDebit()));
         residentPortal.setWidget(0, ++col, alignedToCenter(proto().residentPortalInterac()));
 
         BasicFlexFormPanel cashEquivalent = new BasicFlexFormPanel();
@@ -85,8 +89,10 @@ public class PaymentTypeSelectionPolicyForm extends PolicyDTOTabPanelBasedForm<P
         cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCash()));
         cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCheck()));
         cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentEcheck()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentEFT()));
-        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCreditCard()));
+        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentDirectBanking()));
+        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCreditCardMasterCard()));
+        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentCreditCardVisa()));
+        cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentVisaDebit()));
         cashEquivalent.setWidget(0, ++col, alignedToCenter(proto().cashEquivalentInterac()));
 
         // put all together:

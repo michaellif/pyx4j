@@ -40,12 +40,7 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     IPrimitive<Boolean> acceptedEcheck();
 
     @Caption(name = "Direct Banking")
-    //TODO rename the filed!
-    IPrimitive<Boolean> acceptedEFT();
-
-    @Caption(name = "Credit Card")
-    @Deprecated
-    IPrimitive<Boolean> acceptedCreditCard();
+    IPrimitive<Boolean> acceptedDirectBanking();
 
     @Caption(name = "Visa Credit Card")
     IPrimitive<Boolean> acceptedCreditCardVisa();
@@ -65,11 +60,7 @@ public interface PaymentTypeSelectionPolicy extends Policy {
     IPrimitive<Boolean> residentPortalEcheck();
 
     @Caption(name = "Direct Banking")
-    IPrimitive<Boolean> residentPortalEFT();
-
-    @Caption(name = "Credit Card")
-    @Deprecated
-    IPrimitive<Boolean> residentPortalCreditCard();
+    IPrimitive<Boolean> residentPortalDirectBanking();
 
     @Caption(name = "Visa Credit Card")
     IPrimitive<Boolean> residentPortalCreditCardVisa();
@@ -96,11 +87,7 @@ public interface PaymentTypeSelectionPolicy extends Policy {
 
     // There is no way to Disabled this, We can just not advertise it portal
     @Caption(name = "Direct Banking")
-    IPrimitive<Boolean> cashEquivalentEFT();
-
-    @Caption(name = "Credit Card")
-    @Deprecated
-    IPrimitive<Boolean> cashEquivalentCreditCard();
+    IPrimitive<Boolean> cashEquivalentDirectBanking();
 
     @Caption(name = "Visa Credit Card")
     IPrimitive<Boolean> cashEquivalentCreditCardVisa();
