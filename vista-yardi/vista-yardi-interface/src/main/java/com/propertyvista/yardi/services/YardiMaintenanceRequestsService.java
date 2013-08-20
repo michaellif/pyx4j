@@ -129,7 +129,19 @@ public class YardiMaintenanceRequestsService extends YardiAbstractService {
     public void loadMaintenanceRequestMeta(PmcYardiCredential yc) throws YardiServiceException, RemoteException {
         assert VistaFeatures.instance().yardiIntegration() && VistaFeatures.instance().yardiMaintenance();
 
-        if (getMetaTimestamp(yc) == null && VistaDeployment.getPmcYardiBuildings(yc).size() > 0) {
+        boolean load = false;
+        Date metaTS = getMetaTimestamp(yc);
+        if (metaTS == null) {
+            // load on startup
+            load = true;
+        } else {
+            // wait at least 1 min before reload
+            Calendar now = GregorianCalendar.getInstance();
+            now.setTime(SystemDateManager.getDate());
+            now.add(Calendar.MINUTE, -1);
+            load = now.getTime().after(metaTS);
+        }
+        if (load && VistaDeployment.getPmcYardiBuildings(yc).size() > 0) {
             loadMeta(yc);
         }
     }

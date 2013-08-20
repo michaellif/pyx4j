@@ -67,7 +67,6 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO> {
@@ -96,7 +95,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
 
     // TODO - YARDI: per building cache is easy to implement with current data model, but it is INEFFICIENT since
     // multiple buildings that belong to the same Yardi account will share the same Meta
-    private final Map<Building, MaintenanceRequestMetadataDTO> categoryMetaCache = new HashMap<Building, MaintenanceRequestMetadataDTO>();
+    private final Map<String, MaintenanceRequestMetadata> categoryMetaCache = new HashMap<String, MaintenanceRequestMetadata>();
 
     public MaintenanceRequestForm(IForm<MaintenanceRequestDTO> view) {
         super(MaintenanceRequestDTO.class, view);
@@ -120,20 +119,24 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private void setMaintenanceRequestCategoryMeta() {
-        MaintenanceRequestMetadataDTO meta = categoryMetaCache.get(getValue().building());
+        Building bld = getValue().building();
+        final String buildingCode = bld.propertyCode().getValue();
+        MaintenanceRequestMetadata meta = categoryMetaCache.get(buildingCode);
         if (meta == null) {
-            DefaultAsyncCallback<MaintenanceRequestMetadataDTO> callback = new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+            DefaultAsyncCallback<MaintenanceRequestMetadata> callback = new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
                 @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO meta) {
-                    MaintenanceRequestForm.this.categoryMetaCache.put(getValue().building(), meta);
+                public void onSuccess(MaintenanceRequestMetadata meta) {
+                    if (!meta.rootCategory().isNull()) {
+                        MaintenanceRequestForm.this.categoryMetaCache.put(buildingCode, meta);
+                    }
                     MaintenanceRequestForm.this.meta = meta;
                     initSelectors();
                 }
             };
             if (getParentView() instanceof IEditor) {
-                ((MaintenanceRequestEditorView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, getValue().building());
+                ((MaintenanceRequestEditorView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
             } else {
-                ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, getValue().building());
+                ((MaintenanceRequestViewerView.Presenter) getParentView().getPresenter()).getCategoryMeta(callback, bld.getPrimaryKey());
             }
         } else {
             this.meta = meta;
@@ -238,7 +241,7 @@ public class MaintenanceRequestForm extends CrmEntityForm<MaintenanceRequestDTO>
     }
 
     private void initSelectors() {
-        if (meta == null) {
+        if (meta == null || meta.isNull()) {
             return;
         }
 

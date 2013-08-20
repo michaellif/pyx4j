@@ -27,8 +27,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -89,10 +89,10 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback) {
-        srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
+        srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
             @Override
-            public void onSuccess(MaintenanceRequestMetadataDTO result) {
+            public void onSuccess(MaintenanceRequestMetadata result) {
                 callback.onSuccess(result);
             }
         }, false);

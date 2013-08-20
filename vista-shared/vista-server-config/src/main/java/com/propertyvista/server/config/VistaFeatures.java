@@ -102,7 +102,7 @@ public class VistaFeatures {
 
         @Override
         public int yardiInterfaces() {
-            return threadLocale.get().yardiInterfaces().getValue(0);
+            return getCurrentVistaFeatures().yardiInterfaces().getValue(0);
         }
 
         @Override

@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
@@ -26,16 +27,14 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmViewerActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestViewerView;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestSchedule;
 import com.propertyvista.domain.maintenance.SurveyResponse;
-import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 
 public class MaintenanceRequestViewerActivity extends CrmViewerActivity<MaintenanceRequestDTO> implements MaintenanceRequestViewerView.Presenter {
-    private MaintenanceRequestMetadataDTO meta;
 
     @SuppressWarnings("unchecked")
     public MaintenanceRequestViewerActivity(CrudAppPlace place) {
@@ -99,17 +98,12 @@ public class MaintenanceRequestViewerActivity extends CrmViewerActivity<Maintena
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building) {
-        if (meta == null) {
-            ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
-                @Override
-                public void onSuccess(MaintenanceRequestMetadataDTO result) {
-                    meta = result;
-                    callback.onSuccess(result);
-                }
-            }, true, building);
-        } else {
-            callback.onSuccess(meta);
-        }
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback, Key buildingId) {
+        ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
+            @Override
+            public void onSuccess(MaintenanceRequestMetadata result) {
+                callback.onSuccess(result);
+            }
+        }, true, buildingId);
     }
 }

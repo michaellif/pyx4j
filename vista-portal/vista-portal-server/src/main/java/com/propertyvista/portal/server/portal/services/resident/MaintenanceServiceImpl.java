@@ -38,7 +38,6 @@ import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -145,17 +144,13 @@ public class MaintenanceServiceImpl extends AbstractCrudServiceDtoImpl<Maintenan
     }
 
     @Override
-    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, boolean levelsOnly) {
+    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly) {
         Tenant tenant = TenantAppContext.getCurrentUserTenantInLease().leaseParticipant();
         Building building = tenant.lease().unit().building();
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
-        MaintenanceRequestMetadataDTO metaDto = EntityFactory.create(MaintenanceRequestMetadataDTO.class);
-        metaDto.categoryLevels().addAll(meta.categoryLevels());
-        metaDto.statuses().addAll(meta.statuses());
-        metaDto.priorities().addAll(meta.priorities());
-        if (!levelsOnly) {
-            metaDto.rootCategory().set(meta.rootCategory());
+        if (levelsOnly) {
+            meta.rootCategory().subCategories().setAttachLevel(AttachLevel.Detached);
         }
-        callback.onSuccess(metaDto);
+        callback.onSuccess(meta);
     }
 }

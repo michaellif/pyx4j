@@ -117,7 +117,8 @@ public class YardiMaintenanceProcessor {
     // we will update and reload meta from here if request categories, status, or priority do not exist
     public MaintenanceRequest mergeRequest(PmcYardiCredential yc, ServiceRequest request) throws YardiServiceException {
         EntityQueryCriteria<MaintenanceRequest> crit = EntityQueryCriteria.create(MaintenanceRequest.class);
-        crit.add(PropertyCriterion.eq(crit.proto().requestId(), request.getServiceRequestId().toString()));
+        crit.eq(crit.proto().building().propertyCode(), request.getPropertyCode());
+        crit.eq(crit.proto().requestId(), request.getServiceRequestId().toString());
         MaintenanceRequest mr = Persistence.service().retrieve(crit);
         if (mr == null) {
             mr = EntityFactory.create(MaintenanceRequest.class);

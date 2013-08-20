@@ -36,7 +36,6 @@ import com.propertyvista.domain.maintenance.SurveyResponse;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.dto.MaintenanceRequestScheduleDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -164,24 +163,25 @@ public class MaintenanceCrudServiceImpl extends AbstractCrudServiceDtoImpl<Maint
     }
 
     @Override
-    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadataDTO> callback, boolean levelsOnly, Building building) {
-        if (building.isNull() && VistaFeatures.instance().yardiIntegration()) {
+    public void getCategoryMeta(AsyncCallback<MaintenanceRequestMetadata> callback, boolean levelsOnly, Key buildingId) {
+        Building building = null;
+        if (buildingId == null && VistaFeatures.instance().yardiIntegration()) {
             // ensure single interface
             if (VistaFeatures.instance().yardiInterfaces() > 1) {
-                throw new Error("Building selection must be forced");
+                throw new Error("Building must be provided in Multiple Yardi Interface mode");
             }
             // single interface - use first available building
             building = VistaDeployment.getPmcYardiBuildings(VistaDeployment.getPmcYardiCredentials().get(0)).get(0);
+        } else if (buildingId != null) {
+            building = Persistence.service().retrieve(Building.class, buildingId);
         }
         MaintenanceRequestMetadata meta = ServerSideFactory.create(MaintenanceFacade.class).getMaintenanceMetadata(building);
-        MaintenanceRequestMetadataDTO metaDto = EntityFactory.create(MaintenanceRequestMetadataDTO.class);
-        metaDto.categoryLevels().addAll(meta.categoryLevels());
-        metaDto.statuses().addAll(meta.statuses());
-        metaDto.priorities().addAll(meta.priorities());
-        if (!levelsOnly) {
-            metaDto.rootCategory().set(meta.rootCategory());
+        // TODO - for an unknown reason duplicate() fixed RPC failure to get meta to the client
+        meta = meta.duplicate();
+        if (levelsOnly) {
+            meta.rootCategory().subCategories().setAttachLevel(AttachLevel.Detached);
         }
-        callback.onSuccess(metaDto);
+        callback.onSuccess(meta);
     }
 
     @Override

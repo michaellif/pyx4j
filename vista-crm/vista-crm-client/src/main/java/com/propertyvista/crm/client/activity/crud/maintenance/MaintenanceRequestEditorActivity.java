@@ -16,6 +16,7 @@ package com.propertyvista.crm.client.activity.crud.maintenance;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.rpc.CrudAppPlace;
@@ -24,9 +25,9 @@ import com.propertyvista.crm.client.CrmSite;
 import com.propertyvista.crm.client.activity.crud.CrmEditorActivity;
 import com.propertyvista.crm.client.ui.crud.maintenance.MaintenanceRequestEditorView;
 import com.propertyvista.crm.rpc.services.MaintenanceCrudService;
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 
 public class MaintenanceRequestEditorActivity extends CrmEditorActivity<MaintenanceRequestDTO> implements MaintenanceRequestEditorView.Presenter {
 
@@ -45,12 +46,12 @@ public class MaintenanceRequestEditorActivity extends CrmEditorActivity<Maintena
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback, Building building) {
-        ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback, Key buildingId) {
+        ((MaintenanceCrudService) getService()).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
             @Override
-            public void onSuccess(MaintenanceRequestMetadataDTO result) {
+            public void onSuccess(MaintenanceRequestMetadata result) {
                 callback.onSuccess(result);
             }
-        }, false, building);
+        }, false, buildingId);
     }
 }

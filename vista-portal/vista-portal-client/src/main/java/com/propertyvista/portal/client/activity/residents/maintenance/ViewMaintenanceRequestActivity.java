@@ -25,8 +25,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.ViewMaintenanceRequestView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
@@ -68,10 +68,10 @@ public class ViewMaintenanceRequestActivity extends SecurityAwareActivity implem
     }
 
     @Override
-    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadataDTO> callback) {
-        srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+    public void getCategoryMeta(final AsyncCallback<MaintenanceRequestMetadata> callback) {
+        srv.getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
             @Override
-            public void onSuccess(MaintenanceRequestMetadataDTO result) {
+            public void onSuccess(MaintenanceRequestMetadata result) {
                 callback.onSuccess(result);
             }
         }, true);

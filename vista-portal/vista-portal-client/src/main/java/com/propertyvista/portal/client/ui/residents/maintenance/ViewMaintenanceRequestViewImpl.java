@@ -15,9 +15,9 @@ package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
+import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.domain.maintenance.MaintenanceRequestStatus.StatusPhase;
 import com.propertyvista.dto.MaintenanceRequestDTO;
-import com.propertyvista.dto.MaintenanceRequestMetadataDTO;
 import com.propertyvista.portal.client.ui.residents.ViewBase;
 import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
@@ -30,9 +30,9 @@ public class ViewMaintenanceRequestViewImpl extends ViewImpl<MaintenanceRequestD
     @Override
     public void setPresenter(ViewBase.Presenter<MaintenanceRequestDTO> presenter) {
         super.setPresenter(presenter);
-        ((ViewMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadataDTO>() {
+        ((ViewMaintenanceRequestView.Presenter) presenter).getCategoryMeta(new DefaultAsyncCallback<MaintenanceRequestMetadata>() {
             @Override
-            public void onSuccess(MaintenanceRequestMetadataDTO meta) {
+            public void onSuccess(MaintenanceRequestMetadata meta) {
                 ((MaintenanceRequestForm) getForm()).setMaintenanceRequestCategoryMeta(meta);
             }
         });
