@@ -22,7 +22,7 @@ public class CreditCardNumberGenerator {
 
     private static final String[] VISA_PREFIX_LIST = new String[] { "4539", "4556", "4916", "4532", "4929", "40240071", "4485", "4716", "4" };
 
-    private static final String[] VISA_DEBIT_PREFIX_LIST = new String[] { "400447" /* , "402371", "402372" */};
+    private static final String[] VISA_DEBIT_PREFIX_LIST = new String[] { "400447", "402371", "402372" };
 
     private static final String[] MASTERCARD_PREFIX_LIST = new String[] { "51", "52", "53", "54", "55" };
 

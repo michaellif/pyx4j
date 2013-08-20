@@ -13,10 +13,31 @@
  */
 package com.propertyvista.payment.caledon.dev;
 
+import java.util.concurrent.Callable;
+
+import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+
+import com.propertyvista.domain.util.ValidationUtils;
+import com.propertyvista.operations.domain.dev.VisaDebitRange;
+import com.propertyvista.server.jobs.TaskRunner;
+
 public class VisaDebitInternalValidator {
 
     public static boolean isVisaDebitValid(String cardNumber) {
-        // TODO implement table lookup
-        return (cardNumber.startsWith("400447"));
+        if (!ValidationUtils.isCreditCardNumberValid(cardNumber)) {
+            return false;
+        }
+        final long value = Long.valueOf(cardNumber.substring(0, 12));
+        return TaskRunner.runInOperationsNamespace(new Callable<Boolean>() {
+            @Override
+            public Boolean call() {
+                EntityQueryCriteria<VisaDebitRange> criteria = EntityQueryCriteria.create(VisaDebitRange.class);
+                criteria.ge(criteria.proto().rangeStart(), value);
+                criteria.le(criteria.proto().rangeEnd(), value);
+                VisaDebitRange rangeMatch = Persistence.service().retrieve(criteria);
+                return rangeMatch != null;
+            }
+        });
     }
 }
