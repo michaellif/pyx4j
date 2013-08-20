@@ -118,6 +118,7 @@ public class Vista2PmcFacadeImpl implements Vista2PmcFacade {
         setNonNullMember(fee.interacCaledonFee(), pmcFee, defaultFeee);
         setNonNullMember(fee.interacPaymentPadFee(), pmcFee, defaultFeee);
         setNonNullMember(fee.interacVisaFee(), pmcFee, defaultFeee);
+        setNonNullMember(fee.visaDebitFee(), pmcFee, defaultFeee);
         return fee;
     }
 
