@@ -25,13 +25,11 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.IDebugId;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
@@ -52,6 +50,8 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
     private final Button btnPrevious;
 
     private final Button btnNext;
+
+    private final Button btnCancel;
 
     private String endButtonCaption;
 
@@ -82,13 +82,13 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
         footer.setWidget(footerToolbar);
         add(footer);
 
-        Anchor btnCancel = new Anchor(i18n.tr("Cancel"), new Command() {
+        btnCancel = new Button(i18n.tr("Cancel"), new Command() {
             @Override
             public void execute() {
                 onCancel();
             }
         });
-        addFooterItem(btnCancel);
+        footerToolbar.add(btnCancel);
 
         btnPrevious = new Button(i18n.tr("Previous"), new Command() {
             @Override
@@ -97,7 +97,7 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
                 calculateButtonsState();
             }
         });
-        addFooterItem(btnPrevious);
+        footerToolbar.add(btnPrevious);
 
         btnNext = new Button(i18n.tr("Next"), new Command() {
             @Override
@@ -110,7 +110,7 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
                 }
             }
         });
-        addFooterItem(btnNext);
+        footerToolbar.add(btnNext);
 
         setWidth("100%");
     }
@@ -149,9 +149,16 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
         return captionLabel.getText();
     }
 
-    public void addFooterItem(Widget widget) {
-        footer.setHeight(footerHeight);
-        footerToolbar.add(widget);
+    public Button getBtnPrevious() {
+        return btnPrevious;
+    }
+
+    public Button getBtnNext() {
+        return btnNext;
+    }
+
+    public Button getBtnCancel() {
+        return btnCancel;
     }
 
     public void calculateButtonsState() {
