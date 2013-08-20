@@ -91,7 +91,6 @@ public class DefaultWidgetsTheme extends Theme {
 
     private void initLabelStyle() {
         Style style = new Style(".", StyleName.Label);
-        style.addProperty("line-height", "2em");
         addStyle(style);
     }
 
@@ -114,6 +113,10 @@ public class DefaultWidgetsTheme extends Theme {
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
+        addStyle(style);
+
+        style = new Style(".", StyleName.TextBox);
+        style.addProperty("height", "2em");
         addStyle(style);
 
         style = new Style(".", StyleName.TextBox, " td");

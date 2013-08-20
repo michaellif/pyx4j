@@ -154,10 +154,12 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         componentHolder.add(nativeComponent);
 
         validationLabel = new Label();
+        validationLabel.setVisible(false);
         validationLabel.setWidth(builder.contentWidth);
         validationLabel.setStyleName(DefaultCComponentsTheme.StyleName.ValidationLabel.name());
 
         noteLabel = new Label();
+        noteLabel.setVisible(false);
         noteLabel.setWidth(builder.contentWidth);
         noteLabel.setStyleName(DefaultCComponentsTheme.StyleName.NoteLabel.name());
 
@@ -284,9 +286,11 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
         if ((this.component.isUnconditionalValidationErrorRendering() || component.isVisited()) && !component.isValid()) {
             validationLabel.setText(component.getValidationResults().getValidationMessage(false, false));
             component.asWidget().addStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            validationLabel.setVisible(true);
         } else {
             validationLabel.setText(null);
             component.asWidget().removeStyleDependentName(DefaultWidgetDecoratorTheme.StyleDependent.invalid.name());
+            validationLabel.setVisible(false);
         }
 
         if (component.getDebugId() != null) {
@@ -334,9 +338,11 @@ public class WidgetDecorator extends FlowPanel implements IDecorator<CComponent<
     private void updateNote() {
         if (component.getNote() != null && component.getNote().trim().length() > 0) {
             noteLabel.setText(component.getNote());
+            noteLabel.setVisible(true);
             noteLabel.addStyleDependentName(component.getNoteStyle().getStyle().toString());
         } else {
             noteLabel.setText(null);
+            noteLabel.setVisible(false);
             for (DefaultCComponentsTheme.StyleDependent style : DefaultCComponentsTheme.StyleDependent.values()) {
                 noteLabel.removeStyleDependentName(style.toString());
             }

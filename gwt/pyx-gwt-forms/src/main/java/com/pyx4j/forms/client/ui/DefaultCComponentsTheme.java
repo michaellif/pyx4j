@@ -92,7 +92,15 @@ public class DefaultCComponentsTheme extends Theme {
 
     protected void initTriggerButtonStyle() {
 
-        Style style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
+        Style style = new Style(".", StyleName.FieldEditorPanel);
+        style.addProperty("line-height", "2em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FieldViewerPanel);
+        style.addProperty("line-height", "1.5em");
+        addStyle(style);
+
+        style = new Style(".", StyleName.FieldEditorPanel, " .", DefaultWidgetsTheme.StyleName.Button);
         style.addProperty("background", "transparent");
         style.addProperty("border", "none");
         style.addProperty("padding", "0");
@@ -123,6 +131,7 @@ public class DefaultCComponentsTheme extends Theme {
         style.addProperty("font-style", "italic");
         style.addProperty("text-align", "left");
         style.addProperty("white-space", "normal");
+        style.addProperty("padding-top", "3px");
         addStyle(style);
 
         style = new Style(".", StyleName.NoteLabel, "-", StyleDependent.info);
