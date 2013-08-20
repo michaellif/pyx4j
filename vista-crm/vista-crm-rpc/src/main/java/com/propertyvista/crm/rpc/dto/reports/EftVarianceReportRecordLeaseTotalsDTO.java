@@ -7,8 +7,8 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-08-19
- * @author ArtyomB
+ * Created on Aug 20, 2013
+ * @author vlads
  * @version $Id$
  */
 package com.propertyvista.crm.rpc.dto.reports;
@@ -20,12 +20,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface EftVarianceReportRecordDetailsDTO extends IEntity {
-
-    IPrimitive<String> tenantName();
-
-    IPrimitive<String> paymentMethod();
+public interface EftVarianceReportRecordLeaseTotalsDTO extends IEntity {
 
     IPrimitive<BigDecimal> totalEft();
 
+    IPrimitive<BigDecimal> charges();
+
+    IPrimitive<BigDecimal> difference();
 }

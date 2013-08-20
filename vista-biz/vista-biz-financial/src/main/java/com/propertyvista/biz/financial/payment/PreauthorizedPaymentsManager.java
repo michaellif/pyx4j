@@ -49,7 +49,7 @@ class PreauthorizedPaymentsManager {
 
     private static final I18n i18n = I18n.get(PreauthorizedPaymentsManager.class);
 
-    private static class PreauthorizedAmount {
+    static class PreauthorizedAmount {
 
         LeaseTermTenant leaseTermTenant;
 
@@ -206,9 +206,9 @@ class PreauthorizedPaymentsManager {
     }
 
     /**
-     * Calculate Percentage with rounding.
+     * Calculate total amounts.
      */
-    private List<PreauthorizedAmount> calulatePapAmounts(BillingCycle billingCycle, BillingAccount billingAccount) {
+    List<PreauthorizedAmount> calulatePapAmounts(BillingCycle billingCycle, BillingAccount billingAccount) {
         List<PreauthorizedAmount> records = new ArrayList<PreauthorizedAmount>();
         List<LeaseTermTenant> leaseParticipants;
         {

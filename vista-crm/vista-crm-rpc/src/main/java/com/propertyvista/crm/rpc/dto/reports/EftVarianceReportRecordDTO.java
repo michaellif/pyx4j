@@ -36,4 +36,6 @@ public interface EftVarianceReportRecordDTO extends IEntity {
 
     IList<EftVarianceReportRecordDetailsDTO> details();
 
+    EftVarianceReportRecordLeaseTotalsDTO leaseTotals();
+
 }
