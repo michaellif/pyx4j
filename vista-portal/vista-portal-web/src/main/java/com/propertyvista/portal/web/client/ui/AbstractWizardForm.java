@@ -62,6 +62,8 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
                 view.getPresenter().cancel();
             };
         };
+
+        decorator.getBtnPrevious().setVisible(false);
         return decorator;
     }
 

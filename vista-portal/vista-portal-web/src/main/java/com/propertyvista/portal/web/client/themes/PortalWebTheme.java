@@ -226,6 +226,20 @@ public class PortalWebTheme extends Theme {
                 style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Toolbar);
                 style.addProperty("float", "right");
                 addStyle(style);
+
+                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.ToolbarItem);
+                style.addProperty("margin-left", "10px");
+                addStyle(style);
+
+                style = new Style(".", StyleName.WizardFooter, " .", DefaultWidgetsTheme.StyleName.Button);
+                style.addProperty("width", "100%");
+                style.addProperty("line-height", "40px");
+                style.addProperty("background", "#aaa");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("border", "none");
+                style.addProperty("color", ThemeColor.foreground, 0.01);
+                addStyle(style);
+
             }
         });
 
