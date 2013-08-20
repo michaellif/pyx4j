@@ -515,6 +515,8 @@ public class VistaCrmAccessControlList extends ServletContainerAclBuilder {
 //            }
 //        }
 
+        grant(VistaBasicBehavior.CRM, new IServiceExecutePermission(CreditCardValidationService.class));
+
         // Data Access
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingDatasetAccessRule(), Building.class);
         grant(VistaDataAccessBehavior.BuildingsAssigned, new BuildingElementDatasetAccessRule(), AptUnit.class);

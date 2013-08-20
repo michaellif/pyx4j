@@ -226,6 +226,8 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(TenantSureManagementService.class));
 
         // Billing and Payments
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(CreditCardValidationService.class));
+
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(Bill.class, EntityPermission.READ));
         grant(VistaCustomerBehavior.Tenant, new EntityPermission(InvoiceLineItem.class, EntityPermission.READ));
 

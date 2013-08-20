@@ -11,7 +11,7 @@
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.server.common.policy;
+package com.propertyvista.portal.server.shared.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
