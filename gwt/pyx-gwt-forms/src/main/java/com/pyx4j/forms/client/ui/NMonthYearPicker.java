@@ -20,18 +20,17 @@
  */
 package com.pyx4j.forms.client.ui;
 
-import java.util.Date;
-
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.view.client.Range;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.MonthYearPicker;
 
-public class NMonthYearPicker extends NFocusField<Date, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusComponent<Date> {
+public class NMonthYearPicker extends NFocusField<LogicalDate, MonthYearPicker, CMonthYearPicker, HTML> implements INativeFocusComponent<LogicalDate> {
 
     private static final I18n i18n = I18n.get(NMonthYearPicker.class);
 
@@ -67,7 +66,7 @@ public class NMonthYearPicker extends NFocusField<Date, MonthYearPicker, CMonthY
     }
 
     @Override
-    public void setNativeValue(Date value) {
+    public void setNativeValue(LogicalDate value) {
         if (isViewable()) {
             getViewer().setText(value == null ? "" : getCComponent().isYearOnly() ? yearOnlyDateFormat.format(value) : defaultDateFormat.format(value));
         } else {
@@ -76,7 +75,7 @@ public class NMonthYearPicker extends NFocusField<Date, MonthYearPicker, CMonthY
     }
 
     @Override
-    public Date getNativeValue() {
+    public LogicalDate getNativeValue() {
         if (isViewable()) {
             assert false : "getNativeValue() shouldn't be called in viewable mode";
             return null;

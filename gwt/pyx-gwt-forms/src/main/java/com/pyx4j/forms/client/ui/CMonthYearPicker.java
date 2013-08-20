@@ -24,7 +24,9 @@ import java.util.Date;
 
 import com.google.gwt.view.client.Range;
 
-public class CMonthYearPicker extends CFocusComponent<Date, NMonthYearPicker> {
+import com.pyx4j.commons.LogicalDate;
+
+public class CMonthYearPicker extends CFocusComponent<LogicalDate, NMonthYearPicker> {
 
     private final boolean yearOnly;
 

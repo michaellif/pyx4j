@@ -20,8 +20,6 @@
  */
 package com.pyx4j.widgets.client;
 
-import java.util.Date;
-
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.BlurEvent;
 import com.google.gwt.event.dom.client.BlurHandler;
@@ -36,6 +34,8 @@ import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.i18n.client.LocaleInfo;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.view.client.Range;
+
+import com.pyx4j.commons.LogicalDate;
 
 public class MonthYearPicker extends HorizontalPanel implements HasChangeHandlers, IFocusWidget {
 
@@ -54,7 +54,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
     private final GroupFocusHandler focusHandlerManager;
 
     public MonthYearPicker() {
-        this(new Range(1900, new Date().getYear() + 7), true);
+        this(new Range(1900, new LogicalDate().getYear() + 7), true);
     }
 
     public MonthYearPicker(Range yearRange, boolean showYearOnly) {
@@ -112,7 +112,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         }
     }
 
-    public void setDate(Date date) {
+    public void setDate(LogicalDate date) {
         if (date == null) {
             if (!showYearOnly) {
                 monthSelector.setSelectedIndex(0);
@@ -131,7 +131,7 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         }
     }
 
-    public Date getDate() {
+    public LogicalDate getDate() {
         if (yearSelector.getSelectedIndex() == 0) {
             return null;
         }
@@ -140,11 +140,11 @@ public class MonthYearPicker extends HorizontalPanel implements HasChangeHandler
         if (!showYearOnly) {
             month = monthSelector.getSelectedIndex() == 0 ? 0 : monthSelector.getSelectedIndex() - 1;
         }
-        return new Date(year - 1900, month, 1);
+        return new LogicalDate(year - 1900, month, 1);
     }
 
     public void setYearRange(Range yearRange) {
-        Date current = getDate();
+        LogicalDate current = getDate();
         this.yearRange = yearRange;
         initYearSelector();
         setDate(current);
