@@ -200,16 +200,19 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private void validateCreditCardNumberAsync(CreditCardNumberIdentity value) {
         if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
-            ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue());
-            if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {
-                setCreditCardNumberValidationResult(true);
+            if (ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue())) {
+                if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {
+                    setCreditCardNumberValidationResult(true);
+                } else {
+                    GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
+                        @Override
+                        public void onSuccess(Boolean result) {
+                            setCreditCardNumberValidationResult(result);
+                        }
+                    }, getValue());
+                }
             } else {
-                GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
-                    @Override
-                    public void onSuccess(Boolean result) {
-                        setCreditCardNumberValidationResult(result);
-                    }
-                }, getValue());
+                setCreditCardNumberValidationResult(false);
             }
         } else {
             setCreditCardNumberValidationResult(false);
