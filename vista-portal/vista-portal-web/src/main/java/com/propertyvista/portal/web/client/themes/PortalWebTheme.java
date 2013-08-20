@@ -46,6 +46,7 @@ public class PortalWebTheme extends Theme {
     public PortalWebTheme(Skin skin) {
         this.skin = skin;
         initStyles();
+
     }
 
     protected void initStyles() {
@@ -63,7 +64,20 @@ public class PortalWebTheme extends Theme {
 
         addTheme(new BlockMixin());
 
-        addTheme(new DefaultWidgetsTheme());
+        addTheme(new DefaultWidgetsTheme() {
+
+            @Override
+            protected void initTextBoxStyle() {
+                super.initTextBoxStyle();
+                Style style = new Style(".", StyleName.TextBox);
+                style.addProperty("border-radius", "5px");
+                style.addProperty("height", "2em");
+                style.addProperty("line-height", "2em");
+                addStyle(style);
+            };
+
+        });
+
         addTheme(new DefaultWidgetDecoratorTheme() {
             @Override
             protected ThemeColor getBackgroundColor() {

@@ -33,13 +33,6 @@ public class DashboardTheme extends Theme {
         Style style = new Style(".", StyleName.Gadget);
         addStyle(style);
 
-        style = new Style(".", StyleName.Gadget, " .", DefaultWidgetsTheme.StyleName.TextBox);
-        //  style.addProperty("border", "1px solid");
-        style.addProperty("border-radius", "5px");
-        style.addProperty("height", "2em");
-        style.addProperty("line-height", "2em");
-        addStyle(style);
-
         style = new Style(".", StyleName.GadgetContent);
         addStyle(style);
 
