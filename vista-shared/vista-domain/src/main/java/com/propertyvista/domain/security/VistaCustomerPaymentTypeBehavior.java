@@ -23,6 +23,6 @@ public enum VistaCustomerPaymentTypeBehavior implements Behavior {
 
     InteracPaymentsAllowed,
 
-    EFTPaymentsAllowed
+    DirectBankingPaymentsAllowed
 
 }

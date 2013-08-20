@@ -145,7 +145,7 @@ public class PortalAuthenticationServiceImpl extends VistaAuthenticationServices
                     actualBehaviors.add(VistaCustomerPaymentTypeBehavior.EcheckPaymentsAllowed);
                     break;
                 case DirectBanking:
-                    actualBehaviors.add(VistaCustomerPaymentTypeBehavior.EFTPaymentsAllowed);
+                    actualBehaviors.add(VistaCustomerPaymentTypeBehavior.DirectBankingPaymentsAllowed);
                     break;
                 case Interac:
                     actualBehaviors.add(VistaCustomerPaymentTypeBehavior.InteracPaymentsAllowed);

@@ -38,7 +38,7 @@ public class PortalPaymentTypesUtil {
                     break;
                 case InteracPaymentsAllowed:
                     break;
-                case EFTPaymentsAllowed:
+                case DirectBankingPaymentsAllowed:
                     break;
                 }
             }
@@ -63,7 +63,7 @@ public class PortalPaymentTypesUtil {
                 case InteracPaymentsAllowed:
                     allowedTypes.add(PaymentType.Interac);
                     break;
-                case EFTPaymentsAllowed:
+                case DirectBankingPaymentsAllowed:
                     allowedTypes.add(PaymentType.DirectBanking);
                     break;
                 }
