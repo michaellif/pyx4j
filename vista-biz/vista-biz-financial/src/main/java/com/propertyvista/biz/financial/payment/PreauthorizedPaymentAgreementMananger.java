@@ -280,7 +280,7 @@ class PreauthorizedPaymentAgreementMananger {
 
         // lease last month check:
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
-        if (!autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
+        if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
             suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
         }
 
@@ -323,7 +323,7 @@ class PreauthorizedPaymentAgreementMananger {
                             public Void execute() {
                                 boolean suspended = false;
                                 for (PreauthorizedPayment item : retrieveActivePreauthorizedPayments(account.lease())) {
-                                    if (!autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
+                                    if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
                                         suspendPreauthorizedPayment(item, true);
                                         executionMonitor.addProcessedEvent("Pap suspend");
                                         suspended = true;
