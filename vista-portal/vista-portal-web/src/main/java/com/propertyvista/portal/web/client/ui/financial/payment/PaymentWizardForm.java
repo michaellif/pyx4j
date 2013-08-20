@@ -106,7 +106,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Make a Payment"));
+        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Make a Payment"));
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), "200px")
                 .customLabel(i18n.tr("Tenant")).build());
@@ -123,7 +123,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
         int row = -1;
 
-        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.maintenanceIcon(), i18n.tr("Payment Method"));
+        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Method"));
 
         panel.setWidget(
                 ++row,
