@@ -279,6 +279,11 @@ BEGIN
                                                         ADD COLUMN resident_portal_credit_card_master_card BOOLEAN,
                                                         ADD COLUMN resident_portal_credit_card_visa BOOLEAN,
                                                         ADD COLUMN resident_portal_visa_debit BOOLEAN;
+                                                        
+        ALTER TABLE payment_type_selection_policy RENAME COLUMN accepted_eft TO accepted_direct_banking;                                                    
+        ALTER TABLE payment_type_selection_policy RENAME COLUMN cash_equivalent_eft TO cash_equivalent_direct_banking;
+        ALTER TABLE payment_type_selection_policy RENAME COLUMN resident_portal_eft TO resident_portal_direct_banking;
+        
                                         
         -- preauthorized_payment
         
@@ -401,7 +406,16 @@ BEGIN
                 ||'SET  funds_transfer_type = ''PreAuthorizedDebit'' ';
         
         
+        -- auto_pay_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.auto_pay_policy '
+                ||'SET  allow_first_billing_period_charge = FALSE,'
+                ||'     allow_last_billing_period_charge = TRUE ';
        
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer '
+                ||'SET  registered_in_portal = FALSE '
+                ||'WHERE registered_in_portal IS NULL';               
         
         -- emergency_contact
         EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact '
@@ -450,6 +464,17 @@ BEGIN
         SET CONSTRAINTS payment_method_billing_address_country_fk,payment_method_billing_address_province_fk,
                         payment_method_customer_fk,payment_method_details_fk,payment_method_tenant_fk IMMEDIATE;
         
+        
+        
+        -- payment_type_selection_policy
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.payment_type_selection_policy '
+                ||'SET  accepted_credit_card_master_card = accepted_credit_card,'
+                ||'     accepted_credit_card_visa = accepted_credit_card,'
+                ||'     cash_equivalent_credit_card_master_card = cash_equivalent_credit_card,'
+                ||'     cash_equivalent_credit_card_visa = cash_equivalent_credit_card,'
+                ||'     resident_portal_credit_card_master_card = resident_portal_credit_card,'
+                ||'     resident_portal_credit_card_visa = resident_portal_credit_card';
         
         
         -- yardi_building_origination

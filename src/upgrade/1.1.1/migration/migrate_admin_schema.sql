@@ -213,6 +213,18 @@ SET search_path = '_admin_';
         
         ALTER TABLE dev_pad_sim_file ADD COLUMN funds_transfer_type VARCHAR(50);
         
+        -- dev_visa_debit_range
+        
+        CREATE TABLE dev_visa_debit_range
+        (
+                id                      BIGINT                          NOT NULL,
+                range_start             BIGINT,
+                range_end               BIGINT,
+                        CONSTRAINT dev_visa_debit_range_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE dev_visa_debit_range OWNER TO vista;
+        
         -- development_user
         
         ALTER TABLE development_user ALTER COLUMN email TYPE VARCHAR(64);
@@ -361,6 +373,82 @@ SET search_path = '_admin_';
         UPDATE  audit_record
         SET     user_type = 'operations'
         WHERE   namespace = '_admin_';
+        
+        
+        -- dev_visa_debit_range
+        
+        INSERT INTO dev_visa_debit_range (id,range_start,range_end) VALUES
+                (nextval('public.dev_visa_debit_range_seq'),400447000000,400447999999),
+                (nextval('public.dev_visa_debit_range_seq'),402371000000,402371999999),
+                (nextval('public.dev_visa_debit_range_seq'),402372000000,402372999999),
+                (nextval('public.dev_visa_debit_range_seq'),402982000000,402982999999),
+                (nextval('public.dev_visa_debit_range_seq'),417895000000,417895999999),
+                (nextval('public.dev_visa_debit_range_seq'),420099002000,420099002999),
+                (nextval('public.dev_visa_debit_range_seq'),421402000000,421402999999),
+                (nextval('public.dev_visa_debit_range_seq'),421545000000,421545999999),
+                (nextval('public.dev_visa_debit_range_seq'),421546000000,421546999999),
+                (nextval('public.dev_visa_debit_range_seq'),421611000000,421611999999),
+                (nextval('public.dev_visa_debit_range_seq'),421657000000,421657999999),
+                (nextval('public.dev_visa_debit_range_seq'),421659000000,421659999999),
+                (nextval('public.dev_visa_debit_range_seq'),422112000000,422112999999),
+                (nextval('public.dev_visa_debit_range_seq'),423915000000,423915999999),
+                (nextval('public.dev_visa_debit_range_seq'),424107000000,424107999999),
+                (nextval('public.dev_visa_debit_range_seq'),428434000000,428434999999),
+                (nextval('public.dev_visa_debit_range_seq'),428459000000,428459999999),
+                (nextval('public.dev_visa_debit_range_seq'),428460000000,428460999999),
+                (nextval('public.dev_visa_debit_range_seq'),432144000000,432144999999),
+                (nextval('public.dev_visa_debit_range_seq'),437428000000,437428999999),
+                (nextval('public.dev_visa_debit_range_seq'),437429000000,437429999999),
+                (nextval('public.dev_visa_debit_range_seq'),440039000000,440039999999),
+                (nextval('public.dev_visa_debit_range_seq'),450644000000,450644099999),
+                (nextval('public.dev_visa_debit_range_seq'),450644100000,450644599999),
+                (nextval('public.dev_visa_debit_range_seq'),450644600000,450644999999),
+                (nextval('public.dev_visa_debit_range_seq'),451016000000,451016999999),
+                (nextval('public.dev_visa_debit_range_seq'),451017000000,451017999999),
+                (nextval('public.dev_visa_debit_range_seq'),451018000000,451018999999),
+                (nextval('public.dev_visa_debit_range_seq'),451991000000,451991999999),
+                (nextval('public.dev_visa_debit_range_seq'),451992000000,451992999999),
+                (nextval('public.dev_visa_debit_range_seq'),451993000000,451993999999),
+                (nextval('public.dev_visa_debit_range_seq'),452901000000,452901999999),
+                (nextval('public.dev_visa_debit_range_seq'),453081000000,453081000999),
+                (nextval('public.dev_visa_debit_range_seq'),453739000000,453739999999),
+                (nextval('public.dev_visa_debit_range_seq'),453740000000,453740999999),
+                (nextval('public.dev_visa_debit_range_seq'),453745000000,453745999999),
+                (nextval('public.dev_visa_debit_range_seq'),453746000000,453746999999),
+                (nextval('public.dev_visa_debit_range_seq'),457757000000,457757999999),
+                (nextval('public.dev_visa_debit_range_seq'),457758000000,457758999999),
+                (nextval('public.dev_visa_debit_range_seq'),457850000000,457850999999),
+                (nextval('public.dev_visa_debit_range_seq'),457851000000,457851999999),
+                (nextval('public.dev_visa_debit_range_seq'),458714000000,458714999999),
+                (nextval('public.dev_visa_debit_range_seq'),460022000000,460022999999),
+                (nextval('public.dev_visa_debit_range_seq'),461126000000,461126999999),
+                (nextval('public.dev_visa_debit_range_seq'),461128000000,461128999999),
+                (nextval('public.dev_visa_debit_range_seq'),461130000000,461130999999),
+                (nextval('public.dev_visa_debit_range_seq'),461703000000,461703999999),
+                (nextval('public.dev_visa_debit_range_seq'),461788000000,461788999999),
+                (nextval('public.dev_visa_debit_range_seq'),467726000000,467726999999),
+                (nextval('public.dev_visa_debit_range_seq'),469344000000,469344999999),
+                (nextval('public.dev_visa_debit_range_seq'),469358000000,469358999999),
+                (nextval('public.dev_visa_debit_range_seq'),470360000000,470360999999),
+                (nextval('public.dev_visa_debit_range_seq'),470372000000,470372999999),
+                (nextval('public.dev_visa_debit_range_seq'),471401000000,471401999999),
+                (nextval('public.dev_visa_debit_range_seq'),471402000000,471402999999),
+                (nextval('public.dev_visa_debit_range_seq'),471403000000,471403999999),
+                (nextval('public.dev_visa_debit_range_seq'),471404000000,471404999999),
+                (nextval('public.dev_visa_debit_range_seq'),472408000000,472408999999),
+                (nextval('public.dev_visa_debit_range_seq'),472409000000,472409999999),
+                (nextval('public.dev_visa_debit_range_seq'),472476000000,472476999999),
+                (nextval('public.dev_visa_debit_range_seq'),472571000000,472571999999),
+                (nextval('public.dev_visa_debit_range_seq'),472926000000,472926999999),
+                (nextval('public.dev_visa_debit_range_seq'),483588000000,483588999999),
+                (nextval('public.dev_visa_debit_range_seq'),483994000000,483994999999),
+                (nextval('public.dev_visa_debit_range_seq'),483995000000,483995999999),
+                (nextval('public.dev_visa_debit_range_seq'),483996000000,483996999999),
+                (nextval('public.dev_visa_debit_range_seq'),483997000000,483997999999),
+                (nextval('public.dev_visa_debit_range_seq'),484887000000,484887999999),
+                (nextval('public.dev_visa_debit_range_seq'),484888000000,484888999999),
+                (nextval('public.dev_visa_debit_range_seq'),486098000000,486098999999),
+                (nextval('public.dev_visa_debit_range_seq'),489382000000,489382999999);
         
         -- fee_default_payment_fees
         
