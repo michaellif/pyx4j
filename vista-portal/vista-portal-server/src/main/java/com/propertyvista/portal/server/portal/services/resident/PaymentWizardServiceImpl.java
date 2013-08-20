@@ -14,10 +14,7 @@
 package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Vector;
-
-import org.apache.commons.lang.Validate;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -103,12 +100,8 @@ public class PaymentWizardServiceImpl extends EntityDtoBinder<PaymentRecord, Pay
     public void finish(AsyncCallback<Key> callback, PaymentDTO dto) {
         PaymentRecord entity = createDBO(dto);
 
-        // some validation:
-        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
-        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                VistaApplication.residentPortal);
-        Validate.isTrue(allowedPaymentTypes.contains(dto.paymentMethod().type().getValue()));
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);
 
         entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
 

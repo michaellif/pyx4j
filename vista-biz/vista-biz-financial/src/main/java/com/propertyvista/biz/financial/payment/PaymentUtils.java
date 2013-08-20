@@ -29,6 +29,7 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.PaymentAccepted;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.PaymentTypeSelectionPolicy;
 import com.propertyvista.domain.property.asset.building.Building;
@@ -118,6 +119,24 @@ class PaymentUtils {
                     PaymentTypeSelectionPolicy.class);
         }
         return PaymentAcceptanceUtils.getAllowedPaymentTypes(vistaApplication, electronicPaymentsAllowed, paymentAccepted == PaymentAccepted.CashEquivalent,
+                paymentMethodSelectionPolicy);
+    }
+
+    public static Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        BillingAccount billingAccount = billingAccountId.duplicate();
+        Persistence.ensureRetrieve(billingAccount, AttachLevel.Attached);
+        PaymentAccepted paymentAccepted = billingAccount.paymentAccepted().getValue();
+        if ((paymentAccepted == PaymentAccepted.DoNotAccept) || !isElectronicPaymentsSetup(billingAccountId)) {
+            return Collections.emptyList();
+        }
+        PaymentTypeSelectionPolicy paymentMethodSelectionPolicy;
+        {
+            EntityQueryCriteria<AptUnit> criteria = EntityQueryCriteria.create(AptUnit.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto()._Leases().$().billingAccount(), billingAccountId));
+            paymentMethodSelectionPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(Persistence.service().retrieve(criteria),
+                    PaymentTypeSelectionPolicy.class);
+        }
+        return PaymentAcceptanceUtils.getAllowedCreditCardTypes(vistaApplication, paymentAccepted == PaymentAccepted.CashEquivalent,
                 paymentMethodSelectionPolicy);
     }
 

@@ -96,9 +96,13 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
         Building building = Persistence.service().retrieve(criteria);
 
         // save new/edited ones:
+        Persistence.ensureRetrieve(entity.lease(), AttachLevel.Attached);
         for (LeasePaymentMethod paymentMethod : dto.paymentMethods()) {
             paymentMethod.customer().set(entity.customer());
             paymentMethod.isProfiledMethod().setValue(true);
+
+            ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(entity.lease().billingAccount(), paymentMethod, VistaApplication.crm);
+
             ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(paymentMethod, building);
         }
 

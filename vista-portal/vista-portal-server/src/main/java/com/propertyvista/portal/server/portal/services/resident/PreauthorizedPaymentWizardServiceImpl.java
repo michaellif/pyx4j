@@ -15,10 +15,7 @@ package com.propertyvista.portal.server.portal.services.resident;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collection;
 import java.util.Vector;
-
-import org.apache.commons.lang.Validate;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -38,7 +35,6 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -100,22 +96,13 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     public void finish(AsyncCallback<Key> callback, PreauthorizedPaymentDTO dto) {
         PreauthorizedPayment entity = createDBO(dto);
 
+        Lease lease = TenantAppContext.getCurrentUserLease();
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);
+
         if (entity.paymentMethod().getPrimaryKey() == null) {
-            Lease lease = TenantAppContext.getCurrentUserLease();
-            Persistence.service().retrieve(lease.unit());
-
             entity.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
-
-            Validate.isTrue(PaymentType.avalableInPortal().contains(entity.paymentMethod().type().getValue()));
-            Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                    VistaApplication.residentPortal);
-
-            // save just allowed methods here:
-            if (allowedPaymentTypes.contains(entity.paymentMethod().type().getValue())) {
-                entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
-
-                ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity.paymentMethod(), lease.unit().building());
-            }
+            entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
+            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity.paymentMethod(), lease.unit().building());
         }
 
         updateCoveredItems(entity, dto);

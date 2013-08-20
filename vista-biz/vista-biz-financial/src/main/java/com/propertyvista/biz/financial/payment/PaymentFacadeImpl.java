@@ -42,6 +42,9 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.security.common.VistaApplication;
@@ -78,6 +81,31 @@ public class PaymentFacadeImpl implements PaymentFacade {
     @Override
     public Collection<PaymentType> getAllowedPaymentTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
         return PaymentUtils.getAllowedPaymentTypes(billingAccountId, vistaApplication);
+    }
+
+    @Override
+    public Collection<CreditCardType> getAllowedCardTypes(BillingAccount billingAccountId, VistaApplication vistaApplication) {
+        return PaymentUtils.getAllowedCardTypes(billingAccountId, vistaApplication);
+    }
+
+    @Override
+    public void validatePaymentMethod(BillingAccount billingAccount, LeasePaymentMethod paymentMethod, VistaApplication vistaApplication) {
+        switch (vistaApplication) {
+        case residentPortal:
+            Validate.isTrue(PaymentType.avalableInPortal().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
+            break;
+        case crm:
+            Validate.isTrue(PaymentType.avalableInCrm().contains(paymentMethod.type().getValue()), "Payment type not acceptable");
+            break;
+        default:
+            throw new IllegalArgumentException();
+        }
+
+        Validate.isTrue(getAllowedPaymentTypes(billingAccount, vistaApplication).contains(paymentMethod.type().getValue()), "Payment type not acceptable");
+        if (paymentMethod.type().getValue() == PaymentType.CreditCard) {
+            CreditCardType cardType = paymentMethod.details().<CreditCardInfo> cast().cardType().getValue();
+            Validate.isTrue(getAllowedCardTypes(billingAccount, vistaApplication).contains(cardType), "Card type " + cardType + " not acceptable");
+        }
     }
 
     @Override

@@ -31,6 +31,7 @@ public enum PaymentType {
 
     DirectBanking,
 
+    @Translate("Credit/Debit Card")
     CreditCard,
 
     Interac;

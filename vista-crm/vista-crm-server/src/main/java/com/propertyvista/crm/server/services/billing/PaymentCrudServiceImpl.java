@@ -112,6 +112,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
                 entity.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
             }
         }
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(entity.billingAccount(), dto.paymentMethod(), VistaApplication.crm);
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(entity);
     }

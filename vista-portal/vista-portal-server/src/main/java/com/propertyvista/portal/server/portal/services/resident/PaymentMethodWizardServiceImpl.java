@@ -13,10 +13,6 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
-import java.util.Collection;
-
-import org.apache.commons.lang.Validate;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -78,21 +74,14 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
 
         dto.paymentMethod().customer().set(TenantAppContext.getCurrentUserCustomer());
 
-        Validate.isTrue(PaymentType.avalableInPortal().contains(dto.paymentMethod().type().getValue()));
-        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                VistaApplication.residentPortal);
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto.paymentMethod(), VistaApplication.residentPortal);
 
-        Key key = null;
+        dto.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
 
-        // save just allowed methods here:
-        if (allowedPaymentTypes.contains(dto.paymentMethod().type().getValue())) {
-            dto.paymentMethod().isProfiledMethod().setValue(Boolean.TRUE);
-
-            LeasePaymentMethod entity = createDBO(dto);
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
-            key = entity.getPrimaryKey();
-            Persistence.service().commit();
-        }
+        LeasePaymentMethod entity = createDBO(dto);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
+        Key key = entity.getPrimaryKey();
+        Persistence.service().commit();
 
         callback.onSuccess(key);
     }

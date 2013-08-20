@@ -24,6 +24,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -61,6 +62,8 @@ public interface PaymentDataDTO extends IEntity {
     IPrimitive<Boolean> electronicPaymentsAllowed();
 
     IPrimitiveSet<PaymentType> allowedPaymentTypes();
+
+    IPrimitiveSet<CreditCardType> allowedCardTypes();
 
     // UI-only (control organization) members:
 

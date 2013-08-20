@@ -15,8 +15,6 @@ package com.propertyvista.portal.server.portal.services.resident;
 
 import java.util.Collection;
 
-import org.apache.commons.lang.Validate;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -67,17 +65,10 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
         Persistence.service().retrieve(lease.unit());
 
         entity.customer().set(TenantAppContext.getCurrentUserCustomer());
+        entity.isProfiledMethod().setValue(Boolean.TRUE);
 
-        Validate.isTrue(PaymentType.avalableInPortal().contains(entity.type().getValue()));
-        Collection<PaymentType> allowedPaymentTypes = ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(),
-                VistaApplication.residentPortal);
-
-        // save just allowed methods here:
-        if (allowedPaymentTypes.contains(entity.type().getValue())) {
-            entity.isProfiledMethod().setValue(Boolean.TRUE);
-
-            ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
-        }
+        ServerSideFactory.create(PaymentFacade.class).validatePaymentMethod(lease.billingAccount(), dto, VistaApplication.residentPortal);
+        ServerSideFactory.create(PaymentMethodFacade.class).persistLeasePaymentMethod(entity, lease.unit().building());
     }
 
     @Override
