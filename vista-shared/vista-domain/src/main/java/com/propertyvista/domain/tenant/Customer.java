@@ -101,5 +101,6 @@ public interface Customer extends IEntity {
 
     IPrimitive<String> portalRegistrationToken();
 
+    @NotNull
     IPrimitive<Boolean> registeredInPortal();
 }
