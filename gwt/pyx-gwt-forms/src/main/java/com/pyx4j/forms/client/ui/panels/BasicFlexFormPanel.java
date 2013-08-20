@@ -37,13 +37,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -132,24 +134,28 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
     private void setHX(int row, int col, int span, ImageResource imageResource, String caption, Widget actionWidget, StyleName imageStyle,
             StyleName labelStyle, StyleName headerStyle) {
         getFlexCellFormatter().setColSpan(row, col, span);
-        HorizontalPanel header = new HorizontalPanel();
+        FlowPanel header = new FlowPanel();
         header.setStyleName(headerStyle.name());
+        header.getElement().getStyle().setTextAlign(TextAlign.LEFT);
 
         if (imageResource != null) {
             Image image = new Image(imageResource);
             image.setStyleName(imageStyle.name());
+            image.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            image.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             header.add(image);
-            header.setCellVerticalAlignment(image, HasVerticalAlignment.ALIGN_MIDDLE);
-            header.setCellWidth(image, "1px");
         }
 
         Label label = new Label(caption);
+        label.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+        label.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
         label.setStyleName(labelStyle.name());
         header.add(label);
-        header.setCellVerticalAlignment(label, HasVerticalAlignment.ALIGN_MIDDLE);
 
         if (actionWidget != null) {
             SimplePanel actionWidgetHolder = new SimplePanel();
+            actionWidgetHolder.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionWidgetHolder.getElement().getStyle().setVerticalAlign(VerticalAlign.MIDDLE);
             actionWidgetHolder.setWidget(actionWidget);
             actionWidgetHolder.setStyleName(FormFlexPanelActionWidget.name());
             header.add(actionWidgetHolder);
