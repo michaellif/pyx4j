@@ -29,8 +29,8 @@ public class AutoPayPolicyPreloader extends AbstractPolicyPreloader<AutoPayPolic
         AutoPayPolicy policy = EntityFactory.create(AutoPayPolicy.class);
 
         policy.onLeaseChargeChangeRule().setValue(AutoPayPolicy.ChangeRule.keepPercentage);
-        policy.allowFirstBillingPeriodCharge().setValue(Boolean.TRUE);
-        policy.allowLastBillingPeriodCharge().setValue(Boolean.FALSE);
+        policy.excludeFirstBillingPeriodCharge().setValue(Boolean.FALSE);
+        policy.excludeLastBillingPeriodCharge().setValue(Boolean.TRUE);
 
         return policy;
     }

@@ -49,7 +49,7 @@ public interface AutoPayPolicy extends Policy {
     @Caption(description = "AutoPay Change Rule for Lease Charge Changes (Suggestion)")
     IPrimitive<ChangeRule> onLeaseChargeChangeRule();
 
-    IPrimitive<Boolean> allowFirstBillingPeriodCharge();
+    IPrimitive<Boolean> excludeFirstBillingPeriodCharge();
 
-    IPrimitive<Boolean> allowLastBillingPeriodCharge();
+    IPrimitive<Boolean> excludeLastBillingPeriodCharge();
 }

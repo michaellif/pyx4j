@@ -29,8 +29,8 @@ public class AutoPayPolicyDataModel extends MockDataModel<AutoPayPolicy> {
         AutoPayPolicy policy = EntityFactory.create(AutoPayPolicy.class);
 
         policy.onLeaseChargeChangeRule().setValue(AutoPayPolicy.ChangeRule.keepPercentage);
-        policy.allowFirstBillingPeriodCharge().setValue(Boolean.TRUE);
-        policy.allowLastBillingPeriodCharge().setValue(Boolean.FALSE);
+        policy.excludeFirstBillingPeriodCharge().setValue(Boolean.FALSE);
+        policy.excludeLastBillingPeriodCharge().setValue(Boolean.TRUE);
 
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
