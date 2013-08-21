@@ -14,6 +14,7 @@
 package com.propertyvista.operations.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.essentials.client.DefaultErrorHandlerDialog;
@@ -71,15 +72,24 @@ public class OperationsSite extends VistaSite {
 
                     @Override
                     public void onSuccess(Boolean result) {
+                        setOperationsTitle();
                         OperationsSite.getHistoryHandler().handleCurrentHistory();
                     }
 
                     @Override
                     public void onFailure(Throwable caught) {
+                        setOperationsTitle();
                         //TODO handle it properly
                         OperationsSite.getHistoryHandler().handleCurrentHistory();
                         super.onFailure(caught);
                     }
                 });
+    }
+
+    private void setOperationsTitle() {
+        String envName = ClientContext.getEnviromentName();
+        if (envName != null) {
+            Window.setTitle(envName + " - Vista Operations");
+        }
     }
 }

@@ -430,6 +430,7 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             if (!requestUrl.startsWith(baseUrl)) {
                 systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
             }
+            ar.setEnviromentName("Production");
             break;
         case staging:
             if (requestUrl.startsWith(baseUrl)) {
@@ -437,15 +438,21 @@ public abstract class VistaAuthenticationServicesImpl<U extends AbstractUser, E 
             } else {
                 systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
             }
+            ar.setEnviromentName("Staging");
             break;
         case demo:
             systemWallMessage = new SystemWallMessage("Demo Environment", true);
+            ar.setEnviromentName("Demo");
             break;
         default:
             if (ApplicationMode.isDevelopment()) {
                 systemWallMessage = new SystemWallMessage("This is development and tests System", true);
             } else {
                 systemWallMessage = new SystemWallMessage(i18n.tr("Repairs in Progress"), true);
+            }
+            Integer enviromentId = ServerSideConfiguration.instance(AbstractVistaServerSideConfiguration.class).enviromentId();
+            if (enviromentId != null) {
+                ar.setEnviromentName("Env" + enviromentId);
             }
         }
         switch (SystemMaintenance.getState()) {
