@@ -277,8 +277,12 @@ class PreauthorizedPaymentAgreementMananger {
 
         boolean suspend = false;
 
-        // lease last month check:
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
+        // TODO: lease first month check:
+        if (autoPayPolicy.excludeFirstBillingPeriodCharge().getValue(Boolean.FALSE)) {
+        }
+
+        // lease last month check:
         if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
             suspend |= (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
                     nextCycle.billingCycleEndDate()));
