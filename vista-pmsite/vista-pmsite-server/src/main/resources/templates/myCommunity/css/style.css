@@ -1,6 +1,9 @@
 body {
 	background-image: url(../img/brushed_alu.png);
 	margin: 0px;
+	color: #4F565A;
+	font-family: 'Lato', sans-serif;
+
 }
 
 #residentInsert {
@@ -68,14 +71,10 @@ body {
 	background-image: url(../img/Footer_Logo-PropertyVista.png);
 }
 
-.MainMenu {
-	background: white;
-	border-radius: 4px 4px 4px 4px;
-}
-
 .MainMenuHolder {
 	display: inline-block;
 	margin: 0;
+	padding-left: 0;
 }
 
 .MainMenuTab {
@@ -90,14 +89,222 @@ body {
 }
 
 .content {
-	background: white;
-	border-radius: 4px 4px 4px 4px;
+	background: none repeat scroll 0 0 #FDFDFD;
+	border-color: #C6CBCE;
+	border-radius: 5px 5px 5px 5px;
+	border-style: solid;
+	border-width: 1px;
 	margin: 10px 0 20px 0;
+	padding: 10px;
+	border-top-color: #F68308;
+	border-top-width: 5px;
 }
 
 .caption {
-	background: white;
-	border-radius: 4px 4px 4px 4px;
+	background: none repeat scroll 0 0 #FDFDFD;
+	border-color: #C6CBCE;
+	border-radius: 5px 5px 5px 5px;
+	border-style: solid;
+	border-width: 1px;
 	margin: 20px 0;
 	padding: 0 20px;
+	border-top-color: #F68308;
+	border-top-width: 5px;
+}
+
+
+
+
+
+#siteAuthInsert>div td a {
+	display: block;
+	background: none repeat scroll 0 0 #80878C;
+	border-color: #777F83;
+	border-radius: 5px 5px 5px 5px;
+	height: 2em;
+	padding: 5px 10px;
+	margin-right: 5px !important;
+}
+
+.Anchor, .gwt-Anchor {
+	color: #F68308;
+	font-size: 0.8em;
+	padding: 5px 5px 5px 0;
+	white-space: nowrap;
+	text-decoration: none;
+}
+
+.Anchor:hover,.gwt-Anchor:hover {
+	text-decoration: underline !important;
+}
+
+.SiteViewAction .Anchor {
+	color: #ECEDEF;
+	line-height: 2em;
+	font-weight: bolder;
+	text-decoration: none;
+	margin-right: 0 !important;
+	font-size: 1em
+}
+
+.LandingCaption {
+	font-size: 1.2em;
+	color: #4F565A;
+}
+
+.LandingViewSectionContent {
+	text-align: center;
+}
+
+.LandingInputField {
+    text-align: left;
+}
+
+.WidgetDecorator {
+    margin: 0 !important;
+}
+
+div.Button,button.gwt-Button {
+	background: none repeat scroll 0 0 #F68308;
+	border: medium none;
+	border-radius: 5px 5px 5px 5px;
+	line-height: 35px;
+	height: auto;
+	min-width: 200px;
+}
+
+div.ButtonText,button.gwt-Button {
+	color: #FDFDFD;
+	font-weight: bolder;
+}
+
+button.gwt-Button {
+	cursor: pointer;
+	min-width: 7em;
+	padding: 3px;
+}
+
+.TextBox, .ListBox {
+	-moz-box-sizing: border-box;
+	background-color: white;
+	border-color: #B4BABD;
+	border-style: solid;
+	border-width: 1px;
+	padding: 2px 5px;
+	border-radius: 5px 5px 5px 5px;
+	height: 2em;
+}
+
+div.LandingOrLineSeparator div {
+	border: 1px solid #F68307 !important;
+	height: 95% !important;
+	margin-top: 10px;
+}
+
+.secondaryNavig {
+	width: 12em !important;
+}
+
+li.MainMenuTab {
+	background: none repeat scroll 0 0 #FDFDFD;
+	border-color: #C6CBCE;
+	border-style: solid;
+	border-width: 1px 1px 0;
+	padding: 5px 0 5px 10px;
+	white-space: nowrap;
+}
+
+li.MainMenuTab:first-child {
+	border-radius: 5px 5px 0 0;
+}
+
+li.MainMenuTab:last-child {
+	border-bottom-width: 1px;
+	border-radius: 0 0 5px 5px;
+}
+
+li.MainMenuTab:hover {
+	text-decoration: none !important;
+	background: none repeat scroll 0 0 #ECEDEF;
+}
+
+li.MainMenuTab.active {
+	background: none repeat scroll 0 0 #F68307;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+ol li {
+	line-height: 1.5em;
+	padding-bottom: 10px;
+	position: relative;
+	text-align: justify;
+}
+
+.Dialog {
+	background-color: #F68308 !important;
+	box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.Dialog .popupContent>table {
+	height: auto !important;
+}
+
+.DialogCaption {
+	background: none repeat scroll 0 0 #f89d3c !important;
+	color: #FFFFFF !important;
+	font-weight: bold !important;
+	opacity: 0.95 !important;
+	padding-left: 10px !important;
+}
+
+.DialogDefaultButtonsToolbar {
+	border-top: 1px solid #C6CBCE;
+}
+
+.DialogDefaultButtonsToolbar .ToolbarItem {
+	float: right;
+	margin: 8px 0 0;
+}
+
+.gwt-DatePicker {
+	border: 1px solid #F68308 !important;
+}
+
+.DatePickerMonthSelector tr {
+	background-color: #f89d3c !important;
+	color: #FFFFFF;
+}
+
+.DatePickerWeekendDayLabel {
+	color: #d56e01;
+}
+
+.FieldEditorPanel .Button {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	height: 19px;
+	padding: 0;
+}
+
+.WidgetDecoratorContentPanel {
+    width: 14em !important;
+}
+
+
+element.style {
+    cursor: default;
+    display: inline-block;
+}
+.WidgetDecoratorLabel {
+    white-space: nowrap;
+}
+.WidgetDecoratorComponentHolder .TextBox, .WidgetDecoratorComponentHolder .ListBox {
+    min-width: 85px !important;
+}
+.FormFlexPanel, .EntityFolderTableDecorator {
+    font-size: 14px !important;
+}
+.FieldEditorPanel td {
+    vertical-align: bottom !important;
 }
