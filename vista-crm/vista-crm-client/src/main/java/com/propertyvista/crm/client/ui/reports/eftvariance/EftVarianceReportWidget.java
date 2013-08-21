@@ -13,6 +13,7 @@
  */
 package com.propertyvista.crm.client.ui.reports.eftvariance;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
@@ -23,6 +24,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
@@ -30,6 +32,7 @@ import com.google.gwt.user.client.EventListener;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.ReportWidget;
 
@@ -112,7 +115,26 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
         builder.appendHtmlConstant("</thead>");
 
         builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
+
+        NumberFormat totalFormat = NumberFormat.getFormat(EntityFactory.getEntityPrototype(EftVarianceReportRecordDTO.class).leaseTotals().totalEft().getMeta()
+                .getFormat());
+        String buildingId = eftReportRecords.get(0).building().getValue();
+        BigDecimal buildingEftTotal = new BigDecimal("0.00");
+        BigDecimal buildingChargesTotal = new BigDecimal("0.00");
+        BigDecimal buildingDifferenceTotal = new BigDecimal("0.00");
+
         for (EftVarianceReportRecordDTO record : eftReportRecords) {
+            // building totals:
+            if (!buildingId.equals(record.building().getValue())) {
+                addBuildingTotals(builder, totalFormat, buildingId, buildingEftTotal, buildingChargesTotal, buildingDifferenceTotal);
+
+                buildingId = record.building().getValue();
+                buildingEftTotal = new BigDecimal("0.00");
+                buildingChargesTotal = new BigDecimal("0.00");
+                buildingDifferenceTotal = new BigDecimal("0.00");
+
+            }
+
             builder.appendHtmlConstant("<tr>");
             builder.appendHtmlConstant("<td style='width: " + columns.get(0).getEffectiveWidth() + "px;'>");
             builder.appendEscaped(record.building().getValue());
@@ -128,7 +150,9 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
             builder.appendHtmlConstant("</td>");
 
             boolean isFirstLine = true;
+
             for (EftVarianceReportRecordDetailsDTO details : record.details()) {
+
                 if (isFirstLine) {
                     isFirstLine = false;
                 } else {
@@ -157,7 +181,7 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
                 builder.appendHtmlConstant("</tr>");
 
             }
-            // totals:
+            // lease totals:
             builder.appendHtmlConstant("<tr>");
             builder.appendHtmlConstant("<td colspan='2'></td>");
             builder.appendHtmlConstant("<td colspan='3' style='text-align:left;' class='" + CommonReportStyles.RRowTotal.name() + "'>");
@@ -174,7 +198,13 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
             builder.appendHtmlConstant("</td>");
             builder.appendHtmlConstant("</tr>");
 
+            buildingEftTotal = buildingEftTotal.add(record.leaseTotals().totalEft().getValue());
+            buildingChargesTotal = record.leaseTotals().charges().isNull() ? buildingChargesTotal : buildingChargesTotal.add(record.leaseTotals().charges()
+                    .getValue());
+            buildingDifferenceTotal = record.leaseTotals().difference().isNull() ? buildingDifferenceTotal : buildingDifferenceTotal.add(record.leaseTotals()
+                    .difference().getValue());
         }
+        addBuildingTotals(builder, totalFormat, buildingId, buildingEftTotal, buildingChargesTotal, buildingDifferenceTotal);
 
         builder.appendHtmlConstant("</table>");
         reportHtml.setHTML(builder.toSafeHtml());
@@ -224,6 +254,25 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
                 tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
             }
         }
+    }
+
+    private void addBuildingTotals(SafeHtmlBuilder builder, NumberFormat totalFormat, String buildingId, BigDecimal totalEft, BigDecimal totalCharges,
+            BigDecimal totalDifference) {
+
+        builder.appendHtmlConstant("<tr>");
+        builder.appendHtmlConstant("<td colspan='5' style='text-align:left;' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendEscaped(i18n.tr("Total for building {0}:", buildingId));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendEscaped(totalFormat.format(totalEft));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendEscaped(totalFormat.format(totalCharges));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>");
+        builder.appendEscaped(totalFormat.format(totalDifference));
+        builder.appendHtmlConstant("</td>");
+        builder.appendHtmlConstant("</tr>");
     }
 
 }
