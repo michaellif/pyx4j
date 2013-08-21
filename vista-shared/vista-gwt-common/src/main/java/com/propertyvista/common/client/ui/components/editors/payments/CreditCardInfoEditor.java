@@ -14,6 +14,8 @@
 package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -30,6 +32,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
+import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
@@ -64,8 +67,11 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     private final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor;
 
+    private final CComboBox<CreditCardType> typeSelector;
+
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);
+        typeSelector = new CComboBox<CreditCardType>();
         cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
     }
 
@@ -76,7 +82,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn()), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType()), 15, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 15, true).build());
 
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 15, true).build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15, true).build());
@@ -92,6 +98,8 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
     @Override
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
+
+        typeSelector.setOptions(getAllowedCardTypes());
 
         updateVisibility(getValue());
     }
@@ -185,6 +193,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
             });
         }
+    }
+
+    protected Set<CreditCardType> getAllowedCardTypes() {
+        return EnumSet.allOf(CreditCardType.class);
     }
 
     private ValidationError validateCreditCardNumberAsync(final CComponent<?> component, CreditCardNumberIdentity value) {
