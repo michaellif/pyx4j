@@ -48,6 +48,7 @@ body {
 	min-height: 450px;
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 10px;
 }
 
 .footer {
@@ -68,6 +69,40 @@ body {
 	padding: 10px;
 	border-top-color: #F68308;
 	border-top-width: 5px;
+}
+
+.FormFlexPanelH1,.TenantDashboardTableHeader,.EntityFolderTableHeader,.Header
+	{
+	background: none repeat scroll 0 0 #FDFDFD !important;
+	border-color: #C6CBCE !important;
+	border-radius: 5px 5px 5px 5px !important;
+	border-style: solid !important;
+	border-width: 0 !important;
+	border-top-color: #F68308 !important;
+	border-top-width: 5px !important;
+	color: #F68308 !important;
+}
+
+.EntityFolderTableHeader {
+	background: none repeat scroll 0 0 #FDFDFD !important;
+	border-color: #C6CBCE !important;
+	border-radius: 5px 5px 5px 5px !important;
+	border-style: solid !important;
+	border-width: 0 !important;
+	border-top-color: #EF231B !important;
+	border-top-width: 5px !important;
+	color: #EF231B !important;
+}
+
+.Header {
+	background: none repeat scroll 0 0 #FDFDFD !important;
+	border-color: #C6CBCE !important;
+	border-radius: 5px 5px 5px 5px !important;
+	border-style: solid !important;
+	border-width: 0 !important;
+	border-top-color: #0091DC !important;
+	border-top-width: 5px !important;
+	color: #0091DC !important;
 }
 
 #siteAuthInsert>div td a {
@@ -106,17 +141,13 @@ body {
 	text-align: center;
 }
 
-.FormFlexPanelH1Label,.Header {
-	color: #F68308;
-}
-
 div.Button,button.gwt-Button {
 	background: none repeat scroll 0 0 #F68308;
 	border: medium none;
 	border-radius: 5px 5px 5px 5px;
 	line-height: 35px;
 	height: auto;
-	width: 250px;
+	width: 200px;
 }
 
 div.ButtonText,button.gwt-Button {
@@ -164,30 +195,121 @@ button.gwt-Button {
 }
 
 div.LandingOrLineSeparator div {
-	border-color: #888F94;
+	border: 1px solid #F68307 !important;
+	height: 95% !important;
+	margin-top: 10px;
 }
 
-.MainMenuTab {
-    background: none repeat scroll 0 0 #FDFDFD;
-    border-color: #C6CBCE;
-    border-style: solid;
-    border-width: 1px 1px 0;
-    font-weight: bold;
-    height: 34px;
-    line-height: 34px;
-    list-style: none outside none;
-    padding: 5px;
-    white-space: nowrap;
+.secondaryNavig {
+	padding-right: 20px;
+	width: 12em !important;
 }
-.MainMenuTab:first-child {
-    border-radius: 5px 5px 0 0;
+
+div.secondaryNavig ul {
+	padding-left: 0;
 }
-.MainMenuTab:last-child {
-    border-bottom-width: 1px;
-    border-radius: 0 0 5px 5px;
+
+li.MainMenuTab {
+	background: none repeat scroll 0 0 #FDFDFD;
+	border-color: #C6CBCE;
+	border-style: solid;
+	border-width: 1px 1px 0;
+	font-weight: bold;
+	height: 34px;
+	line-height: 34px;
+	list-style: none outside none;
+	padding: 5px;
+	white-space: nowrap;
 }
+
+li.MainMenuTab:first-child {
+	border-radius: 5px 5px 0 0;
+}
+
+li.MainMenuTab:last-child {
+	border-bottom-width: 1px;
+	border-radius: 0 0 5px 5px;
+}
+
+li.MainMenuTab:hover {
+	text-decoration: none !important;
+	background: none repeat scroll 0 0 #ECEDEF;
+}
+
+li.MainMenuTab.active {
+	background: none repeat scroll 0 0 #FFCB00;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
 .MainMenuNavigItem-active {
-    color: #FDFDFD;
+	color: #FDFDFD;
+}
+
+ol li {
+	line-height: 1.5em;
+	padding-bottom: 10px;
+	position: relative;
+	text-align: justify;
+}
+
+.Dialog {
+	background-color: #315EAF !important;
+	box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.Dialog .popupContent>table {
+	height: auto !important;
+}
+
+.DialogCaption {
+	background: none repeat scroll 0 0 #5178BF !important;
+	color: #E5ECF7 !important;
+	font-weight: bold !important;
+	opacity: 0.95 !important;
+	padding-left: 10px !important;
+}
+
+.DialogDefaultButtonsToolbar {
+	border-top: 1px solid #C6CBCE;
+}
+
+.DialogDefaultButtonsToolbar .ToolbarItem {
+	float: right;
+	margin: 8px 0 0;
+}
+
+.DialogDefaultButtonsToolbar .Button {
+	background: none repeat scroll 0 0 #315EAF;
+}
+
+.gwt-DatePicker {
+	border: 1px solid #d56e01 !important;
+}
+
+.DatePickerMonthSelector tr {
+	background-color: #F68308 !important;
+	color: #FFFFFF;
+}
+
+.DatePickerWeekendDayLabel {
+	color: #d56e01;
+}
+
+.FieldEditorPanel .Button {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	height: 19px;
+	padding: 0;
+}
+
+.legal_poweredby {
+    color: #FFFFFF !important;
+    width: 100% !important;
+}
+
+.PageFooter {
+	width: 100% !important;
 }
 </style>
 </head>
@@ -214,7 +336,21 @@ div.LandingOrLineSeparator div {
 
 		</div>
 
-		<div class="footer"></div>
+		<div class="footer">
+			<div class="HorizontalAlignCenter" style="max-width: 1200px;">
+				<div class="PageFooter" style="display: inline-block;">
+					<div class="" style="display: inline-block;"></div>
+					<div class="legal_poweredby">
+						<span class="powered_product">Property Management Software</span>
+						<span class="powered_by">by</span> <a class="powered_logo"
+							href="http://www.propertyvista.com"
+							title="Property Management Software by PropertyVista"
+							alt="PropertyVista Logo"></a>
+					</div>
+
+				</div>
+			</div>
+		</div>
 
 	</div>
 
