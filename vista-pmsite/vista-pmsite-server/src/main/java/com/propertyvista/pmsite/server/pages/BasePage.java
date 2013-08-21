@@ -99,16 +99,40 @@ public abstract class BasePage extends WebPage {
 
         boolean residentOnly = cm.isResidentOnlyMode();
 
-        if (residentOnly && !(this instanceof ResidentsPage) && !(this instanceof StaticPage)) {
+        if (residentOnly && !(this instanceof MyCommunityPage) && !(this instanceof StaticPage)) {
             // render residents page
             getRequestCycle().replaceAllRequestHandlers(
-                    new RenderPageRequestHandler(new PageProvider(ResidentsPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
+                    new RenderPageRequestHandler(new PageProvider(MyCommunityPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
         } else if (!cm.isCustomResidentsContentEnabled()) {
             // default view
-            add(new LocalizedHtmlTag("localizedHtml"));
-            add(new HeaderPanel(residentOnly));
-            add(new FooterPanel(residentOnly));
+            createDefaultLayout(residentOnly);
         }
+    }
+
+    protected void addDefaultMeta() {
+        // add page title if not already done
+        if (get(META_TITLE) == null) {
+            String title = getLocalizedPageTitle();
+            if (title != null && title.trim().length() > 0) {
+                title = " - " + title;
+            } else {
+                title = "";
+            }
+            PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
+            add(new Label(META_TITLE, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
+        }
+        if (get(META_DESCRIPTION) == null) {
+            add(new Label(META_DESCRIPTION));
+        }
+        if (get(META_KEYWORDS) == null) {
+            add(new Label(META_KEYWORDS));
+        }
+    }
+
+    protected void createDefaultLayout(boolean residentOnly) {
+        add(new LocalizedHtmlTag("localizedHtml"));
+        add(new HeaderPanel(residentOnly));
+        add(new FooterPanel(residentOnly));
     }
 
     public PMSiteContentManager getCM() {
@@ -152,23 +176,7 @@ public abstract class BasePage extends WebPage {
         super.onBeforeRender();
 
         if (!cm.isCustomResidentsContentEnabled()) {
-            // add page title if not already done
-            if (get(META_TITLE) == null) {
-                String title = getLocalizedPageTitle();
-                if (title != null && title.trim().length() > 0) {
-                    title = " - " + title;
-                } else {
-                    title = "";
-                }
-                PMSiteWebRequest req = (PMSiteWebRequest) getRequest();
-                add(new Label(META_TITLE, req.getContentManager().getSiteTitles(req.getSiteLocale()).residentPortalTitle().getStringView() + title));
-            }
-            if (get(META_DESCRIPTION) == null) {
-                add(new Label(META_DESCRIPTION));
-            }
-            if (get(META_KEYWORDS) == null) {
-                add(new Label(META_KEYWORDS));
-            }
+            addDefaultMeta();
         }
         if (ApplicationMode.isDevelopment()) {
             checkIfPageStateless(this);

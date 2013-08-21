@@ -28,7 +28,7 @@ import com.propertyvista.pmsite.server.pages.AptDetailsPage;
 import com.propertyvista.pmsite.server.pages.AptListPage;
 import com.propertyvista.pmsite.server.pages.FindAptPage;
 import com.propertyvista.pmsite.server.pages.InquiryPage;
-import com.propertyvista.pmsite.server.pages.ResidentsPage;
+import com.propertyvista.pmsite.server.pages.MyCommunityPage;
 import com.propertyvista.pmsite.server.pages.StaticPage;
 import com.propertyvista.pmsite.server.pages.UnitDetailsPage;
 
@@ -79,9 +79,9 @@ public class MainNavigationPanel extends Panel {
 
                     active = true;
 
-                } else if (ResidentsPage.class.equals(navItem.getDestination())
+                } else if (MyCommunityPage.class.equals(navItem.getDestination())
 
-                && ((MainNavigationPanel.this.getPage() instanceof ResidentsPage)
+                && ((MainNavigationPanel.this.getPage() instanceof MyCommunityPage)
 
                 || (MainNavigationPanel.this.getPage() instanceof SignInPage))) {
 
