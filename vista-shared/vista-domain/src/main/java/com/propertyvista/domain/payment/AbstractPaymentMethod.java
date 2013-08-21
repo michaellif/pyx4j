@@ -25,11 +25,14 @@ import com.pyx4j.entity.annotations.Owned;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.ToStringFormat;
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 @AbstractEntity
 @ToStringFormat("{0} - {1}")
@@ -67,4 +70,7 @@ public interface AbstractPaymentMethod extends IEntity {
     @Editor(type = EditorType.label)
     IPrimitive<Date> updated();
 
+    // TODO: Temporary UI only member: 
+    @Transient
+    IPrimitiveSet<CreditCardType> allowedCardTypes();
 }

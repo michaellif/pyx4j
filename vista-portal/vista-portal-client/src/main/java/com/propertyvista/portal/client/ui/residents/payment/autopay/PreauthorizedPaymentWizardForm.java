@@ -59,6 +59,7 @@ import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolde
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
@@ -91,6 +92,11 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
             return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+        }
+
+        @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return PreauthorizedPaymentWizardForm.this.getValue().allowedCardTypes();
         }
 
         @Override

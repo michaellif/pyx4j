@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -25,8 +23,8 @@ import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 
 public class PortalPaymentTypesUtil {
 
-    public static Collection<PaymentType> avalableInProfile() {
-        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>();
+    public static Set<PaymentType> avalableInProfile() {
+        Set<PaymentType> allowedTypes = EnumSet.noneOf(PaymentType.class);
 
         for (VistaCustomerPaymentTypeBehavior behavior : VistaCustomerPaymentTypeBehavior.values()) {
             if (SecurityController.checkBehavior(behavior)) {
@@ -45,7 +43,6 @@ public class PortalPaymentTypesUtil {
             }
         }
         return allowedTypes;
-
     }
 
     public static Set<PaymentType> getAllowedPaymentTypes() {

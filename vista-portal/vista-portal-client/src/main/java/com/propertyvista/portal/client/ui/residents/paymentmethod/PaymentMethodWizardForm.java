@@ -42,6 +42,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
@@ -61,6 +62,11 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
             return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+        }
+
+        @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return PaymentMethodWizardForm.this.getValue().allowedCardTypes();
         }
 
         @Override

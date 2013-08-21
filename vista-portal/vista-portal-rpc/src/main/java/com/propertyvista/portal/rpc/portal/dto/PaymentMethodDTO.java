@@ -18,6 +18,7 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IPrimitiveSet;
 
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 
@@ -29,4 +30,6 @@ public interface PaymentMethodDTO extends IEntity {
     IPrimitive<Boolean> electronicPaymentsAllowed();
 
     IPrimitiveSet<PaymentType> allowedPaymentTypes();
+
+    IPrimitiveSet<CreditCardType> allowedCardTypes();
 }

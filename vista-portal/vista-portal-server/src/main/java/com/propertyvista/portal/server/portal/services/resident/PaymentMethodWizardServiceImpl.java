@@ -56,6 +56,8 @@ public class PaymentMethodWizardServiceImpl extends EntityDtoBinder<LeasePayment
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
                 ServerSideFactory.create(PaymentFacade.class).getAllowedPaymentTypes(lease.billingAccount(), VistaApplication.residentPortal));
+        dto.allowedCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(lease.billingAccount(), VistaApplication.residentPortal));
 
         if (dto.allowedPaymentTypes().contains(PaymentType.Echeck)) {
             dto.paymentMethod().type().setValue(PaymentType.Echeck);

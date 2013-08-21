@@ -54,6 +54,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
@@ -78,6 +79,11 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
             return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+        }
+
+        @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return PaymentWizardForm.this.getValue().allowedCardTypes();
         }
 
         @Override

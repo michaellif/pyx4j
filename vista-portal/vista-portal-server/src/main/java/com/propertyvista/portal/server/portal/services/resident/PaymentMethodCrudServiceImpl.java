@@ -47,6 +47,15 @@ public class PaymentMethodCrudServiceImpl extends AbstractCrudServiceImpl<LeaseP
     }
 
     @Override
+    protected void enhanceRetrieved(LeasePaymentMethod entity, LeasePaymentMethod dto, RetrieveTarget retrieveTarget) {
+        super.enhanceRetrieved(entity, dto, retrieveTarget);
+
+        dto.allowedCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(TenantAppContext.getCurrentUserLease().billingAccount(),
+                        VistaApplication.residentPortal));
+    }
+
+    @Override
     protected void enhanceListCriteria(EntityListCriteria<LeasePaymentMethod> dbCriteria, EntityListCriteria<LeasePaymentMethod> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().customer().user(), TenantAppContext.getCurrentUser()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isProfiledMethod(), Boolean.TRUE));
