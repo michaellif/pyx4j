@@ -1,9 +1,53 @@
-h2 {
-	text-align:center;
+
+body {
+		background-image:url(../img/brushed_alu.png);
+		margin:0px;
 }
+
 #residentInsert {
-	background-image:url(../img/brushed_alu.png);
+	background:#fff;
 	width:920px;
 	padding:0 20px;
 	margin:auto;
 }
+
+.PageHeader {
+	text-align: center;
+}
+
+.PageHeaderContent {
+	display:inline-block;
+}
+
+.MainToolbar {
+	background:#4f565a;
+}
+
+.MainToolbarContent {
+    height: 100%;
+    margin: 0 auto;
+    width: 960px;
+}
+
+.PageFooter {
+	background:#8A9195;
+	min-height:200px;
+}
+
+.MyComunityTopLogo {
+	display:inline-block; 
+	margin-top: 5px; 
+	height:50px; 
+	width:60px;
+	background-image:url(../img/Header_Logo-myCommunity.png);
+}
+
+.MyComunityTopLogoText {
+	display:inline-block; 
+	margin-top: 5px; 
+	height:44px; 
+	width:245px;
+	background-image:url(../img/Header_Logo-myCommunityLabel.png);
+}
+
+

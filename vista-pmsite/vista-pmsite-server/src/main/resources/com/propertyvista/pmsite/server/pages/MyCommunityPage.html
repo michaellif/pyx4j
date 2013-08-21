@@ -1,20 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
+<html
+	xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 
 <head>
 </head>
 
 <body>
 	<wicket>
-	<div wicket:id="header"></div>
-	<div>
-		<img src="portal/wicket/resource/templates.TemplateResources/myCommunity/img/Header_Logo-myCommunity.png">
-		<img src="portal/wicket/resource/templates.TemplateResources/myCommunity/img/Header_Logo-myCommunityLabel.png">
-		<h2>Ultimate Home for Smart Tenants</h2>
+	<div class="PageHeader">
+		<div class="PageHeaderContent" wicket:id="header"></div>
 	</div>
-	<div wicket:id="loginPanel"></div>
+	<div class="MainToolbar" style="height:60px">
+		<div class="MainToolbarContent">
+			<div class="MyComunityTopLogo"></div>
+			<div class="MyComunityTopLogoText"></div>
+			<div wicket:id="loginPanel"></div>
+		</div>
+	</div>
 	<div wicket:id="contentPanel"></div>
-	<div wicket:id="footer"></div>
+	<div class="PageFooter">
+		<div wicket:id="footer"></div>
+	</div>
 	</wicket>
 </body>
 </html>
