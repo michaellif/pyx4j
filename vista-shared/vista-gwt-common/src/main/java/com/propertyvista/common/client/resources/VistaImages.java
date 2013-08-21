@@ -79,20 +79,17 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
     @Source("PaymentOptionIcons/Small/Credit-Card.png")
     ImageResource paymentCredit();
 
-    @Source("payment-interact.gif")
-    ImageResource paymentInterac();
+    @Source("PaymentOptionIcons/Small/DirectBanking.png")
+    ImageResource paymentDirectBanking();
 
-    @Source("payment-ach.gif")
-    ImageResource paymentACH();
+    @Source("PaymentOptionIcons/Small/Interac.png")
+    ImageResource paymentInterac();
 
     @Source("PaymentOptionIcons/Small/RecurringCredit.png")
     ImageResource recurringCredit();
 
     @Source("cheque-guide.jpg")
     ImageResource chequeGuide();
-
-    @Source("canadian-cheque-guide.jpg")
-    ImageResource canadianChequeGuide();
 
     @Source("e_cheque-guide.png")
     ImageResource eChequeGuide();

@@ -142,6 +142,9 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
                     case CreditCard:
                         paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
                         break;
+                    case DirectBanking:
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDirectBanking().getSafeUri());
+                        break;
                     case Interac:
                         paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
                         break;

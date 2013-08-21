@@ -45,7 +45,7 @@ public class PropertyAccountInfoForm extends CEntityDecoratableForm<OnlinePaymen
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().institutionNumber())).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().accountNumber())).build());
 
-        panel.setWidget(irow, 1, new Image(VistaImages.INSTANCE.canadianChequeGuide()));
+        panel.setWidget(irow, 1, new Image(VistaImages.INSTANCE.eChequeGuide()));
         panel.getFlexCellFormatter().setRowSpan(irow, 1, 3);
         return panel;
     }
