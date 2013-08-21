@@ -4,7 +4,6 @@ body {
 }
 
 #residentInsert {
-	background: #fff;
 	width: 920px;
 	padding: 0 20px;
 	margin: auto;
@@ -44,6 +43,7 @@ body {
 	margin-top: 5px;
 	width: 60px;
 	height: 50px;
+	border-radius: 4px 4px 4px 4px;
 	background-image: url(../img/Header_Logo-myCommunity.png);
 }
 
@@ -56,9 +56,20 @@ body {
 }
 
 .MyComunityBottomLogo {
-	display: inline-block;
 	margin-top: 5px;
 	width: 114px;
 	height: 119px;
 	background-image: url(../img/Footer_Logo-myCommunity.png);
+}
+
+.PoweredByVistaBottomLogo {
+	margin-top: 5px;
+	width: 113px;
+	height: 38px;
+	background-image: url(../img/Footer_Logo-PropertyVista.png);
+}
+
+.MainMenu {
+	background: white;
+	margin: 10px 0 0 0;
 }

@@ -1657,7 +1657,6 @@ ul.footer_locations li {
 .secondaryNavig ul li {
 	height: 2em;
 	overflow: hidden;
-	padding-left: 1em;
 	width: 100%;
 }
 
@@ -1668,7 +1667,6 @@ ul.footer_locations li {
 }
 
 .MainMenu {
-    padding: 1.5em 0;
 }
 
 .vista-pmsite-main .content {
