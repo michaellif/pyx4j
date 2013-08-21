@@ -1,14 +1,13 @@
-
 body {
-		background-image:url(../img/brushed_alu.png);
-		margin:0px;
+	background-image: url(../img/brushed_alu.png);
+	margin: 0px;
 }
 
 #residentInsert {
-	background:#fff;
-	width:920px;
-	padding:0 20px;
-	margin:auto;
+	background: #fff;
+	width: 920px;
+	padding: 0 20px;
+	margin: auto;
 }
 
 .PageHeader {
@@ -16,38 +15,50 @@ body {
 }
 
 .PageHeaderContent {
-	display:inline-block;
+	display: inline-block;
 }
 
 .MainToolbar {
-	background:#4f565a;
+	background: #4f565a;
 }
 
 .MainToolbarContent {
-    height: 100%;
-    margin: 0 auto;
-    width: 960px;
+	height: 100%;
+	margin: 0 auto;
+	width: 960px;
 }
 
 .PageFooter {
-	background:#8A9195;
-	min-height:200px;
+	background: #8A9195;
+	min-height: 200px;
+}
+
+.PageFooterContent {
+	height: 100%;
+	margin: 0 auto;
+	width: 960px;
 }
 
 .MyComunityTopLogo {
-	display:inline-block; 
-	margin-top: 5px; 
-	height:50px; 
-	width:60px;
-	background-image:url(../img/Header_Logo-myCommunity.png);
+	display: inline-block;
+	margin-top: 5px;
+	width: 60px;
+	height: 50px;
+	background-image: url(../img/Header_Logo-myCommunity.png);
 }
 
 .MyComunityTopLogoText {
-	display:inline-block; 
-	margin-top: 5px; 
-	height:44px; 
-	width:245px;
-	background-image:url(../img/Header_Logo-myCommunityLabel.png);
+	display: inline-block;
+	margin-top: 5px;
+	width: 245px;
+	height: 44px;
+	background-image: url(../img/Header_Logo-myCommunityLabel.png);
 }
 
-
+.MyComunityBottomLogo {
+	display: inline-block;
+	margin-top: 5px;
+	width: 114px;
+	height: 119px;
+	background-image: url(../img/Footer_Logo-myCommunity.png);
+}
