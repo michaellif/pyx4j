@@ -280,7 +280,7 @@ class PreauthorizedPaymentAgreementMananger {
         // lease last month check:
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
         if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
-            suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
+            suspend |= (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
         }
 
         if (suspend) {
@@ -315,7 +315,7 @@ class PreauthorizedPaymentAgreementMananger {
 
         // TODO : somehow calculate actual lease end date!?
         if (!lease.leaseTo().isNull()) {
-            suspend |= (before(lease.leaseTo(), nextCycle.billingCycleEndDate()));
+            suspend |= (beforeOrEqual(lease.leaseTo(), nextCycle.billingCycleEndDate()));
         }
 
         if (suspend) {
@@ -388,9 +388,9 @@ class PreauthorizedPaymentAgreementMananger {
         }
     }
 
-    private boolean before(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
+    private boolean beforeOrEqual(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
         if (!one.isNull() && !two.isNull()) {
-            return one.getValue().before(two.getValue());
+            return !one.getValue().after(two.getValue());
         }
         return false;
     }
