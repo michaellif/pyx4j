@@ -71,5 +71,25 @@ body {
 
 .MainMenu {
 	background: white;
-	margin: 10px 0 0 0;
+	border-radius: 4px 4px 4px 4px;
+}
+
+.MainMenuTab {
+	font-weight: bold;
+	height: 34px;
+	list-style: none outside none;
+	white-space: nowrap;
+}
+
+.content {
+	background: white;
+	border-radius: 4px 4px 4px 4px;
+	margin: 10px 0 20px 0;
+}
+
+.caption {
+	background: white;
+	border-radius: 4px 4px 4px 4px;
+	margin: 20px 0;
+	padding: 0 20px;
 }
