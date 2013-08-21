@@ -208,6 +208,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.MainNav
         folder.addNavigItem(new CrmSiteMap.Reports.Availability());
         folder.addNavigItem(new CrmSiteMap.Reports.CustomerCreditCheck());
         folder.addNavigItem(new CrmSiteMap.Reports.Eft());
+        folder.addNavigItem(new CrmSiteMap.Reports.EftVariance());
         folder.addNavigItem(new CrmSiteMap.Reports.ResidentInsurance());
 
         // TODO this is a temporary place for this view to be used only for development and experimentation

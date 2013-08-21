@@ -25,6 +25,7 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 
 public class CrmSiteMap implements SiteMap {
@@ -332,6 +333,12 @@ public class CrmSiteMap implements SiteMap {
         public static class Eft extends ReportsAppPlace<EftReportMetadata> {
             public Eft() {
                 super(EftReportMetadata.class);
+            }
+        }
+
+        public static class EftVariance extends ReportsAppPlace<EftVarianceReportMetadata> {
+            public EftVariance() {
+                super(EftVarianceReportMetadata.class);
             }
         }
 

@@ -223,6 +223,7 @@ import com.propertyvista.crm.client.activity.reports.AutoPayReviewUpdaterActivit
 import com.propertyvista.crm.client.activity.reports.AvailabilityReportActivity;
 import com.propertyvista.crm.client.activity.reports.CustomerCreditCheckReportActivity;
 import com.propertyvista.crm.client.activity.reports.EftReportActivity;
+import com.propertyvista.crm.client.activity.reports.EftVarianceReportActivity;
 import com.propertyvista.crm.client.activity.reports.ResidentInsuranceReportActivity;
 import com.propertyvista.crm.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.crm.client.activity.security.PasswordResetActivity;
@@ -241,6 +242,7 @@ import com.propertyvista.domain.reports.AutoPayChangesReportMetadata;
 import com.propertyvista.domain.reports.AvailabilityReportMetadata;
 import com.propertyvista.domain.reports.CustomerCreditCheckReportMetadata;
 import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 import com.propertyvista.domain.reports.ResidentInsuranceReportMetadata;
 import com.propertyvista.misc.VistaTODO;
 
@@ -1223,6 +1225,8 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new CustomerCreditCheckReportActivity((ReportsAppPlace<CustomerCreditCheckReportMetadata>) place);
                     } else if (place instanceof CrmSiteMap.Reports.Eft) {
                         activity = new EftReportActivity((ReportsAppPlace<EftReportMetadata>) place);
+                    } else if (place instanceof CrmSiteMap.Reports.EftVariance) {
+                        activity = new EftVarianceReportActivity((ReportsAppPlace<EftVarianceReportMetadata>) place);
                     } else if (place instanceof CrmSiteMap.Reports.ResidentInsurance) {
                         activity = new ResidentInsuranceReportActivity((ReportsAppPlace<ResidentInsuranceReportMetadata>) place);
                     } // CRUD APP PLACE IF ENDS HERE
