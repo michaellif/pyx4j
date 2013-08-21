@@ -14,8 +14,6 @@
 package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.util.Date;
-import java.util.EnumSet;
-import java.util.Set;
 
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -32,12 +30,10 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
-import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
-import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -60,14 +56,17 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
     private static final I18n i18n = I18n.get(CreditCardInfoEditor.class);
 
     // a hack for async creditCardNumber Validation
+    private boolean isCreditCardNumberCheckSent;
+
     private boolean isCreditCardNumberCheckRecieved;
 
-    private boolean isCreditCardNumberValid;
+    private ValidationError isCreditCardNumberValid;
 
-    private final CComboBox<CreditCardType> typeSelector = new CComboBox<CreditCardType>();
+    private final CPersonalIdentityField<CreditCardNumberIdentity> cardEditor;
 
     public CreditCardInfoEditor() {
         super(CreditCardInfo.class);
+        cardEditor = new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class, "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null);
     }
 
     @Override
@@ -77,14 +76,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn()), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 15, true).build());
-        panel.setWidget(
-                ++row,
-                0,
-                2,
-                new FormDecoratorBuilder(inject(proto().card(), new CPersonalIdentityField<CreditCardNumberIdentity>(CreditCardNumberIdentity.class,
-                        "X XXXX XXXX xxxx;XXXX XXXX XXXX xxxx", null)), 15, true).build());
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType()), 15, true).build());
 
+        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 15, true).build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15, true).build());
         panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().securityCode()), 3, true).build());
 
@@ -99,14 +93,12 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        typeSelector.setOptions(getAllowedCardTypes());
-
         updateVisibility(getValue());
     }
 
     private void updateVisibility(CreditCardInfo value) {
         if (isEditable()) {
-            get(proto().card()).setMandatory(false);
+            cardEditor.setMandatory(false);
             get(proto().securityCode()).setMandatory(false);
             ((CTextComponent<?, ?>) get(proto().securityCode())).setWatermark("XXX");
         }
@@ -123,37 +115,27 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             }
         });
 
-        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
+        cardEditor.addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
-                get(proto().card()).setMandatory(true);
+                cardEditor.setMandatory(true);
                 get(proto().securityCode()).setMandatory(true);
             }
         });
 
         // set up async validation for credit card number:
-        get(proto().card()).addValueChangeHandler(new ValueChangeHandler<CreditCardNumberIdentity>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<CreditCardNumberIdentity> event) {
-                if (event.getValue() != null) {
-                    isCreditCardNumberCheckRecieved = false;
-                    isCreditCardNumberValid = false;
-                    CreditCardInfoEditor.this.validateCreditCardNumberAsync(event.getValue());
-                }
-            }
-        });
-        get(proto().card()).addValueValidator(new EditableValueValidator<CreditCardNumberIdentity>() {
+        cardEditor.addValueValidator(new EditableValueValidator<CreditCardNumberIdentity>() {
             @Override
             public ValidationError isValid(CComponent<CreditCardNumberIdentity> component, CreditCardNumberIdentity value) {
                 if (value != null) {
                     if (isCreditCardNumberCheckRecieved) {
-                        if (isCreditCardNumberValid) {
-                            return null;
-                        } else {
-                            return new ValidationError(component, i18n.tr("Invalid Credit Card Number"));
-                        }
+                        isCreditCardNumberCheckRecieved = false;
+                        isCreditCardNumberCheckSent = false;
+                        return isCreditCardNumberValid;
+                    } else if (!isCreditCardNumberCheckSent) {
+                        return CreditCardInfoEditor.this.validateCreditCardNumberAsync(component, value);
                     } else {
-                        return new ValidationError(component, i18n.tr("Please wait, credit card number validation is in progress"));
+                        return new ValidationError(component, i18n.tr("Validation in progress"));
                     }
                 } else {
                     return null;
@@ -161,7 +143,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             }
         });
 
-        get(proto().card()).addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
+        cardEditor.addValueValidator(new CreditCardNumberTypeValidator(new CreditCardTypeProvider() {
             @Override
             public CreditCardType getCreditCardType() {
                 return (get(proto().cardType()).getValue() == null ? null : get(proto().cardType()).getValue());
@@ -171,9 +153,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
                 // imitate user input and revalidate
-                get(proto().card()).reset();
-                get(proto().card()).onEditingStop();
-                get(proto().card()).revalidate();
+                cardEditor.clear();
+                cardEditor.onEditingStop();
+                cardEditor.revalidate();
             }
         });
 
@@ -205,35 +187,36 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         }
     }
 
-    protected Set<CreditCardType> getAllowedCardTypes() {
-        return EnumSet.allOf(CreditCardType.class);
-    }
-
-    private void validateCreditCardNumberAsync(CreditCardNumberIdentity value) {
+    private ValidationError validateCreditCardNumberAsync(final CComponent<?> component, CreditCardNumberIdentity value) {
         if ((value != null) && CommonsStringUtils.isStringSet(value.newNumber().getValue())) {
             if (ValidationUtils.isCreditCardNumberValid(value.newNumber().getValue())) {
                 if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {
-                    setCreditCardNumberValidationResult(true);
+                    return null;
                 } else {
                     GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
                         @Override
                         public void onSuccess(Boolean result) {
-                            setCreditCardNumberValidationResult(result);
+                            setCreditCardNumberValidationResult(result ? null : new ValidationError(component, i18n.tr("Invalid Credit Card Number")));
                         }
-                    }, getValue());
+
+                        @Override
+                        public void onFailure(Throwable caught) {
+                            isCreditCardNumberCheckRecieved = true;
+                            super.onFailure(caught);
+                        }
+                    }, getValue().<CreditCardInfo> duplicate());
+                    isCreditCardNumberCheckSent = true;
+                    return new ValidationError(component, i18n.tr("Validation in progress"));
                 }
-            } else {
-                setCreditCardNumberValidationResult(false);
             }
-        } else {
-            setCreditCardNumberValidationResult(false);
         }
+        return new ValidationError(component, i18n.tr("Invalid Credit Card Number"));
     }
 
-    private void setCreditCardNumberValidationResult(boolean isValid) {
+    private void setCreditCardNumberValidationResult(ValidationError error) {
         isCreditCardNumberCheckRecieved = true;
-        isCreditCardNumberValid = isValid;
-        get(proto().card()).revalidate();
+        isCreditCardNumberValid = error;
+        cardEditor.revalidate();
     }
 
     private void devGenerateCreditCard() {
@@ -243,7 +226,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
         if (get(proto().cardType()).getValue() == null) {
             get(proto().cardType()).setValue(CreditCardType.Visa);
         }
-        ((CTextFieldBase<?, ?>) get(proto().card())).setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
+        cardEditor.setValueByString(CreditCardNumberGenerator.generateCardNumber(get(proto().cardType()).getValue()));
 
         LogicalDate nextMonth = new LogicalDate();
         TimeUtils.addDays(nextMonth, 31);
