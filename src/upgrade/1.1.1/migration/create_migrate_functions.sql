@@ -105,8 +105,8 @@ BEGIN
         
         ALTER TABLE auto_pay_change_policy RENAME TO auto_pay_policy;
         
-        ALTER TABLE auto_pay_policy     ADD COLUMN allow_first_billing_period_charge BOOLEAN,
-                                        ADD COLUMN allow_last_billing_period_charge BOOLEAN;
+        ALTER TABLE auto_pay_policy     ADD COLUMN exclude_first_billing_period_charge BOOLEAN,
+                                        ADD COLUMN exclude_last_billing_period_charge BOOLEAN;
                                         
         ALTER TABLE auto_pay_policy RENAME COLUMN rule TO on_lease_charge_change_rule; 
                                                 
@@ -409,13 +409,27 @@ BEGIN
         -- auto_pay_policy
         
         EXECUTE 'UPDATE '||v_schema_name||'.auto_pay_policy '
-                ||'SET  allow_first_billing_period_charge = FALSE,'
-                ||'     allow_last_billing_period_charge = TRUE ';
+                ||'SET  exclude_first_billing_period_charge = FALSE,'
+                ||'     exclude_last_billing_period_charge = TRUE ';
        
+        
+        -- customer
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer '
                 ||'SET  registered_in_portal = FALSE '
-                ||'WHERE registered_in_portal IS NULL';               
+                ||'WHERE registered_in_portal IS NULL';        
+                
+                
+        -- email_template  
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.email_template (id,policy,order_in_policy,subject,use_header,use_footer,content,template_type) '
+                ||'(SELECT      nextval(''public.email_template_seq'') AS id, ep.id AS policy, t.order_in_policy, t.subject, '
+                ||'             t.use_header,t.use_footer,t.content,t.template_type '
+                ||'FROM         '||v_schema_name||'.email_templates_policy ep, '
+                ||'             _dba_.email_template t '
+                ||'ORDER BY     t.order_in_policy )';   
+                
+        SET CONSTRAINTS email_template_policy_fk IMMEDIATE;              
         
         -- emergency_contact
         EXECUTE 'UPDATE '||v_schema_name||'.emergency_contact '
@@ -551,6 +565,12 @@ BEGIN
                                         DROP COLUMN billing_address_street_number_suffix,
                                         DROP COLUMN billing_address_street_type,
                                         DROP COLUMN billing_address_suite_number;
+                                        
+        -- payment_type_selection_policy
+        
+        ALTER TABLE payment_type_selection_policy       DROP COLUMN accepted_credit_card,
+                                                        DROP COLUMN cash_equivalent_credit_card,
+                                                        DROP COLUMN resident_portal_credit_card;
         
           
         -- portal_preferences

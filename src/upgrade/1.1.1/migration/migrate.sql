@@ -16,6 +16,10 @@
 -- _admin_ schema migration 
 \i migrate_admin_schema.sql;
 
+
+-- 1.1.1 migration only - extra table in _dba_.email_templates
+\i email_templates.sql
+
 -- _expiring_ schema migration 
 --\i migrate_expiring_schema.sql;
 
@@ -263,4 +267,6 @@ COMMIT;
 
 
 DROP FUNCTION _dba_.migrate_pmc_111(text);
+
+DROP TABLE _dba_.email_template; 
 
