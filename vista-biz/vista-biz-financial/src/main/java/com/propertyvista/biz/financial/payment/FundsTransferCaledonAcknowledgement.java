@@ -88,7 +88,7 @@ class FundsTransferCaledonAcknowledgement {
             markAcknowledgedReceived(padFile);
 
             executionMonitor.setMessage("All Accepted");
-            executionMonitor.addProcessedEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
+            executionMonitor.addInfoEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
         } else if (EnumSet.of(FileAcknowledgmentStatus.BatchAndTransactionReject, FileAcknowledgmentStatus.TransactionReject,
                 FileAcknowledgmentStatus.BatchLevelReject).contains(padFile.acknowledgmentStatus().getValue())) {
             assertAcknowledgedValues(padFile, ackFile);
@@ -99,7 +99,7 @@ class FundsTransferCaledonAcknowledgement {
 
             markAcknowledgedReceived(padFile);
 
-            executionMonitor.addProcessedEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
+            executionMonitor.addInfoEvent("fileStatus", padFile.acknowledgmentStatusCode().getValue());
         } else {
             padFile.status().setValue(PadFile.PadFileStatus.Invalid);
             Persistence.service().merge(padFile);
@@ -150,6 +150,7 @@ class FundsTransferCaledonAcknowledgement {
 
             Persistence.ensureRetrieve(padBatch.pmc(), AttachLevel.Attached);
 
+            executionMonitor.setExcludedSectionsFromTotals("Batch Rejected", true);
             executionMonitor.addFailedEvent("Batch Rejected", padBatch.batchAmount().getValue(),
                     SimpleMessageFormat.format("PMC {0}, Mid {1}", padBatch.pmc(), padBatch.merchantTerminalId()));
         }
@@ -199,7 +200,11 @@ class FundsTransferCaledonAcknowledgement {
             criteria.isNull(criteria.proto().processingStatus());
             for (PadDebitRecord padDebitRecord : Persistence.service().query(criteria)) {
                 padDebitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgedReceived);
-                executionMonitor.addProcessedEvent("Record Acknowledged", padDebitRecord.amount().getValue());
+                if (padDebitRecord.padBatch().acknowledgmentStatusCode().isNull()) {
+                    executionMonitor.addProcessedEvent("Record Acknowledged", padDebitRecord.amount().getValue());
+                } else {
+                    executionMonitor.addFailedEvent("Record Acknowledged", padDebitRecord.amount().getValue());
+                }
                 Persistence.service().persist(padDebitRecord);
             }
         }
@@ -210,7 +215,7 @@ class FundsTransferCaledonAcknowledgement {
             criteria.isNull(criteria.proto().processingStatus());
             for (PadBatch padBatch : Persistence.service().query(criteria)) {
                 padBatch.processingStatus().setValue(PadBatchProcessingStatus.AcknowledgedReceived);
-                executionMonitor.addProcessedEvent("Batch Acknowledged");
+                executionMonitor.addInfoEvent("Batch Acknowledged", null, padBatch.batchAmount().getValue());
                 Persistence.service().persist(padBatch);
             }
         }
