@@ -104,6 +104,23 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             getValue().obfuscatedNumber().setValue(null);
         }
         super.onEditingStop();
+        getValue();
+    }
+
+    @Override
+    protected T getEditorValue() throws ParseException {
+        T value;
+        try {
+            value = super.getEditorValue();
+        } catch (Throwable e) {
+            clear();
+            value = getValue();
+        }
+        return value;
+    }
+
+    public void clear() {
+        getWidget().getEditor().setText("");
     }
 
     public void postprocess() {
