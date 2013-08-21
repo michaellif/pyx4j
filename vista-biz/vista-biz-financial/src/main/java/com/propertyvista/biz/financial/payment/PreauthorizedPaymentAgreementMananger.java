@@ -280,7 +280,8 @@ class PreauthorizedPaymentAgreementMananger {
         // lease last month check:
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
         if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
-            suspend |= (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
+            suspend |= (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
+                    nextCycle.billingCycleEndDate()));
         }
 
         if (suspend) {
@@ -336,6 +337,9 @@ class PreauthorizedPaymentAgreementMananger {
         try {
             while (i.hasNext()) {
                 BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(i.next());
+                if (!forDate.before(nextCycle.targetPadGenerationDate().getValue())) {
+                    nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(nextCycle);
+                }
 
                 EntityQueryCriteria<BillingAccount> criteria1 = EntityQueryCriteria.create(BillingAccount.class);
                 criteria1.eq(criteria1.proto().lease().unit().building(), nextCycle.building());
