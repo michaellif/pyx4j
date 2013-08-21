@@ -220,7 +220,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
         panel.setHR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().addThisPaymentMethodToProfile()), 5).labelWidth(20).build());
 
         // tweaks:
         paymentMethodEditor.addTypeSelectionValueChangeHandler(new ValueChangeHandler<PaymentType>() {
@@ -307,16 +307,19 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
             case CreditCard:
                 get(proto().addThisPaymentMethodToProfile()).setValue(true);
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(true);
+                get(proto().addThisPaymentMethodToProfile()).setVisible(true);
                 break;
 
             case Echeck:
                 get(proto().addThisPaymentMethodToProfile()).setValue(true);
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                get(proto().addThisPaymentMethodToProfile()).setVisible(true);
                 break;
 
             default:
                 get(proto().addThisPaymentMethodToProfile()).setValue(false);
                 get(proto().addThisPaymentMethodToProfile()).setEnabled(false);
+                get(proto().addThisPaymentMethodToProfile()).setVisible(false);
                 break;
             }
         }
