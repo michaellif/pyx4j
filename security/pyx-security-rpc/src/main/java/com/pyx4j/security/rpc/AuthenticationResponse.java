@@ -52,6 +52,8 @@ public class AuthenticationResponse implements Serializable {
 
     private SystemWallMessage systemWallMessage;
 
+    private String enviromentName;
+
     private String googleAnalyticsKey;
 
     public AuthenticationResponse() {
@@ -152,6 +154,14 @@ public class AuthenticationResponse implements Serializable {
 
     public void setSystemWallMessage(SystemWallMessage systemWallMessage) {
         this.systemWallMessage = systemWallMessage;
+    }
+
+    public String getEnviromentName() {
+        return enviromentName;
+    }
+
+    public void setEnviromentName(String enviromentName) {
+        this.enviromentName = enviromentName;
     }
 
     public String getGoogleAnalyticsKey() {

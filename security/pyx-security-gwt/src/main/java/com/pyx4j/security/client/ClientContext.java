@@ -107,6 +107,8 @@ public class ClientContext {
 
     private static SystemWallMessage systemWallMessage;
 
+    private static String enviromentName;
+
     static {
         RPCManager.addSystemNotificationHandler(new SystemNotificationHandler() {
             @Override
@@ -208,6 +210,10 @@ public class ClientContext {
         return systemWallMessage;
     }
 
+    public static String getEnviromentName() {
+        return enviromentName;
+    }
+
     public static HandlerRegistration addContextChangeHandler(ContextChangeHandler handler) {
         return ClientEventBus.addHandler(ContextChangeEvent.TYPE, handler);
     }
@@ -259,6 +265,7 @@ public class ClientContext {
                 RPCManager.enableAppEngineUsageStats();
             }
             systemWallMessage = authenticationResponse.getSystemWallMessage();
+            enviromentName = authenticationResponse.getEnviromentName();
             googleAnalyticsKey = authenticationResponse.getGoogleAnalyticsKey();
         } finally {
             authenticationChanging = false;
