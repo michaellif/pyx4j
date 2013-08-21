@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
+import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.reports.EftVarianceReportMetadata;
 
 public class EftVarianceReportSettingsForm extends CEntityDecoratableForm<EftVarianceReportMetadata> {
@@ -29,6 +30,8 @@ public class EftVarianceReportSettingsForm extends CEntityDecoratableForm<EftVar
     @Override
     public IsWidget createContent() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        int row = -1;
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).build());
         return panel;
     }
 

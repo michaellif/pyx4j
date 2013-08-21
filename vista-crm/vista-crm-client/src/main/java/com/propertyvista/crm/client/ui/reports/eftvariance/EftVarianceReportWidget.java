@@ -78,19 +78,16 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
 
         SafeHtmlBuilder builder = new SafeHtmlBuilder();
 
-        int totalWidth = 800;
-        builder.appendHtmlConstant("<table style=\"display: inline-block; position: absolute; left: 0px; width: " + totalWidth
-                + "px; top: 31px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border=\"0\">");
-
         int[] VERY_SHORT_COLUMN_WIDTHS = new int[] { 1200, 80, 60 };
         int[] SHORT_COLUMN_WIDTHS = new int[] { 1200, 100, 80 };
-        int[] LONG_COLUMN_WIDTHS = new int[] { 1200, 150, 100 };
+        int[] LONG_COLUMN_WIDTHS = new int[] { 1200, 200, 150 };
+        int[] VERY_LONG_COLUMN_WIDTHS = new int[] { 1200, 400, 350 };
         List<Column> columns = Arrays.asList(//@formatter:off
                         new Column(i18n.tr("Building"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Unit"), null, VERY_SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Lease ID"), null, SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Tenant Name"), null, LONG_COLUMN_WIDTHS),
-                        new Column(i18n.tr("Bank Account No"), null, LONG_COLUMN_WIDTHS),
+                        new Column(i18n.tr("Bank Account No"), null, VERY_LONG_COLUMN_WIDTHS),
 
                         new Column(i18n.tr("Total EFT"), null, SHORT_COLUMN_WIDTHS),
                         new Column(i18n.tr("Charges"), null, SHORT_COLUMN_WIDTHS),
@@ -101,6 +98,8 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
         for (Column c : columns) {
             tableWidth += c.getEffectiveWidth();
         }
+        builder.appendHtmlConstant("<table style=\"display: inline-block; position: absolute; left: 0px; width: " + tableWidth
+                + "px; top: 31px; bottom: 0px; border-collapse: separate; border-spacing: 0px;\" border=\"0\">");
 
         builder.appendHtmlConstant("<thead class=\"" + CommonReportStyles.RReportTableFixedHeader.name() + "\">");
         builder.appendHtmlConstant("<tr>");
@@ -161,7 +160,7 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
             // totals:
             builder.appendHtmlConstant("<tr>");
             builder.appendHtmlConstant("<td colspan='2'></td>");
-            builder.appendHtmlConstant("<td colspan='3' style='text-align:right;' class='" + CommonReportStyles.RRowTotal.name() + "'>");
+            builder.appendHtmlConstant("<td colspan='3' style='text-align:left;' class='" + CommonReportStyles.RRowTotal.name() + "'>");
             builder.appendEscaped(i18n.tr("Total for lease:"));
             builder.appendHtmlConstant("</td>");
             builder.appendHtmlConstant("<td class='" + CommonReportStyles.RCellNumber.name() + " " + CommonReportStyles.RRowTotal.name() + "'>");
