@@ -197,7 +197,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         if (activePaps.size() == 0) {
-            return;
+            return; // nothing to do!..
         }
 
         // Verify that new charges not added
@@ -211,8 +211,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         if (previousVersion == null) {
-            // LeaseLifecycleSimulator or preload
-            return;
+            return; // LeaseLifecycleSimulator or preload
         }
 
         boolean suspend = false;
@@ -273,7 +272,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         if (activePaps.size() == 0) {
-            return;
+            return; // nothing to do!..
         }
 
         boolean suspend = false;
@@ -284,7 +283,41 @@ class PreauthorizedPaymentAgreementMananger {
             suspend |= (before(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || before(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
         }
 
-        // Suspend all or update all
+        if (suspend) {
+            for (PreauthorizedPayment pap : activePaps) {
+                suspendPreauthorizedPayment(pap, true);
+            }
+
+            ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
+        }
+    }
+
+    public void updatePreauthorizedPaymentsByLeaseEnd(Lease lease) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        List<PreauthorizedPayment> activePaps;
+        {
+            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+            {
+                OrCriterion or = criteria.or();
+                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
+                or.left().isNull(criteria.proto().expiring());
+            }
+            criteria.in(criteria.proto().tenant().lease(), lease);
+            activePaps = Persistence.service().query(criteria);
+        }
+
+        if (activePaps.size() == 0) {
+            return; // nothing to do!..
+        }
+
+        boolean suspend = false;
+
+        // TODO : somehow calculate actual lease end date!?
+        if (!lease.leaseTo().isNull()) {
+            suspend |= (before(lease.leaseTo(), nextCycle.billingCycleEndDate()));
+        }
+
         if (suspend) {
             for (PreauthorizedPayment pap : activePaps) {
                 suspendPreauthorizedPayment(pap, true);
