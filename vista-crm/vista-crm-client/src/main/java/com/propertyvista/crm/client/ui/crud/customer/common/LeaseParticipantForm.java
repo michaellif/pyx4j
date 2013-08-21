@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.Vector;
 
 import com.google.gwt.core.shared.GWT;
@@ -55,6 +56,7 @@ import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.client.ui.crud.lease.common.CLeaseTermVHyperlink;
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.policies.domain.IdAssignmentItem.IdTarget;
 import com.propertyvista.domain.tenant.CustomerPicture;
@@ -225,6 +227,11 @@ public class LeaseParticipantForm<P extends LeaseParticipantDTO<?>> extends CrmE
             @Override
             public String getNameOn() {
                 return LeaseParticipantForm.this.getValue().customer().person().name().getStringView();
+            }
+
+            @Override
+            protected Set<CreditCardType> getAllowedCardTypes() {
+                return LeaseParticipantForm.this.getValue().allowedCardTypes().getValue();
             }
 
             @Override

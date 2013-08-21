@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.forms;
 
-import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -96,7 +96,7 @@ public class TenantSurePaymentMethodForm extends PaymentMethodForm<InsurancePaym
     }
 
     @Override
-    public Collection<PaymentType> defaultPaymentTypes() {
+    public Set<PaymentType> defaultPaymentTypes() {
         return EnumSet.of(PaymentType.CreditCard);
     }
 

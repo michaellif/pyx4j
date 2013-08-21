@@ -14,6 +14,7 @@
 package com.propertyvista.crm.client.ui.crud.customer.common;
 
 import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Command;
@@ -36,6 +37,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -133,12 +135,19 @@ public abstract class PaymentMethodFolder extends VistaBoxFolder<LeasePaymentMet
         }
 
         @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return PaymentMethodFolder.this.getAllowedCardTypes();
+        };
+
+        @Override
         protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {
             PaymentMethodFolder.this.onBillingAddressSameAsCurrentOne(set, comp);
         }
     }
 
     protected abstract String getNameOn();
+
+    protected abstract Set<CreditCardType> getAllowedCardTypes();
 
     protected abstract void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp);
 

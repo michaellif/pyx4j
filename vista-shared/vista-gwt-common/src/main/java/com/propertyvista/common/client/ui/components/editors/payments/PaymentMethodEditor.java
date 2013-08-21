@@ -15,6 +15,7 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -43,6 +44,7 @@ import com.propertyvista.domain.payment.AbstractPaymentMethod;
 import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentDetails;
@@ -269,7 +271,12 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     }
 
     protected CEntityForm<?> createCreditCardInfoEditor() {
-        return new CreditCardInfoEditor();
+        return new CreditCardInfoEditor() {
+            @Override
+            protected Set<CreditCardType> getAllowedCardTypes() {
+                return PaymentMethodEditor.this.getAllowedCardTypes();
+            }
+        };
     }
 
     protected CEntityForm<?> createInteracInfoEditor() {
@@ -349,7 +356,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
     /**
      * Override in derived classes to supply alternative set of options.
      */
-    public Collection<PaymentType> defaultPaymentTypes() {
+    public Set<PaymentType> defaultPaymentTypes() {
         return EnumSet.allOf(PaymentType.class);
     }
 
@@ -368,6 +375,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
             this.setPaymentTypesEnabled(PaymentType.electronicPayments(), false);
             (get(proto().type())).setNote(i18n.tr("Warning: Building has not been set up to process electronic payments yet"), NoteStyle.Warn);
         }
+    }
+
+    protected Set<CreditCardType> getAllowedCardTypes() {
+        return EnumSet.allOf(CreditCardType.class);
     }
 
     protected void onBillingAddressSameAsCurrentOne(boolean set, CComponent<AddressSimple> comp) {

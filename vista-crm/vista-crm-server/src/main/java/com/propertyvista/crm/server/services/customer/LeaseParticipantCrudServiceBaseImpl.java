@@ -70,6 +70,9 @@ public abstract class LeaseParticipantCrudServiceBaseImpl<DBO extends LeaseParti
             }
         }
 
+        dto.allowedCardTypes().setCollectionValue(
+                ServerSideFactory.create(PaymentFacade.class).getAllowedCardTypes(dto.lease().billingAccount(), VistaApplication.crm));
+
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(dto.leaseTermV().holder()));
 
         Persistence.service().retrieve(dto.customer().pictures());

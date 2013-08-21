@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
-import java.util.Collection;
+import java.util.Set;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -32,7 +32,7 @@ public class EditPaymentMethodViewImpl extends EditImpl<LeasePaymentMethod> impl
     public EditPaymentMethodViewImpl() {
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
             @Override
-            public Collection<PaymentType> defaultPaymentTypes() {
+            public Set<PaymentType> defaultPaymentTypes() {
                 return PortalPaymentTypesUtil.getAllowedPaymentTypes();
             }
 

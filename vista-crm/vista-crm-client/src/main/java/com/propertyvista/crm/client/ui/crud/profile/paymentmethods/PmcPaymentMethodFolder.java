@@ -13,8 +13,8 @@
  */
 package com.propertyvista.crm.client.ui.crud.profile.paymentmethods;
 
-import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -53,7 +53,7 @@ public class PmcPaymentMethodFolder extends VistaBoxFolder<PmcPaymentMethod> {
         }
 
         @Override
-        public Collection<PaymentType> defaultPaymentTypes() {
+        public Set<PaymentType> defaultPaymentTypes() {
             return EnumSet.of(PaymentType.CreditCard);
         }
 

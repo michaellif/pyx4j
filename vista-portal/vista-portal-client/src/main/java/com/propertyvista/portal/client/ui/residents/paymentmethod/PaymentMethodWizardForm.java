@@ -13,7 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
-import java.util.Collection;
+import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
@@ -59,7 +59,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
 
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public Collection<PaymentType> defaultPaymentTypes() {
+        public Set<PaymentType> defaultPaymentTypes() {
             return PortalPaymentTypesUtil.getAllowedPaymentTypes();
         }
 

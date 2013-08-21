@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents.payment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EnumSet;
+import java.util.Set;
 
 import com.pyx4j.security.shared.SecurityController;
 
@@ -47,9 +48,9 @@ public class PortalPaymentTypesUtil {
 
     }
 
-    public static Collection<PaymentType> getAllowedPaymentTypes() {
+    public static Set<PaymentType> getAllowedPaymentTypes() {
         // set allowed for the lease payments types selection:
-        ArrayList<PaymentType> allowedTypes = new ArrayList<PaymentType>();
+        Set<PaymentType> allowedTypes = EnumSet.noneOf(PaymentType.class);
 
         for (VistaCustomerPaymentTypeBehavior behavior : VistaCustomerPaymentTypeBehavior.values()) {
             if (SecurityController.checkBehavior(behavior)) {
@@ -73,7 +74,7 @@ public class PortalPaymentTypesUtil {
     }
 
     public static boolean isPreauthorizedPaumentAllowed() {
-        Collection<PaymentType> available = getAllowedPaymentTypes();
+        Set<PaymentType> available = getAllowedPaymentTypes();
         available.retainAll(EnumSet.of(PaymentType.Echeck, PaymentType.CreditCard));
         return !available.isEmpty();
     }

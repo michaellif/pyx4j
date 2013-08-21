@@ -14,8 +14,8 @@
 package com.propertyvista.crm.client.ui.crud.billing.payment;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -60,6 +60,7 @@ import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressSimple;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -85,9 +86,14 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
 
     private final PaymentMethodEditor<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodEditor<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
-        public Collection<PaymentType> defaultPaymentTypes() {
+        public Set<PaymentType> defaultPaymentTypes() {
             return PaymentType.avalableInCrm();
         }
+
+        @Override
+        protected Set<CreditCardType> getAllowedCardTypes() {
+            return PaymentForm.this.getValue().allowedCardTypes().getValue();
+        };
 
         @Override
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
@@ -102,7 +108,6 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
             } else {
                 comp.setValue(EntityFactory.create(AddressSimple.class), false);
             }
-
         }
 
         @Override
