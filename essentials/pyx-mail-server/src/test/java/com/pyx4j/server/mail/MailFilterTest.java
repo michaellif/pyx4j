@@ -38,8 +38,13 @@ public class MailFilterTest {
     public void testFilterDestinations() throws AddressException {
         MailMessage m = new MailMessage();
         m.addToList("bob@gmail.com,dan@hotmail.com,vlad@pyx4j.com");
-        List<InternetAddress> address = filterDestinations("pyx4j.com", emails(m.getTo()));
+        List<InternetAddress> address1 = filterDestinations("pyx4j.com", emails(m.getTo()));
+        Assert.assertEquals("only one selected", 1, address1.size());
 
-        Assert.assertEquals("only one selected", 1, address.size());
+        List<InternetAddress> address2 = filterDestinations("pyx4j.com;hotmail.com", emails(m.getTo()));
+        Assert.assertEquals("two selected", 2, address2.size());
+
+        address2 = filterDestinations("pyx4j.com;gmail.com", emails(m.getTo()));
+        Assert.assertEquals("two selected", 2, address2.size());
     }
 }
