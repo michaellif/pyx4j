@@ -16,12 +16,17 @@ package com.propertyvista.operations.server.services;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.rpc.EntitySearchResult;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.entity.shared.criterion.EntityListCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.utils.EntityDiff;
 
+import com.propertyvista.biz.system.AuditFacade;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxFee;
 import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
@@ -33,7 +38,7 @@ import com.propertyvista.operations.rpc.services.Vista2PmcService;
 public class Vista2PmcServiceImpl implements Vista2PmcService {
 
     @Override
-    public void retrieve(AsyncCallback<VistaSystemDefaultsDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget ) {
+    public void retrieve(AsyncCallback<VistaSystemDefaultsDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
         VistaSystemDefaultsDTO dto = EntityFactory.create(VistaSystemDefaultsDTO.class);
 
         dto.paymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
@@ -47,13 +52,29 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
 
     @Override
     public void save(AsyncCallback<Key> callback, VistaSystemDefaultsDTO dto) {
+        auditChanges(dto.paymentFees(), Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)), dto.paymentFees().updated());
         Persistence.service().merge(dto.paymentFees());
+
+        auditChanges(dto.equifaxFees(), Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxFee.class)), dto.equifaxFees().updated());
         Persistence.service().merge(dto.equifaxFees());
+
         Persistence.service().merge(dto.equifaxLimit());
+
+        auditChanges(dto.vistaMerchantAccount(), Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class)));
         Persistence.service().merge(dto.vistaMerchantAccount());
+
+        auditChanges(dto.tenantSureMerchantAccount(), Persistence.service().retrieve(EntityQueryCriteria.create(TenantSureMerchantAccount.class)));
         Persistence.service().merge(dto.tenantSureMerchantAccount());
+
         Persistence.service().commit();
         callback.onSuccess(new Key(-1));
+    }
+
+    private void auditChanges(IEntity entityOrid, IEntity entityNew, IObject<?>... ignoreMembers) {
+        String changes = EntityDiff.getChanges(entityOrid, entityNew, ignoreMembers);
+        if (changes.length() > 0) {
+            ServerSideFactory.create(AuditFacade.class).updated(entityNew, changes);
+        }
     }
 
     @Override

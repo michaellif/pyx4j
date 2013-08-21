@@ -14,12 +14,14 @@
 package com.propertyvista.domain.pmc.fee;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import com.pyx4j.entity.annotations.AbstractEntity;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.MemberColumn;
+import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -76,4 +78,7 @@ public interface AbstractPaymentFees extends IEntity {
     //Not implemented
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> interacVisaFee();
+
+    @Timestamp(Timestamp.Update.Updated)
+    IPrimitive<Date> updated();
 }
