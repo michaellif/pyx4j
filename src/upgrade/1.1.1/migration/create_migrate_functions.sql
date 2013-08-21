@@ -446,7 +446,36 @@ BEGIN
         EXECUTE 'UPDATE '||v_schema_name||'.insurance_certificate '
                 ||'SET  payment_schedule = ''Monthly'' '
                 ||'WHERE        id_discriminator = ''InsuranceTenantSure'' ';
+        
+        
+        -- maintenance_request_category 
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request_category  AS m '
+                ||'SET  root = r.id '
+                ||'FROM (SELECT id FROM '||v_schema_name||'.maintenance_request_category '
+                ||'     WHERE name = ''ROOT'') AS r '
+                ||'WHERE m.id != r.id ';
                 
+        
+        -- maintenance_request_metadata
+        
+        EXECUTE 'INSERT INTO '||v_schema_name||'.maintenance_request_metadata (id,root_category) '
+                ||'(SELECT nextval(''public.maintenance_request_metadata_seq'') AS id, id AS root_category '
+                ||'FROM '||v_schema_name||'.maintenance_request_category '
+                ||'WHERE name = ''ROOT'') ';
+                
+                
+        -- maintenance_request_priority
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request_priority AS p '
+                ||'SET  meta = m.id '
+                ||'FROM '||v_schema_name||'.maintenance_request_metadata AS m ';
+
+       -- maintenance_request_status
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.maintenance_request_status AS s '
+                ||'SET  meta = m.id '
+                ||'FROM '||v_schema_name||'.maintenance_request_metadata AS m ';      
         
         -- nsf_fee_item
         
@@ -646,8 +675,8 @@ BEGIN
         -- not null
         
         ALTER TABLE aggregated_transfer ALTER COLUMN funds_transfer_type SET NOT NULL;
-        -- ALTER TABLE maintenance_request_priority ALTER COLUMN meta SET NOT NULL;
-        -- ALTER TABLE maintenance_request_status ALTER COLUMN meta SET NOT NULL;
+        ALTER TABLE maintenance_request_priority ALTER COLUMN meta SET NOT NULL;
+        ALTER TABLE maintenance_request_status ALTER COLUMN meta SET NOT NULL;
        
         /**
         ***     ====================================================================================================
