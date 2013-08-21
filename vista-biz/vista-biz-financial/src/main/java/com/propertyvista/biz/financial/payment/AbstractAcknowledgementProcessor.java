@@ -135,7 +135,7 @@ abstract class AbstractAcknowledgementProcessor {
             }
         });
 
-        executionMonitor.addFailedEvent("Funds Transfer Batch Rejected", padBatch.batchAmount().getValue());
+        executionMonitor.addFailedEvent("Funds Transfer Batch Rejected", padBatch.batchAmount().getValue(), padBatch.merchantTerminalId().getStringView());
     }
 
     private void processPadBatchRecords(final PadBatch padBatch) {

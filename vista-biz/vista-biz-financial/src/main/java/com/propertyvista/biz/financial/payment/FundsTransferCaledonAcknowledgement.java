@@ -15,8 +15,10 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.EnumSet;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -146,7 +148,10 @@ class FundsTransferCaledonAcknowledgement {
             padBatch.acknowledgmentStatusCode().setValue(akBatch.acknowledgmentStatusCode().getValue());
             Persistence.service().merge(padBatch);
 
-            executionMonitor.addFailedEvent("Batch Rejected", padBatch.batchAmount().getValue());
+            Persistence.ensureRetrieve(padBatch.pmc(), AttachLevel.Attached);
+
+            executionMonitor.addFailedEvent("Batch Rejected", padBatch.batchAmount().getValue(),
+                    SimpleMessageFormat.format("PMC {0}, Mid {1}", padBatch.pmc(), padBatch.merchantTerminalId()));
         }
     }
 
