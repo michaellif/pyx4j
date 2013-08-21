@@ -25,7 +25,6 @@ import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.ComplexPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.css.IStyleDependent;
@@ -49,16 +48,11 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
 
     private final NavigTabList tabsHolder;
 
-    private final VerticalPanel menuContainer;
-
     public NavigViewImpl() {
         setStyleName(DEFAULT_STYLE_PREFIX);
         setSize("100%", "100%");
-        menuContainer = new VerticalPanel();
-        menuContainer.setSize("100%", "100%");
         tabsHolder = new NavigTabList();
-        menuContainer.add(tabsHolder);
-        setWidget(menuContainer);
+        setWidget(tabsHolder);
     }
 
     @Override
@@ -73,7 +67,7 @@ public class NavigViewImpl extends SimplePanel implements NavigView {
             NavigTab navigTab = new NavigTab(item, DEFAULT_STYLE_PREFIX);
             tabsHolder.add(navigTab);
 
-            AppPlace currentPlace = (AppPlace) presenter.getWhere();
+            AppPlace currentPlace = presenter.getWhere();
             if (item.equals(currentPlace)) {
                 navigTab.select();
             }

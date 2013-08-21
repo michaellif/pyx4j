@@ -73,11 +73,20 @@ body {
 	border-radius: 4px 4px 4px 4px;
 }
 
+.MainMenuHolder {
+	display: inline-block;
+	margin: 0;
+}
+
 .MainMenuTab {
 	font-weight: bold;
 	height: 34px;
 	list-style: none outside none;
 	white-space: nowrap;
+}
+
+.MainMenuTab {
+	line-height: 2em;
 }
 
 .content {
