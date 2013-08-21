@@ -11,12 +11,11 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopay;
+package com.propertyvista.crm.client.ui.reports;
 
 import com.google.gwt.user.client.Window;
 
-
-class Column {
+public class Column {
 
     public final String name;
 

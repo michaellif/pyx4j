@@ -11,9 +11,9 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports.autopay;
+package com.propertyvista.crm.client.ui.reports;
 
-class ColumnGroup {
+public class ColumnGroup {
 
     public final String groupTitle;
 

@@ -15,6 +15,7 @@ package com.propertyvista.crm.rpc.dto.reports;
 
 import java.math.BigDecimal;
 
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -22,9 +23,12 @@ import com.pyx4j.entity.shared.IPrimitive;
 @Transient
 public interface EftVarianceReportRecordLeaseTotalsDTO extends IEntity {
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> totalEft();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> charges();
 
+    @Format("#,##0.00")
     IPrimitive<BigDecimal> difference();
 }

@@ -38,6 +38,8 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.ui.reports.ReportWidget;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.crm.client.ui.reports.Column;
+import com.propertyvista.crm.client.ui.reports.ColumnGroup;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
