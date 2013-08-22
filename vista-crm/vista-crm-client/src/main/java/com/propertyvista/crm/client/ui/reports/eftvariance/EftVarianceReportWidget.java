@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
@@ -34,7 +35,9 @@ import com.google.gwt.user.client.ui.HTML;
 
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppPlaceEntityMapper;
 import com.pyx4j.site.client.ui.reports.ReportWidget;
+import com.pyx4j.site.rpc.AppPlaceInfo;
 
 import com.propertyvista.crm.client.ui.reports.Column;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
@@ -42,6 +45,7 @@ import com.propertyvista.crm.client.ui.reports.NoResultsHtml;
 import com.propertyvista.crm.client.ui.reports.ScrollBarPositionMemento;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDetailsDTO;
+import com.propertyvista.domain.tenant.lease.Lease;
 
 public class EftVarianceReportWidget extends Composite implements ReportWidget {
 
@@ -146,7 +150,12 @@ public class EftVarianceReportWidget extends Composite implements ReportWidget {
             builder.appendHtmlConstant("</td>");
 
             builder.appendHtmlConstant("<td style='width: " + columns.get(2).getEffectiveWidth() + "px;'>");
+
+            builder.appendHtmlConstant("<a href='"
+                    + AppPlaceInfo.absoluteUrl(GWT.getModuleBaseURL(), false, AppPlaceEntityMapper.resolvePlace(Lease.class, record.leaseId_().getPrimaryKey()))
+                    + "'>");
             builder.appendEscaped(record.leaseId().getValue());
+            builder.appendHtmlConstant("</a>");
             builder.appendHtmlConstant("</td>");
 
             boolean isFirstLine = true;
