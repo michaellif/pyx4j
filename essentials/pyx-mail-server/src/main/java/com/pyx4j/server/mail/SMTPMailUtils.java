@@ -29,7 +29,12 @@ import java.util.Vector;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 class SMTPMailUtils {
+
+    private final static Logger log = LoggerFactory.getLogger(SMTPMailUtils.class);
 
     static InternetAddress email(String email) throws AddressException {
         if (email == null) {
@@ -97,6 +102,8 @@ class SMTPMailUtils {
         for (InternetAddress a : list) {
             if (allowDestinations(emailFilter, a.getAddress())) {
                 r.add(a);
+            } else {
+                log.warn("Destinations email {} not allowed by configuration {}", a.getAddress(), emailFilter);
             }
         }
         return r;

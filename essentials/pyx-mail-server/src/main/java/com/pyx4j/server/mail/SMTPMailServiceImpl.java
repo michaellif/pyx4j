@@ -144,6 +144,7 @@ class SMTPMailServiceImpl implements IMailService {
             }
 
             if (isEmptyList(address) && SMTPMailUtils.isEmptyList(recipientsCc) && isEmptyList(recipientsBcc)) {
+                log.debug("addresses filtered {} {} {}", mailMessage.getTo(), mailMessage.getCc(), mailMessage.getBcc());
                 log.error("No destination E-Mail addresses found");
                 return MailDeliveryStatus.MessageDataError;
             }
