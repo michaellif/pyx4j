@@ -36,6 +36,7 @@ import com.propertyvista.operations.domain.payment.pad.PadBatch;
 import com.propertyvista.operations.domain.payment.pad.PadBatchProcessingStatus;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.server.jobs.TaskRunner;
 
 abstract class AbstractAcknowledgementProcessor {
@@ -130,12 +131,14 @@ abstract class AbstractAcknowledgementProcessor {
                 for (PadDebitRecord debitRecord : padBatch.records()) {
                     debitRecord.processingStatus().setValue(PadDebitRecordProcessingStatus.AcknowledgeReject);
                     Persistence.service().persist(debitRecord);
+                    executionMonitor.addFailedEvent("Debit Record", debitRecord.amount().getValue());
                 }
                 return null;
             }
         });
 
-        executionMonitor.addFailedEvent("Funds Transfer Batch Rejected", padBatch.batchAmount().getValue(), padBatch.merchantTerminalId().getStringView());
+        executionMonitor
+                .addInfoEvent("Batch Rejected", CompletionType.failed, padBatch.merchantTerminalId().getStringView(), padBatch.batchAmount().getValue());
     }
 
     private void processPadBatchRecords(final PadBatch padBatch) {
@@ -159,7 +162,7 @@ abstract class AbstractAcknowledgementProcessor {
                 } catch (Throwable e) {
                     unprocessedRecordsCount++;
                     log.error("PadDebitRecord {} processing failed", debitRecord, e);
-                    executionMonitor.addErredEvent("DebitRecordErred", debitRecord.amount().getValue(),
+                    executionMonitor.addErredEvent("Debit Record", debitRecord.amount().getValue(),
                             SimpleMessageFormat.format("DebitRecord {0} {1}", debitRecord.id(), debitRecord), e);
                 }
 
@@ -175,7 +178,7 @@ abstract class AbstractAcknowledgementProcessor {
                     return null;
                 }
             });
-            executionMonitor.addProcessedEvent("Pad Batch Acknowledged", padBatch.batchAmount().getValue());
+            executionMonitor.addInfoEvent("Batch Acknowledged", null, padBatch.batchAmount().getValue());
         }
 
     }
@@ -195,9 +198,9 @@ abstract class AbstractAcknowledgementProcessor {
         });
 
         if (!debitRecord.acknowledgmentStatusCode().isNull()) {
-            executionMonitor.addFailedEvent("Record Rejected", debitRecord.amount().getValue());
+            executionMonitor.addFailedEvent("Debit Record", debitRecord.amount().getValue());
         } else {
-            executionMonitor.addProcessedEvent("Record Acknowledged", debitRecord.amount().getValue());
+            executionMonitor.addProcessedEvent("Debit Record", debitRecord.amount().getValue());
         }
     }
 

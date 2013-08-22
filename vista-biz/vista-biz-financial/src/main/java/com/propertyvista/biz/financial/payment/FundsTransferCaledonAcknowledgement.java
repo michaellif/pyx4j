@@ -28,6 +28,7 @@ import com.propertyvista.operations.domain.payment.pad.PadDebitRecord;
 import com.propertyvista.operations.domain.payment.pad.PadDebitRecordProcessingStatus;
 import com.propertyvista.operations.domain.payment.pad.PadFile;
 import com.propertyvista.operations.domain.payment.pad.PadFile.FileAcknowledgmentStatus;
+import com.propertyvista.operations.domain.scheduler.CompletionType;
 import com.propertyvista.payment.pad.CaledonPadUtils;
 import com.propertyvista.payment.pad.data.PadAckBatch;
 import com.propertyvista.payment.pad.data.PadAckDebitRecord;
@@ -150,9 +151,10 @@ class FundsTransferCaledonAcknowledgement {
 
             Persistence.ensureRetrieve(padBatch.pmc(), AttachLevel.Attached);
 
-            executionMonitor.setExcludedSectionsFromTotals("Batch Rejected", true);
-            executionMonitor.addFailedEvent("Batch Rejected", padBatch.batchAmount().getValue(),
-                    SimpleMessageFormat.format("PMC {0}, Mid {1}", padBatch.pmc(), padBatch.merchantTerminalId()));
+            executionMonitor.addInfoEvent("Batch Rejected", CompletionType.failed, // 
+                    SimpleMessageFormat.format("PMC {0}, Mid {1}, Status {2}", padBatch.pmc(), padBatch.merchantTerminalId(), padBatch
+                            .acknowledgmentStatusCode().getValue()), //
+                    padBatch.batchAmount().getValue());
         }
     }
 

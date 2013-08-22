@@ -177,6 +177,11 @@ public class ExecutionMonitor {
         addEvent(sectionName, CompletionType.processed, value, message);
     }
 
+    public void addInfoEvent(String sectionName, CompletionType type, String message, BigDecimal value) {
+        setExcludedSectionsFromTotals(sectionName, true);
+        addEvent(sectionName, type, value, message);
+    }
+
     public void addProcessedEvent(String sectionName) {
         addEvent(sectionName, CompletionType.processed, null);
     }
