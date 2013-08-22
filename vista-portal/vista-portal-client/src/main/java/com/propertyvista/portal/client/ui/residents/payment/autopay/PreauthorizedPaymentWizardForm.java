@@ -367,7 +367,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         FlowPanel panel = new FlowPanel();
         Widget w;
 
-        panel.add(new HTML(i18n.tr("By pressing Submit you are acknowledgeing our")));
+        panel.add(new HTML(i18n.tr("Be informed that you are acknowledging our")));
         panel.add(w = new Anchor(i18n.tr("Terms Of Use"), new Command() {
             @Override
             public void execute() {
