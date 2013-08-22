@@ -296,8 +296,9 @@ element.style {
     cursor: default;
     display: inline-block;
 }
-.WidgetDecoratorLabel {
+.WidgetDecorator .WidgetDecoratorLabelHolder .WidgetDecoratorLabel {
     white-space: nowrap;
+    margin-top: 5px;
 }
 .WidgetDecoratorComponentHolder .TextBox, .WidgetDecoratorComponentHolder .ListBox {
     min-width: 85px !important;
@@ -307,4 +308,8 @@ element.style {
 }
 .FieldEditorPanel td {
     vertical-align: bottom !important;
+}
+
+.ProvideTIRequirements {
+    width: auto !important;
 }
