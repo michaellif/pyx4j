@@ -69,6 +69,7 @@ public class ExportTenantsPortalSecretsDeferredProcess extends AbstractDeferredP
             criteria.isNotNull(criteria.proto().customer().portalRegistrationToken());
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().id(), criteria.proto().id());
             criteria.in(criteria.proto().lease().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
+            criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
             criteria.asc(criteria.proto().lease().unit().building());
             criteria.asc(criteria.proto().lease().unit());
             maximum = Persistence.service().count(criteria);
