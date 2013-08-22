@@ -38,7 +38,7 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
     private static final I18n i18n = I18n.get(TenantInsuranceFacadeImpl.class);
 
     @Override
-    public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
+    public InsuranceCertificate getInsuranceCertificate(Tenant tenantId) {
         LogicalDate today = new LogicalDate(SystemDateManager.getDate());
 
         // try to get current insurance certificate either tenant's own or the insurance certificate of the room mate
@@ -57,6 +57,14 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
                     PropertyCriterion.isNull(anyNonExpiredInsuranceCriteria.proto().expiryDate()));
             insuranceCertificate = Persistence.service().retrieve(anyNonExpiredInsuranceCriteria);
         }
+
+        return insuranceCertificate;
+    }
+
+    @Override
+    public TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId) {
+
+        InsuranceCertificate insuranceCertificate = getInsuranceCertificate(tenantId);
 
         TenantInsuranceStatusDTO insuranceStatus = null;
         if (insuranceCertificate == null) {

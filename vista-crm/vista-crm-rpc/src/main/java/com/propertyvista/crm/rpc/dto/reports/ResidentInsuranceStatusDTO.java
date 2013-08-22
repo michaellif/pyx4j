@@ -22,12 +22,16 @@ import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
+import com.propertyvista.domain.tenant.lease.Tenant;
+
 @Transient
 public interface ResidentInsuranceStatusDTO extends IEntity {
 
     IPrimitive<Boolean> hasResidentInsurance();
 
     IPrimitive<String> namesOnLease();
+
+    Tenant namesOnLease_();
 
     IPrimitive<String> building();
 
@@ -47,6 +51,11 @@ public interface ResidentInsuranceStatusDTO extends IEntity {
 
     IPrimitive<LogicalDate> expiryDate();
 
-    IPrimitive<String> certificateFile();
+    IPrimitive<String> certificate();
+
+    Tenant certificate_();
+
+    // TODO this cannot work beacuse file can have more than one url
+    IPrimitive<String> certificateFileUrl();
 
 }

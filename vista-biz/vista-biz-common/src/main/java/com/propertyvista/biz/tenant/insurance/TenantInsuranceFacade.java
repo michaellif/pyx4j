@@ -13,11 +13,14 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
 public interface TenantInsuranceFacade {
 
-    TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantStub);
+    InsuranceCertificate getInsuranceCertificate(Tenant tenantId);
+
+    TenantInsuranceStatusDTO getInsuranceStatus(Tenant tenantId);
 
 }
