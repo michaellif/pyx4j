@@ -161,9 +161,9 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
             @Override
             public void onValueChange(ValueChangeEvent<CreditCardType> event) {
                 // imitate user input and revalidate
-                cardEditor.clear();
-                cardEditor.onEditingStop();
-                cardEditor.revalidate();
+                cardEditor.clear(true);
+//                cardEditor.onEditingStop();
+//                cardEditor.revalidate();
             }
         });
 
@@ -205,6 +205,8 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                 if (getValue().cardType().getValue() != CreditCardType.VisaDebit) {
                     return null;
                 } else {
+                    CreditCardInfo ccInfo = getValue().<CreditCardInfo> duplicate();
+                    ccInfo.card().newNumber().set(value.newNumber());
                     GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
                         @Override
                         public void onSuccess(Boolean result) {
@@ -216,7 +218,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                             isCreditCardNumberCheckRecieved = true;
                             super.onFailure(caught);
                         }
-                    }, getValue().<CreditCardInfo> duplicate());
+                    }, ccInfo);
                     isCreditCardNumberCheckSent = true;
                     return new ValidationError(component, i18n.tr("Validation in progress"));
                 }
