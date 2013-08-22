@@ -18,13 +18,15 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.annotations.ToStringFormat;
 import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
-@AbstractEntity
-@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 @Table
+@AbstractEntity
+@ToStringFormat("{0}{1,choice,null#|!null# - {1}}")
+@Inheritance(strategy = Inheritance.InheritanceStrategy.SINGLE_TABLE)
 public interface PaymentMethod extends AbstractPaymentMethod {
 
     @ReadOnly

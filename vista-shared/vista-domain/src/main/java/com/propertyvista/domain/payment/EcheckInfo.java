@@ -23,7 +23,7 @@ import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 
-@ToStringFormat("{1}-{0}: {2}")
+@ToStringFormat("{1}{0,choice,null#|!null#-{0}}{2,choice,null#|!null#: {2}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @Table(prefix = "payment")
 @DiscriminatorValue("EcheckInfo")

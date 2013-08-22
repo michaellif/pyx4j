@@ -30,7 +30,7 @@ import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.annotations.Translate;
 import com.pyx4j.i18n.shared.I18nEnum;
 
-@ToStringFormat("{0}: {1}, {2}")
+@ToStringFormat("{0}{1,choice,null#|!null#: {1}}{2,choice,null#|!null#, {2}}")
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
 @DiscriminatorValue("CreditCard")
 public interface CreditCardInfo extends PaymentDetails {

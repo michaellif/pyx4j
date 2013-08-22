@@ -35,7 +35,7 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 
 @AbstractEntity
-@ToStringFormat("{0} - {1}")
+@ToStringFormat("{0}{1,choice,null#|!null# - {1}}")
 public interface AbstractPaymentMethod extends IEntity {
 
     @NotNull
