@@ -127,7 +127,8 @@ public class TenantFolder extends VistaTableFolder<TenantInLeaseDTO> {
                     }
 
                     if (getValue().role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationError(component, i18n.tr("Applicant must be at least 18 years old"));
+                        return ValidationUtils.isOlderThen18(value) ? null : new ValidationError(component, i18n
+                                .tr("Tenant must be at least 18 years old. Please mark the person as 'Dependent' instead."));
                     } else {
                         return null;
                     }

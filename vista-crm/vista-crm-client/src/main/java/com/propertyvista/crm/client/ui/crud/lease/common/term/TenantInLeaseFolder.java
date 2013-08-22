@@ -155,14 +155,14 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     for (LeaseTermTenant item : value) {
                         if (applicant) {
                             if (item.role().getValue() == LeaseTermParticipant.Role.Applicant) {
-                                return new ValidationError(component, i18n.tr("Just one Applicant could be selected!"));
+                                return new ValidationError(component, i18n.tr("Just one person with role 'Tenant' could be selected!"));
                             }
                         } else {
                             applicant = (item.role().getValue() == LeaseTermParticipant.Role.Applicant);
                         }
                     }
                     if (!applicant) {
-                        return new ValidationError(component, i18n.tr("Applicant should be present!"));
+                        return new ValidationError(component, i18n.tr("A person with role 'Tenant' should be present!"));
                     }
                 }
                 return null;
@@ -272,8 +272,10 @@ public class TenantInLeaseFolder extends LeaseTermParticipantFolder<LeaseTermTen
                     if (getAgeOfMajority() != null && !getValue().leaseParticipant().customer().person().birthDate().isNull()) {
                         if (role != null && Role.resposible().contains(role)) {
                             if (!TimeUtils.isOlderThan(getValue().leaseParticipant().customer().person().birthDate().getValue(), getAgeOfMajority() - 1)) {
-                                return new ValidationError(component, i18n.tr("This tenant is too young to be an applicant: the minimum age required is {0}.",
-                                        getAgeOfMajority()));
+                                return new ValidationError(
+                                        component,
+                                        i18n.tr("This person is too young to be an tenant or co-tenant: the minimum age required is {0}. Please mark the person as Dependent instead.",
+                                                getAgeOfMajority()));
                             }
                         }
                     }
