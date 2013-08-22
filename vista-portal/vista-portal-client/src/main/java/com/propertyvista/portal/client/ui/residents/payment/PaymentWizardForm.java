@@ -58,6 +58,7 @@ import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.resources.VistaResources;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -365,8 +366,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
         panel.add(new HTML("<br/>"));
 
-        panel.add(new HTML(
-                i18n.tr("Please Note: Select and click onto your direct banking icon below. You will be redirected to your financial institution. Only banks listed below are currently supported. As an alternative, you can pay by phone or in person to your bank. Do not forget to provide your Account Number and Payee.")));
+        panel.add(new HTML(VistaResources.INSTANCE.directBanking().getText()));
 
         panel.add(new HTML("<br/>"));
 
@@ -375,18 +375,18 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 //        links.setBorderWidth(1);
 
         links.setWidget(0, 0, createLink(VistaImages.INSTANCE.linkTD(), "http://www.td.com/about-tdbfg/our-business"));
-        links.setWidget(0, 1, createLink(VistaImages.INSTANCE.linkBMO(), "http://www.bmo.com/home"));
+        links.setWidget(0, 1, createLink(VistaImages.INSTANCE.linkBMO(), "http://www.bmo.com/home/personal"));
 
         links.setWidget(1, 0, createLink(VistaImages.INSTANCE.linkCIBC(), "https://www.cibc.com/ca/personal.html"));
         links.setWidget(1, 1, createLink(VistaImages.INSTANCE.linkLaurentian(), "https://www.laurentianbank.ca/en/personal_banking_services/index.html"));
 
-        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkManulife(), "http://www.manulifebank.ca/wps/portal/bankca/Bank.caHome/Personal/"));
-        links.setWidget(2, 1, createLink(VistaImages.INSTANCE.linkNBC(), "http://www.nbc.ca/bnc/cda/index/0,4229,divId-2_langId-1_navCode-1000,00.html"));
+//        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkManulife(), "http://www.manulifebank.ca/wps/portal/bankca/Bank.caHome/Personal/"));
 
-        links.setWidget(3, 0, createLink(VistaImages.INSTANCE.linkPCF(), "http://www.pcfinancial.ca/"));
-        links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkRBC(), "http://www.rbcroyalbank.com/personal.html"));
+        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkNBC(), "http://www.nbc.ca/bnc/cda/index/0,4229,divId-2_langId-1_navCode-1000,00.html"));
+        links.setWidget(2, 1, createLink(VistaImages.INSTANCE.linkPCF(), "http://www.pcfinancial.ca/"));
 
-        links.setWidget(4, 0, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
+        links.setWidget(3, 0, createLink(VistaImages.INSTANCE.linkRBC(), "http://www.rbcroyalbank.com/personal.html"));
+        links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
 
         panel.add(links);
 
@@ -398,7 +398,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
         Widget w;
 
         payee.add(w = new HTML(label));
-        w.setWidth("15em");
+        w.setWidth("12em");
         payee.add(w = new HTML(value));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
 

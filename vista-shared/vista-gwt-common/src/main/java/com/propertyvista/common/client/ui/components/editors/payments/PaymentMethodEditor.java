@@ -243,6 +243,7 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 }
                 break;
             case DirectBanking:
+                setPaymentDetailsWidget(null);
                 break;
             default:
                 break;
@@ -289,6 +290,8 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
 
     private void setPaymentDetailsWidget(Widget w) {
         paymentDetailsHolder.setWidget(w);
+
+        paymentDetailsHolder.setVisible(w != null);
         paymentDetailsHeader.setVisible(w != null);
     }
 

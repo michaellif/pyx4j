@@ -137,16 +137,16 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
                 if (value != null) {
                     switch (value) {
                     case Echeck:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque().getSafeUri());
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentECheque());
                         break;
                     case CreditCard:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit().getSafeUri());
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentCredit());
                         break;
                     case DirectBanking:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDirectBanking().getSafeUri());
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentDirectBanking());
                         break;
                     case Interac:
-                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac().getSafeUri());
+                        paymentTypeImage = new Image(VistaImages.INSTANCE.paymentInterac());
                         break;
                     default:
                         paymentTypeImage = null;
