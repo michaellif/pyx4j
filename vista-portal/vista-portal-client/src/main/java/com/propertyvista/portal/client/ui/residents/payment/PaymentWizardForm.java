@@ -259,9 +259,16 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
     @Override
     protected void onStepChange(SelectionEvent<WizardStep> event) {
         super.onStepChange(event);
+
+        getDecorator().getBtnNext().setEnabled(true);
+
         if (event.getSelectedItem().equals(comfirmationStep)) {
             confirmationDetailsHolder.clear();
             confirmationDetailsHolder.setWidget(createConfirmationDetailsPanel());
+
+            if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
+                getDecorator().getBtnNext().setEnabled(false);
+            }
         }
     }
 

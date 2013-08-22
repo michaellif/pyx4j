@@ -49,6 +49,11 @@ public abstract class VistaWizardForm<E extends IEntity> extends CEntityWizard<E
     }
 
     @Override
+    public WizardDecorator<E> getDecorator() {
+        return decorator;
+    }
+
+    @Override
     protected void onFinish() {
         view.getPresenter().finish();
     }
