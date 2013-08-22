@@ -356,6 +356,7 @@ class PreauthorizedPaymentAgreementMananger {
                 }
 
                 for (final BillingAccount account : Persistence.service().query(criteria1)) {
+                    Persistence.service().retrieve(account.lease());
                     final AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(account.lease().unit().building(),
                             AutoPayPolicy.class);
                     try {
