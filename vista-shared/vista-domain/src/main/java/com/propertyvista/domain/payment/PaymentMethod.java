@@ -18,6 +18,7 @@ import com.pyx4j.entity.annotations.Detached;
 import com.pyx4j.entity.annotations.Inheritance;
 import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Table;
+import com.pyx4j.entity.shared.AttachLevel;
 
 import com.propertyvista.domain.security.common.AbstractPmcUser;
 
@@ -27,7 +28,6 @@ import com.propertyvista.domain.security.common.AbstractPmcUser;
 public interface PaymentMethod extends AbstractPaymentMethod {
 
     @ReadOnly
-    @Detached
+    @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
-
 }

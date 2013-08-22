@@ -32,6 +32,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
@@ -101,7 +102,7 @@ public interface PreauthorizedPayment extends IEntity {
     Tenant tenant();
 
     @ReadOnly
-    @Detached
+    @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
 
     @Timestamp(Timestamp.Update.Created)

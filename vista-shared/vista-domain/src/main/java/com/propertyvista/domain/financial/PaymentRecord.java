@@ -35,6 +35,7 @@ import com.pyx4j.entity.annotations.ReadOnly;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.ToString;
 import com.pyx4j.entity.annotations.validator.NotNull;
+import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.ISet;
@@ -230,7 +231,7 @@ public interface PaymentRecord extends IEntity {
     IPrimitive<Date> updated();
 
     @ReadOnly
-    @Detached
+    @Detached(level = AttachLevel.ToStringMembers)
     AbstractPmcUser createdBy();
 
     @Owned(cascade = {})

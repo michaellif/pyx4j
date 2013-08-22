@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.policy.policies.RestrictionsPolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.lease.BillableItem;
@@ -118,9 +117,5 @@ public abstract class LeaseCrudServiceBaseImpl<DTO extends LeaseDTO> extends Abs
         item.leaseParticipant().preauthorizedPayments().clear();
         item.leaseParticipant().preauthorizedPayments()
                 .addAll(ServerSideFactory.create(PaymentMethodFacade.class).retrievePreauthorizedPayments(item.leaseParticipant()));
-
-        for (PreauthorizedPayment pap : item.leaseParticipant().preauthorizedPayments()) {
-            Persistence.service().retrieve(pap.createdBy(), AttachLevel.ToStringMembers);
-        }
     }
 }

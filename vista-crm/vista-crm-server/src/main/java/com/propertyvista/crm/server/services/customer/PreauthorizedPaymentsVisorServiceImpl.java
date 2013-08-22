@@ -167,8 +167,6 @@ public class PreauthorizedPaymentsVisorServiceImpl implements PreauthorizedPayme
     private PreauthorizedPaymentDTO createPreauthorizedPaymentDto(PreauthorizedPayment pap) {
         PreauthorizedPaymentDTO papDto = new PapConverter().createDTO(pap);
 
-        Persistence.service().retrieve(papDto.createdBy(), AttachLevel.ToStringMembers);
-
         updateCoveredItemsDto(papDto);
         fillCoveredItemsDto(papDto);
 

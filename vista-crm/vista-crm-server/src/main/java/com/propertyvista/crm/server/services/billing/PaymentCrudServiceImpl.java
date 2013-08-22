@@ -27,7 +27,6 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.AbstractCrudServiceDtoImpl;
 import com.pyx4j.entity.server.Persistence;
-import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -85,9 +84,7 @@ public class PaymentCrudServiceImpl extends AbstractCrudServiceDtoImpl<PaymentRe
         Persistence.service().retrieve(dto.billingAccount().lease().unit().building());
         Persistence.service().retrieve(dto.leaseTermParticipant());
         Persistence.service().retrieve(dto.paymentMethod());
-        Persistence.service().retrieve(dto.paymentMethod().createdBy(), AttachLevel.ToStringMembers);
         Persistence.service().retrieve(dto.preauthorizedPayment());
-        Persistence.service().retrieve(dto.createdBy(), AttachLevel.ToStringMembers);
 
         dto.leaseId().set(dto.billingAccount().lease().leaseId());
         dto.leaseStatus().set(dto.billingAccount().lease().status());
