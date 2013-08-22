@@ -146,6 +146,9 @@ public class PaymentFacadeImpl implements PaymentFacade {
                     b.append("eCheck");
                     break;
                 }
+            } else if (paymentRecord.paymentMethod().type().getValue() == PaymentType.CreditCard) {
+                CreditCardType cardType = paymentRecord.paymentMethod().details().<CreditCardInfo> cast().cardType().getValue();
+                b.append(cardType.name());
             } else {
                 b.append(paymentRecord.paymentMethod().type().getValue().name());
             }

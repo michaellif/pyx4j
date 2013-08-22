@@ -212,11 +212,11 @@ public class YardiARIntegrationAgent {
         case Echeck:
             return YardiPaymentType.Other.name();
         case DirectBanking:
-            return YardiPaymentType.ACH.name();
+            return YardiPaymentType.Other.name();
         case CreditCard:
-            return YardiPaymentType.CreditCard.name();
+            return YardiPaymentType.Other.name();
         case Interac:
-            return YardiPaymentType.DebitCard.name();
+            return YardiPaymentType.Other.name();
         }
         return null;
     }
