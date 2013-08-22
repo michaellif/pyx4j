@@ -16,6 +16,7 @@ package com.propertyvista.operations.server.qa;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
 import com.propertyvista.operations.server.upgrade.VistaUpgrade;
+import com.propertyvista.server.jobs.TaskRunner;
 
 public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess<Pmc> {
 
@@ -63,14 +65,22 @@ public class DBIntegrityCheckDeferredProcess extends SearchReportDeferredProcess
 
     @Override
     public void execute() {
-        new UnitOfWork(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
-
+        TaskRunner.runInOperationsNamespace(new Callable<Void>() {
             @Override
-            public Void execute() {
-                DBIntegrityCheckDeferredProcess.super.execute();
-                return null;
-            }
+            public Void call() {
 
+                new UnitOfWork(TransactionScopeOption.Suppress, ConnectionTarget.BackgroundProcess).execute(new Executable<Void, RuntimeException>() {
+
+                    @Override
+                    public Void execute() {
+                        DBIntegrityCheckDeferredProcess.super.execute();
+                        return null;
+                    }
+
+                });
+                return null;
+
+            }
         });
 
     }

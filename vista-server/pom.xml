@@ -851,7 +851,7 @@
                                         <get src="${vista-app-ping-url}/o/db-reset?type=dbIntegrityCheck" dest="${project.build.directory}/db-IntegrityCheck.txt" maxtime="2700"/>
                                         <fail message="Found Error in DB IntegrityCheck on server, See server log for details">
                                             <condition>
-                                                <resourcecontains resource="${project.build.directory}/db-IntegrityCheck.txt" substring="DB IntegrityCheck error"/>
+                                                <resourcecontains resource="${project.build.directory}/db-IntegrityCheck.txt" substring="DB reset error"/>
                                             </condition>
                                         </fail>
                                     </target>
