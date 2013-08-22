@@ -39,4 +39,5 @@ public interface PreauthorizedPaymentListDTO extends IEntity {
     IPrimitive<LogicalDate> nextPaymentDate();
 
     IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
+
 }

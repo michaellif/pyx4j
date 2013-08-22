@@ -67,8 +67,7 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
 
     @Override
     public void delete(AsyncCallback<Boolean> callback, Key entityId) {
-        PreauthorizedPayment pap = Persistence.service().retrieve(entityClass, entityId);
-        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(pap);
+        ServerSideFactory.create(PaymentMethodFacade.class).deletePreauthorizedPayment(Persistence.service().retrieve(entityClass, entityId));
         Persistence.service().commit();
 
         callback.onSuccess(Boolean.TRUE);

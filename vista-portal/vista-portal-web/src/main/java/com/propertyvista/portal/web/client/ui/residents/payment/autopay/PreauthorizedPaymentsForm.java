@@ -24,7 +24,6 @@ import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityLabel;
-import com.pyx4j.forms.client.ui.CField;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
@@ -127,7 +126,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 content.setHR(++row, 0, 1);
 
                 content.setWidget(row, 0, inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()));
-                ((CField) get(proto().paymentMethod())).setNavigationCommand(new Command() {
+                ((CEntityLabel<LeasePaymentMethod>) get(proto().paymentMethod())).setNavigationCommand(new Command() {
                     @Override
                     public void execute() {
                         presenter.viewPaymentMethod(getValue());
