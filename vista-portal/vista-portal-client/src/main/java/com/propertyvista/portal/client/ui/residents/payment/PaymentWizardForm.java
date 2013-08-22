@@ -16,6 +16,7 @@ package com.propertyvista.portal.client.ui.residents.payment;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gwt.dom.client.Style.Cursor;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -368,9 +369,11 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
         panel.add(new HTML("<br/>"));
         panel.add(new HTML(
-                i18n.tr("Please Note: Select and click onto your direct banking icon below. You will be redirected to your financial institution. Only banks listed below are currently supported. As an alternative, you can pay by phone or in person to your bank. Do not forget to provide your Account Number and payee Rent Payments - Payment Pad")));
+                i18n.tr("Please Note: Select and click onto your direct banking icon below. You will be redirected to your financial institution. Only banks listed below are currently supported. As an alternative, you can pay by phone or in person to your bank. Do not forget to provide your Account Number and payee Rent Payments - Payment Pad.")));
 
         FlexTable links = new FlexTable();
+        links.setCellSpacing(10);
+//        links.setBorderWidth(1);
 
         links.setWidget(0, 0, createLink(VistaImages.INSTANCE.linkTD(), "http://www.td.com/about-tdbfg/our-business"));
         links.setWidget(0, 1, createLink(VistaImages.INSTANCE.linkBMO(), "http://www.bmo.com/home"));
@@ -393,6 +396,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
     private Image createLink(ImageResource image, final String url) {
         Image link = new Image(image);
+        link.getElement().getStyle().setCursor(Cursor.POINTER);
         link.addClickHandler(new ClickHandler() {
             @Override
             public void onClick(ClickEvent event) {
