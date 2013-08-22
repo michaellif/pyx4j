@@ -33,8 +33,8 @@ public class VisaDebitInternalValidator {
             @Override
             public Boolean call() {
                 EntityQueryCriteria<VisaDebitRange> criteria = EntityQueryCriteria.create(VisaDebitRange.class);
-                criteria.ge(criteria.proto().rangeStart(), value);
-                criteria.le(criteria.proto().rangeEnd(), value);
+                criteria.le(criteria.proto().rangeStart(), value);
+                criteria.ge(criteria.proto().rangeEnd(), value);
                 VisaDebitRange rangeMatch = Persistence.service().retrieve(criteria);
                 return rangeMatch != null;
             }

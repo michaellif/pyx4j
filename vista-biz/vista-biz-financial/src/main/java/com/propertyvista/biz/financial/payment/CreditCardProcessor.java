@@ -168,7 +168,6 @@ class CreditCardProcessor {
 
             IPaymentProcessor proc = new CaledonPaymentProcessor();
             PaymentResponse response = proc.validateVisaDebit(ccInfo);
-
             return response.success().getValue();
         }
     }

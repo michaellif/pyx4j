@@ -208,7 +208,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                     GWT.<CreditCardValidationService> create(CreditCardValidationService.class).validate(new DefaultAsyncCallback<Boolean>() {
                         @Override
                         public void onSuccess(Boolean result) {
-                            setCreditCardNumberValidationResult(result ? null : new ValidationError(component, i18n.tr("Invalid Credit Card Number")));
+                            setCreditCardNumberValidationResult(result ? null : new ValidationError(component, i18n.tr("Invalid Card Number")));
                         }
 
                         @Override
@@ -222,7 +222,7 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                 }
             }
         }
-        return new ValidationError(component, i18n.tr("Invalid Credit Card Number"));
+        return new ValidationError(component, i18n.tr("Invalid Card Number"));
     }
 
     private void setCreditCardNumberValidationResult(ValidationError error) {

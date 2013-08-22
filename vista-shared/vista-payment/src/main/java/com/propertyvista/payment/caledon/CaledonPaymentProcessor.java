@@ -247,13 +247,13 @@ public class CaledonPaymentProcessor implements IPaymentProcessor {
         if (VisaDebitInternalValidator.isVisaDebitValid(ccinfo.creditCardNumber().getValue())) {
             PaymentResponse response = EntityFactory.create(PaymentResponse.class);
             response.success().setValue(true);
-            response.code().setValue("1020");
-            response.message().setValue("The card number did not pass check-digit tests for that card type.");
+            response.code().setValue("0000");
             return response;
         } else {
             PaymentResponse response = EntityFactory.create(PaymentResponse.class);
-            response.success().setValue(true);
-            response.code().setValue("0000");
+            response.success().setValue(false);
+            response.code().setValue("1020");
+            response.message().setValue("The card number did not pass check-digit tests for that card type.");
             return response;
         }
     }
