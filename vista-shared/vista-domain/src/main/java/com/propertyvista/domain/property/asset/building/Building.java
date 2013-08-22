@@ -86,6 +86,10 @@ public interface Building extends PolicyNode {
 
     IPrimitive<String> externalId();
 
+    // Indicator for sold properties
+    @NotNull
+    IPrimitive<Boolean> suspended();
+
     @Editor(type = EditorType.suggest)
     @Reference(adapter = PropertyManagerReferenceAdapter.class)
     PropertyManager propertyManager();

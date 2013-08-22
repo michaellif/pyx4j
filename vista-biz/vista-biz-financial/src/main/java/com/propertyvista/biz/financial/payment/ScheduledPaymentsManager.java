@@ -52,6 +52,7 @@ class ScheduledPaymentsManager {
         EntityQueryCriteria<PaymentRecord> criteria = EntityQueryCriteria.create(PaymentRecord.class);
         criteria.in(criteria.proto().paymentStatus(), PaymentRecord.PaymentStatus.Scheduled, PaymentRecord.PaymentStatus.PendingAction);
         criteria.eq(criteria.proto().paymentMethod().type(), paymentType);
+        criteria.eq(criteria.proto().billingAccount().lease().unit().building().suspended(), false);
         criteria.le(criteria.proto().targetDate(), forDate);
         criteria.asc(criteria.proto().billingAccount().lease().unit().building());
 
@@ -123,6 +124,7 @@ class ScheduledPaymentsManager {
         {//TODO->Closure
             EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetPadExecutionDate(), forDate);
+            criteria.in(criteria.proto().building().suspended(), false);
             billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         }
         try {

@@ -74,8 +74,8 @@ public class BuildingFacadeImpl implements BuildingFacade {
 
     @Override
     public void suspend(Building building) {
-        // TODO Auto-generated method stub
-
+        building.suspended().setValue(true);
+        Persistence.service().merge(building);
     }
 
 }

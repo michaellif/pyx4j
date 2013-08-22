@@ -79,6 +79,8 @@ class PreauthorizedPaymentsManager {
             criteria.isNull(criteria.proto().actualPadGenerationDate());
             if ((reportCriteria != null) && (reportCriteria.selectedBuildings != null)) {
                 criteria.in(criteria.proto().building(), reportCriteria.selectedBuildings);
+            } else {
+                criteria.in(criteria.proto().building().suspended(), false);
             }
             billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
         }

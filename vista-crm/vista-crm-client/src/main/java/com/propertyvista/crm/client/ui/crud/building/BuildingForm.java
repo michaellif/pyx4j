@@ -145,6 +145,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         super.onValueSet(populate);
 
         get(proto().externalId()).setVisible(!getValue().externalId().isNull());
+        get(proto().suspended()).setEditable(SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport));
 
         // tweak property code editing UI:
         if (isEditable()) {
@@ -200,6 +201,7 @@ public class BuildingForm extends CrmEntityForm<BuildingDTO> {
         flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().info().residentialStoreys()), 5).build());
 
         flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().propertyManager()), 16).build());
+        flexPanel.setWidget(row++, 1, new FormDecoratorBuilder(inject(proto().suspended()), 15).build());
         flexPanel.setBR(row++, 1, 1);
 
         flexPanel.setWidget(row, 0, new FormDecoratorBuilder(inject(proto().externalId()), 15).build());

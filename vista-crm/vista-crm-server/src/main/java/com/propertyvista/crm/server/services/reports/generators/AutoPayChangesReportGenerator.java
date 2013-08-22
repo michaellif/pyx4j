@@ -65,11 +65,13 @@ public class AutoPayChangesReportGenerator implements ReportGenerator, ReportExp
             for (Building b : autoPayChangesReportMetadata.buildings()) {
                 buildingKeys.add(b.getPrimaryKey());
             }
-            EntityQueryCriteria<Building> buildingsCriteria = EntityQueryCriteria.create(Building.class);
-            buildingsCriteria.in(buildingsCriteria.proto().id(), buildingKeys);
-            selectedBuildings = Persistence.secureQuery(buildingsCriteria, AttachLevel.IdOnly);
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.in(criteria.proto().id(), buildingKeys);
+            selectedBuildings = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
         } else {
-            selectedBuildings = Persistence.secureQuery(EntityQueryCriteria.create(Building.class));
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().suspended(), false);
+            selectedBuildings = Persistence.secureQuery(criteria);
         }
 
         PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(null, selectedBuildings);

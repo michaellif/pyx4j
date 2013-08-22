@@ -111,6 +111,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.in(criteria.proto().status(), Lease.Status.active());
+            criteria.in(criteria.proto().unit().building().suspended(), false);
             criteria.eq(criteria.proto().currentTerm().version().tenants().$().leaseParticipant().customer(), customer);
             criteria.in(criteria.proto().currentTerm().version().tenants().$().role(), LeaseTermParticipant.Role.portalAccess());
             leases.addAll(Persistence.service().query(criteria));
@@ -203,6 +204,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         // We need protection from attacks that check names of the user?
         EntityQueryCriteria<Tenant> criteria = EntityQueryCriteria.create(Tenant.class);
         criteria.eq(criteria.proto().lease().unit().building(), selfRegistration.building().buildingKey());
+        criteria.eq(criteria.proto().lease().unit().building().suspended(), false);
         criteria.eq(criteria.proto().customer().portalRegistrationToken(), selfRegistration.securityCode().getValue().toUpperCase(Locale.ENGLISH));
 
         List<Tenant> tenants = Persistence.service().query(criteria);

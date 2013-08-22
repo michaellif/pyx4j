@@ -49,14 +49,21 @@ public class EftVarianceReportGenerator implements ReportGenerator {
 
         // Find PadGenerationDate for each BillingCycle in system, they may be different
         Set<LogicalDate> padGenerationDays = new HashSet<LogicalDate>();
-        EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
-        criteria.eq(criteria.proto().billingCycleStartDate(), eftVarianceReportMetadata.billingCycleStartDate().getValue());
-        criteria.isNull(criteria.proto().actualPadGenerationDate());
-        for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
-            padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
+        {
+            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            criteria.eq(criteria.proto().billingCycleStartDate(), eftVarianceReportMetadata.billingCycleStartDate().getValue());
+            criteria.isNull(criteria.proto().actualPadGenerationDate());
+            for (BillingCycle cycle : Persistence.secureQuery(criteria)) {
+                padGenerationDays.add(cycle.targetPadGenerationDate().getValue());
+            }
         }
 
-        Vector<Building> selectedBuildings = Persistence.secureQuery(EntityQueryCriteria.create(Building.class), AttachLevel.IdOnly);
+        Vector<Building> selectedBuildings;
+        {
+            EntityQueryCriteria<Building> criteria = EntityQueryCriteria.create(Building.class);
+            criteria.eq(criteria.proto().suspended(), false);
+            selectedBuildings = Persistence.secureQuery(criteria, AttachLevel.IdOnly);
+        }
 
         for (LogicalDate padGenerationDate : padGenerationDays) {
             PreauthorizedPaymentsReportCriteria reportCriteria = new PreauthorizedPaymentsReportCriteria(padGenerationDate, selectedBuildings);

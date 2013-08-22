@@ -59,6 +59,8 @@ class PreauthorizedPaymentAutoPayReviewReport {
             EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
             if (reportCriteria.selectedBuildings != null) {
                 criteria.in(criteria.proto().lease().unit().building(), reportCriteria.selectedBuildings);
+            } else {
+                criteria.in(criteria.proto().lease().unit().building().suspended(), false);
             }
             criteria.eq(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().isDeleted(), false);
             criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments().$().expiring());
