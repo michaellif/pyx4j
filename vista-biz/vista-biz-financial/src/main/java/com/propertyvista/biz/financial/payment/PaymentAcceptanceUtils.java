@@ -240,10 +240,10 @@ public class PaymentAcceptanceUtils {
         Collection<CardTypeAcceptance> require = new ArrayList<CardTypeAcceptance>();
         ElectronicPaymentMethodSelection p = EntityFactory.getEntityPrototype(ElectronicPaymentMethodSelection.class);
 
-        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
-                .residentPortalCreditCardMasterCard(), p.notCashEquivalent()));
-        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.electronicPayments(), p.acceptedCreditCardMasterCard(), p
-                .residentPortalCreditCardMasterCard(), p.cashEquivalentCreditCardMasterCard()));
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.acceptedCreditCardMasterCard(), p.residentPortalCreditCardMasterCard(), p
+                .notCashEquivalent()));
+        require.add(new CardTypeAcceptance(CreditCardType.MasterCard, p.acceptedCreditCardMasterCard(), p.residentPortalCreditCardMasterCard(), p
+                .cashEquivalentCreditCardMasterCard()));
 
         require.add(new CardTypeAcceptance(CreditCardType.Visa, p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(), p.notCashEquivalent()));
         require.add(new CardTypeAcceptance(CreditCardType.Visa, p.acceptedCreditCardVisa(), p.residentPortalCreditCardVisa(), p.cashEquivalentCreditCardVisa()));
