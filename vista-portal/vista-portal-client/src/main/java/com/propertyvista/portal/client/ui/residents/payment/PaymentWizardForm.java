@@ -336,26 +336,14 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
     private Widget createConfirmationDetailsPanel() {
         VerticalPanel panel = new VerticalPanel();
-        Widget w;
 
         panel.add(new HTML(getValue().leaseTermParticipant().getStringView()));
         panel.add(new HTML(getValue().address().getStringView()));
 
         panel.add(new HTML("<br/>"));
 
-        HorizontalPanel pm = new HorizontalPanel();
-        pm.add(w = new HTML(i18n.tr("Payment Method:")));
-        w.setWidth("10em");
-        pm.add(w = new HTML(get(proto().paymentMethod()).getValue().getStringView()));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        panel.add(pm);
-
-        HorizontalPanel amount = new HorizontalPanel();
-        amount.add(w = new HTML(i18n.tr("Amount to pay:")));
-        w.setWidth("10em");
-        amount.add(w = new HTML(((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
-        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
-        panel.add(amount);
+        panel.add(createDecorator(i18n.tr("Payment Method:"), get(proto().paymentMethod()).getValue().getStringView()));
+        panel.add(createDecorator(i18n.tr("Amount to pay:"), ((CTextFieldBase<?, ?>) get(proto().amount())).getFormattedValue()));
 
         if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
             panel.add(createDirectBankingPanel());
@@ -367,9 +355,15 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
     private Widget createDirectBankingPanel() {
         VerticalPanel panel = new VerticalPanel();
 
+        panel.add(createDecorator(i18n.tr("Account #:"), getValue().billingAccount().accountNumber().getStringView()));
+        panel.add(createDecorator(i18n.tr("Payee:"), "Rent Payments - Payment Pad"));
+
         panel.add(new HTML("<br/>"));
+
         panel.add(new HTML(
-                i18n.tr("Please Note: Select and click onto your direct banking icon below. You will be redirected to your financial institution. Only banks listed below are currently supported. As an alternative, you can pay by phone or in person to your bank. Do not forget to provide your Account Number and payee Rent Payments - Payment Pad.")));
+                i18n.tr("Please Note: Select and click onto your direct banking icon below. You will be redirected to your financial institution. Only banks listed below are currently supported. As an alternative, you can pay by phone or in person to your bank. Do not forget to provide your Account Number and Payee.")));
+
+        panel.add(new HTML("<br/>"));
 
         FlexTable links = new FlexTable();
         links.setCellSpacing(10);
@@ -392,6 +386,18 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
         panel.add(links);
 
         return panel;
+    }
+
+    private Widget createDecorator(String label, String value) {
+        HorizontalPanel payee = new HorizontalPanel();
+        Widget w;
+
+        payee.add(w = new HTML(label));
+        w.setWidth("15em");
+        payee.add(w = new HTML(value));
+        w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
+
+        return payee;
     }
 
     private Image createLink(ImageResource image, final String url) {
