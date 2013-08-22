@@ -67,7 +67,6 @@ import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
-import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.client.ui.residents.LegalTermsDialog.TermsType;
@@ -285,8 +284,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
                 get(proto().selectPaymentMethod()).reset();
                 get(proto().selectPaymentMethod()).setEnabled(hasProfiledMethods);
-                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentDataDTO.PaymentSelect.Profiled : PaymentDataDTO.PaymentSelect.New,
-                        true, populate);
+                get(proto().selectPaymentMethod()).setValue(hasProfiledMethods ? PaymentSelect.Profiled : PaymentSelect.New, true, populate);
 
                 paymentMethodSelectionStep.setStepVisible(hasProfiledMethods);
             }
