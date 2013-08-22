@@ -23,7 +23,6 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
-import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IPersonalIdentity;
 import com.pyx4j.forms.client.validators.RegexValidator;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
@@ -104,23 +103,31 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
             getValue().obfuscatedNumber().setValue(null);
         }
         super.onEditingStop();
-        getValue();
     }
 
+    // catch exception here to avoid null-value set by CComponent#update(null)
     @Override
     protected T getEditorValue() throws ParseException {
         T value;
         try {
             value = super.getEditorValue();
         } catch (Throwable e) {
-            clear();
+            // don't clear native value so that format validator could fail properly
+            clear(false);
             value = getValue();
         }
-        return value;
+        // return a copy so that CComponent#isValuesEqual() gets different object
+        return value.duplicate();
     }
 
-    public void clear() {
-        getWidget().getEditor().setText("");
+    public void clear(boolean clearNative) {
+        if (clearNative) {
+            getWidget().getEditor().setText("");
+        }
+        if (getValue() != null) {
+            getValue().newNumber().setValue(null);
+            getValue().obfuscatedNumber().setValue(null);
+        }
     }
 
     public void postprocess() {
@@ -189,7 +196,7 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                 // TODO - need a way to clear value
                 return value;
             } else {
-                // not empty string could be either new user input or obfuscated value (formatted) of existing entity
+                // non-empty string could be either new user input or obfuscated value (formatted) of existing entity
                 String data = dataFilter(string);
                 if (getPatternIdx(data) == -1) {
                     throw new ParseException(i18n.tr("Identity value is invalid for the given format."), 0);
@@ -198,7 +205,8 @@ public class CPersonalIdentityField<T extends IPersonalIdentity> extends CTextFi
                 boolean userInput = (value == null || value.obfuscatedNumber().isNull());
                 // populate resulting value
                 if (value == null) {
-                    value = EntityFactory.create(component.entityClass);
+                    // this should never happen
+                    throw new Error("Value is null");
                 }
                 if (userInput) {
                     // if no obfuscated value then we are getting new user input
