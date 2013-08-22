@@ -64,18 +64,22 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
         NavigFolder folder = null;
 
         folder = new NavigFolder(i18n.tr("Profile"));
-        folder.addNavigItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)));
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Profile.PaymentMethods().formViewerPlace(new Key(-1)));
+        }
         list.add(folder);
 
-        if (VistaTODO.ENABLE_ONBOARDING_WIZARDS) {
-            folder = new NavigFolder(i18n.tr("Settings"));
-            folder.addNavigItem(new Settings.OnlinePaymentSetup());
-            folder.addNavigItem(new Settings.CreditCheck());
-            if (ApplicationMode.isDevelopment()) {
-                folder.addNavigItem(new Settings.CreditCheck.Setup());
-                folder.addNavigItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1)));
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+            if (VistaTODO.ENABLE_ONBOARDING_WIZARDS) {
+                folder = new NavigFolder(i18n.tr("Settings"));
+                folder.addNavigItem(new Settings.OnlinePaymentSetup());
+                folder.addNavigItem(new Settings.CreditCheck());
+                if (ApplicationMode.isDevelopment()) {
+                    folder.addNavigItem(new Settings.CreditCheck.Setup());
+                    folder.addNavigItem(new Settings.CreditCheck.Status().formViewerPlace(new Key(-1)));
+                }
+                list.add(folder);
             }
-            list.add(folder);
         }
 
         folder = new NavigFolder(i18n.tr("Security"));
@@ -92,7 +96,9 @@ public class NavigSettingsActivity extends AbstractActivity implements NavigView
             folder.addNavigItem(new CrmSiteMap.Administration.Financial.GlCodeCategory());
             folder.addNavigItem(new CrmSiteMap.Administration.Financial.Tax());
         }
-        folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
+        if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaAccountOwner)) {
+            folder.addNavigItem(new CrmSiteMap.Administration.Financial.MerchantAccount());
+        }
         list.add(folder);
 
         folder = new NavigFolder(i18n.tr("Website"));
