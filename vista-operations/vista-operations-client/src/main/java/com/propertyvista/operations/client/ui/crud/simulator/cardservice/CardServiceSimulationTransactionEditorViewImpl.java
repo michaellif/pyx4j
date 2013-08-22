@@ -44,6 +44,7 @@ public class CardServiceSimulationTransactionEditorViewImpl extends OperationsEd
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().reference())).build());
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().responseCode())).build());
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().authorizationNumber())).build());
+            tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().voided())).build());
             tabPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().transactionDate())).build());
 
             selectTab(addTab(tabPanel));

@@ -31,8 +31,8 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.server.contexts.NamespaceManager;
 
-import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.domain.VistaNamespace;
+import com.propertyvista.operations.domain.dev.CardServiceSimulatorConfig;
 import com.propertyvista.payment.caledon.CaledonRequestToken;
 import com.propertyvista.payment.caledon.CaledonResponse;
 import com.propertyvista.payment.caledon.HttpRequestField;
@@ -74,7 +74,7 @@ public class CardServiceSimulationServlet extends HttpServlet {
                 responseBody = buildResponse(caledonResponse);
             }
         } catch (Throwable e) {
-            log.error("Error", e);
+            log.error("card simulator error", e);
             responseBody = "TEXT=Simulated " + e.getMessage() + "&CODE=1000";
         }
         writeResponse(responseBody, httpResponse);
@@ -129,6 +129,7 @@ public class CardServiceSimulationServlet extends HttpServlet {
     }
 
     private void writeResponse(String responseBody, HttpServletResponse httpResponse) throws IOException {
+        log.info("card simulator response {}", responseBody);
         httpResponse.setContentType("text/plain");
         byte[] buf = responseBody.getBytes();
         httpResponse.setContentLength(buf.length);

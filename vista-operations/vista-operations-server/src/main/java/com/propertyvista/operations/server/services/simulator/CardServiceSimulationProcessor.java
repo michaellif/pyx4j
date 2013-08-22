@@ -16,6 +16,9 @@ package com.propertyvista.operations.server.services.simulator;
 import java.math.BigDecimal;
 import java.util.Random;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
@@ -32,6 +35,8 @@ import com.propertyvista.payment.caledon.CaledonTokenAction;
 import com.propertyvista.payment.caledon.CaledonTransactionType;
 
 public class CardServiceSimulationProcessor {
+
+    private static final Logger log = LoggerFactory.getLogger(CardServiceSimulationProcessor.class);
 
     public static CaledonResponse execute(CaledonRequestToken caledonRequest) {
         CaledonResponse caledonResponse;
@@ -62,6 +67,7 @@ public class CardServiceSimulationProcessor {
         } finally {
             Persistence.service().commit();
         }
+        log.info("card simulator response code {}", caledonResponse.code);
         return caledonResponse;
     }
 
@@ -163,19 +169,30 @@ public class CardServiceSimulationProcessor {
 
     private static CaledonResponse processCard(CardServiceSimulationMerchantAccount merchantAccount, CaledonRequest caledonRequest) {
         CaledonResponse caledonResponse = new CaledonResponse();
-        CardServiceSimulationCard card = ensureCard(merchantAccount, caledonRequest);
-        if (card == null) {
-            caledonResponse.code = "1101";
-            caledonResponse.text = "TOKEN NOT FOUND";
-            return caledonResponse;
-        }
-        if (card.cardType().isNull()) {
-            caledonResponse.code = "1020";
-            caledonResponse.text = "CARD NUMBER INVALID";
-            return caledonResponse;
-        }
-
         CaledonTransactionType transactionType = CardServiceSimulationUtils.toCaledonTransactionType(caledonRequest.transactionType);
+        CardServiceSimulationCard card;
+        if (transactionType == CaledonTransactionType.VOID) {
+            CardServiceSimulationTransaction prevTransaction = findTransaction(merchantAccount, caledonRequest.referenceNumber);
+            if (prevTransaction == null) {
+                caledonResponse.code = "1017";
+                caledonResponse.text = "NO MATCH";
+                return caledonResponse;
+            } else {
+                card = prevTransaction.card();
+            }
+        } else {
+            card = ensureCard(merchantAccount, caledonRequest);
+            if (card == null) {
+                caledonResponse.code = "1101";
+                caledonResponse.text = "TOKEN NOT FOUND";
+                return caledonResponse;
+            }
+            if (card.cardType().isNull()) {
+                caledonResponse.code = "1020";
+                caledonResponse.text = "CARD NUMBER INVALID";
+                return caledonResponse;
+            }
+        }
 
         CardServiceSimulationTransaction createdTransaction = findSimulatedResponce(card, caledonRequest);
         if (createdTransaction != null) {
@@ -270,6 +287,9 @@ public class CardServiceSimulationProcessor {
             case VOID: {
                 CardServiceSimulationTransaction prevTransaction = findPreAuthorization(card, caledonRequest.referenceNumber);
                 if (prevTransaction != null) {
+                    prevTransaction.voided().setValue(true);
+                    Persistence.service().persist(prevTransaction);
+
                     newBalance = card.balance().getValue().subtract(transaction.amount().getValue());
                     card.balance().setValue(newBalance);
                     card.reserved().setValue(card.reserved().getValue(BigDecimal.ZERO).subtract(transaction.amount().getValue()));
@@ -325,6 +345,15 @@ public class CardServiceSimulationProcessor {
         EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
         criteria.eq(criteria.proto().card(), card);
         criteria.eq(criteria.proto().reference(), referenceNumber);
+        criteria.eq(criteria.proto().voided(), false);
+        return Persistence.service().retrieve(criteria);
+    }
+
+    private static CardServiceSimulationTransaction findTransaction(CardServiceSimulationMerchantAccount merchantAccount, String referenceNumber) {
+        EntityQueryCriteria<CardServiceSimulationTransaction> criteria = EntityQueryCriteria.create(CardServiceSimulationTransaction.class);
+        criteria.eq(criteria.proto().card().merchant(), merchantAccount);
+        criteria.eq(criteria.proto().reference(), referenceNumber);
+        criteria.eq(criteria.proto().voided(), false);
         return Persistence.service().retrieve(criteria);
     }
 

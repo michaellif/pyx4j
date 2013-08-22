@@ -29,6 +29,7 @@ import com.propertyvista.domain.util.ValidationUtils;
 import com.propertyvista.operations.domain.dev.CardServiceSimulationTransaction.SimpulationTransactionType;
 import com.propertyvista.payment.caledon.CaledonTokenAction;
 import com.propertyvista.payment.caledon.CaledonTransactionType;
+import com.propertyvista.payment.caledon.dev.VisaDebitInternalValidator;
 
 class CardServiceSimulationUtils {
 
@@ -113,10 +114,13 @@ class CardServiceSimulationUtils {
     static CreditCardType detectCardType(String creditCardNumber) {
         for (CreditCardType type : CreditCardType.values()) {
             if (ValidationUtils.isCreditCardNumberIinValid(type.iinsPatterns, creditCardNumber)) {
-                return type;
+                if ((type == CreditCardType.Visa) && VisaDebitInternalValidator.isVisaDebitValid(creditCardNumber)) {
+                    return CreditCardType.VisaDebit;
+                } else {
+                    return type;
+                }
             }
         }
         return null;
     }
-
 }

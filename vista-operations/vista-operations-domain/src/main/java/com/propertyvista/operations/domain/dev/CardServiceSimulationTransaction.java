@@ -20,7 +20,6 @@ import com.pyx4j.entity.annotations.Caption;
 import com.pyx4j.entity.annotations.Editor;
 import com.pyx4j.entity.annotations.Editor.EditorType;
 import com.pyx4j.entity.annotations.Format;
-import com.pyx4j.entity.annotations.Indexed;
 import com.pyx4j.entity.annotations.JoinColumn;
 import com.pyx4j.entity.annotations.Length;
 import com.pyx4j.entity.annotations.MemberColumn;
@@ -28,6 +27,7 @@ import com.pyx4j.entity.annotations.Owner;
 import com.pyx4j.entity.annotations.Table;
 import com.pyx4j.entity.annotations.Timestamp;
 import com.pyx4j.entity.annotations.Timestamp.Update;
+import com.pyx4j.entity.annotations.validator.NotNull;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
@@ -57,7 +57,6 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @JoinColumn
     CardServiceSimulationCard card();
 
-    @Indexed(group = { "r,2" }, uniqueConstraint = true)
     @MemberColumn(name = "tp")
     IPrimitive<SimpulationTransactionType> transactionType();
 
@@ -68,7 +67,6 @@ public interface CardServiceSimulationTransaction extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
-    @Indexed(group = { "r,1" }, uniqueConstraint = true)
     @Length(60)
     IPrimitive<String> reference();
 
@@ -76,8 +74,11 @@ public interface CardServiceSimulationTransaction extends IEntity {
 
     IPrimitive<String> authorizationNumber();
 
+    @NotNull
+    IPrimitive<Boolean> voided();
+
     @Timestamp(Update.Updated)
-    @Format("MM/dd/yyyy HH:mm")
+    @Format("MM/dd/yyyy HH:mm.ss")
     @Editor(type = EditorType.label)
     IPrimitive<Date> transactionDate();
 }

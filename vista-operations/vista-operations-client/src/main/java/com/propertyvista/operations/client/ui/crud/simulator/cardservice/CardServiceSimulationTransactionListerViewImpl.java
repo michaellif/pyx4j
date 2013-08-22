@@ -13,6 +13,10 @@
  */
 package com.propertyvista.operations.client.ui.crud.simulator.cardservice;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.Sort;
 import com.pyx4j.forms.client.ui.datatable.MemberColumnDescriptor;
 import com.pyx4j.site.client.ui.prime.lister.AbstractLister;
 import com.pyx4j.site.client.ui.prime.lister.ListerViewImplBase;
@@ -27,15 +31,22 @@ public class CardServiceSimulationTransactionListerViewImpl extends ListerViewIm
         public CardServiceSimulationTransactionLister() {
             super(CardServiceSimulationTransaction.class, false, true);
             setColumnDescriptors(//@formatter:off
+                    new MemberColumnDescriptor.Builder(proto().id()).build(),
                     new MemberColumnDescriptor.Builder(proto().card().number()).columnTitle("Card Number").build(),
                     new MemberColumnDescriptor.Builder(proto().card().merchant()).build(),
                     new MemberColumnDescriptor.Builder(proto().transactionType() ).build(),
-                    new MemberColumnDescriptor.Builder(proto().amount() ).build(),
-                    new MemberColumnDescriptor.Builder(proto().reference() ).build(),
+                    new MemberColumnDescriptor.Builder(proto().amount()).build(),
+                    new MemberColumnDescriptor.Builder(proto().reference()).build(),
                     new MemberColumnDescriptor.Builder(proto().responseCode()).build(),
                     new MemberColumnDescriptor.Builder(proto().authorizationNumber()).build(),
+                    new MemberColumnDescriptor.Builder(proto().voided()).build(),
                     new MemberColumnDescriptor.Builder(proto().transactionDate()).build()
             );//@formatter:on
+        }
+
+        @Override
+        public List<Sort> getDefaultSorting() {
+            return Arrays.asList(new Sort(proto().id(), true));
         }
     }
 
