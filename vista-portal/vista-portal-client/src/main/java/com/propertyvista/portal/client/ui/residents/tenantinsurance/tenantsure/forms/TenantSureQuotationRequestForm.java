@@ -26,6 +26,7 @@ import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboBox;
 import com.propertyvista.common.client.ui.components.tenantinsurance.YesNoComboBox;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
+import com.propertyvista.misc.VistaTODO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 
@@ -55,8 +56,10 @@ public class TenantSureQuotationRequestForm extends CEntityDecoratableForm<Tenan
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().smoker(), new YesNoComboBox()), 5).labelWidth("25em").build());
         contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().numberOfPreviousClaims()), 5).labelWidth("25em").build());
 
-        contentPanel.setH2(++row, 0, 1, i18n.tr("Payment"));
-        contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentSchedule())).build());
+        if (VistaTODO.VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED) {
+            contentPanel.setH2(++row, 0, 1, i18n.tr("Payment"));
+            contentPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().paymentSchedule())).build());
+        }
 
         return contentPanel;
     }

@@ -76,4 +76,6 @@ public class VistaTODO {
     public static boolean VISTA_2446_Periodic_Lease_Terms = false;
 
     public static boolean VISTA_3129_AutoPayBulkEditorExperiment = true;
+
+    public static boolean VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED = false;
 }

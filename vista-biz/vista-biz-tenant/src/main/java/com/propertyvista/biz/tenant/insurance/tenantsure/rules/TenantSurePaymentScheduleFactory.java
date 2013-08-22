@@ -14,6 +14,7 @@
 package com.propertyvista.biz.tenant.insurance.tenantsure.rules;
 
 import com.propertyvista.domain.tenant.insurance.TenantSurePaymentSchedule;
+import com.propertyvista.misc.VistaTODO;
 
 public class TenantSurePaymentScheduleFactory {
 
@@ -27,6 +28,9 @@ public class TenantSurePaymentScheduleFactory {
             ps = new TenantSureMonthlyPaymentSchedule();
             break;
         case Annual:
+            if (!VistaTODO.VISTA_3207_TENANT_SURE_YEARLY_PAY_SCHEDULE_IMPLEMENTED) {
+                throw new IllegalStateException("Yearly payment schedule has not been implemented yet");
+            }
             ps = new TenantSureAnnualPaymentSchedule();
             break;
         default:
