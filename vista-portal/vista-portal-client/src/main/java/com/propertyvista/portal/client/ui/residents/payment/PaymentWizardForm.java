@@ -366,7 +366,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
 
         panel.add(new HTML("<br/>"));
 
-        panel.add(new HTML(VistaResources.INSTANCE.directBanking().getText()));
+        panel.add(new HTML(VistaResources.INSTANCE.directBankingDescription().getText()));
 
         panel.add(new HTML("<br/>"));
 
@@ -389,6 +389,15 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
         links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
 
         panel.add(links);
+
+        panel.add(new HTML("<br/>"));
+
+        panel.add(new Anchor(i18n.tr("How to pay..."), new Command() {
+            @Override
+            public void execute() {
+                new LegalTermsDialog(TermsType.DirectBankingInstruction).show();
+            }
+        }));
 
         return panel;
     }

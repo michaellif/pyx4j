@@ -36,6 +36,9 @@ public interface VistaResources extends ClientBundleWithLookup {
     @Source("LT_TermsAndConditions.html")
     TextResource termsAndConditions();
 
-    @Source("DirectBanking.html")
-    TextResource directBanking();
+    @Source("DirectBankingInstruction.html")
+    TextResource directBankingInstruction();
+
+    @Source("DirectBankingDescription.html")
+    TextResource directBankingDescription();
 }
