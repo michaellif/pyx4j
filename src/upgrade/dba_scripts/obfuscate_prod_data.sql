@@ -153,10 +153,10 @@ LANGUAGE plpgsql VOLATILE;
 
 BEGIN TRANSACTION;
 
+        SELECT * FROM _dba_.obfuscate_prod_data();       
        
-        
                 
 COMMIT;
 
-SELECT * FROM _dba_.obfuscate_prod_data();
+
 
