@@ -223,8 +223,10 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
                     return new ValidationError(component, i18n.tr("Validation in progress"));
                 }
             }
+        } else if (value != null && value.obfuscatedNumber().isNull()) {
+            return new ValidationError(component, i18n.tr("Invalid Card Number"));
         }
-        return new ValidationError(component, i18n.tr("Invalid Card Number"));
+        return null;
     }
 
     private void setCreditCardNumberValidationResult(ValidationError error) {
