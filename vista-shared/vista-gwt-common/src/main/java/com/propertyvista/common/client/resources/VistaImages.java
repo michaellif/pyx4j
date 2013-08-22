@@ -61,6 +61,35 @@ public interface VistaImages extends FormsImageBundle, EntityFolderImages, Widge
 
     // -----------------------------------------------
 
+    @Source("PaymentOptionIcons/Banks/bfg.png")
+    ImageResource linkTD();
+
+    @Source("PaymentOptionIcons/Banks/bmo.png")
+    ImageResource linkBMO();
+
+    @Source("PaymentOptionIcons/Banks/cibc.png")
+    ImageResource linkCIBC();
+
+    @Source("PaymentOptionIcons/Banks/laurentian.png")
+    ImageResource linkLaurentian();
+
+    @Source("PaymentOptionIcons/Banks/manulife.png")
+    ImageResource linkManulife();
+
+    @Source("PaymentOptionIcons/Banks/nbc.png")
+    ImageResource linkNBC();
+
+    @Source("PaymentOptionIcons/Banks/pcf.png")
+    ImageResource linkPCF();
+
+    @Source("PaymentOptionIcons/Banks/rbc.png")
+    ImageResource linkRBC();
+
+    @Source("PaymentOptionIcons/Banks/scotia.png")
+    ImageResource linkScotia();
+
+    // -----------------------------------------------
+
     @Source("PaymentOptionIcons/Small/Mastercard.png")
     ImageResource paymentMC();
 

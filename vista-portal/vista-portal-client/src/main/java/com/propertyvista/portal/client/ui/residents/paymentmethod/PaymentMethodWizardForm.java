@@ -61,7 +61,7 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
         }
 
         @Override

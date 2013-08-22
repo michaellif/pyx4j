@@ -18,16 +18,22 @@ import java.util.Set;
 
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.FontWeight;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -41,6 +47,7 @@ import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
@@ -49,6 +56,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
+import com.propertyvista.common.client.resources.VistaImages;
 import com.propertyvista.common.client.ui.components.editors.AddressSimpleEditor;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -78,7 +86,7 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
     private final PaymentMethodForm<LeasePaymentMethod> paymentMethodEditor = new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
         @Override
         public Set<PaymentType> defaultPaymentTypes() {
-            return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+            return PortalPaymentTypesUtil.getAllowedPaymentTypes(true);
         }
 
         @Override
@@ -348,7 +356,54 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         panel.add(amount);
 
+        if (get(proto().paymentMethod()).getValue().type().getValue() == PaymentType.DirectBanking) {
+            panel.add(createDirectBankingPanel());
+        }
+
         return panel;
+    }
+
+    private Widget createDirectBankingPanel() {
+        VerticalPanel panel = new VerticalPanel();
+
+        panel.add(new HTML("<br/>"));
+        panel.add(new HTML(
+                i18n.tr("Please Note: Select and click onto your direct banking icon below. You will be redirected to your financial institution. Only banks listed below are currently supported. As an alternative, you can pay by phone or in person to your bank. Do not forget to provide your Account Number and payee Rent Payments - Payment Pad")));
+
+        FlexTable links = new FlexTable();
+
+        links.setWidget(0, 0, createLink(VistaImages.INSTANCE.linkTD(), "http://www.td.com/about-tdbfg/our-business"));
+        links.setWidget(0, 1, createLink(VistaImages.INSTANCE.linkBMO(), "http://www.bmo.com/home"));
+
+        links.setWidget(1, 0, createLink(VistaImages.INSTANCE.linkCIBC(), "https://www.cibc.com/ca/personal.html"));
+        links.setWidget(1, 1, createLink(VistaImages.INSTANCE.linkLaurentian(), "https://www.laurentianbank.ca/en/personal_banking_services/index.html"));
+
+        links.setWidget(2, 0, createLink(VistaImages.INSTANCE.linkManulife(), "http://www.manulifebank.ca/wps/portal/bankca/Bank.caHome/Personal/"));
+        links.setWidget(2, 1, createLink(VistaImages.INSTANCE.linkNBC(), "http://www.nbc.ca/bnc/cda/index/0,4229,divId-2_langId-1_navCode-1000,00.html"));
+
+        links.setWidget(3, 0, createLink(VistaImages.INSTANCE.linkPCF(), "http://www.pcfinancial.ca/"));
+        links.setWidget(3, 1, createLink(VistaImages.INSTANCE.linkRBC(), "http://www.rbcroyalbank.com/personal.html"));
+
+        links.setWidget(4, 0, createLink(VistaImages.INSTANCE.linkScotia(), "http://www.scotiabank.com/ca/en/0,1091,2,00.html"));
+
+        panel.add(links);
+
+        return panel;
+    }
+
+    private Image createLink(ImageResource image, final String url) {
+        Image link = new Image(image);
+        link.addClickHandler(new ClickHandler() {
+            @Override
+            public void onClick(ClickEvent event) {
+                openLink(url);
+            }
+        });
+        return link;
+    }
+
+    private void openLink(String url) {
+        Window.open(url, "_blank", BrowserType.isIE() ? "status=1,toolbar=1,location=1,resizable=1,scrollbars=1" : null);
     }
 
     private Widget createLegalTermsPanel() {

@@ -34,7 +34,7 @@ public class EditPaymentMethodViewImpl extends EditImpl<LeasePaymentMethod> impl
         setForm(new PaymentMethodForm<LeasePaymentMethod>(LeasePaymentMethod.class) {
             @Override
             public Set<PaymentType> defaultPaymentTypes() {
-                return PortalPaymentTypesUtil.getAllowedPaymentTypes();
+                return PortalPaymentTypesUtil.getAllowedPaymentTypes(false);
             }
 
             @Override

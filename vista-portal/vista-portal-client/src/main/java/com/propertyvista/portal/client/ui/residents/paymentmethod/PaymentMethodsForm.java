@@ -136,7 +136,7 @@ public class PaymentMethodsForm extends CEntityForm<PaymentMethodListDTO> {
                 super.onValueSet(populate);
 
                 // disable non-allowed items:
-                if (!PortalPaymentTypesUtil.getAllowedPaymentTypes().contains(getValue().type().getValue())) {
+                if (!PortalPaymentTypesUtil.getAllowedPaymentTypes(false).contains(getValue().type().getValue())) {
                     get(proto().details()).setEnabled(false);
                 }
             }
