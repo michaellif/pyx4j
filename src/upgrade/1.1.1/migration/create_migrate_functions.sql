@@ -109,6 +109,11 @@ BEGIN
                                         ADD COLUMN exclude_last_billing_period_charge BOOLEAN;
                                         
         ALTER TABLE auto_pay_policy RENAME COLUMN rule TO on_lease_charge_change_rule; 
+        
+        
+        -- building
+        
+        ALTER TABLE building ADD COLUMN suspended BOOLEAN;
                                                 
         -- company
         
@@ -368,13 +373,7 @@ BEGIN
         
         -- _admin_.audit_record
         
-        UPDATE  _admin_.audit_record 
-        SET     namespace = LOWER(namespace);
-        
-        DELETE FROM _admin_.audit_record 
-        WHERE   (namespace NOT IN (SELECT namespace FROM _admin_.admin_pmc)
-        AND     namespace != '_admin_');
-        
+                
         
         EXECUTE 'UPDATE _admin_.audit_record AS a '
                 ||'SET  user_type = ''crm'' '
@@ -412,6 +411,14 @@ BEGIN
                 ||'SET  exclude_first_billing_period_charge = FALSE,'
                 ||'     exclude_last_billing_period_charge = TRUE ';
        
+        
+        
+        -- building
+         
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.building '
+                ||'SET  suspended = FALSE ';
+        
         
         -- customer
         
@@ -518,6 +525,15 @@ BEGIN
                 ||'     cash_equivalent_credit_card_visa = cash_equivalent_credit_card,'
                 ||'     resident_portal_credit_card_master_card = resident_portal_credit_card,'
                 ||'     resident_portal_credit_card_visa = resident_portal_credit_card';
+        
+        
+        -- resident_portal_settings
+        
+        IF v_schema_name != 'realstar'
+        THEN
+                EXECUTE 'UPDATE '||v_schema_name||'.resident_portal_settings '
+                        ||'SET use_custom_html = FALSE ';
+        END IF;
         
         
         -- yardi_building_origination

@@ -270,3 +270,11 @@ DROP FUNCTION _dba_.migrate_pmc_111(text);
 
 DROP TABLE _dba_.email_template; 
 
+-- Final touch, cleanup of _admin_.audit_record
+
+BEGIN TRANSACTION;
+
+        DELETE FROM _admin_.audit_record WHERE usr IS NOT NULL and user_type IS NULL;
+        
+COMMIT;
+

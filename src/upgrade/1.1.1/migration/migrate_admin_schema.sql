@@ -125,7 +125,8 @@ SET search_path = '_admin_';
         -- admin_pmc_payment_type_info
         
         ALTER TABLE admin_pmc_payment_type_info ADD COLUMN direct_banking_fee NUMERIC(18,2),
-                                                ADD COLUMN visa_debit_fee NUMERIC(18,4);
+                                                ADD COLUMN visa_debit_fee NUMERIC(18,4),
+                                                ADD COLUMN updated TIMESTAMP;
                                                 
         ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN cc_amex_fee TYPE NUMERIC(18,4);
         ALTER TABLE admin_pmc_payment_type_info ALTER COLUMN cc_discover_fee TYPE NUMERIC(18,4);
@@ -269,17 +270,27 @@ SET search_path = '_admin_';
         
         ALTER TABLE direct_debit_record OWNER TO vista;
         
+        -- fee_default_equifax_fee
+        
+        ALTER TABLE fee_default_equifax_fee ADD COLUMN updated TIMESTAMP;
+        
         
         -- fee_default_payment_fees
         
         ALTER TABLE fee_default_payment_fees    ADD COLUMN direct_banking_fee NUMERIC(18,2),
-                                                ADD COLUMN visa_debit_fee NUMERIC(18,4);
+                                                ADD COLUMN visa_debit_fee NUMERIC(18,4),
+                                                ADD COLUMN updated TIMESTAMP;
                                                 
         ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_amex_fee TYPE NUMERIC(18,4);
         ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_discover_fee TYPE NUMERIC(18,4);
         ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_master_card_fee TYPE NUMERIC(18,4);
         ALTER TABLE fee_default_payment_fees ALTER COLUMN cc_visa_fee TYPE NUMERIC(18,4);
                                     
+      
+        -- fee_pmc_equifax_fee
+        
+        ALTER TABLE fee_pmc_equifax_fee ADD COLUMN updated TIMESTAMP;                              
+      
         -- global_crm_user_index
         
         CREATE TABLE global_crm_user_index
@@ -365,6 +376,9 @@ SET search_path = '_admin_';
        
         -- audit_record
         
+        UPDATE  audit_record 
+        SET     namespace = LOWER(namespace);
+        
         UPDATE  audit_record AS r
         SET     pmc = a.id
         FROM    admin_pmc a
@@ -373,6 +387,10 @@ SET search_path = '_admin_';
         UPDATE  audit_record
         SET     user_type = 'operations'
         WHERE   namespace = '_admin_';
+        
+        DELETE FROM _admin_.audit_record 
+        WHERE   (namespace NOT IN (SELECT namespace FROM _admin_.admin_pmc)
+        AND     namespace != '_admin_');
         
         
         -- dev_visa_debit_range
