@@ -61,8 +61,8 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     public IsWidget createContent() {
         VerticalPanel container = new VerticalPanel();
 
-        container.add(new FormDecoratorBuilder(inject(proto().currentPaymentDate(), new CDateLabel()), 10).labelWidth(22).build());
-        container.add(new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).labelWidth(22).build());
+        container.add(new FormDecoratorBuilder(inject(proto().currentPaymentDate(), new CDateLabel()), 10).labelWidth(18).build());
+        container.add(new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 10).labelWidth(18).build());
         container.add(new HTML("&nbsp"));
         container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
 
@@ -75,11 +75,11 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
 
         get(proto().preauthorizedPayments()).setEditable(!getValue().isMoveOutWithinNextBillingCycle().getValue(false));
 
-        if (!getValue().currentPaymentDate().equals(getValue().nextScheduledPaymentDate())) {
-            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
+        if (!getValue().currentPaymentDate().equals(getValue().nextPaymentDate())) {
+            get(proto().nextPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
             get(proto().currentPaymentDate()).setVisible(true);
         } else {
-            get(proto().nextScheduledPaymentDate()).setNote(null);
+            get(proto().nextPaymentDate()).setNote(null);
             get(proto().currentPaymentDate()).setVisible(false);
         }
     }

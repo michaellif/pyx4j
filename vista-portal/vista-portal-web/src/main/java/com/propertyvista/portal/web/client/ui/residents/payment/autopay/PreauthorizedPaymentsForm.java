@@ -60,7 +60,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
     public IsWidget createContent() {
         VerticalPanel container = new VerticalPanel();
 
-        container.add(new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 10).build());
+        container.add(new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 10).build());
         container.add(new HTML("&nbsp"));
         container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
 
