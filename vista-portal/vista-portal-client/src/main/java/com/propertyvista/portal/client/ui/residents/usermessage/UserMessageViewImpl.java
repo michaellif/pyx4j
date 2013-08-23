@@ -122,7 +122,7 @@ public class UserMessageViewImpl extends Composite implements UserMessageView {
     @Override
     public void populate(Notification userMessage) {
         messageTypeImageHolder.setWidget(new Image(getUserMessageImageResource(userMessage.getNotificationType())));
-        messageLabel.setText(userMessage.getMessage());
+        messageLabel.setHTML(userMessage.getMessage());
 
         debugMessageLabel.setVisible(isDebugInfoRequired());
         debugMessageLabel.setText(isDebugInfoRequired() & userMessage.getSystemInfo() != null ? userMessage.getSystemInfo() : "");
