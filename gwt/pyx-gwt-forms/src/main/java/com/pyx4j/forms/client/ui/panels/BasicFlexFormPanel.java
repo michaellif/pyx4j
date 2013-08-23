@@ -40,7 +40,6 @@ import java.util.List;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.VerticalAlign;
-import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -52,9 +51,6 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import com.pyx4j.forms.client.events.HasPropertyChangeHandlers;
-import com.pyx4j.forms.client.events.PropertyChangeEvent;
-import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.INativeComponent;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme.StyleName;
@@ -62,11 +58,9 @@ import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.forms.client.validators.ValidationResults;
 
-public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandler, HasPropertyChangeHandlers, IValidatable {
+public class BasicFlexFormPanel extends FlexTable implements IValidatable {
 
     private final String title;
-
-    private final List<CComponent<?>> components = new ArrayList<CComponent<?>>();
 
     public BasicFlexFormPanel(String title) {
         this.title = title;
@@ -169,7 +163,6 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
     }
 
     public void setWidget(int row, int column, int span, Widget widget) {
-        locateCComponents(widget);
         super.setWidget(row, column, widget);
         getFlexCellFormatter().setColSpan(row, column, span);
     }
@@ -184,17 +177,18 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
         setWidget(row, column, asWidgetOrNull(widget));
     }
 
-    private void locateCComponents(Widget widget) {
+    private List<CComponent<?>> locateCComponents(Widget widget) {
+        List<CComponent<?>> components = new ArrayList<CComponent<?>>();
         if (widget instanceof INativeComponent) {
             CComponent<?> comp = ((INativeComponent<?>) widget).getCComponent();
             components.add(comp);
-            comp.addPropertyChangeHandler(this);
             comp.setLocationHint(title);
         } else if (widget instanceof HasWidgets) {
             for (Iterator<Widget> iterator = ((HasWidgets) widget).iterator(); iterator.hasNext();) {
-                locateCComponents(iterator.next());
+                components.addAll(locateCComponents(iterator.next()));
             }
         }
+        return components;
     }
 
     @Override
@@ -203,19 +197,9 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
     }
 
     @Override
-    public void onPropertyChange(PropertyChangeEvent event) {
-        PropertyChangeEvent.fire(this, event.getPropertyName());
-    }
-
-    @Override
-    public HandlerRegistration addPropertyChangeHandler(PropertyChangeHandler handler) {
-        return addHandler(handler, PropertyChangeEvent.getType());
-    }
-
-    @Override
     public ValidationResults getValidationResults() {
         ValidationResults results = new ValidationResults();
-        for (CComponent<?> component : components) {
+        for (CComponent<?> component : locateCComponents(this)) {
             if (component.isUnconditionalValidationErrorRendering()) {
                 results.appendValidationErrors(component.getValidationResults());
             } else {
@@ -233,7 +217,7 @@ public class BasicFlexFormPanel extends FlexTable implements PropertyChangeHandl
 
     @Override
     public void showErrors(boolean show) {
-        for (CComponent<?> component : components) {
+        for (CComponent<?> component : locateCComponents(this)) {
             component.setUnconditionalValidationErrorRendering(show);
         }
     }

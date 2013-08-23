@@ -22,6 +22,7 @@ package com.pyx4j.site.client.ui.prime.wizard;
 
 import java.util.List;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.BeforeSelectionHandler;
 import com.google.gwt.event.logical.shared.HasBeforeSelectionHandlers;
 import com.google.gwt.event.logical.shared.HasSelectionHandlers;
@@ -62,6 +63,38 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
                 onStepChange(event);
             }
         });
+
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+
+                    if (!sheduled) {
+                        sheduled = true;
+                        Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                            @Override
+                            public void execute() {
+
+                                for (int i = 0; i < wizardPanel.size(); i++) {
+                                    WizardStep step = (WizardStep) wizardPanel.getTab(i);
+                                    ValidationResults validationResults = step.getValidationResults();
+                                    if (validationResults.isValid()) {
+                                        step.setTabWarning(null);
+                                    } else {
+                                        step.setTabWarning(validationResults.getValidationShortMessage());
+                                    }
+                                }
+                                sheduled = false;
+                            }
+                        });
+
+                    }
+                }
+            }
+
+        });
     }
 
     protected void onStepChange(SelectionEvent<Tab> event) {
@@ -76,19 +109,6 @@ public abstract class WizardForm<E extends IEntity> extends CEntityForm<E> imple
 
     public WizardStep addStep(final TwoColumnFlexFormPanel panel) {
         final WizardStep step = addStep(panel, panel.getTitle());
-        panel.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
-                    ValidationResults validationResults = panel.getValidationResults();
-                    if (validationResults.isValid()) {
-                        step.setTabWarning(null);
-                    } else {
-                        step.setTabWarning(validationResults.getValidationShortMessage());
-                    }
-                }
-            }
-        });
         return step;
     }
 

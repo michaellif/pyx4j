@@ -20,7 +20,9 @@
  */
 package com.pyx4j.forms.client.ui;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -34,6 +36,7 @@ import com.pyx4j.forms.client.events.PropertyChangeEvent;
 import com.pyx4j.forms.client.events.PropertyChangeEvent.PropertyName;
 import com.pyx4j.forms.client.events.PropertyChangeHandler;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.validators.IValidatable;
 import com.pyx4j.forms.client.validators.ValidationResults;
 import com.pyx4j.widgets.client.tabpanel.Tab;
 import com.pyx4j.widgets.client.tabpanel.TabPanel;
@@ -52,6 +55,46 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
         tabPanel = new TabPanel();
         tabPanel.setSize("100%", "100%");
 
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+                    if (!sheduled) {
+                        sheduled = true;
+                        Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                            @Override
+                            public void execute() {
+                                for (int i = 0; i < tabPanel.size(); i++) {
+                                    Tab tab = tabPanel.getTab(i);
+                                    ValidationResults validationResults = getValidationResults(tab);
+                                    if (validationResults.isValid()) {
+                                        tab.setTabWarning(null);
+                                    } else {
+                                        tab.setTabWarning(validationResults.getValidationShortMessage());
+                                    }
+                                }
+                                sheduled = false;
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
+    }
+
+    private ValidationResults getValidationResults(Widget widget) {
+        ValidationResults results = new ValidationResults();
+        if (widget instanceof IValidatable) {
+            results.appendValidationErrors(((IValidatable) widget).getValidationResults());
+        } else if (widget instanceof HasWidgets) {
+            for (Widget childWidget : ((HasWidgets) widget)) {
+                results.appendValidationErrors(getValidationResults(childWidget));
+            }
+        }
+        return results;
     }
 
     @Override
@@ -60,21 +103,7 @@ public class CTabbedEntityForm<E extends IEntity> extends CEntityForm<E> {
     }
 
     public Tab addTab(final TwoColumnFlexFormPanel panel) {
-        final Tab tab = addTab(panel, panel.getTitle());
-        panel.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
-                    ValidationResults validationResults = panel.getValidationResults();
-                    if (validationResults.isValid()) {
-                        tab.setTabWarning(null);
-                    } else {
-                        tab.setTabWarning(validationResults.getValidationShortMessage());
-                    }
-                }
-            }
-        });
-        return tab;
+        return addTab(panel, panel.getTitle());
     }
 
     public Tab addTab(Widget content, String tabTitle) {

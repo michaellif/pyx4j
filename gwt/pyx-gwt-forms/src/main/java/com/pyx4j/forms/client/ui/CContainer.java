@@ -95,7 +95,7 @@ public abstract class CContainer<DATA_TYPE> extends CComponent<DATA_TYPE> {
                             if (event.isEventOfType(PropertyName.valid)) {
                                 log.trace("CContainer.onPropertyChange fired from {}. Changed property is {}.", shortDebugInfo(), event.getPropertyName());
                                 CContainer.super.revalidate();
-                                PropertyChangeEvent.fire(CContainer.this, PropertyChangeEvent.PropertyName.valid);
+                                PropertyChangeEvent.fire(CContainer.this, PropertyName.valid);
                             }
                             sheduled = false;
                         }

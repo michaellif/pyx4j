@@ -20,6 +20,7 @@
  */
 package com.pyx4j.forms.client.ui.wizard;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -50,6 +51,38 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
                 onStepChange(event);
             }
         });
+
+        addPropertyChangeHandler(new PropertyChangeHandler() {
+            boolean sheduled = false;
+
+            @Override
+            public void onPropertyChange(PropertyChangeEvent event) {
+                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
+
+                    if (!sheduled) {
+                        sheduled = true;
+                        Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
+                            @Override
+                            public void execute() {
+
+                                for (int i = 0; i < wizardPanel.size(); i++) {
+                                    WizardStep step = wizardPanel.getStep(i);
+                                    ValidationResults validationResults = step.getValidationResults();
+                                    if (validationResults.isValid()) {
+                                        step.setStepWarning(null);
+                                    } else {
+                                        step.setStepWarning(validationResults.getValidationShortMessage());
+                                    }
+                                }
+
+                                sheduled = false;
+                            }
+                        });
+                    }
+
+                }
+            }
+        });
     }
 
     @Override
@@ -62,21 +95,7 @@ public class CEntityWizard<E extends IEntity> extends CEntityForm<E> {
     }
 
     public WizardStep addStep(final BasicFlexFormPanel panel) {
-        final WizardStep step = addStep(panel, panel.getTitle());
-        panel.addPropertyChangeHandler(new PropertyChangeHandler() {
-            @Override
-            public void onPropertyChange(PropertyChangeEvent event) {
-                if (event.isEventOfType(PropertyName.valid, PropertyName.repopulated, PropertyName.showErrorsUnconditional)) {
-                    ValidationResults validationResults = panel.getValidationResults();
-                    if (validationResults.isValid()) {
-                        step.setStepWarning(null);
-                    } else {
-                        step.setStepWarning(validationResults.getValidationShortMessage());
-                    }
-                }
-            }
-        });
-        return step;
+        return addStep(panel, panel.getTitle());
     }
 
     public WizardStep addStep(Widget content, String tabTitle) {
