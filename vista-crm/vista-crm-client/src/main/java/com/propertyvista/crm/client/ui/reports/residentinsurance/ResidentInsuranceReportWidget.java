@@ -146,13 +146,23 @@ public class ResidentInsuranceReportWidget extends Composite implements ReportWi
 
     @Override
     public Object getMemento() {
-        // TODO Auto-generated method stub
-        return null;
+        return new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento };
     }
 
     @Override
     public void setMemento(Object memento) {
-        // TODO Auto-generated method stub
+        if (memento != null) {
+            final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+            ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) memento;
+            if (scrollBarPositionMementi[0] != null) {
+                reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
+                reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
+            }
+            if (scrollBarPositionMementi[1] != null) {
+                tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
+                tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
+            }
+        }
     }
 
     private List<ITableColumnFormatter> initColumnDescriptors() {
@@ -165,7 +175,7 @@ public class ResidentInsuranceReportWidget extends Composite implements ReportWi
         return Arrays.<ITableColumnFormatter> asList(//@formatter:off
                 new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.hasResidentInsurance()).build()),
                 new ColumnDescriptorAnchorTableColumnFormatter(WIDE_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.namesOnLease()).build()),
-                new ColumnDescriptorTableColumnFormatter(SHORT_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.building()).build()),
+                new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.building()).build()),
                 new ColumnDescriptorTableColumnFormatter(SHORT_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.unit()).build()),
                 new ColumnDescriptorTableColumnFormatter(WIDE_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.address()).build()),
                 new ColumnDescriptorTableColumnFormatter(NORMAL_COLUMN_WIDTH, new MemberColumnDescriptor.Builder(proto.postalCode()).build()),                

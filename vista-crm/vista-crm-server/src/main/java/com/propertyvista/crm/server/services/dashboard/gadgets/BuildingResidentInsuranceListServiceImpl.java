@@ -97,6 +97,7 @@ public class BuildingResidentInsuranceListServiceImpl implements BuildingResiden
             }
 
             dto.unitsWithInsuranceCount().setValue(Persistence.service().count(insuranceCriteria));
+
             if (dto.units().getValue() > 0) {
                 dto.unitsWithInsuranceShare().setValue(dto.unitsWithInsuranceCount().getValue() / (double) dto.units().getValue());
             }
