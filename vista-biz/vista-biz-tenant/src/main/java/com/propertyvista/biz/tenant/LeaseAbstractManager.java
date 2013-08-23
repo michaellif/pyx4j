@@ -633,9 +633,7 @@ public abstract class LeaseAbstractManager {
 
         lease.actualMoveOut().setValue(actualMoveOut);
 
-        updateLeaseDates(lease);
-
-        Persistence.service().merge(lease);
+        persist(lease);
 
         AptUnitOccupancySegment segment = ServerSideFactory.create(OccupancyFacade.class).getOccupancySegment(lease.unit(), lease.actualMoveOut().getValue());
         // if unit is not reserved/leased for new application/lease yet - correct the move out date:
@@ -706,7 +704,7 @@ public abstract class LeaseAbstractManager {
 
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
 
         return (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
     }
@@ -887,6 +885,7 @@ public abstract class LeaseAbstractManager {
         Persistence.service().merge(lease.billingAccount());
 
         ServerSideFactory.create(PaymentMethodFacade.class).updatePreauthorizedPaymentsByPolicy(lease);
+        ServerSideFactory.create(PaymentMethodFacade.class).updatePreauthorizedPaymentsByLeaseEnd(lease);
 
         // update reservation if necessary:
         if (doUnreserve) {

@@ -151,7 +151,7 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public BillingCycle getNextScheduledPreauthorizedPaymentBillingCycle(Lease lease) {
+    public BillingCycle getNextPreauthorizedPaymentBillingCycle(Lease lease) {
         LogicalDate when = new LogicalDate(SystemDateManager.getDate());
         BillingCycle cycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease, when);
         cycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(cycle);
@@ -162,8 +162,8 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
-    public LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease) {
-        return getNextScheduledPreauthorizedPaymentBillingCycle(lease).targetPadExecutionDate().getValue();
+    public LogicalDate getNextPreauthorizedPaymentDate(Lease lease) {
+        return getNextPreauthorizedPaymentBillingCycle(lease).targetPadExecutionDate().getValue();
     }
 
     @Override
@@ -182,6 +182,11 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     }
 
     @Override
+    public void updatePreauthorizedPaymentsByLeaseEnd(Lease lease) {
+        new PreauthorizedPaymentAgreementMananger().updatePreauthorizedPaymentsByLeaseEnd(lease);
+    }
+
+    @Override
     public AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccount) {
         return new PreauthorizedPaymentAutoPayReviewReport().getSuspendedPreauthorizedPaymentReview(billingAccount);
     }
@@ -190,5 +195,4 @@ public class PaymentMethodFacadeImpl implements PaymentMethodFacade {
     public List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId) {
         return new PreauthorizedPaymentsManager().calulatePreauthorizedPayment(billingCycle, billingAccountId);
     }
-
 }

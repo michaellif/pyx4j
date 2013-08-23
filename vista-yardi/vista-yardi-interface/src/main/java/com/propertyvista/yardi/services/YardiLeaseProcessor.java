@@ -405,7 +405,7 @@ public class YardiLeaseProcessor {
         return Customerinfo.FUTURE_RESIDENT.equals(info);
     }
 
-    private boolean isOnNotice(RTCustomer rtCustomer) {
+    public static boolean isOnNotice(RTCustomer rtCustomer) {
         Unitleasestatusinfo info = rtCustomer.getRTUnit().getUnit().getInformation().get(0).getUnitLeasedStatus();
         return (Unitleasestatusinfo.ON_NOTICE.equals(info) || Unitleasestatusinfo.LEASED_ON_NOTICE.equals(info));
     }
@@ -458,6 +458,8 @@ public class YardiLeaseProcessor {
         ARCode arCode = new ARCodeAdapter().retrieveARCode(ActionType.Debit, detail.getChargeCode());
         return arCode == null ? detail.getDescription() : arCode.name().getValue();
     }
+
+    // Lease state management: 
 
     private static Lease markLeaseOnNotice(Lease lease, YardiLease yardiLease) {
         ServerSideFactory.create(LeaseFacade.class).createCompletionEvent(lease, CompletionType.Notice, new LogicalDate(SystemDateManager.getDate()),

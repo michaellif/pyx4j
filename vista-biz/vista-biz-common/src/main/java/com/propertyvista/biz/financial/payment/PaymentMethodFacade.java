@@ -77,6 +77,11 @@ public interface PaymentMethodFacade {
      */
     void updatePreauthorizedPaymentsByPolicy(Lease lease);
 
+    /**
+     * Suspend PreauthorizedPayments for ending lease during Lease persist.
+     */
+    void updatePreauthorizedPaymentsByLeaseEnd(Lease lease);
+
     AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccountId);
 
     List<PreauthorizedPayment> retrievePreauthorizedPayments(Tenant tenantId);
@@ -89,9 +94,9 @@ public interface PaymentMethodFacade {
 
     LogicalDate getPreauthorizedPaymentCutOffDate(Lease lease);
 
-    BillingCycle getNextScheduledPreauthorizedPaymentBillingCycle(Lease lease);
+    BillingCycle getNextPreauthorizedPaymentBillingCycle(Lease lease);
 
-    LogicalDate getNextScheduledPreauthorizedPaymentDate(Lease lease);
+    LogicalDate getNextPreauthorizedPaymentDate(Lease lease);
 
     List<PaymentRecord> calulatePreauthorizedPayment(BillingCycle billingCycle, BillingAccount billingAccountId);
 }

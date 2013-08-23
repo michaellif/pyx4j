@@ -89,8 +89,7 @@ public class LeaseInternalManager extends LeaseAbstractManager {
             }
             // set termination date to day before current(new) lease:
             concurrent.terminationLeaseTo().setValue(DateUtils.daysAdd(lease.leaseFrom().getValue(), -1));
-            updateLeaseDates(concurrent);
-            Persistence.service().merge(concurrent);
+            persist(concurrent);
             complete(concurrent);
         }
     }

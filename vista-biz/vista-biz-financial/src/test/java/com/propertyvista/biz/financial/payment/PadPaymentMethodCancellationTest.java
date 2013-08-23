@@ -76,7 +76,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Need to investigate the diff with lease agreed price of 1000.00
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-04-01").totalDueAmount("2050.30");
 
-        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
+        assertEquals("Next PAP", "2011-04-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(getLease()));
 
         assertEquals("CutOffDate", "2011-03-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
 
@@ -86,7 +86,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
                 build());
 
         advanceSysDate("2011-03-29");
-        assertEquals("Next PAP", "2011-05-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
+        assertEquals("Next PAP", "2011-05-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(getLease()));
 
         // @formatter:off
         new PaymentRecordTester(getLease().billingAccount()).
@@ -160,7 +160,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         // Need to investigate the diff with lease agreed price of 1000.00
         new BillTester(getLatestBill()).billingCyclePeriodStartDate("2011-01-01").totalDueAmount("2050.30");
 
-        assertEquals("", "2011-01-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
+        assertEquals("", "2011-01-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(getLease()));
 
         assertEquals("", "2010-12-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
 
@@ -183,7 +183,7 @@ public class PadPaymentMethodCancellationTest extends LeaseFinancialTestBase {
         advanceSysDate("2010-12-29");
 
         assertEquals("", "2010-12-29", ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(getLease()));
-        assertEquals("", "2011-02-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(getLease()));
+        assertEquals("", "2011-02-01", ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(getLease()));
 
         // Record should not be updated, and new PA created
         pa1.coveredItems().get(0).amount().setValue(new BigDecimal("1000.03"));

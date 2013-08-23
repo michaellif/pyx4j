@@ -51,6 +51,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.server.common.security.VistaContext;
+import com.propertyvista.shared.config.VistaFeatures;
 
 class PreauthorizedPaymentAgreementMananger {
 
@@ -60,7 +61,7 @@ class PreauthorizedPaymentAgreementMananger {
         preauthorizedPayment.tenant().set(tenantId);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
 
-        LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(
+        LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(
                 preauthorizedPayment.tenant().lease());
 
         PreauthorizedPayment origPreauthorizedPayment;
@@ -120,30 +121,32 @@ class PreauthorizedPaymentAgreementMananger {
         return Persistence.service().query(criteria);
     }
 
-    List<PreauthorizedPayment> retrieveActivePreauthorizedPayments(Lease leaseId) {
+    List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentBillingCycle(lease);
         EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-        criteria.eq(criteria.proto().tenant().lease(), leaseId);
         criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-        criteria.isNull(criteria.proto().expiring());
+        criteria.in(criteria.proto().tenant().lease(), lease);
+        {
+            OrCriterion or = criteria.or();
+            or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
+            or.left().isNull(criteria.proto().expiring());
+        }
+
         return Persistence.service().query(criteria);
     }
 
-    List<PreauthorizedPayment> retrieveCurrentPreauthorizedPayments(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentBillingCycle(lease);
-        List<PreauthorizedPayment> currentPaps;
+    List<PreauthorizedPayment> retrieveNextPreauthorizedPayments(Lease lease) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
+        criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
+        criteria.in(criteria.proto().tenant().lease(), lease);
         {
-            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-            {
-                OrCriterion or = criteria.or();
-                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
-                or.left().isNull(criteria.proto().expiring());
-            }
-            criteria.in(criteria.proto().tenant().lease(), lease);
-            currentPaps = Persistence.service().query(criteria);
+            OrCriterion or = criteria.or();
+            or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
+            or.left().isNull(criteria.proto().expiring());
         }
 
-        return currentPaps;
+        return Persistence.service().query(criteria);
     }
 
     //If Tenant removes PAP - payment will NOT be canceled.
@@ -182,7 +185,7 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     public void renewPreauthorizedPayments(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         List<PreauthorizedPayment> activePaps;
         {
             EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
@@ -257,20 +260,7 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     public void updatePreauthorizedPaymentsByPolicy(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
-        List<PreauthorizedPayment> activePaps;
-        {
-            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-            {
-                OrCriterion or = criteria.or();
-                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
-                or.left().isNull(criteria.proto().expiring());
-            }
-            criteria.in(criteria.proto().tenant().lease(), lease);
-            activePaps = Persistence.service().query(criteria);
-        }
-
+        List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
         if (activePaps.size() == 0) {
             return; // nothing to do!..
         }
@@ -283,6 +273,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
 
         // lease last month check:
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
             suspend |= (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
                     nextCycle.billingCycleEndDate()));
@@ -298,28 +289,19 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     public void updatePreauthorizedPaymentsByLeaseEnd(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
-        List<PreauthorizedPayment> activePaps;
-        {
-            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-            {
-                OrCriterion or = criteria.or();
-                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
-                or.left().isNull(criteria.proto().expiring());
-            }
-            criteria.in(criteria.proto().tenant().lease(), lease);
-            activePaps = Persistence.service().query(criteria);
-        }
-
+        List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
         if (activePaps.size() == 0) {
             return; // nothing to do!..
         }
 
         boolean suspend = false;
 
-        // TODO : somehow calculate actual lease end date!?
-        if (!lease.leaseTo().isNull()) {
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        if (VistaFeatures.instance().yardiIntegration()) {
+            // currently checks just actual move out date (workable for Yardi mode):
+            suspend |= (beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
+        } else {
+            // TODO : calculate/ensure (case of Fixed and Periodic lease types) real lease end date!?
             suspend |= (beforeOrEqual(lease.leaseTo(), nextCycle.billingCycleEndDate()));
         }
 
@@ -364,7 +346,7 @@ class PreauthorizedPaymentAgreementMananger {
                             @Override
                             public Void execute() {
                                 boolean suspended = false;
-                                for (PreauthorizedPayment item : retrieveActivePreauthorizedPayments(account.lease())) {
+                                for (PreauthorizedPayment item : retrieveNextPreauthorizedPayments(account.lease())) {
                                     if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
                                         suspendPreauthorizedPayment(item, true);
                                         executionMonitor.addProcessedEvent("Pap suspend");

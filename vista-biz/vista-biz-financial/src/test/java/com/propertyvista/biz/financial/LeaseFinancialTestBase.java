@@ -613,7 +613,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     }
 
     protected LogicalDate getNextTargetPadExecutionDate() {
-        return ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(retrieveLease());
+        return ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(retrieveLease());
     }
 
     private BillableItem findBillableItem(String billableItemId, Lease lease) {

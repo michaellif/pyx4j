@@ -155,7 +155,7 @@ class CaledonReport {
         model.maxLeaseCharges().setValue(DomainUtil.max(model.maxLeaseCharges().getValue(), leaseCharges));
 
         // Calculate total EFT
-        BillingCycle nextBillingCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle nextBillingCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         for (PaymentRecord paymentRecord : ServerSideFactory.create(PaymentMethodFacade.class).calulatePreauthorizedPayment(nextBillingCycle,
                 lease.billingAccount())) {
             model.eftCount().setValue(model.eftCount().getValue() + 1);

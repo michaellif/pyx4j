@@ -117,7 +117,7 @@ class PreauthorizedPaymentAutoPayReviewReport {
 
         review.unit().setValue(billingAccount.lease().unit().info().number().getValue());
 
-        review.paymentDue().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(billingAccount.lease()));
+        review.paymentDue().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(billingAccount.lease()));
 
         AutoPayPolicy policy = ServerSideFactory.create(PolicyFacade.class)
                 .obtainEffectivePolicy(billingAccount.lease().unit().building(), AutoPayPolicy.class);

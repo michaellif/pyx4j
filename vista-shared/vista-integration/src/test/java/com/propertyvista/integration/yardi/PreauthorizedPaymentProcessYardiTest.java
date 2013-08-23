@@ -104,7 +104,7 @@ public class PreauthorizedPaymentProcessYardiTest extends PaymentYardiTestBase {
     }
 
     protected LogicalDate getTargetPadGenerationDate(Lease lease) {
-        BillingCycle curCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
+        BillingCycle curCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         return curCycle.targetPadGenerationDate().getValue();
     }
 

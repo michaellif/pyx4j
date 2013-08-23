@@ -85,7 +85,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
         dto.tenant().set(TenantAppContext.getCurrentUserTenant());
 
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentDate(lease));
+        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
         dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(dto.tenant().lease()));
 
         fillCoveredItems(dto, lease.currentTerm().version().leaseProducts());
