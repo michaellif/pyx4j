@@ -48,6 +48,10 @@ public class YardiLeaseImportTest extends YardiTestBase {
             MockEventBus.fireEvent(new PropertyUpdateEvent(updater));
         }
 
+        setupCustomerFirstLease();
+    }
+
+    protected void setupCustomerFirstLease() {
         // Add first Lease
         {
             // @formatter:off
@@ -84,7 +88,9 @@ public class YardiLeaseImportTest extends YardiTestBase {
             // @formatter:on
             MockEventBus.fireEvent(new LeaseChargeUpdateEvent(updater));
         }
+    }
 
+    protected void setupCustomerSecondLease() {
         // Add second Lease (same customer)
         {
             // @formatter:off
@@ -93,7 +99,7 @@ public class YardiLeaseImportTest extends YardiTestBase {
             set(RtCustomerUpdater.YCUSTOMER.CustomerID, "t000222").
             set(RtCustomerUpdater.YCUSTOMERNAME.FirstName, "John").
             set(RtCustomerUpdater.YCUSTOMERNAME.LastName, "Smith").
-            set(RtCustomerUpdater.YCUSTOMERADDRESS.Email, "John@Smith.ca").
+            set(RtCustomerUpdater.YCUSTOMERADDRESS.Email, "john@smith.ca").
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1002.00")).
             set(RtCustomerUpdater.YLEASE.LeaseFromDate, DateUtils.detectDateformat("2010-01-01")).
             set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("2014-12-31")).
@@ -123,7 +129,10 @@ public class YardiLeaseImportTest extends YardiTestBase {
         }
     }
 
-    public void testInitialImport_OneCustomerMultipleLeases() throws Exception {
+    public void testOneCustomerMultipleLeases_InitialImport() throws Exception {
+
+        setupCustomerSecondLease();
+
         setSysDate("2010-11-01");
 
         // Initial Import 
@@ -140,6 +149,45 @@ public class YardiLeaseImportTest extends YardiTestBase {
 
         assertNotNull("Lease imported", lease1);
         assertEquals("Lease Status", Lease.Status.Active, lease1.status().getValue());
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000222"));
+            lease2 = Persistence.service().retrieve(criteria);
+        }
+        assertNotNull("Lease imported", lease2);
+        assertEquals("Lease Status", Lease.Status.Active, lease2.status().getValue());
+
+        // verify Customer is the same:
+
+        assertEquals("Customer", lease1.currentTerm().version().tenants().get(0).leaseParticipant().customer().getValue(), lease2.currentTerm().version()
+                .tenants().get(0).leaseParticipant().customer().getValue());
+    }
+
+    public void testOneCustomerMultipleLeases_AddLeaseInSecondUpdate() throws Exception {
+        setSysDate("2010-11-01");
+
+        // Initial Import 
+        yardiImportAll(getYardiCredential("prop123"));
+
+        Lease lease1, lease2;
+
+        // Verify Leases is imported:
+        {
+            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
+            lease1 = Persistence.service().retrieve(criteria);
+        }
+
+        assertNotNull("Lease imported", lease1);
+        assertEquals("Lease Status", Lease.Status.Active, lease1.status().getValue());
+
+        setSysDate("2010-11-02");
+
+        setupCustomerSecondLease();
+
+        //Run second update from yardi
+        yardiImportAll(getYardiCredential("prop123"));
+
         {
             EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
             criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000222"));

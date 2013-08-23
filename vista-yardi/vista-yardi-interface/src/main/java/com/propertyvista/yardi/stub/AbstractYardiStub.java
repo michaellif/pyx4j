@@ -95,6 +95,10 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
         }
     }
 
+    private String logSec(String xml) {
+        return xml.replaceAll("<ns1:Password>.*</ns1:Password>", "<ns1:Password>***</ns1:Password>");
+    }
+
     protected void addMessageContextListener(final String prefix, Stub stub, final StringBuilder envelopeBuffer) {
         stub._getServiceClient().getAxisService().addMessageContextListener(new MessageContextListener() {
 
@@ -113,18 +117,18 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
             public void attachServiceContextEvent(ServiceContext sc, MessageContext mc) {
                 if (mc.getEnvelope() != null) {
                     requestCount++;
-                    String fileName = TransactionLog.log(transactionId, fileName() + "-request", mc.getEnvelope().toString(), "xml");
+                    String fileName = TransactionLog.log(transactionId, fileName() + "-request", logSec(mc.getEnvelope().toString()), "xml");
                     if (fileName != null) {
                         recordedTracastionsLogs.add(fileName);
                     }
-                    log.debug(prefix + " Service Context", mc.getEnvelope());
+                    log.debug("{} Service Context {}", prefix, logSec(mc.getEnvelope().toString()));
                     requestStartTime = System.currentTimeMillis();
                 }
             }
 
             @Override
             public void attachEnvelopeEvent(MessageContext mc) {
-                log.debug(prefix + " Envelope Event", mc.getEnvelope());
+                log.debug("{} Envelope Event {}", prefix, mc.getEnvelope());
                 String fileName = TransactionLog.log(transactionId, fileName() + "-response", mc.getEnvelope().toString(), "xml");
                 if (fileName != null) {
                     recordedTracastionsLogs.add(fileName);
