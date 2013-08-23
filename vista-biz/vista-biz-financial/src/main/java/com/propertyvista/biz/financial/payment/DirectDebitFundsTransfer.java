@@ -69,7 +69,7 @@ class DirectDebitFundsTransfer {
                 return Persistence.service().retrieve(criteria);
             }
         });
-        if ((vistaMerchantAccount == null || vistaMerchantAccount.merchantTerminalId().isNull())) {
+        if (vistaMerchantAccount == null) {
             throw new UserRuntimeException("Vista MerchantAccount is not setup");
         }
     }
