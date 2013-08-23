@@ -40,6 +40,7 @@ public interface BuildingResidentInsuranceCoverageDTO extends IEntity {
 
     @Editor(type = EditorType.percentage)
     @Caption(name = "% with insurance")
+    @Format("#0.00%")
     IPrimitive<Double> unitsWithInsuranceShare();
 
 }

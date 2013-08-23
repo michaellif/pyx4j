@@ -43,13 +43,14 @@ import com.propertyvista.domain.dashboard.gadgets.util.ListerUserSettings;
 public class BuildingResidentInsuranceCoverageGadget extends GadgetInstanceBase<BuildingResidentInsuranceCoverageGadgetMetadata> {
 
     private static final List<ColumnDescriptor> COLUMN_DESCRIPTORS;
+
     static {
         BuildingResidentInsuranceCoverageDTO proto = EntityFactory.getEntityPrototype(BuildingResidentInsuranceCoverageDTO.class);
         COLUMN_DESCRIPTORS = Arrays.asList(//@formatter:off
                 new MemberColumnDescriptor.Builder(proto.building()).build(),
                 new MemberColumnDescriptor.Builder(proto.complex()).build(), new MemberColumnDescriptor.Builder(proto.units()).build(),
                 new MemberColumnDescriptor.Builder(proto.unitsWithInsuranceCount()).build(),
-                new MemberColumnDescriptor.Builder(proto.unitsWithInsuranceShare()).build()
+                new MemberColumnDescriptor.Builder(proto.unitsWithInsuranceShare()).build()                
         );//@formatter:on
     }
 
