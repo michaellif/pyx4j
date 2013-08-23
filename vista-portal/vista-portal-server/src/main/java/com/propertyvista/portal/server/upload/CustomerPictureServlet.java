@@ -30,6 +30,7 @@ import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
+import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.rpc.DeploymentConsts;
@@ -71,54 +72,47 @@ public class CustomerPictureServlet extends HttpServlet {
         }
         key = new Key(id);
 
-        //TODO deserialize key
-        CustomerPicture file = Persistence.service().retrieve(CustomerPicture.class, key);
-        if (file == null) {
+        // retrieve blob
+        FileBlob blob = Persistence.service().retrieve(FileBlob.class, key);
+        // retrieve picture file
+        EntityQueryCriteria<CustomerPicture> crit = EntityQueryCriteria.create(CustomerPicture.class);
+        crit.eq(crit.proto().blobKey(), key);
+        CustomerPicture file = Persistence.service().retrieve(crit);
+        if (file == null && blob == null) {
             log.debug("no such document {} {}", key, filename);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        if (file.blobKey().isNull()) {
-            log.debug("resources {} {} is not file", key, filename);
-            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-            return;
-        }
-
-        String token = ETag.getEntityTag(file, "");
-        response.setHeader("Etag", token);
-
-        if (!file.timestamp().isNull()) {
-            long since = request.getDateHeader("If-Modified-Since");
-            if ((since != -1) && (file.timestamp().getValue() < since)) {
-                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                return;
-            }
-            response.setDateHeader("Last-Modified", file.timestamp().getValue());
-            // HTTP 1.0
-            response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
-            // HTTP 1.1
-            response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
-
-        }
-        if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
-            response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-            return;
-        }
-
-        if (!file.contentMimeType().isNull()) {
-            response.setContentType(file.contentMimeType().getValue());
-        }
-
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, file.blobKey().getValue());
-        if (blob == null) {
-            log.debug("no such blob {} {}", key, filename);
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
 
         response.setContentType(blob.contentType().getValue());
         response.getOutputStream().write(blob.content().getValue());
+
+        if (file != null) {
+            String token = ETag.getEntityTag(file, "");
+            response.setHeader("Etag", token);
+
+            if (!file.timestamp().isNull()) {
+                long since = request.getDateHeader("If-Modified-Since");
+                if ((since != -1) && (file.timestamp().getValue() < since)) {
+                    response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                    return;
+                }
+                response.setDateHeader("Last-Modified", file.timestamp().getValue());
+                // HTTP 1.0
+                response.setDateHeader("Expires", System.currentTimeMillis() + Consts.HOURS2MSEC * cacheExpiresHours);
+                // HTTP 1.1
+                response.setHeader("Cache-Control", "public, max-age=" + ((long) Consts.HOURS2SEC * cacheExpiresHours));
+
+            }
+            if (ETag.checkIfNoneMatch(token, request.getHeader("If-None-Match"))) {
+                response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                return;
+            }
+
+            if (!file.contentMimeType().isNull()) {
+                response.setContentType(file.contentMimeType().getValue());
+            }
+        }
     }
 
 }

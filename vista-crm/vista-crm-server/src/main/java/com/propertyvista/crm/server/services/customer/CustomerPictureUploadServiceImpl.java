@@ -57,6 +57,7 @@ public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<
             final UploadResponse<CustomerPicture> response) {
         response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
         Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
+        Persistence.service().commit(); // commit uploaded file
         response.uploadKey = blobKey;
 
         CustomerPicture newDocument = EntityFactory.create(CustomerPicture.class);
@@ -65,8 +66,6 @@ public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<
         newDocument.fileSize().setValue(response.fileSize);
         newDocument.timestamp().setValue(response.timestamp);
         newDocument.contentMimeType().setValue(response.fileContentType);
-        Persistence.service().persist(newDocument);
-        Persistence.service().commit();
 
         response.data = newDocument;
 

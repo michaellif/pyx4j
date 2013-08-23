@@ -60,7 +60,7 @@ public class MediaUtils {
     }
 
     public static String createCustomerPictureUrl(CustomerPicture picture) {
-        return ClientNavigUtils.getDeploymentBaseURL() + picture.id().getStringView() + "/" + picture.fileName().getStringView()
+        return ClientNavigUtils.getDeploymentBaseURL() + picture.blobKey().getStringView() + "/" + picture.fileName().getStringView()
                 + DeploymentConsts.customerPictureServletMapping;
     }
 
