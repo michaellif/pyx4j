@@ -17,7 +17,6 @@ import java.util.Collection;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.download.MimeMap;
@@ -30,7 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.crm.rpc.services.customer.CustomerPictureUploadService;
 import com.propertyvista.domain.tenant.CustomerPicture;
-import com.propertyvista.server.common.blob.BlobService;
+import com.propertyvista.server.domain.CustomerPictureBlob;
 import com.propertyvista.server.domain.FileBlob;
 
 public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<CustomerPicture, CustomerPicture> implements CustomerPictureUploadService {
@@ -55,13 +54,19 @@ public class CustomerPictureUploadServiceImpl extends AbstractUploadServiceImpl<
     @Override
     public ProcessingStatus onUploadReceived(final UploadData data, final UploadDeferredProcess<CustomerPicture, CustomerPicture> process,
             final UploadResponse<CustomerPicture> response) {
-        response.fileContentType = MimeMap.getContentType(FilenameUtils.getExtension(response.fileName));
-        Key blobKey = BlobService.persist(data.data, response.fileName, response.fileContentType);
-        Persistence.service().commit(); // commit uploaded file
-        response.uploadKey = blobKey;
+
+        CustomerPictureBlob blob = EntityFactory.create(CustomerPictureBlob.class);
+        blob.contentType().setValue(MimeMap.getContentType(FilenameUtils.getExtension(response.fileName)));
+        blob.data().setValue(data.data);
+
+        Persistence.service().persist(blob);
+        Persistence.service().commit();
+
+        response.uploadKey = blob.getPrimaryKey();
+        response.fileContentType = blob.contentType().getValue();
 
         CustomerPicture newDocument = EntityFactory.create(CustomerPicture.class);
-        newDocument.blobKey().setValue(blobKey);
+        newDocument.blobKey().setValue(response.uploadKey);
         newDocument.fileName().setValue(response.fileName);
         newDocument.fileSize().setValue(response.fileSize);
         newDocument.timestamp().setValue(response.timestamp);

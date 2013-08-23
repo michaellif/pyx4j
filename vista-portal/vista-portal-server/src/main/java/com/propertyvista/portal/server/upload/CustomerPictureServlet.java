@@ -31,11 +31,13 @@ import com.pyx4j.commons.Consts;
 import com.pyx4j.commons.Key;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.security.shared.SecurityController;
 
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.CustomerPicture;
 import com.propertyvista.portal.rpc.DeploymentConsts;
 import com.propertyvista.server.common.blob.ETag;
-import com.propertyvista.server.domain.FileBlob;
+import com.propertyvista.server.domain.CustomerPictureBlob;
 
 @SuppressWarnings("serial")
 public class CustomerPictureServlet extends HttpServlet {
@@ -73,7 +75,7 @@ public class CustomerPictureServlet extends HttpServlet {
         key = new Key(id);
 
         // retrieve blob
-        FileBlob blob = Persistence.service().retrieve(FileBlob.class, key);
+        CustomerPictureBlob blob = Persistence.service().retrieve(CustomerPictureBlob.class, key);
         // retrieve picture file
         EntityQueryCriteria<CustomerPicture> crit = EntityQueryCriteria.create(CustomerPicture.class);
         crit.eq(crit.proto().blobKey(), key);
@@ -84,8 +86,10 @@ public class CustomerPictureServlet extends HttpServlet {
             return;
         }
 
+        assertAccessRights();
+
         response.setContentType(blob.contentType().getValue());
-        response.getOutputStream().write(blob.content().getValue());
+        response.getOutputStream().write(blob.data().getValue());
 
         if (file != null) {
             String token = ETag.getEntityTag(file, "");
@@ -113,6 +117,10 @@ public class CustomerPictureServlet extends HttpServlet {
                 response.setContentType(file.contentMimeType().getValue());
             }
         }
+    }
+
+    private void assertAccessRights() {
+        SecurityController.assertAnyBehavior(VistaCrmBehavior.values());
     }
 
 }
