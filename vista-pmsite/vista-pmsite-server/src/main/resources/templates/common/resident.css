@@ -232,7 +232,6 @@
 .FormFlexPanel {
 	-moz-box-sizing: border-box;
     border-spacing: 0;
-    padding: 6px;
     width: 100%;
 }
 
