@@ -118,7 +118,8 @@ public class TenantViewerViewImpl extends CrmViewerViewImplBase<TenantDTO> imple
 
         // Disable password change button for tenants with no associated user principal (+ regular portal access rule):
         setActionVisible(passwordAction, !value.customer().user().isNull() && LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue()));
-        setActionVisible(registrationAction, LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue()));
+        setActionVisible(registrationAction, LeaseTermParticipant.Role.portalAccess().contains(value.role().getValue())
+                && !value.customer().registeredInPortal().getValue(Boolean.FALSE));
     }
 
     @Override
