@@ -146,8 +146,6 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
                 });
 
                 content.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
-                get(proto().coveredItems()).inheritViewable(false);
-                get(proto().coveredItems()).setViewable(true);
 
                 return content;
             }
