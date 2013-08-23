@@ -56,11 +56,11 @@ public class ResidentsPage extends CustomizablePage {
         // redirect if not secure
         PMSiteApplication.onSecurePage(getRequest());
 
-        if (getCM().isCustomResidentsContentEnabled()) {
+        if (getCM().isWebsiteEnabled()) {
+            add(new GwtInclude("gwtInclude"));
+        } else {
             add(new Label(BasePage.RESIDENT_LOGIN_PANEL).add(AttributeModifier.replace("id", "siteAuthInsert")));
             add(new GwtInclude(BasePage.RESIDENT_CUSTOM_CONTENT_PANEL).add(AttributeModifier.replace("id", "residentInsert")));
-        } else {
-            add(new GwtInclude("gwtInclude"));
         }
     }
 
@@ -71,7 +71,7 @@ public class ResidentsPage extends CustomizablePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (getCM().isCustomResidentsContentEnabled()) {
+        if (getCM().isResidentOnlyMode()) {
             response.renderCSSReference(new CssResourceReference(TemplateResources.class, "common/resident.css"));
         } else {
             String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();

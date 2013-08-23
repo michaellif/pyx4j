@@ -562,6 +562,10 @@ public class PMSiteContentManager implements Serializable {
         return "http://www.propertyvista.com";
     }
 
+    public boolean isWebsiteEnabled() {
+        return siteDescriptor.enabled().isBooleanTrue();
+    }
+
     public boolean isCustomResidentsContentEnabled() {
         return siteDescriptor.residentPortalSettings().enabled().isBooleanTrue() && siteDescriptor.residentPortalSettings().useCustomHtml().isBooleanTrue();
     }

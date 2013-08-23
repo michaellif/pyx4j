@@ -97,14 +97,16 @@ public abstract class BasePage extends WebPage {
         cm = ((PMSiteWebRequest) getRequest()).getContentManager();
         locale = ((PMSiteWebRequest) getRequest()).getSiteLocale();
 
+        // true if only resident portal is enabled
         boolean residentOnly = cm.isResidentOnlyMode();
 
         if (residentOnly && !(this instanceof MyCommunityPage) && !(this instanceof StaticPage)) {
-            // render residents page
+            // render residents page for any other request
             getRequestCycle().replaceAllRequestHandlers(
                     new RenderPageRequestHandler(new PageProvider(MyCommunityPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));
-        } else if (!cm.isCustomResidentsContentEnabled()) {
-            // default view
+        }
+
+        if (cm.isWebsiteEnabled()) {
             createDefaultLayout(residentOnly);
         }
     }
@@ -149,7 +151,7 @@ public abstract class BasePage extends WebPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (!cm.isCustomResidentsContentEnabled()) {
+        if (!cm.isResidentOnlyMode()) {
             String skin = ((PMSiteWebRequest) getRequest()).getContentManager().getSiteSkin();
             String fileCSS = skin + "/" + "main.css";
             VolatileTemplateResourceReference refCSS = new VolatileTemplateResourceReference(TemplateResources.class, fileCSS, "text/css",
@@ -175,9 +177,10 @@ public abstract class BasePage extends WebPage {
 
         super.onBeforeRender();
 
-        if (!cm.isCustomResidentsContentEnabled()) {
+        if (cm.isWebsiteEnabled()) {
             addDefaultMeta();
         }
+
         if (ApplicationMode.isDevelopment()) {
             checkIfPageStateless(this);
         }

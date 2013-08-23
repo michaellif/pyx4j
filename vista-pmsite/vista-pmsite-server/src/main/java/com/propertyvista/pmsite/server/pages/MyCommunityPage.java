@@ -14,7 +14,6 @@
 package com.propertyvista.pmsite.server.pages;
 
 import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.DefaultMarkupResourceStreamProvider;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.resource.CssResourceReference;
@@ -28,7 +27,7 @@ public class MyCommunityPage extends ResidentsPage {
     public MyCommunityPage() {
         super();
 
-        if (getCM().isCustomResidentsContentEnabled()) {
+        if (!getCM().isWebsiteEnabled() && !getCM().isCustomResidentsContentEnabled()) {
             add(new Label("header", "This is custom Header"));
             add(new Label("footer", "This is custom Footer"));
         }
@@ -36,7 +35,7 @@ public class MyCommunityPage extends ResidentsPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        if (getCM().isCustomResidentsContentEnabled()) {
+        if (!getCM().isWebsiteEnabled() && !getCM().isCustomResidentsContentEnabled()) {
             response.renderCSSReference(new CssResourceReference(TemplateResources.class, "myCommunity/css/style.css"));
         }
         super.renderHead(response);
@@ -44,10 +43,9 @@ public class MyCommunityPage extends ResidentsPage {
 
     @Override
     public IResourceStream getMarkupResourceStream(MarkupContainer container, Class<?> containerClass) {
-        if (!getCM().isCustomResidentsContentEnabled() && containerClass == getClass()) {
+        if (getCM().isWebsiteEnabled() && containerClass == getClass()) {
             containerClass = ResidentsPage.class;
         }
-        IResourceStream markup = new DefaultMarkupResourceStreamProvider().getMarkupResourceStream(container, containerClass);
-        return markup;
+        return super.getMarkupResourceStream(container, containerClass);
     }
 }
