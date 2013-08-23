@@ -61,8 +61,8 @@ class PreauthorizedPaymentAgreementMananger {
         preauthorizedPayment.tenant().set(tenantId);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
 
-        LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(
-                preauthorizedPayment.tenant().lease());
+        LogicalDate nextPaymentDate = ServerSideFactory.create(PaymentMethodFacade.class)
+                .getNextPreauthorizedPaymentDate(preauthorizedPayment.tenant().lease());
 
         PreauthorizedPayment origPreauthorizedPayment;
 
@@ -185,21 +185,8 @@ class PreauthorizedPaymentAgreementMananger {
     }
 
     public void renewPreauthorizedPayments(Lease lease) {
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
-        List<PreauthorizedPayment> activePaps;
-        {
-            EntityQueryCriteria<PreauthorizedPayment> criteria = EntityQueryCriteria.create(PreauthorizedPayment.class);
-            criteria.eq(criteria.proto().isDeleted(), Boolean.FALSE);
-            {
-                OrCriterion or = criteria.or();
-                or.right().ge(criteria.proto().expiring(), nextCycle.targetPadGenerationDate());
-                or.left().isNull(criteria.proto().expiring());
-            }
-            criteria.in(criteria.proto().tenant().lease(), lease);
-            activePaps = Persistence.service().query(criteria);
-        }
-
-        if (activePaps.size() == 0) {
+        List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
+        if (activePaps.isEmpty()) {
             return; // nothing to do!..
         }
 
@@ -261,7 +248,7 @@ class PreauthorizedPaymentAgreementMananger {
 
     public void updatePreauthorizedPaymentsByPolicy(Lease lease) {
         List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
-        if (activePaps.size() == 0) {
+        if (activePaps.isEmpty()) {
             return; // nothing to do!..
         }
 
@@ -290,7 +277,7 @@ class PreauthorizedPaymentAgreementMananger {
 
     public void updatePreauthorizedPaymentsByLeaseEnd(Lease lease) {
         List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
-        if (activePaps.size() == 0) {
+        if (activePaps.isEmpty()) {
             return; // nothing to do!..
         }
 
