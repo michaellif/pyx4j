@@ -307,12 +307,14 @@ public class EmailTemplateRootObjectLoader {
 
     private static String formatMaintenanceCategory(MaintenanceRequestCategory category) {
         StringBuilder result = new StringBuilder();
-        while (!category.parent().isNull()) {
+        do {
+            Persistence.ensureRetrieve(category, AttachLevel.Attached);
+            Persistence.ensureRetrieve(category.parent(), AttachLevel.Attached);
             if (!category.name().isNull()) {
                 result.insert(0, result.length() > 0 ? " > " : "").insert(0, category.name().getValue());
             }
             category = category.parent();
-        }
+        } while (!category.parent().isNull());
         return result.toString();
     }
 

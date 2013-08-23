@@ -405,7 +405,7 @@ public class MessageTemplates {
     }
 
     private static void buildEmail(MailMessage email, EmailTemplate emailTemplate, Collection<IEntity> data) {
-        email.setSubject(emailTemplate.subject().getValue());
+        email.setSubject(EmailTemplateManager.parseTemplate(emailTemplate.subject().getValue(), data));
 
         Object contentHtml = EmailTemplateManager.parseTemplate(emailTemplate.content().getValue(), data);
 
