@@ -141,6 +141,8 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
     private MaintenanceRequest mr;
 
+    private String mrViewPortalUrl;
+
     public static synchronized void createPmc() {
         final Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.dnsName().setValue(NamespaceManager.getNamespace());
@@ -170,6 +172,9 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
 
         appUrl = AppPlaceInfo.absoluteUrl(VistaDeployment.getBaseApplicationURL(VistaApplication.prospect, true), true, PtSiteMap.LoginWithToken.class,
                 AuthenticationService.AUTH_TOKEN_ARG, token);
+
+        mrViewPortalUrl = tenantHomeUrl + DeploymentConsts.TENANT_URL_PATH + "?place=resident/maintenance/view_maintenance_request";
+
     }
 
     @Override
@@ -716,7 +721,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey()
+                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey()
                 };
                 fmtArgs = args;
             } else {
@@ -756,7 +761,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView()
                 };
@@ -801,7 +806,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView()
                 };
@@ -846,7 +851,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView()
                 };
@@ -892,7 +897,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView(),
                         mr.cancellationNote().getValue()
@@ -939,7 +944,7 @@ public class EmailTemplateManagerTest extends VistaDBTestBase {
                         mr.requestId().getValue(),
                         mr.submitted().getStringView(),
                         mr.status().getStringView(),
-                        tenantHomeUrl + "?place=resident/maintenance/view_maintenance_request&Id=" + mr.getPrimaryKey(),
+                        mrViewPortalUrl + "&Id=" + mr.getPrimaryKey(),
                         mr.building().marketing().name().getValue(),
                         mr.building().info().address().getStringView(),
                         mr.workHistory().get(0).scheduledDate().getStringView(),
