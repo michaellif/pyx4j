@@ -19,6 +19,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -420,19 +421,17 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
             }
 
             @Override
-            public void onProceedToNext(AsyncCallback<VoidSerializable> callback) {
+            public void onProceedToNext(final AsyncCallback<VoidSerializable> callback) {
                 paymentMethodForm.revalidate();
                 paymentMethodForm.setUnconditionalValidationErrorRendering(true);
-                if (paymentMethodForm.isValid() & paymentMethodForm.isAgreedToPreauthorizedPayments()) {
-                    // save the callback to use it's 'onSuccess()' when we get acknowledgment
-                    // from the presenter that we've processed the payment and have bound the quote successfully
-                    TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
 
-                    presenter.onQuoteAccepted();
-
+                if (paymentMethodForm.isAgreedToPreauthorizedPayments()) {
+                    // this delay validaion was made to wait until CreditCardEditor to checks visa debit asyncroneously on server side
+                    paymentFormValidationHack(callback, 0);
                 } else {
-                    MessageDialog.info(i18n.tr("You must fill out the form and accept the Pre-Authorized Payments Agreement in order to proceed!"));
+                    MessageDialog.info(i18n.tr("You must accept the Pre-Authorized Payments Agreement in order to proceed!"));
                 }
+
             }
 
             @Override
@@ -495,6 +494,26 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                 // NOT APPLICABLE
             }
         };
+    }
+
+    private void paymentFormValidationHack(final AsyncCallback<VoidSerializable> callback, final int iterNumber) {
+        if (iterNumber == 5) {
+            MessageDialog.info(i18n.tr("You must fill out the form and accept the Pre-Authorized Payments Agreement in order to proceed!"));
+        } else {
+            new Timer() {
+                @Override
+                public void run() {
+                    if (paymentMethodForm.isValid()) {
+                        // save the callback to use it's 'onSuccess()' when we get acknowledgment
+                        // from the presenter that we've processed the payment and have bound the quote successfully
+                        TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
+                        presenter.onQuoteAccepted();
+                    } else {
+                        paymentFormValidationHack(callback, iterNumber + 1);
+                    }
+                }
+            }.schedule(iterNumber * 2);
+        }
     }
 
 }
