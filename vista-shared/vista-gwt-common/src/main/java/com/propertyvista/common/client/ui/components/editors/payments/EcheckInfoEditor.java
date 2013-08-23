@@ -26,7 +26,7 @@ import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -49,26 +49,25 @@ public class EcheckInfoEditor extends CEntityDecoratableForm<EcheckInfo> {
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn()), 20, true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
         panel.setWidget(
                 ++row,
                 0,
-                2,
                 new FormDecoratorBuilder(inject(proto().accountNo(), new CPersonalIdentityField<AccountNumberIdentity>(AccountNumberIdentity.class,
-                        "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20, true).build());
+                        "X xxxx;XX xxxx;XXX xxxx;XXXX xxxx;X XXXX xxxx;XX XXXX xxxx;XXX XXXX xxxx;XXXX XXXX xxxx", null)), 20).build());
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().bankId()), 3, true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().branchTransitNumber()), 5).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().bankId()), 3).build());
 
         if (isEditable()) {
             Image image = new Image(VistaImages.INSTANCE.eChequeGuide().getSafeUri());
             image.getElement().getStyle().setMarginTop(2, Unit.EM);
             image.getElement().getStyle().setMarginLeft(6, Unit.EM);
             image.getElement().getStyle().setMarginRight(6, Unit.EM);
-            panel.setWidget(++row, 0, 2, image);
+            panel.setWidget(++row, 0, image);
             DOM.getParent(image.getElement()).getStyle().setTextAlign(TextAlign.LEFT);
         }
 

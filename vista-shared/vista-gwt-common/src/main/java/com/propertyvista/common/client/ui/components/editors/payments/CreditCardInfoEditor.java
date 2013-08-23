@@ -37,7 +37,7 @@ import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CMonthYearPicker;
 import com.pyx4j.forms.client.ui.CPersonalIdentityField;
 import com.pyx4j.forms.client.ui.CTextComponent;
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.i18n.shared.I18n;
@@ -77,16 +77,16 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
         CMonthYearPicker monthYearPicker = new CMonthYearPicker(false);
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().nameOn()), 20, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 15, true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nameOn()), 20).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().cardType(), typeSelector), 15).build());
 
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 15, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15, true).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().securityCode()), 3, true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().card(), cardEditor), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().expiryDate(), monthYearPicker), 15).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().securityCode()), 3).build());
 
         // tweak:
         monthYearPicker.setYearRange(new Range(1900 + new Date().getYear(), 10));

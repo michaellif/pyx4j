@@ -143,57 +143,73 @@
 }
 
 .WidgetDecorator {
-	margin: 0.5em 0;
+    border-spacing: 0;
+    padding: 5px 0;
+    white-space: nowrap;
 }
-
-.WidgetDecoratorLabelHolder, .BillingLineItem {
-	padding-right: 1em;
-	font-weight: bold;
+.WidgetDecorator-viewable {
+    color: #666666;
+    font-weight: bold;
 }
-
+.WidgetDecoratorLabelHolder {
+    text-align: left;
+    white-space: nowrap;
+}
+.WidgetDecoratorComponent {
+    white-space: normal;
+}
+.WidgetDecorator-verticalAlign .WidgetDecoratorLabelHolder {
+    padding-right: 0;
+}
+.WidgetDecoratorLabelHolder-labelAlignCenter {
+    text-align: center;
+}
+.WidgetDecoratorLabelHolder-labelAlignRight {
+    text-align: right;
+}
 .WidgetDecoratorLabel {
-	color: #666666;
-	font-weight: bold;
-	display: inline;
-	}
-
-.WidgetDecorator-readOnly .WidgetDecoratorLabel {
-	white-space: nowrap;
+    color: #666666;
+    font-weight: bold;
+    line-height: 2em;
+    padding-right: 1em;
+    white-space: normal;
 }
-
+.WidgetDecorator-viewable .WidgetDecoratorLabel {
+    color: #B3B3B3;
+    font-size: 0.9em;
+    line-height: 1.5em;
+}
 .WidgetDecoratorInfoImage {
-	padding-left: 5px;
-	line-height: 0;
-	vertical-align: middle;
+    line-height: 0;
+    padding-left: 5px;
+    vertical-align: middle;
 }
-
 .WidgetDecoratorMandatoryImage {
-	display: inline-block;
-	width: 5px;
-	padding-right: 3px;
+    display: inline-block;
+    padding-right: 3px;
+    width: 5px;
 }
-
 .WidgetDecorator-noMandatoryStar .WidgetDecoratorMandatoryImage img {
-	display: none;
+    display: none;
 }
-
+.WidgetDecoratorContentPanel {
+}
 .WidgetDecoratorComponentHolder {
-	overflow: visible !important;
-	min-width: 5em !important;
+    word-wrap: break-word;
 }
-
+.WidgetDecoratorComponent {
+}
 .WidgetDecoratorComponent-invalid .TextBox {
-	border-width: 1px;
-	border-style: solid;
-	border-color: #f79494;
-	background-color: #f8d8d8;
+    background-color: #F8D8D8;
+    border-color: #F79494;
+    border-style: solid;
+    border-width: 1px;
 }
-
 .WidgetDecoratorComponent-invalid .ListBox {
-	border-width: 1px;
-	border-style: solid;
-	border-color: #f79494;
-	background-color: #f8d8d8;
+    background-color: #F8D8D8;
+    border-color: #F79494;
+    border-style: solid;
+    border-width: 1px;
 }
 
 .EntityContainerDecoratorCollapsedCaption {
@@ -799,7 +815,18 @@ td.DatePickerMonth {
 }
 
 .ValidationLabel {
-	color: red;
+    color: red;
+    padding-top: 3px;
+    text-align: left;
+    white-space: normal;
+}
+
+.NoteLabel {
+    font-style: italic;
+    font-weight: normal;
+    padding-top: 3px;
+    text-align: left;
+    white-space: normal;
 }
 
 .NoteLabel-info {
@@ -832,7 +859,7 @@ td.DatePickerMonth {
 .PaymentEditorForm {
 	border: solid 1px #666;
 	margin: 1em;
-	width: 550px;
+	width: 45em;
 }
 
 .PaymentEditorImages {

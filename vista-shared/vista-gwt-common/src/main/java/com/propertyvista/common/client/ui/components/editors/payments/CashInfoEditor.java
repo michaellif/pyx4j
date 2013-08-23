@@ -15,8 +15,7 @@ package com.propertyvista.common.client.ui.components.editors.payments;
 
 import com.google.gwt.user.client.ui.IsWidget;
 
-import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
-import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
@@ -24,20 +23,18 @@ import com.propertyvista.domain.payment.CashInfo;
 
 public class CashInfoEditor extends CEntityDecoratableForm<CashInfo> {
 
-    private static final I18n i18n = I18n.get(CashInfoEditor.class);
-
     public CashInfoEditor() {
         super(CashInfo.class);
     }
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel();
+        BasicFlexFormPanel panel = new BasicFlexFormPanel();
 
         int row = -1;
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().receivedAmount()), 15).build());
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().changeAmount()), 5).build());
-        panel.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().notes()), 40, true).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().notes())).build());
 
         return panel;
     }
