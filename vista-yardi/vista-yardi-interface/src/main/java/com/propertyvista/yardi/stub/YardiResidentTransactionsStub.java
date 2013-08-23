@@ -23,9 +23,7 @@ import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.yardi.bean.Properties;
 
-public interface YardiResidentTransactionsStub {
-
-    long getRequestsTime();
+public interface YardiResidentTransactionsStub extends ExternalInterfaceLoggingStub {
 
     String ping(PmcYardiCredential yc) throws RemoteException;
 

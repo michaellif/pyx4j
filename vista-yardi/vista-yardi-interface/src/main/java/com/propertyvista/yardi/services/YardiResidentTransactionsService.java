@@ -65,6 +65,7 @@ import com.propertyvista.domain.property.yardi.YardiPropertyConfiguration;
 import com.propertyvista.domain.settings.PmcYardiCredential;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.yardi.bean.Properties;
+import com.propertyvista.yardi.stub.ExternalInterfaceLoggingStub;
 import com.propertyvista.yardi.stub.YardiPropertyNoAccessException;
 import com.propertyvista.yardi.stub.YardiResidentNoTenantsExistException;
 import com.propertyvista.yardi.stub.YardiResidentTransactionsStub;
@@ -133,7 +134,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     break;
                 }
 
-                importTransaction(yc.getPrimaryKey(), transaction, executionMonitor);
+                importTransaction(yc.getPrimaryKey(), transaction, executionMonitor, stub);
             }
 
             List<ResidentTransactions> allLeaseCharges = getAllLeaseCharges(stub, yc, executionMonitor, propertyCodes);
@@ -142,7 +143,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                     break;
                 }
 
-                importLeaseCharges(leaseCharges, executionMonitor);
+                importLeaseCharges(leaseCharges, executionMonitor, stub);
             }
 
         } finally {
@@ -219,7 +220,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return propertyConfigurations;
     }
 
-    private void importTransaction(Key yardiInterfaceId, ResidentTransactions transaction, final ExecutionMonitor executionMonitor) {
+    private void importTransaction(Key yardiInterfaceId, ResidentTransactions transaction, final ExecutionMonitor executionMonitor,
+            final ExternalInterfaceLoggingStub interfaceLog) {
         // this is (going to be) the core import process that updates buildings, units in them, leases and charges
         log.info("ResidentTransactions: Import started...");
 
@@ -257,14 +259,18 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                             executionMonitor.addProcessedEvent("Lease");
                         } catch (YardiServiceException e) {
                             executionMonitor.addFailedEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), e);
+                            interfaceLog.logRecordedTracastions();
                         } catch (Throwable t) {
                             executionMonitor.addErredEvent("Lease", SimpleMessageFormat.format("Lease for customer {0}", rtCustomer.getCustomerID()), t);
+                            interfaceLog.logRecordedTracastions();
                         }
 
                     } catch (YardiServiceException e) {
                         executionMonitor.addFailedEvent("Unit", e);
+                        interfaceLog.logRecordedTracastions();
                     } catch (Throwable t) {
                         executionMonitor.addErredEvent("Unit", t);
+                        interfaceLog.logRecordedTracastions();
                     }
                 }
 
@@ -274,8 +280,10 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
             } catch (YardiServiceException e) {
                 executionMonitor.addFailedEvent("Building", propertyId, e);
+                interfaceLog.logRecordedTracastions();
             } catch (Throwable t) {
                 executionMonitor.addErredEvent("Building", propertyId, t);
+                interfaceLog.logRecordedTracastions();
             }
 
             if (executionMonitor.isTerminationRequested()) {
@@ -401,7 +409,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return transactions;
     }
 
-    private void importLeaseCharges(ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor) {
+    private void importLeaseCharges(ResidentTransactions leaseCharges, final ExecutionMonitor executionMonitor, final ExternalInterfaceLoggingStub interfaceLog) {
         log.info("LeaseCharges: import started...");
 
         // although we get properties here, all data inside is empty until we get down to the ChargeDetail level
@@ -439,6 +447,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                         String msg = SimpleMessageFormat.format("Lease {0}", leaseId == null ? "undefined" : leaseId);
                         executionMonitor.addErredEvent("Lease", msg, t);
                         log.warn(msg, t);
+                        interfaceLog.logRecordedTracastions();
                     }
                 }
 
@@ -449,6 +458,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 String msg = SimpleMessageFormat.format("Property {0}", propertyCode);
                 executionMonitor.addErredEvent("Building", msg, t);
                 log.warn(msg, t);
+                interfaceLog.logRecordedTracastions();
             }
 
             if (executionMonitor.isTerminationRequested()) {

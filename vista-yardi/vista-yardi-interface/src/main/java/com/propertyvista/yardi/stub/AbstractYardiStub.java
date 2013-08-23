@@ -40,7 +40,7 @@ import com.propertyvista.yardi.TransactionLog;
 import com.propertyvista.yardi.YardiConstants;
 import com.propertyvista.yardi.YardiConstants.Action;
 
-public class AbstractYardiStub {
+public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
 
     private final static Logger log = LoggerFactory.getLogger(AbstractYardiStub.class);
 
@@ -136,6 +136,16 @@ public class AbstractYardiStub {
             }
 
         });
+    }
+
+    @Override
+    public long getRequestsTime() {
+        return requestsTime;
+    }
+
+    @Override
+    public void logRecordedTracastions() {
+        log.warn("Yardi transaction recorded at {}", recordedTracastionsLogs);
     }
 
     protected void setTransportOptions(Stub stub, PmcYardiCredential yc) {

@@ -44,6 +44,10 @@ public class YardiMockResidentTransactionsStubImpl implements YardiResidentTrans
     }
 
     @Override
+    public void logRecordedTracastions() {
+    }
+
+    @Override
     public String ping(PmcYardiCredential yc) throws AxisFault {
         // TODO Auto-generated method stub
         return null;
