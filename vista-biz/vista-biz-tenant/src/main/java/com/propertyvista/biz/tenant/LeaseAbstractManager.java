@@ -33,6 +33,7 @@ import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria.VersionedCriteria;
@@ -705,15 +706,9 @@ public abstract class LeaseAbstractManager {
 
     public boolean isMoveOutWithinNextBillingCycle(Lease leaseId) {
         Lease lease = Persistence.service().retrieve(Lease.class, leaseId.getPrimaryKey());
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextScheduledPreauthorizedPaymentBillingCycle(lease);
 
-        BillingCycle currentCycle = ServerSideFactory.create(BillingCycleFacade.class).getBillingCycleForDate(lease,
-                new LogicalDate(SystemDateManager.getDate()));
-        BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(currentCycle);
-
-        //@formatter:off
-        return (!lease.expectedMoveOut().isNull() && nextCycle.billingCycleEndDate().getValue().after(lease.expectedMoveOut().getValue()) ||
-                !lease.actualMoveOut().isNull() && nextCycle.billingCycleEndDate().getValue().after(lease.actualMoveOut().getValue()));
-        //@formatter:on
+        return (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
     }
 
     /**
@@ -1146,5 +1141,12 @@ public abstract class LeaseAbstractManager {
         P copy = EntityGraph.businessDuplicate(leaseParticipant);
         copy.screening().set(null);
         return copy;
+    }
+
+    private boolean beforeOrEqual(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
+        if (!one.isNull() && !two.isNull()) {
+            return !one.getValue().after(two.getValue());
+        }
+        return false;
     }
 }
