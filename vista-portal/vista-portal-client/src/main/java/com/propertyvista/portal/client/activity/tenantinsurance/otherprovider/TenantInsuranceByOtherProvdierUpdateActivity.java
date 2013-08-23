@@ -19,18 +19,23 @@ import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.tenant.insurance.InsuranceGeneric;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovider.views.TenantInsuranceByOtherProviderUpdateView;
 import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
 
 public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareActivity implements TenantInsuranceByOtherProviderUpdateView.Presenter {
+
+    private static final I18n i18n = I18n.get(TenantInsuranceByOtherProvdierUpdateActivity.class);
 
     private final TenantInsuranceByOtherProviderUpdateView view;
 
@@ -70,7 +75,8 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
 
             @Override
             public void onSuccess(VoidSerializable result) {
-                view.reportSaveSuccess();
+                PortalSite.instance().showInfoDialog(i18n.tr("Your insurance details were saved successfully"), "");
+                PortalSite.getPlaceController().goTo(new PortalSiteMap.NotificationPlace());
             }
 
         }, certificate);

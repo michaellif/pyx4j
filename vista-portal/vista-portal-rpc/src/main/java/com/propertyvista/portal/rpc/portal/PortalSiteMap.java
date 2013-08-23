@@ -218,7 +218,9 @@ public class PortalSiteMap implements SiteMap {
 
                 /** This place is for updating insurance other than TenantSure */
                 public static class UploadCertificate extends AppPlace {
-
+                    {
+                        setStable(false);
+                    }
                 }
 
             }

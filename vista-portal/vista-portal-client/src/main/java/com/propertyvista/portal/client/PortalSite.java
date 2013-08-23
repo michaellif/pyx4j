@@ -95,6 +95,10 @@ public class PortalSite extends VistaSite {
         setNotification(new Notification(message, NotificationType.ERROR, title));
     }
 
+    public void showInfoDialog(String message, String title) {
+        setNotification(new Notification(message, NotificationType.INFO, title));
+    }
+
     private void initialize() {
         initSiteTheme();
         ClientPolicyManager.initialize(GWT.<PolicyRetrieveService> create(PortalPolicyRetrieveService.class));
