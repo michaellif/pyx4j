@@ -19,8 +19,8 @@ import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
-import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.biz.financial.payment.CreditCardProcessor.MerchantTerminalSource;
+import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
 import com.propertyvista.server.jobs.TaskRunner;
 
 public class MerchantTerminalSourceVista implements MerchantTerminalSource {
@@ -30,7 +30,9 @@ public class MerchantTerminalSourceVista implements MerchantTerminalSource {
         VistaMerchantAccount ma = TaskRunner.runInOperationsNamespace(new Callable<VistaMerchantAccount>() {
             @Override
             public VistaMerchantAccount call() {
-                return Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class));
+                EntityQueryCriteria<VistaMerchantAccount> criteria = EntityQueryCriteria.create(VistaMerchantAccount.class);
+                criteria.eq(criteria.proto().accountType(), VistaMerchantAccount.AccountType.Equifax);
+                return Persistence.service().retrieve(criteria);
             }
         });
         if ((ma == null || ma.merchantTerminalId().isNull())) {

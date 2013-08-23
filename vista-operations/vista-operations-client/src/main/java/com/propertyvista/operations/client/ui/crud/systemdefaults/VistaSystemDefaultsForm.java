@@ -57,8 +57,11 @@ public class VistaSystemDefaultsForm extends OperationsEntityForm<VistaSystemDef
     private TwoColumnFlexFormPanel makeMistaMerchantAccountTab() {
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Vista Accounts"));
         int row = -1;
-        panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account"));
-        panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccount(), new MerchantAccountForm()));
+        panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account, Payments BMO"));
+        panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccountPayments(), new MerchantAccountForm()));
+
+        panel.setH1(++row, 0, 2, i18n.tr("Vista Merchant Account, Equifax"));
+        panel.setWidget(++row, 0, 2, inject(proto().vistaMerchantAccountEquifax(), new MerchantAccountForm()));
         return panel;
     }
 

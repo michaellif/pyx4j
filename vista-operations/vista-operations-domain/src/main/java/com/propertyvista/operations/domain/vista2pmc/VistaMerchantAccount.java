@@ -24,8 +24,19 @@ import com.propertyvista.domain.financial.AbstractMerchantAccount;
 @Table(namespace = VistaNamespace.operationsNamespace)
 public interface VistaMerchantAccount extends AbstractMerchantAccount {
 
+    public enum AccountType {
+
+        PaymentAggregation,
+
+        Equifax;
+
+    }
+
+    @Indexed(uniqueConstraint = true)
+    IPrimitive<AccountType> accountType();
+
     @Override
     @Length(8)
-    @Indexed(uniqueConstraint = true)
+    @Indexed(uniqueConstraint = false)
     IPrimitive<String> merchantTerminalId();
 }

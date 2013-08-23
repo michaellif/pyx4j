@@ -64,7 +64,9 @@ class DirectDebitFundsTransfer {
         vistaMerchantAccount = TaskRunner.runInOperationsNamespace(new Callable<VistaMerchantAccount>() {
             @Override
             public VistaMerchantAccount call() {
-                return Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class));
+                EntityQueryCriteria<VistaMerchantAccount> criteria = EntityQueryCriteria.create(VistaMerchantAccount.class);
+                criteria.eq(criteria.proto().accountType(), VistaMerchantAccount.AccountType.PaymentAggregation);
+                return Persistence.service().retrieve(criteria);
             }
         });
         if ((vistaMerchantAccount == null || vistaMerchantAccount.merchantTerminalId().isNull())) {

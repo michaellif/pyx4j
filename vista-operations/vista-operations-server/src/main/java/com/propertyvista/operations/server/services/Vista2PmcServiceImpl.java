@@ -32,10 +32,22 @@ import com.propertyvista.operations.domain.vista2pmc.DefaultEquifaxLimit;
 import com.propertyvista.operations.domain.vista2pmc.DefaultPaymentFees;
 import com.propertyvista.operations.domain.vista2pmc.TenantSureMerchantAccount;
 import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount;
+import com.propertyvista.operations.domain.vista2pmc.VistaMerchantAccount.AccountType;
 import com.propertyvista.operations.rpc.VistaSystemDefaultsDTO;
 import com.propertyvista.operations.rpc.services.Vista2PmcService;
 
 public class Vista2PmcServiceImpl implements Vista2PmcService {
+
+    private VistaMerchantAccount getVistaMerchantAccount(AccountType accountType) {
+        EntityQueryCriteria<VistaMerchantAccount> criteria = EntityQueryCriteria.create(VistaMerchantAccount.class);
+        criteria.eq(criteria.proto().accountType(), accountType);
+        VistaMerchantAccount account = Persistence.service().retrieve(criteria);
+        if (account == null) {
+            account = EntityFactory.create(VistaMerchantAccount.class);
+        }
+        account.accountType().setValue(accountType);
+        return account;
+    }
 
     @Override
     public void retrieve(AsyncCallback<VistaSystemDefaultsDTO> callback, Key entityId, com.pyx4j.entity.rpc.AbstractCrudService.RetrieveTarget retrieveTarget) {
@@ -44,7 +56,8 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
         dto.paymentFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultPaymentFees.class)));
         dto.equifaxFees().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxFee.class)));
         dto.equifaxLimit().set(Persistence.service().retrieve(EntityQueryCriteria.create(DefaultEquifaxLimit.class)));
-        dto.vistaMerchantAccount().set(Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class)));
+        dto.vistaMerchantAccountPayments().set(getVistaMerchantAccount(VistaMerchantAccount.AccountType.PaymentAggregation));
+        dto.vistaMerchantAccountEquifax().set(getVistaMerchantAccount(VistaMerchantAccount.AccountType.Equifax));
         dto.tenantSureMerchantAccount().set(Persistence.service().retrieve(EntityQueryCriteria.create(TenantSureMerchantAccount.class)));
 
         callback.onSuccess(dto);
@@ -60,8 +73,11 @@ public class Vista2PmcServiceImpl implements Vista2PmcService {
 
         Persistence.service().merge(dto.equifaxLimit());
 
-        auditChanges(dto.vistaMerchantAccount(), Persistence.service().retrieve(EntityQueryCriteria.create(VistaMerchantAccount.class)));
-        Persistence.service().merge(dto.vistaMerchantAccount());
+        auditChanges(dto.vistaMerchantAccountPayments(), getVistaMerchantAccount(VistaMerchantAccount.AccountType.PaymentAggregation));
+        Persistence.service().merge(dto.vistaMerchantAccountPayments());
+
+        auditChanges(dto.vistaMerchantAccountEquifax(), getVistaMerchantAccount(VistaMerchantAccount.AccountType.Equifax));
+        Persistence.service().merge(dto.vistaMerchantAccountEquifax());
 
         auditChanges(dto.tenantSureMerchantAccount(), Persistence.service().retrieve(EntityQueryCriteria.create(TenantSureMerchantAccount.class)));
         Persistence.service().merge(dto.tenantSureMerchantAccount());
