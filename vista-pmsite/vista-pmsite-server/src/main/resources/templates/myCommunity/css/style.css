@@ -180,8 +180,9 @@ div.ButtonText,button.gwt-Button {
 
 button.gwt-Button {
 	cursor: pointer;
-	min-width: 7em;
 	padding: 3px;
+	margin-left: 151px !important;
+    margin-top: 2em !important;
 }
 
 .TextBox, .ListBox {
