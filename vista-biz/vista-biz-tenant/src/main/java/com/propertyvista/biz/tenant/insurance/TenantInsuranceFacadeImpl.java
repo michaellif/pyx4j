@@ -13,6 +13,10 @@
  */
 package com.propertyvista.biz.tenant.insurance;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
@@ -25,6 +29,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
@@ -48,14 +53,15 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         ownInsuranceCriteira.eq(ownInsuranceCriteira.proto().isDeleted(), Boolean.FALSE);
         ownInsuranceCriteira.or(PropertyCriterion.gt(ownInsuranceCriteira.proto().expiryDate(), today),
                 PropertyCriterion.isNull(ownInsuranceCriteira.proto().expiryDate()));
-        insuranceCertificate = Persistence.service().retrieve(ownInsuranceCriteira);
+
+        insuranceCertificate = getBestInsuranceCertificate(Persistence.service().query(ownInsuranceCriteira));
         if (insuranceCertificate == null) {
             EntityQueryCriteria<InsuranceCertificate> anyNonExpiredInsuranceCriteria = EntityQueryCriteria.create(InsuranceCertificate.class);
             anyNonExpiredInsuranceCriteria.eq(anyNonExpiredInsuranceCriteria.proto().tenant().lease().leaseParticipants(), tenantId);
             anyNonExpiredInsuranceCriteria.eq(anyNonExpiredInsuranceCriteria.proto().isDeleted(), Boolean.FALSE);
             anyNonExpiredInsuranceCriteria.or(PropertyCriterion.gt(anyNonExpiredInsuranceCriteria.proto().expiryDate(), today),
                     PropertyCriterion.isNull(anyNonExpiredInsuranceCriteria.proto().expiryDate()));
-            insuranceCertificate = Persistence.service().retrieve(anyNonExpiredInsuranceCriteria);
+            insuranceCertificate = getBestInsuranceCertificate(Persistence.service().query(anyNonExpiredInsuranceCriteria));
         }
 
         return insuranceCertificate;
@@ -109,5 +115,27 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
         Tenant tenant = Persistence.service().retrieve(Tenant.class, tenantId.getPrimaryKey());
         Persistence.service().retrieve(Lease.class, tenant.lease().getPrimaryKey());
         return Persistence.service().retrieve(criteria);
+    }
+
+    /** this one chooses the best insurance certificate out of all insurance certificates */
+    private InsuranceCertificate getBestInsuranceCertificate(List<InsuranceCertificate> insuranceCertificates) {
+        if (insuranceCertificates.isEmpty()) {
+            return null;
+        }
+        ArrayList<InsuranceCertificate> sortedInsuranceCertificates = new ArrayList<InsuranceCertificate>(insuranceCertificates);
+        java.util.Collections.sort(sortedInsuranceCertificates, new Comparator<InsuranceCertificate>() {
+
+            @Override
+            public int compare(InsuranceCertificate o1, InsuranceCertificate o2) {
+                if ((o1.getInstanceValueClass().equals(InsuranceTenantSure.class)) && !(o2.getInstanceValueClass().equals(InsuranceTenantSure.class))) {
+                    return -1;
+                } else if (!(o1.getInstanceValueClass().equals(InsuranceTenantSure.class)) && (o2.getInstanceValueClass().equals(InsuranceTenantSure.class))) {
+                    return 1;
+                } else {
+                    return -o1.liabilityCoverage().getValue().compareTo(o2.liabilityCoverage().getValue());
+                }
+            }
+        });
+        return sortedInsuranceCertificates.get(0);
     }
 }
