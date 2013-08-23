@@ -157,7 +157,8 @@ public class YardiLeaseProcessor {
 
         // tenants:
         for (YardiCustomer yardiCustomer : yardiCustomers) {
-            lease.currentTerm().version().tenants().add(new TenantMapper().createTenant(yardiCustomer, lease.currentTerm().version().tenants()));
+            lease.currentTerm().version().tenants()
+                    .add(new TenantMapper(executionMonitor).createTenant(yardiCustomer, lease.currentTerm().version().tenants()));
         }
 
         lease = leaseFacade.persist(lease);
@@ -244,13 +245,13 @@ public class YardiLeaseProcessor {
 
         Persistence.ensureRetrieve(lease.currentTerm().version().tenants(), AttachLevel.Attached);
         if (new TenantMerger().isChanged(yardiCustomers, lease.currentTerm().version().tenants())) {
-            lease.currentTerm().set(new TenantMerger().updateTenants(yardiCustomers, lease.currentTerm()));
+            lease.currentTerm().set(new TenantMerger(executionMonitor).updateTenants(yardiCustomers, lease.currentTerm()));
             toFinalize = true;
             log.debug("        - TenantsChanged...");
         }
 
         lease.currentTerm().yardiLeasePk().setValue(getYardiLeasePk(yardiCustomers));
-        if (new TenantMerger().updateTenantsData(rtCustomer, lease)) {
+        if (new TenantMerger(executionMonitor).updateTenantsData(rtCustomer, lease)) {
             toFinalize = true;
             log.debug("        - TenantDataChanged...");
         }

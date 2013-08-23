@@ -162,7 +162,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         if (transaction != null && !transaction.getProperty().isEmpty()) {
             Property property = transaction.getProperty().iterator().next();
             if (!property.getRTCustomer().isEmpty()) {
-                importLease(propertyCode, property.getRTCustomer().iterator().next());
+                importLease(propertyCode, property.getRTCustomer().iterator().next(), null);
             }
         }
         // import lease charges
@@ -174,7 +174,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             leaseCharges = stub.getLeaseChargesForTenant(yc, propertyCode, lease.leaseId().getValue(), nextCycle.billingCycleStartDate().getValue());
         } catch (YardiResidentNoTenantsExistException e) {
             log.warn("Can't get changes for {}; {}", lease.leaseId().getValue(), e.getMessage()); // log error and reset lease charges.
-            new YardiLeaseProcessor(null).expireLeaseProducts(lease);
+            new YardiLeaseProcessor().expireLeaseProducts(lease);
         }
         if (leaseCharges != null) {
             Lease processed = null;
@@ -186,7 +186,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
             // handle non-processed lease
             if (processed == null) {
-                new YardiLeaseProcessor(null).expireLeaseProducts(lease);
+                new YardiLeaseProcessor().expireLeaseProducts(lease);
             }
         }
     }
@@ -234,7 +234,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
             }
 
             try {
-                Building building = importProperty(yardiInterfaceId, property);
+                Building building = importProperty(yardiInterfaceId, property, executionMonitor);
                 executionMonitor.addProcessedEvent("Building");
 
                 String propertyCode = building.propertyCode().getValue();
@@ -249,11 +249,11 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
 
                     try {
 
-                        importUnit(propertyCode, rtCustomer);
+                        importUnit(propertyCode, rtCustomer, executionMonitor);
                         executionMonitor.addProcessedEvent("Unit");
 
                         try {
-                            LeaseFinancialStats stats = importLease(propertyCode, rtCustomer);
+                            LeaseFinancialStats stats = importLease(propertyCode, rtCustomer, executionMonitor);
                             executionMonitor.addProcessedEvent("Charges", stats.getCharges());
                             executionMonitor.addProcessedEvent("Payments", stats.getPayments());
                             executionMonitor.addProcessedEvent("Lease");
@@ -303,7 +303,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         }
     }
 
-    private Building importProperty(final Key yardiInterfaceId, final Property property) throws YardiServiceException {
+    private Building importProperty(final Key yardiInterfaceId, final Property property, ExecutionMonitor executionMonitor) throws YardiServiceException {
         log.info("Updating building {}", property.getPropertyID().get(0).getIdentification().getPrimaryID());
 
         Building building = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<Building, YardiServiceException>() {
@@ -325,7 +325,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return building;
     }
 
-    private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
+    private AptUnit importUnit(final String propertyCode, final RTCustomer rtCustomer, ExecutionMonitor executionMonitor) throws YardiServiceException {
         log.info("  Updating unit #" + rtCustomer.getRTUnit().getUnitID());
 
         AptUnit unit = new UnitOfWork(TransactionScopeOption.RequiresNew).execute(new Executable<AptUnit, YardiServiceException>() {
@@ -340,7 +340,8 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
         return unit;
     }
 
-    private LeaseFinancialStats importLease(final String propertyCode, final RTCustomer rtCustomer) throws YardiServiceException {
+    private LeaseFinancialStats importLease(final String propertyCode, final RTCustomer rtCustomer, final ExecutionMonitor executionMonitor)
+            throws YardiServiceException {
         final LeaseFinancialStats state = new LeaseFinancialStats();
 
         log.info("    Importing lease:");
@@ -349,7 +350,7 @@ public class YardiResidentTransactionsService extends YardiAbstractService {
                 @Override
                 public Void execute() throws YardiServiceException {
                     // update lease
-                    new YardiLeaseProcessor().processLease(rtCustomer, propertyCode);
+                    new YardiLeaseProcessor(executionMonitor).processLease(rtCustomer, propertyCode);
 
                     // update charges and payments
                     final BillingAccount account = new YardiChargeProcessor().getAccount(rtCustomer);

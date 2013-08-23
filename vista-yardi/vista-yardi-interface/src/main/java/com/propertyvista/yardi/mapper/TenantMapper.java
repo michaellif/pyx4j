@@ -15,6 +15,9 @@ package com.propertyvista.yardi.mapper;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yardi.entity.mits.Customerinfo;
 import com.yardi.entity.mits.Phone;
 import com.yardi.entity.mits.YardiCustomer;
@@ -26,11 +29,24 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.security.server.EmailValidator;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 
 public class TenantMapper {
+
+    private final static Logger log = LoggerFactory.getLogger(TenantMapper.class);
+
+    final ExecutionMonitor executionMonitor;
+
+    public TenantMapper() {
+        this(null);
+    }
+
+    public TenantMapper(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+    }
 
     public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
@@ -150,7 +166,16 @@ public class TenantMapper {
 
     private void setEmail(String email, Customer customer) {
         if (!customer.registeredInPortal().isBooleanTrue()) {
-            customer.person().email().setValue(email);
+            if (!CommonsStringUtils.isEmpty(email)) {
+                if (EmailValidator.isValid(email)) {
+                    customer.person().email().setValue(email);
+                } else {
+                    log.warn(">> DataValidation >> Invalid Email: " + email);
+                    if (executionMonitor != null) {
+                        executionMonitor.addErredEvent("DataValidation", "Invalid Email: " + email);
+                    }
+                }
+            }
         }
     }
 

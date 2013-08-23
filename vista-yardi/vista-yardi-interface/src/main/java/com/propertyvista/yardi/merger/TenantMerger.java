@@ -22,12 +22,23 @@ import com.yardi.entity.resident.RTCustomer;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.yardi.mapper.TenantMapper;
 
 public class TenantMerger {
+
+    final ExecutionMonitor executionMonitor;
+
+    public TenantMerger() {
+        this(null);
+    }
+
+    public TenantMerger(ExecutionMonitor executionMonitor) {
+        this.executionMonitor = executionMonitor;
+    }
 
     public boolean isChanged(List<YardiCustomer> yardiCustomers, List<LeaseTermTenant> tenants) {
         if (yardiCustomers.size() != tenants.size()) {
@@ -70,7 +81,7 @@ public class TenantMerger {
         }
 
         for (String id : added) {
-            term.version().tenants().add(new TenantMapper().createTenant(toC(yardiCustomers, id), term.version().tenants()));
+            term.version().tenants().add(new TenantMapper(executionMonitor).createTenant(toC(yardiCustomers, id), term.version().tenants()));
         }
 
         return term;
@@ -82,7 +93,7 @@ public class TenantMerger {
         for (YardiCustomer customer : rtCustomer.getCustomers().getCustomer()) {
             for (LeaseTermTenant tenant : lease.currentTerm().version().tenants()) {
                 if (tenant.leaseParticipant().participantId().getValue().equals(customer.getCustomerID())) {
-                    updated |= new TenantMapper().updateTenant(customer, tenant);
+                    updated |= new TenantMapper(executionMonitor).updateTenant(customer, tenant);
                     Persistence.service().merge(tenant.leaseParticipant().customer());
                 }
             }
