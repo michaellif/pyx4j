@@ -79,6 +79,7 @@ SET search_path = '_admin_';
         **/
         
         DROP INDEX admin_pmc_yardi_credential_pmc_idx;
+        DROP INDEX dev_card_service_simulation_transaction_reference_tp_idx;
         DROP INDEX onboarding_user_email_idx;
         DROP INDEX pad_sim_batch_pad_file_idx;
         DROP INDEX pad_sim_file$state_owner_idx;
@@ -160,6 +161,7 @@ SET search_path = '_admin_';
         -- dev_card_service_simulation_transaction
         
         ALTER TABLE dev_card_service_simulation_transaction ALTER COLUMN  reference TYPE VARCHAR(60);
+        ALTER TABLE dev_card_service_simulation_transaction ADD COLUMN voided BOOLEAN;
         
         -- dev_direct_debit_sim_file
         
