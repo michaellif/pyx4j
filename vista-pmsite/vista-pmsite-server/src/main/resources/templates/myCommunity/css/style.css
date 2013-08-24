@@ -315,6 +315,14 @@ element.style {
     width: auto !important;
 }
 
+.LandingInputField .FieldPanel.WidgetDecoratorComponent {
+	width: 20px;
+}
+.FieldEditorPanel .pyx4j_CheckBox {
+    display: block;
+    margin-top: 4px;
+}
+
 
 /* PMC custom elements */
 .PmcCustomHeader {	
