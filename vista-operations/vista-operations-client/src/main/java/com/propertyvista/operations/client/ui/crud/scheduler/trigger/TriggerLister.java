@@ -33,7 +33,7 @@ public class TriggerLister extends AbstractLister<TriggerDTO> {
             new MemberColumnDescriptor.Builder(proto().scheduleSuspended()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().schedule()).sortable(false).searchable(false).build(),
             new MemberColumnDescriptor.Builder(proto().nextScheduledFireTime()).sortable(false).searchable(false).build(),
-            new MemberColumnDescriptor.Builder(proto().populationType()).build(),
+            new MemberColumnDescriptor.Builder(proto().populationType(), false).build(),
             new MemberColumnDescriptor.Builder(proto().created()).build()
         );//@formatter:on
 
