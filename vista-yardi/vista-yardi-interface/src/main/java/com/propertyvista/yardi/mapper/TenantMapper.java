@@ -138,7 +138,7 @@ public class TenantMapper {
 
         // set Yardi's email just in case of initial import and non-former leases:
         if (customer.id().isNull() && !yardiCustomer.getAddress().isEmpty() && !isFormerLease(yardiCustomer)) {
-            setEmail(yardiCustomer.getAddress().get(0).getEmail(), customer);
+            setEmail(yardiCustomer, customer);
         }
 
 //TODO - find somewhere...
@@ -164,15 +164,16 @@ public class TenantMapper {
         }
     }
 
-    private void setEmail(String email, Customer customer) {
+    private void setEmail(YardiCustomer yardiCustomer, Customer customer) {
         if (!customer.registeredInPortal().isBooleanTrue()) {
+            String email = yardiCustomer.getAddress().get(0).getEmail();
             if (!CommonsStringUtils.isEmpty(email)) {
                 if (EmailValidator.isValid(email)) {
                     customer.person().email().setValue(email);
                 } else {
-                    log.warn(">> DataValidation >> Invalid Email: " + email);
+                    log.warn(">> DataValidation CustomerID : {} >> Invalid Email: {} ", yardiCustomer.getCustomerID(), email);
                     if (executionMonitor != null) {
-                        executionMonitor.addErredEvent("DataValidation", "Invalid Email: " + email);
+                        executionMonitor.addErredEvent("DataValidation", "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID());
                     }
                 }
             }
