@@ -558,6 +558,21 @@ public class PMSiteContentManager implements Serializable {
         return slogan;
     }
 
+    public String getPmcInfo(AvailableLocale locale) {
+        String pmcInfo = null;
+        String lang = locale.lang().getValue().name();
+        IList<HtmlContent> allInfo = getSiteDescriptor().pmcInfo();
+        for (HtmlContent infoRc : allInfo) {
+            if (infoRc.locale().lang().getValue().name().equals(lang)) {
+                pmcInfo = infoRc.html().getValue();
+            }
+        }
+        if (pmcInfo == null && allInfo.size() > 0) {
+            pmcInfo = allInfo.get(0).html().getValue();
+        }
+        return pmcInfo;
+    }
+
     public String poveredByUrl() {
         return "http://www.propertyvista.com";
     }

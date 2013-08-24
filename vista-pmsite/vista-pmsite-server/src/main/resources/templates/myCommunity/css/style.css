@@ -314,3 +314,20 @@ element.style {
 .ProvideTIRequirements {
     width: auto !important;
 }
+
+
+/* PMC custom elements */
+.PmcCustomHeader {	
+}
+.PmcCustomFooter {
+	display: inline-block;
+	padding-top: 10px;
+}
+.PmcCustomFooter .PmcInfo {
+	display: inline-block;
+	color: white;
+    text-align: center;
+}
+.PmcCustomFooter .PmcLogoSmall {
+	vertical-align: middle;
+}
