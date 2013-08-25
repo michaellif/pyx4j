@@ -411,8 +411,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 paymentMethodEditorHeader.setVisible(true);
             }
 
-            boolean transactionResult = getValue().paymentMethod().isNull() ? false
-                    : (getValue().paymentMethod().type().getValue().isTransactable() && getValue().paymentStatus().getValue().isProcessed());
+            // Need to show Direct Debit details when in status Queued
+            boolean transactionResult = getValue().paymentMethod().isNull() ? false : (getValue().paymentMethod().type().getValue().isTransactable());
 
             get(proto().transactionAuthorizationNumber()).setVisible(transactionResult);
             get(proto().transactionErrorMessage()).setVisible(transactionResult && !getValue().transactionErrorMessage().isNull());

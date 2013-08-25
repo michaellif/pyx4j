@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import org.apache.commons.lang.Validate;
@@ -28,6 +29,7 @@ import com.pyx4j.entity.server.TransactionScopeOption;
 import com.pyx4j.entity.server.UnitOfWork;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
+import com.pyx4j.entity.shared.utils.EntityFromatUtils;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentBatchPosting.ProcessPaymentRecordInBatch;
@@ -36,7 +38,10 @@ import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.payment.DirectDebitInfo;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.domain.person.Name;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.tenant.lease.LeaseParticipant;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecord;
 import com.propertyvista.operations.domain.payment.dbp.DirectDebitRecordProcessingStatus;
@@ -98,13 +103,28 @@ public class DirectDebitPostProcessor {
 
         Persistence.service().retrieve(billingAccount.lease());
         Persistence.service().retrieve(billingAccount.lease().currentTerm().version().tenants());
+        Persistence.service().retrieve(billingAccount.lease().currentTerm().version().guarantors());
+
+        // Find tenant by name in debitRecord.customerName()
+        LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = billingAccount.lease().currentTerm().version().tenants().get(0);
+        String customerNametoMatch = normalizeName(debitRecord.customerName().getStringView());
+        leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().tenants());
+        if (leaseTermParticipant == null) {
+            leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().guarantors());
+        }
+        // Fallback to primary tenant, Applicant
+        if (leaseTermParticipant == null) {
+            for (LeaseTermTenant leaseParticipant : billingAccount.lease().currentTerm().version().tenants()) {
+                if (leaseParticipant.role().getValue() == LeaseTermParticipant.Role.Applicant) {
+                    leaseTermParticipant = leaseParticipant;
+                    break;
+                }
+            }
+        }
 
         PaymentRecord paymentRecord = EntityFactory.create(PaymentRecord.class);
         paymentRecord.billingAccount().set(billingAccount);
         paymentRecord.amount().setValue(debitRecord.amount().getValue());
-
-        // TODO find tenant by name  in debitRecord.customerName()
-        LeaseTermTenant leaseTermParticipant = billingAccount.lease().currentTerm().version().tenants().get(0);
 
         paymentRecord.leaseTermParticipant().set(leaseTermParticipant);
 
@@ -119,6 +139,30 @@ public class DirectDebitPostProcessor {
         paymentRecord.transactionAuthorizationNumber().setValue(debitRecord.paymentReferenceNumber().getValue());
 
         ServerSideFactory.create(PaymentFacade.class).persistPayment(paymentRecord);
+    }
+
+    private static String normalizeName(String name) {
+        return name.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ENGLISH);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E extends LeaseTermParticipant<? extends LeaseParticipant<?>>> E findParticipantByExactNameMatch(String customerName, List<E> participants) {
+        for (E participant : participants) {
+            Name name = participant.leaseParticipant().customer().person().name();
+            if (customerName.equals(normalizeName(EntityFromatUtils.nvl_concat(" ", name.firstName(), name.lastName())))) {
+                return participant;
+            }
+            if (customerName.equals(normalizeName(EntityFromatUtils.nvl_concat(" ", name.firstName(), name.maidenName(), name.lastName())))) {
+                return participant;
+            }
+            if (customerName.equals(normalizeName(EntityFromatUtils.nvl_concat(" ", name.lastName(), name.firstName())))) {
+                return participant;
+            }
+            if (customerName.equals(normalizeName(name.getStringView()))) {
+                return participant;
+            }
+        }
+        return null;
     }
 
     private void processPayments(final ExecutionMonitor executionMonitor) {
