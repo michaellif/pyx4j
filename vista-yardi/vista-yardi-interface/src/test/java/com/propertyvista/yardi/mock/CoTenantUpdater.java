@@ -25,6 +25,10 @@ public class CoTenantUpdater extends Updater<YardiCustomer, CoTenantUpdater> {
         FirstName, LastName;
     }
 
+    public enum YCUSTOMERADDRESS implements com.propertyvista.yardi.mock.Name {
+        Email;
+    }
+
     public enum YLEASE implements com.propertyvista.yardi.mock.Name {
         ActualMoveIn, ResponsibleForLease;
     }

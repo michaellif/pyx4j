@@ -45,4 +45,9 @@ public class LeaseTermTenantTester extends Tester {
         return this;
     }
 
+    public LeaseTermTenantTester email(String value) {
+        assertEquals("E-mails", value, tenant.leaseParticipant().customer().person().email().getValue());
+        return this;
+    }
+
 }

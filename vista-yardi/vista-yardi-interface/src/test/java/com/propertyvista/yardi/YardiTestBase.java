@@ -26,6 +26,7 @@ import com.pyx4j.server.contexts.NamespaceManager;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.system.YardiServiceException;
+import com.propertyvista.biz.system.encryption.PasswordEncryptorFacade;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
@@ -43,6 +44,7 @@ import com.propertyvista.test.mock.models.IdAssignmentPolicyDataModel;
 import com.propertyvista.test.mock.models.LeaseBillingPolicyDataModel;
 import com.propertyvista.test.mock.models.LocationsDataModel;
 import com.propertyvista.test.mock.models.PmcDataModel;
+import com.propertyvista.test.mock.security.PasswordEncryptorFacadeMock;
 import com.propertyvista.yardi.mock.YardiMockServer;
 import com.propertyvista.yardi.mock.stub.YardiMockMaintenanceRequestsStubImpl;
 import com.propertyvista.yardi.mock.stub.YardiMockResidentTransactionsStubImpl;
@@ -59,6 +61,7 @@ public class YardiTestBase extends IntegrationTestBase {
         ServerSideFactory.register(YardiResidentTransactionsStub.class, YardiMockResidentTransactionsStubImpl.class);
         ServerSideFactory.register(YardiSystemBatchesStub.class, YardiMockSystemBatchesStubImpl.class);
         ServerSideFactory.register(YardiMaintenanceRequestsStub.class, YardiMockMaintenanceRequestsStubImpl.class);
+        ServerSideFactory.register(PasswordEncryptorFacade.class, PasswordEncryptorFacadeMock.class);
 
         //Init YardiMockServer
         YardiMockServer.instance().cleanup();

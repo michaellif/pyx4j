@@ -346,6 +346,15 @@ public class PropertyManager {
 
                 updateProperty(coTenant.getName(), property);
 
+            } else if (property.getName() instanceof CoTenantUpdater.YCUSTOMERADDRESS) {
+
+                if (coTenant.getAddress().isEmpty()) {
+                    Address custAddress = new Address();
+                    coTenant.getAddress().add(custAddress);
+                }
+
+                updateProperty(coTenant.getAddress().get(0), property);
+
             } else if (property.getName() instanceof CoTenantUpdater.YLEASE) {
 
                 if (coTenant.getLease() == null) {

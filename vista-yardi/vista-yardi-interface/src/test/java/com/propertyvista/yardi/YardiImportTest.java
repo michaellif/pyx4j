@@ -72,7 +72,8 @@ public class YardiImportTest extends YardiTestBase {
             set(RtCustomerUpdater.YLEASE.CurrentRent, new BigDecimal("1234.56")).
             set(RtCustomerUpdater.YLEASE.LeaseFromDate, DateUtils.detectDateformat("01-Jun-2012")).
             set(RtCustomerUpdater.YLEASE.LeaseToDate, DateUtils.detectDateformat("31-Jul-2014")).
-            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).         
+            set(RtCustomerUpdater.YLEASE.ResponsibleForLease, true).
+            set(RtCustomerUpdater.YCUSTOMERADDRESS.Email, "John@Smith.ca").
             set(RtCustomerUpdater.UNITINFO.UnitType, "2bdrm").
             set(RtCustomerUpdater.UNITINFO.UnitBedrooms, new BigDecimal("2")).
             set(RtCustomerUpdater.UNITINFO.UnitBathrooms, new BigDecimal("1")).
@@ -131,6 +132,7 @@ public class YardiImportTest extends YardiTestBase {
             set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
             set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
             set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Doe").
+            set(CoTenantUpdater.YCUSTOMERADDRESS.Email, "Jane@Doe.ca").
             set(CoTenantUpdater.YLEASE.ResponsibleForLease, true);
             // @formatter:on
             MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
@@ -176,14 +178,16 @@ public class YardiImportTest extends YardiTestBase {
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(0)).
         firstName("John").
         lastName("Smith").
-        role(Role.Applicant);
+        role(Role.Applicant).
+        email("john@smith.ca");
         // @formatter:on
 
         // @formatter:off
         new LeaseTermTenantTester(lease.currentTerm().version().tenants().get(1)).
         firstName("Jane").
         lastName("Doe").
-        role(Role.CoApplicant);
+        role(Role.CoApplicant).
+        email("jane@doe.ca");
         // @formatter:on
 
         // @formatter:off

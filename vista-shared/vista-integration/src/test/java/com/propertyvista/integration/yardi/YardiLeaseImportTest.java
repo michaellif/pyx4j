@@ -23,8 +23,12 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.pyx4j.gwt.server.DateUtils;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.LeaseTermParticipant.Role;
+import com.propertyvista.test.integration.LeaseTermTenantTester;
 import com.propertyvista.test.mock.MockEventBus;
 import com.propertyvista.yardi.YardiTestBase;
+import com.propertyvista.yardi.mock.CoTenantUpdateEvent;
+import com.propertyvista.yardi.mock.CoTenantUpdater;
 import com.propertyvista.yardi.mock.LeaseChargeUpdateEvent;
 import com.propertyvista.yardi.mock.LeaseChargeUpdater;
 import com.propertyvista.yardi.mock.PropertyUpdateEvent;
@@ -129,6 +133,14 @@ public class YardiLeaseImportTest extends YardiTestBase {
         }
     }
 
+    private Lease getLeaseById(String leaseId) {
+        EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
+        criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), leaseId));
+        Lease lease = Persistence.service().retrieve(criteria);
+        Persistence.service().retrieve(lease.currentTerm().version().tenants());
+        return lease;
+    }
+
     public void testOneCustomerMultipleLeases_InitialImport() throws Exception {
 
         setupCustomerSecondLease();
@@ -142,17 +154,13 @@ public class YardiLeaseImportTest extends YardiTestBase {
 
         // Verify Leases is imported:
         {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
-            lease1 = Persistence.service().retrieve(criteria);
+            lease1 = getLeaseById("t000111");
         }
 
         assertNotNull("Lease imported", lease1);
         assertEquals("Lease Status", Lease.Status.Active, lease1.status().getValue());
         {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000222"));
-            lease2 = Persistence.service().retrieve(criteria);
+            lease2 = getLeaseById("t000222");
         }
         assertNotNull("Lease imported", lease2);
         assertEquals("Lease Status", Lease.Status.Active, lease2.status().getValue());
@@ -173,9 +181,7 @@ public class YardiLeaseImportTest extends YardiTestBase {
 
         // Verify Leases is imported:
         {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000111"));
-            lease1 = Persistence.service().retrieve(criteria);
+            lease1 = getLeaseById("t000111");
         }
 
         assertNotNull("Lease imported", lease1);
@@ -189,9 +195,7 @@ public class YardiLeaseImportTest extends YardiTestBase {
         yardiImportAll(getYardiCredential("prop123"));
 
         {
-            EntityQueryCriteria<Lease> criteria = EntityQueryCriteria.create(Lease.class);
-            criteria.add(PropertyCriterion.eq(criteria.proto().leaseId(), "t000222"));
-            lease2 = Persistence.service().retrieve(criteria);
+            lease2 = getLeaseById("t000222");
         }
         assertNotNull("Lease imported", lease2);
         assertEquals("Lease Status", Lease.Status.Active, lease2.status().getValue());
@@ -200,5 +204,99 @@ public class YardiLeaseImportTest extends YardiTestBase {
 
         assertEquals("Customer", lease1.currentTerm().version().tenants().get(0).leaseParticipant().customer().getValue(), lease2.currentTerm().version()
                 .tenants().get(0).leaseParticipant().customer().getValue());
+    }
+
+    public void testDuplicateEmailOnSingleLease_InitialImport() throws Exception {
+        {
+            // @formatter:off
+            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            set(CoTenantUpdater.YCUSTOMER.Type, Customerinfo.CUSTOMER).
+            set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
+            set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
+            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Doe").
+            set(CoTenantUpdater.YCUSTOMERADDRESS.Email, "john@smith.ca").
+            set(CoTenantUpdater.YLEASE.ResponsibleForLease, true);
+            // @formatter:on
+            MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
+        }
+
+        setSysDate("2010-11-01");
+
+        // Initial Import 
+        yardiImportAll(getYardiCredential("prop123"));
+
+        Lease lease1;
+
+        // Verify Leases is imported:
+        {
+            lease1 = getLeaseById("t000111");
+        }
+
+        assertNotNull("Lease imported", lease1);
+
+        // verify Customer is the same:
+
+        new LeaseTermTenantTester(lease1.currentTerm().version().tenants().get(0)). //
+                firstName("John").//
+                lastName("Smith").//
+                role(Role.Applicant) //
+                .email("john@smith.ca");
+
+        new LeaseTermTenantTester(lease1.currentTerm().version().tenants().get(1)).//
+                firstName("Jane"). //
+                lastName("Doe"). //
+                role(Role.CoApplicant). //
+                email(null);
+    }
+
+    // See the bug  VISTA-3365  
+    public void TODO_testDuplicateEmailOnSingleLease_Updae() throws Exception {
+        setSysDate("2010-11-01");
+
+        // Initial Import 
+        yardiImportAll(getYardiCredential("prop123"));
+
+        {
+            // @formatter:off
+            CoTenantUpdater updater = new CoTenantUpdater("prop123", "t000111", "r000222").
+            set(CoTenantUpdater.YCUSTOMER.Type, Customerinfo.CUSTOMER).
+            set(CoTenantUpdater.YCUSTOMER.CustomerID, "r000222").
+            set(CoTenantUpdater.YCUSTOMERNAME.FirstName, "Jane").
+            set(CoTenantUpdater.YCUSTOMERNAME.LastName, "Doe").
+            set(CoTenantUpdater.YCUSTOMERADDRESS.Email, "john@smith.ca").
+            set(CoTenantUpdater.YLEASE.ResponsibleForLease, true);
+            // @formatter:on
+            MockEventBus.fireEvent(new CoTenantUpdateEvent(updater));
+        }
+
+        setSysDate("2010-11-02");
+
+        setupCustomerSecondLease();
+
+        //Run second update from yardi
+        yardiImportAll(getYardiCredential("prop123"));
+
+        Lease lease1;
+
+        // Verify Leases is imported:
+        {
+            lease1 = getLeaseById("t000111");
+        }
+
+        assertNotNull("Lease imported", lease1);
+
+        // verify Customer is the same:
+
+        new LeaseTermTenantTester(lease1.currentTerm().version().tenants().get(0)). //
+                firstName("John").//
+                lastName("Smith").//
+                role(Role.Applicant) //
+                .email("john@smith.ca");
+
+        new LeaseTermTenantTester(lease1.currentTerm().version().tenants().get(1)).//
+                firstName("Jane"). //
+                lastName("Doe"). //
+                role(Role.CoApplicant). //
+                email(null);
     }
 }
