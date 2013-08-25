@@ -24,16 +24,21 @@ import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 public class DashboardTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        Gadget, GadgetContent, GadgetHeader, GadgetBlockSeparator,
+        Dashboard, Gadget, GadgetContent, GadgetHeader, GadgetBlockSeparator,
 
         PersonPhoto, PersonName
     }
 
     public DashboardTheme() {
-        Style style = new Style(".", StyleName.Gadget);
+        Style style = new Style(".", StyleName.Dashboard);
+        style.addProperty("margin", "0 10px 10px 0");
+        addStyle(style);
+
+        style = new Style(".", StyleName.Gadget);
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetContent);
+        style.addProperty("margin", "10px 0 0 10px");
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetHeader);

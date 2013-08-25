@@ -258,12 +258,6 @@ public class PortalWebRootPaneTheme extends Theme {
 
         style = new Style(".", StyleName.ExtraGadgetItem);
         style.addProperty("margin", "10px 10px 0 0");
-        style.addProperty("padding", "10px ");
-        style.addProperty("border-color", ThemeColor.foreground, 0.3);
-        style.addProperty("border-style", "solid");
-        style.addProperty("border-width", "1px");
-        style.addProperty("border-radius", "5px");
-        style.addProperty("background", ThemeColor.foreground, 0.01);
         addStyle(style);
 
         style = new Style(".", StyleName.ExtraGadgetItemTitle);

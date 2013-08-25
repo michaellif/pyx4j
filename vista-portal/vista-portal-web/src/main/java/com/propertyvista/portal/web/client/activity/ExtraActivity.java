@@ -21,26 +21,55 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
 
-import com.propertyvista.common.client.site.ExtraGadget;
+import com.propertyvista.portal.domain.dto.CommunityEventDTO;
+import com.propertyvista.portal.domain.dto.extra.CommunityEventsGadgetDTO;
+import com.propertyvista.portal.domain.dto.extra.ExtraGadgetDTO;
+import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO;
+import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO.WeatherType;
 import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.ui.ExtraView;
+import com.propertyvista.portal.web.client.ui.extra.ExtraView;
 
 public class ExtraActivity extends AbstractActivity {
 
-    private static List<ExtraGadget> gadgets = new ArrayList<ExtraGadget>();
+    private static List<ExtraGadgetDTO> gadgets = new ArrayList<ExtraGadgetDTO>();
 
     private final ExtraView view;
 
     static {
-        gadgets.add(new ExtraGadget(
-                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.",
-                "COMMERCIAL"));
-        gadgets.add(new ExtraGadget(
-                "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.", "NEWS"));
+
+        {
+            WeatherGadgetDTO data = EntityFactory.create(WeatherGadgetDTO.class);
+            data.weatherType().setValue(WeatherType.sunny);
+            data.temperature().setValue(25);
+            gadgets.add(data);
+        }
+
+        {
+            CommunityEventsGadgetDTO data = EntityFactory.create(CommunityEventsGadgetDTO.class);
+
+            {
+                CommunityEventDTO event = EntityFactory.create(CommunityEventDTO.class);
+                event.caption().setValue("Community Garage Sale");
+                event.timeAndLocation().setValue("June 10th, 8:00 - 3:00");
+                event.description().setValue("Clean out the attic. It's time to turn your unused items into cash. Signs will be posted around the community.");
+                data.events().add(event);
+            }
+
+            {
+                CommunityEventDTO event = EntityFactory.create(CommunityEventDTO.class);
+                event.caption().setValue("Summerfest is fast approaching!");
+                event.timeAndLocation().setValue("August 31st from 11:00am-4:00pm at Central Park");
+                event.description().setValue("We’ve planned a fun event for you to come out, have fun and meet your neighbours.");
+                data.events().add(event);
+            }
+            gadgets.add(data);
+        }
+
     }
 
     public ExtraActivity(Place place) {

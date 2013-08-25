@@ -11,25 +11,12 @@
  * @author Misha
  * @version $Id$
  */
-package com.propertyvista.common.client.site;
+package com.propertyvista.portal.domain.dto.extra;
 
-public class ExtraGadget {
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
 
-    private final String message;
-
-    private final String title;
-
-    public ExtraGadget(String message, String title) {
-        this.message = message;
-        this.title = title;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public String getTitle() {
-        return title;
-    }
+@Transient
+public interface ExtraGadgetDTO extends IEntity {
 
 }

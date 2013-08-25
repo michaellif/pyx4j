@@ -249,6 +249,7 @@ public class PortalWebTheme extends Theme {
         addTheme(new BillingTheme());
         addTheme(new TransactionHistoryViewerTheme());
         addTheme(new DashboardTheme());
+        addTheme(new ExtraGadgetsTheme());
         addTheme(new EntityViewTheme());
         addTheme(new TenantInsuranceTheme());
         addTheme(new TenantSureTheme());

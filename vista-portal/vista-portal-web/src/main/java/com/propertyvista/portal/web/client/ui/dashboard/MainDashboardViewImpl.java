@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -24,6 +25,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
+import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class MainDashboardViewImpl extends FlowPanel implements MainDashboardView {
 
@@ -43,6 +45,9 @@ public class MainDashboardViewImpl extends FlowPanel implements MainDashboardVie
     private final OffersGadget offersGadget;
 
     public MainDashboardViewImpl() {
+
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
+        getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
 
         profileGadget = new ProfileGadget(this);
         profileGadget.asWidget().setWidth("100%");

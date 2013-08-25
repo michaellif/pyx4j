@@ -11,15 +11,18 @@
  * @author Mykola
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui;
+package com.propertyvista.portal.web.client.ui.extra;
 
 import java.util.List;
 
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 
-import com.propertyvista.common.client.site.ExtraGadget;
+import com.propertyvista.portal.domain.dto.extra.CommunityEventsGadgetDTO;
+import com.propertyvista.portal.domain.dto.extra.ExtraGadgetDTO;
+import com.propertyvista.portal.domain.dto.extra.WeatherGadgetDTO;
 import com.propertyvista.portal.web.client.themes.PortalWebRootPaneTheme;
+import com.propertyvista.portal.web.client.ui.extra.events.CommunityEventsGadget;
+import com.propertyvista.portal.web.client.ui.extra.weather.WeatherGadget;
 
 public class ExtraViewImpl extends FlowPanel implements ExtraView {
 
@@ -36,31 +39,22 @@ public class ExtraViewImpl extends FlowPanel implements ExtraView {
     }
 
     @Override
-    public void populate(List<ExtraGadget> gadgets) {
+    public void populate(List<ExtraGadgetDTO> gadgets) {
         contentPanel.clear();
         if (gadgets.size() == 0) {
             setVisible(false);
         } else {
             setVisible(true);
-            for (final ExtraGadget gadget : gadgets) {
-
-                FlowPanel message = new FlowPanel();
-                message.setStyleName(PortalWebRootPaneTheme.StyleName.ExtraGadgetItem.name());
-
-                HTML title = new HTML(gadget.getTitle());
-                title.setStyleName(PortalWebRootPaneTheme.StyleName.ExtraGadgetItemTitle.name());
-
-                HTML body = new HTML(gadget.getMessage());
-
-                message.add(title);
-                message.add(body);
-
-                contentPanel.add(message);
+            for (final ExtraGadgetDTO gadget : gadgets) {
+                if (gadget.isInstanceOf(WeatherGadgetDTO.class)) {
+                    contentPanel.add(new WeatherGadget((WeatherGadgetDTO) gadget));
+                } else if (gadget.isInstanceOf(CommunityEventsGadgetDTO.class)) {
+                    contentPanel.add(new CommunityEventsGadget((CommunityEventsGadgetDTO) gadget));
+                }
 
             }
 
         }
 
     }
-
 }

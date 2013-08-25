@@ -7,24 +7,21 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Jun 23, 2013
+ * Created on Aug 25, 2013
  * @author michaellif
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui;
+package com.propertyvista.portal.domain.dto;
 
-import java.util.List;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IPrimitive;
 
-import com.pyx4j.site.client.IsView;
+public interface CommunityEventDTO extends IEntity {
 
-import com.propertyvista.common.client.site.ExtraGadget;
+    IPrimitive<String> caption();
 
-public interface ExtraView extends IsView {
+    IPrimitive<String> timeAndLocation();
 
-    public interface ExtraPresenter {
-
-    }
-
-    void populate(List<ExtraGadget> notifications);
+    IPrimitive<String> description();
 
 }
