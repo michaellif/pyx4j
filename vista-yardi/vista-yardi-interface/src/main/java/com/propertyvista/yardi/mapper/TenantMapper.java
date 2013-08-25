@@ -49,20 +49,14 @@ public class TenantMapper {
         this.executionMonitor = executionMonitor;
     }
 
-    private boolean isEmailAlreadyUsed(String email, List<LeaseTermTenant> tenants) {
-        for (LeaseTermTenant tenant : tenants) {
-            String emailN = tenant.leaseParticipant().customer().person().email().getValue();
-            if (CommonsStringUtils.isStringSet(emailN) && CommonsStringUtils.equals(email, emailN)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
+        boolean isEmailAlreadyUsed = isEmailAlreadyUsed(retrieveYardiCustomerEmail(yardiCustomer), tenants);
 
-        Customer customer = findCustomer(yardiCustomer);
+        Customer customer = null;
+        if (!isEmailAlreadyUsed) {
+            customer = findCustomer(yardiCustomer);
+        }
         if (customer == null) {
             customer = EntityFactory.create(Customer.class);
         }
@@ -74,6 +68,11 @@ public class TenantMapper {
             tenant.role().setValue(isApplicantExists(tenants) ? Role.CoApplicant : Role.Applicant);
         } else {
             tenant.role().setValue(Role.Dependent);
+        }
+
+        // set Yardi's email just in case of initial import and non-former leases:
+        if (!isEmailAlreadyUsed && customer.id().isNull() && !isFormerLease(yardiCustomer)) {
+            setEmail(yardiCustomer, customer);
         }
 
         return tenant;
@@ -100,21 +99,9 @@ public class TenantMapper {
         return updated;
     }
 
-    private Customer findCustomer(YardiCustomer yardiCustomer) {
-        if (!yardiCustomer.getAddress().isEmpty()) {
-            String email = yardiCustomer.getAddress().get(0).getEmail();
-            if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
-                EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-                criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
-                return Persistence.service().retrieve(criteria);
-            }
-        }
-        return null;
-    }
-
     public Customer mapCustomer(YardiCustomer yardiCustomer, Customer customer) {
         // TODO translate plane string to our Name.Prefix enum:
-//      customer.person().name().namePrefix().setValue(yardiCustomer.getName().getNamePrefix());
+        //      customer.person().name().namePrefix().setValue(yardiCustomer.getName().getNamePrefix());
         customer.person().name().firstName().setValue(yardiCustomer.getName().getFirstName());
         customer.person().name().middleName().setValue(yardiCustomer.getName().getMiddleName());
         customer.person().name().lastName().setValue(yardiCustomer.getName().getLastName());
@@ -150,15 +137,32 @@ public class TenantMapper {
             }
         }
 
-        // set Yardi's email just in case of initial import and non-former leases:
-        if (customer.id().isNull() && !yardiCustomer.getAddress().isEmpty() && !isFormerLease(yardiCustomer)) {
-            setEmail(yardiCustomer, customer);
-        }
-
-//TODO - find somewhere...
-//      customer.person().birthDate().setValue(value);
+        //TODO - find somewhere...
+        //      customer.person().birthDate().setValue(value);
 
         return customer;
+    }
+
+    private boolean isEmailAlreadyUsed(String email, List<LeaseTermTenant> tenants) {
+        if (!CommonsStringUtils.isEmpty(email)) {
+            for (LeaseTermTenant tenant : tenants) {
+                String emailN = tenant.leaseParticipant().customer().person().email().getValue();
+                if (!CommonsStringUtils.isEmpty(emailN) && CommonsStringUtils.equals(email, emailN)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private Customer findCustomer(YardiCustomer yardiCustomer) {
+        String email = retrieveYardiCustomerEmail(yardiCustomer);
+        if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
+            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+            criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
+            return Persistence.service().retrieve(criteria);
+        }
+        return null;
     }
 
     private boolean isApplicantExists(List<LeaseTermTenant> tenants) {
@@ -178,18 +182,23 @@ public class TenantMapper {
         }
     }
 
+    private String retrieveYardiCustomerEmail(YardiCustomer yardiCustomer) {
+        if (!yardiCustomer.getAddress().isEmpty()) {
+            return yardiCustomer.getAddress().get(0).getEmail();
+        }
+        return null;
+    }
+
     private void setEmail(YardiCustomer yardiCustomer, Customer customer) {
-        if (!customer.registeredInPortal().isBooleanTrue()) {
-            String email = yardiCustomer.getAddress().get(0).getEmail();
-            if (!CommonsStringUtils.isEmpty(email)) {
-                if (EmailValidator.isValid(email)) {
-                    customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
-                } else {
-                    log.warn(">> DataValidation CustomerID : {} >> Invalid Email: {} ", yardiCustomer.getCustomerID(), email);
-                    if (executionMonitor != null) {
-                        executionMonitor.addInfoEvent("DataValidation", CompletionType.failed,
-                                "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID(), null);
-                    }
+        String email = retrieveYardiCustomerEmail(yardiCustomer);
+        if (!CommonsStringUtils.isEmpty(email)) {
+            if (EmailValidator.isValid(email)) {
+                customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
+            } else {
+                log.warn(">> DataValidation CustomerID : {} >> Invalid Email: {} ", yardiCustomer.getCustomerID(), email);
+                if (executionMonitor != null) {
+                    executionMonitor.addInfoEvent("DataValidation", CompletionType.failed,
+                            "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID(), null);
                 }
             }
         }
