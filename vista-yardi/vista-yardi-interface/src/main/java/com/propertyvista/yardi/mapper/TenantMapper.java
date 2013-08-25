@@ -49,6 +49,16 @@ public class TenantMapper {
         this.executionMonitor = executionMonitor;
     }
 
+    private boolean isEmailAlreadyUsed(String email, List<LeaseTermTenant> tenants) {
+        for (LeaseTermTenant tenant : tenants) {
+            String emailN = tenant.leaseParticipant().customer().person().email().getValue();
+            if (CommonsStringUtils.isStringSet(emailN) && CommonsStringUtils.equals(email, emailN)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public LeaseTermTenant createTenant(YardiCustomer yardiCustomer, List<LeaseTermTenant> tenants) {
         LeaseTermTenant tenant = EntityFactory.create(LeaseTermTenant.class);
 
@@ -91,10 +101,13 @@ public class TenantMapper {
     }
 
     private Customer findCustomer(YardiCustomer yardiCustomer) {
-        if (!yardiCustomer.getAddress().isEmpty() && CommonsStringUtils.isStringSet(yardiCustomer.getAddress().get(0).getEmail())) {
-            EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
-            criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(yardiCustomer.getAddress().get(0).getEmail()));
-            return Persistence.service().retrieve(criteria);
+        if (!yardiCustomer.getAddress().isEmpty()) {
+            String email = yardiCustomer.getAddress().get(0).getEmail();
+            if (!CommonsStringUtils.isEmpty(email) && EmailValidator.isValid(email)) {
+                EntityQueryCriteria<Customer> criteria = EntityQueryCriteria.create(Customer.class);
+                criteria.eq(criteria.proto().person().email(), EmailValidator.normalizeEmailAddress(email));
+                return Persistence.service().retrieve(criteria);
+            }
         }
         return null;
     }
