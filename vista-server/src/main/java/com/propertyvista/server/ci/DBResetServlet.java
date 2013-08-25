@@ -70,6 +70,7 @@ import com.propertyvista.config.VistaDeployment;
 import com.propertyvista.domain.DemoData.DemoPmc;
 import com.propertyvista.domain.VistaNamespace;
 import com.propertyvista.domain.pmc.Pmc;
+import com.propertyvista.domain.pmc.Pmc.PmcStatus;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.misc.VistaDataPreloaderParameter;
 import com.propertyvista.misc.VistaDevPreloadConfig;
@@ -401,7 +402,10 @@ public class DBResetServlet extends HttpServlet {
                                     break;
                                 case dbIntegrityCheck:
                                     ReportRequest reportdbo = new ReportRequest();
-                                    reportdbo.setCriteria(EntityQueryCriteria.create(Pmc.class));
+                                    EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
+                                    criteria.add(PropertyCriterion.ne(criteria.proto().status(), PmcStatus.Created));
+                                    criteria.asc(criteria.proto().namespace());
+                                    reportdbo.setCriteria(criteria);
                                     new DBIntegrityCheckDeferredProcess(reportdbo).execute();
                                     break;
                                 default:
