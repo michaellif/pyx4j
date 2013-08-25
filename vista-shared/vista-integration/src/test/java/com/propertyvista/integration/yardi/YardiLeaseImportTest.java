@@ -250,7 +250,7 @@ public class YardiLeaseImportTest extends YardiTestBase {
     }
 
     // See the bug  VISTA-3365  
-    public void TODO_testDuplicateEmailOnSingleLease_Updae() throws Exception {
+    public void testDuplicateEmailOnSingleLease_Update() throws Exception {
         setSysDate("2010-11-01");
 
         // Initial Import 
