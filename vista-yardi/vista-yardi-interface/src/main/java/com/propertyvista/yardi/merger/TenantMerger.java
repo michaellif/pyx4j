@@ -124,7 +124,7 @@ public class TenantMerger {
                 for (int j = i + 1; j < term.version().tenants().size(); ++j) {
                     Customer customer = term.version().tenants().get(j).leaseParticipant().customer();
                     String emailN = customer.person().email().getValue();
-                    if (CommonsStringUtils.isStringSet(emailN) && CommonsStringUtils.equals(email0, emailN)) {
+                    if (!customer.registeredInPortal().isBooleanTrue() && CommonsStringUtils.isStringSet(emailN) && CommonsStringUtils.equals(email0, emailN)) {
                         customer.person().email().setValue(null);
                         log.warn(">> cleanDuplicatEmails >> Person: {} - Email: {} removed!.", customer.person().getStringView(), emailN);
                     }
