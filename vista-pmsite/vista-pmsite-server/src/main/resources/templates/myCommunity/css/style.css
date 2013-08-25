@@ -322,8 +322,12 @@ element.style {
     display: block;
     margin-top: 4px;
 }
-
-
+.vista-pmsite-main .content {
+    line-height: normal !important;
+}
+.ValidationLabel {
+    margin-top: 5px !important;
+}
 /* PMC custom elements */
 .PmcCustomHeader {	
 }
