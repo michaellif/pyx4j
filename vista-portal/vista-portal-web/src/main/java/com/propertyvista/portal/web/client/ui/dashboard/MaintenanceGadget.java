@@ -35,9 +35,7 @@ public class MaintenanceGadget extends AbstractGadget<MainDashboardViewImpl> {
         setActionsToolbar(new MaintenanceToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
-        contentPanel
-                .add(new HTML(
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+        contentPanel.add(new HTML("You don't have any pending Maintenance Requests."));
         setContent(contentPanel);
     }
 

@@ -36,7 +36,7 @@ public class ResidentServicesGadget extends AbstractGadget<MainDashboardViewImpl
         FlowPanel contentPanel = new FlowPanel();
         contentPanel
                 .add(new HTML(
-                        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat."));
+                        "<b>Our records indicate you do not have valid tenant insurance.</b><br>As per your lease agreement, you must obtain and provide the landlord with proof of tenant insurance."));
 
         setContent(contentPanel);
     }
