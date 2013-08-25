@@ -83,6 +83,7 @@ SET search_path = '_admin_';
         DROP INDEX onboarding_user_email_idx;
         DROP INDEX pad_sim_batch_pad_file_idx;
         DROP INDEX pad_sim_file$state_owner_idx;
+        DROP INDEX vista_merchant_account_merchant_terminal_id_idx;
         
         /**
         ***     =======================================================================================================
@@ -353,6 +354,10 @@ SET search_path = '_admin_';
        
        ALTER TABLE scheduler_execution_report_section ALTER COLUMN name TYPE VARCHAR(120);
        
+       -- vista_merchant_account
+       
+       ALTER TABLE vista_merchant_account ADD COLUMN account_type VARCHAR(50);
+       
         /**
         ***     ============================================================================================================
         ***
@@ -558,7 +563,10 @@ SET search_path = '_admin_';
         (SELECT nextval('public.scheduler_trigger_seq') AS id,'paymentsDbpProcessReconciliation','P 7C - Payments Direct Banking Process Reconciliation (auto triggered by ReceiveReconciliation)',
         'allPmc',current_timestamp));
         
+        -- vista_merchant_account
         
+        UPDATE  vista_merchant_account
+        SET     account_type = 'PaymentAggregation';
         
         /**
         ***     ==========================================================================================================
@@ -703,6 +711,7 @@ SET search_path = '_admin_';
                 'updatePaymentsSummary', 'vistaBusinessReport', 'vistaCaleonReport', 'yardiARDateVerification', 'yardiImportProcess'));
         ALTER TABLE scheduler_trigger_notification ADD CONSTRAINT scheduler_trigger_notification_event_e_ck 
                 CHECK ((event) IN ('All', 'Completed', 'Error', 'Failed', 'NonEmpty'));
+        ALTER TABLE vista_merchant_account ADD CONSTRAINT vista_merchant_account_account_type_e_ck CHECK ((account_type) IN ('Equifax', 'PaymentAggregation'));
 
         
 
@@ -729,6 +738,9 @@ SET search_path = '_admin_';
         CREATE INDEX onboarding_user_email_idx ON onboarding_user USING btree (lower(email));
         CREATE INDEX pad_debit_record_transaction_pad_debit_record_idx ON pad_debit_record_transaction USING btree (pad_debit_record);
         CREATE UNIQUE INDEX pad_file_creation_number_funds_transfer_type_company_id_idx ON pad_file USING btree (file_creation_number, funds_transfer_type, company_id) ;
+        CREATE INDEX vista_merchant_account_merchant_terminal_id_idx ON vista_merchant_account USING btree (merchant_terminal_id);
+        CREATE UNIQUE INDEX vista_merchant_account_account_type_idx ON vista_merchant_account USING btree (account_type);
+
 
        
 

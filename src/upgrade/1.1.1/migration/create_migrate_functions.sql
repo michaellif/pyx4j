@@ -140,7 +140,21 @@ BEGIN
         );
         
         ALTER TABLE customer_picture OWNER TO vista;
-                                
+        
+        
+        -- customer_picture_blob
+        
+        CREATE TABLE customer_picture_blob
+        (
+                id                              BIGINT                  NOT NULL,
+                content_type                    VARCHAR(500),
+                data                            BYTEA,
+                created                         TIMESTAMP,
+                        CONSTRAINT customer_picture_blob_pk PRIMARY KEY(id)
+        );
+        
+        ALTER TABLE customer_picture_blob OWNER TO vista;
+                               
         -- emergency_contact
         
         ALTER TABLE emergency_contact   ADD COLUMN address_street1 VARCHAR(500),
