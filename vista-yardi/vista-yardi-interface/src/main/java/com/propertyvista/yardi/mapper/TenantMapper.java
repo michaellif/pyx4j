@@ -38,7 +38,7 @@ public class TenantMapper {
 
     private final static Logger log = LoggerFactory.getLogger(TenantMapper.class);
 
-    final ExecutionMonitor executionMonitor;
+    private final ExecutionMonitor executionMonitor;
 
     public TenantMapper() {
         this(null);
@@ -169,7 +169,7 @@ public class TenantMapper {
             String email = yardiCustomer.getAddress().get(0).getEmail();
             if (!CommonsStringUtils.isEmpty(email)) {
                 if (EmailValidator.isValid(email)) {
-                    customer.person().email().setValue(email);
+                    customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
                 } else {
                     log.warn(">> DataValidation CustomerID : {} >> Invalid Email: {} ", yardiCustomer.getCustomerID(), email);
                     if (executionMonitor != null) {

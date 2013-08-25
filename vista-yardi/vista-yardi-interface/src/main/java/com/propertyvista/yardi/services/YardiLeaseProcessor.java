@@ -62,7 +62,6 @@ import com.propertyvista.domain.tenant.lease.Lease.CompletionType;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.extradata.YardiLeaseChargeData;
 import com.propertyvista.portal.rpc.shared.PolicyNotFoundException;
-import com.propertyvista.yardi.mapper.TenantMapper;
 import com.propertyvista.yardi.merger.LeaseMerger;
 import com.propertyvista.yardi.merger.LeaseMerger.LeaseChargesMergeStatus;
 import com.propertyvista.yardi.merger.TenantMerger;
@@ -71,7 +70,7 @@ public class YardiLeaseProcessor {
 
     private final static Logger log = LoggerFactory.getLogger(YardiLeaseProcessor.class);
 
-    final ExecutionMonitor executionMonitor;
+    private final ExecutionMonitor executionMonitor;
 
     public YardiLeaseProcessor() {
         this(null);
@@ -156,10 +155,7 @@ public class YardiLeaseProcessor {
         // TODO Need to find another lease to merge with
 
         // tenants:
-        for (YardiCustomer yardiCustomer : yardiCustomers) {
-            lease.currentTerm().version().tenants()
-                    .add(new TenantMapper(executionMonitor).createTenant(yardiCustomer, lease.currentTerm().version().tenants()));
-        }
+        new TenantMerger(executionMonitor).createTenants(yardiCustomers, lease.currentTerm());
 
         lease = leaseFacade.persist(lease);
         leaseFacade.activate(lease);

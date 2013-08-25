@@ -16,13 +16,18 @@ package com.propertyvista.yardi.merger;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.yardi.entity.mits.YardiCustomer;
 import com.yardi.entity.resident.RTCustomer;
 
+import com.pyx4j.commons.CommonsStringUtils;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.IList;
 
 import com.propertyvista.biz.ExecutionMonitor;
+import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTerm;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
@@ -30,7 +35,9 @@ import com.propertyvista.yardi.mapper.TenantMapper;
 
 public class TenantMerger {
 
-    final ExecutionMonitor executionMonitor;
+    private final static Logger log = LoggerFactory.getLogger(TenantMapper.class);
+
+    private final ExecutionMonitor executionMonitor;
 
     public TenantMerger() {
         this(null);
@@ -62,6 +69,14 @@ public class TenantMerger {
         return false;
     }
 
+    public LeaseTerm createTenants(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
+        for (YardiCustomer yardiCustomer : yardiCustomers) {
+            term.version().tenants().add(new TenantMapper(executionMonitor).createTenant(yardiCustomer, term.version().tenants()));
+        }
+
+        return cleanDuplicatEmails(term);
+    }
+
     public LeaseTerm updateTenants(List<YardiCustomer> yardiCustomers, LeaseTerm term) {
         IList<LeaseTermTenant> tenants = term.version().tenants();
 
@@ -84,7 +99,7 @@ public class TenantMerger {
             term.version().tenants().add(new TenantMapper(executionMonitor).createTenant(toC(yardiCustomers, id), term.version().tenants()));
         }
 
-        return term;
+        return cleanDuplicatEmails(term);
     }
 
     public boolean updateTenantsData(RTCustomer rtCustomer, Lease lease) {
@@ -100,6 +115,23 @@ public class TenantMerger {
         }
 
         return updated;
+    }
+
+    private LeaseTerm cleanDuplicatEmails(LeaseTerm term) {
+        for (int i = 0; i < term.version().tenants().size(); ++i) {
+            String email0 = term.version().tenants().get(i).leaseParticipant().customer().person().email().getValue();
+            if (CommonsStringUtils.isStringSet(email0)) {
+                for (int j = i + 1; j < term.version().tenants().size(); ++j) {
+                    Customer customer = term.version().tenants().get(j).leaseParticipant().customer();
+                    String emailN = customer.person().email().getValue();
+                    if (CommonsStringUtils.isStringSet(emailN) && CommonsStringUtils.equals(email0, emailN)) {
+                        customer.person().email().setValue(null);
+                        log.warn(">> cleanDuplicatEmails >> Person: {} - Email: {} removed!.", customer.person().getStringView(), emailN);
+                    }
+                }
+            }
+        }
+        return term;
     }
 
     private List<String> fromT(List<LeaseTermTenant> tenants) {
