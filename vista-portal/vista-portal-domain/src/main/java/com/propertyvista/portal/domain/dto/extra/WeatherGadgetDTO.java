@@ -13,10 +13,12 @@
  */
 package com.propertyvista.portal.domain.dto.extra;
 
+import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.i18n.annotations.I18n;
 import com.pyx4j.i18n.shared.I18nEnum;
 
+@Transient
 public interface WeatherGadgetDTO extends ExtraGadgetDTO {
 
     @I18n
