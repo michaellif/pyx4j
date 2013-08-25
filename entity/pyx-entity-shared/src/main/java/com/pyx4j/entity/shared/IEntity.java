@@ -197,7 +197,7 @@ public interface IEntity extends IObject<Map<String, Serializable>>, Serializabl
     public boolean isObjectClassSameAsDef();
 
     /**
-     * Determines if IEntity object is either the same class as, or is a superclass or
+     * Determines if this IEntity object is either the same class as, or is a superclass or
      * superinterface of, the class or interface represented by the specified Class
      * parameter.
      */
