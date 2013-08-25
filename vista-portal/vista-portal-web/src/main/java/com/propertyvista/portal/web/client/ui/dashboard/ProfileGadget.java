@@ -119,9 +119,9 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
 
             FlowPanel actionsPanel = new FlowPanel();
             actionsPanel.getElement().getStyle().setProperty("marginRight", "10px");
-            actionsPanel.add(new Anchor("Edit my Profile"));
-            actionsPanel.add(new Anchor("Edit Settings"));
-            actionsPanel.add(new Anchor("Change Password"));
+            actionsPanel.add(new Anchor("View my Profile"));
+            actionsPanel.add(new Anchor("Change my Settings"));
+            actionsPanel.add(new Anchor("Change my Password"));
 
             contentPanel.setWidget(++row, ++col, actionsPanel);
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
@@ -134,7 +134,9 @@ public class ProfileGadget extends AbstractGadget<MainDashboardViewImpl> {
             contentPanel.getFlexCellFormatter().setStyleName(row, col, DashboardTheme.StyleName.GadgetBlockSeparator.name());
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
 
-            contentPanel.setWidget(row, ++col, new Image(PortalImages.INSTANCE.marker()));
+            Image marker = new Image(PortalImages.INSTANCE.marker());
+            marker.getElement().getStyle().setProperty("marginRight", "10px");
+            contentPanel.setWidget(row, ++col, marker);
             contentPanel.getFlexCellFormatter().setRowSpan(row, col, 2);
             contentPanel.getFlexCellFormatter().setVerticalAlignment(row, col, HasVerticalAlignment.ALIGN_TOP);
 
