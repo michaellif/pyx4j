@@ -19,7 +19,7 @@ import com.pyx4j.config.server.ServerSideFactory;
 import com.propertyvista.biz.financial.payment.PaymentProcessFacade;
 import com.propertyvista.domain.settings.PmcVistaFeatures;
 
-public class PaymentsLastMonthSuspendProcess implements PmcProcess {
+public class PaymentsUpdatePreauthorizedPaymentAgreementsProcess implements PmcProcess {
 
     @Override
     public boolean start(PmcProcessContext context) {
@@ -28,7 +28,7 @@ public class PaymentsLastMonthSuspendProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).updatePreauthorizedPayments(context.getExecutionMonitor(),
+        ServerSideFactory.create(PaymentProcessFacade.class).updatePreauthorizedPaymentAgreements(context.getExecutionMonitor(),
                 new LogicalDate(context.getForDate()));
     }
 

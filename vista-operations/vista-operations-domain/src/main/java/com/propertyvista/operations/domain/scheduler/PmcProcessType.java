@@ -80,6 +80,7 @@ public enum PmcProcessType implements Serializable {
 
     paymentsTenantSure(PmcProcessOptions.RunForDay),
 
+    // TODO rename to : paymentsUpdatePreauthorizedPaymentAgreements
     paymentsLastMonthSuspend(PmcProcessOptions.RunForDay),
 
     initializeFutureBillingCycles,
