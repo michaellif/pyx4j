@@ -46,8 +46,8 @@ import com.pyx4j.gwt.commons.UncaughtHandler;
 import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.RecoverableAsyncCallback;
 import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 
 /**
  * Cache Reference Data
@@ -63,9 +63,9 @@ public class ReferenceDataManager {
     private static EventBus eventBus;
 
     static {
-        ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
+        ClientSecurityController.addSecurityControllerHandler(new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 ReferenceDataManager.invalidate();
             }
         });

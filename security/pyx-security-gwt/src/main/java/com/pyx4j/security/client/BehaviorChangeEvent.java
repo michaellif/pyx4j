@@ -28,30 +28,29 @@ import com.pyx4j.security.shared.Behavior;
 
 /**
  * Fired when set of user behaviors changed, e.g. Login/Logout/TerminateSession
- * // TODO rename SecurityBehaviorChagedEvent
  */
-public class SecurityControllerEvent extends GwtEvent<SecurityControllerHandler> {
+public class BehaviorChangeEvent extends GwtEvent<BehaviorChangeHandler> {
 
-    static Type<SecurityControllerHandler> TYPE = new Type<SecurityControllerHandler>();
+    static Type<BehaviorChangeHandler> TYPE = new Type<BehaviorChangeHandler>();
 
     private final Set<Behavior> behaviors;
 
-    public SecurityControllerEvent(Set<Behavior> behaviors) {
+    public BehaviorChangeEvent(Set<Behavior> behaviors) {
         this.behaviors = behaviors;
     }
 
-    public static Type<SecurityControllerHandler> getType() {
+    public static Type<BehaviorChangeHandler> getType() {
         return TYPE;
     }
 
     @Override
-    public GwtEvent.Type<SecurityControllerHandler> getAssociatedType() {
+    public GwtEvent.Type<BehaviorChangeHandler> getAssociatedType() {
         return TYPE;
     }
 
     @Override
-    protected void dispatch(SecurityControllerHandler handler) {
-        handler.onSecurityContextChange(this);
+    protected void dispatch(BehaviorChangeHandler handler) {
+        handler.onBehaviorChange(this);
     }
 
     public Set<Behavior> getBehaviors() {

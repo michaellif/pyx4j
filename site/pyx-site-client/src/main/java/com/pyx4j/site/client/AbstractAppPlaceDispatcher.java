@@ -28,8 +28,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.site.shared.meta.PublicPlace;
 import com.pyx4j.widgets.client.dialog.ConfirmDecline;
@@ -42,10 +42,10 @@ public abstract class AbstractAppPlaceDispatcher implements AppPlaceDispatcher {
 
     protected AbstractAppPlaceDispatcher() {
 
-        AppSite.getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        AppSite.getEventBus().addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
 
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 Place current = AppSite.getPlaceController().getWhere();
                 if ((current instanceof PublicPlace) || (!isApplicationAuthenticated())) {
                     AppSite.getPlaceController().goTo(AppPlace.NOWHERE);

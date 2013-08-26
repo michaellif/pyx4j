@@ -82,10 +82,10 @@ public class SessionMonitor implements RPCStatusChangeHandler, StorageEventHandl
 
             }
         });
-        ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
+        ClientSecurityController.addSecurityControllerHandler(new BehaviorChangeHandler() {
 
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 instance.onAuthenticationChange();
 
             }

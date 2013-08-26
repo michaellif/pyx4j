@@ -128,7 +128,7 @@ public class ClientSecurityController extends SecurityController {
         if (!EqualsHelper.equals(acl.behaviors, behaviors)) {
             log.debug("Client behaviors changed {} -> {}", acl.behaviors, behaviors);
             acl.behaviors = behaviors;
-            ClientEventBus.fireEvent(new SecurityControllerEvent(acl.behaviors));
+            ClientEventBus.fireEvent(new BehaviorChangeEvent(acl.behaviors));
         }
 
         if (!initialized) {
@@ -149,8 +149,8 @@ public class ClientSecurityController extends SecurityController {
         return acl;
     }
 
-    public static HandlerRegistration addSecurityControllerHandler(SecurityControllerHandler handler) {
-        return ClientEventBus.addHandler(SecurityControllerEvent.getType(), handler);
+    public static HandlerRegistration addSecurityControllerHandler(BehaviorChangeHandler handler) {
+        return ClientEventBus.addHandler(BehaviorChangeEvent.getType(), handler);
     }
 
     public static HandlerRegistration addContextInitializeHandler(ContextInitializeHandler handler) {

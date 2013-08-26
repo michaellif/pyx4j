@@ -22,8 +22,8 @@ package com.pyx4j.security.client;
 
 import com.google.gwt.event.shared.EventHandler;
 
-public interface SecurityControllerHandler extends EventHandler {
+public interface BehaviorChangeHandler extends EventHandler {
 
-    void onSecurityContextChange(SecurityControllerEvent event);
+    void onBehaviorChange(BehaviorChangeEvent event);
 
 }
