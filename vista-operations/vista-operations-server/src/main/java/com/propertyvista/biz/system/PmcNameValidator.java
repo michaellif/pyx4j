@@ -82,7 +82,7 @@ public class PmcNameValidator {
     }
 
     public static boolean isDnsNameValid(String value) {
-        return (value.length() < 63) && value.matches("[a-zA-Z0-9][a-zA-Z0-9-]*");
+        return (value.length() < 63) && value.matches("[a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9-]*");
     }
 
     public static boolean isDnsReserved(String dnsName) {

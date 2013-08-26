@@ -61,6 +61,8 @@ public class PmcNameValidatorTest {
         assertTrue(PmcNameValidator.isDnsNameValid("ABCDE"));
         assertFalse(PmcNameValidator.isDnsNameValid("%abc"));
         assertFalse(PmcNameValidator.isDnsNameValid("ab%c"));
+
+        assertFalse("DNS name must not contain only numbers", PmcNameValidator.isDnsNameValid("1234"));
     }
 
     @Test
