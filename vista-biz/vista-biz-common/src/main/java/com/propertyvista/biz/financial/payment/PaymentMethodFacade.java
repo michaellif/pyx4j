@@ -75,12 +75,7 @@ public interface PaymentMethodFacade {
     /**
      * Suspend/Restore PreauthorizedPayments according to LeaseState and AutoPay policy during Lease persist.
      */
-    void updatePreauthorizedPaymentsByPolicy(Lease lease);
-
-    /**
-     * Suspend PreauthorizedPayments for ending lease during Lease persist.
-     */
-    void updatePreauthorizedPaymentsByLeaseEnd(Lease lease);
+    void updatePreauthorizedPayments(Lease lease);
 
     AutoPayReviewDTO getSuspendedPreauthorizedPaymentReview(BillingAccount billingAccountId);
 

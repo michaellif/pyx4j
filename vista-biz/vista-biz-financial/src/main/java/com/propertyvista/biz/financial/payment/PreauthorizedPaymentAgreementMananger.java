@@ -246,7 +246,7 @@ class PreauthorizedPaymentAgreementMananger {
         }
     }
 
-    public void updatePreauthorizedPaymentsByPolicy(Lease lease) {
+    public void updatePreauthorizedPayments(Lease lease) {
         List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
         if (activePaps.isEmpty()) {
             return; // nothing to do!..
@@ -266,24 +266,7 @@ class PreauthorizedPaymentAgreementMananger {
                     nextCycle.billingCycleEndDate()));
         }
 
-        if (suspend) {
-            for (PreauthorizedPayment pap : activePaps) {
-                suspendPreauthorizedPayment(pap, true);
-            }
-
-            ServerSideFactory.create(NotificationFacade.class).papSuspension(lease);
-        }
-    }
-
-    public void updatePreauthorizedPaymentsByLeaseEnd(Lease lease) {
-        List<PreauthorizedPayment> activePaps = retrieveNextPreauthorizedPayments(lease);
-        if (activePaps.isEmpty()) {
-            return; // nothing to do!..
-        }
-
-        boolean suspend = false;
-
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
+        // Lease end date check:
         if (VistaFeatures.instance().yardiIntegration()) {
             // currently checks just actual move out date (workable for Yardi mode):
             suspend |= (beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));

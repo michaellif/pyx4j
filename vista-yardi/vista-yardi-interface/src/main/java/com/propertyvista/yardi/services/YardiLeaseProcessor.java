@@ -47,7 +47,6 @@ import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 
 import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.ar.yardi.YardiARIntegrationAgent;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.financial.ARCode;
@@ -345,8 +344,6 @@ public class YardiLeaseProcessor {
                     executionMonitor.addInfoEvent("chargesChanged", msg);
                 }
             }
-        } else { // check first/last/etc. month charges suspension (via policies):
-            ServerSideFactory.create(PaymentMethodFacade.class).updatePreauthorizedPaymentsByPolicy(lease);
         }
 
         return lease;
