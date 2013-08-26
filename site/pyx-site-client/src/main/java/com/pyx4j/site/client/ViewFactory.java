@@ -24,6 +24,4 @@ public interface ViewFactory {
 
     <T extends IsView> T instantiate(Class<T> clazz);
 
-    void invalidate();
-
 }
