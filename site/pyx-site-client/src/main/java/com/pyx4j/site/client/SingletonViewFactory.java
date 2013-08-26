@@ -45,4 +45,9 @@ public class SingletonViewFactory implements ViewFactory {
         return impl;
     }
 
+    @Override
+    public void invalidate() {
+        map.clear();
+    }
+
 }

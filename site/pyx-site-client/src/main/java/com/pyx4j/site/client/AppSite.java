@@ -79,6 +79,32 @@ public abstract class AppSite implements EntryPoint {
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
         this.appId = appId;
 
+        if (dispatcher == null) {
+            dispatcher = new AppPlaceDispatcher() {
+
+                @Override
+                public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
+                    callback.onSuccess(newPlace);
+                }
+
+                @Override
+                public void confirm(String message, ConfirmDecline confirmDecline) {
+                    log.debug("We show JS confirm {}", message);
+                    if (Window.confirm(message)) {
+                        confirmDecline.onConfirmed();
+                    } else {
+                        confirmDecline.onDeclined();
+                    }
+                }
+
+                @Override
+                public AppPlace getUserMessagePlace() {
+                    return null;
+                }
+
+            };
+        }
+
         String encodedPlace = Window.Location.getParameter(NavigNode.PLACE_ARGUMENT);
         if (encodedPlace != null) {
             // Redirect to proper location with history token
@@ -122,29 +148,7 @@ public abstract class AppSite implements EntryPoint {
     }
 
     public AppSite(String appId, Class<? extends SiteMap> siteMapClass) {
-        this(appId, siteMapClass, new AppPlaceDispatcher() {
-
-            @Override
-            public void forwardTo(AppPlace newPlace, AsyncCallback<AppPlace> callback) {
-                callback.onSuccess(newPlace);
-            }
-
-            @Override
-            public void confirm(String message, ConfirmDecline confirmDecline) {
-                log.debug("We show JS confirm {}", message);
-                if (Window.confirm(message)) {
-                    confirmDecline.onConfirmed();
-                } else {
-                    confirmDecline.onDeclined();
-                }
-            }
-
-            @Override
-            public AppPlace getUserMessagePlace() {
-                return null;
-            }
-
-        });
+        this(appId, siteMapClass, null);
     }
 
     public static AppSite instance() {
