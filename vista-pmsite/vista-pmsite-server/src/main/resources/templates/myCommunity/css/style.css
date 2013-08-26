@@ -147,6 +147,11 @@ body {
 	font-size: 1em
 }
 
+.FieldViewerPanel .Anchor{
+	display: block;
+    padding: 0;
+}
+
 .LandingCaption {
 	font-size: 1.2em;
 	color: #4F565A;
@@ -172,6 +177,7 @@ div.Button,button.gwt-Button {
 	height: auto;
 	min-width: 200px;
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)";
+	text-align: center;
 }
 
 div.ButtonText,button.gwt-Button {
@@ -319,10 +325,6 @@ element.style {
 
 .LandingInputField .FieldPanel.WidgetDecoratorComponent {
 	width: 20px;
-}
-.FieldEditorPanel .pyx4j_CheckBox {
-    display: block;
-    margin-top: 4px;
 }
 .vista-pmsite-main .content {
     line-height: normal !important;
