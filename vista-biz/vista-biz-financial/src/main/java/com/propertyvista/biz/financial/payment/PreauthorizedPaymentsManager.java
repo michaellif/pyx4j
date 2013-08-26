@@ -32,6 +32,7 @@ import com.pyx4j.entity.shared.AttachLevel;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
 import com.pyx4j.entity.shared.criterion.OrCriterion;
+import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 
 import com.propertyvista.biz.ExecutionMonitor;
@@ -60,9 +61,9 @@ class PreauthorizedPaymentsManager {
         String notice;
     }
 
-    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
+    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor) {
         List<PaymentRecord> paymentRecords = new ArrayList<PaymentRecord>();
-        createPreauthorisedPayments(new ExecutionMonitor(), reportCriteria.padGenerationDate, true, paymentRecords, reportCriteria);
+        createPreauthorisedPayments(executionMonitor, reportCriteria.padGenerationDate, true, paymentRecords, reportCriteria);
         return paymentRecords;
     }
 
@@ -72,9 +73,10 @@ class PreauthorizedPaymentsManager {
 
     private void createPreauthorisedPayments(final ExecutionMonitor executionMonitor, LogicalDate runDate, boolean reportOny,
             List<PaymentRecord> resultingPaymentRecords, PreauthorizedPaymentsReportCriteria reportCriteria) {
-        ICursorIterator<BillingCycle> billingCycleIterator;
+
+        EntityQueryCriteria<BillingCycle> criteria;
         {//TODO->Closure
-            EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
+            criteria = EntityQueryCriteria.create(BillingCycle.class);
             criteria.eq(criteria.proto().targetPadGenerationDate(), runDate);
             criteria.isNull(criteria.proto().actualPadGenerationDate());
             if ((reportCriteria != null) && (reportCriteria.selectedBuildings != null)) {
@@ -82,14 +84,31 @@ class PreauthorizedPaymentsManager {
             } else {
                 criteria.in(criteria.proto().building().suspended(), false);
             }
-            billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
         }
-        try {
-            while (billingCycleIterator.hasNext()) {
-                createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor, reportOny, resultingPaymentRecords, reportCriteria);
+        // calculate total 
+        {
+            ICursorIterator<BillingCycle> billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
+            try {
+                long expectedTotal = 0L;
+                while (billingCycleIterator.hasNext() & !executionMonitor.isTerminationRequested()) {
+                    expectedTotal += Persistence.service().count(createBillingCyclePreauthorisedQueryCriteria(billingCycleIterator.next(), reportCriteria));
+                }
+                executionMonitor.setExpectedTotal(expectedTotal);
+            } finally {
+                IOUtils.closeQuietly(billingCycleIterator);
             }
-        } finally {
-            billingCycleIterator.close();
+        }
+
+        // process payment records
+        {
+            ICursorIterator<BillingCycle> billingCycleIterator = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
+            try {
+                while (billingCycleIterator.hasNext() & !executionMonitor.isTerminationRequested()) {
+                    createBillingCyclePreauthorisedPayments(billingCycleIterator.next(), executionMonitor, reportOny, resultingPaymentRecords, reportCriteria);
+                }
+            } finally {
+                billingCycleIterator.close();
+            }
         }
     }
 
@@ -122,22 +141,8 @@ class PreauthorizedPaymentsManager {
 
                 ICursorIterator<BillingAccount> billingAccountIterator;
                 { //TODO->Closure
-                    EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
-                    criteria.eq(criteria.proto().lease().unit().building(), billingCycle.building());
-                    criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
-                    criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
 
-                    if (reportCriteria != null) {
-                        if (reportCriteria.isLeasesOnNoticeOnly()) {
-                            criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
-                        }
-                        if (reportCriteria.hasExpectedMoveOutFilter()) {
-                            criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
-                            criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
-                        }
-                    }
-
-                    criteria.asc(criteria.proto().lease().leaseId());
+                    EntityQueryCriteria<BillingAccount> criteria = createBillingCyclePreauthorisedQueryCriteria(billingCycle, reportCriteria);
                     billingAccountIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
                 }
                 try {
@@ -160,6 +165,27 @@ class PreauthorizedPaymentsManager {
                 return null;
             }
         });
+    }
+
+    private EntityQueryCriteria<BillingAccount> createBillingCyclePreauthorisedQueryCriteria(final BillingCycle billingCycle,
+            final PreauthorizedPaymentsReportCriteria reportCriteria) {
+        EntityQueryCriteria<BillingAccount> criteria = EntityQueryCriteria.create(BillingAccount.class);
+        criteria.eq(criteria.proto().lease().unit().building(), billingCycle.building());
+        criteria.eq(criteria.proto().billingType(), billingCycle.billingType());
+        criteria.isNotNull(criteria.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
+
+        if (reportCriteria != null) {
+            if (reportCriteria.isLeasesOnNoticeOnly()) {
+                criteria.eq(criteria.proto().lease().completion(), Lease.CompletionType.Notice);
+            }
+            if (reportCriteria.hasExpectedMoveOutFilter()) {
+                criteria.ge(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMinExpectedMoveOut());
+                criteria.le(criteria.proto().lease().expectedMoveOut(), reportCriteria.getMaxExpectedMoveOut());
+            }
+        }
+
+        criteria.asc(criteria.proto().lease().leaseId());
+        return criteria;
     }
 
     private List<PaymentRecord> createBillingAccountPreauthorisedPayments(BillingCycle billingCycle, BillingAccount billingAccount,

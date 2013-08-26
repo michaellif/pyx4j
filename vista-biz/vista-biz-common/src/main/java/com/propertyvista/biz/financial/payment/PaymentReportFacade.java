@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
@@ -23,7 +24,7 @@ public interface PaymentReportFacade {
 
     List<AutoPayReviewDTO> reportSuspendedPreauthorizedPayments(PreauthorizedPaymentsReportCriteria reportCriteria);
 
-    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria);
+    List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor);
 
     List<EftVarianceReportRecordDTO> reportEftVariance(PreauthorizedPaymentsReportCriteria reportCriteria);
 

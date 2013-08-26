@@ -50,6 +50,8 @@ public class ExecutionMonitor {
 
     private Long erredCount;
 
+    private Long expectedTotal;
+
     private String message;
 
     private boolean terminationRequested = false;
@@ -63,6 +65,7 @@ public class ExecutionMonitor {
     public ExecutionMonitor(Long processed, Long failed, Long erred) {
         sections = new HashMap<ReportSectionId, ReportSection>();
         excludedSectionsFromTotals = new HashMap<String, Boolean>();
+        this.expectedTotal = 0L;
         this.processedCount = processed == null ? 0L : processed;
         this.failedCount = failed == null ? 0L : failed;
         this.erredCount = erred == null ? 0L : erred;
@@ -114,6 +117,10 @@ public class ExecutionMonitor {
 
     public boolean isTerminationRequested() {
         return terminationRequested;
+    }
+
+    public void setExpectedTotal(Long expectedTotal) {
+        this.expectedTotal = expectedTotal;
     }
 
     public void addEvent(String sectionName, CompletionType type, BigDecimal value, String message) {
@@ -254,6 +261,10 @@ public class ExecutionMonitor {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Long getExpectedTotal() {
+        return expectedTotal;
     }
 
     public Long getTotal() {

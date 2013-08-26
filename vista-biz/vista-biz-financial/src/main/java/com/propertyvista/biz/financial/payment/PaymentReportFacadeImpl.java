@@ -15,6 +15,7 @@ package com.propertyvista.biz.financial.payment;
 
 import java.util.List;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.crm.rpc.dto.reports.EftVarianceReportRecordDTO;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.dto.payment.AutoPayReviewDTO;
@@ -27,8 +28,8 @@ public class PaymentReportFacadeImpl implements PaymentReportFacade {
     }
 
     @Override
-    public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria) {
-        return new PreauthorizedPaymentsManager().reportPreauthorisedPayments(reportCriteria);
+    public List<PaymentRecord> reportPreauthorisedPayments(PreauthorizedPaymentsReportCriteria reportCriteria, ExecutionMonitor executionMonitor) {
+        return new PreauthorizedPaymentsManager().reportPreauthorisedPayments(reportCriteria, executionMonitor);
     }
 
     @Override

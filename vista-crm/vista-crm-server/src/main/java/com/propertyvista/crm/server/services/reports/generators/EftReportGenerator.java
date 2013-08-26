@@ -33,16 +33,17 @@ import com.pyx4j.entity.shared.utils.EntityComparatorFactory;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.pyx4j.essentials.server.services.reports.ReportExporter;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
-import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
+import com.propertyvista.biz.ExecutionMonitor;
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
 import com.propertyvista.biz.financial.payment.PreauthorizedPaymentsReportCriteria;
 import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
+import com.propertyvista.crm.server.services.reports.util.ReportProgressStatusHolderExectutionMonitorAdapter;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
@@ -56,15 +57,11 @@ public class EftReportGenerator implements ReportExporter {
 
     private static final I18n i18n = I18n.get(EftReportGenerator.class);
 
-    private final ReportProgressStatusHolder reportProgressStatusHolder;
-
-    private volatile boolean aborted;
+    private volatile ReportProgressStatusHolderExectutionMonitorAdapter reportProgressStatusHolder;
 
     private final EntityDtoBinder<PaymentRecord, EftReportRecordDTO> dtoBinder;
 
     public EftReportGenerator() {
-        aborted = false;
-        reportProgressStatusHolder = new ReportProgressStatusHolder();
 
         dtoBinder = new EntityDtoBinder<PaymentRecord, EftReportRecordDTO>(PaymentRecord.class, EftReportRecordDTO.class) {
 
@@ -118,12 +115,15 @@ public class EftReportGenerator implements ReportExporter {
 
     @Override
     public Serializable generateReport(ReportMetadata metadata) {
-        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, 0, 100));
+        reportProgressStatusHolder = new ReportProgressStatusHolderExectutionMonitorAdapter();
+        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Generating Report"), 1, 2, 0, 100));
+
         EftReportMetadata reportMetadata = (EftReportMetadata) metadata;
 
         EftReportDataDTO reportData = EntityFactory.create(EftReportDataDTO.class);
 
         if (reportMetadata.forthcomingEft().isBooleanTrue()) {
+            reportProgressStatusHolder.setExecutionMonitor(new ExecutionMonitor());
             // Create forthcoming payment records here
             Vector<PaymentRecord> paymentRecords = new Vector<PaymentRecord>();
 
@@ -149,7 +149,8 @@ public class EftReportGenerator implements ReportExporter {
                     reportCriteria.setExpectedMoveOutCriteris(reportMetadata.minimum().getValue(), reportMetadata.maximum().getValue());
                 }
                 reportCriteria.setLeasesOnNoticeOnly(reportMetadata.leasesOnNoticeOnly().isBooleanTrue());
-                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria));
+                paymentRecords.addAll(ServerSideFactory.create(PaymentReportFacade.class).reportPreauthorisedPayments(reportCriteria,
+                        reportProgressStatusHolder.getExecutionMonitor()));
             }
 
             if (!reportMetadata.orderBy().isNull()) {
@@ -171,13 +172,15 @@ public class EftReportGenerator implements ReportExporter {
 
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
-                while (paymentRecordsIter.hasNext() & !aborted) {
-                    if (progress % 10 == 0) {
-                        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
-                    }
+
+                while (paymentRecordsIter.hasNext() & !reportProgressStatusHolder.isTerminationRequested()) {
                     PaymentRecord paymentRecord = paymentRecordsIter.next();
                     enhancePaymentRecord(paymentRecord);
                     reportData.eftReportRecords().add(dtoBinder.createDTO(paymentRecord));
+                    if (true) {
+                        reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
+                    }
+                    ++progress;
                 }
             } finally {
                 IOUtils.closeQuietly(paymentRecordsIter);
@@ -194,7 +197,7 @@ public class EftReportGenerator implements ReportExporter {
 
     @Override
     public void abort() {
-        this.aborted = true;
+        reportProgressStatusHolder.requestTermination();
     }
 
     @Override
@@ -318,7 +321,7 @@ public class EftReportGenerator implements ReportExporter {
     private void makeMockupProgress() {
         int dummyMax = 1000;
         for (int i = 0; i < dummyMax; ++i) {
-            if (aborted) {
+            if (reportProgressStatusHolder.isTerminationRequested()) {
                 break;
             }
             try {
