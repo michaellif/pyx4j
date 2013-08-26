@@ -22,6 +22,10 @@ package com.pyx4j.security.client;
 
 import com.google.gwt.event.shared.GwtEvent;
 
+/**
+ * Fired when UserVisit (user name and other attributes) changed on client e.g. previously changed on server.
+ * Also fired at the same time when SecurityControllerEvent is triggered
+ */
 public class ContextChangeEvent extends GwtEvent<ContextChangeHandler> {
 
     static Type<ContextChangeHandler> TYPE = new Type<ContextChangeHandler>();

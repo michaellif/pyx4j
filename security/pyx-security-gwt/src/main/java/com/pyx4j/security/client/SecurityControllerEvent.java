@@ -26,14 +26,18 @@ import com.google.gwt.event.shared.GwtEvent;
 
 import com.pyx4j.security.shared.Behavior;
 
+/**
+ * Fired when set of user behaviors changed, e.g. Login/Logout/TerminateSession
+ * // TODO rename SecurityBehaviorChagedEvent
+ */
 public class SecurityControllerEvent extends GwtEvent<SecurityControllerHandler> {
 
     static Type<SecurityControllerHandler> TYPE = new Type<SecurityControllerHandler>();
 
-    private final Set<Behavior> behaviours;
+    private final Set<Behavior> behaviors;
 
-    public SecurityControllerEvent(Set<Behavior> behaviours) {
-        this.behaviours = behaviours;
+    public SecurityControllerEvent(Set<Behavior> behaviors) {
+        this.behaviors = behaviors;
     }
 
     public static Type<SecurityControllerHandler> getType() {
@@ -50,8 +54,8 @@ public class SecurityControllerEvent extends GwtEvent<SecurityControllerHandler>
         handler.onSecurityContextChange(this);
     }
 
-    public Set<Behavior> getBehaviours() {
-        return behaviours;
+    public Set<Behavior> getBehaviors() {
+        return behaviors;
     }
 
 }
