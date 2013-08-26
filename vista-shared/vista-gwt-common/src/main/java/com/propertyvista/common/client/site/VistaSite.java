@@ -29,6 +29,7 @@ import com.pyx4j.security.client.SecurityControllerEvent;
 import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.ViewFactory;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.GlassPanel;
@@ -71,7 +72,9 @@ public abstract class VistaSite extends AppSite {
         getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
             @Override
             public void onSecurityContextChange(SecurityControllerEvent event) {
-                viewFactory.invalidate();
+                if (viewFactory instanceof SingletonViewFactory) {
+                    ((SingletonViewFactory) viewFactory).invalidate();
+                }
             }
         });
 
