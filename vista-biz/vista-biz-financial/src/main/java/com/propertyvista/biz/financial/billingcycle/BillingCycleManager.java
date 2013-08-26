@@ -14,6 +14,7 @@
 package com.propertyvista.biz.financial.billingcycle;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
@@ -243,29 +244,34 @@ class BillingCycleManager {
             EntityQueryCriteria<BillingCycle> criteria = new EntityQueryCriteria<BillingCycle>(BillingCycle.class);
             criteria.add(PropertyCriterion.in(criteria.proto().building(), buildings));
             criteria.add(PropertyCriterion.eq(criteria.proto().billingType().billingPeriod(), oldItem.billingPeriod()));
-            criteria.add(PropertyCriterion.gt(criteria.proto().targetBillExecutionDate(), SystemDateManager.getDate()));
+            criteria.add(PropertyCriterion.gt(criteria.proto().billingCycleStartDate(), SystemDateManager.getDate()));
             for (BillingCycle billingCycle : Persistence.service().query(criteria)) {
-                // Only update cycle if all new dates are in the future
+                // For each cycle we can update ANY date that is in the future
                 LogicalDate startDate = billingCycle.billingCycleStartDate().getValue();
+                Date now = SystemDateManager.getDate();
 
-                LogicalDate billExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.billExecutionDayOffset().getValue(), startDate);
-                if (!billExecDate.after(SystemDateManager.getDate())) {
-                    continue;
+                // BillExecutionDate
+                if (now.before(billingCycle.targetBillExecutionDate().getValue())) {
+                    // Ok, we have not passed that date yet - check that new date is also in the future
+                    LogicalDate billExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.billExecutionDayOffset().getValue(), startDate);
+                    if (now.before(billExecDate)) {
+                        billingCycle.targetBillExecutionDate().setValue(billExecDate);
+                    }
                 }
-
-                LogicalDate padCalcDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padCalculationDayOffset().getValue(), startDate);
-                if (!padCalcDate.after(SystemDateManager.getDate())) {
-                    continue;
+                // PadGenerationDate
+                if (now.before(billingCycle.targetPadGenerationDate().getValue())) {
+                    LogicalDate padCalcDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padCalculationDayOffset().getValue(), startDate);
+                    if (now.before(padCalcDate)) {
+                        billingCycle.targetPadGenerationDate().setValue(padCalcDate);
+                    }
                 }
-
-                LogicalDate padExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padExecutionDayOffset().getValue(), startDate);
-                if (!padExecDate.after(SystemDateManager.getDate())) {
-                    continue;
+                // PadExecutionDate
+                if (now.before(billingCycle.targetPadExecutionDate().getValue())) {
+                    LogicalDate padExecDate = BillDateUtils.calculateBillingCycleDateByOffset(newItem.padExecutionDayOffset().getValue(), startDate);
+                    if (now.before(padExecDate)) {
+                        billingCycle.targetPadExecutionDate().setValue(padExecDate);
+                    }
                 }
-
-                billingCycle.targetBillExecutionDate().setValue(billExecDate);
-                billingCycle.targetPadGenerationDate().setValue(padCalcDate);
-                billingCycle.targetPadExecutionDate().setValue(padExecDate);
 
                 Persistence.service().persist(billingCycle);
             }
