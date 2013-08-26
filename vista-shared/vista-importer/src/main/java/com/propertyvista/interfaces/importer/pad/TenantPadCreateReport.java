@@ -47,16 +47,19 @@ public class TenantPadCreateReport {
             if (!reportModel._processorInformation().percent().isNull()) {
                 reportModel.percentStored().setValue(reportModel._processorInformation().percent().getValue().doubleValue() * 100);
             }
+            reportModel.actualChargeCodeAmount().setValue(reportModel._processorInformation().actualChargeCodeAmount().getValue());
 
-            StringBuilder amountStored = new StringBuilder();
-            for (PadFileModel charge : data._processorInformation().accountCharges()) {
-                if (amountStored.length() > 0) {
-                    amountStored.append(", ");
+            if (!reportModel.invalid().isBooleanTrue()) {
+                StringBuilder amountStored = new StringBuilder();
+                for (PadFileModel charge : data._processorInformation().accountCharges()) {
+                    if (amountStored.length() > 0) {
+                        amountStored.append(", ");
+                    }
+                    amountStored.append(charge.chargeCode().getValue()).append(":");
+                    amountStored.append(charge._processorInformation().chargeEftAmount().getValue().toString());
                 }
-                amountStored.append(charge.chargeCode().getValue()).append(":");
-                amountStored.append(charge._processorInformation().chargeEftAmount().getValue().toString());
+                reportModel.amountStored().setValue(amountStored.toString());
             }
-            reportModel.amountStored().setValue(amountStored.toString());
 
             entityFormatter.reportEntity(formatter, reportModel);
         }

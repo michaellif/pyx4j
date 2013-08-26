@@ -190,6 +190,24 @@ public class TenantPadProcessor {
                 continue;
             }
 
+            Persistence.ensureRetrieve(padFileModel._processorInformation().tenant().lease(), AttachLevel.Attached);
+            Persistence.ensureRetrieve(padFileModel._processorInformation().tenant().lease().unit().building(), AttachLevel.Attached);
+            if (padFileModel.property().isNull()) {
+                padFileModel.property().setValue(padFileModel._processorInformation().tenant().lease().unit().building().propertyCode().getValue());
+            } else {
+                if (!padFileModel.property().equals(padFileModel._processorInformation().tenant().lease().unit().building().propertyCode())) {
+                    padFileModel._import().invalid().setValue(Boolean.TRUE);
+                    padFileModel
+                            ._import()
+                            .message()
+                            .setValue(
+                                    i18n.tr("Property Code do not match {0}", padFileModel._processorInformation().tenant().lease().unit().building()
+                                            .propertyCode()));
+                    counters.invalid++;
+                    continue;
+                }
+            }
+
             List<PadFileModel> leaseEntities = mappedByLease.get(padFileModel._processorInformation().tenant().lease());
             if (leaseEntities == null) {
                 leaseEntities = new ArrayList<PadFileModel>();
@@ -947,6 +965,7 @@ public class TenantPadProcessor {
                             + formatBillableItems(billableItemsUnprocessed));
                 }
                 if (charge._processorInformation().chargeAmount().getValue().compareTo(sameIdBillableItem.agreedPrice().getValue()) != 0) {
+                    charge._processorInformation().actualChargeCodeAmount().setValue(sameIdBillableItem.agreedPrice().getValue());
                     throw new Error("BillableItem '" + charge.chargeCode().getValue() + "' " + charge._processorInformation().chargeAmount().getValue()
                             + "$ do not match; already processed items " + formatBillableItems(billableItemsProcesed) + "; unprocessed "
                             + formatBillableItems(billableItemsUnprocessed));

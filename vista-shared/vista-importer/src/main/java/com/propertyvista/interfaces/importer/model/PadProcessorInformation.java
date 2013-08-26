@@ -80,4 +80,6 @@ public interface PadProcessorInformation extends IEntity {
 
     IPrimitive<BigDecimal> calulatedEftTotalAmount();
 
+    IPrimitive<BigDecimal> actualChargeCodeAmount();
+
 }

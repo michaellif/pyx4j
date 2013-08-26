@@ -83,7 +83,7 @@ public interface PadFileModel extends IEntity {
     // Optional by default TRUE
     IPrimitive<Boolean> recurringEFT();
 
-    @ImportColumn(names = { "Lease Charge", "Estimated Charge", "Yardy Lease Charge" })
+    @ImportColumn(names = { "Lease Charge", "Estimated Charge", "Yardi Lease Charge" })
     IPrimitive<String> estimatedCharge();
 
 }
