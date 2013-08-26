@@ -438,8 +438,19 @@ BEGIN
         
         EXECUTE 'UPDATE '||v_schema_name||'.customer '
                 ||'SET  registered_in_portal = FALSE '
-                ||'WHERE registered_in_portal IS NULL';        
+                ||'WHERE registered_in_portal IS NULL';  
                 
+        EXECUTE 'UPDATE '||v_schema_name||'.customer '
+                'SET    person_email = NULL '
+                'WHERE  (person_email IS NOT NULL AND person_email !~ ''^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$'') ';      
+                
+        
+        -- customer_user
+        
+        EXECUTE 'UPDATE '||v_schema_name||'.customer_user '
+                'SET    email = NULL '
+                'WHERE  (email IS NOT NULL AND email !~ ''^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$'') ';  
+        
                 
         -- email_template  
         
