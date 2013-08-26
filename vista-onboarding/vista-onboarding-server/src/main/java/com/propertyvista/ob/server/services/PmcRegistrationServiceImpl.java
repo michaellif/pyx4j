@@ -73,7 +73,6 @@ public class PmcRegistrationServiceImpl implements PmcRegistrationService {
 
                 pmc.name().setValue(request.name().getValue());
                 pmc.dnsName().setValue(request.dnsName().getValue());
-                pmc.namespace().setValue(pmc.dnsName().getValue());
 
                 pmc.equifaxInfo().status().setValue(PmcEquifaxStatus.NotRequested);
 

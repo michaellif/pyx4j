@@ -39,7 +39,6 @@ public class PmcCreatorDev {
         Pmc pmc = EntityFactory.create(Pmc.class);
         pmc.name().setValue(pmcName + " Demo");
         pmc.dnsName().setValue(pmcName);
-        pmc.namespace().setValue(pmcName.replace('-', '_'));
 
         pmc.features().occupancyModel().setValue(Boolean.TRUE);
         pmc.features().productCatalog().setValue(Boolean.TRUE);

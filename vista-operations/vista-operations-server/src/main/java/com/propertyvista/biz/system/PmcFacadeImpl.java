@@ -50,7 +50,7 @@ public class PmcFacadeImpl implements PmcFacade {
     @Override
     public void create(Pmc pmc) {
         pmc.dnsName().setValue(pmc.dnsName().getValue().toLowerCase(Locale.ENGLISH));
-        pmc.namespace().setValue(pmc.namespace().getValue().replace('-', '_').toLowerCase(Locale.ENGLISH));
+        pmc.namespace().setValue(ServerSideFactory.create(PmcDomainNameToNamespaceMappingRule.class).makeNamespace(pmc.dnsName().getValue()));
         pmc.status().setValue(PmcStatus.Created);
         pmc.schemaVersion().setValue(ApplicationVersion.getProductVersion());
         pmc.schemaDataUpgradeSteps().setValue(VistaUpgrade.getPreloadSchemaDataUpgradeSteps());

@@ -21,6 +21,9 @@ import com.propertyvista.domain.pmc.Pmc;
  */
 public interface PmcFacade {
 
+    /**
+     * Warning: It will ignore value passed as <code>pmc.namespace()</code> and generate a <b>namespace</b> based on some internal rule.
+     */
     public void create(Pmc pmc);
 
     public boolean isOnboardingEnabled(Pmc pmc);

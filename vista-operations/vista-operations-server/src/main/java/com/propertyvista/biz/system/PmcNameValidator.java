@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pyx4j.commons.SimpleMessageFormat;
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.shared.ApplicationMode;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.criterion.EntityQueryCriteria;
@@ -114,7 +115,8 @@ public class PmcNameValidator {
 
     public static boolean isDnsTaken(String dnsName) {
         EntityQueryCriteria<Pmc> criteria = EntityQueryCriteria.create(Pmc.class);
-        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName), PropertyCriterion.eq(criteria.proto().namespace(), dnsName));
+        criteria.or(PropertyCriterion.eq(criteria.proto().dnsName(), dnsName),
+                PropertyCriterion.eq(criteria.proto().namespace(), ServerSideFactory.create(PmcDomainNameToNamespaceMappingRule.class).makeNamespace(dnsName)));
         return (Persistence.service().retrieve(criteria) != null);
     }
 
