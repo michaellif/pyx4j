@@ -28,8 +28,8 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
@@ -37,7 +37,7 @@ import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymen
 public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView.Persenter {
 
     public PreauthorizedPaymentWizardActivity(AppPlace place) {
-        super(place, ResidentsViewFactory.instance(PreauthorizedPaymentWizardView.class), GWT
+        super(place, PortalSite.getViewFactory().instantiate(PreauthorizedPaymentWizardView.class), GWT
                 .<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), PreauthorizedPaymentDTO.class);
     }
 

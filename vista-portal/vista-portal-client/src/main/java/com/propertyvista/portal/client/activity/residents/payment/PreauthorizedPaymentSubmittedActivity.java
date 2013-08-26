@@ -22,9 +22,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentSubmittedService;
@@ -38,7 +38,7 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
     private final Key entityId;
 
     public PreauthorizedPaymentSubmittedActivity(AppPlace place) {
-        this.view = ResidentsViewFactory.instance(PreauthorizedPaymentSubmittedView.class);
+        this.view = PortalSite.getViewFactory().instantiate(PreauthorizedPaymentSubmittedView.class);
         this.view.setPresenter(this);
 
         srv = GWT.create(PreauthorizedPaymentSubmittedService.class);

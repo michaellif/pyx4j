@@ -29,9 +29,9 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.domain.maintenance.MaintenanceRequestCategory;
 import com.propertyvista.domain.maintenance.MaintenanceRequestMetadata;
 import com.propertyvista.dto.MaintenanceRequestDTO;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.maintenance.EditMaintenanceRequestView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 
@@ -45,7 +45,7 @@ public class EditMaintenanceRequestActivity extends SecurityAwareActivity implem
 
     public EditMaintenanceRequestActivity(AppPlace place) {
         srv = GWT.create(MaintenanceService.class);
-        this.view = ResidentsViewFactory.instance(EditMaintenanceRequestView.class);
+        this.view = PortalSite.getViewFactory().instantiate(EditMaintenanceRequestView.class);
         this.view.setPresenter(this);
 
         entityId = place.getItemId();

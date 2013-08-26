@@ -27,8 +27,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.LeaseContextSelectionView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.LeaseContextChoiceDTO;
 import com.propertyvista.portal.rpc.portal.services.LeaseContextSelectionService;
 
@@ -40,7 +40,7 @@ public class LeaseContextSelectionActivity extends AbstractActivity implements L
 
     public LeaseContextSelectionActivity() {
         this.service = GWT.<LeaseContextSelectionService> create(LeaseContextSelectionService.class);
-        this.view = ResidentsViewFactory.instance(LeaseContextSelectionView.class);
+        this.view = PortalSite.getViewFactory().instantiate(LeaseContextSelectionView.class);
         this.view.setPresenter(this);
     }
 

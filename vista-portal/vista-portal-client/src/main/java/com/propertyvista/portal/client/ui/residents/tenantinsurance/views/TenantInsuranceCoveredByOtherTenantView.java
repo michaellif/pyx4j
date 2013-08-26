@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
-public interface TenantInsuranceCoveredByOtherTenantView extends IsWidget {
+public interface TenantInsuranceCoveredByOtherTenantView extends IsView {
 
     void populate(TenantInsuranceStatusDTO status);
 

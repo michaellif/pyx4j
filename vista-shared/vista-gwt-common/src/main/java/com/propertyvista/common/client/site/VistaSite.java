@@ -25,8 +25,11 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
+import com.pyx4j.security.client.SecurityControllerEvent;
+import com.pyx4j.security.client.SecurityControllerHandler;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ViewFactory;
 import com.pyx4j.site.shared.meta.SiteMap;
 import com.pyx4j.widgets.client.GlassPanel;
 
@@ -35,14 +38,17 @@ import com.propertyvista.portal.rpc.DeploymentConsts;
 
 public abstract class VistaSite extends AppSite {
 
+    private final ViewFactory viewFactory;
+
     private Notification notification;
 
-    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass) {
-        super(appId, siteMapClass);
+    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory) {
+        this(appId, siteMapClass, viewFactory, null);
     }
 
-    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, AppPlaceDispatcher dispatcher) {
+    public VistaSite(String appId, Class<? extends SiteMap> siteMapClass, ViewFactory viewFactory, AppPlaceDispatcher dispatcher) {
         super(appId, siteMapClass, dispatcher);
+        this.viewFactory = viewFactory;
     }
 
     @Override
@@ -61,10 +67,22 @@ public abstract class VistaSite extends AppSite {
 
         ClientDeploymentConfig.setDownloadServletMapping(DeploymentConsts.downloadServletMapping);
         ClientDeploymentConfig.setUploadServletMapping(DeploymentConsts.uploadServletMapping);
+
+        getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+            @Override
+            public void onSecurityContextChange(SecurityControllerEvent event) {
+                viewFactory.invalidate();
+            }
+        });
+
     }
 
     public static VistaSite instance() {
         return (VistaSite) AppSite.instance();
+    }
+
+    public static ViewFactory getViewFactory() {
+        return instance().viewFactory;
     }
 
     protected void setNotification(Notification notification) {

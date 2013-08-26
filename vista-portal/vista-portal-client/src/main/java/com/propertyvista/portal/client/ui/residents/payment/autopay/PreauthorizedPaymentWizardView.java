@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -24,7 +25,7 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 
-public interface PreauthorizedPaymentWizardView extends IWizard<PreauthorizedPaymentDTO> {
+public interface PreauthorizedPaymentWizardView extends IWizard<PreauthorizedPaymentDTO>, IsView {
 
     interface Persenter extends IWizard.Presenter {
 

@@ -29,7 +29,7 @@ import com.pyx4j.widgets.client.dialog.MessageDialog;
 
 import com.propertyvista.common.client.ui.components.security.PasswordChangeView;
 import com.propertyvista.common.client.ui.components.security.TenantPasswordStrengthRule;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.rpc.portal.services.PasswordChangeUserService;
 
 public class PasswordChangeActivity extends AbstractActivity implements PasswordChangeView.Presenter {
@@ -39,7 +39,7 @@ public class PasswordChangeActivity extends AbstractActivity implements Password
     private final PasswordChangeView view;
 
     public PasswordChangeActivity() {
-        view = ResidentsViewFactory.instance(PasswordChangeView.class);
+        view = PortalSite.getViewFactory().instantiate(PasswordChangeView.class);
     }
 
     @Override

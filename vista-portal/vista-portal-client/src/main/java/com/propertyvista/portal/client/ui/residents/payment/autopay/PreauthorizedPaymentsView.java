@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment.autopay;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
-public interface PreauthorizedPaymentsView extends IsWidget {
+public interface PreauthorizedPaymentsView extends IsView {
 
     interface Presenter {
 

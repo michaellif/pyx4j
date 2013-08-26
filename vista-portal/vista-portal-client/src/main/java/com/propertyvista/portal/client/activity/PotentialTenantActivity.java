@@ -18,14 +18,14 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.PotentialTenantView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 
 public class PotentialTenantActivity extends AbstractActivity {
     private final PotentialTenantView view;
 
     public PotentialTenantActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PotentialTenantView.class);
+        this.view = PortalSite.getViewFactory().instantiate(PotentialTenantView.class);
         withPlace(place);
 
     }

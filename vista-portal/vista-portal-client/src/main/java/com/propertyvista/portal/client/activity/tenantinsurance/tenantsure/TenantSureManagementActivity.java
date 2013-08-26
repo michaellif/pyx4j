@@ -23,8 +23,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureManagementView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureTenantInsuranceStatusDetailedDTO;
@@ -36,7 +36,7 @@ public class TenantSureManagementActivity extends AbstractActivity implements Te
     private final TenantSureManagementService service;
 
     public TenantSureManagementActivity() {
-        view = ResidentsViewFactory.instance(TenantSureManagementView.class);
+        view = PortalSite.getViewFactory().instantiate(TenantSureManagementView.class);
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 

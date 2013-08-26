@@ -39,7 +39,7 @@ import com.propertyvista.field.rpc.services.FieldAuthenticationService;
 public class FieldSite extends VistaSite {
 
     public FieldSite() {
-        super("vista-field", FieldSiteMap.class, new FieldSiteAppPlaceDispatcher());
+        super("vista-field", FieldSiteMap.class, null, new FieldSiteAppPlaceDispatcher());
     }
 
     @Override

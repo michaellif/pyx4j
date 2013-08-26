@@ -24,6 +24,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.Dialog;
 import com.pyx4j.widgets.client.dialog.Dialog.Type;
@@ -61,7 +62,7 @@ public class PortalSite extends VistaSite {
     public static final String TOP_RIGHT_INSERTION_ID = "siteAuthInsert";
 
     public PortalSite() {
-        super("vista-portal", PortalSiteMap.class, new PortalSiteDispatcher());
+        super("vista-portal", PortalSiteMap.class, new SingletonViewFactory(), new PortalSiteDispatcher());
     }
 
     @Override

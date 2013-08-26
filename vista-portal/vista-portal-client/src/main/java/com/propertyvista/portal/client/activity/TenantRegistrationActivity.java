@@ -29,8 +29,8 @@ import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.NavigationUri;
 import com.pyx4j.site.rpc.AppPlaceInfo;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.registration.TenantRegistrationView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
@@ -44,7 +44,7 @@ public class TenantRegistrationActivity extends AbstractActivity implements Tena
     private final TenantRegistrationView view;
 
     public TenantRegistrationActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(TenantRegistrationView.class);
+        this.view = PortalSite.getViewFactory().instantiate(TenantRegistrationView.class);
         withPlace(place);
 
     }

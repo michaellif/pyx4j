@@ -13,8 +13,8 @@
  */
 package com.propertyvista.portal.client.ui;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
-public interface PotentialTenantView extends IsWidget {
+public interface PotentialTenantView extends IsView {
 
 }

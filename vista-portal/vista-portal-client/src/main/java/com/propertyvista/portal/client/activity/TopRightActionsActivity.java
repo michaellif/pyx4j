@@ -29,8 +29,8 @@ import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.TopRightActionsView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.PortalAuthenticationService;
 
@@ -39,7 +39,7 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     private final TopRightActionsView view;
 
     public TopRightActionsActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(TopRightActionsView.class);
+        this.view = PortalSite.getViewFactory().instantiate(TopRightActionsView.class);
         assert (view != null);
         view.setPresenter(this);
     }

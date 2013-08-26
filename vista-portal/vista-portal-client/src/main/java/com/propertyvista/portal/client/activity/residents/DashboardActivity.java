@@ -24,9 +24,9 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.dashboard.DashboardView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
@@ -39,7 +39,7 @@ public class DashboardActivity extends SecurityAwareActivity implements Dashboar
     private final DashboardService srv;
 
     public DashboardActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(DashboardView.class);
+        this.view = PortalSite.getViewFactory().instantiate(DashboardView.class);
         this.view.setPresenter(this);
         srv = GWT.create(DashboardService.class);
     }

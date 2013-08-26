@@ -26,9 +26,9 @@ import com.pyx4j.site.client.AppSite;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.views.TenantSureCreditCardUpdateView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSureManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
@@ -40,7 +40,7 @@ public class TenantSureCreditCardUpdateActivity extends SecurityAwareActivity im
     private final TenantSureManagementService service;
 
     public TenantSureCreditCardUpdateActivity() {
-        view = ResidentsViewFactory.instance(TenantSureCreditCardUpdateView.class);
+        view = PortalSite.getViewFactory().instantiate(TenantSureCreditCardUpdateView.class);
         service = GWT.<TenantSureManagementService> create(TenantSureManagementService.class);
     }
 

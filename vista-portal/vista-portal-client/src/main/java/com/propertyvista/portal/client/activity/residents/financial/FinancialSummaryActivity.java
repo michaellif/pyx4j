@@ -25,8 +25,8 @@ import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.financial.yardi.FinancialSummaryView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.YardiFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
@@ -42,7 +42,7 @@ public class FinancialSummaryActivity extends AbstractActivity implements Financ
     private final BillSummaryService service;
 
     public FinancialSummaryActivity(Place place) {
-        view = ResidentsViewFactory.instance(FinancialSummaryView.class);
+        view = PortalSite.getViewFactory().instantiate(FinancialSummaryView.class);
         service = GWT.<BillSummaryService> create(BillSummaryService.class);
     }
 

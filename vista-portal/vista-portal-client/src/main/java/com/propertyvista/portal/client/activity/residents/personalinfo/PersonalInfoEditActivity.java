@@ -24,9 +24,9 @@ import com.pyx4j.entity.rpc.AbstractCrudService;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.personalinfo.PersonalInfoEdit;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.ResidentDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.ProfileViewer;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
@@ -38,7 +38,7 @@ public class PersonalInfoEditActivity extends SecurityAwareActivity implements P
     PersonalInfoCrudService srv;
 
     public PersonalInfoEditActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PersonalInfoEdit.class);
+        this.view = PortalSite.getViewFactory().instantiate(PersonalInfoEdit.class);
         this.view.setPresenter(this);
         srv = GWT.create(PersonalInfoCrudService.class);
     }

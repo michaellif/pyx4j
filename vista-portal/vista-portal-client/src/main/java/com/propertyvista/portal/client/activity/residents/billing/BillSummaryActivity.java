@@ -22,9 +22,9 @@ import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.billing.BillSummaryView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
@@ -38,7 +38,7 @@ public class BillSummaryActivity extends SecurityAwareActivity implements BillSu
     private final BillSummaryService srv;
 
     public BillSummaryActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(BillSummaryView.class);
+        this.view = PortalSite.getViewFactory().instantiate(BillSummaryView.class);
         this.view.setPresenter(this);
         srv = GWT.create(BillSummaryService.class);
     }

@@ -13,11 +13,10 @@
  */
 package com.propertyvista.portal.client.ui.residents;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.site.client.IsView;
 
-public interface ViewBase<E extends IEntity> extends IsWidget {
+public interface ViewBase<E extends IEntity> extends IsView {
 
     interface Presenter<E extends IEntity> {
 

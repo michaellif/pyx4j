@@ -30,6 +30,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.client.activity.AppActivityManager;
 import com.pyx4j.site.rpc.AppPlace;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -54,7 +55,7 @@ public class OnboardingSite extends VistaSite {
     }
 
     public OnboardingSite() {
-        super("vista-onboarding", OnboardingSiteMap.class, new OnboardingAppPlaceDispatcher());
+        super("vista-onboarding", OnboardingSiteMap.class, new SingletonViewFactory(), new OnboardingAppPlaceDispatcher());
     }
 
     @Override

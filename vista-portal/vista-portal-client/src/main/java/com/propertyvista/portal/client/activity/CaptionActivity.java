@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.CaptionView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 
 public class CaptionActivity extends AbstractActivity {
 
@@ -31,7 +31,7 @@ public class CaptionActivity extends AbstractActivity {
     private final AppPlace place;
 
     public CaptionActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(CaptionView.class);
+        this.view = PortalSite.getViewFactory().instantiate(CaptionView.class);
         this.place = (AppPlace) place;
     }
 

@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
@@ -36,7 +36,7 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
     private final TenantInsuranceService service;
 
     public ProvideTenantInsuranceActivity() {
-        view = ResidentsViewFactory.instance(ProvideTenantInsuranceView.class);
+        view = PortalSite.getViewFactory().instantiate(ProvideTenantInsuranceView.class);
         service = GWT.<TenantInsuranceService> create(TenantInsuranceService.class);
     }
 

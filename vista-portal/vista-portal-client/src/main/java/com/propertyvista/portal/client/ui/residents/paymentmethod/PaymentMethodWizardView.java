@@ -15,12 +15,13 @@ package com.propertyvista.portal.client.ui.residents.paymentmethod;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 
-public interface PaymentMethodWizardView extends IWizard<PaymentMethodDTO> {
+public interface PaymentMethodWizardView extends IWizard<PaymentMethodDTO>, IsView {
 
     interface Persenter extends IWizard.Presenter {
 

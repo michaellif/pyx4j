@@ -13,11 +13,11 @@
  */
 package com.propertyvista.portal.client.ui.residents.usermessage;
 
-import com.google.gwt.user.client.ui.IsWidget;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.common.client.site.Notification;
 
-public interface UserMessageView extends IsWidget {
+public interface UserMessageView extends IsView {
 
     interface Presenter {
 

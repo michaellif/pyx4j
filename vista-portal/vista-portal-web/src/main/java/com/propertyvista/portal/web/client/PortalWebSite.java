@@ -57,10 +57,8 @@ public class PortalWebSite extends VistaSite {
 
     private static SiteThemeServices siteThemeServices = GWT.create(SiteThemeServices.class);
 
-    private static SingletonViewFactory viewFactory = new SingletonViewFactory();
-
     public PortalWebSite() {
-        super("vista-portal", PortalSiteMap.class, new PortalWebSiteDispatcher());
+        super("vista-portal", PortalSiteMap.class, new SingletonViewFactory(), new PortalWebSiteDispatcher());
     }
 
     @Override
@@ -134,10 +132,6 @@ public class PortalWebSite extends VistaSite {
 
     public static PortalWebSite instance() {
         return (PortalWebSite) AppSite.instance();
-    }
-
-    public static SingletonViewFactory getViewFactory() {
-        return viewFactory;
     }
 
     public static PortalSiteServices getPortalSiteServices() {

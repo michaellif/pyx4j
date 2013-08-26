@@ -72,10 +72,8 @@ public class CrmSite extends VistaSite {
 
     private static final I18n i18n = I18n.get(CrmSite.class);
 
-    private static SingletonViewFactory viewFactory = new SingletonViewFactory();
-
     public CrmSite() {
-        super("vista-crm", CrmSiteMap.class, new CrmSiteAppPlaceDispatcher());
+        super("vista-crm", CrmSiteMap.class, new SingletonViewFactory(), new CrmSiteAppPlaceDispatcher());
     }
 
     @Override
@@ -119,10 +117,6 @@ public class CrmSite extends VistaSite {
     @Override
     public void showMessageDialog(String message, String title) {
         setNotification(new Notification(message, NotificationType.ERROR, title));
-    }
-
-    public static SingletonViewFactory getViewFactory() {
-        return viewFactory;
     }
 
     private void initialize() {

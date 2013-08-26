@@ -24,9 +24,9 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 
 import com.propertyvista.domain.payment.LeasePaymentMethod;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodsView;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
 
@@ -37,7 +37,7 @@ public class PaymentMethodsActivity extends SecurityAwareActivity implements Pay
     private final PaymentMethodCrudService srv;
 
     public PaymentMethodsActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(PaymentMethodsView.class);
+        this.view = PortalSite.getViewFactory().instantiate(PaymentMethodsView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PaymentMethodCrudService.class);
     }

@@ -29,6 +29,7 @@ import com.pyx4j.security.client.SessionInactiveHandler;
 import com.pyx4j.security.client.SessionMonitor;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.SingletonViewFactory;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.common.client.ClientNavigUtils;
@@ -57,7 +58,7 @@ public class PtAppSite extends VistaSite {
     private PtAppWizardManager wizardManager;
 
     public PtAppSite() {
-        super("vista-ptapp", PtSiteMap.class, new PtAppPlaceDispatcher());
+        super("vista-ptapp", PtSiteMap.class, new SingletonViewFactory(), new PtAppPlaceDispatcher());
     }
 
     @Override

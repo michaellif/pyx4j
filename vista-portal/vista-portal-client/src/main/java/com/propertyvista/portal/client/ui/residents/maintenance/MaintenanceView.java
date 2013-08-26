@@ -15,13 +15,12 @@ package com.propertyvista.portal.client.ui.residents.maintenance;
 
 import java.util.Vector;
 
-import com.google.gwt.user.client.ui.IsWidget;
-
 import com.pyx4j.commons.Key;
+import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 
-public interface MaintenanceView extends IsWidget {
+public interface MaintenanceView extends IsView {
 
     interface Presenter {
 

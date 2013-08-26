@@ -29,9 +29,9 @@ import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.domain.security.VistaCustomerBehavior;
 import com.propertyvista.domain.security.VistaCustomerPaymentTypeBehavior;
 import com.propertyvista.misc.VistaTODO;
+import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.NavigView;
 import com.propertyvista.portal.client.ui.residents.payment.PortalPaymentTypesUtil;
-import com.propertyvista.portal.client.ui.viewfactories.ResidentsViewFactory;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident;
 import com.propertyvista.shared.config.VistaFeatures;
@@ -41,7 +41,7 @@ public class NavigActivity extends AbstractActivity implements NavigView.NavigPr
     private final NavigView view;
 
     public NavigActivity(Place place) {
-        this.view = ResidentsViewFactory.instance(NavigView.class);
+        this.view = PortalSite.getViewFactory().instantiate(NavigView.class);
         view.setPresenter(this);
         withPlace(place);
     }

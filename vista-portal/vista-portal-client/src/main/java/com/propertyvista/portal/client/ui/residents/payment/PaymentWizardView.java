@@ -17,13 +17,14 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.domain.dto.financial.PaymentDTO;
 
-public interface PaymentWizardView extends IWizard<PaymentDTO> {
+public interface PaymentWizardView extends IWizard<PaymentDTO>, IsView {
 
     interface Persenter extends IWizard.Presenter {
 

@@ -34,10 +34,8 @@ import com.propertyvista.operations.rpc.services.OperationsAuthenticationService
 
 public class OperationsSite extends VistaSite {
 
-    private static SingletonViewFactory viewFactory = new SingletonViewFactory();
-
     public OperationsSite() {
-        super("vista-operations", OperationsSiteMap.class, new OperationsSiteAppPlaceDispatcher());
+        super("vista-operations", OperationsSiteMap.class, new SingletonViewFactory(), new OperationsSiteAppPlaceDispatcher());
     }
 
     @Override
@@ -60,10 +58,6 @@ public class OperationsSite extends VistaSite {
     public void showMessageDialog(String message, String title) {
         setNotification(new Notification(message, NotificationType.ERROR, title));
         //TODO getPlaceController().goTo(new AdminSiteMap.GenericMessage());
-    }
-
-    public static SingletonViewFactory getViewFactory() {
-        return viewFactory;
     }
 
     private void obtainAuthenticationData() {
