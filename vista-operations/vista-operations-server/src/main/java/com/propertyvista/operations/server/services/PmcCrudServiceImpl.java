@@ -227,6 +227,7 @@ public class PmcCrudServiceImpl extends AbstractCrudServiceDtoImpl<Pmc, PmcDTO> 
         {
             EntityQueryCriteria<Trigger> criteria = EntityQueryCriteria.create(Trigger.class);
             criteria.eq(criteria.proto().triggerType(), processType);
+            criteria.asc(criteria.proto().id());
             trigger = Persistence.service().retrieve(criteria);
             if (trigger == null) {
                 throw new UserRuntimeException("The Trigger " + processType + " not found");
