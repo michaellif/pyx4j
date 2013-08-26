@@ -192,13 +192,11 @@
 .WidgetDecorator-noMandatoryStar .WidgetDecoratorMandatoryImage img {
     display: none;
 }
-.WidgetDecoratorContentPanel {
-}
+
 .WidgetDecoratorComponentHolder {
     word-wrap: break-word;
 }
-.WidgetDecoratorComponent {
-}
+
 .WidgetDecoratorComponent-invalid .TextBox {
     background-color: #F8D8D8;
     border-color: #F79494;
@@ -227,7 +225,6 @@
 	border: solid 1px;
 	border-color: #666666;
 }
-
 
 .FormFlexPanel {
 	-moz-box-sizing: border-box;
