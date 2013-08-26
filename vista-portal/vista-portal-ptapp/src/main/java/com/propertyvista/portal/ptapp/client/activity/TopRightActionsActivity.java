@@ -23,8 +23,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.site.client.AppSite;
 
@@ -54,9 +54,9 @@ public class TopRightActionsActivity extends AbstractActivity implements TopRigh
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         updateAuthenticatedView();
-        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 updateAuthenticatedView();
             }
         });

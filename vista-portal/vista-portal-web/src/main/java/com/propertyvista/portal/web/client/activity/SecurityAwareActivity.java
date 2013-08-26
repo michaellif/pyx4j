@@ -18,16 +18,16 @@ import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 
 public abstract class SecurityAwareActivity extends AbstractActivity {
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 if (!ClientContext.isAuthenticated()) {
                     panel.setWidget(null);
                 }

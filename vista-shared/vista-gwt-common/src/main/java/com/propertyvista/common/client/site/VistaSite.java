@@ -25,8 +25,8 @@ import com.pyx4j.forms.client.ImageFactory;
 import com.pyx4j.log4gwt.client.ClientLogger;
 import com.pyx4j.log4gwt.rpcappender.RPCAppender;
 import com.pyx4j.log4gwt.shared.Level;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.site.client.AppPlaceDispatcher;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.SingletonViewFactory;
@@ -69,9 +69,9 @@ public abstract class VistaSite extends AppSite {
         ClientDeploymentConfig.setDownloadServletMapping(DeploymentConsts.downloadServletMapping);
         ClientDeploymentConfig.setUploadServletMapping(DeploymentConsts.uploadServletMapping);
 
-        getEventBus().addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        getEventBus().addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 if (viewFactory instanceof SingletonViewFactory) {
                     ((SingletonViewFactory) viewFactory).invalidate();
                 }

@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeRerquestEvent.ChangeType;
@@ -44,9 +44,9 @@ public class MenuActivity extends AbstractActivity implements MenuView.MenuPrese
     public void start(AcceptsOneWidget panel, EventBus eventBus) {
         panel.setWidget(view);
         updateView();
-        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 updateView();
             }
         });

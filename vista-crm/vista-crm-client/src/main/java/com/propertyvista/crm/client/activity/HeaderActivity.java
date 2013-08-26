@@ -25,8 +25,8 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
 import com.pyx4j.security.client.ContextChangeEvent;
 import com.pyx4j.security.client.ContextChangeHandler;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 import com.pyx4j.security.rpc.AuthenticationResponse;
 import com.pyx4j.security.rpc.AuthenticationService;
 import com.pyx4j.security.shared.SecurityController;
@@ -60,9 +60,9 @@ public class HeaderActivity extends AbstractActivity implements HeaderView.Prese
         panel.setWidget(view);
         view.setDisplayThisIsDemoWarning(VistaFeaturesCustomizationClient.enviromentTitleVisible && VistaDemo.isDemo());
         updateAuthenticatedView();
-        eventBus.addHandler(SecurityControllerEvent.getType(), new SecurityControllerHandler() {
+        eventBus.addHandler(BehaviorChangeEvent.getType(), new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 updateAuthenticatedView();
             }
         });

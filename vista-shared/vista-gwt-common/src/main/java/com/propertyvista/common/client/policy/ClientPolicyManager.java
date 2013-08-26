@@ -27,8 +27,8 @@ import com.pyx4j.rpc.client.RPCManager;
 import com.pyx4j.rpc.client.SystemNotificationEvent;
 import com.pyx4j.rpc.client.SystemNotificationHandler;
 import com.pyx4j.security.client.ClientSecurityController;
-import com.pyx4j.security.client.SecurityControllerEvent;
-import com.pyx4j.security.client.SecurityControllerHandler;
+import com.pyx4j.security.client.BehaviorChangeEvent;
+import com.pyx4j.security.client.BehaviorChangeHandler;
 
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
 import com.propertyvista.domain.policy.framework.Policy;
@@ -121,9 +121,9 @@ public class ClientPolicyManager {
     public static void initialize(PolicyRetrieveService policyRetrieveService) {
         ClientPolicyManager.policyRetrieveService = policyRetrieveService;
 
-        ClientSecurityController.addSecurityControllerHandler(new SecurityControllerHandler() {
+        ClientSecurityController.addSecurityControllerHandler(new BehaviorChangeHandler() {
             @Override
-            public void onSecurityContextChange(SecurityControllerEvent event) {
+            public void onBehaviorChange(BehaviorChangeEvent event) {
                 ClientPolicyManager.invalidate();
             }
         });
