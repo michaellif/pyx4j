@@ -91,8 +91,8 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
                     }
                 } else if (status != null) {
                     r.setMessage(status.stage);
-                    r.setProgress(status.stageProgress);
-                    r.setProgressMaximum(status.stageProgressMax);
+                    r.setProgress((int) status.stageProgress);
+                    r.setProgressMaximum((int) status.stageProgressMax);
                 }
                 if (cancelled) {
                     r.setCanceled();
@@ -175,8 +175,8 @@ public abstract class AbstractReportsService<R extends ReportMetadata> implement
                         }
                     } else if (status != null) {
                         r.setMessage(status.stage);
-                        r.setProgress(status.stageProgress);
-                        r.setProgressMaximum(status.stageProgressMax);
+                        r.setProgress((int) status.stageProgress);
+                        r.setProgressMaximum((int) status.stageProgressMax);
                     }
                 }
                 if (cancelled) {

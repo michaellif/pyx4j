@@ -24,15 +24,15 @@ public final class ReportProgressStatus {
 
     public final String stage;
 
-    public final int stageNum;
+    public final long stageNum;
 
-    public final int stagesCount;
+    public final long stagesCount;
 
-    public final int stageProgress;
+    public final long stageProgress;
 
-    public final int stageProgressMax;
+    public final long stageProgressMax;
 
-    public ReportProgressStatus(String stage, int stageNum, int stagesCount, int stageProgress, int stageProgressMax) {
+    public ReportProgressStatus(String stage, long stageNum, long stagesCount, long stageProgress, long stageProgressMax) {
         this.stage = stage;
         this.stageNum = stageNum;
         this.stagesCount = stagesCount;
