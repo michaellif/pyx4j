@@ -28,7 +28,7 @@ public class PaymentsLastMonthSuspendProcess implements PmcProcess {
 
     @Override
     public void executePmcJob(PmcProcessContext context) {
-        ServerSideFactory.create(PaymentProcessFacade.class).suspendPmcScheduledLastMonthPreauthorisedPayments(context.getExecutionMonitor(),
+        ServerSideFactory.create(PaymentProcessFacade.class).updatePreauthorizedPayments(context.getExecutionMonitor(),
                 new LogicalDate(context.getForDate()));
     }
 

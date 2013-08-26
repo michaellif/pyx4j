@@ -254,26 +254,17 @@ class PreauthorizedPaymentAgreementMananger {
 
         boolean suspend = false;
 
+        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
         AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit().building(), AutoPayPolicy.class);
+
         // TODO: lease first month check:
-        if (autoPayPolicy.excludeFirstBillingPeriodCharge().getValue(Boolean.FALSE)) {
-        }
+        suspend |= leaseFirstBillingPeriodChargePolicyCheck(lease, nextCycle, autoPayPolicy);
 
         // lease last month check:
-        BillingCycle nextCycle = ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentBillingCycle(lease);
-        if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
-            suspend |= (beforeOrEqual(lease.expectedMoveOut(), nextCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
-                    nextCycle.billingCycleEndDate()));
-        }
+        suspend |= leaseLastBillingPeriodChargePolicyCheck(lease, nextCycle, autoPayPolicy);
 
         // Lease end date check:
-        if (VistaFeatures.instance().yardiIntegration()) {
-            // currently checks just actual move out date (workable for Yardi mode):
-            suspend |= (beforeOrEqual(lease.actualMoveOut(), nextCycle.billingCycleEndDate()));
-        } else {
-            // TODO : calculate/ensure (case of Fixed and Periodic lease types) real lease end date!?
-            suspend |= (beforeOrEqual(lease.leaseTo(), nextCycle.billingCycleEndDate()));
-        }
+        suspend |= leaseEndDateCheck(lease, nextCycle);
 
         if (suspend) {
             for (PreauthorizedPayment pap : activePaps) {
@@ -284,50 +275,74 @@ class PreauthorizedPaymentAgreementMananger {
         }
     }
 
-    public void suspendPreauthorisedPaymentsInLastMonth(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
+    public void updatePreauthorizedPayments(final ExecutionMonitor executionMonitor, LogicalDate forDate) {
         EntityQueryCriteria<BillingCycle> criteria = EntityQueryCriteria.create(BillingCycle.class);
         criteria.le(criteria.proto().billingCycleStartDate(), forDate);
         criteria.ge(criteria.proto().billingCycleEndDate(), forDate);
 
-        ICursorIterator<BillingCycle> i = Persistence.service().query(null, criteria, AttachLevel.Attached);
+        ICursorIterator<BillingCycle> billingCycleIterator = Persistence.service().query(null, criteria, AttachLevel.Attached);
         try {
-            while (i.hasNext()) {
-                BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(i.next());
+            while (billingCycleIterator.hasNext()) {
+                BillingCycle nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(billingCycleIterator.next());
+                final BillingCycle suspensionCycle;
                 if (!forDate.before(nextCycle.targetPadGenerationDate().getValue())) {
-                    nextCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(nextCycle);
+                    suspensionCycle = ServerSideFactory.create(BillingCycleFacade.class).getSubsequentBillingCycle(nextCycle);
+                } else {
+                    suspensionCycle = nextCycle;
                 }
 
                 EntityQueryCriteria<BillingAccount> criteria1 = EntityQueryCriteria.create(BillingAccount.class);
-                criteria1.eq(criteria1.proto().lease().unit().building(), nextCycle.building());
-                criteria1.eq(criteria1.proto().billingType(), nextCycle.billingType());
+                criteria1.eq(criteria1.proto().lease().unit().building(), suspensionCycle.building());
+                criteria1.eq(criteria1.proto().billingType(), suspensionCycle.billingType());
                 criteria1.isNotNull(criteria1.proto().lease().currentTerm().version().tenants().$().leaseParticipant().preauthorizedPayments());
                 {
-                    OrCriterion or = criteria1.or();
-                    or.right().le(criteria1.proto().lease().expectedMoveOut(), nextCycle.billingCycleEndDate());
-                    or.left().le(criteria1.proto().lease().actualMoveOut(), nextCycle.billingCycleEndDate());
+                    // retrieve BillingAccounts which confirms :
+                    //
+                    // lease().expectedMoveOut()    <=      suspensionCycle.billingCycleEndDate();
+                    // lease().actualMoveOut()      <=      suspensionCycle.billingCycleEndDate();
+                    // lease().leaseTo()            <=      suspensionCycle.billingCycleEndDate();
+                    //
+                    // Note: do not synchronize it with set of leaseXXXCheck(...) methods!!!   
+
+                    OrCriterion or1 = new OrCriterion();
+                    or1.left().le(criteria1.proto().lease().expectedMoveOut(), suspensionCycle.billingCycleEndDate());
+                    or1.right().le(criteria1.proto().lease().actualMoveOut(), suspensionCycle.billingCycleEndDate());
+
+                    OrCriterion or2 = criteria1.or();
+                    or2.left().le(criteria1.proto().lease().leaseTo(), suspensionCycle.billingCycleEndDate());
+                    or2.right(or1);
                 }
 
                 for (final BillingAccount account : Persistence.service().query(criteria1)) {
                     Persistence.service().retrieve(account.lease());
-                    final AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(account.lease().unit().building(),
-                            AutoPayPolicy.class);
                     try {
                         new UnitOfWork().execute(new Executable<Void, RuntimeException>() {
                             @Override
                             public Void execute() {
                                 boolean suspended = false;
+                                AutoPayPolicy autoPayPolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(
+                                        account.lease().unit().building(), AutoPayPolicy.class);
+
                                 for (PreauthorizedPayment item : retrieveNextPreauthorizedPayments(account.lease())) {
-                                    if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
+                                    boolean suspend = false;
+
+                                    suspend |= leaseFirstBillingPeriodChargePolicyCheck(account.lease(), suspensionCycle, autoPayPolicy);
+                                    suspend |= leaseLastBillingPeriodChargePolicyCheck(account.lease(), suspensionCycle, autoPayPolicy);
+                                    suspend |= leaseEndDateCheck(account.lease(), suspensionCycle);
+
+                                    if (suspend) {
+                                        suspended = true;
                                         suspendPreauthorizedPayment(item, true);
                                         executionMonitor.addProcessedEvent("Pap suspend");
-                                        suspended = true;
                                     }
                                 }
+
                                 if (suspended) {
                                     ServerSideFactory.create(NotificationFacade.class).papSuspension(account.lease());
                                     Persistence.ensureRetrieve(account.lease(), AttachLevel.Attached);
                                     executionMonitor.addInfoEvent("Lease with suspended Pap", "LeaseId " + account.lease().leaseId().getStringView());
                                 }
+
                                 return null;
                             }
                         });
@@ -345,7 +360,33 @@ class PreauthorizedPaymentAgreementMananger {
                 }
             }
         } finally {
-            i.close();
+            billingCycleIterator.close();
+        }
+    }
+
+    // lease leaseXXXCheck(...) methods:
+    // Note: do not synchronize it with criteria1 in updatePreauthorizedPayments(ExecutionMonitor executionMonitor, LogicalDate forDate) !!!   
+
+    private boolean leaseFirstBillingPeriodChargePolicyCheck(Lease lease, BillingCycle nextCycle, AutoPayPolicy autoPayPolicy) {
+        // TODO Not implemented yet!..
+        return false;
+    }
+
+    private boolean leaseLastBillingPeriodChargePolicyCheck(Lease lease, BillingCycle suspensionCycle, AutoPayPolicy autoPayPolicy) {
+        if (autoPayPolicy.excludeLastBillingPeriodCharge().getValue(Boolean.TRUE)) {
+            return (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleEndDate()) || beforeOrEqual(lease.actualMoveOut(),
+                    suspensionCycle.billingCycleEndDate()));
+        }
+        return false;
+    }
+
+    private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle) {
+        if (VistaFeatures.instance().yardiIntegration()) {
+            // currently checks just actual move out date (workable for Yardi mode):
+            return (beforeOrEqual(lease.actualMoveOut(), suspensionCycle.billingCycleEndDate()));
+        } else {
+            // TODO : calculate/ensure (case of Fixed and Periodic lease types) real lease end date!?
+            return (beforeOrEqual(lease.leaseTo(), suspensionCycle.billingCycleEndDate()));
         }
     }
 
@@ -355,4 +396,5 @@ class PreauthorizedPaymentAgreementMananger {
         }
         return false;
     }
+
 }
