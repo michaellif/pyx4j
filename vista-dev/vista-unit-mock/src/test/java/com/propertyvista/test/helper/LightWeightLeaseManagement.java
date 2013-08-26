@@ -20,6 +20,7 @@ import com.pyx4j.entity.shared.IVersionedEntity.SaveAction;
 import com.propertyvista.domain.financial.ARCode;
 import com.propertyvista.domain.financial.BillingAccount;
 import com.propertyvista.domain.financial.BillingAccount.BillingPeriod;
+import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Lease.Status;
@@ -53,6 +54,12 @@ public class LightWeightLeaseManagement {
         return lease;
     }
 
+    // no product catalog support; no unit availability support 
+    public static void setUnit(Lease lease, AptUnit unit) {
+        lease.unit().set(unit);
+        lease.currentTerm().unit().set(unit);
+    }
+
     public static Lease persist(Lease lease, boolean finalize) {
         if (lease.currentTerm().getPrimaryKey() == null) {
             LeaseTerm term = lease.currentTerm().detach();
@@ -64,14 +71,16 @@ public class LightWeightLeaseManagement {
 
             lease.currentTerm().lease().set(lease);
 
+            // just one tenant per customer supported:
             for (LeaseTermTenant tenantInLease : term.version().tenants()) {
                 Customer customer = tenantInLease.leaseParticipant().customer();
-                Tenant leaseCustomer = EntityFactory.create(Tenant.class);
-                leaseCustomer.participantId().setValue(uniqueId());
-                leaseCustomer.lease().set(lease);
-                leaseCustomer.customer().set(customer);
-                Persistence.service().persist(leaseCustomer);
-                tenantInLease.leaseParticipant().set(leaseCustomer);
+                Tenant tenant = EntityFactory.create(Tenant.class);
+                tenant.participantId().setValue(uniqueId());
+                tenant.lease().set(lease);
+                tenant.customer().set(customer);
+                Persistence.service().persist(customer);
+                Persistence.service().persist(tenant);
+                tenantInLease.leaseParticipant().set(tenant);
             }
         }
         if (finalize) {

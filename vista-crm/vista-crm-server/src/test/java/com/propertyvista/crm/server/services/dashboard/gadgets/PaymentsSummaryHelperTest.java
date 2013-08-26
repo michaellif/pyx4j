@@ -17,8 +17,6 @@ import static com.pyx4j.gwt.server.DateUtils.detectDateformat;
 
 import java.math.BigDecimal;
 
-import org.junit.Ignore;
-
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.config.server.SystemDateManager;
 
@@ -27,7 +25,6 @@ import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.server.common.util.PaymentsSummaryHelper;
 
-@Ignore
 public class PaymentsSummaryHelperTest extends PaymentsSummaryHelperTestBase {
 
     public void testCalculateSummary() {

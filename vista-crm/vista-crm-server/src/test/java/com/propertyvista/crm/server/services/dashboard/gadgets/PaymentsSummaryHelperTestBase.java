@@ -19,14 +19,12 @@ import java.math.BigDecimal;
 
 import com.pyx4j.commons.Key;
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.config.server.SystemDateManager;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.security.shared.UserVisit;
 import com.pyx4j.unit.server.mock.TestLifecycle;
 
-import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
@@ -41,6 +39,7 @@ import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.security.common.VistaBasicBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseTermTenant;
+import com.propertyvista.test.helper.LightWeightLeaseManagement;
 
 public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
@@ -81,18 +80,17 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
 
         Persistence.service().persist(idAssignmentPolicy);
 
-        lease = ServerSideFactory.create(LeaseFacade.class).create(Lease.Status.Application);
+        lease = LightWeightLeaseManagement.create(Lease.Status.Application);
 
         LeaseTermTenant tenant = lease.currentTerm().version().tenants().$();
         tenant.leaseParticipant().customer().person().name().firstName().setValue("Foo");
         tenant.leaseParticipant().customer().person().name().lastName().setValue("Foo");
         lease.currentTerm().version().tenants().add(tenant);
         lease.status().setValue(Lease.Status.ExistingLease);
-        lease = ServerSideFactory.create(LeaseFacade.class).init(lease);
         if (lease.unit().getPrimaryKey() != null) {
-            ServerSideFactory.create(LeaseFacade.class).setUnit(lease, lease.unit());
+            LightWeightLeaseManagement.setUnit(lease, lease.unit());
         }
-        lease = ServerSideFactory.create(LeaseFacade.class).persist(lease);
+        lease = LightWeightLeaseManagement.persist(lease, false);
 
         merchantAccountA = makeMerchantAccount("A");
         merchantAccountB = makeMerchantAccount("B");
