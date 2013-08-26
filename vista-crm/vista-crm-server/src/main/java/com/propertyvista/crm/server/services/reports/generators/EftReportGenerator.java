@@ -36,6 +36,7 @@ import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.gwt.server.IOUtils;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.security.shared.SecurityController;
 import com.pyx4j.site.shared.domain.reports.ReportMetadata;
 
 import com.propertyvista.biz.financial.payment.PaymentReportFacade;
@@ -45,8 +46,10 @@ import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
 import com.propertyvista.domain.company.Portfolio;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.billing.BillingCycle;
+import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.reports.EftReportMetadata;
+import com.propertyvista.domain.security.VistaCrmBehavior;
 import com.propertyvista.domain.tenant.lease.Lease;
 
 public class EftReportGenerator implements ReportExporter {
@@ -67,13 +70,19 @@ public class EftReportGenerator implements ReportExporter {
 
             @Override
             protected void bind() {
+                bind(dtoProto.targetDate(), dboProto.targetDate());
                 bind(dtoProto.notice(), dboProto.notice());
                 bind(dtoProto.billingCycleStartDate(), dboProto.padBillingCycle().billingCycleStartDate());
                 bind(dtoProto.leaseId(), dboProto.preauthorizedPayment().tenant().lease().leaseId());
                 bind(dtoProto.leaseId_(), dboProto.preauthorizedPayment().tenant().lease());
+                bind(dtoProto.leaseStatus(), dboProto.preauthorizedPayment().tenant().lease().status());
+                bind(dtoProto.leaseFrom(), dboProto.preauthorizedPayment().tenant().lease().leaseFrom());
+                bind(dtoProto.leaseTo(), dboProto.preauthorizedPayment().tenant().lease().leaseTo());
                 bind(dtoProto.expectedMoveOut(), dboProto.preauthorizedPayment().tenant().lease().expectedMoveOut());
+
                 bind(dtoProto.building(), dboProto.preauthorizedPayment().tenant().lease().unit().building().propertyCode());
                 bind(dtoProto.building_(), dboProto.preauthorizedPayment().tenant().lease().unit().building());
+
                 bind(dtoProto.unit(), dboProto.preauthorizedPayment().tenant().lease().unit().info().number());
                 bind(dtoProto.unit_(), dboProto.preauthorizedPayment().tenant().lease().unit());
                 bind(dtoProto.participantId(), dboProto.preauthorizedPayment().tenant().participantId());
@@ -83,6 +92,26 @@ public class EftReportGenerator implements ReportExporter {
                 bind(dtoProto.amount_().id(), dboProto.id());
                 bind(dtoProto.paymentType(), dboProto.paymentMethod().type());
                 bind(dtoProto.paymentStatus(), dboProto.paymentStatus());
+            }
+
+            @Override
+            public EftReportRecordDTO createDTO(PaymentRecord paymentRecord) {
+                EftReportRecordDTO eftReportRecordDto = super.createDTO(paymentRecord);
+                switch (paymentRecord.paymentMethod().type().getValue()) {
+                case Echeck:
+                    EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
+                    eftReportRecordDto.bankId().setValue(echeck.bankId().getValue());
+                    eftReportRecordDto.transitNumber().setValue(echeck.branchTransitNumber().getValue());
+                    if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
+                        eftReportRecordDto.accountNumber().setValue(echeck.accountNo().number().getValue());
+                    } else {
+                        eftReportRecordDto.accountNumber().setValue(echeck.accountNo().obfuscatedNumber().getValue());
+                    }
+                    break;
+                default:
+                    break;
+                }
+                return eftReportRecordDto;
             }
         };
     }
@@ -198,6 +227,7 @@ public class EftReportGenerator implements ReportExporter {
 
         criteria.isNotNull(criteria.proto().padBillingCycle());
 
+        criteria.eq(criteria.proto().billingAccount().lease().status(), Lease.Status.Active);
         if (reportMetadata.leasesOnNoticeOnly().isBooleanTrue()) {
             criteria.eq(criteria.proto().billingAccount().lease().completion(), Lease.CompletionType.Notice);
         }

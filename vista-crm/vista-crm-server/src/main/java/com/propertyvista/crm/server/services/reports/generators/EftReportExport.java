@@ -13,7 +13,6 @@
  */
 package com.propertyvista.crm.server.services.reports.generators;
 
-import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.report.EntityReportFormatter;
 import com.pyx4j.essentials.server.report.ReportTableXLSXFormatter;
@@ -21,13 +20,9 @@ import com.pyx4j.essentials.server.services.reports.ReportExporter.ExportedRepor
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatus;
 import com.pyx4j.essentials.server.services.reports.ReportProgressStatusHolder;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.security.shared.SecurityController;
 
 import com.propertyvista.crm.rpc.dto.reports.EftReportDataDTO;
 import com.propertyvista.crm.rpc.dto.reports.EftReportRecordDTO;
-import com.propertyvista.domain.financial.PaymentRecord;
-import com.propertyvista.domain.payment.EcheckInfo;
-import com.propertyvista.domain.security.VistaCrmBehavior;
 
 public class EftReportExport {
 
@@ -68,18 +63,15 @@ public class EftReportExport {
 
     private EftReportExportModel convertModel(EftReportRecordDTO eftReportRecord) {
         EftReportExportModel model = EntityFactory.create(EftReportExportModel.class);
-        PaymentRecord paymentRecord = Persistence.secureRetrieve(PaymentRecord.class, eftReportRecord.amount_().getPrimaryKey());
-        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant());
-        Persistence.service().retrieve(paymentRecord.preauthorizedPayment().tenant().lease());
-        model.targetDate().setValue(paymentRecord.targetDate().getValue());
+        model.targetDate().setValue(eftReportRecord.targetDate().getValue());
 
         model.building().setValue(eftReportRecord.building().getValue());
         model.unit().setValue(eftReportRecord.unit().getValue());
         model.leaseId().setValue(eftReportRecord.leaseId().getValue());
 
-        model.leaseStatus().setValue(paymentRecord.preauthorizedPayment().tenant().lease().status().getValue());
-        model.leaseFrom().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseFrom().getValue());
-        model.leaseTo().setValue(paymentRecord.preauthorizedPayment().tenant().lease().leaseTo().getValue());
+        model.leaseStatus().setValue(eftReportRecord.leaseStatus().getValue());
+        model.leaseFrom().setValue(eftReportRecord.leaseFrom().getValue());
+        model.leaseTo().setValue(eftReportRecord.leaseTo().getValue());
         model.expectedMoveOut().setValue(eftReportRecord.expectedMoveOut().getValue());
 
         model.participantId().setValue(eftReportRecord.participantId().getValue());
@@ -88,21 +80,9 @@ public class EftReportExport {
         model.amount().setValue(eftReportRecord.amount().getValue());
         model.paymentType().setValue(eftReportRecord.paymentType().getValue());
 
-        // TODO verify permissions
-        switch (eftReportRecord.paymentType().getValue()) {
-        case Echeck:
-            EcheckInfo echeck = paymentRecord.paymentMethod().details().duplicate(EcheckInfo.class);
-            model.bankId().setValue(echeck.bankId().getValue());
-            model.transitNumber().setValue(echeck.branchTransitNumber().getValue());
-            if (SecurityController.checkBehavior(VistaCrmBehavior.PropertyVistaSupport)) {
-                model.accountNumber().setValue(echeck.accountNo().number().getValue());
-            } else {
-                model.accountNumber().setValue(echeck.accountNo().obfuscatedNumber().getValue());
-            }
-            break;
-        default:
-            break;
-        }
+        model.bankId().setValue(eftReportRecord.bankId().getValue());
+        model.transitNumber().setValue(eftReportRecord.transitNumber().getValue());
+        model.accountNumber().setValue(eftReportRecord.accountNumber().getValue());
 
         model.paymentStatus().setValue(eftReportRecord.paymentStatus().getValue());
         model.notice().setValue(eftReportRecord.notice().getValue());

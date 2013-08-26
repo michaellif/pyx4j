@@ -27,6 +27,7 @@ import com.propertyvista.domain.property.asset.building.Building;
 import com.propertyvista.domain.property.asset.unit.AptUnit;
 import com.propertyvista.domain.tenant.Customer;
 import com.propertyvista.domain.tenant.lease.Lease;
+import com.propertyvista.domain.tenant.lease.Lease.Status;
 import com.propertyvista.domain.tenant.lease.Tenant;
 
 @Transient
@@ -40,6 +41,12 @@ public interface EftReportRecordDTO extends IEntity {
     IPrimitive<String> leaseId();
 
     Lease leaseId_();
+
+    IPrimitive<Status> leaseStatus();
+
+    IPrimitive<LogicalDate> leaseFrom();
+
+    IPrimitive<LogicalDate> leaseTo();
 
     IPrimitive<LogicalDate> expectedMoveOut();
 
@@ -66,4 +73,11 @@ public interface EftReportRecordDTO extends IEntity {
 
     IPrimitive<PaymentRecord.PaymentStatus> paymentStatus();
 
+    IPrimitive<LogicalDate> targetDate();
+
+    IPrimitive<String> bankId();
+
+    IPrimitive<String> transitNumber();
+
+    IPrimitive<String> accountNumber();
 }
