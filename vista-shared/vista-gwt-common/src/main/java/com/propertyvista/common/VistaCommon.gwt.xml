@@ -13,6 +13,7 @@
 	<inherits name='com.pyx4j.site.GwtSite' />
 
     <inherits name='com.propertyvista.Domain' />
+	<inherits name='com.propertyvista.portal.Rpc' />
     
     <source path="client"/>
     

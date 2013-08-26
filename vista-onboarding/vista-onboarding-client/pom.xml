@@ -80,6 +80,7 @@
                             <extra>${project.build.directory}/gwt-extra</extra>
                             <localWorkers>${gwtLocalWorkers}</localWorkers>
                             <draftCompile>${gwtDraftCompile}</draftCompile>
+                            <strict>true</strict>
                             <compileReport>${gwtCompileReport}</compileReport>
                             <enableAssertions>${gwtEnableAssertions}</enableAssertions>
                             <!-- disableCastChecking>true</disableCastChecking -->

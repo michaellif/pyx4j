@@ -41,6 +41,7 @@ import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.events.DevShortcutEvent;
 import com.pyx4j.forms.client.events.DevShortcutHandler;
 import com.pyx4j.forms.client.ui.CComponent;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.forms.client.validators.EditableValueValidator;
 import com.pyx4j.forms.client.validators.ValidationError;
@@ -49,7 +50,6 @@ import com.pyx4j.site.rpc.AppPlaceInfo;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.customizations.CountryOfOperation;
 import com.propertyvista.ob.rpc.OnboardingSiteMap;
@@ -57,7 +57,7 @@ import com.propertyvista.ob.rpc.dto.PmcAccountCreationRequest;
 import com.propertyvista.shared.config.VistaDemo;
 
 // TODO refactor this form with using a special decorator (same or similar to one that is used in login/singup forms in portal
-public class PmcAccountCreationRequestForm extends CEntityDecoratableForm<PmcAccountCreationRequest> {
+public class PmcAccountCreationRequestForm extends CEntityForm<PmcAccountCreationRequest> {
 
     public enum Styles implements IStyleName {
 
