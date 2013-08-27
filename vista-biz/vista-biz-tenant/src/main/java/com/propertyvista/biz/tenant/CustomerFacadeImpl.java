@@ -64,7 +64,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
             ServerSideFactory.create(IdAssignmentFacade.class).assignId(customer);
         }
         if (!customer.user().isNull() && customer.person().email().isNull()) {
-            throw new UnRecoverableRuntimeException(i18n.tr("Can't remove e-mail address for {0} ", customer.person().name().getStringView()));
+            throw new UnRecoverableRuntimeException(i18n.tr("Can''t remove e-mail address for {0} ", customer.person().name().getStringView()));
         }
         if ((!customer.person().email().isNull()) || (customer.user().getPrimaryKey() != null)) {
             customer.person().email().setValue(EmailValidator.normalizeEmailAddress(customer.person().email().getValue()));
