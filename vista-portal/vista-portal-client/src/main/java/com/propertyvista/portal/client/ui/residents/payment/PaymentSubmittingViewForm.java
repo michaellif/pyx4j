@@ -23,7 +23,9 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.forms.client.ui.CEntityLabel;
+import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
@@ -66,6 +68,7 @@ public class PaymentSubmittingViewForm extends CEntityDecoratableForm<PaymentRec
 
         content.setBR(++row, 0, 1);
 
+        content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().id(), new CLabel<Key>()), 5).customLabel(i18n.tr("Payment ID")).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentStatus()), 10).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 30).build());
         content.setWidget(++row, 0, 2, new FormDecoratorBuilder(inject(proto().amount()), 20).build());
