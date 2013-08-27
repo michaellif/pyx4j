@@ -173,6 +173,7 @@ abstract class AbstractReconciliationProcessor {
                 criteria.eq(criteria.proto().processingStatus(), Boolean.FALSE);
                 criteria.eq(criteria.proto().reconciliationSummary().processingStatus(), Boolean.TRUE);
                 criteria.eq(criteria.proto().reconciliationSummary().merchantAccount().pmc(), pmc);
+                criteria.eq(criteria.proto().reconciliationSummary().reconciliationFile().fundsTransferType(), fundsTransferType);
                 return Persistence.service().query(criteria);
             }
         });
