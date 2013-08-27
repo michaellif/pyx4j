@@ -224,19 +224,21 @@ public class FundsTransferCaledon {
 
         // Find and verify that previous file has acknowledgment
         {
+            String previousValue = fileCreationNumberFormat(useSimulator, sequence.number().getValue());
             EntityQueryCriteria<PadFile> criteria = EntityQueryCriteria.create(PadFile.class);
             criteria.eq(criteria.proto().companyId(), companyId);
             criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
-            criteria.eq(criteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, sequence.number().getValue()));
+            criteria.eq(criteria.proto().fileCreationNumber(), previousValue);
             PadFile padFile = Persistence.service().retrieve(criteria);
             if (padFile != null) {
                 if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
-                    throw new Error("Can't send FundsTransfer File until previous file is Acknowledged or Canceled");
+                    throw new Error(SimpleMessageFormat.format("Can't send FundsTransfer {0} File until previous file {1} is Acknowledged or Canceled",
+                            fundsTransferType, previousValue));
                 }
 
                 //If a file has rejected the corrected file must be submitted using the same file creation number.
                 if (PadFile.PadFileStatus.Canceled == padFile.status().getValue()) {
-                    return fileCreationNumberFormat(useSimulator, sequence.number().getValue());
+                    return previousValue;
                 }
             }
         }
@@ -253,7 +255,8 @@ public class FundsTransferCaledon {
             criteria.eq(criteria.proto().fundsTransferType(), fundsTransferType);
             criteria.eq(criteria.proto().fileCreationNumber(), fileCreationNumberFormat(useSimulator, value));
             if (Persistence.service().count(criteria) > 0) {
-                throw new Error(SimpleMessageFormat.format("FundsTransfer FileCreationNumber sequence is duplicated, the number ''{0}'' already exists", value));
+                throw new Error(SimpleMessageFormat.format("FundsTransfer {0} FileCreationNumber sequence is duplicated, the number ''{1}'' already exists",
+                        fundsTransferType, value));
             }
         }
 
