@@ -100,7 +100,6 @@ public interface SiteDescriptor extends Descriptor {
     @Owned
     ResidentPortalSettings residentPortalSettings();
 
-    @Owned
     SiteImageResource crmLogo();
 
     // Content ================================================================
