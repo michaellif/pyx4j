@@ -192,10 +192,11 @@ public class TenantMapper {
     private void setEmail(YardiCustomer yardiCustomer, Customer customer) {
         String email = retrieveYardiCustomerEmail(yardiCustomer);
         if (!CommonsStringUtils.isEmpty(email)) {
+            email = email.trim();
             if (EmailValidator.isValid(email)) {
                 customer.person().email().setValue(EmailValidator.normalizeEmailAddress(email));
             } else {
-                log.warn(">> DataValidation CustomerID : {} >> Invalid Email: {} ", yardiCustomer.getCustomerID(), email);
+                log.warn(">> DataValidation CustomerID : {} >> Invalid Email: [{}] ", yardiCustomer.getCustomerID(), email);
                 if (executionMonitor != null) {
                     executionMonitor.addInfoEvent("DataValidation", CompletionType.failed,
                             "Invalid Email: " + email + " for CustomerID " + yardiCustomer.getCustomerID(), null);
