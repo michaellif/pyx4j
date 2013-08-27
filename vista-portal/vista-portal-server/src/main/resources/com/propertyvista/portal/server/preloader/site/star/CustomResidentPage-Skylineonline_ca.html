@@ -92,6 +92,27 @@ div.ButtonText,button.gwt-Button{
 	text-shadow: 0 2px 4px #000000;
 }
 
+button.gwt-Button {
+	min-width: 7em;
+	padding: 3px;
+    margin-top: 2em !important;
+}
+
+.DialogButtonsPanel .Button {
+    height: auto !important;
+}
+.FieldEditorPanel .Button {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)";
+	height: 17px;
+}
+.FieldEditorPanel .Button:hover {
+	background: none repeat scroll 0 0 transparent;
+	border: medium none;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)";
+}
+
 .ProvideTIBGetTenantSure .ButtonText {
 	text-transform: inherit;
 }
@@ -108,10 +129,6 @@ div.secondaryNavig .MainMenuLabel:hover {
 
 div#siteAuthInsert {
 	bottom: 0 !important;
-}
-
-div.WidgetDecoratorComponent input,div.WidgetDecoratorComponent textarea,div.WidgetDecoratorComponent select
-	{
 }
 
 ol li {
@@ -133,7 +150,7 @@ ol li {
 .DialogCaption {
 	background: #5c8aa7 !important;
 	color: #fff !important;
-	padding-left: 0.5em;
+	padding: 4px 5px 5px !important;
 }
 
 .gwt-DatePicker {
@@ -153,7 +170,6 @@ ol li {
 	color: #ffffff;
 }
 
-
 .DatePickerYearNavigation > table td {
     border-top: 0.1em solid #5C8AA7 !important;
 }
@@ -166,6 +182,32 @@ ol li {
     overflow: visible !important;
 }
 
+.LandingViewSectionContent {
+    text-align: center;
+}
+.LandingInputField {
+    text-align: left;
+}
+.WidgetDecorator.LandingInputField {
+    width: 250px !important;
+}
+.ValidationLabel {
+    margin-top: 10px !important;
+}
+.LandingInputField .FieldPanel.WidgetDecoratorComponent {
+	width: 20px;
+}
+
+.DialogDefaultButtonsToolbar {
+    float: right;
+    margin: 5px;
+}
+.WidgetDecoratorComponent select {
+    width: 200px !important;
+}
+.PaymentEditorForm {
+    width: auto !important;
+}
 </style>
 
 </head>

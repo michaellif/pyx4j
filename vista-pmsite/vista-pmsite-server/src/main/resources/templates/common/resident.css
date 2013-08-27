@@ -1748,15 +1748,7 @@ ul.footer_locations li {
 .TenantSureManagementStatusDetailsPanel {
     display: inline-block;
     vertical-align: middle;
-    width: 65%;
-}
-
-
-.TenantSureManagementActionsPanel {
-    display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-    width: 35%;
+    width: 100%;
 }
 
 
