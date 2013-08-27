@@ -497,7 +497,7 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
     }
 
     private void paymentFormValidationHack(final AsyncCallback<VoidSerializable> callback, final int iterNumber) {
-        if (iterNumber == 5) {
+        if (iterNumber == 10) {
             MessageDialog.info(i18n.tr("You must fill out the form and accept the Pre-Authorized Payments Agreement in order to proceed!"));
         } else {
             new Timer() {
@@ -509,10 +509,13 @@ public class TenantSurePurchaseViewImpl extends Composite implements TenantSureP
                         TenantSurePurchaseViewImpl.this.paymentSucceededCallback = callback;
                         presenter.onQuoteAccepted();
                     } else {
+                        paymentMethodForm.revalidate();
+                        paymentMethodForm.setUnconditionalValidationErrorRendering(true);
+
                         paymentFormValidationHack(callback, iterNumber + 1);
                     }
                 }
-            }.schedule(iterNumber * 2);
+            }.schedule(iterNumber * 200);
         }
     }
 
