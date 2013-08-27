@@ -149,4 +149,16 @@ public final class VistaDevPreloadConfig implements Serializable {
         return config;
     }
 
+    public static VistaDevPreloadConfig createPerfomanceMax(int numTenants) {
+        VistaDevPreloadConfig config = new VistaDevPreloadConfig();
+        config.numTenants = numTenants;
+
+        config.numResidentialBuildings = numTenants / (config.numFloors * config.numUnitsPerFloor);
+        config.oneBillOnePayment = true;
+
+        config.numOfLeasesWithNoSimulation = 0;
+
+        return config;
+    }
+
 }

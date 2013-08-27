@@ -103,6 +103,9 @@ public class DBResetServlet extends HttpServlet {
         @Translate("Drop All and Preload One 'vista' PMC : Mini version for UI Design (~30 seconds)")
         vistaMini,
 
+        @Translate("Drop All and Preload One 'vista' PMC : Perfomance tests version (~25 minutes)")
+        vistaMax3000,
+
         @Translate("Drop All and Preload all demo PMC : Mockup version  (~5 minutes)")
         allWithMockup,
 
@@ -303,8 +306,8 @@ public class DBResetServlet extends HttpServlet {
                             Mail.getMailService().setDisabled(true);
                             ServerSideFactory.create(CommunicationFacade.class).setDisabled(true);
                             try {
-                                if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.allWithMockup,
-                                        ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
+                                if (EnumSet.of(ResetType.prodReset, ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vistaMax3000,
+                                        ResetType.allWithMockup, ResetType.resetOperationsAndPmc, ResetType.clear).contains(type)) {
                                     Validate.isTrue(!VistaDeployment.isVistaProduction(), "Destruction is disabled");
                                     SchedulerHelper.shutdown();
                                     RDBUtils.resetDatabase();
@@ -366,6 +369,9 @@ public class DBResetServlet extends HttpServlet {
                                     }
                                     break;
                                 case vistaMini:
+                                    preloadPmc(req, out, prodPmcNameCorrections(DemoPmc.vista.name()), type);
+                                    break;
+                                case vistaMax3000:
                                     preloadPmc(req, out, prodPmcNameCorrections(DemoPmc.vista.name()), type);
                                     break;
                                 case addPmcMockup:
@@ -494,8 +500,8 @@ public class DBResetServlet extends HttpServlet {
             o(out, "PMC Tables created ", TimeUtils.secSince(pmcStart));
         }
 
-        if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.addPmcMockup, ResetType.allAddMockup, ResetType.addPmcMockupTest1)
-                .contains(type)) {
+        if (!EnumSet.of(ResetType.all, ResetType.allMini, ResetType.vistaMini, ResetType.vistaMax3000, ResetType.addPmcMockup, ResetType.allAddMockup,
+                ResetType.addPmcMockupTest1).contains(type)) {
             RDBUtils.deleteFromAllEntityTables();
         }
         CacheService.reset();
@@ -513,6 +519,9 @@ public class DBResetServlet extends HttpServlet {
         case vistaMini:
         case allMini:
             cfg = VistaDevPreloadConfig.createUIDesignMini();
+            break;
+        case vistaMax3000:
+            cfg = VistaDevPreloadConfig.createPerfomanceMax(3000);
             break;
         default:
             cfg = VistaDevPreloadConfig.createDefault();
