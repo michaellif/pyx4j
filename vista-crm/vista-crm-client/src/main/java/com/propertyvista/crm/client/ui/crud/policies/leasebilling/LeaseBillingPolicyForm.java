@@ -325,7 +325,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                         } else if (value.compareTo(padCalcDayOffset.getValue()) >= 0) {
                             return null;
                         } else {
-                            return new ValidationError(component, i18n.tr("Must be greater than or equals to {0}", proto().padCalculationDayOffset().getMeta()
+                            return new ValidationError(component, i18n.tr("Must be greater than or equal to {0}", proto().padCalculationDayOffset().getMeta()
                                     .getCaption()));
                         }
                     }
@@ -347,8 +347,7 @@ public class LeaseBillingPolicyForm extends PolicyDTOTabPanelBasedForm<LeaseBill
                     finalDueDayOffset.setOptions(makeList(0, maxOffset));
                     billDayOffset.setOptions(makeList(-maxOffset / 2, -1));
                     padCalcDayOffset.setOptions(makeList(-maxOffset / 2, maxOffset / 2));
-                    // TODO - validate pmnt >= calc
-                    padExecDayOffset.setOptions(makeList(0, maxOffset / 2));
+                    padExecDayOffset.setOptions(makeList(-maxOffset / 2, maxOffset / 2));
                 }
             }
 
