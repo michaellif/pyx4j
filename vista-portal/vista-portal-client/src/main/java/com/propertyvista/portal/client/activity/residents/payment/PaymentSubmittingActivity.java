@@ -25,23 +25,23 @@ import com.pyx4j.site.rpc.AppPlace;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittedView;
+import com.propertyvista.portal.client.ui.residents.payment.PaymentSubmittingView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmittingService;
 
-public class PaymentSubmittedActivity extends SecurityAwareActivity implements PaymentSubmittedView.Presenter {
+public class PaymentSubmittingActivity extends SecurityAwareActivity implements PaymentSubmittingView.Presenter {
 
-    private final PaymentSubmittedView view;
+    private final PaymentSubmittingView view;
 
-    protected final PaymentSubmittedService srv;
+    protected final PaymentSubmittingService srv;
 
     private final Key entityId;
 
-    public PaymentSubmittedActivity(AppPlace place) {
-        this.view = PortalSite.getViewFactory().instantiate(PaymentSubmittedView.class);
+    public PaymentSubmittingActivity(AppPlace place) {
+        this.view = PortalSite.getViewFactory().instantiate(PaymentSubmittingView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(PaymentSubmittedService.class);
+        srv = GWT.create(PaymentSubmittingService.class);
 
         entityId = place.getItemId();
     }

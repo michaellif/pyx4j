@@ -14,12 +14,12 @@
 package com.propertyvista.portal.client.ui.residents.payment;
 
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.client.ui.residents.ViewImpl;
+import com.propertyvista.portal.client.ui.residents.View;
 
-public class PaymentSubmittedViewImpl extends ViewImpl<PaymentRecordDTO> implements PaymentSubmittedView {
+public interface PaymentSubmittingView extends View<PaymentRecordDTO> {
 
-    public PaymentSubmittedViewImpl() {
-        super(true, true);
-        setForm(new PaymentSubmittedViewForm(this));
+    interface Presenter extends View.Presenter<PaymentRecordDTO> {
+
+        void goToAutoPay();
     }
 }

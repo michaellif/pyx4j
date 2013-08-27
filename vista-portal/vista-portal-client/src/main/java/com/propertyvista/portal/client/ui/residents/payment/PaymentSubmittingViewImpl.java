@@ -7,20 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-12
+ * Created on 2013-04-10
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.services.resident;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
-import com.pyx4j.commons.Key;
-import com.pyx4j.rpc.shared.IService;
+package com.propertyvista.portal.client.ui.residents.payment;
 
 import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.client.ui.residents.ViewImpl;
 
-public interface PaymentSubmittedService extends IService {
+public class PaymentSubmittingViewImpl extends ViewImpl<PaymentRecordDTO> implements PaymentSubmittingView {
 
-    void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
+    public PaymentSubmittingViewImpl() {
+        super(true, true);
+        setForm(new PaymentSubmittingViewForm(this));
+    }
 }

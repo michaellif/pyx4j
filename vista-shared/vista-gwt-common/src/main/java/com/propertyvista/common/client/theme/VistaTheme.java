@@ -29,7 +29,7 @@ import com.propertyvista.common.client.ui.components.VistaTabLayoutPanel;
 public class VistaTheme extends Theme {
 
     public static enum StyleName implements IStyleName {
-        warningMessage
+        infoMessage, warningMessage
     }
 
     public VistaTheme() {
@@ -589,6 +589,12 @@ public class VistaTheme extends Theme {
         style.addProperty("font-size", "1.2em");
         style.addProperty("font-weight", "bolder");
         style.addProperty("color", "#C03A47");
+        addStyle(style);
+
+        style = new Style(".", StyleName.infoMessage);
+        style.addProperty("font-size", "1.2em");
+        style.addProperty("font-weight", "bolder");
+        style.addProperty("color", ThemeColor.foreground);
         addStyle(style);
     }
 

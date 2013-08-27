@@ -106,12 +106,12 @@ public class PortalSiteMap implements SiteMap {
             public static class PayNow extends AppPlace {
             }
 
-            public static class PaymentSubmitted extends AppPlace {
+            public static class PaymentSubmitting extends AppPlace {
 
-                public PaymentSubmitted() {
+                public PaymentSubmitting() {
                 }
 
-                public PaymentSubmitted(Key paymentRecordID) {
+                public PaymentSubmitting(Key paymentRecordID) {
                     formPlace(paymentRecordID);
                 }
             }
