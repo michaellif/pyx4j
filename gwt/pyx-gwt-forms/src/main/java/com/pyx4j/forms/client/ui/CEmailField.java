@@ -23,6 +23,7 @@ package com.pyx4j.forms.client.ui;
 import java.text.ParseException;
 
 import com.pyx4j.commons.CommonsStringUtils;
+import com.pyx4j.commons.ValidationUtils;
 import com.pyx4j.forms.client.validators.TextBoxParserValidator;
 import com.pyx4j.i18n.shared.I18n;
 
@@ -67,7 +68,7 @@ public class CEmailField extends CTextFieldBase<String, NTextBox<String>> {
             if (CommonsStringUtils.isEmpty(string)) {
                 return null; // empty value case
             }
-            if (!string.matches(EMAIL_REGEXPR)) {
+            if (!ValidationUtils.isValidEmail(string)) {
                 throw new ParseException(i18n.tr("Not A Valid Email"), 0);
             }
             return string;
