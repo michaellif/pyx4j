@@ -172,12 +172,11 @@ public class EftReportGenerator implements ReportExporter {
 
             ICursorIterator<PaymentRecord> paymentRecordsIter = Persistence.secureQuery(null, criteria, AttachLevel.Attached);
             try {
-
                 while (paymentRecordsIter.hasNext() & !reportProgressStatusHolder.isTerminationRequested()) {
                     PaymentRecord paymentRecord = paymentRecordsIter.next();
                     enhancePaymentRecord(paymentRecord);
                     reportData.eftReportRecords().add(dtoBinder.createDTO(paymentRecord));
-                    if (true) {
+                    if (progress % 100 == 0) {
                         reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, progress, count));
                     }
                     ++progress;
@@ -192,6 +191,7 @@ public class EftReportGenerator implements ReportExporter {
                 reportMetadata.orderBy().isEmpty()
                         || reportMetadata.orderBy().memberPath().getValue()
                                 .equals(EntityFactory.getEntityPrototype(EftReportRecordDTO.class).building().getPath().toString()));
+
         return reportData;
     }
 
@@ -315,22 +315,6 @@ public class EftReportGenerator implements ReportExporter {
 
         }
         return portfoliosBuildings;
-    }
-
-    /** this is for testing progress UI */
-    private void makeMockupProgress() {
-        int dummyMax = 1000;
-        for (int i = 0; i < dummyMax; ++i) {
-            if (reportProgressStatusHolder.isTerminationRequested()) {
-                break;
-            }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-            }
-            reportProgressStatusHolder.set(new ReportProgressStatus(i18n.tr("Gathering Data"), 1, 2, i, dummyMax));
-
-        }
     }
 
 }

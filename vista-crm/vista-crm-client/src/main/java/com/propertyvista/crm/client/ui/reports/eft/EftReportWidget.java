@@ -15,9 +15,11 @@ package com.propertyvista.crm.client.ui.reports.eft;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.RepeatingCommand;
 import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Overflow;
@@ -29,6 +31,7 @@ import com.google.gwt.i18n.client.NumberFormat;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SafeHtmlUtils;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
@@ -64,6 +67,8 @@ public class EftReportWidget extends Composite implements ReportWidget {
 
     private ScrollBarPositionMemento reportScrollBarPositionMemento;
 
+    private boolean isTableReady;
+
     public EftReportWidget() {
         reportHtml = new HTML();
         reportHtml.getElement().getStyle().setPosition(Position.ABSOLUTE);
@@ -75,25 +80,31 @@ public class EftReportWidget extends Composite implements ReportWidget {
         reportHtml.getElement().getStyle().setOverflowX(Overflow.SCROLL);
         reportHtml.getElement().getStyle().setOverflowY(Overflow.AUTO);
         initWidget(reportHtml);
+
+        isTableReady = false;
     }
 
     @Override
-    public void setData(Object data) {
+    public void setData(Object data, final Command onWidgetReady) {
+        reportHtml.setHTML("");
+        isTableReady = false;
+
         if (data == null) {
-            reportHtml.setHTML("");
+            onWidgetReady.execute();
             return;
         }
 
-        EftReportDataDTO eftReportData = (EftReportDataDTO) data;
-        List<EftReportRecordDTO> paymentRecords = eftReportData.eftReportRecords();
+        final EftReportDataDTO eftReportData = (EftReportDataDTO) data;
+        final List<EftReportRecordDTO> paymentRecords = eftReportData.eftReportRecords();
 
         if (paymentRecords.isEmpty()) {
             reportHtml.setHTML(NoResultsHtml.get());
+            onWidgetReady.execute();
             return;
         }
 
-        SafeHtmlBuilder builder = new SafeHtmlBuilder();
-        List<ITableColumnFormatter> columnDescriptors = initColumnDescriptors();
+        final SafeHtmlBuilder builder = new SafeHtmlBuilder();
+        final List<ITableColumnFormatter> columnDescriptors = initColumnDescriptors();
 
         int totalWidth = 0;
         for (ITableColumnFormatter formatter : columnDescriptors) {
@@ -119,44 +130,116 @@ public class EftReportWidget extends Composite implements ReportWidget {
         builder.appendHtmlConstant("<tbody class=\"" + CommonReportStyles.RReportTableScrollableBody.name() + "\">");
         builder.appendHtmlConstant("</tr>");
 
-        String currentPropertyCode = paymentRecords.get(0).building().getValue();
-        BigDecimal propertyCodeTotal = new BigDecimal("0.00");
-        BigDecimal overallTotal = new BigDecimal("0.00");
+        final NumberFormat currencyFormat = NumberFormat.getFormat(paymentRecords.get(0).amount().getMeta().getFormat());
 
-        NumberFormat currencyFormat = NumberFormat.getFormat(paymentRecords.get(0).amount().getMeta().getFormat());
+        RepeatingCommand rc = new RepeatingCommand() {
 
-        for (EftReportRecordDTO paymentRecord : paymentRecords) {
-            if (eftReportData.agregateByBuildings().isBooleanTrue()) {
-                if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
+            private final Iterator<EftReportRecordDTO> paymentRecordIterator = paymentRecords.iterator();
 
-                    appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
+            private String currentPropertyCode = paymentRecords.get(0).building().getValue();
 
-                    currentPropertyCode = paymentRecord.building().getValue();
+            private BigDecimal propertyCodeTotal = new BigDecimal("0.00");
 
-                    propertyCodeTotal = new BigDecimal("0.00");
+            private BigDecimal overallTotal = new BigDecimal("0.00");
+
+            private int progress = 0;
+
+            @Override
+            public boolean execute() {
+                if (paymentRecordIterator.hasNext()) {
+                    reportHtml.setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>")
+                            .appendEscaped(i18n.tr("Preparing report table (record {0} of {1})", progress, paymentRecords.size())).appendHtmlConstant("</div>")
+                            .toSafeHtml());
+                    int i = 0;
+                    while (paymentRecordIterator.hasNext() & (i < 300)) {
+                        ++i;
+                        EftReportRecordDTO paymentRecord = paymentRecordIterator.next();
+                        if (eftReportData.agregateByBuildings().isBooleanTrue()) {
+                            if (!currentPropertyCode.equals(paymentRecord.building().getValue())) {
+                                appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                                currentPropertyCode = paymentRecord.building().getValue();
+                                propertyCodeTotal = new BigDecimal("0.00");
+                            }
+                            propertyCodeTotal = propertyCodeTotal.add(paymentRecord.amount().getValue());
+                        }
+                        overallTotal = overallTotal.add(paymentRecord.amount().getValue());
+
+                        builder.appendHtmlConstant("<tr>");
+                        for (ITableColumnFormatter desc : columnDescriptors) {
+                            builder.appendHtmlConstant("<td style=\"width: " + desc.getWidth() + "px;\">");
+                            builder.append(desc.formatContent(paymentRecord));
+                            builder.appendHtmlConstant("</td>");
+                        }
+                        builder.appendHtmlConstant("</tr>");
+                    }
+                    progress += i;
+                    return true;
+                } else {
+                    reportHtml.setHTML(new SafeHtmlBuilder().appendHtmlConstant("<div style='text-align: center;'>").appendEscaped("Finished...")
+                            .appendHtmlConstant("</div>").toSafeHtml());
+
+                    if (eftReportData.agregateByBuildings().isBooleanTrue()) {
+                        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
+                    }
+                    appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"),
+                            new BigDecimal(paymentRecords.size()));
+                    appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $:"), overallTotal);
+
+                    builder.appendHtmlConstant("</tbody>");
+                    builder.appendHtmlConstant("</table>");
+
+                    setReportTable(builder.toSafeHtml().asString(), null);
+                    onWidgetReady.execute();
+                    return false;
                 }
-                propertyCodeTotal = propertyCodeTotal.add(paymentRecord.amount().getValue());
             }
-            overallTotal = overallTotal.add(paymentRecord.amount().getValue());
+        };
+        Scheduler.get().scheduleIncremental(rc);
 
-            builder.appendHtmlConstant("<tr>");
-            for (ITableColumnFormatter desc : columnDescriptors) {
-                builder.appendHtmlConstant("<td style=\"width: " + desc.getWidth() + "px;\">");
-                builder.append(desc.formatContent(paymentRecord));
-                builder.appendHtmlConstant("</td>");
-            }
-            builder.appendHtmlConstant("</tr>");
+    }
+
+    @Override
+    public Object getMemento() {
+        if (isTableReady) {
+            return new Object[] { reportHtml.getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
+        } else {
+            return null;
         }
-        if (eftReportData.agregateByBuildings().isBooleanTrue()) {
-            appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $ for Building {0}:", currentPropertyCode), propertyCodeTotal);
+    }
+
+    @Override
+    public void setMemento(final Object memento, Command onWidgetReady) {
+        isTableReady = false;
+        if (memento != null) {
+            String html = (String) (((Object[]) memento)[0]);
+            setReportTable(html, new Command() {
+                @Override
+                public void execute() {
+                    Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                        @Override
+                        public void execute() {
+                            final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                            ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) (((Object[]) memento)[1]);
+                            if (scrollBarPositionMementi[0] != null) {
+                                reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
+                                reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
+                            }
+                            if (scrollBarPositionMementi[1] != null) {
+                                tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
+                                tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            setData(null, onWidgetReady);
         }
-        appendRenderedTotalRow(builder, NumberFormat.getFormat("#,##0"), i18n.tr("Total # of Payment Records:"), new BigDecimal(paymentRecords.size()));
-        appendRenderedTotalRow(builder, currencyFormat, i18n.tr("Total $:"), overallTotal);
+        onWidgetReady.execute();
+    }
 
-        builder.appendHtmlConstant("</tbody>");
-        builder.appendHtmlConstant("</table>");
-
-        reportHtml.setHTML(builder.toSafeHtml());
+    private void setReportTable(String safeHtmlReportTable, final Command onSetComplete) {
+        reportHtml.setHTML(safeHtmlReportTable);
         reportHtml.addDomHandler(new ScrollHandler() {
             @Override
             public void onScroll(ScrollEvent event) {
@@ -184,29 +267,13 @@ public class EftReportWidget extends Composite implements ReportWidget {
                     }
                 });
 
+                if (onSetComplete != null) {
+                    onSetComplete.execute();
+                }
+                isTableReady = true;
             }
         });
-    }
 
-    @Override
-    public Object getMemento() {
-        return new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento };
-    }
-
-    @Override
-    public void setMemento(Object memento) {
-        if (memento != null) {
-            final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
-            ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) memento;
-            if (scrollBarPositionMementi[0] != null) {
-                reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
-                reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
-            }
-            if (scrollBarPositionMementi[1] != null) {
-                tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
-                tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
-            }
-        }
     }
 
     private final static List<ITableColumnFormatter> initColumnDescriptors() {

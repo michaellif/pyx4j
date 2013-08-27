@@ -13,12 +13,14 @@
  */
 package com.propertyvista.crm.client.ui.reports.customercreditcheck;
 
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -79,13 +81,15 @@ public class CustomerCreditCheckReportWidget implements ReportWidget {
     }
 
     @Override
-    public void setData(Object data) {
+    public void setData(Object data, Command onWidgetReady) {
+        reportHtml.setHTML("");
         if (data == null) {
-            reportHtml.setHTML("");
+            onWidgetReady.execute();
             return;
         }
         CustomerCreditCheckReportDataDTO reportData = (CustomerCreditCheckReportDataDTO) data;
         if (reportData.unitStatuses.isEmpty()) {
+            onWidgetReady.execute();
             reportHtml.setHTML(NoResultsHtml.get());
             return;
         }
@@ -123,20 +127,31 @@ public class CustomerCreditCheckReportWidget implements ReportWidget {
                 scrollBarPositionMemento = new ScrollBarPositionMemento(reportHtml.getElement().getScrollLeft(), reportHtml.getElement().getScrollTop());
             }
         }, ScrollEvent.getType());
+
+        onWidgetReady.execute();
     }
 
     @Override
     public Object getMemento() {
-        return scrollBarPositionMemento;
+        return new Object[] { reportHtml.getHTML(), scrollBarPositionMemento };
     }
 
     @Override
-    public void setMemento(Object memento) {
+    public void setMemento(final Object memento, Command onWidgetReady) {
         if (memento != null) {
-            ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) memento;
-            reportHtml.getElement().setScrollLeft(scrollBarPosition.posX);
-            reportHtml.getElement().setScrollTop(scrollBarPosition.posY);
+            String html = (String) (((Object[]) memento)[0]);
+            reportHtml.setHTML(html);
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+                @Override
+                public void execute() {
+                    ScrollBarPositionMemento scrollBarPosition = (ScrollBarPositionMemento) (((Object[]) memento)[1]);
+                    reportHtml.getElement().setScrollLeft(scrollBarPosition.posX);
+                    reportHtml.getElement().setScrollTop(scrollBarPosition.posY);
+                }
+            });
+
         }
+        onWidgetReady.execute();
     }
 
     private void cell(SafeHtmlBuilder bb, String data) {

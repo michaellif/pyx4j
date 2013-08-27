@@ -26,6 +26,7 @@ import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.event.dom.client.ScrollEvent;
 import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.EventListener;
@@ -67,15 +68,18 @@ public class ResidentInsuranceReportWidget extends Composite implements ReportWi
     }
 
     @Override
-    public void setData(Object data) {
+    public void setData(Object data, Command onWidgetReady) {
+        reportHtml.setHTML("");
+
         if (data == null) {
-            reportHtml.setHTML("");
+            onWidgetReady.execute();
             return;
         }
 
         Vector<ResidentInsuranceStatusDTO> reportData = (Vector<ResidentInsuranceStatusDTO>) data;
         if (reportData.isEmpty()) {
             reportHtml.setHTML(NoResultsHtml.get());
+            onWidgetReady.execute();
             return;
         }
 
@@ -142,27 +146,40 @@ public class ResidentInsuranceReportWidget extends Composite implements ReportWi
             }
         });
 
+        onWidgetReady.execute();
     }
 
     @Override
     public Object getMemento() {
-        return new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento };
+        return new Object[] { reportHtml.getHTML(), new ScrollBarPositionMemento[] { reportScrollBarPositionMemento, tableBodyScrollBarPositionMemento } };
     }
 
     @Override
-    public void setMemento(Object memento) {
+    public void setMemento(final Object memento, Command onWidgetReady) {
         if (memento != null) {
-            final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
-            ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) memento;
-            if (scrollBarPositionMementi[0] != null) {
-                reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
-                reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
-            }
-            if (scrollBarPositionMementi[1] != null) {
-                tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
-                tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
-            }
+            String html = (String) (((Object[]) memento)[0]);
+            reportHtml.setHTML(html);
+            Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                @Override
+                public void execute() {
+                    final Element tableBody = reportHtml.getElement().getElementsByTagName("tbody").getItem(0);
+                    if (tableBody == null) {
+                        return;
+                    }
+                    ScrollBarPositionMemento[] scrollBarPositionMementi = (ScrollBarPositionMemento[]) (((Object[]) memento)[1]);
+                    if (scrollBarPositionMementi[0] != null) {
+                        reportHtml.getElement().setScrollLeft(scrollBarPositionMementi[0].posX);
+                        reportHtml.getElement().setScrollTop(scrollBarPositionMementi[0].posY);
+                    }
+                    if (scrollBarPositionMementi[1] != null) {
+                        tableBody.setScrollLeft(scrollBarPositionMementi[1].posX);
+                        tableBody.setScrollTop(scrollBarPositionMementi[1].posY);
+                    }
+                }
+            });
+
         }
+        onWidgetReady.execute();
     }
 
     private List<ITableColumnFormatter> initColumnDescriptors() {
