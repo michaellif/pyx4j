@@ -33,5 +33,7 @@ BEGIN TRANSACTION;
         
 COMMIT;
 
+DROP FUNCTION _dba_.fix_customer_user(text);
+
 
 
