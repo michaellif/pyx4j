@@ -77,6 +77,9 @@ public class PaymentRecordsSummaryGadget extends GadgetInstanceBase<PaymentsSumm
                         new MemberColumnDescriptor.Builder(proto.check()).build(),
                         new MemberColumnDescriptor.Builder(proto.eCheck()).build(),
                         new MemberColumnDescriptor.Builder(proto.eft()).build(),
+                        new MemberColumnDescriptor.Builder(proto.visa()).build(),
+                        new MemberColumnDescriptor.Builder(proto.visaDebit()).build(),
+                        new MemberColumnDescriptor.Builder(proto.masterCard()).build(),
                         new MemberColumnDescriptor.Builder(proto.cc()).build(),
                         new MemberColumnDescriptor.Builder(proto.interac()).build()
                 

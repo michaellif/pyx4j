@@ -28,6 +28,8 @@ import com.pyx4j.unit.server.mock.TestLifecycle;
 import com.propertyvista.config.tests.VistaDBTestBase;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.policy.framework.OrganizationPoliciesNode;
@@ -114,6 +116,12 @@ public class PaymentsSummaryHelperTestBase extends VistaDBTestBase {
             PaymentRecord.PaymentStatus paymentStatus) {
         LeasePaymentMethod paymentMethod = EntityFactory.create(LeasePaymentMethod.class);
         paymentMethod.type().setValue(paymentType);
+        if (paymentType == PaymentType.CreditCard) {
+            CreditCardInfo ccInfo = EntityFactory.create(CreditCardInfo.class);
+            ccInfo.cardType().setValue(CreditCardType.MasterCard);
+            paymentMethod.details().set(ccInfo);
+        }
+
         LeaseTermTenant tenant = lease.currentTerm().version().tenants().get(0);
         if (tenant.isValueDetached()) {
             Persistence.service().retrieve(tenant);

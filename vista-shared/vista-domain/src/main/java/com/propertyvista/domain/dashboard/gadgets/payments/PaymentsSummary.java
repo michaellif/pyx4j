@@ -55,15 +55,30 @@ public interface PaymentsSummary extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> eCheck();
 
-    @Caption(name = "EFT")
+    @Caption(name = "Direct Banking")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> eft();
 
-    @Caption(name = "CC")
+    @Caption(name = "Credit Card Total")
     @Format("#,##0.00")
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> cc();
+
+    @Caption(name = "Visa")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> visa();
+
+    @Caption(name = "Visa Debit")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> visaDebit();
+
+    @Caption(name = "Master Card")
+    @Format("#,##0.00")
+    @Editor(type = EditorType.money)
+    IPrimitive<BigDecimal> masterCard();
 
     @Format("#,##0.00")
     @Editor(type = EditorType.money)

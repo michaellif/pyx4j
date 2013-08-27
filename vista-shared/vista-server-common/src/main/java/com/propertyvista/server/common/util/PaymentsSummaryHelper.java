@@ -14,7 +14,9 @@
 package com.propertyvista.server.common.util;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.entity.server.Executable;
@@ -33,6 +35,9 @@ import com.propertyvista.domain.dashboard.gadgets.payments.PaymentsSummary;
 import com.propertyvista.domain.financial.MerchantAccount;
 import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.financial.PaymentRecord.PaymentStatus;
+import com.propertyvista.domain.payment.CreditCardInfo;
+import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.PaymentDetails;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.property.asset.building.Building;
 
@@ -56,27 +61,31 @@ public final class PaymentsSummaryHelper {
 
     private class PaymentTypeMapper {
 
-        private final Path[] memberMap;
+        private final Map<Object, Path> memberMap;
 
         public PaymentTypeMapper() {
-            memberMap = new Path[PaymentType.values().length];
+            memberMap = new HashMap<Object, Path>();
             PaymentsSummary proto = EntityFactory.create(PaymentsSummary.class);
 
             bind(PaymentType.Cash, proto.cash());
             bind(PaymentType.Check, proto.check());
             bind(PaymentType.Echeck, proto.eCheck());
-            bind(PaymentType.CreditCard, proto.cc());
+            bind(CreditCardType.Visa, proto.visa());
+            bind(CreditCardType.VisaDebit, proto.visaDebit());
+            bind(CreditCardType.MasterCard, proto.masterCard());
             bind(PaymentType.DirectBanking, proto.eft());
             bind(PaymentType.Interac, proto.interac());
         }
 
-        public IPrimitive<BigDecimal> getMember(PaymentsSummary summary, PaymentType type) {
-            return (IPrimitive<BigDecimal>) summary.getMember(memberMap[type.ordinal()]);
+        public IPrimitive<BigDecimal> getMember(PaymentsSummary summary, PaymentType type, PaymentDetails paymentDetails) {
+            Object memberKey = type != PaymentType.CreditCard ? type : paymentDetails.<CreditCardInfo> duplicate(CreditCardInfo.class).cardType().getValue();
+            return (IPrimitive<BigDecimal>) summary.getMember(memberMap.get(memberKey));
         }
 
-        protected final void bind(PaymentType type, IPrimitive<BigDecimal> member) {
-            memberMap[type.ordinal()] = member.getPath();
+        private void bind(Object key, IPrimitive<BigDecimal> valueMember) {
+            memberMap.put(key, valueMember.getPath());
         }
+
     }
 
     private final PaymentTypeMapper paymentTypeMapper;
@@ -109,7 +118,7 @@ public final class PaymentsSummaryHelper {
             throw new IllegalArgumentException("paymentStatus is a mandatory argument");
         }
         if (snapshotDay == null) {
-            throw new IllegalArgumentException("snapshotDay is a amandatory argument");
+            throw new IllegalArgumentException("snapshotDay is a mandatory argument");
         }
 
         PaymentsSummary summary = initPaymentsSummary(snapshotDay);
@@ -125,8 +134,13 @@ public final class PaymentsSummaryHelper {
                 PaymentRecord r = i.next();
                 Persistence.service().retrieve(r.merchantAccount());
                 PaymentType paymentType = r.paymentMethod().type().getValue();
-                IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
+                PaymentDetails paymentDetails = r.paymentMethod().details();
+                IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType, paymentDetails);
                 amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+
+                if (paymentType == PaymentType.CreditCard) {
+                    summary.cc().setValue(summary.cc().getValue().add(r.amount().getValue()));
+                }
             }
         } finally {
             i.close();
@@ -145,7 +159,7 @@ public final class PaymentsSummaryHelper {
             throw new IllegalArgumentException("paymentStatus is a mandatory argument");
         }
         if (snapshotDay == null) {
-            throw new IllegalArgumentException("snapshotDay is a amandatory argument");
+            throw new IllegalArgumentException("snapshotDay is a mandatory argument");
         }
 
         PaymentsSummary summary = initPaymentsSummary(snapshotDay);
@@ -161,8 +175,12 @@ public final class PaymentsSummaryHelper {
                 PaymentRecord r = i.next();
                 Persistence.service().retrieve(r.merchantAccount());
                 PaymentType paymentType = r.paymentMethod().type().getValue();
-                IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType);
+                PaymentDetails paymentDetails = r.paymentMethod().details();
+                IPrimitive<BigDecimal> amountMember = paymentTypeMapper.getMember(summary, paymentType, paymentDetails);
                 amountMember.setValue(amountMember.getValue().add(r.amount().getValue()));
+                if (paymentType == PaymentType.CreditCard) {
+                    summary.cc().setValue(summary.cc().getValue().add(r.amount().getValue()));
+                }
             }
         } finally {
             i.close();
@@ -178,13 +196,9 @@ public final class PaymentsSummaryHelper {
      */
     public boolean hasPayments(PaymentsSummary summary) {
         final BigDecimal ZERO = new BigDecimal("0.00"); // not using BigDecimal.ZERO because i'm not sure about percision
-        // TODO refactor this access to private value memberMap 
-        for (Path memberPath : paymentTypeMapper.memberMap) {
-            if (!summary.getMember(memberPath).getValue().equals(ZERO)) {
-                return true;
-            }
-        }
-        return false;
+        return !(summary.cash().getValue().equals(ZERO) && summary.check().getValue().equals(ZERO) && summary.eCheck().getValue().equals(ZERO)
+                && summary.eft().getValue().equals(ZERO) && summary.cc().getValue().equals(ZERO) && summary.visa().getValue().equals(ZERO)
+                && summary.visaDebit().getValue().equals(ZERO) && summary.masterCard().getValue().equals(ZERO) && summary.interac().getValue().equals(ZERO));
     }
 
     /**
@@ -251,10 +265,16 @@ public final class PaymentsSummaryHelper {
 
     private PaymentsSummary initPaymentsSummary(LogicalDate snapshotDay) {
         PaymentsSummary summary = EntityFactory.create(PaymentsSummary.class);
+        summary.cash().setValue(new BigDecimal("0.00"));
+        summary.check().setValue(new BigDecimal("0.00"));
+        summary.eCheck().setValue(new BigDecimal("0.00"));
+        summary.eft().setValue(new BigDecimal("0.00"));
+        summary.cc().setValue(new BigDecimal("0.00"));
+        summary.visa().setValue(new BigDecimal("0.00"));
+        summary.visaDebit().setValue(new BigDecimal("0.00"));
+        summary.masterCard().setValue(new BigDecimal("0.00"));
+        summary.interac().setValue(new BigDecimal("0.00"));
 
-        for (PaymentType type : PaymentType.values()) {
-            paymentTypeMapper.getMember(summary, type).setValue(new BigDecimal("0.00"));
-        }
         summary.snapshotDay().setValue(snapshotDay);
 
         return summary;
