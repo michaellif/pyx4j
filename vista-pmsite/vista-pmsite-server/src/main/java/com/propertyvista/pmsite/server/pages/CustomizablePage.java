@@ -45,15 +45,12 @@ public class CustomizablePage extends BasePage implements IMarkupResourceStreamP
         return super.getAssociatedMarkup();
     }
 
+    /**
+     * Page variation is part of the cache key above. This will trigger markup caching per PMC and locale
+     */
     @Override
     public String getVariation() {
-        PMSiteContentManager cm = getCM();
-        if (cm != null && cm.isCustomResidentsContentEnabled()) {
-            // cache markup per PMC + locale
-            return NamespaceManager.getNamespace() + ((PMSiteWebRequest) getRequest()).getSiteLocale().getStringView();
-        } else {
-            return super.getVariation();
-        }
+        return NamespaceManager.getNamespace() + "_" + ((PMSiteWebRequest) getRequest()).getSiteLocale().getStringView();
     }
 
     @Override
