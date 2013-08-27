@@ -21,11 +21,11 @@
 package com.pyx4j.security.server;
 
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+
+import com.pyx4j.commons.ValidationUtils;
 
 public class EmailValidator {
 
@@ -34,15 +34,7 @@ public class EmailValidator {
     }
 
     public static boolean isValid(String email) {
-        // check email using regular expressions
-        Pattern p = Pattern.compile(".+@.+\\.[a-z]+");
-
-        // Match the given string with the pattern
-        Matcher m = p.matcher(email);
-
-        // check whether match is found
-        boolean matchFound = m.matches();
-        if (!matchFound) {
+        if (!ValidationUtils.isValidEmail(email)) {
             return false;
         }
 

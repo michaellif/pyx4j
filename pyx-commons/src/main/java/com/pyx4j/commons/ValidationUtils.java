@@ -50,4 +50,10 @@ public class ValidationUtils {
     public static boolean isSimpleUrl(String url) {
         return url.matches("[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
     }
+
+    // see http://www.regular-expressions.info/email.html
+    public static boolean isValidEmail(String url) {
+        return url
+                .matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
+    }
 }
