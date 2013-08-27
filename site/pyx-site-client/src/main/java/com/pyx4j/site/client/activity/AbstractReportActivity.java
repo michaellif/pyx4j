@@ -28,6 +28,8 @@ import java.util.Vector;
 
 import com.google.gwt.activity.shared.AbstractActivity;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -37,7 +39,6 @@ import com.pyx4j.commons.GWTJava5Helper;
 import com.pyx4j.commons.UserRuntimeException;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.essentials.rpc.report.ReportRequest;
 import com.pyx4j.essentials.rpc.report.ReportService;
 import com.pyx4j.gwt.client.deferred.DeferredProgressListener;
@@ -166,44 +167,45 @@ public abstract class AbstractReportActivity<R extends ReportMetadata> extends A
 
     @Override
     public void apply(boolean forceRefresh) {
-        CachedReportData cachedData = reportDataCache.get(GWTJava5Helper.getSimpleName(view.getReportMetadata().getInstanceValueClass()));
-        if (!forceRefresh && cachedData != null && EntityGraph.fullyEqualValues(view.getReportMetadata(), cachedData.reportMetadata)) {
-            view.setReportData(cachedData.data);
-        } else {
-            reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
-                @Override
-                public void onSuccess(String deferredProcessId) {
-                    view.startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
+        reportsService.generateReportAsync(new DefaultAsyncCallback<String>() {
+            @Override
+            public void onSuccess(String deferredProcessId) {
+                view.startReportGenerationProgress(deferredProcessId, new DeferredProgressListener() {
 
-                        @Override
-                        public void onDeferredSuccess(DeferredProcessProgressResponse result) {
-                            reportsService.getReport(new DefaultAsyncCallback<Serializable>() {
+                    @Override
+                    public void onDeferredSuccess(DeferredProcessProgressResponse result) {
+                        Scheduler.get().scheduleDeferred(new ScheduledCommand() {
+                            @Override
+                            public void execute() {
+                                reportsService.getReport(new DefaultAsyncCallback<Serializable>() {
 
-                                @Override
-                                public void onSuccess(Serializable result) {
-                                    CachedReportData cachedReportData = new CachedReportData();
-                                    cachedReportData.data = result;
-                                    cachedReportData.reportMetadata = view.getReportMetadata().duplicate();
-                                    reportDataCache.put(GWTJava5Helper.getSimpleName(view.getReportMetadata().getInstanceValueClass()), cachedReportData);
-                                    view.setReportData(result);
-                                }
+                                    @Override
+                                    public void onSuccess(Serializable result) {
+                                        CachedReportData cachedReportData = new CachedReportData();
+                                        cachedReportData.data = result;
+                                        cachedReportData.reportMetadata = view.getReportMetadata().duplicate();
+                                        reportDataCache.put(GWTJava5Helper.getSimpleName(view.getReportMetadata().getInstanceValueClass()), cachedReportData);
+                                        view.setReportData(result);
+                                    }
 
-                            });
-                        }
+                                });
+                            }
+                        });
 
-                        @Override
-                        public void onDeferredProgress(DeferredProcessProgressResponse result) {
-                            // TODO Auto-generated method stub
-                        }
+                    }
 
-                        @Override
-                        public void onDeferredError(DeferredProcessProgressResponse result) {
-                            view.setError(result.getMessage());
-                        }
-                    });
-                }
-            }, view.getReportMetadata());
-        }
+                    @Override
+                    public void onDeferredProgress(DeferredProcessProgressResponse result) {
+                        // TODO Auto-generated method stub
+                    }
+
+                    @Override
+                    public void onDeferredError(DeferredProcessProgressResponse result) {
+                        view.setError(result.getMessage());
+                    }
+                });
+            }
+        }, view.getReportMetadata());
     }
 
     @Override

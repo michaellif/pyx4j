@@ -21,14 +21,11 @@
 package com.pyx4j.site.client.ui.reports;
 
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.core.client.Scheduler.ScheduledCommand;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.dom.client.Style.Overflow;
 import com.google.gwt.dom.client.Style.Position;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.place.shared.Place;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -143,8 +140,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     private final FlowPanel errorPanel;
 
-    private boolean hasReportData;
-
     private final ReportWidget reportWidget;
 
     private CEntityForm<R> activeSettingsForm;
@@ -192,11 +187,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             @Override
             public void onApply() {
                 if (presenter != null & activeSettingsForm != null) {
-                    if (activeSettingsForm.isValid()) {
-                        presenter.apply(true);
-                    } else {
-                        activeSettingsForm.setUnconditionalValidationErrorRendering(true);
-                    }
+                    AbstractReport.this.apply();
                 }
             }
 
@@ -228,6 +219,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             @Override
             public void execute() {
                 progressPanel.cancelProgress();
+                showReportWidget();
                 unlockReportSettings();
             }
         }));
@@ -304,21 +296,27 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         this.settingsFormPanel.setWidget(null);
         this.reportSettingsFormControlBar.setEnabled(false);
         this.reportPanel.setWidget(null);
+        this.errorPanel.setVisible(false);
 
         if (reportMetadata != null) {
+            exportButton.setVisible(reportMetadata instanceof ExportableReport);
 
             populateSettingsForm(reportMetadata);
-            reportSettingsFormControlBar.setEnabled(true);
 
             reportWidget.asWidget().getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            showReportWidget();
             reportPanel.setWidget(reportWidget);
-            reportWidget.setData(null);
-
-            exportButton.setVisible(reportMetadata instanceof ExportableReport);
+            reportWidget.setData(null, new Command() {
+                @Override
+                public void execute() {
+                    unlockReportSettings();
+                    resetCaption();
+                }
+            });
+        } else {
+            resetCaption();
         }
 
-        resetCaption();
-        errorPanel.setVisible(false);
     }
 
     @Override
@@ -328,14 +326,18 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
 
     @Override
     public void setReportData(Object data) {
-        unlockReportSettings();
         errorPanel.setVisible(false);
 
-        if (reportWidget != null & data != null) {
-            reportWidget.setData(data);
-            hasReportData = true;
-        } else {
-            hasReportData = false;
+        lockReportSettings();
+        showReportWidget();
+        if (data != null) {
+            reportWidget.asWidget().setVisible(true);
+            reportWidget.setData(data, new Command() {
+                @Override
+                public void execute() {
+                    unlockReportSettings();
+                }
+            });
         }
     }
 
@@ -407,7 +409,6 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
     public void storeState(Place place) {
         getMemento().setCurrentPlace(place);
         getMemento().putObject(MementoKeys.ReportMetadata.name(), activeSettingsForm.getValue());
-        getMemento().putObject(MementoKeys.HasReportData.name(), hasReportData);
         getMemento().putObject(MementoKeys.ReportWidget.name(), reportWidget.getMemento());
     }
 
@@ -416,18 +417,18 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         if (getMemento().mayRestore()) {
             R reportMetadata = (R) getMemento().getObject(MementoKeys.ReportMetadata.name());
             setReportMetadata(reportMetadata);
-            boolean hadData = Boolean.TRUE.equals(getMemento().getObject(MementoKeys.HasReportData.name()));
-            if (hadData) {
-                // TODO: not good: here we rely its not going to be async because activity has cache: apply() has to work with a 'on success' callback
-                presenter.apply(false);
-                Scheduler.get().scheduleDeferred(new ScheduledCommand() {
-                    @Override
-                    public void execute() {
-                        Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
-                        reportWidget.setMemento(reportMemento);
-                    }
-                });
-            }
+
+            Object reportMemento = getMemento().getObject(MementoKeys.ReportWidget.name());
+
+            lockReportSettings();
+
+            reportWidget.setMemento(reportMemento, new Command() {
+                @Override
+                public void execute() {
+                    showReportWidget();
+                    unlockReportSettings();
+                }
+            });
         } else {
             setReportMetadata((R) ((ReportsAppPlace<?>) getMemento().getCurrentPlace()).getReportMetadata());
         }
@@ -450,16 +451,7 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
             reportSettingsFormControlBar.disableModeToggle();
         }
         settingsFormPanel.setWidget(activeSettingsForm);
-        activeSettingsForm.addValueChangeHandler(new ValueChangeHandler<R>() {
-            @Override
-            public void onValueChange(ValueChangeEvent<R> event) {
-                hasReportData = false;
-            }
-        });
-
         activeSettingsForm.populate(reportSettings);
-        activeSettingsForm.setEnabled(true);
-        reportSettingsFormControlBar.setEnabled(true);
     }
 
     private void onSaveSettingsAsClicked() {
@@ -502,16 +494,41 @@ public abstract class AbstractReport<R extends ReportMetadata> extends AbstractP
         }
     }
 
-    private void unlockReportSettings() {
-        if (activeSettingsForm != null) {
-            activeSettingsForm.setEnabled(true);
-        }
-        reportSettingsFormControlBar.setEnabled(true);
+    private void showReportWidget() {
         reportPanel.setVisible(true);
 
         reportProgressHolderPanel.setWidget(null);
         reportProgressControlPanel.setVisible(false);
         progressPanel = null;
+    }
+
+    private void unlockReportSettings() {
+        if (activeSettingsForm != null) {
+            activeSettingsForm.setEnabled(true);
+        }
+        reportSettingsFormControlBar.setEnabled(true);
+    }
+
+    private void lockReportSettings() {
+        if (activeSettingsForm != null) {
+            activeSettingsForm.setEnabled(false);
+        }
+        reportSettingsFormControlBar.setEnabled(false);
+    }
+
+    private void apply() {
+        if (activeSettingsForm.isValid()) {
+            AbstractReport.this.reportWidget.asWidget().setVisible(false);
+            Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+
+                @Override
+                public void execute() {
+                    presenter.apply(true);
+                }
+            });
+        } else {
+            activeSettingsForm.setUnconditionalValidationErrorRendering(true);
+        }
     }
 
 }
