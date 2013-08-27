@@ -20,6 +20,7 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.pyx4j.commons.SimpleMessageFormat;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
@@ -55,9 +56,9 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
 
         // Override Caledon report values by calculating our onw fee
         at.grossPaymentCount().setValue(0);
-        if (at.grossPaymentFee().isNull()) {
-            at.grossPaymentFee().setValue(BigDecimal.ZERO);
-        }
+
+        BigDecimal grossPaymentAmount = BigDecimal.ZERO;
+        BigDecimal grossPaymentFee = BigDecimal.ZERO;
 
         // Validate payment records and add them to this aggregatedTransfer
         for (final PadReconciliationDebitRecord debitRecord : summary.records()) {
@@ -67,23 +68,23 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
             switch (debitRecord.reconciliationStatus().getValue()) {
             case PROCESSED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
-                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
+                    throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
+                    throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' already received");
                 }
                 break;
             case REJECTED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.AcknowledgeProcessed) {
-                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
+                    throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' was not Acknowledged");
                 }
                 if (padDebitRecord.processed().getValue(Boolean.FALSE)) {
-                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' already received");
+                    throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' already received");
                 }
                 break;
             case RETURNED:
                 if (padDebitRecord.processingStatus().getValue() != PadDebitRecordProcessingStatus.ReconciliationProcessed) {
-                    throw new Error("Payment PAD transaction '" + padDebitRecord.getStringView() + "' was not processed");
+                    throw new Error("Payment DirectBanking transaction '" + padDebitRecord.getStringView() + "' was not processed");
                 }
                 break;
             case DUPLICATE:
@@ -97,8 +98,9 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 switch (debitRecord.reconciliationStatus().getValue()) {
                 case PROCESSED:
                     paymentRecord.aggregatedTransfer().set(at);
+                    grossPaymentFee = grossPaymentFee.add(transactionRecord.feeAmount().getValue());
+                    grossPaymentAmount = grossPaymentAmount.add(paymentRecord.amount().getValue());
                     at.grossPaymentCount().setValue(at.grossPaymentCount().getValue() + 1);
-                    at.grossPaymentFee().setValue(at.grossPaymentFee().getValue().add(transactionRecord.feeAmount().getValue()));
                     break;
                 case REJECTED:
                     paymentRecord.aggregatedTransfer().set(at);
@@ -123,6 +125,17 @@ class DirectDebitReconciliationProcessor extends AbstractReconciliationProcessor
                 });
             }
 
+        }
+
+        if (at.grossPaymentFee().isNull()) {
+            at.grossPaymentFee().setValue(BigDecimal.ZERO);
+        }
+        at.grossPaymentFee().setValue(at.grossPaymentFee().getValue().add(grossPaymentFee));
+        at.grossPaymentAmount().setValue(at.grossPaymentAmount().getValue(BigDecimal.ZERO).add(grossPaymentFee));
+
+        if (at.grossPaymentAmount().getValue().compareTo(grossPaymentAmount) != 0) {
+            log.warn(SimpleMessageFormat.format("Unexpected Payment total amount {0} != grossPaymentAmount {1}, grossPaymentFee {2}", grossPaymentAmount,
+                    at.grossPaymentAmount(), at.grossPaymentFee()));
         }
 
         Persistence.service().persist(at);
