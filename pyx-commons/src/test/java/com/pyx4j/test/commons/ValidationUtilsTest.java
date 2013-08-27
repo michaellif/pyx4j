@@ -29,6 +29,7 @@ public class ValidationUtilsTest extends TestCase {
     // see http://blogs.msdn.com/b/testing123/archive/2009/02/05/email-address-test-cases.aspx
     public void testEmail() {
         assertTrue("Valid Email: Valid email", ValidationUtils.isValidEmail("email@domain.com"));
+        assertTrue("Valid Email: Valid email - mixed case in all parts", ValidationUtils.isValidEmail("EMAiL@doMAIN.CoM"));
         assertTrue("Valid Email: Email contains dot in the address field", ValidationUtils.isValidEmail("firstname.lastname@domain.com"));
         assertTrue("Valid Email: Email contains dot with subdomain", ValidationUtils.isValidEmail("email@subdomain.domain.com"));
         assertTrue("Valid Email: Plus sign is considered valid character", ValidationUtils.isValidEmail("firstname+lastname@domain.com"));
