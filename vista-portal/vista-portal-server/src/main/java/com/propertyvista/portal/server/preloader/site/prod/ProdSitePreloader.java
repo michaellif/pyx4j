@@ -64,7 +64,7 @@ public class ProdSitePreloader extends AbstractSitePreloader {
 
     @Override
     protected Integer object1() {
-        return 50;
+        return 200;
     }
 
     @Override
