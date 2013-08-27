@@ -24,10 +24,13 @@ import com.pyx4j.i18n.annotations.I18n;
 @DiscriminatorValue("DirectDebit")
 public interface DirectDebitInfo extends PaymentDetails {
 
-    @Caption(name = "Name On Account")
+    //Name of the payer if provided by the source location code telebanking operator
+    @Caption(name = "Customer name")
     IPrimitive<String> nameOn();
 
+    //If the source location (e.g. TDBANK) sends a trace number for their incoming file, then that trace number is referenced here. Each source location can have a different trace number format.
     IPrimitive<String> traceNumber();
 
+    //Location code assigned to each source (e.g. BMO is 1001)
     IPrimitive<String> locationCode();
 }

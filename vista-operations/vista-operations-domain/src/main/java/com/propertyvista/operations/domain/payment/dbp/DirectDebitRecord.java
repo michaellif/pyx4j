@@ -61,9 +61,11 @@ public interface DirectDebitRecord extends IEntity {
     @Editor(type = EditorType.money)
     IPrimitive<BigDecimal> amount();
 
+    //Trace number unique to the payer's transaction provided by the incoming source location code telebanking operator
     @Length(30)
     IPrimitive<String> paymentReferenceNumber();
 
+    //Name of the payer if provided by the source location code telebanking operator
     @Length(35)
     IPrimitive<String> customerName();
 

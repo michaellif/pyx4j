@@ -22,12 +22,15 @@ import com.pyx4j.i18n.annotations.I18n;
 @I18n(strategy = I18n.I18nStrategy.IgnoreAll)
 public interface DirectDebitRecordTrace extends IEntity {
 
+    //Location code assigned to each source (e.g. BMO is 1001)
     IPrimitive<String> locationCode();
 
     IPrimitive<String> collectionDate();
 
+    //Identification of source of remittance information. Value of 14 represents telebanking/electronic bill payments.
     IPrimitive<String> sourceCode();
 
+    // If the source location (e.g. TDBANK) sends a trace number for their incoming file, then that trace number is referenced here. Each source location can have a different trace number format.
     IPrimitive<String> traceNumber();
 
 }
