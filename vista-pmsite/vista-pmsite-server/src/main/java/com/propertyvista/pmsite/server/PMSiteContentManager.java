@@ -119,8 +119,12 @@ public class PMSiteContentManager implements Serializable {
         }
     }
 
-    protected void setUpdated(boolean updated) {
-        siteUpdated = updated;
+    protected void setSiteUpdatedFlag() {
+        siteUpdated = true;
+    }
+
+    public void clearSiteUpdatedFlag() {
+        siteUpdated = false;
     }
 
     public boolean isSiteUpdated() {

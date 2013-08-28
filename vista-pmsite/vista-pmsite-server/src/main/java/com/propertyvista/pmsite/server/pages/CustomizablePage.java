@@ -41,6 +41,7 @@ public class CustomizablePage extends BasePage implements IMarkupResourceStreamP
             IMarkupCache cache = MarkupFactory.get().getMarkupCache();
             String cacheKey = new DefaultMarkupCacheKeyProvider().getCacheKey(this, getClass());
             cache.removeMarkup(cacheKey);
+            getCM().clearSiteUpdatedFlag();
         }
         return super.getAssociatedMarkup();
     }

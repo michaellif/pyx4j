@@ -100,7 +100,7 @@ public abstract class BasePage extends WebPage {
         // true if only resident portal is enabled
         boolean residentOnly = cm.isResidentOnlyMode();
 
-        if (residentOnly && !(this instanceof MyCommunityPage) && !(this instanceof StaticPage)) {
+        if (residentOnly && !(this instanceof MyCommunityPage)) {
             // render residents page for any other request
             getRequestCycle().replaceAllRequestHandlers(
                     new RenderPageRequestHandler(new PageProvider(MyCommunityPage.class), RenderPageRequestHandler.RedirectPolicy.AUTO_REDIRECT));

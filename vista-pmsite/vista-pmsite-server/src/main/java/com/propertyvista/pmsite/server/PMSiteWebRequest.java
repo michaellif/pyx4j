@@ -50,14 +50,10 @@ public class PMSiteWebRequest extends ServletWebRequest {
         if (cm == null) {
             cm = new PMSiteContentManager();
             CacheService.put(PMSiteContentCache.cacheKey, cm);
-        } else {
-            if (cm.refreshRequired()) {
-                cm = new PMSiteContentManager();
-                CacheService.put(PMSiteContentCache.cacheKey, cm);
-                cm.setUpdated(true);
-            } else {
-                cm.setUpdated(false);
-            }
+        } else if (cm.refreshRequired()) {
+            cm = new PMSiteContentManager();
+            CacheService.put(PMSiteContentCache.cacheKey, cm);
+            cm.setSiteUpdatedFlag();
         }
         contentManager = cm;
 
