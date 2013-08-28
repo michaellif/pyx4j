@@ -45,6 +45,7 @@ import com.propertyvista.domain.payment.CashInfo;
 import com.propertyvista.domain.payment.CheckInfo;
 import com.propertyvista.domain.payment.CreditCardInfo;
 import com.propertyvista.domain.payment.CreditCardInfo.CreditCardType;
+import com.propertyvista.domain.payment.DirectDebitInfo;
 import com.propertyvista.domain.payment.EcheckInfo;
 import com.propertyvista.domain.payment.InteracInfo;
 import com.propertyvista.domain.payment.PaymentDetails;
@@ -243,7 +244,10 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
                 }
                 break;
             case DirectBanking:
-                setPaymentDetailsWidget(null);
+                editor = createDirectDebitInfoEditor();
+                if (details.getInstanceValueClass() != DirectDebitInfo.class) {
+                    details.set(EntityFactory.create(DirectDebitInfo.class));
+                }
                 break;
             default:
                 break;
@@ -284,15 +288,22 @@ public class PaymentMethodEditor<E extends AbstractPaymentMethod> extends CEntit
         return new InteracInfoEditor();
     }
 
+    private CEntityForm<?> createDirectDebitInfoEditor() {
+        return new DirectDebitInfoEditor();
+    }
+
     protected String getNameOn() {
         return null;
     }
 
-    private void setPaymentDetailsWidget(Widget w) {
+    protected void setPaymentDetailsWidget(Widget w) {
         paymentDetailsHolder.setWidget(w);
+        setPaymentDetailsWisible(w != null);
+    }
 
-        paymentDetailsHolder.setVisible(w != null);
-        paymentDetailsHeader.setVisible(w != null);
+    protected void setPaymentDetailsWisible(boolean visible) {
+        paymentDetailsHolder.setVisible(visible);
+        paymentDetailsHeader.setVisible(visible);
     }
 
     public void initNew(PaymentType type) {

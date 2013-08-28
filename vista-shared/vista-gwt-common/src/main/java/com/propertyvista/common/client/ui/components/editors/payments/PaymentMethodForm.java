@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.CRadioGroupEnum;
@@ -169,5 +170,33 @@ public class PaymentMethodForm<E extends AbstractPaymentMethod> extends PaymentM
         pmRadioGroup.setOptions(defaultPaymentTypes());
 
         return pmRadioGroup;
+    }
+
+    @Override
+    protected void setPaymentDetailsWidget(Widget w) {
+        super.setPaymentDetailsWidget(w);
+
+        // hide details while editing got some types:
+        PaymentType type = get(proto().type()).getValue();
+
+        if (type != null && isEditable()) {
+            switch (type) {
+            case Cash:
+                break;
+            case Check:
+                break;
+            case CreditCard:
+                break;
+            case DirectBanking:
+                setPaymentDetailsWisible(false);
+                break;
+            case Echeck:
+                break;
+            case Interac:
+                break;
+            default:
+                break;
+            }
+        }
     }
 }
