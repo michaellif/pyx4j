@@ -90,8 +90,11 @@ public class EftReportSettingsForm extends CEntityDecoratableForm<EftReportMetad
         FlowPanel billingCycleFilterPanel = new FlowPanel();
         billingCycleFilterPanel.getElement().getStyle().setPaddingLeft(3, Unit.EM);
         billingCycleFilterPanel.getElement().getStyle().setPaddingBottom(1, Unit.EM);
+
         billingCycleFilterPanel.add(new FormDecoratorBuilder(inject(proto().billingPeriod())).componentWidth(INPUT_FIELD_WIDTH).contentWidth(CONTENT_WIDTH)
                 .build());
+        get(proto().billingPeriod()).setEnabled(!VistaFeatures.instance().yardiIntegration());
+
         billingCycleFilterPanel.add(new FormDecoratorBuilder(inject(proto().billingCycleStartDate())).componentWidth(INPUT_FIELD_WIDTH)
                 .contentWidth(CONTENT_WIDTH).build());
         column2.add(billingCycleFilterPanel);
