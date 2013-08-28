@@ -38,6 +38,7 @@ import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilityGadgetMet
 import com.propertyvista.domain.dashboard.gadgets.type.UnitAvailabilitySummaryGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.UnitTurnoverAnalysisGadgetMetadata;
 import com.propertyvista.domain.dashboard.gadgets.type.base.BuildingGadget;
+import com.propertyvista.domain.dashboard.gadgets.type.base.DemoGadget;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetDescription;
 import com.propertyvista.domain.dashboard.gadgets.type.base.GadgetMetadata;
 import com.propertyvista.server.common.gadgets.GadgetMetadataRepository;
@@ -100,7 +101,9 @@ public class GadgetMetadataServiceImpl implements GadgetMetadataService {
                     isAcceptedBy(boardType, gadgetMetadataClass)
                         & isVistaFeaturesCompatible(gadgetMetadataClass)
                         & SecurityController.checkAnyBehavior(gadgetDescription.allowedBehaviors())
-                        & !gadgetMetadataClass.equals(AccessDeniedGagetMetadata.class)) {//@formatter:on
+                        & !AccessDeniedGagetMetadata.class.equals(gadgetMetadataClass) // this is a special gadget that can't be added
+                        & !DemoGadget.class.isAssignableFrom(gadgetMetadataClass) // don't allow demo gadgets
+                        ) {//@formatter:on
 
                 GadgetMetadata proto = EntityFactory.getEntityPrototype(gadgetMetadataClass);
                 descriptors.add(//@formatter:off

@@ -97,4 +97,5 @@ public final class GadgetMetadataRepository extends GadgetMetadataRepositoryBase
     public static GadgetMetadataRepository get() {
         return INSTANCE;
     }
+
 }
