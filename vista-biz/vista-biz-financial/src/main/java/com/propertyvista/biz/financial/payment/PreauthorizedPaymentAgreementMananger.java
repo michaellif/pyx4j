@@ -382,11 +382,11 @@ class PreauthorizedPaymentAgreementMananger {
 
     private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle) {
         if (VistaFeatures.instance().yardiIntegration()) {
-            // currently checks just actual move out date (workable for Yardi mode):
-            return (beforeOrEqual(lease.actualMoveOut(), suspensionCycle.billingCycleEndDate()));
+            return (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleStartDate()) || beforeOrEqual(lease.actualMoveOut(),
+                    suspensionCycle.billingCycleStartDate()));
         } else {
             // TODO : calculate/ensure (case of Fixed and Periodic lease types) real lease end date!?
-            return (beforeOrEqual(lease.leaseTo(), suspensionCycle.billingCycleEndDate()));
+            return (beforeOrEqual(lease.leaseTo(), suspensionCycle.billingCycleStartDate()));
         }
     }
 

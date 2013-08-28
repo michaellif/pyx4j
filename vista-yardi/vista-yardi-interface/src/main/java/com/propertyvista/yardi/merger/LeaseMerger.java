@@ -58,8 +58,7 @@ public class LeaseMerger {
 
         compare(existing.expectedMoveOut(), imported.getExpectedMoveOutDate());
 
-//        return isNew;
-        return true;
+        return isNew;
     }
 
     public Lease mergeLeaseDates(YardiLease imported, Lease existing) {

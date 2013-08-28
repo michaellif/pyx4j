@@ -65,6 +65,7 @@ public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<Preauthori
         container.add(new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 10).labelWidth(18).build());
         container.add(new HTML("&nbsp"));
         container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+        get(proto().preauthorizedPayments()).inheritEditable(false);
 
         return container;
     }
