@@ -26,7 +26,9 @@ public class DashboardTheme extends Theme {
     public static enum StyleName implements IStyleName {
         Dashboard, Gadget, GadgetContent, GadgetHeader, GadgetBlockSeparator,
 
-        PersonPhoto, PersonName
+        PersonPhoto, PersonName,
+
+        LandingPage
     }
 
     public DashboardTheme() {
@@ -39,6 +41,10 @@ public class DashboardTheme extends Theme {
 
         style = new Style(".", StyleName.GadgetContent);
         style.addProperty("margin", "10px 0 0 10px");
+        addStyle(style);
+
+        style = new Style(".", StyleName.LandingPage, " .", StyleName.GadgetContent);
+        style.addProperty("margin", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.GadgetHeader);

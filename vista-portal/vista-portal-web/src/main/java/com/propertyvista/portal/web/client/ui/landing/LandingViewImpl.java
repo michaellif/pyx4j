@@ -35,6 +35,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 
 import com.propertyvista.common.client.ui.components.login.LoginView;
 import com.propertyvista.portal.web.client.resources.PortalImages;
+import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class LandingViewImpl extends FlowPanel implements LandingView {
 
@@ -47,6 +48,8 @@ public class LandingViewImpl extends FlowPanel implements LandingView {
     private final SimplePanel orHolder;
 
     public LandingViewImpl() {
+
+        setStyleName(DashboardTheme.StyleName.LandingPage.name());
 
         loginGadget = new LoginGadget(this);
         loginGadget.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
