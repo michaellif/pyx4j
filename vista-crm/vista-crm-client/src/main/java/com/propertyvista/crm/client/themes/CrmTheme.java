@@ -47,6 +47,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AbstractDashb
 import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDialog;
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.LeasePapsReviewFolder;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
@@ -137,6 +138,8 @@ public class CrmTheme extends VistaTheme {
 
         initReportsStyles();
         initGadgetStyles();
+
+        initAutoPayUpdaterStyles();
     }
 
     @Override
@@ -683,6 +686,52 @@ public class CrmTheme extends VistaTheme {
     private void initGadgetStyles() {
         Style style = new Style("." + ArrearsGadgetSummaryForm.Styles.ArrearsSummaryPanel.name() + " .ViewerPanel");
         style.addProperty("display", "inline");
+        addStyle(style);
+    }
+
+    private void initAutoPayUpdaterStyles() {
+        Style style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayReviewUpdaterLeaseCaption.name() + " div");
+        style.addProperty("display", "inline-block");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.5em");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityContainerDecorator");
+        style.addProperty("margin", "0px");
+        style.addProperty("border", "none");
+        style.addProperty("padding", "0px");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargesContainer.name() + " .EntityFolderBoxItem");
+        style.addProperty("margin", "0px");
+        style.addProperty("padding", "0px");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapCharge.name());
+        style.addProperty("width", "80em");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapCharge.name() + " div");
+        style.addProperty("display", "inline-block");
+        style.addProperty("vertical-align", "middle");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargeNameColumn.name());
+        style.addProperty("width", "200px");
+        style.addProperty("padding-left", "20px");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargeNumberColumn.name());
+        style.addProperty("width", "100px");
+        style.addProperty("padding-left", "2px");
+        style.addProperty("padding-right", "2px");
+        style.addProperty("text-align", "right");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewFolder.Styles.AutoPayPapChargeNumberColumn.name() + " .TextBox");
+        style.addProperty("text-align", "right");
+        style.addProperty("margin-left", "2px");
+        style.addProperty("margin-right", "2px");
         addStyle(style);
     }
 

@@ -7,14 +7,18 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-06-27
+ * Created on 2013-08-29
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.crm.client.ui.reports;
+package com.propertyvista.crm.client.ui.reports.autopayreviewer.dto;
 
-import com.pyx4j.site.client.ui.prime.IPrimePane;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.entity.shared.IList;
 
-public interface AutoPayReviewUpdaterView extends IPrimePane {
+@Transient
+public interface LeasePapsReviewsHolderDTO extends IEntity {
 
+    IList<LeasePapsReviewDTO> leasePapsReviews();
 }
