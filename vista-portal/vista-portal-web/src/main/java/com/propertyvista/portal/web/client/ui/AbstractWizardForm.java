@@ -15,6 +15,8 @@ package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.event.logical.shared.SelectionEvent;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.decorators.IDecorator;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizard;
@@ -29,10 +31,13 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
 
     private final String endButtonCaption;
 
-    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String endButtonCaption) {
+    private final ThemeColor themeColor;
+
+    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String endButtonCaption, ThemeColor themeColor) {
         super(rootClass);
         this.view = view;
         this.endButtonCaption = endButtonCaption;
+        this.themeColor = themeColor;
     }
 
     @Override
@@ -64,6 +69,10 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
         };
 
         decorator.getBtnPrevious().setVisible(false);
+
+        decorator.getContentHolder().getElement().getStyle().setProperty("borderTopWidth", "5px");
+        decorator.getContentHolder().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));
+
         return decorator;
     }
 

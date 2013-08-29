@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityLabel;
@@ -94,7 +95,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
     };
 
     public PaymentWizardForm(PaymentWizardView view, String endButtonCaption) {
-        super(PaymentDTO.class, view, endButtonCaption);
+        super(PaymentDTO.class, view, endButtonCaption, ThemeColor.contrast4);
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
