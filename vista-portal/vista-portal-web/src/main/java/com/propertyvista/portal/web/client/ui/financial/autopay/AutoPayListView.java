@@ -11,13 +11,13 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
-public interface PreauthorizedPaymentsView extends IsView {
+public interface AutoPayListView extends IsView {
 
     interface Presenter {
 

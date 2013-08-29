@@ -11,18 +11,22 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.IObject;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CDateLabel;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.folder.CEntityFolderItem;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -39,31 +43,39 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.web.client.themes.BlockMixin;
+import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 
-public class PreauthorizedPaymentsForm extends CEntityDecoratableForm<PreauthorizedPaymentListDTO> {
+public class AutoPayListForm extends CEntityForm<PreauthorizedPaymentListDTO> {
 
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentsForm.class);
+    private static final I18n i18n = I18n.get(AutoPayListForm.class);
 
-    private PreauthorizedPaymentsView.Presenter presenter;
+    private AutoPayListView.Presenter presenter;
 
-    public PreauthorizedPaymentsForm() {
+    public AutoPayListForm() {
         super(PreauthorizedPaymentListDTO.class, new VistaViewersComponentFactory());
         setViewable(true);
     }
 
-    public void setPresenter(PreauthorizedPaymentsView.Presenter presenter) {
+    public void setPresenter(AutoPayListView.Presenter presenter) {
         this.presenter = presenter;
     }
 
     @Override
     public IsWidget createContent() {
-        VerticalPanel container = new VerticalPanel();
+        VerticalPanel mainPanel = new VerticalPanel();
 
-        container.add(new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 10).build());
-        container.add(new HTML("&nbsp"));
-        container.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+        mainPanel.add(new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 10).build());
+        mainPanel.add(new HTML("&nbsp"));
+        mainPanel.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
 
-        return container;
+        SimplePanel contentPanel = new SimplePanel(mainPanel);
+        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
+        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
+        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
+        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+
+        return contentPanel;
     }
 
     private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentListDTO.ListItemDTO> {

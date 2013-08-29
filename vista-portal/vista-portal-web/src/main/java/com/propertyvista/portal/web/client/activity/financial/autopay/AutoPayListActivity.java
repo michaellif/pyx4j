@@ -11,7 +11,7 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.activity.residents.payment;
+package com.propertyvista.portal.web.client.activity.financial.autopay;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -27,16 +27,16 @@ import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.residents.payment.autopay.PreauthorizedPaymentsView;
+import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayListView;
 
-public class PreauthorizedPaymentsActivity extends SecurityAwareActivity implements PreauthorizedPaymentsView.Presenter {
+public class AutoPayListActivity extends SecurityAwareActivity implements AutoPayListView.Presenter {
 
-    private final PreauthorizedPaymentsView view;
+    private final AutoPayListView view;
 
     private final PreauthorizedPaymentListService srv;
 
-    public PreauthorizedPaymentsActivity(Place place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(PreauthorizedPaymentsView.class);
+    public AutoPayListActivity(Place place) {
+        this.view = PortalWebSite.getViewFactory().instantiate(AutoPayListView.class);
         this.view.setPresenter(this);
         srv = GWT.create(PreauthorizedPaymentListService.class);
     }

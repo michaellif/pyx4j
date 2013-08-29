@@ -31,6 +31,7 @@ import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPaySubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayListActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentSubmissionActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
@@ -48,7 +49,6 @@ import com.propertyvista.portal.web.client.activity.residents.maintenance.EditMa
 import com.propertyvista.portal.web.client.activity.residents.maintenance.MaintenanceAcitvity;
 import com.propertyvista.portal.web.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
 import com.propertyvista.portal.web.client.activity.residents.maintenance.ViewMaintenanceRequestActivity;
-import com.propertyvista.portal.web.client.activity.residents.payment.PreauthorizedPaymentsActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodSubmittedActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodWizardActivity;
@@ -122,7 +122,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new PaymentSubmissionActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments) {
-                        activity = new PreauthorizedPaymentsActivity(appPlace);
+                        activity = new AutoPayListActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
                         activity = new AutoPayWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {

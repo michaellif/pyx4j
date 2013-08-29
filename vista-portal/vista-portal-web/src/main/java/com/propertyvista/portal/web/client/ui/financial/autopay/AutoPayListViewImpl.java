@@ -11,25 +11,24 @@
  * @author Dad
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
-import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 
-public class PreauthorizedPaymentsViewImpl extends FlowPanel implements PreauthorizedPaymentsView {
+public class AutoPayListViewImpl extends SimplePanel implements AutoPayListView {
 
-    private final PreauthorizedPaymentsForm form;
+    private final AutoPayListForm form;
 
-    public PreauthorizedPaymentsViewImpl() {
-
-        form = new PreauthorizedPaymentsForm();
+    public AutoPayListViewImpl() {
+        form = new AutoPayListForm();
         form.initContent();
-        add(form);
+        setWidget(form);
     }
 
     @Override
-    public void setPresenter(PreauthorizedPaymentsView.Presenter presenter) {
+    public void setPresenter(AutoPayListView.Presenter presenter) {
         form.setPresenter(presenter);
     }
 

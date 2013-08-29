@@ -23,7 +23,7 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
+import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 
@@ -41,7 +41,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         setContent(contentPanel);
     }
 
-    protected void populate(TenantResidentServicesDTO value) {
+    protected void populate(PreauthorizedPaymentListDTO value) {
 
     }
 

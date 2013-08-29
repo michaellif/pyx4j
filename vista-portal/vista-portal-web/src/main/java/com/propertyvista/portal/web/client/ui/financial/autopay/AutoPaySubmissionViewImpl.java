@@ -14,12 +14,12 @@
 package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
+import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class AutoPaySubmissionViewImpl extends ViewImpl<PreauthorizedPaymentDTO> implements AutoPaySubmissionView {
+public class AutoPaySubmissionViewImpl extends AbstractEntityView<PreauthorizedPaymentDTO> implements AutoPaySubmissionView {
 
     public AutoPaySubmissionViewImpl() {
-        super(true, false);
+        super();
         setForm(new AutoPaySubmissionForm());
     }
 }
