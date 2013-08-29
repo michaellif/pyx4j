@@ -27,13 +27,13 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.paymentmethod.PaymentMethodSubmittedView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
 
 public class PaymentMethodSubmittedActivity extends SecurityAwareActivity implements PaymentMethodSubmittedView.Presenter {
 
     private final PaymentMethodSubmittedView view;
 
-    protected final PaymentMethodSubmittedService srv;
+    protected final PaymentMethodRetrieveService srv;
 
     private final Key entityId;
 
@@ -41,7 +41,7 @@ public class PaymentMethodSubmittedActivity extends SecurityAwareActivity implem
         this.view = PortalSite.getViewFactory().instantiate(PaymentMethodSubmittedView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(PaymentMethodSubmittedService.class);
+        srv = GWT.create(PaymentMethodRetrieveService.class);
 
         entityId = place.getItemId();
     }

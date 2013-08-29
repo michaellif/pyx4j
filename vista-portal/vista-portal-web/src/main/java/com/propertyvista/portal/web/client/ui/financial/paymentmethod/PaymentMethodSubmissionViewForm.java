@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.paymentmethod;
+package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
@@ -36,13 +36,13 @@ import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class PaymentMethodSubmittedViewForm extends CEntityDecoratableForm<PaymentMethodDTO> {
+public class PaymentMethodSubmissionViewForm extends CEntityDecoratableForm<PaymentMethodDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodSubmittedViewForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodSubmissionViewForm.class);
 
     private final AbstractEntityView<PaymentMethodDTO> view;
 
-    public PaymentMethodSubmittedViewForm(AbstractEntityView<PaymentMethodDTO> view) {
+    public PaymentMethodSubmissionViewForm(AbstractEntityView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class);
         this.view = view;
         setViewable(true);
@@ -78,7 +78,7 @@ public class PaymentMethodSubmittedViewForm extends CEntityDecoratableForm<Payme
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
             @Override
             public void execute() {
-                ((PaymentMethodSubmittedView.Presenter) view.getPresenter()).goToAutoPay();
+                ((PaymentMethodSubmissionView.Presenter) view.getPresenter()).goToAutoPay();
             }
         }));
 

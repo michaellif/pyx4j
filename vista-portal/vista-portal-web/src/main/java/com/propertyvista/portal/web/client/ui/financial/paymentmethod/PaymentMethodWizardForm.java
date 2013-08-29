@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.paymentmethod;
+package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
 import java.util.Set;
 

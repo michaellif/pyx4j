@@ -7,19 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-10
+ * Created on 2013-04-02
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.paymentmethod;
+package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
+import com.pyx4j.site.client.ui.prime.wizard.IWizard;
+
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
-import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
 
-public class PaymentMethodSubmittedViewImpl extends ViewImpl<PaymentMethodDTO> implements PaymentMethodSubmittedView {
+public interface PaymentMethodWizardView extends IWizard<PaymentMethodDTO> {
 
-    public PaymentMethodSubmittedViewImpl() {
-        super(true, true);
-        setForm(new PaymentMethodSubmittedViewForm(this));
+    interface Persenter extends IWizard.Presenter {
+
+        void getCurrentAddress(AsyncCallback<AddressSimple> callback);
     }
 }

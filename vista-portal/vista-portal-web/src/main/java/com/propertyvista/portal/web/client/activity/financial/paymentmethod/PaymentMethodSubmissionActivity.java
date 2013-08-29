@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.activity.residents.paymentmethod;
+package com.propertyvista.portal.web.client.activity.financial.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -24,24 +24,24 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodSubmittedView;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodSubmissionView;
 
-public class PaymentMethodSubmittedActivity extends SecurityAwareActivity implements PaymentMethodSubmittedView.Presenter {
+public class PaymentMethodSubmissionActivity extends SecurityAwareActivity implements PaymentMethodSubmissionView.Presenter {
 
-    private final PaymentMethodSubmittedView view;
+    private final PaymentMethodSubmissionView view;
 
-    protected final PaymentMethodSubmittedService srv;
+    protected final PaymentMethodRetrieveService srv;
 
     private final Key entityId;
 
-    public PaymentMethodSubmittedActivity(AppPlace place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(PaymentMethodSubmittedView.class);
+    public PaymentMethodSubmissionActivity(AppPlace place) {
+        this.view = PortalWebSite.getViewFactory().instantiate(PaymentMethodSubmissionView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(PaymentMethodSubmittedService.class);
+        srv = GWT.create(PaymentMethodRetrieveService.class);
 
         entityId = place.getItemId();
     }
@@ -65,13 +65,6 @@ public class PaymentMethodSubmittedActivity extends SecurityAwareActivity implem
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
-    @Override
-    public void edit(Key id) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void back() {
         // TODO Auto-generated method stub
 

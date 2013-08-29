@@ -61,13 +61,13 @@ import com.propertyvista.portal.rpc.portal.services.resident.DashboardService;
 import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
 import com.propertyvista.portal.rpc.portal.services.resident.MaintenanceService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodCrudService;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmissionService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.PersonalInfoCrudService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentListService;
-import com.propertyvista.portal.rpc.portal.services.resident.AutoPaySubmissionService;
+import com.propertyvista.portal.rpc.portal.services.resident.AutoPayRetrieveService;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.rpc.portal.services.resident.SelfRegistrationBuildingsSourceService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
@@ -197,15 +197,15 @@ public class VistaPortalAccessControlList extends ServletContainerAclBuilder {
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentWizardService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(CreditCardValidationService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentSubmissionService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentRetrieveService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodCrudService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodWizardService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodSubmittedService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PaymentMethodRetrieveService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentListService.class));
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(PreauthorizedPaymentWizardService.class));
-        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(AutoPaySubmissionService.class));
+        grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(AutoPayRetrieveService.class));
 
         grant(VistaCustomerBehavior.Tenant, new IServiceExecutePermission(MaintenanceService.class));
 

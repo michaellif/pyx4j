@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.AutoPaySubmissionService;
+import com.propertyvista.portal.rpc.portal.services.resident.AutoPayRetrieveService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPaySubmissionView;
@@ -33,7 +33,7 @@ public class AutoPaySubmissionActivity extends SecurityAwareActivity implements 
 
     private final AutoPaySubmissionView view;
 
-    protected final AutoPaySubmissionService srv;
+    protected final AutoPayRetrieveService srv;
 
     private final Key entityId;
 
@@ -41,7 +41,7 @@ public class AutoPaySubmissionActivity extends SecurityAwareActivity implements 
         this.view = PortalWebSite.getViewFactory().instantiate(AutoPaySubmissionView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(AutoPaySubmissionService.class);
+        srv = GWT.create(AutoPayRetrieveService.class);
 
         entityId = place.getItemId();
     }

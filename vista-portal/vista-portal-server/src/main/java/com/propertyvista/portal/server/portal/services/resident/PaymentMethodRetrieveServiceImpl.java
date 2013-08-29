@@ -22,12 +22,12 @@ import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PaymentMethodSubmittedServiceImpl extends EntityDtoBinder<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodSubmittedService {
+public class PaymentMethodRetrieveServiceImpl extends EntityDtoBinder<LeasePaymentMethod, PaymentMethodDTO> implements PaymentMethodRetrieveService {
 
-    public PaymentMethodSubmittedServiceImpl() {
+    public PaymentMethodRetrieveServiceImpl() {
         super(LeasePaymentMethod.class, PaymentMethodDTO.class);
     }
 

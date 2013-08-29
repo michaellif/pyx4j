@@ -35,6 +35,8 @@ import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayLis
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentSubmissionActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
+import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodSubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
@@ -50,8 +52,6 @@ import com.propertyvista.portal.web.client.activity.residents.maintenance.Mainte
 import com.propertyvista.portal.web.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
 import com.propertyvista.portal.web.client.activity.residents.maintenance.ViewMaintenanceRequestActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
-import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodSubmittedActivity;
-import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodsActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.ViewPaymentMethodActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
@@ -105,7 +105,7 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.PaymentMethods.PaymentMethodSubmitted) {
-                        activity = new PaymentMethodSubmittedActivity(appPlace);
+                        activity = new PaymentMethodSubmissionActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.BillSummary) {
                         activity = new BillSummaryActivity(appPlace);

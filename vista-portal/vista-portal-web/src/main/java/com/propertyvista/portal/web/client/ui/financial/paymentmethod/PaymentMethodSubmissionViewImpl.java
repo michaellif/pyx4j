@@ -7,24 +7,19 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2013-04-02
+ * Created on 2013-04-10
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.paymentmethod;
+package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 
-import com.pyx4j.i18n.shared.I18n;
-
-import com.propertyvista.common.client.ui.wizard.VistaAbstractWizardPane;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
+import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
 
-public class PaymentMethodWizardViewImpl extends VistaAbstractWizardPane<PaymentMethodDTO> implements PaymentMethodWizardView {
+public class PaymentMethodSubmissionViewImpl extends ViewImpl<PaymentMethodDTO> implements PaymentMethodSubmissionView {
 
-    private static final I18n i18n = I18n.get(PaymentMethodWizardViewImpl.class);
-
-    public PaymentMethodWizardViewImpl() {
-        super();
-        setWizard(new PaymentMethodWizardForm(this, i18n.tr("Profile Payment Setup"), i18n.tr("Submit")));
-
+    public PaymentMethodSubmissionViewImpl() {
+        super(true, true);
+        setForm(new PaymentMethodSubmissionViewForm(this));
     }
 }

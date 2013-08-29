@@ -13,8 +13,6 @@
  */
 package com.propertyvista.portal.server.portal.services.resident;
 
-import java.math.BigDecimal;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.commons.Key;
@@ -23,22 +21,19 @@ import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.utils.EntityDtoBinder;
 
 import com.propertyvista.biz.financial.payment.PaymentFacade;
-import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
+import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.AutoPaySubmissionService;
+import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentRetrieveService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class AutoPaySubmissionServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
-        AutoPaySubmissionService {
+public class PaymentRetrieveServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentRetrieveService {
 
-    public AutoPaySubmissionServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+    public PaymentRetrieveServiceImpl() {
+        super(PaymentRecord.class, PaymentRecordDTO.class);
     }
 
     @Override
@@ -47,12 +42,13 @@ public class AutoPaySubmissionServiceImpl extends EntityDtoBinder<PreauthorizedP
     }
 
     @Override
-    public void retrieve(AsyncCallback<PreauthorizedPaymentDTO> callback, Key entityId) {
-        PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId);
-        PreauthorizedPaymentDTO dto = createDTO(dbo);
+    public void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId) {
+        PaymentRecord dbo = Persistence.secureRetrieve(PaymentRecord.class, entityId);
+        PaymentRecordDTO dto = createDTO(dbo);
 
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();
+        Persistence.service().retrieve(lease.unit());
         Persistence.service().retrieve(lease.unit().building());
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
@@ -66,14 +62,6 @@ public class AutoPaySubmissionServiceImpl extends EntityDtoBinder<PreauthorizedP
 
         dto.leaseId().set(lease.leaseId());
         dto.leaseStatus().set(lease.status());
-
-        dto.nextScheduledPaymentDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(lease));
-        dto.paymentCutOffDate().setValue(ServerSideFactory.create(PaymentMethodFacade.class).getPreauthorizedPaymentCutOffDate(lease));
-
-        dto.total().setValue(BigDecimal.ZERO);
-        for (PreauthorizedPaymentCoveredItem item : dto.coveredItems()) {
-            dto.total().setValue(dto.total().getValue().add(item.amount().getValue()));
-        }
 
         callback.onSuccess(dto);
     }

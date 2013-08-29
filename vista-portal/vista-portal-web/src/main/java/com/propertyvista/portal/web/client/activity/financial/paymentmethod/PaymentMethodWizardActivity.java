@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.activity.residents.paymentmethod;
+package com.propertyvista.portal.web.client.activity.financial.paymentmethod;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -27,7 +27,7 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.ui.residents.paymentmethod.PaymentMethodWizardView;
+import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodWizardView;
 
 public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Persenter {
 
