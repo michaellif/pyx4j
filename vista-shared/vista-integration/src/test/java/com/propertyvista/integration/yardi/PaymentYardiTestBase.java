@@ -33,7 +33,6 @@ import com.propertyvista.payment.pad.EFTTransportFacade;
 import com.propertyvista.payment.pad.mock.EFTTransportFacadeMock;
 import com.propertyvista.test.mock.MockDataModel;
 import com.propertyvista.test.mock.MockEventBus;
-import com.propertyvista.test.mock.models.AutoPayPolicyDataModel;
 import com.propertyvista.test.mock.models.BuildingDataModel;
 import com.propertyvista.test.mock.models.CustomerDataModel;
 import com.propertyvista.test.mock.models.LeaseDataModel;
@@ -141,7 +140,6 @@ public abstract class PaymentYardiTestBase extends YardiTestBase {
         List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
         models.add(CustomerDataModel.class);
         models.add(LeaseDataModel.class);
-        models.add(AutoPayPolicyDataModel.class);
         models.add(BuildingDataModel.class);
         models.add(MerchantAccountDataModel.class);
         return models;

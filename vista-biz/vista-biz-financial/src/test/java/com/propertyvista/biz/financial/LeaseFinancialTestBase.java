@@ -95,6 +95,7 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = new ArrayList<Class<? extends MockDataModel<?>>>();
         models.add(PmcDataModel.class);
+        models.add(CustomerDataModel.class);
         models.add(LocationsDataModel.class);
         models.add(TaxesDataModel.class);
         models.add(GLCodeDataModel.class);
@@ -105,10 +106,9 @@ public abstract class LeaseFinancialTestBase extends IntegrationTestBase {
         models.add(ProductTaxPolicyDataModel.class);
         models.add(DepositPolicyDataModel.class);
         models.add(LeaseAdjustmentPolicyDataModel.class);
-        models.add(CustomerDataModel.class);
-        models.add(LeaseBillingPolicyDataModel.class);
         models.add(ARPolicyDataModel.class);
         models.add(AutoPayPolicyDataModel.class);
+        models.add(LeaseBillingPolicyDataModel.class);
         models.add(LeaseDataModel.class);
         return models;
     }

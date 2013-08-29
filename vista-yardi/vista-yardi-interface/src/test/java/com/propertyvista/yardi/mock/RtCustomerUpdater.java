@@ -30,7 +30,7 @@ public class RtCustomerUpdater extends Updater<RTCustomer, RtCustomerUpdater> {
     }
 
     public enum YLEASE implements com.propertyvista.yardi.mock.Name {
-        CurrentRent, LeaseFromDate, LeaseToDate, ResponsibleForLease;
+        CurrentRent, ExpectedMoveInDate, ExpectedMoveOutDate, LeaseFromDate, LeaseToDate, ActualMoveIn, ActualMoveOut, ResponsibleForLease;
     }
 
     public enum RTCUSTOMER implements com.propertyvista.yardi.mock.Name {

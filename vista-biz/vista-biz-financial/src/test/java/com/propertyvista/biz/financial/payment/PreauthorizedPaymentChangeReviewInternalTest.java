@@ -31,7 +31,6 @@ import com.propertyvista.test.integration.PaymentAgreementTester;
 import com.propertyvista.test.integration.PreauthorizedPaymentBuilder;
 import com.propertyvista.test.mock.MockConfig;
 import com.propertyvista.test.mock.MockDataModel;
-import com.propertyvista.test.mock.models.AutoPayPolicyDataModel;
 
 public class PreauthorizedPaymentChangeReviewInternalTest extends LeaseFinancialTestBase {
 
@@ -51,7 +50,6 @@ public class PreauthorizedPaymentChangeReviewInternalTest extends LeaseFinancial
     @Override
     protected List<Class<? extends MockDataModel<?>>> getMockModelTypes() {
         List<Class<? extends MockDataModel<?>>> models = super.getMockModelTypes();
-        models.add(AutoPayPolicyDataModel.class);
         return models;
     }
 

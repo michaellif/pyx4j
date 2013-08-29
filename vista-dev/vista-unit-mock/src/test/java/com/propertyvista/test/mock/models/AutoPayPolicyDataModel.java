@@ -13,20 +13,24 @@
  */
 package com.propertyvista.test.mock.models;
 
+import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 
+import com.propertyvista.biz.policy.PolicyFacade;
 import com.propertyvista.domain.policy.policies.AutoPayPolicy;
 import com.propertyvista.test.mock.MockDataModel;
 
 public class AutoPayPolicyDataModel extends MockDataModel<AutoPayPolicy> {
+
+    private AutoPayPolicy policy;
 
     public AutoPayPolicyDataModel() {
     }
 
     @Override
     protected void generate() {
-        AutoPayPolicy policy = EntityFactory.create(AutoPayPolicy.class);
+        policy = EntityFactory.create(AutoPayPolicy.class);
 
         policy.onLeaseChargeChangeRule().setValue(AutoPayPolicy.ChangeRule.keepPercentage);
         policy.excludeFirstBillingPeriodCharge().setValue(Boolean.FALSE);
@@ -35,5 +39,26 @@ public class AutoPayPolicyDataModel extends MockDataModel<AutoPayPolicy> {
         policy.node().set(getDataModel(PmcDataModel.class).getOrgNode());
         Persistence.service().persist(policy);
         addItem(policy);
+    }
+
+    // modifiers:
+    public void setOnLeaseChargeChangeRule(AutoPayPolicy.ChangeRule rule) {
+        policy.onLeaseChargeChangeRule().setValue(rule);
+        ensureSetEffective();
+    }
+
+    public void setExcludeFirstBillingPeriodCharge(Boolean exclude) {
+        policy.excludeFirstBillingPeriodCharge().setValue(exclude);
+        ensureSetEffective();
+    }
+
+    public void setExcludeLastBillingPeriodCharge(Boolean exclude) {
+        policy.excludeLastBillingPeriodCharge().setValue(exclude);
+        ensureSetEffective();
+    }
+
+    private void ensureSetEffective() {
+        Persistence.service().merge(policy);
+        ServerSideFactory.create(PolicyFacade.class).resetPolicyCache();
     }
 }
