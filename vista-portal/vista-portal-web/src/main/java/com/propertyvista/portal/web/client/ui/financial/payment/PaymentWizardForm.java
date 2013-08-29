@@ -95,7 +95,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
     };
 
     public PaymentWizardForm(PaymentWizardView view, String endButtonCaption) {
-        super(PaymentDTO.class, view, endButtonCaption, ThemeColor.contrast4);
+        super(PaymentDTO.class, view, i18n.tr("Make a Payment"), endButtonCaption, ThemeColor.contrast4);
 
         addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
@@ -107,7 +107,7 @@ public class PaymentWizardForm extends AbstractWizardForm<PaymentDTO> {
         BasicFlexFormPanel panel = new BasicFlexFormPanel();
         int row = -1;
 
-        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Make a Payment"));
+        panel.setH1(++row, 0, 1, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Details"));
 
         panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().leaseTermParticipant(), new CEntityLabel<LeaseTermParticipant<?>>()), "200px")
                 .customLabel(i18n.tr("Tenant")).build());

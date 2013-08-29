@@ -27,6 +27,8 @@ public interface FinancialDashboardView extends IsView {
 
         void setAutopay();
 
+        void addPaymentMethod();
+
     }
 
     void setPresenter(FinancialDashboardPresenter presenter);

@@ -13,11 +13,15 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
+import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.widgets.client.Button;
+import com.pyx4j.widgets.client.actionbar.Toolbar;
 
 import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
@@ -29,6 +33,8 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     PaymentMethodsGadget(FinancialDashboardViewImpl form) {
         super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Payment Methods"), ThemeColor.contrast4);
+        setActionsToolbar(new PaymentMethodsToolbar());
+
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.add(new HTML("Payment Methods"));
 
@@ -39,4 +45,17 @@ public class PaymentMethodsGadget extends AbstractGadget<FinancialDashboardViewI
 
     }
 
+    class PaymentMethodsToolbar extends Toolbar {
+        public PaymentMethodsToolbar() {
+            Button autoPayButton = new Button("Add Payment Method", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetViewer().getPresenter().addPaymentMethod();
+                }
+            });
+            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+            add(autoPayButton);
+        }
+    }
 }

@@ -29,13 +29,17 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
 
     private WizardDecorator<E> decorator;
 
+    private final String headerCaption;
+
     private final String endButtonCaption;
 
     private final ThemeColor themeColor;
 
-    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String endButtonCaption, ThemeColor themeColor) {
+    public AbstractWizardForm(Class<E> rootClass, final IWizardView<? extends IEntity> view, String headerCaption, String endButtonCaption,
+            ThemeColor themeColor) {
         super(rootClass);
         this.view = view;
+        this.headerCaption = headerCaption;
         this.endButtonCaption = endButtonCaption;
         this.themeColor = themeColor;
     }
@@ -69,6 +73,7 @@ public abstract class AbstractWizardForm<E extends IEntity> extends CEntityWizar
         };
 
         decorator.getBtnPrevious().setVisible(false);
+        decorator.setCaption(headerCaption);
 
         decorator.getContentHolder().getElement().getStyle().setProperty("borderTopWidth", "5px");
         decorator.getContentHolder().getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(themeColor, 1));

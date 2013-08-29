@@ -24,6 +24,7 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme;
+import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme.StyleName;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -189,6 +190,16 @@ public class PortalWebTheme extends Theme {
             @Override
             protected void initHeaderStyles() {
                 Style style = new Style(".", StyleName.WizardHeader);
+                style.addProperty("background", ThemeColor.foreground, 0.01);
+                style.addProperty("border-color", ThemeColor.foreground, 0.3);
+                style.addProperty("border-style", "solid");
+                style.addProperty("border-width", "1px");
+                style.addProperty("border-radius", "5px");
+                style.addProperty("padding", "10px");
+                style.addProperty("margin", "10px");
+                style.addProperty("overflow", "hidden");
+                style.addProperty("font-size", "1.3em");
+                style.addProperty("font-weight", "bold");
                 addStyle(style);
 
                 style = new Style(".", StyleName.WizardHeaderCaption);

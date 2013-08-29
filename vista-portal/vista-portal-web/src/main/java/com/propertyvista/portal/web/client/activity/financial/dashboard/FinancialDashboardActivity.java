@@ -77,4 +77,11 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
         }
     }
 
+    @Override
+    public void addPaymentMethod() {
+        if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
+            AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.PaymentMethods.NewPaymentMethod());
+        }
+    }
+
 }

@@ -110,7 +110,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<PreauthorizedPaymentDT
     };
 
     public AutoPayWizardForm(AutoPayWizardView view, String endButtonCaption) {
-        super(PreauthorizedPaymentDTO.class, view, endButtonCaption, ThemeColor.contrast4);
+        super(PreauthorizedPaymentDTO.class, view, i18n.tr("Auto Payment Setup"), endButtonCaption, ThemeColor.contrast4);
 
         detailsStep = addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
