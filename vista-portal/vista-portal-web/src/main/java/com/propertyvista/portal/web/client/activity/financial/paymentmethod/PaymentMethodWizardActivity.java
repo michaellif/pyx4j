@@ -19,7 +19,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -27,12 +26,13 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.PaymentMethods
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodWizardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
+import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodWizardView;
 
 public class PaymentMethodWizardActivity extends AbstractWizardActivity<PaymentMethodDTO> implements PaymentMethodWizardView.Persenter {
 
     public PaymentMethodWizardActivity(AppPlace place) {
-        super(place, PortalWebSite.getViewFactory().instantiate(PaymentMethodWizardView.class), GWT
+        super(PortalWebSite.getViewFactory().instantiate(PaymentMethodWizardView.class), GWT
                 .<PaymentMethodWizardService> create(PaymentMethodWizardService.class), PaymentMethodDTO.class);
     }
 

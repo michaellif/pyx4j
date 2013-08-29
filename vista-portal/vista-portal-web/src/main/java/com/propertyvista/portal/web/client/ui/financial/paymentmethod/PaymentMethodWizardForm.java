@@ -29,6 +29,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -39,16 +40,16 @@ import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
-import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
+import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog.TermsType;
 
-public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
+public class PaymentMethodWizardForm extends AbstractWizardForm<PaymentMethodDTO> {
 
     private static final I18n i18n = I18n.get(PaymentMethodWizardForm.class);
 
@@ -78,8 +79,8 @@ public class PaymentMethodWizardForm extends VistaWizardForm<PaymentMethodDTO> {
         }
     };
 
-    public PaymentMethodWizardForm(IWizard<PaymentMethodDTO> view, String caption, String endButtonCaption) {
-        super(PaymentMethodDTO.class, view, caption, endButtonCaption);
+    public PaymentMethodWizardForm(PaymentMethodWizardView view, String endButtonCaption) {
+        super(PaymentMethodDTO.class, view, i18n.tr("New Payment Method"), endButtonCaption, ThemeColor.contrast4);
 
         addStep(createPaymentMethodStep());
         comfirmationStep = addStep(createConfirmationStep());

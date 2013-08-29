@@ -20,9 +20,13 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
@@ -30,19 +34,20 @@ import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.common.client.resources.VistaImages;
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
+import com.propertyvista.portal.web.client.themes.BlockMixin;
+import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class PaymentMethodSubmissionViewForm extends CEntityDecoratableForm<PaymentMethodDTO> {
+public class PaymentMethodSubmissionForm extends CEntityForm<PaymentMethodDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodSubmissionViewForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodSubmissionForm.class);
 
     private final AbstractEntityView<PaymentMethodDTO> view;
 
-    public PaymentMethodSubmissionViewForm(AbstractEntityView<PaymentMethodDTO> view) {
+    public PaymentMethodSubmissionForm(AbstractEntityView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class);
         this.view = view;
         setViewable(true);
@@ -51,24 +56,31 @@ public class PaymentMethodSubmissionViewForm extends CEntityDecoratableForm<Paym
 
     @Override
     public IsWidget createContent() {
-        TwoColumnFlexFormPanel content = new TwoColumnFlexFormPanel();
+        TwoColumnFlexFormPanel mainPanel = new TwoColumnFlexFormPanel();
         int row = -1;
         Widget w;
 
-        content.setWidget(++row, 0, w = new HTML(i18n.tr("New Payment Method Submitted Successfully!")));
+        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("New Payment Method Submitted Successfully!")));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         w.getElement().getStyle().setFontSize(1.2, Unit.EM);
 
-        content.setBR(++row, 0, 1);
+        mainPanel.setBR(++row, 0, 1);
 
-        content.setWidget(++row, 0,
+        mainPanel.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).labelAlignment(Alignment.left).build());
 
-        content.setHR(++row, 0, 1);
+        mainPanel.setHR(++row, 0, 1);
 
-        content.setWidget(++row, 0, createAutoPaySignupPanel());
+        mainPanel.setWidget(++row, 0, createAutoPaySignupPanel());
 
-        return content;
+        SimplePanel contentPanel = new SimplePanel(mainPanel);
+        contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
+        contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
+        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
+        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
+
+        return contentPanel;
+
     }
 
     private Widget createAutoPaySignupPanel() {

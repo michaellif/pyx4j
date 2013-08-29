@@ -21,5 +21,7 @@ public interface PaymentMethodSubmissionView extends IEntityView<PaymentMethodDT
     interface Presenter extends IEntityView.EntityPresenter<PaymentMethodDTO> {
 
         void goToAutoPay();
+
+        void back();
     }
 }
