@@ -254,6 +254,7 @@ public class PortalWebRootPaneTheme extends Theme {
     private void initExtraGadgetStyles() {
         Style style = new Style(".", StyleName.ExtraGadget);
         style.addProperty("width", "220px");
+        style.addProperty("margin-bottom", "10px");
         addStyle(style);
 
         style = new Style(".", StyleName.ExtraGadgetItem);
