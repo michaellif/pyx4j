@@ -36,8 +36,6 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
 
     private final LatestActivitiesGadget offersGadget;
 
-    private final BillingHistoryGadget billingHistoryGadget;
-
     private final AutoPayAgreementsGadget autoPayAgreementsGadget;
 
     private final PaymentMethodsGadget paymentMethodsGadget;
@@ -55,16 +53,12 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
         offersGadget = new LatestActivitiesGadget(this);
         offersGadget.asWidget().setWidth("100%");
 
-        billingHistoryGadget = new BillingHistoryGadget(this);
-        billingHistoryGadget.asWidget().setWidth("100%");
-
         paymentMethodsGadget = new PaymentMethodsGadget(this);
         paymentMethodsGadget.asWidget().setWidth("100%");
 
         add(billingGadget);
         add(autoPayAgreementsGadget);
         add(offersGadget);
-        add(billingHistoryGadget);
         add(paymentMethodsGadget);
 
         doLayout(LayoutType.getLayoutType(Window.getClientWidth()));

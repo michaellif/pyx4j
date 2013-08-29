@@ -64,6 +64,12 @@ public class FinancialDashboardActivity extends SecurityAwareActivity implements
     }
 
     @Override
+    public void viewBillingHistory() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.BillingHistory());
+
+    }
+
+    @Override
     public void payNow() {
         if (SecurityController.checkAnyBehavior(VistaCustomerPaymentTypeBehavior.values())) {
             AppSite.getPlaceController().goTo(new Financial.PayNow());

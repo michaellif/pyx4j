@@ -110,6 +110,17 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback) {
         FinancialDashboardDTO dashboard = EntityFactory.create(FinancialDashboardDTO.class);
+        FinancialSummaryDTO billingSummary = BillSummaryServiceImpl.retrieve();
+        dashboard.billingSummary().currentBalance().setValue(billingSummary.currentBalance().getValue());
+        if (!VistaFeatures.instance().yardiIntegration()) {
+            LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+            Persistence.service().retrieve(tenantInLease.leaseTermV());
+            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+
+            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
+            dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
+        }
+
         callback.onSuccess(dashboard);
     }
 }

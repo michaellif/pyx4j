@@ -87,12 +87,17 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
             FlowPanel contentPanel = new FlowPanel();
 
             BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-            mainPanel.setWidth("auto");
             mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
             mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
             mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
             mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
             contentPanel.add(mainPanel);
+
+            FlowPanel actionsPanel = new FlowPanel();
+            actionsPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
+            actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+            actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            contentPanel.add(actionsPanel);
 
             if (!VistaFeatures.instance().yardiIntegration()) {
                 Anchor viewBillAnchor = new Anchor("View my Current Bill", new Command() {
@@ -102,11 +107,17 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
                         getGadgetViewer().getPresenter().viewCurrentBill();
                     }
                 });
-                viewBillAnchor.getElement().getStyle().setMarginTop(10, Unit.PX);
-                viewBillAnchor.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-                viewBillAnchor.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
-                contentPanel.add(viewBillAnchor);
+                actionsPanel.add(viewBillAnchor);
             }
+
+            Anchor viewBillAnchor = new Anchor("View Billing History", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetViewer().getPresenter().viewBillingHistory();
+                }
+            });
+            actionsPanel.add(viewBillAnchor);
 
             return contentPanel;
         }

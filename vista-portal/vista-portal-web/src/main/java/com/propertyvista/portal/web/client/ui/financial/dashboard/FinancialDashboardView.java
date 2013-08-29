@@ -23,6 +23,8 @@ public interface FinancialDashboardView extends IsView {
 
         void viewCurrentBill();
 
+        void viewBillingHistory();
+
         void payNow();
 
         void setAutopay();
