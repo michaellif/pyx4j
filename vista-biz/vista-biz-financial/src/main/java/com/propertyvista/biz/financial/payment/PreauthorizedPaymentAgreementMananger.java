@@ -382,12 +382,19 @@ class PreauthorizedPaymentAgreementMananger {
 
     private boolean leaseEndDateCheck(Lease lease, BillingCycle suspensionCycle) {
         if (VistaFeatures.instance().yardiIntegration()) {
-            return (beforeOrEqual(lease.expectedMoveOut(), suspensionCycle.billingCycleStartDate()) || beforeOrEqual(lease.actualMoveOut(),
+            return (before(lease.expectedMoveOut(), suspensionCycle.billingCycleStartDate()) || before(lease.actualMoveOut(),
                     suspensionCycle.billingCycleStartDate()));
         } else {
             // TODO : calculate/ensure (case of Fixed and Periodic lease types) real lease end date!?
-            return (beforeOrEqual(lease.leaseTo(), suspensionCycle.billingCycleStartDate()));
+            return (before(lease.leaseTo(), suspensionCycle.billingCycleStartDate()));
         }
+    }
+
+    private boolean before(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
+        if (!one.isNull() && !two.isNull()) {
+            return one.getValue().before(two.getValue());
+        }
+        return false;
     }
 
     private boolean beforeOrEqual(IPrimitive<LogicalDate> one, IPrimitive<LogicalDate> two) {
