@@ -23,6 +23,7 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
 import com.propertyvista.portal.rpc.portal.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.web.client.themes.DashboardTheme;
 
 public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDashboardView {
 
@@ -42,6 +43,8 @@ public class FinancialDashboardViewImpl extends FlowPanel implements FinancialDa
     private final PaymentMethodsGadget paymentMethodsGadget;
 
     public FinancialDashboardViewImpl() {
+
+        setStyleName(DashboardTheme.StyleName.Dashboard.name());
 
         billingGadget = new BillingSummaryGadget(this);
         billingGadget.asWidget().setWidth("100%");

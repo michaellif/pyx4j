@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.activity.residents.payment;
+package com.propertyvista.portal.web.client.activity.financial.payment;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
@@ -22,26 +22,26 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
+import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmissionService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
-import com.propertyvista.portal.web.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedView;
+import com.propertyvista.portal.web.client.ui.financial.payment.PaymentSubmissionView;
 
-public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity implements PreauthorizedPaymentSubmittedView.Presenter {
+public class PaymentSubmissionActivity extends SecurityAwareActivity implements PaymentSubmissionView.Presenter {
 
-    private final PreauthorizedPaymentSubmittedView view;
+    private final PaymentSubmissionView view;
 
-    protected final PreauthorizedPaymentSubmittedService srv;
+    protected final PaymentSubmissionService srv;
 
     private final Key entityId;
 
-    public PreauthorizedPaymentSubmittedActivity(AppPlace place) {
-        this.view = PortalWebSite.getViewFactory().instantiate(PreauthorizedPaymentSubmittedView.class);
+    public PaymentSubmissionActivity(AppPlace place) {
+        this.view = PortalWebSite.getViewFactory().instantiate(PaymentSubmissionView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(PreauthorizedPaymentSubmittedService.class);
+        srv = GWT.create(PaymentSubmissionService.class);
 
         entityId = place.getItemId();
     }
@@ -52,27 +52,27 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<PreauthorizedPaymentDTO>() {
+        srv.retrieve(new DefaultAsyncCallback<PaymentRecordDTO>() {
             @Override
-            public void onSuccess(PreauthorizedPaymentDTO result) {
+            public void onSuccess(PaymentRecordDTO result) {
                 view.populate(result);
             }
         }, entityId);
     }
 
     @Override
-    public void edit(Key id) {
+    public void goToAutoPay() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
+    }
+
+    @Override
+    public void back() {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void back() {
-        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments());
-    }
-
-    @Override
-    public void save(PreauthorizedPaymentDTO value) {
+    public void save(PaymentRecordDTO value) {
         // TODO Auto-generated method stub
 
     }

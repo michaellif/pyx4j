@@ -11,20 +11,20 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.common.client.ui.wizard.VistaAbstractWizardPane;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
-public class PreauthorizedPaymentWizardViewImpl extends VistaAbstractWizardPane<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView {
+public class AutoPayWizardViewImpl extends AbstractWizardView<PreauthorizedPaymentDTO> implements AutoPayWizardView {
 
-    private static final I18n i18n = I18n.get(PreauthorizedPaymentWizardViewImpl.class);
+    private static final I18n i18n = I18n.get(AutoPayWizardViewImpl.class);
 
-    public PreauthorizedPaymentWizardViewImpl() {
+    public AutoPayWizardViewImpl() {
         super();
-        setWizard(new PreauthorizedPaymentWizardForm(this, i18n.tr("Automatic Payment Setup"), i18n.tr("Submit")));
+        setWizard(new AutoPayWizardForm(this, i18n.tr("Submit")));
 
     }
 }

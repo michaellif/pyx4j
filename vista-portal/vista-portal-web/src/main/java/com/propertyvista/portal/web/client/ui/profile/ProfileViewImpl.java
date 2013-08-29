@@ -14,14 +14,13 @@
 package com.propertyvista.portal.web.client.ui.profile;
 
 import com.propertyvista.portal.domain.dto.ResidentDTO;
-import com.propertyvista.portal.web.client.ui.EntityViewImpl;
+import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class ProfileViewImpl extends EntityViewImpl<ResidentDTO> implements ProfileView {
+public class ProfileViewImpl extends AbstractEntityView<ResidentDTO> implements ProfileView {
 
     public ProfileViewImpl() {
         super();
         setForm(new ProfileForm(this));
-
     }
 
 }

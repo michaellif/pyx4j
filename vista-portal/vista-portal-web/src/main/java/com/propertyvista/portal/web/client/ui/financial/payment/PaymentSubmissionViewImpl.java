@@ -11,15 +11,15 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.payment;
 
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.web.client.ui.residents.ViewImpl;
+import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class PreauthorizedPaymentSubmittedViewImpl extends ViewImpl<PreauthorizedPaymentDTO> implements PreauthorizedPaymentSubmittedView {
+public class PaymentSubmissionViewImpl extends AbstractEntityView<PaymentRecordDTO> implements PaymentSubmissionView {
 
-    public PreauthorizedPaymentSubmittedViewImpl() {
-        super(true, false);
-        setForm(new PreauthorizedPaymentSubmittedViewForm());
+    public PaymentSubmissionViewImpl() {
+        super();
+        setForm(new PaymentSubmissionForm(this));
     }
 }

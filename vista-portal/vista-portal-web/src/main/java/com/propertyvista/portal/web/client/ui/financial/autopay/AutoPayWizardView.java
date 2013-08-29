@@ -11,22 +11,21 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
-
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.web.client.ui.IWizardView;
 
-public interface PreauthorizedPaymentWizardView extends IWizard<PreauthorizedPaymentDTO> {
+public interface AutoPayWizardView extends IWizardView<PreauthorizedPaymentDTO> {
 
-    interface Persenter extends IWizard.Presenter {
+    interface Persenter extends WizardPresenter<PreauthorizedPaymentDTO> {
 
         void getCurrentAddress(AsyncCallback<AddressSimple> callback);
 

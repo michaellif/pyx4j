@@ -25,14 +25,14 @@ import com.propertyvista.domain.financial.PaymentRecord;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.dto.PaymentRecordDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmittingService;
+import com.propertyvista.portal.rpc.portal.services.resident.PaymentSubmissionService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class PaymentSubmittingServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentSubmittingService {
+public class PaymentSubmissionServiceImpl extends EntityDtoBinder<PaymentRecord, PaymentRecordDTO> implements PaymentSubmissionService {
 
-    public PaymentSubmittingServiceImpl() {
+    public PaymentSubmissionServiceImpl() {
         super(PaymentRecord.class, PaymentRecordDTO.class);
     }
 

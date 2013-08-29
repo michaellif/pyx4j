@@ -30,6 +30,7 @@ public class EntityViewTheme extends Theme {
         addStyle(style);
 
         style = new Style(".", StyleName.EntityViewContent);
+        style.addProperty("margin", "10px");
         addStyle(style);
 
     }

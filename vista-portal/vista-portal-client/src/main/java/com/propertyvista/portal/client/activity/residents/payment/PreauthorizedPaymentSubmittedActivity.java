@@ -27,13 +27,13 @@ import com.propertyvista.portal.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.client.ui.residents.payment.autopay.PreauthorizedPaymentSubmittedView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.AutoPaySubmissionService;
 
 public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity implements PreauthorizedPaymentSubmittedView.Presenter {
 
     private final PreauthorizedPaymentSubmittedView view;
 
-    protected final PreauthorizedPaymentSubmittedService srv;
+    protected final AutoPaySubmissionService srv;
 
     private final Key entityId;
 
@@ -41,7 +41,7 @@ public class PreauthorizedPaymentSubmittedActivity extends SecurityAwareActivity
         this.view = PortalSite.getViewFactory().instantiate(PreauthorizedPaymentSubmittedView.class);
         this.view.setPresenter(this);
 
-        srv = GWT.create(PreauthorizedPaymentSubmittedService.class);
+        srv = GWT.create(AutoPaySubmissionService.class);
 
         entityId = place.getItemId();
     }

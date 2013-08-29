@@ -20,7 +20,7 @@ import com.pyx4j.rpc.shared.IService;
 
 import com.propertyvista.dto.PaymentRecordDTO;
 
-public interface PaymentSubmittingService extends IService {
+public interface PaymentSubmissionService extends IService {
 
     void retrieve(AsyncCallback<PaymentRecordDTO> callback, Key entityId);
 }

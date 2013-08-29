@@ -16,9 +16,9 @@ package com.propertyvista.portal.web.client.ui.residents;
 import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.forms.client.ui.CEntityForm;
 
-import com.propertyvista.portal.web.client.ui.EntityViewImpl;
+import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class ViewImpl<E extends IEntity> extends EntityViewImpl<E> implements View<E> {
+public class ViewImpl<E extends IEntity> extends AbstractEntityView<E> implements View<E> {
 
     public ViewImpl() {
         this(null);

@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.payment.autopay;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,6 +35,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.forms.client.ui.CComboBox;
 import com.pyx4j.forms.client.ui.CComponent;
@@ -47,7 +48,6 @@ import com.pyx4j.forms.client.ui.wizard.WizardStep;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.security.client.ClientContext;
-import com.pyx4j.site.client.ui.prime.wizard.IWizard;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.RadioGroup;
 import com.pyx4j.widgets.client.dialog.MessageDialog;
@@ -56,8 +56,6 @@ import com.propertyvista.common.client.theme.VistaTheme;
 import com.propertyvista.common.client.ui.components.editors.payments.PaymentMethodForm;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemDtoFolder;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
-import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
-import com.propertyvista.common.client.ui.wizard.VistaWizardForm;
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PaymentType;
@@ -67,13 +65,15 @@ import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.residents.LegalTermsDialog.TermsType;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class PreauthorizedPaymentWizardForm extends VistaWizardForm<PreauthorizedPaymentDTO> {
+public class AutoPayWizardForm extends AbstractWizardForm<PreauthorizedPaymentDTO> {
 
-    static final I18n i18n = I18n.get(PreauthorizedPaymentWizardForm.class);
+    private static final I18n i18n = I18n.get(AutoPayWizardForm.class);
 
     private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
@@ -97,7 +97,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         public void onBillingAddressSameAsCurrentOne(boolean set, final CComponent<AddressSimple> comp) {
             if (set) {
                 assert (getView().getPresenter() != null);
-                ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
+                ((AutoPayWizardView.Persenter) getView().getPresenter()).getCurrentAddress(new DefaultAsyncCallback<AddressSimple>() {
                     @Override
                     public void onSuccess(AddressSimple result) {
                         comp.setValue(result, false);
@@ -109,8 +109,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         }
     };
 
-    public PreauthorizedPaymentWizardForm(IWizard<PreauthorizedPaymentDTO> view, String caption, String endButtonCaption) {
-        super(PreauthorizedPaymentDTO.class, view, caption, endButtonCaption);
+    public AutoPayWizardForm(AutoPayWizardView view, String endButtonCaption) {
+        super(PreauthorizedPaymentDTO.class, view, endButtonCaption, ThemeColor.contrast4);
 
         detailsStep = addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
@@ -122,8 +122,8 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         TwoColumnFlexFormPanel panel = new TwoColumnFlexFormPanel(i18n.tr("Details"));
         int row = -1;
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), 22).build());
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), 22).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().tenant(), new CEntityLabel<Tenant>()), "200px").build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().address(), new CEntityLabel<AddressSimple>()), "200px").build());
         panel.setWidget(++row, 0, inject(proto().coveredItemsDTO(), new PapCoveredItemDtoFolder() {
             @Override
             public void onAmontValueChange() {
@@ -133,7 +133,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                         total = (total.add(item.amount().getValue()));
                     }
                 }
-                PreauthorizedPaymentWizardForm.this.get(PreauthorizedPaymentWizardForm.this.proto().total()).setValue(total);
+                AutoPayWizardForm.this.get(AutoPayWizardForm.this.proto().total()).setValue(total);
             }
         }));
         panel.setWidget(++row, 0, detailsTotalHolder);
@@ -149,9 +149,9 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
                 ++row,
                 0,
                 new FormDecoratorBuilder(inject(proto().selectPaymentMethod(), new CRadioGroupEnum<PaymentSelect>(PaymentSelect.class,
-                        RadioGroup.Layout.HORISONTAL))).build());
+                        RadioGroup.Layout.HORISONTAL)), "200px").build());
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), 22).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().profiledPaymentMethod(), profiledPaymentMethodsCombo), "200px").build());
 
         get(proto().selectPaymentMethod()).addValueChangeHandler(new ValueChangeHandler<PaymentSelect>() {
             @Override
@@ -235,7 +235,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
         panel.setBR(++row, 0, 1);
 
-        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 22).build());
+        panel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), "200px").build());
         panel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         panel.setHR(++row, 0, 1);
@@ -254,7 +254,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
         } else if (event.getSelectedItem().equals(comfirmationStep)) {
 
             confirmationDetailsHolder.clear();
-            ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
+            ((AutoPayWizardView.Persenter) getView().getPresenter()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
                 @Override
                 public void onSuccess(PreauthorizedPayment result) {
                     get(proto().coveredItems()).populate(result.coveredItems());
@@ -272,7 +272,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
             total = get(proto().total()).getValue();
             unbind(proto().total());
         }
-        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), 10).build());
+        holder.setWidget(new FormDecoratorBuilder(inject(proto().total()), "100px").build());
         get(proto().total()).setValue(total);
         get(proto().total()).setViewable(true);
     }
@@ -306,7 +306,7 @@ public class PreauthorizedPaymentWizardForm extends VistaWizardForm<Preauthorize
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
         profiledPaymentMethodsCombo.setOptions(null);
-        ((PreauthorizedPaymentWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
+        ((AutoPayWizardView.Persenter) getView().getPresenter()).getProfiledPaymentMethods(new DefaultAsyncCallback<List<LeasePaymentMethod>>() {
             @Override
             public void onSuccess(List<LeasePaymentMethod> result) {
                 profiledPaymentMethodsCombo.setOptions(result);

@@ -23,9 +23,9 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 
 import com.propertyvista.common.client.ui.decorations.DecorationUtils;
-import com.propertyvista.portal.web.client.ui.EntityViewImpl;
+import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class EditImpl<E extends IEntity> extends EntityViewImpl<E> implements Edit<E> {
+public class EditImpl<E extends IEntity> extends AbstractEntityView<E> implements Edit<E> {
 
     private final Anchor cancel;
 

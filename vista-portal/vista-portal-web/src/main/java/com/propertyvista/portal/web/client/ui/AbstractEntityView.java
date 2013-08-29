@@ -32,9 +32,9 @@ import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
 import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-public class EntityViewImpl<E extends IEntity> extends FlowPanel implements IEntityView<E> {
+public class AbstractEntityView<E extends IEntity> extends FlowPanel implements IEntityView<E> {
 
-    protected static final I18n i18n = I18n.get(EntityViewImpl.class);
+    protected static final I18n i18n = I18n.get(AbstractEntityView.class);
 
     private final SimplePanel formHolder;
 
@@ -49,7 +49,7 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements IEnt
 
     private Layout widgetLayout = Layout.horisontal;
 
-    public EntityViewImpl() {
+    public AbstractEntityView() {
         add(formHolder = new SimplePanel());
         add(footer = new FlowPanel());
 
@@ -73,19 +73,23 @@ public class EntityViewImpl<E extends IEntity> extends FlowPanel implements IEnt
 
     protected void setForm(final CEntityForm<E> form) {
         this.form = form;
-        form.initContent();
-        formHolder.setWidget(form.asWidget());
+        if (form == null) {
+            formHolder.clear();
+        } else {
+            form.initContent();
+            formHolder.setWidget(form.asWidget());
 
-        form.setViewable(true);
-        form.addValueChangeHandler(new ValueChangeHandler<E>() {
+            form.setViewable(true);
+            form.addValueChangeHandler(new ValueChangeHandler<E>() {
 
-            @Override
-            public void onValueChange(ValueChangeEvent<E> event) {
-                if (!editingInProgress) {
-                    presenter.save(form.getValue());
+                @Override
+                public void onValueChange(ValueChangeEvent<E> event) {
+                    if (!editingInProgress) {
+                        presenter.save(form.getValue());
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Deprecated

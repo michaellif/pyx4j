@@ -18,6 +18,8 @@ import java.util.List;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 
+import com.pyx4j.commons.css.StyleManager;
+import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.entity.shared.utils.EntityGraph;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CEntityForm;
@@ -78,6 +80,8 @@ public class ProfileForm extends CEntityForm<ResidentDTO> {
         SimplePanel contentPanel = new SimplePanel(mainPanel);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
         contentPanel.addStyleName(BlockMixin.StyleName.PortalBlock.name());
+        contentPanel.getElement().getStyle().setProperty("borderTopWidth", "5px");
+        contentPanel.getElement().getStyle().setProperty("borderTopColor", StyleManager.getPalette().getThemeColor(ThemeColor.foreground, 1));
 
         view.doLayout();
 

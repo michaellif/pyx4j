@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.activity.residents.payment;
+package com.propertyvista.portal.web.client.activity.financial.autopay;
 
 import java.util.List;
 import java.util.Vector;
@@ -22,7 +22,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 import com.pyx4j.site.client.AppSite;
-import com.pyx4j.site.client.activity.AbstractWizardActivity;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.domain.contact.AddressSimple;
@@ -32,12 +31,13 @@ import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.ui.residents.payment.autopay.PreauthorizedPaymentWizardView;
+import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
+import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayWizardView;
 
-public class PreauthorizedPaymentWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements PreauthorizedPaymentWizardView.Persenter {
+public class AutoPayWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements AutoPayWizardView.Persenter {
 
-    public PreauthorizedPaymentWizardActivity(AppPlace place) {
-        super(place, PortalWebSite.getViewFactory().instantiate(PreauthorizedPaymentWizardView.class), GWT
+    public AutoPayWizardActivity(AppPlace place) {
+        super(PortalWebSite.getViewFactory().instantiate(AutoPayWizardView.class), GWT
                 .<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), PreauthorizedPaymentDTO.class);
     }
 

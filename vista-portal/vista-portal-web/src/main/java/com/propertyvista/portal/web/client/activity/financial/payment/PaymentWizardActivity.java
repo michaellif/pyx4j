@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.activity.residents.payment;
+package com.propertyvista.portal.web.client.activity.financial.payment;
 
 import java.util.List;
 import java.util.Vector;

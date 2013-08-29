@@ -29,7 +29,11 @@ import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPaySubmissionActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
+import com.propertyvista.portal.web.client.activity.financial.payment.PaymentSubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
 import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity;
@@ -44,10 +48,6 @@ import com.propertyvista.portal.web.client.activity.residents.maintenance.EditMa
 import com.propertyvista.portal.web.client.activity.residents.maintenance.MaintenanceAcitvity;
 import com.propertyvista.portal.web.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
 import com.propertyvista.portal.web.client.activity.residents.maintenance.ViewMaintenanceRequestActivity;
-import com.propertyvista.portal.web.client.activity.residents.payment.PaymentSubmittedActivity;
-import com.propertyvista.portal.web.client.activity.residents.payment.PaymentWizardActivity;
-import com.propertyvista.portal.web.client.activity.residents.payment.PreauthorizedPaymentSubmittedActivity;
-import com.propertyvista.portal.web.client.activity.residents.payment.PreauthorizedPaymentWizardActivity;
 import com.propertyvista.portal.web.client.activity.residents.payment.PreauthorizedPaymentsActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
 import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodSubmittedActivity;
@@ -119,14 +119,14 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.Financial.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PaymentSubmitting) {
-                        activity = new PaymentSubmittedActivity(appPlace);
+                        activity = new PaymentSubmissionActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments) {
                         activity = new PreauthorizedPaymentsActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
-                        activity = new PreauthorizedPaymentWizardActivity(appPlace);
+                        activity = new AutoPayWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
-                        activity = new PreauthorizedPaymentSubmittedActivity(appPlace);
+                        activity = new AutoPaySubmissionActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Maintenance) {
                         activity = new MaintenanceAcitvity(appPlace);

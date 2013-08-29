@@ -29,15 +29,15 @@ import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymen
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PreauthorizedPaymentSubmittedService;
+import com.propertyvista.portal.rpc.portal.services.resident.AutoPaySubmissionService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class PreauthorizedPaymentSubmittedServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
-        PreauthorizedPaymentSubmittedService {
+public class AutoPaySubmissionServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
+        AutoPaySubmissionService {
 
-    public PreauthorizedPaymentSubmittedServiceImpl() {
+    public AutoPaySubmissionServiceImpl() {
         super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
     }
 
