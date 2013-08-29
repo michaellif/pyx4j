@@ -35,7 +35,7 @@ public class WizardPanel extends DeckPanel implements HasWidgets, IndexedPanel.F
         HasSelectionHandlers<WizardStep> {
 
     public WizardPanel() {
-        addStyleName(CEntityWizardTheme.StyleName.WizardPanel.name());
+        setStyleName(CEntityWizardTheme.StyleName.WizardPanel.name());
     }
 
     public void addStep(WizardStep step) {

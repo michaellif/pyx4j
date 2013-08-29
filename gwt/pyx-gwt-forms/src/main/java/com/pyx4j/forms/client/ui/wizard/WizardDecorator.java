@@ -57,8 +57,6 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
 
     private CEntityWizard<E> component;
 
-    private final String footerHeight = "auto";
-
     public WizardDecorator() {
         this(i18n.tr("Finish"));
     }
@@ -134,6 +132,10 @@ public class WizardDecorator<E extends IEntity> extends FlowPanel implements IDe
 
     protected IsWidget getContent() {
         return contentHolder.getWidget();
+    }
+
+    public SimplePanel getContentHolder() {
+        return contentHolder;
     }
 
     protected void setContent(IsWidget widget) {
