@@ -29,9 +29,9 @@ import com.propertyvista.portal.web.client.activity.NotificationPageActivity;
 import com.propertyvista.portal.web.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
-import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
-import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPaySubmissionActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayListActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPaySubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentSubmissionActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
@@ -43,27 +43,8 @@ import com.propertyvista.portal.web.client.activity.login.LoginWithTokenActivity
 import com.propertyvista.portal.web.client.activity.login.PasswordResetRequestActivity;
 import com.propertyvista.portal.web.client.activity.login.VistaTermsActivity;
 import com.propertyvista.portal.web.client.activity.profile.ProfileActivity;
-import com.propertyvista.portal.web.client.activity.residents.billing.BillSummaryActivity;
-import com.propertyvista.portal.web.client.activity.residents.billing.BillingHistoryActivity;
-import com.propertyvista.portal.web.client.activity.residents.billing.ViewBillActivity;
-import com.propertyvista.portal.web.client.activity.residents.financial.FinancialSummaryActivity;
-import com.propertyvista.portal.web.client.activity.residents.maintenance.EditMaintenanceRequestActivity;
-import com.propertyvista.portal.web.client.activity.residents.maintenance.MaintenanceAcitvity;
-import com.propertyvista.portal.web.client.activity.residents.maintenance.NewMaintenanceRequestActivity;
-import com.propertyvista.portal.web.client.activity.residents.maintenance.ViewMaintenanceRequestActivity;
-import com.propertyvista.portal.web.client.activity.residents.paymentmethod.EditPaymentMethodActivity;
-import com.propertyvista.portal.web.client.activity.residents.paymentmethod.PaymentMethodsActivity;
-import com.propertyvista.portal.web.client.activity.residents.paymentmethod.ViewPaymentMethodActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordChangeActivity;
 import com.propertyvista.portal.web.client.activity.security.PasswordResetActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.ProvideTenantInsuranceActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.TenantInsuranceActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.otherprovider.TenantInsuranceByOtherProvdierUpdateActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.tenantsure.TenantSureAboutActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.tenantsure.TenantSureCreditCardUpdateActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.tenantsure.TenantSureFaqActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.tenantsure.TenantSureManagementActivity;
-import com.propertyvista.portal.web.client.activity.tenantinsurance.tenantsure.TenantSurePurchaseActivity;
 
 public class ContentActivityMapper implements AppActivityMapper {
 
@@ -94,27 +75,11 @@ public class ContentActivityMapper implements AppActivityMapper {
 
                     else if (appPlace instanceof PortalSiteMap.PotentialTenants) {
                         activity = new PotentialTenantActivity(appPlace);
-                    }
 
-                    else if (appPlace instanceof Resident.PaymentMethods) {
-                        activity = new PaymentMethodsActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.ViewPaymentMethod) {
-                        activity = new ViewPaymentMethodActivity(appPlace);
-                    } else if (appPlace instanceof Resident.PaymentMethods.EditPaymentMethod) {
-                        activity = new EditPaymentMethodActivity(appPlace);
                     } else if (appPlace instanceof Resident.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.PaymentMethods.PaymentMethodSubmitted) {
                         activity = new PaymentMethodSubmissionActivity(appPlace);
-
-                    } else if (appPlace instanceof Resident.Financial.BillSummary) {
-                        activity = new BillSummaryActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.BillingHistory) {
-                        activity = new BillingHistoryActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.BillingHistory.ViewBill) {
-                        activity = new ViewBillActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Financial.FinancialSummary) {
-                        activity = new FinancialSummaryActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
@@ -127,34 +92,6 @@ public class ContentActivityMapper implements AppActivityMapper {
                         activity = new AutoPayWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
                         activity = new AutoPaySubmissionActivity(appPlace);
-
-                    } else if (appPlace instanceof Resident.Maintenance) {
-                        activity = new MaintenanceAcitvity(appPlace);
-                    } else if (appPlace instanceof Resident.Maintenance.NewMaintenanceRequest) {
-                        activity = new NewMaintenanceRequestActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Maintenance.ViewMaintenanceRequest) {
-                        activity = new ViewMaintenanceRequestActivity(appPlace);
-                    } else if (appPlace instanceof Resident.Maintenance.EditMaintenanceRequest) {
-                        activity = new EditMaintenanceRequestActivity(appPlace);
-
-                    } else if (appPlace instanceof Resident.TenantInsurance) {
-                        activity = new TenantInsuranceActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.ProvideTenantInsurance) {
-                        activity = new ProvideTenantInsuranceActivity();
-
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.TenantSurePurchase) {
-                        activity = new TenantSurePurchaseActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.Management) {
-                        activity = new TenantSureManagementActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.Faq) {
-                        activity = new TenantSureFaqActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.About) {
-                        activity = new TenantSureAboutActivity();
-                    } else if (appPlace instanceof Resident.TenantInsurance.TenantSure.Management.UpdateCreditCard) {
-                        activity = new TenantSureCreditCardUpdateActivity();
-
-                    } else if (appPlace instanceof Resident.TenantInsurance.Other.UploadCertificate) {
-                        activity = new TenantInsuranceByOtherProvdierUpdateActivity(appPlace);
 
                     } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);

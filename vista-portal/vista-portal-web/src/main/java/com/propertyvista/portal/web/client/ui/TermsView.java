@@ -7,30 +7,16 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-13
+ * Created on 2012-12-06
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views;
+package com.propertyvista.portal.web.client.ui;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+public interface TermsView extends IsView {
 
-public interface ProvideTenantInsuranceView extends IsView {
-
-    interface Presenter {
-
-        void onPurchaseTenantSure();
-
-        void onUpdateInsuranceByOtherProvider();
-
-    }
-
-    void setPresenter(Presenter presenter);
-
-    void setTenantSureInvitationEnabled(boolean tenantSureInvitationEnabled);
-
-    void populate(TenantInsuranceStatusDTO insuranceStatus);
+    void populate(String tenantSureFaqHtml);
 
 }

@@ -24,7 +24,6 @@ import com.pyx4j.forms.client.ui.decorators.DefaultWidgetDecoratorTheme;
 import com.pyx4j.forms.client.ui.folder.DefaultEntityFolderTheme;
 import com.pyx4j.forms.client.ui.panels.FlexFormPanelTheme;
 import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme;
-import com.pyx4j.forms.client.ui.wizard.CEntityWizardTheme.StyleName;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutTheme;
 import com.pyx4j.widgets.client.DefaultWidgetsTheme;
 import com.pyx4j.widgets.client.datepicker.DefaultDatePickerTheme;
@@ -36,9 +35,6 @@ import com.propertyvista.common.client.theme.NewPaymentMethodEditorTheme;
 import com.propertyvista.common.client.theme.TransactionHistoryViewerTheme;
 import com.propertyvista.domain.site.SiteDescriptor.Skin;
 import com.propertyvista.portal.web.client.resources.PortalImages;
-import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
-import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantSureInsuranceStatusViewer;
-import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceViewImpl;
 
 public class PortalWebTheme extends Theme {
 
@@ -263,9 +259,7 @@ public class PortalWebTheme extends Theme {
         addTheme(new ExtraGadgetsTheme());
         addTheme(new EntityViewTheme());
         addTheme(new TenantInsuranceTheme());
-        addTheme(new TenantSureTheme());
 
-        initTenantInsuranceStyles(); // TODO move this to a theme class
     }
 
     private void initBackground() {
@@ -417,107 +411,6 @@ public class PortalWebTheme extends Theme {
         style.addProperty("vertical-align", "bottom");
         style.addProperty("background", "transparent");
         addStyle(style);
-    }
-
-    private void initTenantInsuranceStyles() {
-
-        // TODO move to TenantDashboardTheme?
-        // Dashboard ******************************************************************************************************************************************
-        {
-            Style style = new Style("." + TenantInsuranceStatusViewer.Styles.TenantInsuranceWarningText.name());
-            style.addProperty("color", "#AA0000");
-            style.addProperty("width", "100%");
-            style.addProperty("text-align", "center");
-            style.addProperty("font-size", "16px");
-            style.addProperty("font-weight", "bold");
-            style.addProperty("font-style", "normal");
-            style.addProperty("padding-top", "0.5em");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + TenantInsuranceStatusViewer.Styles.TenantInsuranceAnchor.name());
-            style.addProperty("display", "block");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("margin-right", "auto");
-            style.addProperty("width", "100%");
-            style.addProperty("text-align", "center");
-            style.addProperty("padding-top", "0.5em");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + TenantSureInsuranceStatusViewer.STYLE_PREFIX + TenantSureInsuranceStatusViewer.StyleSuffix.TenantSureLogo);
-            style.addProperty("display", "block");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("margin-right", "auto");
-            style.addProperty("text-align", "center");
-            style.addProperty("margin-top", "10px");
-            style.addProperty("margin-bottom", "10px");
-            addStyle(style);
-        }
-
-        // ProvideTenantInsuranceView **************************************************************************************************************************
-
-        {
-            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIRequirements.name());
-            style.addProperty("text-align", "justify");
-            style.addProperty("font-weight", "normal");
-            style.addProperty("font-style", "normal");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("margin-right", "auto");
-            style.addProperty("margin-top", "30px");
-            style.addProperty("margin-bottom", "40px");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIInsuranceStatus.name());
-            style.addProperty("text-align", "center");
-            style.addProperty("font-weight", "bold");
-            style.addProperty("font-style", "normal");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("margin-right", "auto");
-            style.addProperty("margin-top", "10px");
-            style.addProperty("margin-bottom", "50px");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTITenantSureLogo.name());
-            style.addProperty("display", "block");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("margin-right", "auto");
-            style.addProperty("width", "100%");
-            style.addProperty("text-align", "center");
-            style.addProperty("padding-top", "0.5em");
-            style.addProperty("padding-bottom", "2em");
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIBGetTenantSure.name());
-            style.addProperty("margin-left", "20px");
-            style.addProperty("width", "20em");
-            style.addProperty("padding", "0.40em");
-            style.addProperty("font-size", "18px");
-            style.addProperty("text-align", "center");
-            style.addProperty("font-style", "bold");
-
-            addStyle(style);
-        }
-
-        {
-            Style style = new Style("." + ProvideTenantInsuranceViewImpl.Styles.ProvideTIUpdateExisitingInsurance.name());
-            style.addProperty("display", "block");
-            style.addProperty("margin-left", "auto");
-            style.addProperty("margin-right", "auto");
-            style.addProperty("width", "100%");
-            style.addProperty("text-align", "center");
-            style.addProperty("padding-top", "0.5em");
-            addStyle(style);
-        }
-
     }
 
     @Override

@@ -22,7 +22,7 @@ import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
 import com.propertyvista.portal.rpc.portal.services.PortalVistaTermsService;
 import com.propertyvista.portal.web.client.PortalWebSite;
-import com.propertyvista.portal.web.client.ui.residents.tenantinsurance.tenantsure.views.TermsView;
+import com.propertyvista.portal.web.client.ui.TermsView;
 
 public class VistaTermsActivity extends AbstractActivity {
 

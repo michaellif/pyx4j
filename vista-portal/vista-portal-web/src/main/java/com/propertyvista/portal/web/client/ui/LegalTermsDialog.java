@@ -11,7 +11,7 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.residents;
+package com.propertyvista.portal.web.client.ui;
 
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
@@ -33,7 +33,7 @@ public class LegalTermsDialog extends OkDialog {
 
     @com.pyx4j.i18n.annotations.I18n
     public enum TermsType {
-        TermsOfUse, PrivacyPolicy, BillingAndRefundPolicy, PreauthorisedPAD, PreauthorisedCC;
+        TermsOfUse, PrivacyPolicy, BillingAndRefundPolicy, PreauthorisedPAD, PreauthorisedCC, DirectBankingInstruction;
 
         @Override
         public String toString() {
@@ -64,6 +64,9 @@ public class LegalTermsDialog extends OkDialog {
             break;
         case PreauthorisedCC:
             legalTerms.setHTML(VistaResources.INSTANCE.paymentPreauthorisedCC().getText());
+            break;
+        case DirectBankingInstruction:
+            legalTerms.setHTML(VistaResources.INSTANCE.directBankingInstruction().getText());
             break;
 
         default:
