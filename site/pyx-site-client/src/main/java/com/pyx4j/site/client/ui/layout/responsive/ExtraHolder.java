@@ -28,7 +28,7 @@ public class ExtraHolder extends SimplePanel {
     public ExtraHolder(ResponsiveLayoutPanel parent) {
         getElement().getStyle().setDisplay(com.google.gwt.dom.client.Style.Display.INLINE_BLOCK);
         getElement().getStyle().setProperty("verticalAlign", "top");
-        getElement().getStyle().setPosition(Position.ABSOLUTE);
+        getElement().getStyle().setPosition(Position.RELATIVE);
         getElement().getStyle().setProperty("right", "0");
         getElement().getStyle().setProperty("top", "0");
         setWidget(parent.getExtraDisplay());
