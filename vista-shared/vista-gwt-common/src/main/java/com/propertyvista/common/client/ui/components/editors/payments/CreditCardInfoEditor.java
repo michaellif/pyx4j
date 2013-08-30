@@ -99,7 +99,12 @@ public class CreditCardInfoEditor extends CEntityDecoratableForm<CreditCardInfo>
     protected void onValueSet(boolean populate) {
         super.onValueSet(populate);
 
-        typeSelector.setOptions(getAllowedCardTypes());
+        if (typeSelector.isEditable()) {
+            typeSelector.setOptions(getAllowedCardTypes());
+            if (getValue().id().isNull() && typeSelector.getOptions().size() == 1) {
+                typeSelector.setValue(typeSelector.getOptions().get(0));
+            }
+        }
 
         updateVisibility(getValue());
     }
