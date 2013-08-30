@@ -14,10 +14,12 @@
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.google.gwt.dom.client.Style.Display;
+import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.TextAlign;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.dom.client.Style.VerticalAlign;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
@@ -27,6 +29,10 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
@@ -78,25 +84,66 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     class BillingViewer extends CEntityForm<TenantBillingSummaryDTO> {
 
+        private final BasicFlexFormPanel mainPanel;
+
+        private final FlowPanel actionsPanel;
+
         public BillingViewer() {
             super(TenantBillingSummaryDTO.class);
+
+            mainPanel = new BasicFlexFormPanel();
+
+            actionsPanel = new FlowPanel();
+
+            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
+
+                @Override
+                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                    doLayout(event.getLayoutType());
+                }
+
+            });
+        }
+
+        private void doLayout(LayoutType layoutType) {
+            switch (layoutType) {
+            case phonePortrait:
+            case phoneLandscape:
+            case tabletPortrait:
+                mainPanel.getElement().getStyle().setFloat(Float.NONE);
+                mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                mainPanel.setWidth("100%");
+
+                actionsPanel.getElement().getStyle().setFloat(Float.NONE);
+                actionsPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
+                actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
+                actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+                break;
+            default:
+                mainPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+                mainPanel.getElement().getStyle().setFloat(Float.LEFT);
+                mainPanel.setWidth("auto");
+
+                actionsPanel.getElement().getStyle().setDisplay(Display.BLOCK);
+                actionsPanel.getElement().getStyle().setFloat(Float.RIGHT);
+
+                break;
+            }
         }
 
         @Override
         public IsWidget createContent() {
             FlowPanel contentPanel = new FlowPanel();
 
-            BasicFlexFormPanel mainPanel = new BasicFlexFormPanel();
-            mainPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            mainPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            mainPanel.setWidth("auto");
+            mainPanel.getElement().getStyle().setProperty("margin", "0 5%");
             mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
             mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
-            contentPanel.add(mainPanel);
 
-            FlowPanel actionsPanel = new FlowPanel();
-            actionsPanel.getElement().getStyle().setMarginTop(10, Unit.PX);
-            actionsPanel.getElement().getStyle().setDisplay(Display.INLINE_BLOCK);
-            actionsPanel.getElement().getStyle().setVerticalAlign(VerticalAlign.TOP);
+            contentPanel.add(mainPanel);
             contentPanel.add(actionsPanel);
 
             if (!VistaFeatures.instance().yardiIntegration()) {
