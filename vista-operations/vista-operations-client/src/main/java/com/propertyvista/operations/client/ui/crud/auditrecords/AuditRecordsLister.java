@@ -39,6 +39,8 @@ public class AuditRecordsLister extends AbstractLister<AuditRecordOperationsDTO>
                 new MemberColumnDescriptor.Builder(proto().sessionId()).visible(false).build(),
                 new MemberColumnDescriptor.Builder(proto().event()).build(),
                 new MemberColumnDescriptor.Builder(proto().targetEntity()).searchable(false).sortable(false).build(),
+                new MemberColumnDescriptor.Builder(proto().entityId()).build(),
+                new MemberColumnDescriptor.Builder(proto().entityClass()).build(),
                 new MemberColumnDescriptor.Builder(proto().details()).build()                
         );//@formatter:on
     }

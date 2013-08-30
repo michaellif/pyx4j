@@ -56,4 +56,8 @@ public interface AuditRecordOperationsDTO extends IEntity {
 
     IPrimitive<String> details();
 
+    IPrimitive<Key> entityId();
+
+    IPrimitive<String> entityClass();
+
 }
