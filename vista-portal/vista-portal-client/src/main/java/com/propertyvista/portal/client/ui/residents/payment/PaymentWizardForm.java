@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.client.ui.residents.payment;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -48,6 +49,8 @@ import com.pyx4j.forms.client.ui.CSimpleEntityComboBox;
 import com.pyx4j.forms.client.ui.CTextFieldBase;
 import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.forms.client.ui.wizard.WizardStep;
+import com.pyx4j.forms.client.validators.EditableValueValidator;
+import com.pyx4j.forms.client.validators.ValidationError;
 import com.pyx4j.gwt.commons.BrowserType;
 import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
@@ -254,6 +257,22 @@ public class PaymentWizardForm extends VistaWizardForm<PaymentDTO> {
         panel.getFlexCellFormatter().setAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER, HasVerticalAlignment.ALIGN_MIDDLE);
 
         return panel;
+    }
+
+    @Override
+    public void addValidations() {
+        super.addValidations();
+
+        get(proto().amount()).addValueValidator(new EditableValueValidator<BigDecimal>() {
+            @Override
+            public ValidationError isValid(CComponent<BigDecimal> component, BigDecimal value) {
+                if (value != null) {
+                    return (value.compareTo(BigDecimal.ZERO) > 0 ? null
+                            : new ValidationError(component, i18n.tr("Payment amount should be greater then zero!")));
+                }
+                return null;
+            }
+        });
     }
 
     @Override
