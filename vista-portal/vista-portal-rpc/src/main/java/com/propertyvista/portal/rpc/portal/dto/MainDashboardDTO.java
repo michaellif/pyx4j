@@ -20,6 +20,10 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantBillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantMaintenanceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
 
 @Transient

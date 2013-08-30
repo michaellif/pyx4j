@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
 
 public interface AutoPayListView extends IsView {
 

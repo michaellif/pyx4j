@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantResidentServicesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantResidentServicesDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 

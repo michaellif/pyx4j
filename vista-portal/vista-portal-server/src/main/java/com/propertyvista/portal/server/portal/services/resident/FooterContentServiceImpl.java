@@ -24,8 +24,8 @@ import com.pyx4j.i18n.server.I18nManager;
 
 import com.propertyvista.domain.site.PortalLogoImageResource;
 import com.propertyvista.domain.site.SiteDescriptor;
-import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
+import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
 
 public class FooterContentServiceImpl implements FooterContentService {
 

@@ -47,7 +47,7 @@ import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
 import com.propertyvista.portal.domain.dto.financial.PvBillingFinancialSummaryDTO;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
-import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class DashboardForm extends CEntityDecoratableForm<MainDashboardDTO> {

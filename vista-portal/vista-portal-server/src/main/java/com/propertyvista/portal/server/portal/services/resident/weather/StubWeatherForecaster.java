@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO;
 
 public class StubWeatherForecaster implements WeatherForecaster {
 

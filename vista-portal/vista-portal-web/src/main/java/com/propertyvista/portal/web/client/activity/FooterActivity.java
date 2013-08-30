@@ -21,8 +21,8 @@ import com.google.gwt.user.client.ui.AcceptsOneWidget;
 
 import com.pyx4j.rpc.client.DefaultAsyncCallback;
 
-import com.propertyvista.portal.rpc.portal.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.rpc.portal.services.resident.FooterContentService;
+import com.propertyvista.portal.rpc.portal.web.dto.PortalFooterContentDTO;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.ui.FooterView;
 

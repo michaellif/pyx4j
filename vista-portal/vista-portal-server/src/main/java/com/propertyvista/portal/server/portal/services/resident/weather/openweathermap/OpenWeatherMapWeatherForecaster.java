@@ -19,8 +19,8 @@ import java.util.List;
 import com.pyx4j.entity.shared.EntityFactory;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO;
-import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO.TemperatureUnit;
+import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO.TemperatureUnit;
 import com.propertyvista.portal.server.portal.services.resident.weather.WeatherForecaster;
 import com.propertyvista.portal.server.portal.services.resident.weather.openweathermap.Weatherdata.Forecast.Time;
 

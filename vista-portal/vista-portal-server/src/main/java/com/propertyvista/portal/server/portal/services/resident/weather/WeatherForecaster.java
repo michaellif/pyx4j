@@ -16,7 +16,7 @@ package com.propertyvista.portal.server.portal.services.resident.weather;
 import java.util.List;
 
 import com.propertyvista.domain.contact.AddressStructured;
-import com.propertyvista.portal.rpc.portal.dto.WeatherForecastDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.WeatherForecastDTO;
 
 public interface WeatherForecaster {
 

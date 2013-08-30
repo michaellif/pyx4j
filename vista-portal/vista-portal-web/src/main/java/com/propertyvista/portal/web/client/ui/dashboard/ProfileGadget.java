@@ -27,7 +27,7 @@ import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 import com.pyx4j.widgets.client.Anchor;
 
-import com.propertyvista.portal.rpc.portal.dto.TenantProfileDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.themes.DashboardTheme;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;

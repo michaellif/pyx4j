@@ -25,7 +25,7 @@ import com.pyx4j.forms.client.ui.CAbstractSuggestBox;
 import com.pyx4j.forms.client.ui.IFormat;
 import com.pyx4j.forms.client.ui.NSuggestBox;
 
-import com.propertyvista.portal.rpc.portal.dto.SelfRegistrationBuildingDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.SelfRegistrationBuildingDTO;
 
 public class BuildingSuggestBox extends CAbstractSuggestBox<SelfRegistrationBuildingDTO> {
 

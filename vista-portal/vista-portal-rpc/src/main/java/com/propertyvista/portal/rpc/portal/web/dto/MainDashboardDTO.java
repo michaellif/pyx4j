@@ -7,21 +7,26 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Nov 25, 2011
+ * Created on 2011-05-16
  * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.portal.dto;
+package com.propertyvista.portal.rpc.portal.web.dto;
 
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-import com.pyx4j.entity.shared.IList;
 import com.pyx4j.i18n.annotations.I18n;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
-public interface TenantMaintenanceDTO extends IEntity {
+public interface MainDashboardDTO extends IEntity {
 
-    IList<TenantMainenanceRequestStatusDTO> maintenanceRequestStauses();
+    TenantProfileDTO profileInfo();
+
+    TenantMaintenanceDTO maintenanceInfo();
+
+    TenantBillingSummaryDTO billingSummary();
+
+    TenantResidentServicesDTO residentServicesInfo();
 
 }

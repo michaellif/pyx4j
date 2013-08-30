@@ -23,8 +23,8 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.dto.PaymentMethodDTO;
-import com.propertyvista.portal.rpc.portal.services.resident.PaymentMethodRetrieveService;
+import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
+import com.propertyvista.portal.rpc.portal.web.services.PaymentMethodRetrieveService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
 import com.propertyvista.portal.web.client.ui.financial.paymentmethod.PaymentMethodSubmissionView;
@@ -65,6 +65,7 @@ public class PaymentMethodSubmissionActivity extends SecurityAwareActivity imple
         AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment());
     }
 
+    @Override
     public void back() {
         // TODO Auto-generated method stub
 

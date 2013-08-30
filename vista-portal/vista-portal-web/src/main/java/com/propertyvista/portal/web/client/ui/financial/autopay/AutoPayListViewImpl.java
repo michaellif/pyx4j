@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
 
 public class AutoPayListViewImpl extends SimplePanel implements AutoPayListView {
 

@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.dto.FinancialDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 
 public interface FinancialDashboardView extends IsView {
 

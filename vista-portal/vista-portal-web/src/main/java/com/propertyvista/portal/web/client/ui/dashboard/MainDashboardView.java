@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.dashboard;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.portal.dto.MainDashboardDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
 
 public interface MainDashboardView extends IsView {
 

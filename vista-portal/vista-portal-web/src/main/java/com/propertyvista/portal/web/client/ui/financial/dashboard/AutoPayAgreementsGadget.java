@@ -13,30 +13,47 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.dashboard;
 
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
+import java.util.Arrays;
+import java.util.List;
 
-import com.pyx4j.commons.css.StyleManager;
+import com.google.gwt.dom.client.Style.TextAlign;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.SimplePanel;
+
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CEntityForm;
+import com.pyx4j.forms.client.ui.folder.EntityFolderColumnDescriptor;
+import com.pyx4j.forms.client.ui.panels.BasicFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Button;
-import com.pyx4j.widgets.client.actionbar.Toolbar;
+import com.pyx4j.site.client.AppSite;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeEvent;
+import com.pyx4j.site.client.ui.layout.responsive.LayoutChangeHandler;
+import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutType;
 
-import com.propertyvista.portal.rpc.portal.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
+import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.TenantBillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
+import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
 public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardViewImpl> {
 
     private static final I18n i18n = I18n.get(AutoPayAgreementsGadget.class);
 
-    AutoPayAgreementsGadget(FinancialDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("AutoPay Agreements"), ThemeColor.contrast4);
-        setActionsToolbar(new AutoPayAgreementsToolbar());
+    private final AutoPayViewer autoPayViewer;
 
-        FlowPanel contentPanel = new FlowPanel();
-        contentPanel.add(new HTML("AutoPay Agreements"));
+    AutoPayAgreementsGadget(FinancialDashboardViewImpl form) {
+        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Auto Pay Agreements"), ThemeColor.contrast4);
+
+        autoPayViewer = new AutoPayViewer();
+        autoPayViewer.setViewable(true);
+        autoPayViewer.initContent();
+
+        SimplePanel contentPanel = new SimplePanel(autoPayViewer.asWidget());
+        contentPanel.getElement().getStyle().setTextAlign(TextAlign.CENTER);
 
         setContent(contentPanel);
     }
@@ -45,17 +62,59 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     }
 
-    class AutoPayAgreementsToolbar extends Toolbar {
-        public AutoPayAgreementsToolbar() {
-            Button autoPayButton = new Button("Setup Auto Pay", new Command() {
+    //  getGadgetViewer().getPresenter().setAutopay();
+
+    class AutoPayViewer extends CEntityForm<TenantBillingSummaryDTO> {
+
+        private final BasicFlexFormPanel mainPanel;
+
+        public AutoPayViewer() {
+            super(TenantBillingSummaryDTO.class);
+
+            mainPanel = new BasicFlexFormPanel();
+
+            doLayout(LayoutType.getLayoutType(Window.getClientWidth()));
+
+            AppSite.getEventBus().addHandler(LayoutChangeEvent.TYPE, new LayoutChangeHandler() {
 
                 @Override
-                public void execute() {
-                    getGadgetViewer().getPresenter().setAutopay();
+                public void onLayoutChangeRerquest(LayoutChangeEvent event) {
+                    doLayout(event.getLayoutType());
                 }
+
             });
-            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(autoPayButton);
+        }
+
+        private void doLayout(LayoutType layoutType) {
+
+        }
+
+        @Override
+        public IsWidget createContent() {
+
+            mainPanel.getElement().getStyle().setProperty("margin", "0 5%");
+            mainPanel.setWidget(0, 0, new FormDecoratorBuilder(inject(proto().currentBalance()), "140px", "100px", "120px").build());
+            mainPanel.setWidget(1, 0, new FormDecoratorBuilder(inject(proto().dueDate()), "140px", "100px", "120px").build());
+
+            return mainPanel;
+        }
+    }
+
+    class AutoPayFolder extends VistaTableFolder<PaymentInfoDTO> {
+
+        public AutoPayFolder() {
+            super(PaymentInfoDTO.class, false);
+            setViewable(true);
+        }
+
+        @Override
+        public List<EntityFolderColumnDescriptor> columns() {
+            return Arrays.asList(// @formatter:off
+                    new EntityFolderColumnDescriptor(proto().amount(), "7em"),
+                    new EntityFolderColumnDescriptor(proto().paymentDate(), "9em"),
+                    new EntityFolderColumnDescriptor(proto().paymentMethod().type(), "10em"),
+                    new EntityFolderColumnDescriptor(proto().payer(), "20em")
+            ); // formatter:on
         }
     }
 }
