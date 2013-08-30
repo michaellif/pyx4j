@@ -14,9 +14,12 @@
  */
 package com.propertyvista.integration.yardi;
 
+import java.rmi.RemoteException;
+
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.gwt.server.DateUtils;
 
+import com.propertyvista.biz.system.YardiServiceException;
 import com.propertyvista.domain.payment.PaymentType;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
@@ -47,7 +50,7 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
         getDataModel(CustomerDataModel.class).addPaymentMethod(tenant.customer(), lease.unit().building(), PaymentType.Echeck);
     }
 
-    public void testLeaseEndSuspension() throws Exception {
+    public void testLeaseEndSuspension1() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(false);
         Persistence.service().commit();
 
@@ -57,6 +60,36 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
+        leaseEndSuspentionTestSequence();
+    }
+
+    public void testLeaseEndSuspension2() throws Exception {
+        getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(false);
+        Persistence.service().commit();
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YLEASE.ExpectedMoveOutDate, DateUtils.detectDateformat("2012-03-01"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        leaseEndSuspentionTestSequence();
+    }
+
+    public void testLeaseEndSuspension3() throws Exception {
+        getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(false);
+        Persistence.service().commit();
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YLEASE.ExpectedMoveOutDate, DateUtils.detectDateformat("2012-03-21"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        leaseEndSuspentionTestSequence();
+    }
+
+    private void leaseEndSuspentionTestSequence() throws RemoteException, YardiServiceException {
         createSomePap();
 
         setSysDate("2012-01-11");
@@ -93,10 +126,10 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
         createSomePap();
         setSysDate("2012-04-11");
         yardiImportAll(getYardiCredential("prop123"));
-        new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!
+        new PaymentAgreementTester(lease.billingAccount()).activeCount(0); // PAP is suspended!        
     }
 
-    public void testLeaseEndByPolicySuspension() throws Exception {
+    public void testLeaseEndByPolicySuspension1() throws Exception {
         getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(true);
         Persistence.service().commit();
 
@@ -106,6 +139,36 @@ public class PreauthorizedPaymentSuspensionTest extends PaymentYardiTestBase {
             MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
         }
 
+        leaseEndSuspentionByPolicyTestSequence();
+    }
+
+    public void testLeaseEndByPolicySuspension2() throws Exception {
+        getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(true);
+        Persistence.service().commit();
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YLEASE.ExpectedMoveOutDate, DateUtils.detectDateformat("2012-03-01"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        leaseEndSuspentionByPolicyTestSequence();
+    }
+
+    public void testLeaseEndByPolicySuspension3() throws Exception {
+        getDataModel(AutoPayPolicyDataModel.class).setExcludeLastBillingPeriodCharge(true);
+        Persistence.service().commit();
+
+        {
+            RtCustomerUpdater updater = new RtCustomerUpdater("prop123", "t000111")//
+                    .set(RtCustomerUpdater.YLEASE.ExpectedMoveOutDate, DateUtils.detectDateformat("2012-03-21"));
+            MockEventBus.fireEvent(new RtCustomerUpdateEvent(updater));
+        }
+
+        leaseEndSuspentionByPolicyTestSequence();
+    }
+
+    private void leaseEndSuspentionByPolicyTestSequence() throws RemoteException, YardiServiceException {
         createSomePap();
 
         setSysDate("2012-01-11");
