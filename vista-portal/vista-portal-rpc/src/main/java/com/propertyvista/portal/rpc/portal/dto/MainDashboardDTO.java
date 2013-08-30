@@ -20,11 +20,11 @@ import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.dto.MaintenanceRequestDTO;
 import com.propertyvista.portal.domain.dto.financial.FinancialSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantBillingSummaryDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantMaintenanceDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.MaintenanceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.TenantProfileDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantResidentServicesDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.ResidentServicesDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 @Transient
 @I18n(strategy = I18n.I18nStrategy.IgnoreThis)
@@ -32,11 +32,11 @@ public interface MainDashboardDTO extends IEntity {
 
     TenantProfileDTO profileInfo();
 
-    TenantMaintenanceDTO maintenanceInfo();
+    MaintenanceDTO maintenanceInfo();
 
-    TenantBillingSummaryDTO billingSummary();
+    BillingSummaryDTO billingSummary();
 
-    TenantResidentServicesDTO residentServicesInfo();
+    ResidentServicesDTO residentServicesInfo();
 
     @Deprecated
     FinancialSummaryDTO billSummary();
@@ -45,5 +45,5 @@ public interface MainDashboardDTO extends IEntity {
     IList<MaintenanceRequestDTO> maintanances();
 
     @Deprecated
-    TenantInsuranceStatusDTO tenantInsuranceStatus();
+    InsuranceStatusDTO tenantInsuranceStatus();
 }

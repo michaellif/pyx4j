@@ -23,10 +23,10 @@ public interface MainDashboardDTO extends IEntity {
 
     TenantProfileDTO profileInfo();
 
-    TenantMaintenanceDTO maintenanceInfo();
+    MaintenanceDTO maintenanceInfo();
 
-    TenantBillingSummaryDTO billingSummary();
+    BillingSummaryDTO billingSummary();
 
-    TenantResidentServicesDTO residentServicesInfo();
+    ResidentServicesDTO residentServicesInfo();
 
 }

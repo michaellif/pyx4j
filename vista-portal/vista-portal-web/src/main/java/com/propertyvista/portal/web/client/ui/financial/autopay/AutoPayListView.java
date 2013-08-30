@@ -15,17 +15,18 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.pyx4j.site.client.IsView;
 
+import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
 
 public interface AutoPayListView extends IsView {
 
     interface Presenter {
 
-        void viewPaymentMethod(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment);
+        void viewPaymentMethod(PreauthorizedPaymentDTO preauthorizedPayment);
 
         void addPreauthorizedPayment();
 
-        void deletePreauthorizedPayment(PreauthorizedPaymentListDTO.ListItemDTO preauthorizedPayment);
+        void deletePreauthorizedPayment(PreauthorizedPaymentDTO preauthorizedPayment);
     }
 
     void populate(PreauthorizedPaymentListDTO preauthorizedPayments);

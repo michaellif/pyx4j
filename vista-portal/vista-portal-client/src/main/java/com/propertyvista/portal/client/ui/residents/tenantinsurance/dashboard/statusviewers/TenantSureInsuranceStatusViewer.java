@@ -31,9 +31,9 @@ import com.propertyvista.common.client.ui.components.tenantinsurance.MoneyComboB
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureStatusForm;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.resources.TenantSureResources;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
 
-public class TenantSureInsuranceStatusViewer extends CViewer<TenantSureTenantInsuranceStatusShortDTO> {
+public class TenantSureInsuranceStatusViewer extends CViewer<InsuranceStatusShortDTO> {
 
     public static final String STYLE_PREFIX = "-vista-TenantSureStatusViewer";
 
@@ -46,7 +46,7 @@ public class TenantSureInsuranceStatusViewer extends CViewer<TenantSureTenantIns
     private static final I18n i18n = I18n.get(TenantSureInsuranceStatusViewer.class);
 
     @Override
-    public IsWidget createContent(TenantSureTenantInsuranceStatusShortDTO tenantSureStatus) {
+    public IsWidget createContent(InsuranceStatusShortDTO tenantSureStatus) {
         FlowPanel contentPanel = new FlowPanel();
         Image tenantSureLogo = new Image(TenantSureResources.INSTANCE.logoTenantSure());
         tenantSureLogo.addStyleName(STYLE_PREFIX + StyleSuffix.TenantSureLogo.name());

@@ -11,25 +11,16 @@
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance;
-
-import java.math.BigDecimal;
+package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
 import com.pyx4j.commons.LogicalDate;
-import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface TenantInsuranceStatusDTO extends IEntity {
+public interface OtherProviderInsuranceStatusDTO extends InsuranceStatusDTO {
 
-    @Format("#,##0.00")
-    IPrimitive<BigDecimal> liabilityCoverage();
-
+    @Override
     IPrimitive<LogicalDate> expirationDate();
-
-    /** <code>true</code> when the tenant in the context is the owner of the insurance policy */
-    IPrimitive<Boolean> isOwner();
 
 }

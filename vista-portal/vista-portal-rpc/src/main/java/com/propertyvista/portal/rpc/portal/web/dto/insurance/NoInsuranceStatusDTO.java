@@ -7,17 +7,25 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-12
+ * Created on 2012-11-08
  * @author ArtyomB
  * @version $Id$
  */
-package com.propertyvista.portal.rpc.shared.dto.tenantinsurance.otherprovider;
+package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
+import java.math.BigDecimal;
+
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
-
-import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
+import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface OtherProvidersTenantInsuranceDetailsDTO extends InsuranceCertificate {
+public interface NoInsuranceStatusDTO extends InsuranceStatusDTO {
 
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> minimumRequiredLiability();
+
+    IPrimitive<String> noInsuranceStatusMessage();
+
+    IPrimitive<String> tenantInsuranceInvitation();
 }

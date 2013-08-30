@@ -18,7 +18,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.SimplePanel;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.TenantInsuranceStatusViewer;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 public class TenantInsuranceCoveredByOtherTenantViewImpl extends Composite implements TenantInsuranceCoveredByOtherTenantView {
 
@@ -35,7 +35,7 @@ public class TenantInsuranceCoveredByOtherTenantViewImpl extends Composite imple
     }
 
     @Override
-    public void populate(TenantInsuranceStatusDTO status) {
+    public void populate(InsuranceStatusDTO status) {
         statusViewer.populate(status);
     }
 

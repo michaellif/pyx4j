@@ -25,27 +25,27 @@ import com.propertyvista.domain.policy.policies.TenantInsurancePolicy;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceRequirementsDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
 public class TenantInsuranceServiceImpl implements TenantInsuranceService {
 
     @Override
-    public void getTenantInsuranceStatus(AsyncCallback<TenantInsuranceStatusDTO> callback) {
+    public void getTenantInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback) {
 
-        TenantInsuranceStatusDTO tenantInsuranceStatus = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+        InsuranceStatusDTO tenantInsuranceStatus = ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
                 TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub());
 
         callback.onSuccess(tenantInsuranceStatus);
     }
 
     @Override
-    public void getTenantInsuranceRequirements(AsyncCallback<TenantInsuranceRequirementsDTO> callback) {
+    public void getTenantInsuranceRequirements(AsyncCallback<InsuranceRequirementsDTO> callback) {
         Lease lease = Persistence.service().retrieve(Lease.class, TenantAppContext.getCurrentUserLeaseIdStub().getPrimaryKey());
         TenantInsurancePolicy insurancePolicy = ServerSideFactory.create(PolicyFacade.class).obtainEffectivePolicy(lease.unit(), TenantInsurancePolicy.class);
 
-        TenantInsuranceRequirementsDTO requirements = EntityFactory.create(TenantInsuranceRequirementsDTO.class);
+        InsuranceRequirementsDTO requirements = EntityFactory.create(InsuranceRequirementsDTO.class);
         requirements.minLiability().setValue(
                 insurancePolicy.requireMinimumLiability().isBooleanTrue() ? insurancePolicy.minimumRequiredLiability().getValue() : null);
 

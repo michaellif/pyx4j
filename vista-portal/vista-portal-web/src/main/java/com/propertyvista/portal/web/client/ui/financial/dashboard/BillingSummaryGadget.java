@@ -37,7 +37,7 @@ import com.pyx4j.widgets.client.Anchor;
 import com.pyx4j.widgets.client.Button;
 import com.pyx4j.widgets.client.actionbar.Toolbar;
 
-import com.propertyvista.portal.rpc.portal.web.dto.TenantBillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -64,7 +64,7 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
 
     }
 
-    protected void populate(TenantBillingSummaryDTO value) {
+    protected void populate(BillingSummaryDTO value) {
         billingViewer.populate(value);
     }
 
@@ -82,14 +82,14 @@ public class BillingSummaryGadget extends AbstractGadget<FinancialDashboardViewI
         }
     }
 
-    class BillingViewer extends CEntityForm<TenantBillingSummaryDTO> {
+    class BillingViewer extends CEntityForm<BillingSummaryDTO> {
 
         private final BasicFlexFormPanel mainPanel;
 
         private final FlowPanel actionsPanel;
 
         public BillingViewer() {
-            super(TenantBillingSummaryDTO.class);
+            super(BillingSummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();
 

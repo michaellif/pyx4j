@@ -30,10 +30,10 @@ import com.pyx4j.widgets.client.Label;
 
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.dashboard.statusviewers.OtherProviderTenantInsuranceStatusViewer;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.tenantsure.forms.TenantSureLogo;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 
 public class ProvideTenantInsuranceViewImpl extends Composite implements ProvideTenantInsuranceView {
 
@@ -122,23 +122,23 @@ public class ProvideTenantInsuranceViewImpl extends Composite implements Provide
     }
 
     @Override
-    public void populate(TenantInsuranceStatusDTO insuranceStatus) {
+    public void populate(InsuranceStatusDTO insuranceStatus) {
         tenantInsuranceRequirementsMessage.setVisible(false);
         tenantInsuranceRequirementsMessage.setHTML("");
 
         insuranceStatusViewer.setVisible(false);
 
         if (insuranceStatus != null) {
-            if (insuranceStatus.isInstanceOf(NoInsuranceTenantInsuranceStatusDTO.class)) {
-                NoInsuranceTenantInsuranceStatusDTO insuranceStatusNoInsurance = insuranceStatus.duplicate(NoInsuranceTenantInsuranceStatusDTO.class);
+            if (insuranceStatus.isInstanceOf(NoInsuranceStatusDTO.class)) {
+                NoInsuranceStatusDTO insuranceStatusNoInsurance = insuranceStatus.duplicate(NoInsuranceStatusDTO.class);
                 tenantInsuranceRequirementsMessage.setVisible(true);
                 tenantInsuranceRequirementsMessage.setHTML(insuranceStatusNoInsurance.tenantInsuranceInvitation().getValue());
                 provideInsuranceByOtherProvider.setText(i18n.tr("I (we) already have Tenant Insurance"));
-            } else if (insuranceStatus.isInstanceOf(OtherProviderTenantInsuranceStatusDTO.class)) {
+            } else if (insuranceStatus.isInstanceOf(OtherProviderInsuranceStatusDTO.class)) {
                 insuranceStatusViewer.setVisible(true);
-                insuranceStatusViewer.populate(insuranceStatus.duplicate(OtherProviderTenantInsuranceStatusDTO.class));
+                insuranceStatusViewer.populate(insuranceStatus.duplicate(OtherProviderInsuranceStatusDTO.class));
                 provideInsuranceByOtherProvider.setText(i18n.tr("Update Insurance"));
-            } else if (insuranceStatus.isInstanceOf(TenantSureTenantInsuranceStatusShortDTO.class)) {
+            } else if (insuranceStatus.isInstanceOf(InsuranceStatusShortDTO.class)) {
                 assert false : "this place shouldn't be used when tenantsure is active";
             } else {
                 assert false : "unknown insurance status: " + insuranceStatus.getInstanceValueClass().getName();

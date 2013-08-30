@@ -20,17 +20,11 @@ import com.pyx4j.entity.shared.IEntity;
 import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
-import com.propertyvista.domain.payment.PreauthorizedPayment;
-
 @Transient
 public interface PreauthorizedPaymentListDTO extends IEntity {
 
-    @Transient
-    public interface ListItemDTO extends PreauthorizedPayment {
-    }
-
     @Caption(name = "Pre-Authorized Payments")
-    IList<ListItemDTO> preauthorizedPayments();
+    IList<PreauthorizedPaymentDTO> preauthorizedPayments();
 
     @Caption(name = "Your current automated payment date")
     IPrimitive<LogicalDate> currentPaymentDate();

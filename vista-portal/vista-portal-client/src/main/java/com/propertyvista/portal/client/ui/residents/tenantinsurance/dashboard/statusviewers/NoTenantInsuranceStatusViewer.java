@@ -25,10 +25,10 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.widgets.client.Anchor;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.NoInsuranceTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
-public class NoTenantInsuranceStatusViewer extends CViewer<NoInsuranceTenantInsuranceStatusDTO> {
+public class NoTenantInsuranceStatusViewer extends CViewer<NoInsuranceStatusDTO> {
 
     public static final String STYLE_PREFIX = "-vista-NoTenantInsurance";
 
@@ -41,7 +41,7 @@ public class NoTenantInsuranceStatusViewer extends CViewer<NoInsuranceTenantInsu
     private static final I18n i18n = I18n.get(NoTenantInsuranceStatusViewer.class);
 
     @Override
-    public IsWidget createContent(NoInsuranceTenantInsuranceStatusDTO value) {
+    public IsWidget createContent(NoInsuranceStatusDTO value) {
         FlowPanel contentPanel = new FlowPanel();
         contentPanel.addStyleName(STYLE_PREFIX + StyleSuffix.Panel.name());
         HTML explanationMessage = new HTML();

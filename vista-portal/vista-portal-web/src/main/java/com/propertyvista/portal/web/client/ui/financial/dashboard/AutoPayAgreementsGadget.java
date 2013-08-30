@@ -34,7 +34,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.TenantBillingSummaryDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
@@ -64,12 +64,12 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
 
     //  getGadgetViewer().getPresenter().setAutopay();
 
-    class AutoPayViewer extends CEntityForm<TenantBillingSummaryDTO> {
+    class AutoPayViewer extends CEntityForm<BillingSummaryDTO> {
 
         private final BasicFlexFormPanel mainPanel;
 
         public AutoPayViewer() {
-            super(TenantBillingSummaryDTO.class);
+            super(BillingSummaryDTO.class);
 
             mainPanel = new BasicFlexFormPanel();
 

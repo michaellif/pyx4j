@@ -20,14 +20,14 @@ import com.google.gwt.user.client.ui.Label;
 import com.pyx4j.forms.client.ui.CViewer;
 import com.pyx4j.i18n.shared.I18n;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.OtherProviderTenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.OtherProviderInsuranceStatusDTO;
 
-public class OtherProviderTenantInsuranceStatusViewer extends CViewer<OtherProviderTenantInsuranceStatusDTO> {
+public class OtherProviderTenantInsuranceStatusViewer extends CViewer<OtherProviderInsuranceStatusDTO> {
 
     private static final I18n i18n = I18n.get(OtherProviderTenantInsuranceStatusViewer.class);
 
     @Override
-    public IsWidget createContent(OtherProviderTenantInsuranceStatusDTO insuranceStatus) {
+    public IsWidget createContent(OtherProviderInsuranceStatusDTO insuranceStatus) {
         FlowPanel contentPanel = new FlowPanel();
 
         contentPanel.add(new Label(i18n.tr("Personal Liablity: ${0}", insuranceStatus.liabilityCoverage().getStringView())));

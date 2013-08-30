@@ -25,8 +25,8 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.ProvideTenantInsuranceView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantSureTenantInsuranceStatusShortDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
 import com.propertyvista.shared.config.VistaFeatures;
 
 public class ProvideTenantInsuranceActivity extends AbstractActivity implements ProvideTenantInsuranceView.Presenter {
@@ -42,10 +42,10 @@ public class ProvideTenantInsuranceActivity extends AbstractActivity implements 
 
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
-        service.getTenantInsuranceStatus(new DefaultAsyncCallback<TenantInsuranceStatusDTO>() {
+        service.getTenantInsuranceStatus(new DefaultAsyncCallback<InsuranceStatusDTO>() {
             @Override
-            public void onSuccess(TenantInsuranceStatusDTO status) {
-                if (!status.isInstanceOf(TenantSureTenantInsuranceStatusShortDTO.class)) {
+            public void onSuccess(InsuranceStatusDTO status) {
+                if (!status.isInstanceOf(InsuranceStatusShortDTO.class)) {
                     view.setPresenter(ProvideTenantInsuranceActivity.this);
                     view.setTenantSureInvitationEnabled(VistaFeatures.instance().tenantSure());
                     view.populate(status);

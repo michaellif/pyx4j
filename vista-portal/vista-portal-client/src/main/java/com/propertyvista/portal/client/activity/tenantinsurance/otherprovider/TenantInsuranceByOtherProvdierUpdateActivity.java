@@ -30,7 +30,7 @@ import com.propertyvista.portal.client.ui.residents.tenantinsurance.otherprovide
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceByOtherProviderManagementService;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceRequirementsDTO;
 
 public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareActivity implements TenantInsuranceByOtherProviderUpdateView.Presenter {
 
@@ -51,9 +51,9 @@ public class TenantInsuranceByOtherProvdierUpdateActivity extends SecurityAwareA
     @Override
     public void start(final AcceptsOneWidget panel, EventBus eventBus) {
         super.start(panel, eventBus);
-        insuranceService.getTenantInsuranceRequirements(new DefaultAsyncCallback<TenantInsuranceRequirementsDTO>() {
+        insuranceService.getTenantInsuranceRequirements(new DefaultAsyncCallback<InsuranceRequirementsDTO>() {
             @Override
-            public void onSuccess(final TenantInsuranceRequirementsDTO requirements) {
+            public void onSuccess(final InsuranceRequirementsDTO requirements) {
                 insuranceByOtherProviderService.get(new DefaultAsyncCallback<InsuranceGeneric>() {
                     @Override
                     public void onSuccess(InsuranceGeneric result) {

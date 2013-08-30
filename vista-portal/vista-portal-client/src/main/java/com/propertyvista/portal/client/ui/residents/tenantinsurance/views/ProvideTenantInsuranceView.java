@@ -15,7 +15,7 @@ package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
 
 import com.pyx4j.site.client.IsView;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 public interface ProvideTenantInsuranceView extends IsView {
 
@@ -31,6 +31,6 @@ public interface ProvideTenantInsuranceView extends IsView {
 
     void setTenantSureInvitationEnabled(boolean tenantSureInvitationEnabled);
 
-    void populate(TenantInsuranceStatusDTO insuranceStatus);
+    void populate(InsuranceStatusDTO insuranceStatus);
 
 }

@@ -17,13 +17,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceRequirementsDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.TenantInsuranceStatusDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceRequirementsDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
 public interface TenantInsuranceService extends IService {
 
-    void getTenantInsuranceStatus(AsyncCallback<TenantInsuranceStatusDTO> callback);
+    void getTenantInsuranceStatus(AsyncCallback<InsuranceStatusDTO> callback);
 
-    void getTenantInsuranceRequirements(AsyncCallback<TenantInsuranceRequirementsDTO> callback);
+    void getTenantInsuranceRequirements(AsyncCallback<InsuranceRequirementsDTO> callback);
 
 }

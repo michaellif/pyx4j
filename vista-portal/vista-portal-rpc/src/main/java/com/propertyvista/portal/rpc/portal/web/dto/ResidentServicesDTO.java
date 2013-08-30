@@ -1,5 +1,5 @@
 /*
- * (C) Copyright Property Vista Software Inc. 2011-2012 All Rights Reserved.
+ * (C) Copyright Property Vista Software Inc. 2011- All Rights Reserved.
  *
  * This software is the confidential and proprietary information of Property Vista Software Inc. ("Confidential Information"). 
  * You shall not disclose such Confidential Information and shall use it only in accordance with the terms of the license agreement 
@@ -7,18 +7,23 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-28
- * @author ArtyomB
+ * Created on Nov 25, 2011
+ * @author vlads
  * @version $Id$
  */
-package com.propertyvista.portal.client.ui.residents.tenantinsurance.views;
+package com.propertyvista.portal.rpc.portal.web.dto;
 
-import com.pyx4j.site.client.IsView;
+import com.pyx4j.entity.annotations.Transient;
+import com.pyx4j.entity.shared.IEntity;
+import com.pyx4j.i18n.annotations.I18n;
 
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 
-public interface TenantInsuranceCoveredByOtherTenantView extends IsView {
+@Transient
+@I18n(strategy = I18n.I18nStrategy.IgnoreThis)
+public interface ResidentServicesDTO extends IEntity {
 
-    void populate(InsuranceStatusDTO status);
+    /** Warning: this is a polymorphic entity */
+    InsuranceStatusDTO tenantInsuranceStatus();
 
 }
