@@ -86,6 +86,7 @@ public interface PreauthorizedPayment extends IEntity {
 
     @NotNull
     @ToString(index = 0)
+    @MemberColumn(notNull = true)
     LeasePaymentMethod paymentMethod();
 
     @Length(40)
