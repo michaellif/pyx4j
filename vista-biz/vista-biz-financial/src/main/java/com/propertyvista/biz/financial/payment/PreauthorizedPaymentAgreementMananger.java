@@ -59,6 +59,7 @@ class PreauthorizedPaymentAgreementMananger {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PreauthorizedPaymentAgreementMananger.class);
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
+        Validate.isTrue(!preauthorizedPayment.paymentMethod().isNull());
         Validate.isTrue(preauthorizedPayment.paymentMethod().type().getValue().isSchedulable());
 
         preauthorizedPayment.tenant().set(tenantId);
