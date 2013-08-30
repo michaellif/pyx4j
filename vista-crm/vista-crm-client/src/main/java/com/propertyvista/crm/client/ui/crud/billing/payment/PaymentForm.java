@@ -57,6 +57,7 @@ import com.propertyvista.common.client.ui.components.editors.payments.PaymentMet
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.common.client.ui.misc.PapExpirationWarning;
+import com.propertyvista.common.client.ui.validators.FutureDateIncludeTodayValidator;
 import com.propertyvista.crm.client.ui.crud.CrmEntityForm;
 import com.propertyvista.crm.rpc.services.financial.RevealAccountNumberService;
 import com.propertyvista.domain.contact.AddressSimple;
@@ -434,6 +435,8 @@ public class PaymentForm extends CrmEntityForm<PaymentRecordDTO> {
                 return null;
             }
         });
+
+        get(proto().targetDate()).addValueValidator(new FutureDateIncludeTodayValidator());
     }
 
     private void loadProfiledPaymentMethods(final AsyncCallback<Void> callback) {
