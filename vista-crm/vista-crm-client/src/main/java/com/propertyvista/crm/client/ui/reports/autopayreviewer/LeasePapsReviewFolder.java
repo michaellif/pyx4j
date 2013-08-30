@@ -15,6 +15,8 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
@@ -26,8 +28,12 @@ import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.commons.css.IStyleName;
+import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IObject;
+import com.pyx4j.entity.shared.IPrimitive;
 import com.pyx4j.forms.client.ui.CComponent;
 import com.pyx4j.forms.client.ui.CLabel;
 import com.pyx4j.forms.client.ui.folder.IFolderItemDecorator;
@@ -36,8 +42,11 @@ import com.pyx4j.i18n.shared.I18n;
 import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.VistaBoxFolderItemDecorator;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapTotalsDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeDTO.ChangeType;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapChargeTotalDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.PapDTO;
 
 public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
@@ -81,7 +90,7 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         @Override
         public IsWidget createContent() {
             HTMLPanel contentPanel = new HTMLPanel(//@formatter:off
-                    "<div>" +
+                    "<div>" +                        
                         "<div class='AutoPayReviewUpdaterLeaseCaption'><span id='leaseCaption'></span></div>" +
                         "<div id='folder'></div>" +
                         "<div id='leaseTotal'></div>" +
@@ -90,8 +99,13 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
 
             contentPanel.addAndReplaceElement(leaseCaption = new HTML(), "leaseCaption");
             contentPanel.addAndReplaceElement(inject(proto().paps(), new PapFolder()), "folder");
-            contentPanel.addAndReplaceElement(new HTML("Lease Total"), "leaseTotal");
             return contentPanel;
+        }
+
+        @Override
+        protected LeasePapsReviewDTO preprocessValue(LeasePapsReviewDTO value, boolean fireEvent, boolean populate) {
+            value.paps().add(summarize(value.paps()));
+            return super.preprocessValue(value, fireEvent, populate);
         }
 
         @Override
@@ -116,7 +130,14 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         @Override
         public CComponent<?> create(IObject<?> member) {
             if (member instanceof PapDTO) {
-                return new PapForm();
+                PapForm form = new PapForm();
+                form.addValueChangeHandler(new ValueChangeHandler<PapDTO>() {
+                    @Override
+                    public void onValueChange(ValueChangeEvent<PapDTO> event) {
+                        recalculateTotals();
+                    }
+                });
+                return form;
             }
             return super.create(member);
         }
@@ -126,6 +147,20 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             VistaBoxFolderItemDecorator<PapDTO> itemDecorator = (VistaBoxFolderItemDecorator<PapDTO>) PapFolder.super.createItemDecorator();
             itemDecorator.setCollapsible(false);
             return itemDecorator;
+        }
+
+        public void setTotals(LeasePapTotalsDTO totals) {
+            for (CComponent<?> c : PapFolder.this.getComponents()) {
+                if (c.getValue() instanceof LeasePapTotalsDTO) {
+                    ((CComponent<PapDTO>) c).setValue(totals, false);
+                }
+            }
+        }
+
+        private void recalculateTotals() {
+            IList<PapDTO> paps = PapFolder.this.getValue();
+            LeasePapTotalsDTO totals = summarize(removeTotals(paps));
+            setTotals(totals);
         }
     }
 
@@ -151,6 +186,22 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             contentPanel.addAndReplaceElement(inject(proto().charges(), new PapChargesFolder()), "chargesFolder");
             contentPanel.addAndReplaceElement(inject(proto().isMarkedAsRevised()), "isMarkedAsRevised");
             return contentPanel;
+        }
+
+        @Override
+        protected PapDTO preprocessValue(PapDTO value, boolean fireEvent, boolean populate) {
+            if (value instanceof LeasePapTotalsDTO) {
+                value.tenantAndPaymentMethod().setValue(i18n.tr("Lease Total"));
+            }
+            return super.preprocessValue(value, fireEvent, populate);
+        }
+
+        @Override
+        protected void onValueSet(boolean populate) {
+            super.onValueSet(populate);
+
+            get(proto().isMarkedAsRevised()).setVisible(!(getValue() instanceof LeasePapTotalsDTO));
+            setViewable(getValue() instanceof LeasePapTotalsDTO);
         }
     }
 
@@ -237,6 +288,8 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
             get(proto().newPrice()).setVisible(getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed);
             get(proto().newPreAuthorizedPaymentAmount()).setVisible(getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed);
             get(proto().newPreAuthorizedPaymentPercent()).setVisible(getValue().changeType().getValue() != PapChargeDTO.ChangeType.Removed);
+
+            setViewable(getValue() instanceof PapChargeTotalDTO);
         }
     }
 
@@ -250,5 +303,94 @@ public class LeasePapsReviewFolder extends VistaBoxFolder<LeasePapsReviewDTO> {
         public MiniDecorator(IsWidget widget, String styleName) {
             this(widget.asWidget(), styleName);
         }
+    }
+
+    private static void initIfNull(IPrimitive<BigDecimal> member) {
+        if (member.isNull()) {
+            member.setValue(new BigDecimal("0.00"));
+        }
+    }
+
+    private static Iterable<PapDTO> removeTotals(Iterable<PapDTO> leasePaps) {
+        List<PapDTO> paps = new LinkedList<PapDTO>();
+        for (PapDTO pap : leasePaps) {
+            if (!(pap instanceof LeasePapTotalsDTO)) {
+                paps.add(pap);
+            }
+        }
+        return paps;
+    }
+
+    private static LeasePapTotalsDTO summarize(Iterable<PapDTO> leasePaps) {
+        LeasePapTotalsDTO totals = EntityFactory.create(LeasePapTotalsDTO.class);
+        totals.setPrimaryKey(new Key(-1));
+
+        for (PapDTO pap : leasePaps) {
+            for (PapChargeDTO charge : pap.charges()) {
+                PapChargeDTO totalOfCharge = null;
+                foundTotalOfCharge: for (PapChargeDTO totalOfChargeCandidate : totals.charges()) {
+                    if (totalOfChargeCandidate.getPrimaryKey().equals(charge.getPrimaryKey())) {
+                        totalOfCharge = totalOfChargeCandidate;
+                        break foundTotalOfCharge;
+                    }
+                }
+                if (totalOfCharge != null) {
+                    if (totalOfCharge.changeType().getValue() != ChangeType.New) {
+                        totalOfCharge.suspendedPreAuthorizedPaymentAmount().setValue(
+                                totalOfCharge.suspendedPreAuthorizedPaymentAmount().getValue().add(charge.suspendedPreAuthorizedPaymentAmount().getValue()));
+                        totalOfCharge.suspendedPreAuthorizedPaymentPercent().setValue(
+                                totalOfCharge.suspendedPreAuthorizedPaymentPercent().getValue().add(charge.suspendedPreAuthorizedPaymentPercent().getValue()));
+                    }
+                    if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
+                        totalOfCharge.newPreAuthorizedPaymentAmount().setValue(
+                                totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(charge.newPreAuthorizedPaymentAmount().getValue()));
+                        totalOfCharge.newPreAuthorizedPaymentPercent().setValue(
+                                totalOfCharge.newPreAuthorizedPaymentPercent().getValue().add(charge.newPreAuthorizedPaymentPercent().getValue()));
+                    }
+                } else {
+                    totalOfCharge = charge.duplicate(PapChargeDTO.class);
+                    if (totalOfCharge.changeType().getValue() != ChangeType.New) {
+                        initIfNull(totalOfCharge.suspendedPreAuthorizedPaymentAmount());
+                        initIfNull(totalOfCharge.suspendedPreAuthorizedPaymentPercent());
+                    }
+                    if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
+                        initIfNull(totalOfCharge.newPreAuthorizedPaymentAmount());
+                        initIfNull(totalOfCharge.newPreAuthorizedPaymentPercent());
+                    }
+                    totals.charges().add(totalOfCharge);
+                }
+
+            }
+
+        }
+        PapChargeTotalDTO papChargeTotal = EntityFactory.create(PapChargeTotalDTO.class);
+        papChargeTotal.setPrimaryKey(new Key(-1));
+        papChargeTotal.chargeName().setValue(i18n.tr("Total"));
+
+        initIfNull(papChargeTotal.suspendedPrice());
+        initIfNull(papChargeTotal.suspendedPreAuthorizedPaymentAmount());
+        initIfNull(papChargeTotal.newPrice());
+        initIfNull(papChargeTotal.newPreAuthorizedPaymentAmount());
+
+        for (PapChargeDTO totalOfCharge : totals.charges()) {
+            if (totalOfCharge.changeType().getValue() != ChangeType.New) {
+                papChargeTotal.suspendedPrice().setValue(totalOfCharge.suspendedPrice().getValue().add(papChargeTotal.suspendedPrice().getValue()));
+                papChargeTotal.suspendedPreAuthorizedPaymentAmount().setValue(
+                        totalOfCharge.suspendedPreAuthorizedPaymentAmount().getValue().add(papChargeTotal.suspendedPreAuthorizedPaymentAmount().getValue()));
+            }
+            if (totalOfCharge.changeType().getValue() != ChangeType.Removed) {
+                papChargeTotal.newPrice().setValue(totalOfCharge.newPrice().getValue().add(papChargeTotal.newPrice().getValue()));
+                papChargeTotal.newPreAuthorizedPaymentAmount().setValue(
+                        totalOfCharge.newPreAuthorizedPaymentAmount().getValue().add(papChargeTotal.newPreAuthorizedPaymentAmount().getValue()));
+            }
+        }
+        papChargeTotal.suspendedPreAuthorizedPaymentPercent().setValue(
+                papChargeTotal.suspendedPreAuthorizedPaymentAmount().getValue().divide(papChargeTotal.suspendedPrice().getValue(), MathContext.DECIMAL32));
+        papChargeTotal.newPreAuthorizedPaymentPercent().setValue(
+                papChargeTotal.newPreAuthorizedPaymentAmount().getValue().divide(papChargeTotal.newPrice().getValue(), MathContext.DECIMAL32));
+
+        totals.charges().add(papChargeTotal);
+
+        return totals;
     }
 }

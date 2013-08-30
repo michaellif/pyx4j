@@ -48,6 +48,7 @@ import com.propertyvista.crm.client.ui.gadgets.commonMk2.dashboard.AddGadgetDial
 import com.propertyvista.crm.client.ui.gadgets.forms.ArrearsGadgetSummaryForm;
 import com.propertyvista.crm.client.ui.reports.CommonReportStyles;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.LeasePapsReviewFolder;
+import com.propertyvista.crm.client.ui.reports.autopayreviewer.LeasePapsReviewsHolderForm;
 import com.propertyvista.crm.client.ui.wizard.creditcheck.components.CreditCheckReportTypeSelector;
 
 public class CrmTheme extends VistaTheme {
@@ -732,6 +733,51 @@ public class CrmTheme extends VistaTheme {
         style.addProperty("text-align", "right");
         style.addProperty("margin-left", "2px");
         style.addProperty("margin-right", "2px");
+        addStyle(style);
+
+        // the following styles set up the layout of captions for LeasePapsReviewFolder
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name());
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div");
+        style.addProperty("position", "relative");
+        style.addProperty("display", "inline-block");
+        style.addProperty("text-align", "center");
+        style.addProperty("padding-top", "5px");
+        style.addProperty("padding-bottom", "5px");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("font-size", "1.5em");
+        style.addProperty("border-left", "1px dotted");
+        style.addProperty("border-right", "1px dotted");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(1)");
+        style.addProperty("left", "250px");
+        style.addProperty("width", "400px");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPaySuperCaptionsPanel.name() + " div:nth-child(2)");
+        style.addProperty("left", "250px");
+        style.addProperty("width", "350px");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCaptionsPanel.name());
+        style.addProperty("position", "relative");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
+        style.addProperty("position", "relative");
+        style.addProperty("display", "inline-block");
+        style.addProperty("text-align", "right");
+        style.addProperty("font-weight", "bold");
+        style.addProperty("border-left", "1px dotted");
+        style.addProperty("border-right", "1px dotted");
+        addStyle(style);
+
+        style = new Style("." + LeasePapsReviewsHolderForm.Styles.AutoPayCaptionsPanel.name() + " div");
+        style.addProperty("left", "346px");
+        style.addProperty("width", "100px");
         addStyle(style);
     }
 

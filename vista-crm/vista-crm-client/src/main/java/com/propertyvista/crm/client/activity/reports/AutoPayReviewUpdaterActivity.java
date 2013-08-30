@@ -77,6 +77,8 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
     private List<LeasePapsReviewDTO> makeMockData() {
         ArrayList<LeasePapsReviewDTO> list = new ArrayList<LeasePapsReviewDTO>();
         int tenantNum = 0;
+        int chargeKeyCounter = 0;
+
         for (int leaseNum = 0; leaseNum < 30; leaseNum++) {
             LeasePapsReviewDTO leasePapsReview = EntityFactory.create(LeasePapsReviewDTO.class);
 
@@ -88,6 +90,7 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
             List<PapChargeDTO> charges = new ArrayList<PapChargeDTO>();
             for (int chargeNum = 0; chargeNum < 3; ++chargeNum) {
                 PapChargeDTO papCharge = EntityFactory.create(PapChargeDTO.class);
+                papCharge.setPrimaryKey(new Key(++chargeKeyCounter));
                 papCharge.chargeName().setValue("Charge#" + chargeNum);
                 papCharge.changeType().setValue(
                         chargeNum % 3 == 0 ? PapChargeDTO.ChangeType.Changed : chargeNum % 2 == 0 ? PapChargeDTO.ChangeType.Removed
@@ -100,11 +103,15 @@ public class AutoPayReviewUpdaterActivity extends AbstractActivity implements Au
                     papCharge.suspendedPreAuthorizedPaymentAmount().setValue(
                             papCharge.suspendedPrice().getValue().multiply((papCharge.suspendedPreAuthorizedPaymentPercent().getValue())));
                     papCharge.newPrice().setValue(papCharge.suspendedPrice().getValue().add(new BigDecimal(50)));
+                    papCharge.newPreAuthorizedPaymentAmount().setValue(new BigDecimal("0.00"));
+                    papCharge.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
                     papCharge.suggestedNewPreAuthorizedPaymentAmount().setValue(
                             papCharge.newPrice().getValue().multiply(papCharge.suspendedPreAuthorizedPaymentPercent().getValue()));
                     break;
                 case New:
                     papCharge.newPrice().setValue(new BigDecimal(500 * (chargeNum + 1)));
+                    papCharge.newPreAuthorizedPaymentAmount().setValue(new BigDecimal("0.00"));
+                    papCharge.newPreAuthorizedPaymentPercent().setValue(new BigDecimal("0.00"));
                     papCharge.suggestedNewPreAuthorizedPaymentAmount().setValue(papCharge.newPrice().getValue());
                     break;
                 case Removed:

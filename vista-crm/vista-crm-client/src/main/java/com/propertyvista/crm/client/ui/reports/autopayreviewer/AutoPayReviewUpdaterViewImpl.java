@@ -15,20 +15,20 @@ package com.propertyvista.crm.client.ui.reports.autopayreviewer;
 
 import java.util.List;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.view.client.Range;
 
 import com.pyx4j.entity.shared.EntityFactory;
+import com.pyx4j.i18n.shared.I18n;
 import com.pyx4j.site.client.IsView;
 import com.pyx4j.site.client.ui.prime.AbstractPrimePane;
 
-import com.propertyvista.common.client.ui.components.c.CEntityDecoratableForm;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewDTO;
 import com.propertyvista.crm.client.ui.reports.autopayreviewer.dto.LeasePapsReviewsHolderDTO;
 
 public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements AutoPayReviewUpdaterView, IsView {
+
+    private final static I18n i18n = I18n.get(AutoPayReviewUpdaterViewImpl.class);
 
     private AutoPayReviewUpdaterView.Presenter presenter;
 
@@ -58,21 +58,6 @@ public class AutoPayReviewUpdaterViewImpl extends AbstractPrimePane implements A
     public void setPresenter(AutoPayReviewUpdaterView.Presenter presenter) {
         this.presenter = presenter;
         this.presenter.onRangeChanged();
-    }
-
-    private static final class LeasePapsReviewsHolderForm extends CEntityDecoratableForm<LeasePapsReviewsHolderDTO> {
-
-        public LeasePapsReviewsHolderForm() {
-            super(LeasePapsReviewsHolderDTO.class);
-        }
-
-        @Override
-        public IsWidget createContent() {
-            FlowPanel panel = new FlowPanel();
-            panel.add(inject(proto().leasePapsReviews(), new LeasePapsReviewFolder()));
-            return panel;
-        }
-
     }
 
 }
