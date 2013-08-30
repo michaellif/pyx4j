@@ -16,6 +16,7 @@ package com.propertyvista.biz.financial.payment;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;
 
 import com.pyx4j.commons.EqualsHelper;
@@ -58,6 +59,8 @@ class PreauthorizedPaymentAgreementMananger {
     private static final Logger log = org.slf4j.LoggerFactory.getLogger(PreauthorizedPaymentAgreementMananger.class);
 
     PreauthorizedPayment persistPreauthorizedPayment(PreauthorizedPayment preauthorizedPayment, Tenant tenantId) {
+        Validate.isTrue(preauthorizedPayment.paymentMethod().type().getValue().isSchedulable());
+
         preauthorizedPayment.tenant().set(tenantId);
         Persistence.ensureRetrieve(preauthorizedPayment.tenant(), AttachLevel.Attached);
 
