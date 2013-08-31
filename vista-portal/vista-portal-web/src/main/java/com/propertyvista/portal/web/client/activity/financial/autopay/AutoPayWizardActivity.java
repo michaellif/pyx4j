@@ -28,17 +28,17 @@ import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap.Resident.Financial;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.AbstractWizardActivity;
 import com.propertyvista.portal.web.client.ui.financial.autopay.AutoPayWizardView;
 
-public class AutoPayWizardActivity extends AbstractWizardActivity<PreauthorizedPaymentDTO> implements AutoPayWizardView.Persenter {
+public class AutoPayWizardActivity extends AbstractWizardActivity<AutoPayDTO> implements AutoPayWizardView.Persenter {
 
     public AutoPayWizardActivity(AppPlace place) {
         super(PortalWebSite.getViewFactory().instantiate(AutoPayWizardView.class), GWT
-                .<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), PreauthorizedPaymentDTO.class);
+                .<PreauthorizedPaymentWizardService> create(PreauthorizedPaymentWizardService.class), AutoPayDTO.class);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class AutoPayWizardActivity extends AbstractWizardActivity<PreauthorizedP
     }
 
     @Override
-    public void preview(final AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue) {
+    public void preview(final AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue) {
         ((PreauthorizedPaymentWizardService) getService()).preview(new DefaultAsyncCallback<PreauthorizedPayment>() {
             @Override
             public void onSuccess(PreauthorizedPayment result) {

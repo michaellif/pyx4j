@@ -35,18 +35,18 @@ import com.pyx4j.security.client.ClientContext;
 import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 
-public class AutoPaySubmissionForm extends CEntityForm<PreauthorizedPaymentDTO> {
+public class AutoPaySubmissionForm extends CEntityForm<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPaySubmissionForm.class);
 
     private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
     public AutoPaySubmissionForm() {
-        super(PreauthorizedPaymentDTO.class);
+        super(AutoPayDTO.class);
         setViewable(true);
         inheritViewable(false);
     }

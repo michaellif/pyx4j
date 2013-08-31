@@ -23,7 +23,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.AutoPayRetrieveService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
@@ -52,9 +52,9 @@ public class AutoPaySubmissionActivity extends SecurityAwareActivity implements 
         panel.setWidget(view);
 
         assert (entityId != null);
-        srv.retrieve(new DefaultAsyncCallback<PreauthorizedPaymentDTO>() {
+        srv.retrieve(new DefaultAsyncCallback<AutoPayDTO>() {
             @Override
-            public void onSuccess(PreauthorizedPaymentDTO result) {
+            public void onSuccess(AutoPayDTO result) {
                 view.populate(result);
             }
         }, entityId);
@@ -66,7 +66,7 @@ public class AutoPaySubmissionActivity extends SecurityAwareActivity implements 
     }
 
     @Override
-    public void save(PreauthorizedPaymentDTO value) {
+    public void save(AutoPayDTO value) {
         // TODO Auto-generated method stub
 
     }

@@ -44,6 +44,7 @@ import com.propertyvista.portal.rpc.portal.web.dto.FinancialDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.MainDashboardDTO;
 import com.propertyvista.portal.rpc.portal.web.services.DashboardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
+import com.propertyvista.portal.server.portal.web.services.mock.DashboardServiceMockImpl;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.shared.config.VistaFeatures;
 
@@ -51,55 +52,64 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     public void retrieveMainDashboard(AsyncCallback<MainDashboardDTO> callback) {
-        MainDashboardDTO dashboard = EntityFactory.create(MainDashboardDTO.class);
+        if (true) {
+            new DashboardServiceMockImpl().retrieveMainDashboard(callback);
+        } else {
+            MainDashboardDTO dashboard = EntityFactory.create(MainDashboardDTO.class);
 
-        LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-        Persistence.service().retrieve(tenantInLease.leaseTermV());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
-        Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
+            LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+            Persistence.service().retrieve(tenantInLease.leaseTermV());
+            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit());
+            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().floorplan());
+            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease().unit().building());
 
-        dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
-        dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
-        dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
+            dashboard.profileInfo().tenantName().setValue(tenantInLease.leaseParticipant().customer().person().name().getStringView());
+            dashboard.profileInfo().floorplanName().set(tenantInLease.leaseTermV().holder().lease().unit().floorplan().marketingName());
+            dashboard.profileInfo().tenantAddress().setValue(AddressRetriever.getLeaseParticipantCurrentAddress(tenantInLease).getStringView());
 
-        // fill stuff for the new web portal
-        FinancialSummaryDTO billingSummary = retrieve();
-        dashboard.billingSummary().currentBalance().setValue(billingSummary.currentBalance().getValue());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
-            dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
+            // fill stuff for the new web portal
+            FinancialSummaryDTO billingSummary = retrieve();
+            dashboard.billingSummary().currentBalance().setValue(billingSummary.currentBalance().getValue());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
+                dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
+            }
+
+            if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
+                dashboard
+                        .residentServicesInfo()
+                        .tenantInsuranceStatus()
+                        .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
+                                TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
+
+            }
+
+            callback.onSuccess(dashboard);
         }
-
-        if (VistaFeatures.instance().countryOfOperation() == CountryOfOperation.Canada) {
-            dashboard
-                    .residentServicesInfo()
-                    .tenantInsuranceStatus()
-                    .set(ServerSideFactory.create(TenantInsuranceFacade.class).getInsuranceStatus(
-                            TenantAppContext.getCurrentUserTenantInLease().leaseParticipant().<Tenant> createIdentityStub()));
-
-        }
-
-        callback.onSuccess(dashboard);
     }
 
     @Override
     public void retrieveFinancialDashboard(AsyncCallback<FinancialDashboardDTO> callback) {
-        FinancialDashboardDTO dashboard = EntityFactory.create(FinancialDashboardDTO.class);
+        if (true) {
+            new DashboardServiceMockImpl().retrieveFinancialDashboard(callback);
+        } else {
 
-        FinancialSummaryDTO billingSummary = retrieve();
-        dashboard.billingSummary().currentBalance().setValue(billingSummary.currentBalance().getValue());
-        if (!VistaFeatures.instance().yardiIntegration()) {
-            LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
-            Persistence.service().retrieve(tenantInLease.leaseTermV());
-            Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+            FinancialDashboardDTO dashboard = EntityFactory.create(FinancialDashboardDTO.class);
 
-            Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
-            dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
+            FinancialSummaryDTO billingSummary = retrieve();
+            dashboard.billingSummary().currentBalance().setValue(billingSummary.currentBalance().getValue());
+            if (!VistaFeatures.instance().yardiIntegration()) {
+                LeaseTermTenant tenantInLease = TenantAppContext.getCurrentUserTenantInLease();
+                Persistence.service().retrieve(tenantInLease.leaseTermV());
+                Persistence.service().retrieve(tenantInLease.leaseTermV().holder().lease());
+
+                Bill bill = ServerSideFactory.create(BillingFacade.class).getLatestBill(tenantInLease.leaseTermV().holder().lease());
+                dashboard.billingSummary().dueDate().setValue(bill.dueDate().getValue());
+            }
+
+            callback.onSuccess(dashboard);
         }
-
-        callback.onSuccess(dashboard);
     }
 
     private static FinancialSummaryDTO retrieve() {

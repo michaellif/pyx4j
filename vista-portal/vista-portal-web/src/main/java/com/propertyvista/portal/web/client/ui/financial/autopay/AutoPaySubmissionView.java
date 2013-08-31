@@ -13,12 +13,12 @@
  */
 package com.propertyvista.portal.web.client.ui.financial.autopay;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.IEntityView;
 
-public interface AutoPaySubmissionView extends IEntityView<PreauthorizedPaymentDTO> {
+public interface AutoPaySubmissionView extends IEntityView<AutoPayDTO> {
 
-    interface Presenter extends IEntityView.EntityPresenter<PreauthorizedPaymentDTO> {
+    interface Presenter extends IEntityView.EntityPresenter<AutoPayDTO> {
         void back();
     }
 }

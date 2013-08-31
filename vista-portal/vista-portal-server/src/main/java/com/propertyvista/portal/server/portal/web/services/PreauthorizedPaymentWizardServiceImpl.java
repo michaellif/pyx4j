@@ -43,18 +43,18 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.LeaseProducts;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentWizardService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 import com.propertyvista.server.common.util.LeaseParticipantUtils;
 
-public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
+public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> implements
         PreauthorizedPaymentWizardService {
 
     public PreauthorizedPaymentWizardServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+        super(PreauthorizedPayment.class, AutoPayDTO.class);
     }
 
     @Override
@@ -63,11 +63,11 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     @Override
-    public void create(AsyncCallback<PreauthorizedPaymentDTO> callback) {
+    public void create(AsyncCallback<AutoPayDTO> callback) {
         Lease lease = TenantAppContext.getCurrentUserLease();
         Persistence.service().retrieve(lease.unit().building());
 
-        PreauthorizedPaymentDTO dto = EntityFactory.create(PreauthorizedPaymentDTO.class);
+        AutoPayDTO dto = EntityFactory.create(AutoPayDTO.class);
 
         dto.electronicPaymentsAllowed().setValue(ServerSideFactory.create(PaymentFacade.class).isElectronicPaymentsSetup(lease.billingAccount()));
         dto.allowedPaymentTypes().setCollectionValue(
@@ -95,7 +95,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
-    public void finish(AsyncCallback<Key> callback, PreauthorizedPaymentDTO dto) {
+    public void finish(AsyncCallback<Key> callback, AutoPayDTO dto) {
         PreauthorizedPayment entity = createDBO(dto);
 
         Lease lease = TenantAppContext.getCurrentUserLease();
@@ -127,7 +127,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
     }
 
     @Override
-    public void preview(AsyncCallback<PreauthorizedPayment> callback, PreauthorizedPaymentDTO currentValue) {
+    public void preview(AsyncCallback<PreauthorizedPayment> callback, AutoPayDTO currentValue) {
         PreauthorizedPayment entity = createDBO(currentValue);
 
         updateCoveredItems(entity, currentValue);
@@ -135,7 +135,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         callback.onSuccess(entity);
     }
 
-    private void fillCoveredItems(PreauthorizedPaymentDTO papDto, LeaseProducts products) {
+    private void fillCoveredItems(AutoPayDTO papDto, LeaseProducts products) {
         papDto.total().setValue(BigDecimal.ZERO);
 
         PreauthorizedPaymentCoveredItemDTO item = createCoveredItemDTO(products.serviceItem());
@@ -156,7 +156,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         }
     }
 
-    private boolean isCoveredItemExist(PreauthorizedPaymentDTO papDto, BillableItem billableItem) {
+    private boolean isCoveredItemExist(AutoPayDTO papDto, BillableItem billableItem) {
         for (PreauthorizedPaymentCoveredItem item : papDto.coveredItemsDTO()) {
             if (item.billableItem().id().equals(billableItem.id())) {
                 return true;
@@ -195,7 +195,7 @@ public class PreauthorizedPaymentWizardServiceImpl extends EntityDtoBinder<Preau
         return item;
     }
 
-    private void updateCoveredItems(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
+    private void updateCoveredItems(PreauthorizedPayment entity, AutoPayDTO dto) {
         entity.coveredItems().clear();
         for (PreauthorizedPaymentCoveredItemDTO item : dto.coveredItemsDTO()) {
             if (item.amount().getValue().compareTo(BigDecimal.ZERO) > 0) {

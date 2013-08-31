@@ -29,16 +29,16 @@ import com.pyx4j.entity.shared.criterion.PropertyCriterion;
 import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
-public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, PreauthorizedPaymentDTO> implements
+public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoImpl<PreauthorizedPayment, AutoPayDTO> implements
         PreauthorizedPaymentListService {
 
     public PreauthorizedPaymentListServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+        super(PreauthorizedPayment.class, AutoPayDTO.class);
     }
 
     @Override
@@ -47,14 +47,14 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
     }
 
     @Override
-    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<PreauthorizedPaymentDTO> dtoCriteria) {
+    protected void enhanceListCriteria(EntityListCriteria<PreauthorizedPayment> dbCriteria, EntityListCriteria<AutoPayDTO> dtoCriteria) {
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().tenant().lease(), TenantAppContext.getCurrentUserLeaseIdStub()));
         dbCriteria.add(PropertyCriterion.eq(dbCriteria.proto().isDeleted(), Boolean.FALSE));
         dbCriteria.sort(new Sort(dbCriteria.proto().tenant(), false));
     }
 
     @Override
-    protected void enhanceListRetrieved(PreauthorizedPayment entity, PreauthorizedPaymentDTO dto) {
+    protected void enhanceListRetrieved(PreauthorizedPayment entity, AutoPayDTO dto) {
         super.enhanceListRetrieved(entity, dto);
         Persistence.ensureRetrieve(dto.tenant(), AttachLevel.Attached);
         Persistence.ensureRetrieve(dto.tenant().customer().user(), AttachLevel.Attached);
@@ -75,9 +75,9 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
 
     @Override
     public void getData(final AsyncCallback<AutoPaySummaryDTO> callback) {
-        list(new AsyncCallback<EntitySearchResult<PreauthorizedPaymentDTO>>() {
+        list(new AsyncCallback<EntitySearchResult<AutoPayDTO>>() {
             @Override
-            public void onSuccess(EntitySearchResult<PreauthorizedPaymentDTO> result) {
+            public void onSuccess(EntitySearchResult<AutoPayDTO> result) {
                 AutoPaySummaryDTO dto = EntityFactory.create(AutoPaySummaryDTO.class);
 
                 dto.currentAutoPayments().addAll(result.getData());
@@ -95,6 +95,6 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
             public void onFailure(Throwable arg0) {
                 callback.onFailure(arg0);
             }
-        }, new EntityListCriteria<PreauthorizedPaymentDTO>(PreauthorizedPaymentDTO.class));
+        }, new EntityListCriteria<AutoPayDTO>(AutoPayDTO.class));
     }
 }

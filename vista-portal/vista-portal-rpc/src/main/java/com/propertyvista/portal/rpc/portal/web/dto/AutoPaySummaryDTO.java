@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 public interface AutoPaySummaryDTO extends IEntity {
 
     @Caption(name = "Auto Pay Agreements")
-    IList<PreauthorizedPaymentDTO> currentAutoPayments();
+    IList<AutoPayDTO> currentAutoPayments();
 
     @Caption(name = "Your Current Auto Pay Date")
     IPrimitive<LogicalDate> currentAutoPayDate();

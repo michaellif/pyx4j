@@ -28,16 +28,16 @@ import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.domain.payment.PreauthorizedPayment.PreauthorizedPaymentCoveredItem;
 import com.propertyvista.domain.security.common.VistaApplication;
 import com.propertyvista.domain.tenant.lease.Lease;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.services.AutoPayRetrieveService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 import com.propertyvista.server.common.util.AddressConverter;
 import com.propertyvista.server.common.util.AddressRetriever;
 
-public class AutoPayRetrieveServiceImpl extends EntityDtoBinder<PreauthorizedPayment, PreauthorizedPaymentDTO> implements AutoPayRetrieveService {
+public class AutoPayRetrieveServiceImpl extends EntityDtoBinder<PreauthorizedPayment, AutoPayDTO> implements AutoPayRetrieveService {
 
     public AutoPayRetrieveServiceImpl() {
-        super(PreauthorizedPayment.class, PreauthorizedPaymentDTO.class);
+        super(PreauthorizedPayment.class, AutoPayDTO.class);
     }
 
     @Override
@@ -46,9 +46,9 @@ public class AutoPayRetrieveServiceImpl extends EntityDtoBinder<PreauthorizedPay
     }
 
     @Override
-    public void retrieve(AsyncCallback<PreauthorizedPaymentDTO> callback, Key entityId) {
+    public void retrieve(AsyncCallback<AutoPayDTO> callback, Key entityId) {
         PreauthorizedPayment dbo = Persistence.secureRetrieve(PreauthorizedPayment.class, entityId);
-        PreauthorizedPaymentDTO dto = createDTO(dbo);
+        AutoPayDTO dto = createDTO(dbo);
 
         // enhance dto:
         Lease lease = TenantAppContext.getCurrentUserLease();

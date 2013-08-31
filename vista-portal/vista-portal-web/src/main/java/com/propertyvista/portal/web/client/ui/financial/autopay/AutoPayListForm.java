@@ -42,7 +42,7 @@ import com.propertyvista.common.client.ui.components.folders.VistaBoxFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
@@ -79,16 +79,16 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
         return contentPanel;
     }
 
-    private class PreauthorizedPaymentFolder extends VistaBoxFolder<PreauthorizedPaymentDTO> {
+    private class PreauthorizedPaymentFolder extends VistaBoxFolder<AutoPayDTO> {
 
         public PreauthorizedPaymentFolder() {
-            super(PreauthorizedPaymentDTO.class, true);
+            super(AutoPayDTO.class, true);
             setOrderable(false);
         }
 
         @Override
         public CComponent<?> create(IObject<?> member) {
-            if (member instanceof PreauthorizedPaymentDTO) {
+            if (member instanceof AutoPayDTO) {
                 return new PreauthorizedPaymentEditor();
             }
             return super.create(member);
@@ -100,7 +100,7 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
         }
 
         @Override
-        protected void removeItem(final CEntityFolderItem<PreauthorizedPaymentDTO> item) {
+        protected void removeItem(final CEntityFolderItem<AutoPayDTO> item) {
             MessageDialog.confirm(i18n.tr("Please confirm"), i18n.tr("Do you really want to delete the Pre-Authorized Payment?"), new Command() {
                 @Override
                 public void execute() {
@@ -110,12 +110,12 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
             });
         }
 
-        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<PreauthorizedPaymentDTO> {
+        private class PreauthorizedPaymentEditor extends CEntityDecoratableForm<AutoPayDTO> {
 
             private final TwoColumnFlexFormPanel expirationWarning = new TwoColumnFlexFormPanel();
 
             public PreauthorizedPaymentEditor() {
-                super(PreauthorizedPaymentDTO.class);
+                super(AutoPayDTO.class);
 
                 setViewable(true);
                 inheritViewable(false);
@@ -161,7 +161,7 @@ public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
                 expirationWarning.setVisible(!getValue().expiring().isNull());
 
                 boolean isCurrentTenant = getValue().tenant().customer().user().getPrimaryKey().equals(ClientContext.getUserVisit().getPrincipalPrimaryKey());
-                ((CEntityFolderItem<PreauthorizedPaymentDTO>) getParent()).setRemovable(isCurrentTenant);
+                ((CEntityFolderItem<AutoPayDTO>) getParent()).setRemovable(isCurrentTenant);
             }
         }
     }

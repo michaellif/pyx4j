@@ -23,7 +23,7 @@ import com.pyx4j.site.client.AppSite;
 import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentListService;
 import com.propertyvista.portal.web.client.PortalWebSite;
@@ -56,7 +56,7 @@ public class AutoPayListActivity extends SecurityAwareActivity implements AutoPa
     }
 
     @Override
-    public void viewPaymentMethod(PreauthorizedPaymentDTO preauthorizedPayment) {
+    public void viewPaymentMethod(AutoPayDTO preauthorizedPayment) {
         AppPlace place = new PortalSiteMap.Resident.PaymentMethods.ViewPaymentMethod();
         AppSite.getPlaceController().goTo(place.formPlace(preauthorizedPayment.paymentMethod().id().getValue()));
     }
@@ -67,7 +67,7 @@ public class AutoPayListActivity extends SecurityAwareActivity implements AutoPa
     }
 
     @Override
-    public void deletePreauthorizedPayment(PreauthorizedPaymentDTO preauthorizedPayment) {
+    public void deletePreauthorizedPayment(AutoPayDTO preauthorizedPayment) {
         srv.delete(new DefaultAsyncCallback<Boolean>() {
             @Override
             public void onSuccess(Boolean result) {

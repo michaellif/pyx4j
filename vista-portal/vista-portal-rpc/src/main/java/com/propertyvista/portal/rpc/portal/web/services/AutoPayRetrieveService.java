@@ -18,9 +18,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.pyx4j.commons.Key;
 import com.pyx4j.rpc.shared.IService;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 
 public interface AutoPayRetrieveService extends IService {
 
-    void retrieve(AsyncCallback<PreauthorizedPaymentDTO> callback, Key entityId);
+    void retrieve(AsyncCallback<AutoPayDTO> callback, Key entityId);
 }

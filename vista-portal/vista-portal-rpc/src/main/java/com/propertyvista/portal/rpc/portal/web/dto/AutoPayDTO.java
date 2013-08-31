@@ -33,7 +33,7 @@ import com.propertyvista.dto.PaymentDataDTO;
 @Transient
 @ToStringFormat("")
 @ExtendsDBO(PreauthorizedPayment.class)
-public interface PreauthorizedPaymentDTO extends PaymentDataDTO, com.propertyvista.dto.PreauthorizedPaymentDTO {
+public interface AutoPayDTO extends PaymentDataDTO, com.propertyvista.dto.PreauthorizedPaymentDTO {
 
     @ReadOnly
     @ToString(index = 10)

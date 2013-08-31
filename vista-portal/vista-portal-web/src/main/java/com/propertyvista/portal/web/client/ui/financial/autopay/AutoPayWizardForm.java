@@ -64,14 +64,14 @@ import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.dto.PaymentDataDTO;
 import com.propertyvista.dto.PaymentDataDTO.PaymentSelect;
 import com.propertyvista.dto.PreauthorizedPaymentCoveredItemDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardForm;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog;
 import com.propertyvista.portal.web.client.ui.LegalTermsDialog.TermsType;
 import com.propertyvista.portal.web.client.ui.financial.PortalPaymentTypesUtil;
 import com.propertyvista.portal.web.client.ui.util.decorators.FormDecoratorBuilder;
 
-public class AutoPayWizardForm extends AbstractWizardForm<PreauthorizedPaymentDTO> {
+public class AutoPayWizardForm extends AbstractWizardForm<AutoPayDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayWizardForm.class);
 
@@ -110,7 +110,7 @@ public class AutoPayWizardForm extends AbstractWizardForm<PreauthorizedPaymentDT
     };
 
     public AutoPayWizardForm(AutoPayWizardView view, String endButtonCaption) {
-        super(PreauthorizedPaymentDTO.class, view, i18n.tr("Auto Payment Setup"), endButtonCaption, ThemeColor.contrast4);
+        super(AutoPayDTO.class, view, i18n.tr("Auto Payment Setup"), endButtonCaption, ThemeColor.contrast4);
 
         detailsStep = addStep(createDetailsStep());
         addStep(createSelectPaymentMethodStep());
