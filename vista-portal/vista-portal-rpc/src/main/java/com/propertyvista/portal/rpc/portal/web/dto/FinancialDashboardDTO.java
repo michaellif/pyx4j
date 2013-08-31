@@ -25,4 +25,5 @@ public interface FinancialDashboardDTO extends IEntity {
 
     BillingSummaryDTO billingSummary();
 
+    AutoPaySummaryDTO autoPaySummary();
 }

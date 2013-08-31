@@ -30,7 +30,7 @@ import com.propertyvista.biz.financial.payment.PaymentMethodFacade;
 import com.propertyvista.biz.tenant.LeaseFacade;
 import com.propertyvista.domain.payment.PreauthorizedPayment;
 import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentListService;
 import com.propertyvista.portal.server.portal.TenantAppContext;
 
@@ -74,18 +74,18 @@ public class PreauthorizedPaymentListServiceImpl extends AbstractListServiceDtoI
     }
 
     @Override
-    public void getData(final AsyncCallback<PreauthorizedPaymentListDTO> callback) {
+    public void getData(final AsyncCallback<AutoPaySummaryDTO> callback) {
         list(new AsyncCallback<EntitySearchResult<PreauthorizedPaymentDTO>>() {
             @Override
             public void onSuccess(EntitySearchResult<PreauthorizedPaymentDTO> result) {
-                PreauthorizedPaymentListDTO dto = EntityFactory.create(PreauthorizedPaymentListDTO.class);
+                AutoPaySummaryDTO dto = EntityFactory.create(AutoPaySummaryDTO.class);
 
-                dto.preauthorizedPayments().addAll(result.getData());
-                dto.currentPaymentDate().setValue(
+                dto.currentAutoPayments().addAll(result.getData());
+                dto.currentAutoPayDate().setValue(
                         ServerSideFactory.create(PaymentMethodFacade.class).getCurrentPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLeaseIdStub()));
-                dto.nextPaymentDate().setValue(
+                dto.nextAutoPayDate().setValue(
                         ServerSideFactory.create(PaymentMethodFacade.class).getNextPreauthorizedPaymentDate(TenantAppContext.getCurrentUserLeaseIdStub()));
-                dto.isMoveOutWithinNextBillingCycle().setValue(
+                dto.modificationsAllowd().setValue(
                         ServerSideFactory.create(LeaseFacade.class).isMoveOutWithinNextBillingCycle(TenantAppContext.getCurrentUserLeaseIdStub()));
 
                 callback.onSuccess(dto);

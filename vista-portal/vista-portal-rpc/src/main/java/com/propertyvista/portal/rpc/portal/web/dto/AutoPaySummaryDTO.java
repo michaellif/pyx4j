@@ -21,16 +21,16 @@ import com.pyx4j.entity.shared.IList;
 import com.pyx4j.entity.shared.IPrimitive;
 
 @Transient
-public interface PreauthorizedPaymentListDTO extends IEntity {
+public interface AutoPaySummaryDTO extends IEntity {
 
-    @Caption(name = "Pre-Authorized Payments")
-    IList<PreauthorizedPaymentDTO> preauthorizedPayments();
+    @Caption(name = "Auto Pay Agreements")
+    IList<PreauthorizedPaymentDTO> currentAutoPayments();
 
-    @Caption(name = "Your current automated payment date")
-    IPrimitive<LogicalDate> currentPaymentDate();
+    @Caption(name = "Your Current Auto Pay Date")
+    IPrimitive<LogicalDate> currentAutoPayDate();
 
-    @Caption(name = "Your next automated payment date")
-    IPrimitive<LogicalDate> nextPaymentDate();
+    @Caption(name = "Your Next Auto Pay Date")
+    IPrimitive<LogicalDate> nextAutoPayDate();
 
-    IPrimitive<Boolean> isMoveOutWithinNextBillingCycle();
+    IPrimitive<Boolean> modificationsAllowd();
 }

@@ -33,7 +33,7 @@ import com.pyx4j.site.client.ui.layout.responsive.ResponsiveLayoutPanel.LayoutTy
 
 import com.propertyvista.common.client.ui.components.folders.VistaTableFolder;
 import com.propertyvista.portal.domain.dto.financial.PaymentInfoDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.BillingSummaryDTO;
 import com.propertyvista.portal.web.client.resources.PortalImages;
 import com.propertyvista.portal.web.client.ui.AbstractGadget;
@@ -58,7 +58,7 @@ public class AutoPayAgreementsGadget extends AbstractGadget<FinancialDashboardVi
         setContent(contentPanel);
     }
 
-    protected void populate(PreauthorizedPaymentListDTO value) {
+    protected void populate(AutoPaySummaryDTO value) {
 
     }
 

@@ -43,18 +43,18 @@ import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 
-public class AutoPayListForm extends CEntityForm<PreauthorizedPaymentListDTO> {
+public class AutoPayListForm extends CEntityForm<AutoPaySummaryDTO> {
 
     private static final I18n i18n = I18n.get(AutoPayListForm.class);
 
     private AutoPayListView.Presenter presenter;
 
     public AutoPayListForm() {
-        super(PreauthorizedPaymentListDTO.class, new VistaViewersComponentFactory());
+        super(AutoPaySummaryDTO.class, new VistaViewersComponentFactory());
         setViewable(true);
     }
 
@@ -66,9 +66,9 @@ public class AutoPayListForm extends CEntityForm<PreauthorizedPaymentListDTO> {
     public IsWidget createContent() {
         VerticalPanel mainPanel = new VerticalPanel();
 
-        mainPanel.add(new FormDecoratorBuilder(inject(proto().nextPaymentDate(), new CDateLabel()), 10).build());
+        mainPanel.add(new FormDecoratorBuilder(inject(proto().nextAutoPayDate(), new CDateLabel()), 10).build());
         mainPanel.add(new HTML("&nbsp"));
-        mainPanel.add(inject(proto().preauthorizedPayments(), new PreauthorizedPaymentFolder()));
+        mainPanel.add(inject(proto().currentAutoPayments(), new PreauthorizedPaymentFolder()));
 
         SimplePanel contentPanel = new SimplePanel(mainPanel);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());

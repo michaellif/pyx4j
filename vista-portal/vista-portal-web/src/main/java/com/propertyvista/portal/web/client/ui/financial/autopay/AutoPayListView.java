@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 import com.pyx4j.site.client.IsView;
 
 import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 
 public interface AutoPayListView extends IsView {
 
@@ -29,7 +29,7 @@ public interface AutoPayListView extends IsView {
         void deletePreauthorizedPayment(PreauthorizedPaymentDTO preauthorizedPayment);
     }
 
-    void populate(PreauthorizedPaymentListDTO preauthorizedPayments);
+    void populate(AutoPaySummaryDTO preauthorizedPayments);
 
     void setPresenter(Presenter presenter);
 }

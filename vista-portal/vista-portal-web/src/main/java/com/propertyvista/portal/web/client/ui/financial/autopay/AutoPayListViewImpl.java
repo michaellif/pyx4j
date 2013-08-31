@@ -15,7 +15,7 @@ package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.google.gwt.user.client.ui.SimplePanel;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 
 public class AutoPayListViewImpl extends SimplePanel implements AutoPayListView {
 
@@ -33,7 +33,7 @@ public class AutoPayListViewImpl extends SimplePanel implements AutoPayListView 
     }
 
     @Override
-    public void populate(PreauthorizedPaymentListDTO preauthorizedPayments) {
+    public void populate(AutoPaySummaryDTO preauthorizedPayments) {
         form.reset();
         form.populate(preauthorizedPayments);
     }

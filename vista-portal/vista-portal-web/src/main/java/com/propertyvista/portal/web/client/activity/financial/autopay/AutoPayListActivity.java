@@ -24,7 +24,7 @@ import com.pyx4j.site.rpc.AppPlace;
 
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentDTO;
-import com.propertyvista.portal.rpc.portal.web.dto.PreauthorizedPaymentListDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPaySummaryDTO;
 import com.propertyvista.portal.rpc.portal.web.services.PreauthorizedPaymentListService;
 import com.propertyvista.portal.web.client.PortalWebSite;
 import com.propertyvista.portal.web.client.activity.SecurityAwareActivity;
@@ -47,9 +47,9 @@ public class AutoPayListActivity extends SecurityAwareActivity implements AutoPa
         super.start(panel, eventBus);
         panel.setWidget(view);
 
-        srv.getData(new DefaultAsyncCallback<PreauthorizedPaymentListDTO>() {
+        srv.getData(new DefaultAsyncCallback<AutoPaySummaryDTO>() {
             @Override
-            public void onSuccess(PreauthorizedPaymentListDTO result) {
+            public void onSuccess(AutoPaySummaryDTO result) {
                 view.populate(result);
             }
         });
