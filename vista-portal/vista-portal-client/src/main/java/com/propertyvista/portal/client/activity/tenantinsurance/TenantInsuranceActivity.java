@@ -25,6 +25,7 @@ import com.propertyvista.portal.client.PortalSite;
 import com.propertyvista.portal.client.ui.residents.tenantinsurance.views.TenantInsuranceCoveredByOtherTenantView;
 import com.propertyvista.portal.rpc.portal.PortalSiteMap;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantInsuranceService;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasTenantInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
@@ -47,8 +48,8 @@ public class TenantInsuranceActivity extends AbstractActivity {
             public void onSuccess(InsuranceStatusDTO status) {
                 if (status instanceof NoInsuranceStatusDTO) {
                     AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.ProvideTenantInsurance());
-                } else {
-                    if (status.isOwner().isBooleanTrue()) {
+                } else if (status instanceof HasTenantInsuranceDTO) {
+                    if (((HasTenantInsuranceDTO) status).isOwner().isBooleanTrue()) {
                         if (status instanceof InsuranceStatusShortDTO) {
                             AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.Management());
                         } else if (status instanceof OtherProviderInsuranceStatusDTO) {
@@ -61,9 +62,10 @@ public class TenantInsuranceActivity extends AbstractActivity {
                         view.populate(status);
                         panel.setWidget(view);
                     }
+                } else {
+                    throw new Error("got unknown insurance status");
                 }
             }
-
         });
     }
 }

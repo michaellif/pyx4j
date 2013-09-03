@@ -24,7 +24,7 @@ import com.pyx4j.entity.shared.IPrimitive;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureMessageDTO;
 
 @Transient
-public interface InsuranceStatusShortDTO extends InsuranceStatusDTO {
+public interface InsuranceStatusShortDTO extends HasTenantInsuranceDTO {
 
     @Format("#,##0.00")
     IPrimitive<BigDecimal> monthlyPremiumPayment();

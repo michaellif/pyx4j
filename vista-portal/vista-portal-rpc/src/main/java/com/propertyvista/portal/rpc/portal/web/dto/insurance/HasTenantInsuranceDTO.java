@@ -7,20 +7,33 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on 2012-11-08
+ * Created on 2013-09-03
  * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.commons.LogicalDate;
+import com.pyx4j.entity.annotations.AbstractEntity;
+import com.pyx4j.entity.annotations.Format;
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IPrimitive;
 
+@AbstractEntity
 @Transient
-public interface OtherProviderInsuranceStatusDTO extends HasTenantInsuranceDTO {
+public interface HasTenantInsuranceDTO extends InsuranceStatusDTO {
 
-    @Override
+    @Format("#,##0.00")
+    IPrimitive<BigDecimal> liabilityCoverage();
+
     IPrimitive<LogicalDate> expirationDate();
+
+    /**
+     * <code>true</code> when the tenant in the context is the owner of the insurance policy, <code>false</code> when tenant is covered by insurance certificate
+     * provided by roommate
+     */
+    IPrimitive<Boolean> isOwner();
 
 }

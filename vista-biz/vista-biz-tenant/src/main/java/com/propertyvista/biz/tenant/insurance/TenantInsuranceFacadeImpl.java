@@ -32,6 +32,7 @@ import com.propertyvista.domain.tenant.insurance.InsuranceCertificate;
 import com.propertyvista.domain.tenant.insurance.InsuranceTenantSure;
 import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.HasTenantInsuranceDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.InsuranceStatusShortDTO;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.NoInsuranceStatusDTO;
@@ -72,7 +73,6 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
         InsuranceCertificate insuranceCertificate = getInsuranceCertificate(tenantId);
 
-        InsuranceStatusDTO insuranceStatus = null;
         if (insuranceCertificate == null) {
             NoInsuranceStatusDTO noInsuranceStatus = EntityFactory.create(NoInsuranceStatusDTO.class);
 
@@ -81,8 +81,10 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
             noInsuranceStatus.minimumRequiredLiability().setValue(tenantInsurancePolicy.minimumRequiredLiability().getValue());
             noInsuranceStatus.noInsuranceStatusMessage().setValue(tenantInsurancePolicy.noInsuranceStatusMessage().getValue());
             noInsuranceStatus.tenantInsuranceInvitation().setValue(tenantInsurancePolicy.tenantInsuranceInvitation().getValue());
-            insuranceStatus = noInsuranceStatus;
+
+            return noInsuranceStatus;
         } else {
+            HasTenantInsuranceDTO insuranceStatus = null;
             if (insuranceCertificate.isPropertyVistaIntegratedProvider().isBooleanTrue()) {
                 // TODO currently TenantSure is the only integrated provider so we don't try to understand which one it is
                 TenantSureTenantInsuranceStatusDetailedDTO tsStatusDetailed = ServerSideFactory.create(TenantSureFacade.class).getStatus(tenantId);
@@ -103,11 +105,8 @@ public class TenantInsuranceFacadeImpl implements TenantInsuranceFacade {
 
             insuranceStatus.liabilityCoverage().setValue(insuranceCertificate.liabilityCoverage().getValue());
             insuranceStatus.expirationDate().setValue(insuranceCertificate.expiryDate().getValue());
-
+            return insuranceStatus;
         }
-
-        return insuranceStatus;
-
     }
 
     private static Lease retrieveLease(Tenant tenantId) {
