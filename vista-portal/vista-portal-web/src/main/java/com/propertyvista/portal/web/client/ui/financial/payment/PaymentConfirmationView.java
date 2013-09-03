@@ -16,7 +16,7 @@ package com.propertyvista.portal.web.client.ui.financial.payment;
 import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.ui.IEntityView;
 
-public interface PaymentSubmissionView extends IEntityView<PaymentRecordDTO> {
+public interface PaymentConfirmationView extends IEntityView<PaymentRecordDTO> {
 
     interface Presenter extends IEntityView.EntityPresenter<PaymentRecordDTO> {
 

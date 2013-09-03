@@ -16,10 +16,10 @@ package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
 import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class PaymentMethodSubmissionViewImpl extends AbstractEntityView<PaymentMethodDTO> implements PaymentMethodSubmissionView {
+public class PaymentMethodConfirmationViewImpl extends AbstractEntityView<PaymentMethodDTO> implements PaymentMethodConfirmationView {
 
-    public PaymentMethodSubmissionViewImpl() {
+    public PaymentMethodConfirmationViewImpl() {
         super();
-        setForm(new PaymentMethodSubmissionForm(this));
+        setForm(new PaymentMethodConfirmationForm(this));
     }
 }

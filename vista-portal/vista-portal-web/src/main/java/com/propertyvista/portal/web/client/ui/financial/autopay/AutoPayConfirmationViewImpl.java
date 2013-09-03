@@ -11,17 +11,15 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.paymentmethod;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
-import com.propertyvista.portal.rpc.portal.web.dto.PaymentMethodDTO;
-import com.propertyvista.portal.web.client.ui.IEntityView;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public interface PaymentMethodSubmissionView extends IEntityView<PaymentMethodDTO> {
+public class AutoPayConfirmationViewImpl extends AbstractEntityView<AutoPayDTO> implements AutoPayConfirmationView {
 
-    interface Presenter extends IEntityView.EntityPresenter<PaymentMethodDTO> {
-
-        void goToAutoPay();
-
-        void back();
+    public AutoPayConfirmationViewImpl() {
+        super();
+        setForm(new AutoPayConfirmationForm());
     }
 }

@@ -41,13 +41,13 @@ import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class PaymentMethodSubmissionForm extends CEntityForm<PaymentMethodDTO> {
+public class PaymentMethodConfirmationForm extends CEntityForm<PaymentMethodDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentMethodSubmissionForm.class);
+    private static final I18n i18n = I18n.get(PaymentMethodConfirmationForm.class);
 
     private final AbstractEntityView<PaymentMethodDTO> view;
 
-    public PaymentMethodSubmissionForm(AbstractEntityView<PaymentMethodDTO> view) {
+    public PaymentMethodConfirmationForm(AbstractEntityView<PaymentMethodDTO> view) {
         super(PaymentMethodDTO.class);
         this.view = view;
         setViewable(true);
@@ -90,7 +90,7 @@ public class PaymentMethodSubmissionForm extends CEntityForm<PaymentMethodDTO> {
         text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
             @Override
             public void execute() {
-                ((PaymentMethodSubmissionView.Presenter) view.getPresenter()).goToAutoPay();
+                ((PaymentMethodConfirmationView.Presenter) view.getPresenter()).goToAutoPay();
             }
         }));
 

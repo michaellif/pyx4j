@@ -11,15 +11,15 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.autopay;
+package com.propertyvista.portal.web.client.ui.financial.payment;
 
-import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
+import com.propertyvista.dto.PaymentRecordDTO;
 import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class AutoPaySubmissionViewImpl extends AbstractEntityView<AutoPayDTO> implements AutoPaySubmissionView {
+public class PaymentConfirmationViewImpl extends AbstractEntityView<PaymentRecordDTO> implements PaymentConfirmationView {
 
-    public AutoPaySubmissionViewImpl() {
+    public PaymentConfirmationViewImpl() {
         super();
-        setForm(new AutoPaySubmissionForm());
+        setForm(new PaymentConfirmationForm(this));
     }
 }

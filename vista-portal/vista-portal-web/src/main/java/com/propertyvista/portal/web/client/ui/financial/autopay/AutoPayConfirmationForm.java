@@ -11,45 +11,42 @@
  * @author VladL
  * @version $Id$
  */
-package com.propertyvista.portal.web.client.ui.financial.payment;
+package com.propertyvista.portal.web.client.ui.financial.autopay;
 
 import com.google.gwt.dom.client.Style.FontWeight;
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import com.pyx4j.commons.LogicalDate;
 import com.pyx4j.commons.css.StyleManager;
 import com.pyx4j.commons.css.ThemeColor;
+import com.pyx4j.forms.client.ui.CDateLabel;
 import com.pyx4j.forms.client.ui.CEntityForm;
 import com.pyx4j.forms.client.ui.CEntityLabel;
 import com.pyx4j.forms.client.ui.decorators.WidgetDecorator.Builder.Alignment;
 import com.pyx4j.forms.client.ui.panels.TwoColumnFlexFormPanel;
 import com.pyx4j.i18n.shared.I18n;
-import com.pyx4j.widgets.client.Anchor;
+import com.pyx4j.security.client.ClientContext;
 
-import com.propertyvista.common.client.resources.VistaImages;
+import com.propertyvista.common.client.ui.components.folders.PapCoveredItemFolder;
 import com.propertyvista.common.client.ui.decorations.FormDecoratorBuilder;
 import com.propertyvista.domain.payment.LeasePaymentMethod;
-import com.propertyvista.dto.PaymentRecordDTO;
+import com.propertyvista.portal.rpc.portal.web.dto.AutoPayDTO;
 import com.propertyvista.portal.web.client.themes.BlockMixin;
 import com.propertyvista.portal.web.client.themes.EntityViewTheme;
-import com.propertyvista.portal.web.client.ui.AbstractEntityView;
 
-public class PaymentSubmissionForm extends CEntityForm<PaymentRecordDTO> {
+public class AutoPayConfirmationForm extends CEntityForm<AutoPayDTO> {
 
-    private static final I18n i18n = I18n.get(PaymentSubmissionForm.class);
+    private static final I18n i18n = I18n.get(AutoPayConfirmationForm.class);
 
-    private final AbstractEntityView<PaymentRecordDTO> view;
+    private static String cutOffDateWarning = i18n.tr("All changes will take effect after this date!");
 
-    public PaymentSubmissionForm(AbstractEntityView<PaymentRecordDTO> view) {
-        super(PaymentRecordDTO.class);
-        this.view = view;
+    public AutoPayConfirmationForm() {
+        super(AutoPayDTO.class);
         setViewable(true);
         inheritViewable(false);
     }
@@ -60,7 +57,7 @@ public class PaymentSubmissionForm extends CEntityForm<PaymentRecordDTO> {
         int row = -1;
         Widget w;
 
-        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("Payment Submitted Successfully!")));
+        mainPanel.setWidget(++row, 0, w = new HTML(i18n.tr("Automatic Payment Submitted Successfully!")));
         w.getElement().getStyle().setFontWeight(FontWeight.BOLD);
         w.getElement().getStyle().setFontSize(1.2, Unit.EM);
 
@@ -68,11 +65,16 @@ public class PaymentSubmissionForm extends CEntityForm<PaymentRecordDTO> {
 
         mainPanel.setWidget(++row, 0,
                 new FormDecoratorBuilder(inject(proto().paymentMethod(), new CEntityLabel<LeasePaymentMethod>()), 22).labelAlignment(Alignment.left).build());
-        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().amount())).labelAlignment(Alignment.left).build());
+
+        mainPanel.setWidget(++row, 0, inject(proto().coveredItems(), new PapCoveredItemFolder()));
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().total()), 22).build());
+
+        mainPanel.setBR(++row, 0, 1);
+
+        mainPanel.setWidget(++row, 0, new FormDecoratorBuilder(inject(proto().nextScheduledPaymentDate(), new CDateLabel()), 22).build());
+        mainPanel.getFlexCellFormatter().setHorizontalAlignment(row, 0, HasHorizontalAlignment.ALIGN_CENTER);
 
         mainPanel.setHR(++row, 0, 1);
-
-        mainPanel.setWidget(++row, 0, createAutoPaySignupPanel());
 
         SimplePanel contentPanel = new SimplePanel(mainPanel);
         contentPanel.setStyleName(EntityViewTheme.StyleName.EntityViewContent.name());
@@ -83,21 +85,15 @@ public class PaymentSubmissionForm extends CEntityForm<PaymentRecordDTO> {
         return contentPanel;
     }
 
-    private Widget createAutoPaySignupPanel() {
-        VerticalPanel text = new VerticalPanel();
-        text.add(new HTML(i18n.tr("Want an Easy way to save time on your payments?")));
-        text.add(new HTML(i18n.tr("Let us manage your monthly payments for you.")));
-        text.add(new Anchor(i18n.tr("Sign up for Auto Pay today"), new Command() {
-            @Override
-            public void execute() {
-                ((PaymentSubmissionView.Presenter) view.getPresenter()).goToAutoPay();
-            }
-        }));
+    @Override
+    protected void onValueSet(boolean populate) {
+        super.onValueSet(populate);
 
-        HorizontalPanel panel = new HorizontalPanel();
-        panel.add(new Image(VistaImages.INSTANCE.recurringCredit()));
-        panel.add(text);
-
-        return panel;
+        LogicalDate today = new LogicalDate(ClientContext.getServerDate());
+        if (!today.before(getValue().paymentCutOffDate().getValue()) && !today.after(getValue().nextScheduledPaymentDate().getValue())) {
+            get(proto().nextScheduledPaymentDate()).setNote(cutOffDateWarning, NoteStyle.Warn);
+        } else {
+            get(proto().nextScheduledPaymentDate()).setNote(null);
+        }
     }
 }

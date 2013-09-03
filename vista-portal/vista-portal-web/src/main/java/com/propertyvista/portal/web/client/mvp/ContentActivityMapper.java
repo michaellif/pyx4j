@@ -30,12 +30,12 @@ import com.propertyvista.portal.web.client.activity.PotentialTenantActivity;
 import com.propertyvista.portal.web.client.activity.SignUpActivity;
 import com.propertyvista.portal.web.client.activity.dashboard.MainDashboardActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayListActivity;
-import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPaySubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.autopay.AutoPayWizardActivity;
 import com.propertyvista.portal.web.client.activity.financial.dashboard.FinancialDashboardActivity;
-import com.propertyvista.portal.web.client.activity.financial.payment.PaymentSubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.payment.PaymentConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.payment.PaymentWizardActivity;
-import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodSubmissionActivity;
+import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodConfirmationActivity;
 import com.propertyvista.portal.web.client.activity.financial.paymentmethod.PaymentMethodWizardActivity;
 import com.propertyvista.portal.web.client.activity.login.LandingActivity;
 import com.propertyvista.portal.web.client.activity.login.LeaseContextSelectionActivity;
@@ -79,19 +79,19 @@ public class ContentActivityMapper implements AppActivityMapper {
                     } else if (appPlace instanceof Resident.PaymentMethods.NewPaymentMethod) {
                         activity = new PaymentMethodWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.PaymentMethods.PaymentMethodSubmitted) {
-                        activity = new PaymentMethodSubmissionActivity(appPlace);
+                        activity = new PaymentMethodConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PayNow) {
                         activity = new PaymentWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PaymentSubmitting) {
-                        activity = new PaymentSubmissionActivity(appPlace);
+                        activity = new PaymentConfirmationActivity(appPlace);
 
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments) {
                         activity = new AutoPayListActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.NewPreauthorizedPayment) {
                         activity = new AutoPayWizardActivity(appPlace);
                     } else if (appPlace instanceof Resident.Financial.PreauthorizedPayments.PreauthorizedPaymentSubmitted) {
-                        activity = new AutoPaySubmissionActivity(appPlace);
+                        activity = new AutoPayConfirmationActivity(appPlace);
 
                     } else if (place instanceof PortalSiteMap.Login) {
                         activity = new LandingActivity(place);

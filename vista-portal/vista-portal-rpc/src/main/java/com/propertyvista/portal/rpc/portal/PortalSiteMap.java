@@ -178,6 +178,7 @@ public class PortalSiteMap implements SiteMap {
         public static class Offers extends AppPlace {
         }
 
+        @PlaceProperties(navigLabel = "Resident Services")
         public static class TenantInsurance extends AppPlace {
 
             /** this place is displayed to people who don't have tenant insurance */
