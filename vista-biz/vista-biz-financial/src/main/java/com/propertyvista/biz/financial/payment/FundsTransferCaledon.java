@@ -232,7 +232,7 @@ public class FundsTransferCaledon {
             PadFile padFile = Persistence.service().retrieve(criteria);
             if (padFile != null) {
                 if (!EnumSet.of(PadFile.PadFileStatus.Acknowledged, PadFile.PadFileStatus.Canceled).contains(padFile.status().getValue())) {
-                    throw new Error(SimpleMessageFormat.format("Can't send FundsTransfer {0} File until previous file {1} is Acknowledged or Canceled",
+                    throw new Error(SimpleMessageFormat.format("Can''t send FundsTransfer {0} File until previous file {1} is Acknowledged or Canceled",
                             fundsTransferType, previousValue));
                 }
 
