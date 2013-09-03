@@ -96,7 +96,7 @@ public class AbstractYardiStub implements ExternalInterfaceLoggingStub {
     }
 
     private String logSec(String xml) {
-        return xml.replaceAll("<ns1:Password>.*</ns1:Password>", "<ns1:Password>***</ns1:Password>");
+        return xml.replaceAll("<ns(\\d):Password>.*</ns(\\d):Password>", "<ns$1:Password>***</ns$2:Password>");
     }
 
     protected void addMessageContextListener(final String prefix, Stub stub, final StringBuilder envelopeBuffer) {
