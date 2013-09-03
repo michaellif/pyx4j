@@ -76,4 +76,9 @@ public class MainDashboardActivity extends SecurityAwareActivity implements Main
         }
     }
 
+    @Override
+    public void getTenantSure() {
+        AppSite.getPlaceController().goTo(new PortalSiteMap.Resident.ResidentServices.TenantInsurance.TenantSure.TenantSurePurchase());
+    }
+
 }

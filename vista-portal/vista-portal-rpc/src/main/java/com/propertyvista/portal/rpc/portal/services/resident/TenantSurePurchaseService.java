@@ -15,16 +15,17 @@ package com.propertyvista.portal.rpc.portal.services.resident;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-import com.pyx4j.rpc.shared.IService;
+import com.pyx4j.entity.rpc.AbstractWizardService;
 import com.pyx4j.rpc.shared.VoidSerializable;
 
 import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.domain.payment.InsurancePaymentMethod;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 
-public interface TenantSurePurchaseService extends IService {
+public interface TenantSurePurchaseService extends AbstractWizardService<TenantSureAgreementDTO> {
 
     void getQuotationRequestParams(AsyncCallback<TenantSureQuotationRequestParamsDTO> callback);
 

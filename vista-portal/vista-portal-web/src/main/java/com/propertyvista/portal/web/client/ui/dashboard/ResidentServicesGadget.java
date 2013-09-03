@@ -13,6 +13,7 @@
  */
 package com.propertyvista.portal.web.client.ui.dashboard;
 
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 
@@ -48,7 +49,14 @@ public class ResidentServicesGadget extends AbstractGadget<MainDashboardViewImpl
     class ResidentServicesToolbar extends Toolbar {
         public ResidentServicesToolbar() {
 
-            Button purchaseButton = new Button("Purchase Insurance");
+            Button purchaseButton = new Button("Purchase Insurance", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetViewer().getPresenter().getTenantSure();
+                }
+            });
+
             purchaseButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
             add(purchaseButton);
 

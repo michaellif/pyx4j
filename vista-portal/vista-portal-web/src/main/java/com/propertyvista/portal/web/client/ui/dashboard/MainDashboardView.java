@@ -27,6 +27,8 @@ public interface MainDashboardView extends IsView {
 
         void setAutopay();
 
+        void getTenantSure();
+
     }
 
     void setPresenter(DashboardPresenter presenter);

@@ -25,10 +25,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import com.pyx4j.commons.Key;
 import com.pyx4j.config.server.ServerSideFactory;
 import com.pyx4j.entity.server.Persistence;
 import com.pyx4j.entity.shared.EntityFactory;
 import com.pyx4j.essentials.server.admin.SystemMaintenance;
+import com.pyx4j.rpc.shared.ServiceExecution;
 import com.pyx4j.rpc.shared.VoidSerializable;
 import com.pyx4j.server.contexts.Context;
 import com.pyx4j.server.contexts.Visit;
@@ -47,6 +49,7 @@ import com.propertyvista.domain.tenant.lease.Lease;
 import com.propertyvista.domain.tenant.lease.Tenant;
 import com.propertyvista.operations.rpc.VistaSystemMaintenanceState;
 import com.propertyvista.portal.rpc.portal.services.resident.TenantSurePurchaseService;
+import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuotationRequestParamsDTO;
 import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
@@ -231,6 +234,19 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
             }
         }
         return filteredValues;
+    }
+
+    @Override
+    public void create(AsyncCallback<TenantSureAgreementDTO> callback) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    @ServiceExecution(waitCaption = "Submitting...")
+    public void finish(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
+        // TODO Auto-generated method stub
+        
     }
 
    

@@ -32,7 +32,7 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
     private static final I18n i18n = I18n.get(InsuranceSummaryGadget.class);
 
     InsuranceSummaryGadget(ServicesDashboardViewImpl form) {
-        super(form, PortalImages.INSTANCE.billingIcon(), i18n.tr("Insurance"), ThemeColor.contrast4);
+        super(form, PortalImages.INSTANCE.residentServicesIcon(), i18n.tr("Insurance"), ThemeColor.contrast3);
         setActionsToolbar(new PaymentMethodsToolbar());
 
         FlowPanel contentPanel = new FlowPanel();
@@ -47,14 +47,24 @@ public class InsuranceSummaryGadget extends AbstractGadget<ServicesDashboardView
 
     class PaymentMethodsToolbar extends Toolbar {
         public PaymentMethodsToolbar() {
-            Button autoPayButton = new Button("Add Insurance", new Command() {
+            Button tenantSureButton = new Button("Purchase Insurance", new Command() {
+
+                @Override
+                public void execute() {
+                    getGadgetViewer().getPresenter().getTenantSure();
+                }
+            });
+            tenantSureButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
+            add(tenantSureButton);
+
+            Button thirdPartyButton = new Button("Provide Proof of my Insurance", new Command() {
 
                 @Override
                 public void execute() {
                 }
             });
-            autoPayButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast4, 1));
-            add(autoPayButton);
+            thirdPartyButton.getElement().getStyle().setProperty("background", StyleManager.getPalette().getThemeColor(ThemeColor.contrast3, 1));
+            add(thirdPartyButton);
         }
     }
 }
