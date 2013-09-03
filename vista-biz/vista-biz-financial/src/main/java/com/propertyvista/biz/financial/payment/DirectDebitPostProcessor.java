@@ -107,7 +107,7 @@ public class DirectDebitPostProcessor {
 
         // Find tenant by name in debitRecord.customerName()
         LeaseTermParticipant<? extends LeaseParticipant<?>> leaseTermParticipant = billingAccount.lease().currentTerm().version().tenants().get(0);
-        String customerNametoMatch = normalizeName(debitRecord.customerName().getStringView());
+        String customerNametoMatch = normalizeName(debitRecord.customerName().getStringView().replace(',', ' '));
         leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().tenants());
         if (leaseTermParticipant == null) {
             leaseTermParticipant = findParticipantByExactNameMatch(customerNametoMatch, billingAccount.lease().currentTerm().version().guarantors());
