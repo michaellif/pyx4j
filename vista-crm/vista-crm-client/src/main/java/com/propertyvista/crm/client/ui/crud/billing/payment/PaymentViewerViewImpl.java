@@ -124,6 +124,7 @@ public class PaymentViewerViewImpl extends CrmViewerViewImplBase<PaymentRecordDT
         if (value.paymentStatus().getValue() == PaymentStatus.Submitted) {
             if (!value.targetDate().isNull() && value.paymentMethod().type().getValue().isSchedulable()) {
                 setActionVisible(scheduleAction, true);
+                setActionHighlighted(scheduleAction, true);
             } else {
                 setActionVisible(processAction, true);
                 setActionHighlighted(processAction, true);
