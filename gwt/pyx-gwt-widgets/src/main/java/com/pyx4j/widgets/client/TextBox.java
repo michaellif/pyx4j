@@ -26,6 +26,7 @@ public class TextBox extends com.google.gwt.user.client.ui.TextBox implements IT
 
     public TextBox() {
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
     }
 
     @Override

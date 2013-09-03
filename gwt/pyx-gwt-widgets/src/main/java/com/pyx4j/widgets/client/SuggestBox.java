@@ -45,6 +45,7 @@ public class SuggestBox extends com.google.gwt.user.client.ui.SuggestBox impleme
     public SuggestBox() {
         super(new MultiWordSuggestOracle(), new TextBox());
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
     }
 
     @Override

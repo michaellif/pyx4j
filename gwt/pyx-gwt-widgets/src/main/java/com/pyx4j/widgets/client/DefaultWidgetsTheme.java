@@ -27,7 +27,6 @@ import com.pyx4j.commons.css.Style;
 import com.pyx4j.commons.css.Theme;
 import com.pyx4j.commons.css.ThemeColor;
 import com.pyx4j.commons.css.ThemeId;
-import com.pyx4j.gwt.commons.BrowserType;
 
 public class DefaultWidgetsTheme extends Theme {
 
@@ -56,7 +55,7 @@ public class DefaultWidgetsTheme extends Theme {
     }
 
     public static enum StyleDependent implements IStyleDependent {
-        watermark, hover, disabled, active, semitransparent
+        watermark, hover, disabled, active, semitransparent, singleLine
     }
 
     public DefaultWidgetsTheme() {
@@ -97,25 +96,18 @@ public class DefaultWidgetsTheme extends Theme {
     protected void initTextBoxStyle() {
 
         Style style = new Style(".", StyleName.TextBox);
-
-// TODO check why is it necessary to add /1.4em parameter - it seems that IE9 uses it correctly and shifts TextBox text-line to the bottom,
-//      while all other browsers (Firefox, Chrome) or ignore it or thomehow different calculate text line position.
-//        style.addProperty("font", "12px/1.4em Arial, Helvetica, sans-serif");
-
         style.addProperty("color", ThemeColor.foreground);
         style.addProperty("background-color", "white");
         style.addProperty("border-width", "1px");
         style.addProperty("border-style", "solid");
         style.addProperty("border-color", ThemeColor.foreground, 0.4);
-        if (!BrowserType.isIE7()) {
-            style.addProperty("padding", "2px 5px");
-        }
+        style.addProperty("padding", "2px 5px");
         style.addProperty("box-sizing", "border-box");
         style.addProperty("-moz-box-sizing", "border-box");
         style.addProperty("-webkit-box-sizing", "border-box");
         addStyle(style);
 
-        style = new Style(".", StyleName.TextBox);
+        style = new Style(".", StyleName.TextBox, "-", StyleDependent.singleLine);
         style.addProperty("height", "2em");
         addStyle(style);
 

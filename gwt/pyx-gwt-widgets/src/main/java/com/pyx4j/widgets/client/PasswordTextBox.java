@@ -26,6 +26,7 @@ public class PasswordTextBox extends com.google.gwt.user.client.ui.PasswordTextB
 
     public PasswordTextBox() {
         setStyleName(DefaultWidgetsTheme.StyleName.TextBox.name());
+        addStyleDependentName(DefaultWidgetsTheme.StyleDependent.singleLine.name());
     }
 
     @Override
