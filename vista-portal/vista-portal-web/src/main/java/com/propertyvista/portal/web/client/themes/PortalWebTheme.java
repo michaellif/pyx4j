@@ -68,8 +68,6 @@ public class PortalWebTheme extends Theme {
                 super.initTextBoxStyle();
                 Style style = new Style(".", StyleName.TextBox);
                 style.addProperty("border-radius", "5px");
-                style.addProperty("height", "2em");
-                style.addProperty("line-height", "2em");
                 addStyle(style);
             };
 
