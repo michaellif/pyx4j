@@ -31,6 +31,8 @@ public interface TenantSurePurchaseService extends AbstractWizardService<TenantS
 
     void getQuote(AsyncCallback<TenantSureQuoteDTO> callback, TenantSureCoverageDTO coverageRequest);
 
+    @Deprecated
+    /** TenantSure Purchase service finish should be used */
     void acceptQuote(AsyncCallback<VoidSerializable> callback, TenantSureQuoteDTO quote, String tenantName, String tenantPhone,
             InsurancePaymentMethod paymentMethod);
 

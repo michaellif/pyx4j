@@ -15,7 +15,9 @@ package com.propertyvista.portal.web.client.ui.services.insurance;
 
 import com.pyx4j.i18n.shared.I18n;
 
+import com.propertyvista.domain.contact.AddressSimple;
 import com.propertyvista.portal.rpc.portal.web.dto.insurance.TenantSureAgreementDTO;
+import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
 import com.propertyvista.portal.web.client.ui.AbstractWizardView;
 
 public class TenantSureWizardViewImpl extends AbstractWizardView<TenantSureAgreementDTO> implements TenantSureWizardView {
@@ -26,5 +28,30 @@ public class TenantSureWizardViewImpl extends AbstractWizardView<TenantSureAgree
         super();
         setWizard(new TenantSureWizardForm(this, i18n.tr("Submit")));
 
+    }
+
+    @Override
+    public void waitForQuote() {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setQuote(TenantSureQuoteDTO quote) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void setBillingAddress(AddressSimple billingAddress) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onSendQuoteDetailsSucess(String email) {
+        // TODO Auto-generated method stub
+
+        // show dialog or notification that the quote has been sent to the *email*...
     }
 }

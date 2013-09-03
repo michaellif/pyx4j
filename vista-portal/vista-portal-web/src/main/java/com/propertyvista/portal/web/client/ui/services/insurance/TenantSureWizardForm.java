@@ -25,7 +25,6 @@ public class TenantSureWizardForm extends AbstractWizardForm<TenantSureAgreement
 
     public TenantSureWizardForm(TenantSureWizardView view, String endButtonCaption) {
         super(TenantSureAgreementDTO.class, view, i18n.tr("TenantSure Insurance"), endButtonCaption, ThemeColor.contrast4);
-
     }
 
 }

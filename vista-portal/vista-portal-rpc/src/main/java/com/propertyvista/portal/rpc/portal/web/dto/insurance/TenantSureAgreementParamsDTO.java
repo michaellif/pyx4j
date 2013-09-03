@@ -7,28 +7,29 @@
  *
  * This notice and attribution to Property Vista Software Inc. may not be removed.
  *
- * Created on Sep 3, 2013
- * @author michaellif
+ * Created on 2013-09-03
+ * @author ArtyomB
  * @version $Id$
  */
 package com.propertyvista.portal.rpc.portal.web.dto.insurance;
 
+import java.math.BigDecimal;
+
 import com.pyx4j.entity.annotations.Transient;
 import com.pyx4j.entity.shared.IEntity;
-
-import com.propertyvista.domain.payment.InsurancePaymentMethod;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureCoverageDTO;
-import com.propertyvista.portal.rpc.shared.dto.tenantinsurance.tenantsure.TenantSureQuoteDTO;
+import com.pyx4j.entity.shared.IPrimitive;
+import com.pyx4j.entity.shared.IPrimitiveSet;
 
 @Transient
-public interface TenantSureAgreementDTO extends IEntity {
+/** Holds input options */
+public interface TenantSureAgreementParamsDTO extends IEntity {
 
-    TenantSureAgreementParamsDTO agreementParams();
+    IPrimitiveSet<BigDecimal> generalLiabilityCoverageOptions();
 
-    TenantSureCoverageDTO tenantSureCoverageRequest();
+    IPrimitiveSet<BigDecimal> contentsCoverageOptions();
 
-    TenantSureQuoteDTO quote();
+    IPrimitiveSet<BigDecimal> deductibleOptions();
 
-    InsurancePaymentMethod paymentMethod();
+    IPrimitive<String> preAuthorizedDebitAgreement();
 
 }

@@ -237,16 +237,39 @@ public class TenantSurePurchaseServiceImpl implements TenantSurePurchaseService 
     }
 
     @Override
-    public void create(AsyncCallback<TenantSureAgreementDTO> callback) {
-        // TODO Auto-generated method stub
+    public void create(final AsyncCallback<TenantSureAgreementDTO> callback) {
         
+        getQuotationRequestParams(new AsyncCallback<TenantSureQuotationRequestParamsDTO>() {
+
+            @Override
+            public void onFailure(Throwable caught) {
+                callback.onFailure(caught);
+            }
+
+            @Override
+            public void onSuccess(TenantSureQuotationRequestParamsDTO params) {
+                Tenant tenant = Persistence.service().retrieve(Tenant.class, TenantAppContext.getCurrentUserTenant().getPrimaryKey());
+                
+                TenantSureAgreementDTO tenantSureAgreement = EntityFactory.create(TenantSureAgreementDTO.class);                
+                tenantSureAgreement.tenantSureCoverageRequest().tenantName().setValue(tenant.customer().person().name().getStringView());
+                tenantSureAgreement.tenantSureCoverageRequest().tenantPhone().setValue(getDefaultPhone(tenant.customer().person()));
+
+                tenantSureAgreement.agreementParams().generalLiabilityCoverageOptions().addAll(params.generalLiabilityCoverageOptions());
+                tenantSureAgreement.agreementParams().contentsCoverageOptions().addAll(params.contentsCoverageOptions());
+                tenantSureAgreement.agreementParams().deductibleOptions().addAll(params.deductibleOptions());
+                tenantSureAgreement.agreementParams().preAuthorizedDebitAgreement().setValue(params.preAuthorizedDebitAgreement().getValue());                
+                
+                callback.onSuccess(tenantSureAgreement);
+                
+            }
+        });
+
     }
 
     @Override
     @ServiceExecution(waitCaption = "Submitting...")
     public void finish(AsyncCallback<Key> callback, TenantSureAgreementDTO editableEntity) {
-        // TODO Auto-generated method stub
-        
+        // TODO Auto-generated method stub        
     }
 
    
